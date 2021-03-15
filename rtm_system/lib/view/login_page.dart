@@ -16,7 +16,24 @@ class _LoginPageState extends State<LoginPage> {
     return Container(
       color: welcome_color,
       child: Center(
-       child: _checkLogin(),
+       child: SafeArea(
+         child: Column(
+           // mainAxisAlignment: MainAxisAlignment.center,
+           children: [
+             Container(
+               height: 200,
+               width: 200,
+               child: Image(
+                   image:  AssetImage("images/icon.png")),
+             ),
+             _txtPhone(),
+             SizedBox(height: 10,),
+             _txtPassword(),
+             SizedBox(height: 10,),
+             _checkLogin(),
+           ],
+         ),
+       ),
       )
        );
   }
@@ -28,7 +45,7 @@ Widget _checkLogin(){
       child: Material(
           color: welcome_color,
   child: ProgressButton(
-  child: Text("Login"),
+  child: Text("Đăng nhập"),
   onPressed: () {
 
   setState(() {
@@ -43,11 +60,56 @@ Widget _checkLogin(){
   });
   },
   buttonState: _buttonState,
-    backgroundColor: Colors.blueAccent,
+    backgroundColor: Colors.white60,
     progressColor: Colors.white,
   )),
     );
 }
+
+Widget _txtPhone(){
+    return Container(
+      width: 300,
+      child: Material(
+        borderRadius: BorderRadius.all(new Radius.circular(10)),
+            child: Row(
+              children: [
+                Container(padding: EdgeInsets.only(left: 10,right: 10),child: Icon(Icons.phone_android),),
+                Expanded(
+                  child: TextField(
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.only(left: 0)
+                    ),
+          ),
+                ),
+              ],
+            ),
+      ),
+    );
+}
+
+  Widget _txtPassword(){
+    return Container(
+      width: 300,
+      child: Material(
+        borderRadius: BorderRadius.all(new Radius.circular(10)),
+        child: Row(
+          children: [
+            Container(padding: EdgeInsets.only(left: 10,right: 10),child: Icon(Icons.lock_outline),),
+            Expanded(
+              child: TextField(
+                obscureText: true,
+                decoration: InputDecoration(
+                    border: InputBorder.none,
+                    contentPadding: EdgeInsets.only(left: 0)
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 // class _LoginPageState extends State<LoginPage> {
