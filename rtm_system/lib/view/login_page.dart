@@ -1,16 +1,24 @@
+import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:rtm_system/presenter/check_login.dart';
 import 'package:rtm_system/ultils/color_ultils.dart';
+import 'package:rtm_system/view/customer/home_customer_page.dart';
+import 'package:rtm_system/view/manager/home_admin_page.dart';
 
 class LoginPage extends StatefulWidget {
   @override
-  _LoginPageState createState() => _LoginPageState();
+  LoginPageState createState() => LoginPageState();
 }
 
 ButtonState _buttonState = ButtonState.normal;
+Timer _timer;
 
-class _LoginPageState extends State<LoginPage> {
+class LoginPageState extends State<LoginPage> {
+  static bool isLogin = false;
+  String username = "";
+  String password = "";
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -26,10 +34,11 @@ class _LoginPageState extends State<LoginPage> {
                child: Image(
                    image:  AssetImage("images/icon.png")),
              ),
-             _txtPhone(),
+             SizedBox(height: 10,),
+             _txtUsername(),
              SizedBox(height: 10,),
              _txtPassword(),
-             SizedBox(height: 10,),
+             SizedBox(height: 15,),
              _checkLogin(),
            ],
          ),
@@ -47,16 +56,24 @@ Widget _checkLogin(){
   child: ProgressButton(
   child: Text("Đăng nhập"),
   onPressed: () {
-
   setState(() {
-  if(_buttonState == ButtonState.normal){
-    _buttonState = ButtonState.inProgress;
-  }else if(_buttonState == ButtonState.inProgress){
-    _buttonState = ButtonState.error;
-  }else{
-    _buttonState = ButtonState.normal;
-  }
-  print('Button State: $_buttonState');
+     _buttonState =  ButtonState.inProgress;
+    if(username == 'tu' && password == '1'){
+      isLogin = true;
+        Navigator.pushAndRemoveUntil(context,
+            MaterialPageRoute(builder: (context) => HomeCustomerPage())
+            , (route) => false);
+      _buttonState =  ButtonState.normal;
+    }else if(username == 'admin' && password == '1'){
+      isLogin = true;
+      Navigator.pushAndRemoveUntil(context,
+          MaterialPageRoute(builder: (context) => HomeAdminPage())
+          , (route) => false);
+      _buttonState =  ButtonState.normal;
+    }else {
+      startTimer(false);
+    }
+
   });
   },
   buttonState: _buttonState,
@@ -65,20 +82,39 @@ Widget _checkLogin(){
   )),
     );
 }
+// Điều khiển Animation cua nut Login
+  void startTimer(bool status) {
+    const oneSec = const Duration(seconds: 1);
+    _timer =  new Timer.periodic(
+      oneSec,
+          (Timer timer) => setState(
+            () {
+              if(status == false){
+                _buttonState =  ButtonState.error;
+                timer.cancel();
+              }
+        },
+      ),
+    );
+  }
 
-Widget _txtPhone(){
+Widget _txtUsername(){
     return Container(
       width: 300,
       child: Material(
         borderRadius: BorderRadius.all(new Radius.circular(10)),
             child: Row(
               children: [
-                Container(padding: EdgeInsets.only(left: 10,right: 10),child: Icon(Icons.phone_android),),
+                Container(padding: EdgeInsets.only(left: 10,right: 10),child: Icon(Icons.person),),
                 Expanded(
                   child: TextField(
+                    onChanged: (value) {
+                      username = value;
+                    },
                     decoration: InputDecoration(
                       border: InputBorder.none,
-                      contentPadding: EdgeInsets.only(left: 0)
+                      contentPadding: EdgeInsets.only(left: 0),
+                      hintText: "Tên đăng nhập",
                     ),
           ),
                 ),
@@ -99,9 +135,13 @@ Widget _txtPhone(){
             Expanded(
               child: TextField(
                 obscureText: true,
+                onChanged: (value1) {
+                  password = value1;
+                },
                 decoration: InputDecoration(
                     border: InputBorder.none,
-                    contentPadding: EdgeInsets.only(left: 0)
+                    contentPadding: EdgeInsets.only(left: 0),
+                  hintText: "Mật Khẩu",
                 ),
               ),
             ),
