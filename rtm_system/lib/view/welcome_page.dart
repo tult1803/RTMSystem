@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:rtm_system/ultils/color_ultils.dart';
+import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/login_page.dart';
 
 class WelcomePage extends StatefulWidget {

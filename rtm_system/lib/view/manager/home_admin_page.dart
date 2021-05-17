@@ -1,6 +1,6 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:rtm_system/ultils/color_ultils.dart';
+import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/login_page.dart';
 
 class HomeAdminPage extends StatefulWidget {

@@ -1,9 +1,8 @@
 import 'dart:async';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:rtm_system/presenter/check_login.dart';
-import 'package:rtm_system/ultils/color_ultils.dart';
+import 'package:rtm_system/ultils/src/color_ultils.dart';
+import 'package:rtm_system/ultils/ult_login_page.dart';
 import 'package:rtm_system/view/customer/home_customer_page.dart';
 import 'package:rtm_system/view/manager/home_admin_page.dart';
 
@@ -40,6 +39,11 @@ class LoginPageState extends State<LoginPage> {
              _txtPassword(),
              SizedBox(height: 15,),
              _checkLogin(),
+             SizedBox(height: 15,),
+             RaisedButton(onPressed: () {
+               LoginApi(username,password);
+             }
+                 , child: Text("demo")),
            ],
          ),
        ),
@@ -82,6 +86,7 @@ Widget _checkLogin(){
   )),
     );
 }
+
 // Điều khiển Animation cua nut Login
   void startTimer(bool status) {
     const oneSec = const Duration(seconds: 1);
