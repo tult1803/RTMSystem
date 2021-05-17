@@ -9,8 +9,7 @@ class PostAPI{
   static int status;
   createLogin(String username, String password) async {
   final response = await http.post(
-    Uri.http('3.137.137.156:5000', '/api/auth/v1/login'),
-    // '${url_main}/${url_Login}',
+    Uri.http('${url_main}', '${url_Login}'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
