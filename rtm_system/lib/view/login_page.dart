@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:rtm_system/model/model_login.dart';
+import 'package:rtm_system/model/postAPI_login.dart';
 import 'package:rtm_system/presenter/check_login.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
-import 'package:rtm_system/ultils/ult_login_page.dart';
 import 'package:rtm_system/view/customer/home_customer_page.dart';
 import 'package:rtm_system/view/manager/home_admin_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -13,11 +15,23 @@ class LoginPage extends StatefulWidget {
 
 ButtonState _buttonState = ButtonState.normal;
 Timer _timer;
+PostAPI getAPI = PostAPI();
+DataLogin data;
 
 class LoginPageState extends State<LoginPage> {
   static bool isLogin = false;
+  var role_id = 0, accountId = 0;
   String username = "";
   String password = "";
+  String access_token='';
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    // _isLogin();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -39,11 +53,6 @@ class LoginPageState extends State<LoginPage> {
              _txtPassword(),
              SizedBox(height: 15,),
              _checkLogin(),
-             SizedBox(height: 15,),
-             RaisedButton(onPressed: () {
-               LoginApi(username,password);
-             }
-                 , child: Text("demo")),
            ],
          ),
        ),
@@ -51,7 +60,57 @@ class LoginPageState extends State<LoginPage> {
        );
   }
 
-Widget _checkLogin(){
+  int status;
+  Future _isLogin() async{
+    SharedPreferences shared = await SharedPreferences
+        .getInstance();
+    var _id = shared.get("role_id");
+    bool check = shared.getBool("isLogin");
+    if(_id == 3 &&  check == true){
+      isLogin = true;
+      Navigator.pushAndRemoveUntil(context,
+          MaterialPageRoute(builder: (context) => HomeCustomerPage())
+          , (route) => false);
+    }else if(_id == 2 && check == true){
+      isLogin = true;
+      Navigator.pushAndRemoveUntil(context,
+          MaterialPageRoute(builder: (context) => HomeAdminPage())
+          , (route) => false);
+    }
+  }
+
+  Future LoginApi()async{
+    // Đỗ dữ liệu lấy từ api
+    data = await getAPI.createLogin(
+        username, password);
+    status = await PostAPI.status;
+    setState(() {
+      role_id = data.role_id;
+      access_token = data.access_token;
+      accountId = data.accountId;
+    });
+  }
+
+  Future afterLogin() async{
+    await LoginApi();
+    if(role_id == 3 && status == 200){
+      isLogin = true;
+      Navigator.pushAndRemoveUntil(context,
+          MaterialPageRoute(builder: (context) => HomeCustomerPage())
+          , (route) => false);
+      _buttonState =  ButtonState.normal;
+    }else if(role_id == 2 && status == 200){
+      isLogin = true;
+      Navigator.pushAndRemoveUntil(context,
+          MaterialPageRoute(builder: (context) => HomeAdminPage())
+          , (route) => false);
+      _buttonState =  ButtonState.normal;
+    }else {
+      startTimer(false);
+    }
+  }
+
+Widget _checkLogin() {
     return Container(
       color: welcome_color,
       width: 200,height: 50,
@@ -61,23 +120,8 @@ Widget _checkLogin(){
   child: Text("Đăng nhập"),
   onPressed: () {
   setState(() {
-     _buttonState =  ButtonState.inProgress;
-    if(username == 'tu' && password == '1'){
-      isLogin = true;
-        Navigator.pushAndRemoveUntil(context,
-            MaterialPageRoute(builder: (context) => HomeCustomerPage())
-            , (route) => false);
-      _buttonState =  ButtonState.normal;
-    }else if(username == 'admin' && password == '1'){
-      isLogin = true;
-      Navigator.pushAndRemoveUntil(context,
-          MaterialPageRoute(builder: (context) => HomeAdminPage())
-          , (route) => false);
-      _buttonState =  ButtonState.normal;
-    }else {
-      startTimer(false);
-    }
-
+     _buttonState = ButtonState.inProgress;
+     afterLogin();
   });
   },
   buttonState: _buttonState,

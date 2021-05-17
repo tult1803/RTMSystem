@@ -1,8 +1,9 @@
 
 import 'dart:convert';
-import 'package:rtm_system/presenter/model/model_login.dart';
 import 'package:rtm_system/ultils/src/url_api.dart';
 import 'package:http/http.dart' as http;
+
+import 'model_login.dart';
 
 
 class PostAPI{
