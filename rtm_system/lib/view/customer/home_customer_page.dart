@@ -2,6 +2,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/login_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeCustomerPage extends StatefulWidget {
   @override
@@ -16,11 +17,11 @@ class _HomeCustomerPageState extends State<HomeCustomerPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-   if(LoginPageState.isLogin != true){
-     Navigator.pushAndRemoveUntil(context,
-         MaterialPageRoute(builder: (context) => LoginPage())
-         , (route) => false);
-   }
+   // if(LoginPageState.isLogin != true){
+   //   Navigator.pushAndRemoveUntil(context,
+   //       MaterialPageRoute(builder: (context) => LoginPage())
+   //       , (route) => false);
+   // }
   }
 
   @override
@@ -34,7 +35,10 @@ class _HomeCustomerPageState extends State<HomeCustomerPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               FlatButton(
-                onPressed: () {
+                onPressed: () async{
+                  SharedPreferences prefs = await SharedPreferences.getInstance();
+                  prefs.clear();
+                  print('Saved Info is deleted');
                   Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(builder: (context) => LoginPage()),

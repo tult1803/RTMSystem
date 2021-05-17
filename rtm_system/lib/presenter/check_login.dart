@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:rtm_system/view/customer/home_customer_page.dart';
 import 'package:rtm_system/view/manager/home_admin_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 /// A button that animates between state changes.
@@ -190,5 +191,33 @@ class _ProgressButtonState extends State<ProgressButton>
       },
     );
   }
+}
+
+void checkSaveLogin(BuildContext context) async{
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  print('Role: ${prefs.getInt("role_id")}');
+  try {
+    if (prefs.getInt("role_id") == 3 && prefs.getBool("isLogin") == true) {
+      Navigator.pushAndRemoveUntil(context,
+          MaterialPageRoute(builder: (context) => HomeCustomerPage())
+          , (route) => false);
+    } else
+    if (prefs.getInt("role_id") == 2 && prefs.getBool("isLogin") == true) {
+      Navigator.pushAndRemoveUntil(context,
+          MaterialPageRoute(builder: (context) => HomeAdminPage())
+          , (route) => false);
+    }
+  }catch(e){
+    print('_isLogin co van de !!!');
+  }
+}
+
+void savedInfoLogin(int role_id,int accountId, String access_token) async{
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.setBool("isLogin", true);
+  prefs.setInt("role_id", role_id);
+  prefs.setString("access_token", access_token);
+  prefs.setInt("accountId", accountId);
+  print('Login is saved !!!!');
 }
 
