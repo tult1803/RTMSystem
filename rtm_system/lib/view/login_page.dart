@@ -61,24 +61,6 @@ class LoginPageState extends State<LoginPage> {
   }
 
   int status;
-  Future _isLogin() async{
-    SharedPreferences shared = await SharedPreferences
-        .getInstance();
-    var _id = shared.get("role_id");
-    bool check = shared.getBool("isLogin");
-    if(_id == 3 &&  check == true){
-      isLogin = true;
-      Navigator.pushAndRemoveUntil(context,
-          MaterialPageRoute(builder: (context) => HomeCustomerPage())
-          , (route) => false);
-    }else if(_id == 2 && check == true){
-      isLogin = true;
-      Navigator.pushAndRemoveUntil(context,
-          MaterialPageRoute(builder: (context) => HomeAdminPage())
-          , (route) => false);
-    }
-  }
-
   Future LoginApi()async{
     // Đỗ dữ liệu lấy từ api
     data = await getAPI.createLogin(
@@ -200,31 +182,3 @@ Widget _txtUsername(){
     );
   }
 }
-
-// class _LoginPageState extends State<LoginPage> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       color: welcome_color,
-//       child: Center(
-//         child: Column(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: [
-//             GoogleSignInButton(
-//               onPressed: () {
-//
-//               },),
-//             AppleSignInButton(
-//               onPressed: () {
-//
-//               },),
-//             FacebookSignInButton(
-//               onPressed: () {
-//
-//               },),
-//
-//         ],),
-//       ),
-//     );
-//   }
-// }

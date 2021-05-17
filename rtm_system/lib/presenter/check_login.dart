@@ -2,6 +2,8 @@ library progress_button;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:rtm_system/view/customer/home_customer_page.dart';
+import 'package:rtm_system/view/manager/home_admin_page.dart';
 
 
 /// A button that animates between state changes.
@@ -39,7 +41,9 @@ class _ProgressButtonState extends State<ProgressButton>
   Animation<double> _widthAnimation;
 
   double get buttonWidth => _widthAnimation.value ?? 0;
-  BorderRadius get borderRadius => _borderAnimation.value ?? BorderRadius.circular(12);
+
+  BorderRadius get borderRadius =>
+      _borderAnimation.value ?? BorderRadius.circular(12);
 
   Color get backgroundColor =>
       widget.backgroundColor ?? Theme
@@ -124,7 +128,8 @@ class _ProgressButtonState extends State<ProgressButton>
         });
   }
 
-  AnimatedBuilder getProgressAnimatedBuilder(BuildContext context, BoxConstraints constraints) {
+  AnimatedBuilder getProgressAnimatedBuilder(BuildContext context,
+      BoxConstraints constraints) {
     var buttonHeight = constraints.maxHeight;
     // If there is no constraint on height, we should constrain it
     if (buttonHeight == double.infinity) buttonHeight = 48;
@@ -150,7 +155,6 @@ class _ProgressButtonState extends State<ProgressButton>
 
     if (widget.buttonState != ButtonState.inProgress) {
       buttonContent = child;
-
     } else if (widget.buttonState == ButtonState.inProgress) {
       buttonContent = SizedBox(
           height: buttonHeight,
@@ -187,3 +191,4 @@ class _ProgressButtonState extends State<ProgressButton>
     );
   }
 }
+
