@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:rtm_system/model/model_login.dart';
 import 'package:rtm_system/model/postAPI_login.dart';
@@ -29,7 +30,27 @@ class LoginPageState extends State<LoginPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    // _isLogin();
+    _isLogin();
+  }
+
+  void _isLogin() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    try {
+      if (prefs.getInt("role_id") == 3 && prefs.getBool("isLogin") == true) {
+        isLogin = true;
+        Navigator.pushAndRemoveUntil(context,
+            MaterialPageRoute(builder: (context) => HomeCustomerPage())
+            , (route) => false);
+      } else
+      if (prefs.getInt("role_id") == 2 && prefs.getBool("isLogin") == true) {
+        isLogin = true;
+        Navigator.pushAndRemoveUntil(context,
+            MaterialPageRoute(builder: (context) => HomeAdminPage())
+            , (route) => false);
+      }
+    }catch(e){
+      print('_isLogin co van de !!!');
+    }
   }
 
   @override
@@ -73,15 +94,26 @@ class LoginPageState extends State<LoginPage> {
     });
   }
 
+  void _savedLogin() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool("isLogin", true);
+    prefs.setInt("role_id", role_id);
+    prefs.setString("access_token", access_token);
+    prefs.setInt("accountId", accountId);
+    print('Login is saved !!!!');
+  }
+
   Future afterLogin() async{
     await LoginApi();
     if(role_id == 3 && status == 200){
+      _savedLogin();
       isLogin = true;
       Navigator.pushAndRemoveUntil(context,
           MaterialPageRoute(builder: (context) => HomeCustomerPage())
           , (route) => false);
       _buttonState =  ButtonState.normal;
     }else if(role_id == 2 && status == 200){
+      _savedLogin();
       isLogin = true;
       Navigator.pushAndRemoveUntil(context,
           MaterialPageRoute(builder: (context) => HomeAdminPage())
