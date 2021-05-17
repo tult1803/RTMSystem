@@ -10,7 +10,7 @@ class HomeCustomerPage extends StatefulWidget {
 
 class _HomeCustomerPageState extends State<HomeCustomerPage> {
   GlobalKey _bottomNavigationKey = GlobalKey();
-  int _index = 2;
+  int _index = 1;
   String txt = "Tổng nợ";
   @override
   void initState() {
@@ -40,7 +40,7 @@ class _HomeCustomerPageState extends State<HomeCustomerPage> {
                       MaterialPageRoute(builder: (context) => LoginPage()),
                           (route) => false);
                 },
-                child: Text("Đăng xuất", style: TextStyle(fontSize: 15)),
+                child: Text("CUS", style: TextStyle(fontSize: 15)),
               ),
               Text(
                 txt,
@@ -57,7 +57,7 @@ class _HomeCustomerPageState extends State<HomeCustomerPage> {
         height: 50.0,
         items: <Widget>[
           Icon(Icons.my_library_books_outlined, size: 30),
-          Icon(Icons.local_atm, size: 30),
+          // Icon(Icons.local_atm, size: 30),
           Icon(Icons.attach_money, size: 30),
           Icon(Icons.notifications_none, size: 30),
           Icon(Icons.perm_identity, size: 30),
@@ -72,12 +72,10 @@ class _HomeCustomerPageState extends State<HomeCustomerPage> {
             if(index == 0){
               txt = 'Tổng hoá đơn';
             }else if(index == 1){
-              txt = 'Tổng tiền gửi';
-            }else if(index == 2){
               txt = 'Tổng nợ';
-            }else if(index == 3){
+            }else if(index == 2){
               txt = 'Tất cả thông báo';
-            }else if(index == 4){
+            }else if(index == 3){
               txt = 'Trang cá nhân';
             }
           });
