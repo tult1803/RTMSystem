@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rtm_system/view/manager/allProduct_manager_page.dart';
+import 'package:rtm_system/view/manager/home_manager_page.dart';
 import 'package:rtm_system/view/welcome_page.dart';
 
 void main() {
@@ -7,7 +8,7 @@ void main() {
     MaterialApp(
       debugShowCheckedModeBanner: false,
       home: WelcomePage(),
-      // home:AllProduct(),
+      // home:HomeAdminPage(),
     ),
   );
 }

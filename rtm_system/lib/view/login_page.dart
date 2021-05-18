@@ -25,7 +25,7 @@ class LoginPageState extends State<LoginPage> {
   String username = "";
   String password = "";
   String access_token = '';
-
+  String error="";
   @override
   void initState() {
     // TODO: implement initState
@@ -47,9 +47,7 @@ class LoginPageState extends State<LoginPage> {
                   width: 200,
                   child: Image(image: AssetImage("images/icon.png")),
                 ),
-                SizedBox(
-                  height: 10,
-                ),
+                Text(error, style: TextStyle(fontSize: 25, decoration: TextDecoration.none, color: Colors.redAccent)),
                 _txtUsername(),
                 SizedBox(
                   height: 10,
@@ -79,27 +77,32 @@ class LoginPageState extends State<LoginPage> {
   }
 
   Future afterLogin() async {
-    await LoginApi();
+    try {
+      await LoginApi();
+    }catch (e){
+      print('Error from LoginApi !!!');
+    }
     if (role_id == 3 && status == 200) {
       savedInfoLogin(role_id, accountId, access_token);
-      // isLogin = true;
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => HomeCustomerPage()),
           (route) => false);
+      print('Status button: Done');
       _buttonState = ButtonState.normal;
     } else if (role_id == 2 && status == 200) {
       savedInfoLogin(role_id, accountId, access_token);
-      // isLogin = true;
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => HomeAdminPage()),
           (route) => false);
+      print('Status button: Done');
       _buttonState = ButtonState.normal;
     } else {
       startTimer(false);
     }
   }
+
 
   Widget _checkLogin() {
     return Container(
@@ -112,8 +115,11 @@ class LoginPageState extends State<LoginPage> {
             child: Text("Đăng nhập"),
             onPressed: () {
               setState(() {
+                error = "";
                 _buttonState = ButtonState.inProgress;
-                afterLogin();
+                print('Status button: Process');
+                  afterLogin();
+
               });
             },
             buttonState: _buttonState,
@@ -132,6 +138,8 @@ class LoginPageState extends State<LoginPage> {
         () {
           if (status == false) {
             _buttonState = ButtonState.error;
+            print('Status button: Error');
+            error = "Lỗi đăng nhập !!!";
             timer.cancel();
           }
         },

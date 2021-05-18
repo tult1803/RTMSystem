@@ -20,13 +20,13 @@ class _HomeAdminPageState extends State<HomeAdminPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
-    if (LoginPageState.isLogin != true) {
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => LoginPage()),
-          (route) => false);
-    }
+    //
+    // if (LoginPageState.isLogin != true) {
+    //   Navigator.pushAndRemoveUntil(
+    //       context,
+    //       MaterialPageRoute(builder: (context) => LoginPage()),
+    //       (route) => false);
+    // }
     _widget = AllProduct();
   }
 
