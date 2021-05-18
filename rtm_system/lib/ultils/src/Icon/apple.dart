@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'button.dart';
+import '../../button.dart';
 
 
 const double defaultBorderRadius = 3.0;

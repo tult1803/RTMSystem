@@ -3,7 +3,7 @@ library progress_button;
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:rtm_system/view/customer/home_customer_page.dart';
-import 'package:rtm_system/view/manager/home_admin_page.dart';
+import 'package:rtm_system/view/manager/home_manager_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
