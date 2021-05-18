@@ -19,10 +19,12 @@ class _AllNoticeState extends State<AllNotice> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: welcome_color,
-        title: Text(
-          "Quản lý thông báo",
-          style: TextStyle(
-              color: Colors.white, fontWeight: FontWeight.w500, fontSize: 25),
+        title: Center(
+          child: Text(
+            "Quản lý thông báo",
+            style: TextStyle(
+                color: Colors.white, fontWeight: FontWeight.w500, fontSize: 25),
+          ),
         ),
         bottom: PreferredSize(
             child: btnMain(
