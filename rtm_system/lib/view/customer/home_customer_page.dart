@@ -1,6 +1,7 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
+import 'package:rtm_system/view/customer/notice/all_notices.dart';
 import 'package:rtm_system/view/login_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -78,7 +79,10 @@ class _HomeCustomerPageState extends State<HomeCustomerPage> {
             }else if(index == 1){
               txt = 'Tổng nợ';
             }else if(index == 2){
-              txt = 'Tất cả thông báo';
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => NoticesPage()),
+                      (route) => false);
             }else if(index == 3){
               txt = 'Trang cá nhân';
             }
