@@ -5,14 +5,13 @@ Notice fromJson(String str) => Notice.fromJson(json.decode(str));
 String toJson(Notice data) => json.encode(data.toJson());
 
 class Notice {
+  List<NoticeList> noticeList;
+  int total;
+
   Notice({
     this.noticeList,
     this.total,
   });
-
-  List<NoticeList> noticeList;
-  int total;
-
   factory Notice.fromJson(Map<String, dynamic> json) => Notice(
     noticeList: List<NoticeList>.from(json["noticeList"].map((x) => NoticeList.fromJson(x))),
     total: json["total"],

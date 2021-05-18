@@ -35,13 +35,13 @@ class _AllProductState extends State<AllProduct> {
         child: SingleChildScrollView(
             child: Column(
           children: [
-            card(context, "Mủ nước", "Mủ lỏng", "100000", "17-05-2021"),
-            card(context, "Mủ dây", "Mủ đặc", "165323", "17-05-2021"),
-            card(context, "Mủ ké", "Mủ đặc", "90776", "17-05-2021"),
-            card(context, "Mủ đất", "Mủ đặc", "100000", "17-05-2021"),
-            card(context, "Mủ chén", "Mủ đặc", "265378", "17-05-2021"),
-            card(context, "Mủ đông", "Mủ đặc", "1000", "17-05-2021"),
-            card(context, "Mủ nước", "Mủ đặc", "10000", "17-05-2021"),
+            cardProduct(context, "Mủ nước", "Mủ lỏng", "100000", "17-05-2021"),
+            cardProduct(context, "Mủ dây", "Mủ đặc", "165323", "17-05-2021"),
+            cardProduct(context, "Mủ ké", "Mủ đặc", "90776", "17-05-2021"),
+            cardProduct(context, "Mủ đất", "Mủ đặc", "100000", "17-05-2021"),
+            cardProduct(context, "Mủ chén", "Mủ đặc", "265378", "17-05-2021"),
+            cardProduct(context, "Mủ đông", "Mủ đặc", "1000", "17-05-2021"),
+            cardProduct(context, "Mủ nước", "Mủ đặc", "10000", "17-05-2021"),
           ],
         )),
       ),

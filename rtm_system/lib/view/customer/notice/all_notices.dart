@@ -1,62 +1,65 @@
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:rtm_system/ultils/src/color_ultils.dart';
-import 'package:rtm_system/ultils/src/url_api.dart';
+import 'package:rtm_system/model/notice/model_all_notice.dart';
 import 'package:rtm_system/view/customer/notice/detail_notice.dart';
 import 'package:rtm_system/model/notice/getAPI_all_notice.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class NoticesPage extends StatefulWidget {
+  const NoticesPage({Key key}) : super(key: key);
+
   final String title = "Thông báo";
 
   @override
   _NoticesPageState createState() => _NoticesPageState();
 }
-//
-// GetAPIAllNotice getAPIAllNotice = GetAPIAllNotice();
-// Notice data;
+
+GetAPIAllNotice getAPIAllNotice = GetAPIAllNotice();
+Notice notice;
+NoticeList noticeListsss;
 
 class _NoticesPageState extends State<NoticesPage> {
-  // Future<Notice> getAllNotice;
-  String noticeList, total;
-  String access_token = '';
+  List<NoticeList> noticeList;
+  int total;
+  int length;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    this.getAPINotice();
     print('alo');
+    this.getAPINotice();
   }
+
   int status;
+
   Future getAPINotice() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    String token = sharedPreferences.getString('access_token');
+    print(token);
     // Đỗ dữ liệu lấy từ api
-    var data = await http.get(
-      Uri.http('${url_main}', '${url_notice}'),
-    );
-    print('result is'+'${data.statusCode}');
+    notice = await getAPIAllNotice.getNotices(token);
     status = await GetAPIAllNotice.status;
+    noticeList = notice.noticeList;
     // setState(() {
-    //   noticeList = data.noticeList;
-    //   total = data.total;
-    //   access_token = data.access_token;
-    //
+    //   noticeList = notice.noticeList;
+    //   total = notice.total;
+    //   length = notice.noticeList.length;
     // });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color(0xFF0BB791),
-        title: Center(
-          child: Text(widget.title),
+    if (status == 200)
+      return Scaffold(
+        backgroundColor: Color(0xffEEEEEE),
+        appBar: AppBar(
+          backgroundColor: Color(0xFF0BB791),
+          title: Center(
+            child: Text(widget.title),
+          ),
         ),
-      ),
-      body: Container(
-        color: Color(0xffEEEEEE),
-        child: Container(
-          // color: Color(0xffEEEEEE),
+        body: Container(
           margin: EdgeInsets.fromLTRB(0, 24, 0, 0),
           decoration: BoxDecoration(
             color: Colors.white,
@@ -65,91 +68,94 @@ class _NoticesPageState extends State<NoticesPage> {
               topRight: Radius.circular(15.0),
             ),
           ),
-          child: Center(
-            child: SafeArea(
-              child: Column(
-                children: [
-                  Container(
-                    child: _getNotice(),
-                  ),
-                ],
-              ),
-            ),
-          ),
+          child: _getList(),
         ),
-      ),
-    );
+      );
+    else {
+      return Container();
+    }
   }
 
-  Widget _getNotice() {
-    return Container(
-      margin: EdgeInsets.fromLTRB(12, 20, 12, 0),
-      child: Material(
-        child: TextButton(
-          style: TextButton.styleFrom(
-            primary: Colors.black, // foreground
-            textStyle: TextStyle(
-              fontSize: 16,
-            ),
-          ),
-          onPressed: () {
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => DetailOfNotice()),
-                (route) => false);
-          },
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  Text(
-                    // "${data.noticeList}",
-                    'ha',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                'TextButton with custom TextButton with custom TextButton with custom',
-                style: TextStyle(
-                  fontSize: 14,
-                ),
-                textAlign: TextAlign.left,
-                overflow: TextOverflow.ellipsis,
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Row(
-                children: [
-                  Text(
-                    '17/05/2021',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Color(0xFF0BB791),
+  Widget _getList() {
+    var size = MediaQuery.of(context).size;
+    return ListView.builder(
+        itemCount: noticeList.length,
+        itemBuilder: (context, index) {
+          return Container(
+              // color: Color(0xffEEEEEE),
+              color: Colors.red,
+              margin: EdgeInsets.fromLTRB(12, 0, 12, 0),
+              child: Material(
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                    primary: Colors.black, // foreground
+                    textStyle: TextStyle(
+                      fontSize: 16,
                     ),
                   ),
-                ],
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              SizedBox(
-                height: 1,
-                child: Container(
-                  color: Color(0xFFBDBDBD),
+                  onPressed: () {
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => DetailOfNotice()),
+                        (route) => false);
+                  },
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            "${noticeList[index].title}",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.left,
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      SizedBox(
+                        width: size.width,
+                        child: Text(
+                          "${noticeList[index].content}",
+                          style: TextStyle(
+                            fontSize: 14,
+                          ),
+                          textAlign: TextAlign.left,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            "${noticeList[index].createDate}",
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Color(0xFF0BB791),
+                            ),
+                            textAlign: TextAlign.left,
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 9,
+                      ),
+                      SizedBox(
+                        height: 1,
+                        child: Container(
+                          color: Color(0xFFBDBDBD),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+              ));
+        });
   }
 }
