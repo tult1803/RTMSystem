@@ -9,6 +9,9 @@ import 'package:rtm_system/view/manager/home_manager_page.dart';
 import 'package:rtm_system/view/manager/home_admin_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> master
+=======
 >>>>>>> master
 =======
 >>>>>>> master

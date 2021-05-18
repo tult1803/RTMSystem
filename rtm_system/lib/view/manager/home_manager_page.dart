@@ -4,8 +4,12 @@ import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/login_page.dart';
 <<<<<<< HEAD:rtm_system/lib/view/manager/home_manager_page.dart
 <<<<<<< HEAD:rtm_system/lib/view/manager/home_manager_page.dart
+<<<<<<< HEAD:rtm_system/lib/view/manager/home_manager_page.dart
 import 'package:rtm_system/view/manager/allNotice_manager.dart';
 import 'package:rtm_system/view/manager/allProduct_manager_page.dart';
+=======
+import 'package:shared_preferences/shared_preferences.dart';
+>>>>>>> master:rtm_system/lib/view/manager/home_admin_page.dart
 =======
 import 'package:shared_preferences/shared_preferences.dart';
 >>>>>>> master:rtm_system/lib/view/manager/home_admin_page.dart
@@ -29,6 +33,7 @@ class _HomeAdminPageState extends State<HomeAdminPage> {
     super.initState();
 <<<<<<< HEAD:rtm_system/lib/view/manager/home_manager_page.dart
 <<<<<<< HEAD:rtm_system/lib/view/manager/home_manager_page.dart
+<<<<<<< HEAD:rtm_system/lib/view/manager/home_manager_page.dart
     if (LoginPageState.isLogin != true) {
       Navigator.pushAndRemoveUntil(
           context,
@@ -39,6 +44,8 @@ class _HomeAdminPageState extends State<HomeAdminPage> {
 =======
 =======
 >>>>>>> master:rtm_system/lib/view/manager/home_admin_page.dart
+=======
+>>>>>>> master:rtm_system/lib/view/manager/home_admin_page.dart
     // if (LoginPageState.isLogin != true) {
     //   Navigator.pushAndRemoveUntil(
     //       context,
@@ -46,6 +53,9 @@ class _HomeAdminPageState extends State<HomeAdminPage> {
     //       (route) => false);
     // }
 <<<<<<< HEAD:rtm_system/lib/view/manager/home_manager_page.dart
+<<<<<<< HEAD:rtm_system/lib/view/manager/home_manager_page.dart
+>>>>>>> master:rtm_system/lib/view/manager/home_admin_page.dart
+=======
 >>>>>>> master:rtm_system/lib/view/manager/home_admin_page.dart
 =======
 >>>>>>> master:rtm_system/lib/view/manager/home_admin_page.dart

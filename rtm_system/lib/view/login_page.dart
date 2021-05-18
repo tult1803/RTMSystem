@@ -20,7 +20,7 @@ PostAPI getAPI = PostAPI();
 DataLogin data;
 
 class LoginPageState extends State<LoginPage> {
-  static bool isLogin = false;
+  // static bool isLogin = false;
   var role_id = 0, accountId = 0;
   String username = "";
   String password = "";
