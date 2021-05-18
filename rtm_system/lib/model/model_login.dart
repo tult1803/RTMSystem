@@ -1,5 +1,5 @@
 class DataLogin {
-  final  accountId, role_id;
+  final  int accountId, role_id;
   final String access_token;
 
   DataLogin({this.accountId, this.role_id, this.access_token});

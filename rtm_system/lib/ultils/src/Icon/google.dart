@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'button.dart';
+import '../../button.dart';
 /// A sign in button that matches Google's design guidelines.
 ///
 /// The button text can be overridden, however the default text is recommended
