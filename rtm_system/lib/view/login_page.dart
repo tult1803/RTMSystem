@@ -79,6 +79,7 @@ class LoginPageState extends State<LoginPage> {
   Future afterLogin() async {
     try {
       await LoginApi();
+      print('Role ID: ${role_id}');
     }catch (e){
       print('Error from LoginApi !!!');
     }
