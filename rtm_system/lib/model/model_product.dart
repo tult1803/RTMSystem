@@ -10,8 +10,8 @@ factory DataProduct.fromJson(Map<String, dynamic> json) {
       name: json['name'],
       description: json['description'],
       type: json['type'],
-      date_time: json['date_time'],
-      price: json['price'],
+      date_time: json['updateDateTime'],
+      price: "${json['update_price']}",
     );
   }
 }

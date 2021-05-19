@@ -6,11 +6,11 @@ import 'package:http/http.dart' as http;
 import 'model_login.dart';
 
 
-class PostAPI{
+class PostLogin{
   static int status;
   createLogin(String username, String password) async {
   final response = await http.post(
-    Uri.http('${url_main}', '${url_Login}'),
+    Uri.http('${url_main}', '${url_login}'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -19,7 +19,7 @@ class PostAPI{
       "password": password
     }),
   );
-  print(response.statusCode);
+  print("Status postApi Login:${response.statusCode}");
   if (response.statusCode == 200) {
     // If the server did return a 201 CREATED response,
     // then parse the JSON.

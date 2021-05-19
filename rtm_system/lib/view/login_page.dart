@@ -16,7 +16,7 @@ class LoginPage extends StatefulWidget {
 
 ButtonState _buttonState = ButtonState.normal;
 Timer _timer;
-PostAPI getAPI = PostAPI();
+PostLogin getAPI = PostLogin();
 DataLogin data;
 
 class LoginPageState extends State<LoginPage> {
@@ -68,7 +68,7 @@ class LoginPageState extends State<LoginPage> {
   Future LoginApi() async {
     // Đỗ dữ liệu lấy từ api
     data = await getAPI.createLogin(username, password);
-    status = await PostAPI.status;
+    status = await PostLogin.status;
     setState(() {
       role_id = data.role_id;
       access_token = data.access_token;

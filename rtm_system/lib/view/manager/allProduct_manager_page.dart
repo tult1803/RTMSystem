@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:rtm_system/presenter/showProduct_manager.dart';
 import 'package:rtm_system/ultils/button.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 class AllProduct extends StatefulWidget {
@@ -13,7 +14,6 @@ class AllProduct extends StatefulWidget {
 class _AllProductState extends State<AllProduct> {
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: welcome_color,
@@ -28,23 +28,7 @@ class _AllProductState extends State<AllProduct> {
             child: btnMain(context, "Cập nhật giá", Icon(Icons.update)),
             preferredSize: Size.fromHeight(60.0)),
       ),
-      body: Container(
-        margin: EdgeInsets.only(top: 0, left: 20, right: 20),
-        height: size.height,
-        width: size.width,
-        child: SingleChildScrollView(
-            child: Column(
-          children: [
-            cardProduct(context, "Mủ nước", "Mủ lỏng", "100000", "17-05-2021"),
-            cardProduct(context, "Mủ dây", "Mủ đặc", "165323", "17-05-2021"),
-            cardProduct(context, "Mủ ké", "Mủ đặc", "90776", "17-05-2021"),
-            cardProduct(context, "Mủ đất", "Mủ đặc", "100000", "17-05-2021"),
-            cardProduct(context, "Mủ chén", "Mủ đặc", "265378", "17-05-2021"),
-            cardProduct(context, "Mủ đông", "Mủ đặc", "1000", "17-05-2021"),
-            cardProduct(context, "Mủ nước", "Mủ đặc", "10000", "17-05-2021"),
-          ],
-        )),
-      ),
+      body: showAllProduct()
     );
   }
 }

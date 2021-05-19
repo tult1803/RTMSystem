@@ -123,6 +123,9 @@ Widget btnMain(BuildContext context, String tittle, Icon icon) {
 
 
 Widget card(BuildContext context, String tittle, String type,String price, String date) {
+  //Format lại ngày
+  String dateTime = date.substring(8,10) + "-" + date.substring(5,7) + "-" + date.substring(0,4) ;
+  print(dateTime);
   //Format lại giá
   final oCcy = new NumberFormat("#,##0", "en_US");
   //Lấy size của màn hình
@@ -159,7 +162,7 @@ Widget card(BuildContext context, String tittle, String type,String price, Strin
                     topRight: Radius.circular(10),
                     bottomRight: Radius.circular(10)),
               ),
-              child: componentCard("${oCcy.format(double.parse(price))}đ", date, CrossAxisAlignment.end),
+              child: componentCard("${oCcy.format(double.parse(price))}đ", dateTime, CrossAxisAlignment.end),
             ),
           ),
           SizedBox(width: 10,),
