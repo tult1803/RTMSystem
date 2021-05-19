@@ -44,11 +44,11 @@ class _NoticesPageState extends State<NoticesPage> {
     //   total = notice.total;
     //   length = notice.noticeList.length;
     // });
+    return noticeList;
   }
 
   @override
   Widget build(BuildContext context) {
-    if (status == 200)
       return Scaffold(
         backgroundColor: Color(0xffEEEEEE),
         appBar: AppBar(
@@ -67,93 +67,99 @@ class _NoticesPageState extends State<NoticesPage> {
             ),
           ),
           child: _getList(),
-        ),
-      );
-    else {
-      return Container();
-    }
+        ));
   }
 
   Widget _getList() {
     var size = MediaQuery.of(context).size;
-    return ListView.builder(
-        itemCount: noticeList.length,
-        itemBuilder: (context, index) {
-          return Container(
-              // color: Color(0xffEEEEEE),
-              color: Colors.red,
-              margin: EdgeInsets.fromLTRB(12, 0, 12, 0),
-              child: Material(
-                child: TextButton(
-                  style: TextButton.styleFrom(
-                    primary: Colors.black, // foreground
-                    textStyle: TextStyle(
-                      fontSize: 16,
+    return FutureBuilder(
+      future: getAPINotice(),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.hasData) {
+          return ListView.builder(
+              itemCount: noticeList.length,
+              itemBuilder: (context, index) {
+                return _getInfo(size, index);
+              });
+        }
+        return Container(
+            height: size.height * 0.7,
+            child: Center(child: CircularProgressIndicator()));
+      },
+    );
+  }
+  Widget _getInfo(size, index){
+    return Container(
+      margin: EdgeInsets.fromLTRB(12, 0, 12, 0),
+      child: Material(
+        child: TextButton(
+          style: TextButton.styleFrom(
+            primary: Colors.black, // foreground
+            textStyle: TextStyle(
+              fontSize: 16,
+            ),
+          ),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => DetailOfNotice()),);
+          },
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Text(
+                    "${noticeList[index].title}",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
                     ),
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.left,
                   ),
-                  onPressed: () {
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => DetailOfNotice()),
-                        (route) => false);
-                  },
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            "${noticeList[index].title}",
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.left,
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      SizedBox(
-                        width: size.width,
-                        child: Text(
-                          "${noticeList[index].content}",
-                          style: TextStyle(
-                            fontSize: 14,
-                          ),
-                          textAlign: TextAlign.left,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            "${noticeList[index].createDate}",
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Color(0xFF0BB791),
-                            ),
-                            textAlign: TextAlign.left,
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 9,
-                      ),
-                      SizedBox(
-                        height: 1,
-                        child: Container(
-                          color: Color(0xFFBDBDBD),
-                        ),
-                      ),
-                    ],
+                ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              SizedBox(
+                width: size.width,
+                child: Text(
+                  "${noticeList[index].content}",
+                  style: TextStyle(
+                    fontSize: 14,
                   ),
+                  textAlign: TextAlign.left,
+                  overflow: TextOverflow.ellipsis,
                 ),
-              ));
-        });
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Row(
+                children: [
+                  Text(
+                    "${noticeList[index].createDate}",
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Color(0xFF0BB791),
+                    ),
+                    textAlign: TextAlign.left,
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 9,
+              ),
+              SizedBox(
+                height: 1,
+                child: Container(
+                  color: Color(0xFFBDBDBD),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),);
   }
 }

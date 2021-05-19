@@ -1,6 +1,7 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
+import 'package:rtm_system/view/customer/Profile/profile.dart';
 import 'package:rtm_system/view/customer/invoice/all_invoice.dart';
 import 'package:rtm_system/view/customer/notice/all_notices.dart';
 
@@ -51,6 +52,7 @@ class _HomeCustomerPageState extends State<HomeCustomerPage> {
             } else if (index == 2) {
               _widget = NoticesPage();
             } else if (index == 3){
+              _widget = ProfilePage();
           }});
         },
         letIndexChange: (index) => true,

@@ -2,12 +2,13 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:rtm_system/model/notice/model_all_notice.dart';
+import 'package:rtm_system/ultils/src/url_api.dart';
 
 class GetAPIAllNotice {
   static int status;
 
   Future<Notice> getNotices(String token) async {
-    final response =  await http.get(Uri.parse('http://3.137.137.156:5000/api/rtm/v1/notice/get-notice-list?pageNum=13&pageNo=1'),
+    final response =  await http.get(Uri.parse('${url_notice}'),
         headers: <String, String>{
           'Content-Type': 'application/json',
           'Accept': 'application/json',
