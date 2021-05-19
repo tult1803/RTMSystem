@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -98,7 +99,7 @@ Widget btnMain(BuildContext context, String tittle, Icon icon) {
               child: Container(
             height: size.height,
             child: Center(
-                child: Text(
+                child: AutoSizeText(
               "$tittle",
               style: TextStyle(fontWeight: FontWeight.w600),
             )),
@@ -121,11 +122,14 @@ Widget btnMain(BuildContext context, String tittle, Icon icon) {
   );
 }
 
-
-Widget card(BuildContext context, String tittle, String type,String price, String date) {
+Widget card(BuildContext context, String tittle, String type, String price,
+    String date) {
   //Format lại ngày
-  String dateTime = date.substring(8,10) + "-" + date.substring(5,7) + "-" + date.substring(0,4) ;
-  print(dateTime);
+  String dateTime = date.substring(8, 10) +
+      "-" +
+      date.substring(5, 7) +
+      "-" +
+      date.substring(0, 4);
   //Format lại giá
   final oCcy = new NumberFormat("#,##0", "en_US");
   //Lấy size của màn hình
@@ -151,7 +155,8 @@ Widget card(BuildContext context, String tittle, String type,String price, Strin
             width: size.width * 0.3,
             child: Padding(
               padding: const EdgeInsets.only(left: 8.0),
-              child: componentCard(tittle, "Loại: ${type}", CrossAxisAlignment.start),
+              child: componentCard(
+                  tittle, "Loại: ${type}", CrossAxisAlignment.start),
             ),
           ),
           Expanded(
@@ -162,10 +167,13 @@ Widget card(BuildContext context, String tittle, String type,String price, Strin
                     topRight: Radius.circular(10),
                     bottomRight: Radius.circular(10)),
               ),
-              child: componentCard("${oCcy.format(double.parse(price))}đ", dateTime, CrossAxisAlignment.end),
+              child: componentCard("${oCcy.format(double.parse(price))}đ",
+                  dateTime, CrossAxisAlignment.end),
             ),
           ),
-          SizedBox(width: 10,),
+          SizedBox(
+            width: 10,
+          ),
           TextButton(
               onPressed: () {
                 // Navigate here
@@ -173,11 +181,100 @@ Widget card(BuildContext context, String tittle, String type,String price, Strin
               child: Container(
                   height: size.height,
                   child: Center(
-                    child: Text("Chi tiết",
+                    child: AutoSizeText("Chi tiết",
                         style: TextStyle(color: Colors.black54)),
                   ))),
         ],
       ),
     ),
   );
+}
+
+Widget containerButton(int id, String tittle, String content, String date) {
+  //Format lại ngày
+  String dateTime = date.substring(11, 16) +
+      " " +
+      date.substring(8, 10) +
+      "-" +
+      date.substring(5, 7) +
+      "-" +
+      date.substring(0, 4);
+  return Container(
+      margin: EdgeInsets.all(5),
+      height: 96,
+      child: Material(
+        child: TextButton(
+          style: TextButton.styleFrom(
+            primary: Colors.black, // foreground
+            textStyle: TextStyle(
+              fontSize: 16,
+            ),
+          ),
+          onPressed: () {
+            //Navigate here
+            print('Id: $id');
+          },
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  AutoSizeText(
+                    "$tittle",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.left,
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              AutoSizeText(
+                "$content",
+                style: TextStyle(
+                  fontSize: 14,
+                ),
+                textAlign: TextAlign.left,
+                overflow: TextOverflow.ellipsis,
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Row(
+                children: [
+                  AutoSizeText(
+                    "$dateTime",
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Color(0xFF0BB791),
+                    ),
+                    textAlign: TextAlign.left,
+                  ),
+                  Expanded(
+                      child: Container(
+                    margin: EdgeInsets.only(right: 10),
+                    alignment: Alignment.centerRight,
+                    child: AutoSizeText(
+                      "Chi tiết",
+                      style: TextStyle(fontSize: 10, color: Colors.black54),
+                    ),
+                  )),
+                ],
+              ),
+              SizedBox(
+                height: 9,
+              ),
+              SizedBox(
+                height: 1,
+                child: Container(
+                  color: Color(0xFFBDBDBD),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ));
 }
