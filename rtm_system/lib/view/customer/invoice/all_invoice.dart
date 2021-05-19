@@ -1,7 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:rtm_system/ultils/button.dart';
-import 'package:rtm_system/ultils/src/color_ultils.dart';
+import 'package:intl/intl.dart';
 
 class InvoicePage extends StatefulWidget {
   const InvoicePage({Key key}) : super(key: key);
@@ -11,6 +10,21 @@ class InvoicePage extends StatefulWidget {
 }
 
 class _InvoicePageState extends State<InvoicePage> {
+  var currentDate = new DateTime.now();
+  var formatter = new DateFormat('dd-MM-yyyy');
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime pickedDate = await showDatePicker(
+        context: context,
+        initialDate: currentDate,
+        firstDate: DateTime(2015),
+        lastDate: DateTime(2050));
+    if (pickedDate != null && pickedDate != currentDate)
+      setState(() {
+        currentDate = pickedDate;
+      });
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -23,76 +37,81 @@ class _InvoicePageState extends State<InvoicePage> {
         ),
       ),
       body: Container(
-        margin: EdgeInsets.only(top: 0, left: 20, right: 20),
-        height: size.height,
-        width: size.width,
-        child: SingleChildScrollView(
+          margin: EdgeInsets.only(top: 12, left: 12, right: 12),
           child: Column(
             children: [
-              cardProduct(
-                  context, "Mủ nước", "Mủ lỏng", "100000", "17-05-2021"),
-              cardProduct(context, "Mủ dây", "Mủ đặc", "165323", "17-05-2021"),
-              cardProduct(context, "Mủ ké", "Mủ đặc", "90776", "17-05-2021"),
-              cardProduct(context, "Mủ đất", "Mủ đặc", "100000", "17-05-2021"),
-              cardProduct(context, "Mủ chén", "Mủ đặc", "265378", "17-05-2021"),
-              cardProduct(context, "Mủ đông", "Mủ đặc", "1000", "17-05-2021"),
-              cardProduct(context, "Mủ nước", "Mủ đặc", "10000", "17-05-2021"),
+              Row(
+                children: [
+                  Container(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        RaisedButton(
+                          onPressed: () => {
+                            // chuyển đến trang cần xử lý
+                          },
+                          child: Row(
+                            children: [
+                              Column(children: [
+                                Icon(Icons.access_time_outlined),
+                              ],),
+                              Column(children: [ Text('  ')],),
+                              Column(
+                                children: [
+                                Text('Chờ xử lý'),
+                              ],),
+                            ],
+                          ),
+                          color: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          elevation: 10,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          RaisedButton(
+                            onPressed: () => _selectDate(context),
+                            child: Text(formatter.format(currentDate)),
+                            color: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            elevation: 10,
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(
+                height: 12,
+              ),
+              Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                elevation: 10,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ListTile(
+                      title: Text('10,000,000'),
+                      subtitle: Text('20/04/2021'),
+                      trailing: Text('Chưa trả'),
+                    ),
+                  ],
+                ),
+              ),
             ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget getListInvoice() {
-    var size = MediaQuery.of(context).size;
-    return Column(
-      children: [
-        Row(
-          children: [
-            Text(
-              "1000000",
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
-              ),
-              overflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.left,
-            ),
-          ],
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        SizedBox(
-          width: size.width,
-          child: Text(
-            "20/05/2020",
-            style: TextStyle(
-              fontSize: 14,
-            ),
-            textAlign: TextAlign.left,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-        Expanded(
-          child: Container(
-            alignment: Alignment.centerRight,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(10),
-                  bottomRight: Radius.circular(10)),
-            ),
-            child: Text(
-              "20/05/2020",
-              style: TextStyle(
-                fontSize: 14,
-              ),
-              textAlign: TextAlign.left,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-        ),
-      ],
+          )),
     );
   }
 }

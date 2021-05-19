@@ -19,7 +19,7 @@ class _HomeCustomerPageState extends State<HomeCustomerPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _widget = NoticesPage();
+    _widget = InvoicePage();
   }
 
   @override

@@ -21,13 +21,11 @@ NoticeList noticeListsss;
 class _NoticesPageState extends State<NoticesPage> {
   List<NoticeList> noticeList;
   int total;
-  int length;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    print('alo');
     this.getAPINotice();
   }
 
