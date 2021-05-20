@@ -367,7 +367,7 @@ Widget buttonProfile(double left, double right, double top, double bottom, Strin
     ),
   );
 }
-
+// design Notice bên customer, giống containerButton
 Widget containerButtonNotice(
     context, int id, String tittle, String content, String date) {
   //Format lại ngày
@@ -376,7 +376,7 @@ Widget containerButtonNotice(
       date.substring(5, 7) +
       "-" +
       date.substring(0, 4) +
-      "-" +
+      " " +
       date.substring(11, 16);
   return Container(
       margin: EdgeInsets.all(5),
