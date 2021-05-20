@@ -145,13 +145,13 @@ Widget btnDateTime(BuildContext context, String tittle, Icon icon) {
               child: icon),
           Expanded(
               child: Container(
-                height: size.height,
-                child: Center(
-                    child: AutoSizeText(
-                      "$tittle",
-                      style: TextStyle(fontWeight: FontWeight.w600),
-                    )),
-              ))
+            height: size.height,
+            child: Center(
+                child: AutoSizeText(
+              "$tittle",
+              style: TextStyle(fontWeight: FontWeight.w600),
+            )),
+          ))
         ]),
       ),
       Container(
@@ -172,8 +172,8 @@ Widget btnDateTime(BuildContext context, String tittle, Icon icon) {
   );
 }
 
-Widget card(BuildContext context, String tittle, String type, String detailType, String price,
-    String date, Color color) {
+Widget card(BuildContext context, String tittle, String type, String detailType,
+    String price, String date, Color color) {
   //Format lại ngày
   String dateTime = date.substring(8, 10) +
       "-" +
@@ -211,8 +211,8 @@ Widget card(BuildContext context, String tittle, String type, String detailType,
               width: size.width * 0.5,
               child: Padding(
                 padding: const EdgeInsets.only(top: 2.0),
-                child: componentCardS(
-                    tittle, "${type}", "${detailType}", CrossAxisAlignment.start, color),
+                child: componentCardS(tittle, "${type}", "${detailType}",
+                    CrossAxisAlignment.start, color),
               ),
             ),
             Expanded(
@@ -250,13 +250,13 @@ Widget card(BuildContext context, String tittle, String type, String detailType,
 
 Widget containerButton(int id, String tittle, String content, String date) {
   //Format lại ngày
-  String dateTime = date.substring(11, 16) +
-      " " +
-      date.substring(8, 10) +
+  String dateTime = date.substring(8, 10) +
       "-" +
       date.substring(5, 7) +
       "-" +
-      date.substring(0, 4);
+      date.substring(0, 4) +
+      " " +
+      date.substring(11, 16);
   return Container(
       margin: EdgeInsets.all(5),
       height: 96,
@@ -338,9 +338,10 @@ Widget containerButton(int id, String tittle, String content, String date) {
 }
 
 //Hiện tại đang dùng cho trang "Profile"
-Widget buttonProfile(double left, double right, double top, double bottom, String tittle){
-  return  Container(
-    margin: EdgeInsets.only(left: left ,top: top, right: right, bottom: bottom),
+Widget buttonProfile(
+    double left, double right, double top, double bottom, String tittle) {
+  return Container(
+    margin: EdgeInsets.only(left: left, top: top, right: right, bottom: bottom),
     child: FlatButton(
       onPressed: () {
         // Code here
@@ -348,10 +349,18 @@ Widget buttonProfile(double left, double right, double top, double bottom, Strin
       child: Column(
         children: [
           Container(
-            child:Row(
+            child: Row(
               children: [
-                Expanded(child: Text(tittle, style: TextStyle(color: Colors.black54),)),
-                Icon(Icons.arrow_forward_ios_outlined, color:  Colors.black54, size: 15,),
+                Expanded(
+                    child: Text(
+                  tittle,
+                  style: TextStyle(color: Colors.black54),
+                )),
+                Icon(
+                  Icons.arrow_forward_ios_outlined,
+                  color: Colors.black54,
+                  size: 15,
+                ),
               ],
             ),
           ),
@@ -367,20 +376,22 @@ Widget buttonProfile(double left, double right, double top, double bottom, Strin
 }
 
 // Dùng cho đăng xuất, xóa thông tin.
-Widget btnLogout(BuildContext context){
+Widget btnLogout(BuildContext context) {
   return Center(
       child: Container(
-        child: FlatButton(
-          child: Text("Đăng xuất", style: TextStyle(fontSize: 15, color: Colors.black54),),
-            onPressed: () async {
-              SharedPreferences prefs =
-              await SharedPreferences.getInstance();
-              prefs.clear();
-              print('Đã xóa dữ liệu login !!!');
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => LoginPage()),
-                      (route) => false);
-            },)));
+          child: FlatButton(
+    child: Text(
+      "Đăng xuất",
+      style: TextStyle(fontSize: 15, color: Colors.black54),
+    ),
+    onPressed: () async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.clear();
+      print('Đã xóa dữ liệu login !!!');
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => LoginPage()),
+          (route) => false);
+    },
+  )));
 }
-
