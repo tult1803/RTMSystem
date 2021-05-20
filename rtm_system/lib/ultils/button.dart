@@ -4,8 +4,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../view/customer/notice/detail_notice.dart';
 import '../view/login_page.dart';
 import 'component.dart';
 import 'src/color_ultils.dart';
@@ -313,15 +311,15 @@ Widget containerButton(int id, String tittle, String content, String date) {
                     ),
                     textAlign: TextAlign.left,
                   ),
-                  Expanded(
-                      child: Container(
-                    margin: EdgeInsets.only(right: 10),
-                    alignment: Alignment.centerRight,
-                    child: AutoSizeText(
-                      "Chi tiết",
-                      style: TextStyle(fontSize: 10, color: Colors.black54),
-                    ),
-                  )),
+                  // Expanded(
+                  //     child: Container(
+                  //   margin: EdgeInsets.only(right: 10),
+                  //   alignment: Alignment.centerRight,
+                  //   child: AutoSizeText(
+                  //     "Chi tiết",
+                  //     style: TextStyle(fontSize: 10, color: Colors.black54),
+                  //   ),
+                  // )),
                 ],
               ),
               SizedBox(
@@ -368,114 +366,21 @@ Widget buttonProfile(double left, double right, double top, double bottom, Strin
   );
 }
 
-<<<<<<< HEAD
 // Dùng cho đăng xuất, xóa thông tin.
-Widget btnLogout(){
+Widget btnLogout(BuildContext context){
   return Center(
       child: Container(
         child: FlatButton(
-            onPressed: () {
-              //Code here
-=======
-Widget containerButtonNotice(
-    context, int id, String tittle, String content, String date) {
-  //Format lại ngày
-  String dateTime = date.substring(8, 10) +
-      "-" +
-      date.substring(5, 7) +
-      "-" +
-      date.substring(0, 4) +
-      "-" +
-      date.substring(11, 16);
-  return Container(
-      margin: EdgeInsets.all(5),
-      height: 96,
-      child: Material(
-        child: TextButton(
-          style: TextButton.styleFrom(
-            primary: Colors.black, // foreground
-            textStyle: TextStyle(
-              fontSize: 16,
-            ),
-          ),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => DetailOfNotice( titleNotice: tittle, contentNotice: content,)),
-            );
-          },
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  AutoSizeText(
-                    "$tittle",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.left,
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              AutoSizeText(
-                "$content",
-                style: TextStyle(
-                  fontSize: 14,
-                ),
-                textAlign: TextAlign.left,
-                overflow: TextOverflow.ellipsis,
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Row(
-                children: [
-                  AutoSizeText(
-                    "$dateTime",
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Color(0xFF0BB791),
-                    ),
-                    textAlign: TextAlign.left,
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 9,
-              ),
-              SizedBox(
-                height: 1,
-                child: Container(
-                  color: Color(0xFFBDBDBD),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ));
-}
-
-// Dùng cho đăng xuất, xóa thông tin.
-Widget btnLogout(context){
-  return Center(
-      child: Container(
-        child: FlatButton(
+          child: Text("Đăng xuất", style: TextStyle(fontSize: 15, color: Colors.black54),),
             onPressed: () async {
               SharedPreferences prefs =
               await SharedPreferences.getInstance();
               prefs.clear();
-              print('Clear data login');
+              print('Đã xóa dữ liệu login !!!');
               Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => LoginPage()),
                       (route) => false);
->>>>>>> TrangBTT
-            },
-            child: Text("Đăng xuất", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),)),
-      ));
+            },)));
 }
+

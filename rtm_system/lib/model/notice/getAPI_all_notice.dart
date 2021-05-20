@@ -14,6 +14,7 @@ class GetAPIAllNotice {
           'Accept': 'application/json',
           'Authorization': 'Bearer $token',
         });
+    print("Status getApi Notice:${response.statusCode}");
     if (response.statusCode == 200) {
       status = 200;
       return Notice.fromJson(jsonDecode(response.body));

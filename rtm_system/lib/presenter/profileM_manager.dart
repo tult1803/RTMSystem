@@ -43,11 +43,7 @@ class _profilePageState extends State<profilePage> {
           headerProfile(),
           buttonProfile(0, 10, 20, 0, "Quản lý khách hàng"),
           buttonProfile(0, 10, 0, 0, "Trung tâm hỗ trợ"),
-<<<<<<< HEAD
-          btnLogout(),
-=======
           btnLogout(context),
->>>>>>> TrangBTT
         ],
       ),
     );
