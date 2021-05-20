@@ -3,8 +3,10 @@ import 'dart:ui';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../view/customer/notice/detail_notice.dart';
+import '../view/login_page.dart';
 import 'component.dart';
 import 'src/color_ultils.dart';
 
@@ -366,7 +368,7 @@ Widget buttonProfile(double left, double right, double top, double bottom, Strin
   );
 }
 
-Widget containerButton(
+Widget containerButtonNotice(
     context, int id, String tittle, String content, String date) {
   //Format lại ngày
   String dateTime = date.substring(8, 10) +
@@ -448,13 +450,21 @@ Widget containerButton(
         ),
       ));
 }
+
 // Dùng cho đăng xuất, xóa thông tin.
-Widget btnLogout(){
+Widget btnLogout(context){
   return Center(
       child: Container(
         child: FlatButton(
-            onPressed: () {
-              //Code here
+            onPressed: () async {
+              SharedPreferences prefs =
+              await SharedPreferences.getInstance();
+              prefs.clear();
+              print('Clear data login');
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginPage()),
+                      (route) => false);
             },
             child: Text("Đăng xuất", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),)),
       ));
