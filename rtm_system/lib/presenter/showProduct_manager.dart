@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:rtm_system/model/getAPI_product.dart';
 import 'package:rtm_system/model/model_product.dart';
 import 'package:rtm_system/ultils/button.dart';
@@ -32,10 +31,14 @@ class _showAllProductState extends State<showAllProduct> {
     // await _getToken();
     // gọi APIProduct và lấy dữ liệu
 
+    //Khi click nhiều lần vào button "Sản phẩm" thì sẽ có hiện tượng dữ liệu bị ghi đè
+    //Clear là để xoá dữ liệu cũ, ghi lại dữ liệu mới
+    dataListProduct.clear();
+
     //Nếu ko có If khi FutureBuilder gọi hàm _getProduct lần đầu thì Token chưa trả về nên sẽ bằng null
     //FutureBuilder sẽ gọi đến khi nào có giá trị trả về
     //Ở lần gọi thứ 2 thì token mới có giá trị
-    if (token != null) {
+    if (token.isNotEmpty) {
       dataList = await getProduct.createLogin(token);
       //Parse dữ liệu
       dataList.forEach((element) {
@@ -62,7 +65,7 @@ class _showAllProductState extends State<showAllProduct> {
       height: size.height,
       width: size.width,
       child: new FutureBuilder(
-        future: _getProduct(),
+        future:  _getProduct(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
             return ListView.builder(

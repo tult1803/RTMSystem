@@ -28,7 +28,7 @@ class _AllProductState extends State<AllProduct> {
             child: btnMain(context, "Cập nhật giá", Icon(Icons.update)),
             preferredSize: Size.fromHeight(60.0)),
       ),
-      body: showAllProduct()
+      body: new showAllProduct()
     );
   }
 }
