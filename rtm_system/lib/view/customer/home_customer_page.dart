@@ -1,6 +1,7 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
+import 'package:rtm_system/view/customer/Profile/profile.dart';
 import 'package:rtm_system/view/customer/invoice/all_invoice.dart';
 import 'package:rtm_system/view/customer/notice/all_notices.dart';
 
@@ -31,11 +32,11 @@ class _HomeCustomerPageState extends State<HomeCustomerPage> {
         index: _index,
         height: 50.0,
         items: <Widget>[
-          // Icon(Icons.perm_contact_cal_outlined, size: 30),
           Icon(Icons.my_library_books_outlined, size: 30),
           Icon(Icons.assignment_outlined, size: 30),
           Icon(Icons.notifications_none, size: 30),
-          Icon(Icons.attach_money, size: 30),
+          // Icon(Icons.perm_contact_cal_outlined, size: 30),
+          Icon(Icons.people_rounded, size: 30),
         ],
         color: Colors.white,
         buttonBackgroundColor: welcome_color,
@@ -51,6 +52,7 @@ class _HomeCustomerPageState extends State<HomeCustomerPage> {
             } else if (index == 2) {
               _widget = NoticesPage();
             } else if (index == 3){
+              _widget = ProfilePage();
           }});
         },
         letIndexChange: (index) => true,
