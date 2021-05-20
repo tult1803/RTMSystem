@@ -301,8 +301,8 @@ Widget containerButton(int id, String tittle, String content, String date) {
               SizedBox(
                 height: 10,
               ),
-              Row(
-                children: [
+              // Row(
+              //   children: [
                   AutoSizeText(
                     "$dateTime",
                     style: TextStyle(
@@ -320,8 +320,8 @@ Widget containerButton(int id, String tittle, String content, String date) {
                   //     style: TextStyle(fontSize: 10, color: Colors.black54),
                   //   ),
                   // )),
-                ],
-              ),
+              //   ],
+              // ),
               SizedBox(
                 height: 9,
               ),
