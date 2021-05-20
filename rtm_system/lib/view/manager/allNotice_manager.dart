@@ -12,6 +12,8 @@ class AllNotice extends StatefulWidget {
 }
 
 class _AllNoticeState extends State<AllNotice> {
+
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
