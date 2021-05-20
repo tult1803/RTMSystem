@@ -39,7 +39,7 @@ class _showAllProductState extends State<showAllProduct> {
     //FutureBuilder sẽ gọi đến khi nào có giá trị trả về
     //Ở lần gọi thứ 2 thì token mới có giá trị
     if (token.isNotEmpty) {
-      dataList = await getProduct.createLogin(token);
+      dataList = await getProduct.createLogin(token, 0);
       //Parse dữ liệu
       dataList.forEach((element) {
         Map<dynamic, dynamic> data = element;
@@ -61,7 +61,7 @@ class _showAllProductState extends State<showAllProduct> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Container(
-      margin: EdgeInsets.only(top: 0, left: 20, right: 20),
+      margin: EdgeInsets.only(top: 10, left: 20, right: 20),
       height: size.height,
       width: size.width,
       child: new FutureBuilder(
@@ -74,9 +74,11 @@ class _showAllProductState extends State<showAllProduct> {
                 return card(
                     context,
                     snapshot.data[index].name,
-                    snapshot.data[index].type,
+                    "Loại",
+                    "${snapshot.data[index].type}",
                     snapshot.data[index].price,
-                    snapshot.data[index].date_time);
+                    snapshot.data[index].date_time,
+                    Colors.black54);
               },
             );
           }

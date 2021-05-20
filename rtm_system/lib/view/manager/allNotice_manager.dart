@@ -19,7 +19,7 @@ class _AllNoticeState extends State<AllNotice> {
       appBar: AppBar(
         backgroundColor: welcome_color,
         title: Center(
-          child: Text(
+          child: AutoSizeText(
             "Quản lý thông báo",
             style: TextStyle(
                 color: Colors.white, fontWeight: FontWeight.w500, fontSize: 25),

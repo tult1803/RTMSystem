@@ -53,7 +53,7 @@ class _showAllNoticeState extends State<showAllNotice> {
             return ListView.builder(
               itemCount: snapshot.data.length,
               itemBuilder: (context, index) {
-                return containerButton( context,
+                return containerButton(
                     snapshot.data[index].id,
                     snapshot.data[index].title,
                     snapshot.data[index].content,
