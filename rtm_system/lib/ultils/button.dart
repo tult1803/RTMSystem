@@ -4,6 +4,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../view/customer/notice/detail_notice.dart';
 import 'component.dart';
 import 'src/color_ultils.dart';
 
@@ -190,15 +191,16 @@ Widget card(BuildContext context, String tittle, String type, String price,
   );
 }
 
-Widget containerButton(int id, String tittle, String content, String date) {
+Widget containerButton(
+    context, int id, String tittle, String content, String date) {
   //Format lại ngày
-  String dateTime = date.substring(11, 16) +
-      " " +
-      date.substring(8, 10) +
+  String dateTime = date.substring(8, 10) +
       "-" +
       date.substring(5, 7) +
       "-" +
-      date.substring(0, 4);
+      date.substring(0, 4) +
+      "-" +
+      date.substring(11, 16);
   return Container(
       margin: EdgeInsets.all(5),
       height: 96,
@@ -211,8 +213,10 @@ Widget containerButton(int id, String tittle, String content, String date) {
             ),
           ),
           onPressed: () {
-            //Navigate here
-            print('Id: $id');
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => DetailOfNotice( titleNotice: tittle, contentNotice: content,)),
+            );
           },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -253,15 +257,6 @@ Widget containerButton(int id, String tittle, String content, String date) {
                     ),
                     textAlign: TextAlign.left,
                   ),
-                  Expanded(
-                      child: Container(
-                    margin: EdgeInsets.only(right: 10),
-                    alignment: Alignment.centerRight,
-                    child: AutoSizeText(
-                      "Chi tiết",
-                      style: TextStyle(fontSize: 10, color: Colors.black54),
-                    ),
-                  )),
                 ],
               ),
               SizedBox(
