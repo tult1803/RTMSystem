@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:rtm_system/presenter/showProduct_manager.dart';
 import 'package:rtm_system/ultils/button.dart';
@@ -18,7 +19,7 @@ class _AllProductState extends State<AllProduct> {
       appBar: AppBar(
         backgroundColor: welcome_color,
         title: Center(
-          child: Text(
+          child: AutoSizeText(
             "Quản lý sản phẩm",
             style: TextStyle(
                 color: Colors.white, fontWeight: FontWeight.w500, fontSize: 25),
