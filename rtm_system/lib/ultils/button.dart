@@ -250,125 +250,7 @@ Widget card(BuildContext context, String tittle, String type, String detailType,
   );
 }
 
-Widget containerButton(int id, String tittle, String content, String date) {
-  //Format lại ngày
-  String dateTime = date.substring(11, 16) +
-      " " +
-      date.substring(8, 10) +
-      "-" +
-      date.substring(5, 7) +
-      "-" +
-      date.substring(0, 4);
-  return Container(
-      margin: EdgeInsets.all(5),
-      height: 96,
-      child: Material(
-        child: TextButton(
-          style: TextButton.styleFrom(
-            primary: Colors.black, // foreground
-            textStyle: TextStyle(
-              fontSize: 16,
-            ),
-          ),
-          onPressed: () {
-            //Navigate here
-            print('Id: $id');
-          },
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  AutoSizeText(
-                    "$tittle",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.left,
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              AutoSizeText(
-                "$content",
-                style: TextStyle(
-                  fontSize: 14,
-                ),
-                textAlign: TextAlign.left,
-                overflow: TextOverflow.ellipsis,
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Row(
-                children: [
-                  AutoSizeText(
-                    "$dateTime",
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Color(0xFF0BB791),
-                    ),
-                    textAlign: TextAlign.left,
-                  ),
-                  Expanded(
-                      child: Container(
-                    margin: EdgeInsets.only(right: 10),
-                    alignment: Alignment.centerRight,
-                    child: AutoSizeText(
-                      "Chi tiết",
-                      style: TextStyle(fontSize: 10, color: Colors.black54),
-                    ),
-                  )),
-                ],
-              ),
-              SizedBox(
-                height: 9,
-              ),
-              SizedBox(
-                height: 1,
-                child: Container(
-                  color: Color(0xFFBDBDBD),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ));
-}
-
-//Hiện tại đang dùng cho trang "Profile"
-Widget buttonProfile(double left, double right, double top, double bottom, String tittle){
-  return  Container(
-    margin: EdgeInsets.only(left: left ,top: top, right: right, bottom: bottom),
-    child: FlatButton(
-      onPressed: () {
-        // Code here
-      },
-      child: Column(
-        children: [
-          Container(
-            child:Row(
-              children: [
-                Expanded(child: Text(tittle, style: TextStyle(color: Colors.black54),)),
-                Icon(Icons.arrow_forward_ios_outlined, color:  Colors.black54, size: 15,),
-              ],
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(top: 5),
-            color: Colors.black45,
-            height: 1,
-          ),
-        ],
-      ),
-    ),
-  );
-}
-// design Notice bên customer, giống containerButton
-Widget containerButtonNotice(
+Widget containerButton(
     context, int id, String tittle, String content, String date) {
   //Format lại ngày
   String dateTime = date.substring(8, 10) +
@@ -450,6 +332,37 @@ Widget containerButtonNotice(
         ),
       ));
 }
+
+//Hiện tại đang dùng cho trang "Profile"
+Widget buttonProfile(double left, double right, double top, double bottom, String tittle){
+  return  Container(
+    margin: EdgeInsets.only(left: left ,top: top, right: right, bottom: bottom),
+    child: FlatButton(
+      onPressed: () {
+        // Code here
+      },
+      child: Column(
+        children: [
+          Container(
+            child:Row(
+              children: [
+                Expanded(child: Text(tittle, style: TextStyle(color: Colors.black54),)),
+                Icon(Icons.arrow_forward_ios_outlined, color:  Colors.black54, size: 15,),
+              ],
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 5),
+            color: Colors.black45,
+            height: 1,
+          ),
+        ],
+      ),
+    ),
+  );
+}
+// design Notice bên customer, giống containerButton
+
 
 // Dùng cho đăng xuất, xóa thông tin.
 Widget btnLogout(context){
