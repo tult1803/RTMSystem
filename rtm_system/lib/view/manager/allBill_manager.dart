@@ -1,6 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:rtm_system/presenter/showBill_manager.dart';
+import 'package:rtm_system/presenter/Manager/showBill_manager.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 
 class AllBill extends StatefulWidget {

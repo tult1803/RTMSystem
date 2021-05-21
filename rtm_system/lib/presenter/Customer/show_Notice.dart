@@ -46,6 +46,7 @@ class _showNoticeState extends State<showNotice> {
               itemCount: snapshot.data.length,
               itemBuilder: (context, index) {
                 return containerButton(
+                    context,
                     snapshot.data[index].id,
                     snapshot.data[index].title,
                     snapshot.data[index].content,

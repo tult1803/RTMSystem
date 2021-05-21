@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:rtm_system/ultils/button.dart';
+import 'package:rtm_system/view/manager/processBill.dart';
 
 class showAllBill extends StatefulWidget {
   const showAllBill({Key key}) : super(key: key);
@@ -36,7 +37,7 @@ class _showAllBillState extends State<showAllBill> {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              btnMain(context, "Đơn chờ xử lý", Icon(Icons.update)),
+              btnMain(context, "Đơn chờ xử lý", Icon(Icons.update), processBill()),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

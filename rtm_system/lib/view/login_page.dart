@@ -97,7 +97,7 @@ class LoginPageState extends State<LoginPage> {
       savedInfoLogin(role_id, accountId, access_token, fullname);
       Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => HomeAdminPage()),
+          MaterialPageRoute(builder: (context) => HomeAdminPage(index: 2,)),
           (route) => false);
       print('Status button: Done');
       _buttonState = ButtonState.normal;

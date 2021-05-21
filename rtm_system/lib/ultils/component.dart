@@ -76,13 +76,12 @@ Widget txtFullNameProfile(String tittle) {
 }
 
 // Hiện tại dùng cho trang "Profile"
-Widget txtCanClick(String tittle) {
+Widget txtCanClick(BuildContext context, Widget widget, String tittle) {
   return Container(
     margin: EdgeInsets.only(left: 10),
     child: GestureDetector(
       onTap: () {
-        //Code here
-        print('Click Chỉnh sửa tài khoản');
+        Navigator.push(context, MaterialPageRoute(builder: (context) => widget));
       },
       child: Row(
         children: [

@@ -3,6 +3,10 @@ import 'dart:ui';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:rtm_system/presenter/Manager/showCreateNotice.dart';
+import 'package:rtm_system/ultils/alertDialog.dart';
+import 'package:rtm_system/view/manager/allNotice_manager.dart';
+import 'package:rtm_system/view/manager/home_manager_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../view/login_page.dart';
 import 'component.dart';
@@ -78,7 +82,7 @@ class StretchableButton extends StatelessWidget {
 
 //btnMain khong biet de ten gi cho hop ly
 // Dung cho 'Cap nhat gia', 'Don cho xu ly', 'Tao thong bao'
-Widget btnMain(BuildContext context, String tittle, Icon icon) {
+Widget btnMain(BuildContext context, String tittle, Icon icon, Widget widget) {
   var size = MediaQuery.of(context).size;
   return Stack(
     children: <Widget>[
@@ -117,7 +121,8 @@ Widget btnMain(BuildContext context, String tittle, Icon icon) {
         width: 150,
         child: FlatButton(
           onPressed: () {
-            // Code here
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => widget));
           },
         ),
       ),
@@ -198,7 +203,10 @@ Widget card(BuildContext context, String tittle, String type, String detailType,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
-        onPressed: () {},
+        onPressed: () {
+          //Code navigate ở đây
+          print('Choose: $tittle');
+        },
         child: Row(
           children: [
             Container(
@@ -248,7 +256,9 @@ Widget card(BuildContext context, String tittle, String type, String detailType,
   );
 }
 
-Widget containerButton(int id, String tittle, String content, String date) {
+Widget containerButton(
+    BuildContext context, int id, String tittle, String content, String date) {
+  var size = MediaQuery.of(context).size;
   //Format lại ngày
   String dateTime = date.substring(8, 10) +
       "-" +
@@ -259,7 +269,7 @@ Widget containerButton(int id, String tittle, String content, String date) {
       date.substring(11, 16);
   return Container(
       margin: EdgeInsets.all(5),
-      height: 96,
+      // height: 96,
       child: Material(
         child: TextButton(
           style: TextButton.styleFrom(
@@ -270,23 +280,27 @@ Widget containerButton(int id, String tittle, String content, String date) {
           ),
           onPressed: () {
             //Navigate here
-            print('Id: $id');
+            print('Choose: $tittle');
           },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
-                  AutoSizeText(
-                    "$tittle",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
+                  Container(
+                    width: size.width * 0.93,
+                    child: AutoSizeText(
+                      "$tittle",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                      ),
+                      overflow: TextOverflow.clip,
+                      textAlign: TextAlign.left,
                     ),
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.left,
                   ),
                 ],
               ),
+
               SizedBox(
                 height: 10,
               ),
@@ -303,23 +317,23 @@ Widget containerButton(int id, String tittle, String content, String date) {
               ),
               // Row(
               //   children: [
-                  AutoSizeText(
-                    "$dateTime",
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Color(0xFF0BB791),
-                    ),
-                    textAlign: TextAlign.left,
-                  ),
-                  // Expanded(
-                  //     child: Container(
-                  //   margin: EdgeInsets.only(right: 10),
-                  //   alignment: Alignment.centerRight,
-                  //   child: AutoSizeText(
-                  //     "Chi tiết",
-                  //     style: TextStyle(fontSize: 10, color: Colors.black54),
-                  //   ),
-                  // )),
+              AutoSizeText(
+                "$dateTime",
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Color(0xFF0BB791),
+                ),
+                textAlign: TextAlign.left,
+              ),
+              // Expanded(
+              //     child: Container(
+              //   margin: EdgeInsets.only(right: 10),
+              //   alignment: Alignment.centerRight,
+              //   child: AutoSizeText(
+              //     "Chi tiết",
+              //     style: TextStyle(fontSize: 10, color: Colors.black54),
+              //   ),
+              // )),
               //   ],
               // ),
               SizedBox(
@@ -338,13 +352,16 @@ Widget containerButton(int id, String tittle, String content, String date) {
 }
 
 //Hiện tại đang dùng cho trang "Profile"
-Widget buttonProfile(
-    double left, double right, double top, double bottom, String tittle) {
+Widget buttonProfile(BuildContext context, double left, double right,
+    double top, double bottom, String tittle, Widget widget) {
   return Container(
     margin: EdgeInsets.only(left: left, top: top, right: right, bottom: bottom),
-    child: FlatButton(
-      onPressed: () {
-        // Code here
+    //Nếu dùng "GestureDetector" thì click sẽ không tạo ra hiệu ứng button
+    //Nếu muốn tạo hiệu ứng button có thể dùng FlatButton hoặc RaiseButton
+    child: GestureDetector(
+      onTap: () {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => widget));
       },
       child: Column(
         children: [
@@ -394,4 +411,39 @@ Widget btnLogout(BuildContext context) {
           (route) => false);
     },
   )));
+}
+
+//Widget này dùng cho các button "Tạo" hoặc "Hủy" vd: ở Trang Tạo thông báo
+//bool action = flase khi nhấn nút "Hủy" và bằng true khi nhấn "Tạo"
+Widget btnSubmitOrCancel(BuildContext context, double width, double height,
+    Color color, String tittleButtonAlertDialog, String mainTittle, String content, String txtError, bool action, int indexOfBottomBar) {
+  return Container(
+    height: height,
+    width: width,
+    decoration: BoxDecoration(
+      color: color,
+      borderRadius: BorderRadius.circular(5),
+    ),
+    child: FlatButton(
+        onPressed: ()  async{
+          if (action) {
+            if(mainTittle == ""){
+              showStatusAlertDialog(context, txtError, null, false);
+            }else {
+             int status = await postAPINotice(mainTittle, content);
+             if(status == 200){
+               showStatusAlertDialog(context, "Tạo thành công.", HomeAdminPage(index: indexOfBottomBar,), true);
+             }else showStatusAlertDialog(context, "Tạo thất bại. Xin thử lại !!!", null, false);
+            }
+          } else {
+            showAlertDialog(context, "Bạn muốn hủy tạo thông báo ?", HomeAdminPage(index: indexOfBottomBar,));
+          }
+        },
+        child: Center(
+            child: Text(
+              tittleButtonAlertDialog,
+          style: TextStyle(
+              color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
+        ))),
+  );
 }

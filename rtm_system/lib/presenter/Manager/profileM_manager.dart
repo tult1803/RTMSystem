@@ -3,6 +3,9 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:rtm_system/ultils/button.dart';
 import 'package:rtm_system/ultils/component.dart';
+import 'package:rtm_system/view/manager/allCustomer_manager.dart';
+import 'package:rtm_system/view/manager/support_page.dart';
+import 'package:rtm_system/view/manager/updateProfile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class profilePage extends StatefulWidget {
@@ -41,8 +44,8 @@ class _profilePageState extends State<profilePage> {
       child: Column(
         children: [
           headerProfile(),
-          buttonProfile(0, 10, 20, 0, "Quản lý khách hàng"),
-          buttonProfile(0, 10, 0, 0, "Trung tâm hỗ trợ"),
+          buttonProfile(context,15, 15, 20, 0, "Quản lý khách hàng", AllCustomer()),
+          buttonProfile(context,15, 15, 20, 0, "Trung tâm hỗ trợ", SupportPage()),
           btnLogout(context),
         ],
       ),
@@ -70,7 +73,7 @@ class _profilePageState extends State<profilePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 txtFullNameProfile("$fullname"),
-                txtCanClick("Chỉnh sửa tài khoản"),
+                txtCanClick(context, updateProfile(),"Chỉnh sửa tài khoản"),
               ],
             )),
           ],

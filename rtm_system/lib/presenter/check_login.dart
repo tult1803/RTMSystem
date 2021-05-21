@@ -198,7 +198,7 @@ void checkSaveLogin(BuildContext context) async {
         prefs.getBool("isLogin") == true) {
       Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => HomeAdminPage()),
+          MaterialPageRoute(builder: (context) => HomeAdminPage(index: 2,)),
           (route) => false);
     }
   } catch (e) {
