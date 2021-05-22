@@ -219,7 +219,7 @@ Widget card(BuildContext context, String tittle, String type, String detailType,
               width: size.width * 0.5,
               child: Padding(
                 padding: const EdgeInsets.only(top: 2.0),
-                child: componentCardS(tittle, "${type}", "${detailType}",
+                child: componentCardS(tittle, type, detailType,
                     CrossAxisAlignment.start, color),
               ),
             ),
@@ -396,7 +396,7 @@ Widget buttonProfile(BuildContext context, double left, double right,
 Widget btnLogout(BuildContext context) {
   return Center(
       child: Container(
-          child: FlatButton(
+          child: TextButton(
     child: Text(
       "Đăng xuất",
       style: TextStyle(fontSize: 15, color: Colors.black54),
@@ -424,7 +424,7 @@ Widget btnSubmitOrCancel(BuildContext context, double width, double height,
       color: color,
       borderRadius: BorderRadius.circular(5),
     ),
-    child: FlatButton(
+    child: TextButton(
         onPressed: ()  async{
           if (action) {
             if(mainTittle == ""){
