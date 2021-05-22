@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:rtm_system/ultils/button.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key key}) : super(key: key);
-  final String title = "";
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -48,50 +48,11 @@ class _ProfilePageState extends State<ProfilePage> {
               SizedBox(
                 height: 10,
               ),
-              Container(
-                width: 140,
-                child: Center(
-                  child: TextButton(
-                    onPressed: () {},
-                    style: ButtonStyle(
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(18.0),
-                                    side: BorderSide(color: Colors.red)))),
-                    child: Row(
-                      children: [
-                        Column(
-                          children: [
-                            Image(
-                              image: AssetImage("images/exit.png"),
-                              width: 20,
-                              height: 20,
-                            ),
-                          ],
-                        ),
-                        Column(
-                          children: [Text('     ')],
-                        ),
-                        Column(
-                          children: [
-                            Text(
-                              'Đăng xuất',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 16,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+              btnLogout(context),
               SizedBox(
                 height: 10,
               ),
+
               //data infor show here
               Container(
                   margin: EdgeInsets.fromLTRB(0, 0, 0, 12),
@@ -117,6 +78,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       )
                   )
               ),
+              btnUpdateInfo(context),
             ],
           ),
         ));

@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:rtm_system/view/customer/Profile/update_profile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../view/customer/notice/detail_notice.dart';
@@ -366,19 +367,80 @@ Widget buttonProfile(double left, double right, double top, double bottom, Strin
 
 // Dùng cho đăng xuất, xóa thông tin.
 Widget btnLogout(context){
-  return Center(
-      child: Container(
-        child: FlatButton(
-            onPressed: () async {
-              SharedPreferences prefs =
+  return Container(
+    width: 140,
+    child: Center(
+      child: TextButton(
+        onPressed: () async {
+          SharedPreferences prefs =
               await SharedPreferences.getInstance();
-              prefs.clear();
-              print('Clear data login');
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => LoginPage()),
-                      (route) => false);
-            },
-            child: Text("Đăng xuất", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),)),
-      ));
+          prefs.clear();
+          print('Clear data login');
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => LoginPage()),
+                  (route) => false);
+        },
+        style: ButtonStyle(
+            shape:
+            MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18.0),
+                    side: BorderSide(color: Colors.red)))),
+        child: Row(
+          children: [
+            Column(
+              children: [
+                Image(
+                  image: AssetImage("images/exit.png"),
+                  width: 20,
+                  height: 20,
+                ),
+              ],
+            ),
+            Column(
+              children: [Text('     ')],
+            ),
+            Column(
+              children: [
+                Text(
+                  'Đăng xuất',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
 }
+Widget btnUpdateInfo(context){
+  return Container(
+    width: 320,
+    child: RaisedButton(
+      color: Color(0xFF0BB791),
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => UpdateProfilePage()),
+        );
+      },
+      child: Text(
+        'Cập nhật thông tin',
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 16,
+        ),
+      ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      elevation: 10,
+    ),
+  );
+}
+
