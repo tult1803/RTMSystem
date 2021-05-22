@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:rtm_system/presenter/Manager/showCreateNotice.dart';
 import 'package:rtm_system/ultils/alertDialog.dart';
+import 'package:rtm_system/view/customer/Profile/update_profile.dart';
+import 'package:rtm_system/view/customer/notice/detail_notice.dart';
 import 'package:rtm_system/view/manager/allNotice_manager.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';

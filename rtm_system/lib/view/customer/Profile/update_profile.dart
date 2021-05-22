@@ -110,7 +110,6 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
           fillColor: Colors.amberAccent,
           hintText: 'Họ và tên',
           labelText: 'Họ và tên',
-          suffixIcon: Icon(Icons.edit, ),
         ),
         onChanged: (value) {
           setState(() => valueField = value);
@@ -218,6 +217,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
           return value;
         },
       ),
+
     );
   }
 
