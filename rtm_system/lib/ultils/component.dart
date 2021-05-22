@@ -51,12 +51,12 @@ Widget componentCardS(String tittle, String type, String detailType, CrossAxisAl
             AutoSizeText(
               "$type: ",
               maxLines: 1,
-              style: TextStyle(fontWeight: FontWeight.w200, fontSize: 15, color: Colors.black54,),
+              style: TextStyle(fontWeight: FontWeight.w400, fontSize: 15, color: Colors.black54,),
             ),
             AutoSizeText(
               "${detailType}",
               maxLines: 1,
-              style: TextStyle(fontWeight: FontWeight.w200, fontSize: 15, color: color,),
+              style: TextStyle(fontWeight: FontWeight.w400, fontSize: 15, color: color,),
             ),
           ],
         ),
