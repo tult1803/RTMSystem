@@ -48,19 +48,6 @@ class _InvoicePageState extends State<InvoicePage> {
               ),
               _cardInvoice(
                   'Mủ nước', '20/04/2021', '10,000,000', 'chưa trả'),
-              FlatButton(
-                onPressed: () async {
-                  SharedPreferences prefs =
-                      await SharedPreferences.getInstance();
-                  prefs.clear();
-                  print('Clear data login');
-                  Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (context) => LoginPage()),
-                      (route) => false);
-                },
-                child: Text("Logout"),
-              ),
               _showBottomButton(),
             ],
           )),
@@ -120,8 +107,7 @@ class _InvoicePageState extends State<InvoicePage> {
     return Column(
       children: [
         Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+          mainAxisAlignment: MainAxisAlignment.center,          children: [
             SizedBox(
               width: 150,
               child: RaisedButton(

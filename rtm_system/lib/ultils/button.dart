@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:rtm_system/presenter/Manager/showCreateNotice.dart';
 import 'package:rtm_system/ultils/alertDialog.dart';
+import 'package:rtm_system/view/customer/Profile/update_profile.dart';
+import 'package:rtm_system/view/customer/notice/detail_notice.dart';
 import 'package:rtm_system/view/manager/allNotice_manager.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -279,8 +281,10 @@ Widget containerButton(
             ),
           ),
           onPressed: () {
-            //Navigate here
-            print('Choose: $tittle');
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => DetailOfNotice( titleNotice: tittle, contentNotice: content,)),
+            );
           },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -391,26 +395,86 @@ Widget buttonProfile(BuildContext context, double left, double right,
     ),
   );
 }
+// design Notice bên customer, giống containerButton
+
 
 // Dùng cho đăng xuất, xóa thông tin.
-Widget btnLogout(BuildContext context) {
-  return Center(
-      child: Container(
-          child: TextButton(
-    child: Text(
-      "Đăng xuất",
-      style: TextStyle(fontSize: 15, color: Colors.black54),
+Widget btnLogout(context){
+  return Container(
+    width: 140,
+    child: Center(
+      child: TextButton(
+        onPressed: () async {
+          SharedPreferences prefs =
+              await SharedPreferences.getInstance();
+          prefs.clear();
+          print('Clear data login');
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => LoginPage()),
+                  (route) => false);
+        },
+        style: ButtonStyle(
+            shape:
+            MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18.0),
+                    side: BorderSide(color: Colors.red)))),
+        child: Row(
+          children: [
+            Column(
+              children: [
+                Image(
+                  image: AssetImage("images/exit.png"),
+                  width: 20,
+                  height: 20,
+                ),
+              ],
+            ),
+            Column(
+              children: [Text('     ')],
+            ),
+            Column(
+              children: [
+                Text(
+                  'Đăng xuất',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     ),
-    onPressed: () async {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.clear();
-      print('Đã xóa dữ liệu login !!!');
-      Navigator.pushAndRemoveUntil(
+  );
+}
+Widget btnUpdateInfo(context){
+  return Container(
+    width: 320,
+    child: RaisedButton(
+      color: Color(0xFF0BB791),
+      onPressed: () {
+        Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => LoginPage()),
-          (route) => false);
-    },
-  )));
+          MaterialPageRoute(builder: (context) => UpdateProfilePage()),
+        );
+      },
+      child: Text(
+        'Cập nhật thông tin',
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 16,
+        ),
+      ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      elevation: 10,
+    ),
+  );
 }
 
 //Widget này dùng cho các button "Tạo" hoặc "Hủy" vd: ở Trang Tạo thông báo

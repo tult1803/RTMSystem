@@ -18,7 +18,6 @@ class NoticesPage extends StatefulWidget {
 class _NoticesPageState extends State<NoticesPage> {
   @override
   Widget build(BuildContext context) {
-
       return Scaffold(
         backgroundColor: Color(0xffEEEEEE),
         appBar: AppBar(
