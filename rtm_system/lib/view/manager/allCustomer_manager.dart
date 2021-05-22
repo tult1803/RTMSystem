@@ -1,5 +1,7 @@
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:rtm_system/presenter/Manager/showCustomer.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 
 class AllCustomer extends StatefulWidget {
@@ -16,15 +18,14 @@ class _AllCustomerState extends State<AllCustomer> {
       appBar: AppBar(
         backgroundColor: welcome_color,
         title: Center(
-          child: AutoSizeText(
-            "Quản lý khách hàng",
-            style: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.w500, fontSize: 22),
-          ),
+          child: Text(
+              "Quản lý khách hàng",
+              style: TextStyle(
+                  color: Colors.white, fontWeight: FontWeight.w500, fontSize: 22),
+            ),
         ),
-
       ),
-      // body: new showAllBill(),
+      body: new showAllCustomer(),
     );
   }
 }

@@ -65,7 +65,7 @@ class _showAllProductState extends State<showAllProduct> {
       height: size.height,
       width: size.width,
       child: new FutureBuilder(
-        future:  _getProduct(),
+        future: _getProduct(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
             return ListView.builder(

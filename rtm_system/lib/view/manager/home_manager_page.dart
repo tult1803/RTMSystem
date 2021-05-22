@@ -9,6 +9,9 @@ import 'package:rtm_system/view/manager/profile_manager.dart';
 
 
 class HomeAdminPage extends StatefulWidget {
+  final int index;
+  HomeAdminPage({this.index});
+
   @override
   _HomeAdminPageState createState() => _HomeAdminPageState();
 }
@@ -21,14 +24,18 @@ class _HomeAdminPageState extends State<HomeAdminPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    //
-    // if (LoginPageState.isLogin != true) {
-    //   Navigator.pushAndRemoveUntil(
-    //       context,
-    //       MaterialPageRoute(builder: (context) => LoginPage()),
-    //       (route) => false);
-    // }
-    _widget = AllProduct();
+    _index = widget.index;
+    if (_index == 0) {
+      _widget = AllDebt();
+    } else if (_index == 1) {
+      _widget = AllBill();
+    } else if (_index == 2) {
+      _widget = AllProduct();
+    } else if (_index == 3) {
+      _widget = AllNotice();
+    } else if (_index == 4) {
+      _widget = ProfileManager();
+    }
   }
 
   @override

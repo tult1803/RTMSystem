@@ -1,8 +1,9 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:rtm_system/presenter/showNotice_manager.dart';
+import 'package:rtm_system/presenter/Manager/showNotice_manager.dart';
 import 'package:rtm_system/ultils/button.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
+import 'package:rtm_system/view/manager/createNotice_manager.dart';
 
 class AllNotice extends StatefulWidget {
   const AllNotice({Key key}) : super(key: key);
@@ -12,9 +13,10 @@ class AllNotice extends StatefulWidget {
 }
 
 class _AllNoticeState extends State<AllNotice> {
+
+
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: welcome_color,
@@ -27,7 +29,7 @@ class _AllNoticeState extends State<AllNotice> {
         ),
         bottom: PreferredSize(
             child: btnMain(
-                context, "Tạo thông báo", Icon(Icons.notifications_outlined)),
+                context, "Tạo thông báo", Icon(Icons.notifications_outlined), createNotice()),
             preferredSize: Size.fromHeight(60.0)),
       ),
       body: new showAllNotice(),

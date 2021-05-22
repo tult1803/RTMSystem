@@ -2,9 +2,10 @@ import 'dart:ui';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:rtm_system/presenter/showProduct_manager.dart';
+import 'package:rtm_system/presenter/Manager/showProduct_manager.dart';
 import 'package:rtm_system/ultils/button.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
+import 'package:rtm_system/view/manager/updatePriceProduct_manager.dart';
 class AllProduct extends StatefulWidget {
   const AllProduct({Key key}) : super(key: key);
 
@@ -26,7 +27,7 @@ class _AllProductState extends State<AllProduct> {
           ),
         ),
         bottom: PreferredSize(
-            child: btnMain(context, "Cập nhật giá", Icon(Icons.update)),
+            child: btnMain(context, "Cập nhật giá", Icon(Icons.update), updatePriceProduct()),
             preferredSize: Size.fromHeight(60.0)),
       ),
       body: new showAllProduct()
