@@ -401,6 +401,7 @@ Widget buttonProfile(BuildContext context, double left, double right,
 // Dùng cho đăng xuất, xóa thông tin.
 Widget btnLogout(context){
   return Container(
+    margin: EdgeInsets.only(top: 30),
     width: 140,
     child: Center(
       child: TextButton(
