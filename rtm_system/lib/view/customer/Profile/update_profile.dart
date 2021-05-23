@@ -45,8 +45,15 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          color: Colors.white,
-          margin: EdgeInsets.fromLTRB(0, 24, 0, 12),
+          // color: Colors.red,
+          margin: EdgeInsets.fromLTRB(0, 24, 0, 0),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(15.0),
+              topRight: Radius.circular(15.0),
+            ),
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [

@@ -319,8 +319,6 @@ Widget containerButton(
               SizedBox(
                 height: 10,
               ),
-              // Row(
-              //   children: [
               AutoSizeText(
                 "$dateTime",
                 style: TextStyle(
@@ -329,17 +327,6 @@ Widget containerButton(
                 ),
                 textAlign: TextAlign.left,
               ),
-              // Expanded(
-              //     child: Container(
-              //   margin: EdgeInsets.only(right: 10),
-              //   alignment: Alignment.centerRight,
-              //   child: AutoSizeText(
-              //     "Chi tiết",
-              //     style: TextStyle(fontSize: 10, color: Colors.black54),
-              //   ),
-              // )),
-              //   ],
-              // ),
               SizedBox(
                 height: 9,
               ),
@@ -510,4 +497,212 @@ Widget btnSubmitOrCancel(BuildContext context, double width, double height,
               color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
         ))),
   );
+}
+Widget txtPersonInvoice(context){
+  var size = MediaQuery.of(context).size;
+  return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Container(
+                  child: AutoSizeText(
+                    "Người mua",
+                    style: TextStyle(
+                      color: Colors.black45,
+                      fontSize: 12,
+                    ),
+                    overflow: TextOverflow.clip,
+                    textAlign: TextAlign.left,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            AutoSizeText(
+              "Nguyen Van A",
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+              textAlign: TextAlign.left,
+              overflow: TextOverflow.ellipsis,
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            AutoSizeText(
+              "0123456789",
+              style: TextStyle(
+                fontSize: 14,
+              ),
+              textAlign: TextAlign.left,
+            ),
+            SizedBox(
+              height: 9,
+            ),
+            SizedBox(
+              height: 1,
+              child: Container(
+                color: Color(0xFFBDBDBD),
+              ),
+            ),
+          ],
+  );
+}
+Widget txtItemInvoice(context){
+  var size = MediaQuery.of(context).size;
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Row(
+        children: [
+          Container(
+            child: AutoSizeText(
+              "Người mua",
+              style: TextStyle(
+                color: Colors.black45,
+                fontSize: 12,
+              ),
+              overflow: TextOverflow.clip,
+              textAlign: TextAlign.left,
+            ),
+          ),
+        ],
+      ),
+      SizedBox(
+        height: 10,
+      ),
+      AutoSizeText(
+        "Nguyen Van A",
+        style: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w500,
+        ),
+        textAlign: TextAlign.left,
+        overflow: TextOverflow.ellipsis,
+      ),
+      SizedBox(
+        height: 10,
+      ),
+      SizedBox(
+        height: 9,
+      ),
+      SizedBox(
+        height: 1,
+        child: Container(
+          color: Color(0xFFBDBDBD),
+        ),
+      ),
+    ],
+  );
+}
+Widget headerInvoice(){
+  return Column(
+    children: [
+      Container(
+          child: Center(
+            child: Text(
+              'Giao dịch thành công',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 24,
+              ),
+            ),
+          )),
+      Container(
+          child: Center(
+            child: Text(
+              'Số tiền',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+              ),
+            ),
+          )),
+      Container(
+          child: Center(
+            child: Text(
+              '50,000,000 VND',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 34,
+              ),
+            ),
+          )),
+    ],
+  );
+}
+Widget widgetContentInvoice(context, String status) {
+  return SingleChildScrollView(
+      child: Container(
+        margin: EdgeInsets.only(bottom: 12,),
+        color: Color(0xFF0BB791),
+        child: Column(
+          children: [
+            headerInvoice(),
+            //show data detail invoice
+            Container(
+              margin: EdgeInsets.fromLTRB(12, 12, 12, 12),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.all(Radius.circular(5.0)),
+              ),
+              // height: 96,
+              child: Container(
+                margin: EdgeInsets.fromLTRB(24, 12, 24, 12),
+                child: Column(
+                  children: [
+                    //có api chuyền thông tin cần show vô
+                    txtPersonInvoice(context),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    txtPersonInvoice(context),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    txtItemInvoice(context),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    txtItemInvoice(context),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    txtItemInvoice(context),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    txtItemInvoice(context),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    txtItemInvoice(context),
+                  ],
+                ),
+              ),
+            ),
+
+            //button "Nhận tiền" show if status is "chưa trả"
+            if(status == 'Chưa trả')
+              Center(
+                child: SizedBox(
+                  width: 150,
+                  child: RaisedButton(
+                    color: Color(0xffEEEEEE),
+                    onPressed: () {},
+                    child: Text('Trả nợ'),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    elevation: 10,
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ));
 }
