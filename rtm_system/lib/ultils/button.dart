@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:rtm_system/view/manager/processCreateCustomer.dart';
 import 'package:rtm_system/presenter/Manager/showCreateNotice.dart';
 import 'package:rtm_system/ultils/alertDialog.dart';
 import 'package:rtm_system/view/customer/Profile/update_profile.dart';
@@ -479,7 +480,7 @@ Widget btnUpdateInfo(context){
 }
 
 //Widget này dùng cho các button "Tạo" hoặc "Hủy" vd: ở Trang Tạo thông báo
-//bool action = flase khi nhấn nút "Hủy" và bằng true khi nhấn "Tạo"
+//bool action = flase khi nhấn nút "Hủy" và bằng true khi nhấn "Tạo" nhưng "Tạo" không validate
 Widget btnSubmitOrCancel(BuildContext context, double width, double height,
     Color color, String tittleButtonAlertDialog, String mainTittle, String content, String txtError, bool action, int indexOfBottomBar) {
   return Container(
@@ -490,25 +491,39 @@ Widget btnSubmitOrCancel(BuildContext context, double width, double height,
       borderRadius: BorderRadius.circular(5),
     ),
     child: TextButton(
-        onPressed: ()  async{
+        onPressed: () async {
           if (action) {
-            if(mainTittle == ""){
+            if (mainTittle == "") {
               showStatusAlertDialog(context, txtError, null, false);
-            }else {
-             int status = await postAPINotice(mainTittle, content);
-             if(status == 200){
-               showStatusAlertDialog(context, "Tạo thành công.", HomeAdminPage(index: indexOfBottomBar,), true);
-             }else showStatusAlertDialog(context, "Tạo thất bại. Xin thử lại !!!", null, false);
+            } else {
+              if (indexOfBottomBar == 3) {
+                _getNotice(context, mainTittle, content, indexOfBottomBar);
+              }
             }
           } else {
-            showAlertDialog(context, "Bạn muốn hủy tạo thông báo ?", HomeAdminPage(index: indexOfBottomBar,));
+            // Thông báo cho từng trang cụ thể khi nhấn huỷ
+            if (indexOfBottomBar == 3) {
+              showAlertDialog(context, "Bạn muốn hủy tạo thông báo ?",
+                  HomeAdminPage(index: indexOfBottomBar,));
+            } else if (indexOfBottomBar == 4) {
+              showAlertDialog(context, "Bạn muốn hủy tạo khách hàng ?",
+                  HomeAdminPage(index: indexOfBottomBar,));
+            }
           }
         },
         child: Center(
             child: Text(
               tittleButtonAlertDialog,
-          style: TextStyle(
-              color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
-        ))),
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500),
+            ))),
   );
 }
+  Future<void> _getNotice(BuildContext context,String mainTittle, String content, int indexOfBottomBar) async{
+    int status = await postAPINotice(mainTittle, content);
+    if(status == 200){
+      showStatusAlertDialog(context, "Tạo thành công.", HomeAdminPage(index: indexOfBottomBar,), true);
+    }else showStatusAlertDialog(context, "Tạo thất bại. Xin thử lại !!!", null, false);
+  }
