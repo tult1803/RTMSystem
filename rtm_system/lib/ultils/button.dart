@@ -85,7 +85,9 @@ class StretchableButton extends StatelessWidget {
 //btnMain khong biet de ten gi cho hop ly
 // Dung cho 'Cap nhat gia', 'Don cho xu ly', 'Tao thong bao'
 Widget btnMain(BuildContext context, String tittle, Icon icon, Widget widget) {
-  var size = MediaQuery.of(context).size;
+  var size = MediaQuery
+      .of(context)
+      .size;
   return Stack(
     children: <Widget>[
       Container(
@@ -104,13 +106,13 @@ Widget btnMain(BuildContext context, String tittle, Icon icon, Widget widget) {
               child: icon),
           Expanded(
               child: Container(
-            height: size.height,
-            child: Center(
-                child: AutoSizeText(
-              "$tittle",
-              style: TextStyle(fontWeight: FontWeight.w600),
-            )),
-          ))
+                height: size.height,
+                child: Center(
+                    child: AutoSizeText(
+                      "$tittle",
+                      style: TextStyle(fontWeight: FontWeight.w600),
+                    )),
+              ))
         ]),
       ),
       Container(
@@ -133,7 +135,9 @@ Widget btnMain(BuildContext context, String tittle, Icon icon, Widget widget) {
 }
 
 Widget btnDateTime(BuildContext context, String tittle, Icon icon) {
-  var size = MediaQuery.of(context).size;
+  var size = MediaQuery
+      .of(context)
+      .size;
   return Stack(
     children: <Widget>[
       Container(
@@ -152,13 +156,13 @@ Widget btnDateTime(BuildContext context, String tittle, Icon icon) {
               child: icon),
           Expanded(
               child: Container(
-            height: size.height,
-            child: Center(
-                child: AutoSizeText(
-              "$tittle",
-              style: TextStyle(fontWeight: FontWeight.w600),
-            )),
-          ))
+                height: size.height,
+                child: Center(
+                    child: AutoSizeText(
+                      "$tittle",
+                      style: TextStyle(fontWeight: FontWeight.w600),
+                    )),
+              ))
         ]),
       ),
       Container(
@@ -190,7 +194,9 @@ Widget card(BuildContext context, String tittle, String type, String detailType,
   //Format lại giá
   final oCcy = new NumberFormat("#,##0", "en_US");
   //Lấy size của màn hình
-  var size = MediaQuery.of(context).size;
+  var size = MediaQuery
+      .of(context)
+      .size;
 
   return Card(
     margin: EdgeInsets.only(top: 15),
@@ -258,9 +264,11 @@ Widget card(BuildContext context, String tittle, String type, String detailType,
   );
 }
 
-Widget containerButton(
-    BuildContext context, int id, String tittle, String content, String date) {
-  var size = MediaQuery.of(context).size;
+Widget containerButton(BuildContext context, int id, String tittle,
+    String content, String date) {
+  var size = MediaQuery
+      .of(context)
+      .size;
   //Format lại ngày
   String dateTime = date.substring(8, 10) +
       "-" +
@@ -283,7 +291,8 @@ Widget containerButton(
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => DetailOfNotice( titleNotice: tittle, contentNotice: content,)),
+              MaterialPageRoute(builder: (context) =>
+                  DetailOfNotice(titleNotice: tittle, contentNotice: content,)),
             );
           },
           child: Column(
@@ -361,9 +370,9 @@ Widget buttonProfile(BuildContext context, double left, double right,
               children: [
                 Expanded(
                     child: Text(
-                  tittle,
-                  style: TextStyle(color: Colors.black54),
-                )),
+                      tittle,
+                      style: TextStyle(color: Colors.black54),
+                    )),
                 Icon(
                   Icons.arrow_forward_ios_outlined,
                   color: Colors.black54,
@@ -386,14 +395,14 @@ Widget buttonProfile(BuildContext context, double left, double right,
 
 
 // Dùng cho đăng xuất, xóa thông tin.
-Widget btnLogout(context){
+Widget btnLogout(context) {
   return Container(
     width: 140,
     child: Center(
       child: TextButton(
         onPressed: () async {
           SharedPreferences prefs =
-              await SharedPreferences.getInstance();
+          await SharedPreferences.getInstance();
           prefs.clear();
           print('Clear data login');
           Navigator.pushAndRemoveUntil(
@@ -438,7 +447,8 @@ Widget btnLogout(context){
     ),
   );
 }
-Widget btnUpdateInfo(context){
+
+Widget btnUpdateInfo(context) {
   return Container(
     width: 320,
     child: RaisedButton(
@@ -467,7 +477,8 @@ Widget btnUpdateInfo(context){
 //Widget này dùng cho các button "Tạo" hoặc "Hủy" vd: ở Trang Tạo thông báo
 //bool action = flase khi nhấn nút "Hủy" và bằng true khi nhấn "Tạo"
 Widget btnSubmitOrCancel(BuildContext context, double width, double height,
-    Color color, String tittleButtonAlertDialog, String mainTittle, String content, String txtError, bool action, int indexOfBottomBar) {
+    Color color, String tittleButtonAlertDialog, String mainTittle,
+    String content, String txtError, bool action, int indexOfBottomBar) {
   return Container(
     height: height,
     width: width,
@@ -476,233 +487,71 @@ Widget btnSubmitOrCancel(BuildContext context, double width, double height,
       borderRadius: BorderRadius.circular(5),
     ),
     child: FlatButton(
-        onPressed: ()  async{
+        onPressed: () async {
           if (action) {
-            if(mainTittle == ""){
+            if (mainTittle == "") {
               showStatusAlertDialog(context, txtError, null, false);
-            }else {
-             int status = await postAPINotice(mainTittle, content);
-             if(status == 200){
-               showStatusAlertDialog(context, "Tạo thành công.", HomeAdminPage(index: indexOfBottomBar,), true);
-             }else showStatusAlertDialog(context, "Tạo thất bại. Xin thử lại !!!", null, false);
+            } else {
+              int status = await postAPINotice(mainTittle, content);
+              if (status == 200) {
+                showStatusAlertDialog(context, "Tạo thành công.",
+                    HomeAdminPage(index: indexOfBottomBar,), true);
+              } else
+                showStatusAlertDialog(
+                    context, "Tạo thất bại. Xin thử lại !!!", null, false);
             }
           } else {
-            showAlertDialog(context, "Bạn muốn hủy tạo thông báo ?", HomeAdminPage(index: indexOfBottomBar,));
+            showAlertDialog(context, "Bạn muốn hủy tạo thông báo ?",
+                HomeAdminPage(index: indexOfBottomBar,));
           }
         },
         child: Center(
             child: Text(
               tittleButtonAlertDialog,
-          style: TextStyle(
-              color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
-        ))),
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500),
+            ))),
   );
 }
-Widget txtPersonInvoice(context){
-  var size = MediaQuery.of(context).size;
-  return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Container(
-                  child: AutoSizeText(
-                    "Người mua",
-                    style: TextStyle(
-                      color: Colors.black45,
-                      fontSize: 12,
-                    ),
-                    overflow: TextOverflow.clip,
-                    textAlign: TextAlign.left,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            AutoSizeText(
-              "Nguyen Van A",
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-              ),
-              textAlign: TextAlign.left,
-              overflow: TextOverflow.ellipsis,
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            AutoSizeText(
-              "0123456789",
-              style: TextStyle(
-                fontSize: 14,
-              ),
-              textAlign: TextAlign.left,
-            ),
-            SizedBox(
-              height: 9,
-            ),
-            SizedBox(
-              height: 1,
-              child: Container(
-                color: Color(0xFFBDBDBD),
-              ),
-            ),
-          ],
-  );
-}
-Widget txtItemInvoice(context){
-  var size = MediaQuery.of(context).size;
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Row(
-        children: [
-          Container(
-            child: AutoSizeText(
-              "Người mua",
-              style: TextStyle(
-                color: Colors.black45,
-                fontSize: 12,
-              ),
-              overflow: TextOverflow.clip,
-              textAlign: TextAlign.left,
-            ),
-          ),
-        ],
-      ),
-      SizedBox(
-        height: 10,
-      ),
-      AutoSizeText(
-        "Nguyen Van A",
-        style: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w500,
-        ),
-        textAlign: TextAlign.left,
-        overflow: TextOverflow.ellipsis,
-      ),
-      SizedBox(
-        height: 10,
-      ),
-      SizedBox(
-        height: 9,
-      ),
-      SizedBox(
-        height: 1,
-        child: Container(
-          color: Color(0xFFBDBDBD),
-        ),
-      ),
-    ],
-  );
-}
-Widget headerInvoice(){
-  return Column(
-    children: [
-      Container(
-          child: Center(
-            child: Text(
-              'Giao dịch thành công',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 24,
-              ),
-            ),
-          )),
-      Container(
-          child: Center(
-            child: Text(
-              'Số tiền',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-              ),
-            ),
-          )),
-      Container(
-          child: Center(
-            child: Text(
-              '50,000,000 VND',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 34,
-              ),
-            ),
-          )),
-    ],
-  );
-}
-Widget widgetContentInvoice(context, String status) {
-  return SingleChildScrollView(
-      child: Container(
-        margin: EdgeInsets.only(bottom: 12,),
-        color: Color(0xFF0BB791),
-        child: Column(
-          children: [
-            headerInvoice(),
-            //show data detail invoice
-            Container(
-              margin: EdgeInsets.fromLTRB(12, 12, 12, 12),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(5.0)),
-              ),
-              // height: 96,
-              child: Container(
-                margin: EdgeInsets.fromLTRB(24, 12, 24, 12),
-                child: Column(
-                  children: [
-                    //có api chuyền thông tin cần show vô
-                    txtPersonInvoice(context),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    txtPersonInvoice(context),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    txtItemInvoice(context),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    txtItemInvoice(context),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    txtItemInvoice(context),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    txtItemInvoice(context),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    txtItemInvoice(context),
-                  ],
-                ),
-              ),
-            ),
+// chấp nhận hoặc từ chối hóa đơn
 
-            //button "Nhận tiền" show if status is "chưa trả"
-            if(status == 'Chưa trả')
-              Center(
-                child: SizedBox(
-                  width: 150,
-                  child: RaisedButton(
-                    color: Color(0xffEEEEEE),
-                    onPressed: () {},
-                    child: Text('Trả nợ'),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    elevation: 10,
-                  ),
-                ),
-              ),
-          ],
+Widget btnAcceptOrReject(BuildContext context, double width,
+    Color color, String tittleButtonAlertDialog, bool action,
+    int indexOfBottomBar) {
+  return Container(
+    child: SizedBox(
+      width: width,
+      child: RaisedButton(
+        color: color,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
         ),
-      ));
+        onPressed: () async {
+          if (action) {
+            int status = 200;
+            // await postAPINotice(mainTittle, content);
+            // gọi api trả lại gì đó khi chấp nhận hoặc từ chối
+            if (status == 200) {
+              //chở lại trang all invoice
+              showStatusAlertDialog(context, "Đã xác nhận/ từ chối thông tin.",
+                  HomeAdminPage(index: indexOfBottomBar,), true);
+            } else
+              showStatusAlertDialog(
+                  context, "Xác nhận thất bại", null, false);
+          } else {
+            //chở lại trang all invoice
+            showAlertDialog(context, "Từ chối xác nhận thông tin?",
+                HomeAdminPage(index: indexOfBottomBar,));
+          }
+        },
+        child: Center(
+          child: Text(
+            tittleButtonAlertDialog,
+            style: TextStyle(
+              color: Colors.white, fontSize: 16,),
+          ),),),
+    )
+  );
 }

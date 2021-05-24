@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:rtm_system/ultils/button.dart';
+import 'package:rtm_system/ultils/component.dart';
 
 class DetailInvoicePage extends StatefulWidget {
   const DetailInvoicePage({Key key}) : super(key: key);
@@ -10,6 +10,26 @@ class DetailInvoicePage extends StatefulWidget {
 }
 
 class _DetailInvoicePageState extends State<DetailInvoicePage> {
+  String status = 'Chưa trả';
+  String header;
+  void _showHeader(){
+    if( status == 'Chờ xác nhận'){
+      setState(() {
+        header = 'Xác nhận thông tin giao dịch';
+      });
+    } else {
+      setState(() {
+        header = 'Giao dịch thành công';
+      });
+    }
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    this._showHeader();
+  }
+  // Chờ xác nhận
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +41,7 @@ class _DetailInvoicePageState extends State<DetailInvoicePage> {
           elevation: 0,
         ),
       ),
-      body: widgetContentInvoice(context, ''),
+      body: widgetContentInvoice(context, status, header),
     );
   }
 }
