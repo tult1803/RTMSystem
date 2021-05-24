@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:rtm_system/ultils/button.dart';
-import 'package:rtm_system/view/manager/processBill.dart';
+import 'package:rtm_system/view/manager/invoice/processBill.dart';
 
 class showAllBill extends StatefulWidget {
   const showAllBill({Key key}) : super(key: key);

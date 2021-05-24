@@ -1,7 +1,7 @@
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:rtm_system/presenter/Manager/showCustomer.dart';
+import 'package:rtm_system/presenter/Manager/profile/showCustomer.dart';
 import 'package:rtm_system/ultils/button.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 

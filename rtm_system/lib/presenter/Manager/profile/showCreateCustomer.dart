@@ -1,6 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:rtm_system/view/manager/processCreateCustomer.dart';
+import 'package:rtm_system/view/manager/product/processCreateCustomer.dart';
 import 'package:rtm_system/ultils/button.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/ultils/src/regExp.dart';

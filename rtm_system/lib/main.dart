@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rtm_system/view/welcome_page.dart';
-import 'view/manager/allCustomer_manager.dart';
+import 'view/manager/profile/allCustomer_manager.dart';
 
 void main() {
   runApp(
