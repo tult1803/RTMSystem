@@ -78,8 +78,6 @@ class LoginPageState extends State<LoginPage> {
       access_token = data.access_token;
       accountId = data.accountId;
       fullname = data.fullname;
-      gender = data.gender;
-      birthday = data.birthday;
       phone = data.phone;
     });
   }
@@ -93,7 +91,7 @@ class LoginPageState extends State<LoginPage> {
       print('Error from LoginApi !!!');
     }
     if (role_id == 3 && status == 200) {
-      savedInfoLogin(role_id, accountId, access_token, fullname, gender, birthday, phone);
+      savedInfoLogin(role_id, accountId, access_token, fullname, phone);
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => HomeCustomerPage()),
@@ -101,7 +99,7 @@ class LoginPageState extends State<LoginPage> {
       print('Status button: Done');
       _buttonState = ButtonState.normal;
     } else if (role_id == 2 && status == 200) {
-      savedInfoLogin(role_id, accountId, access_token, fullname, gender, birthday, phone);
+      savedInfoLogin(role_id, accountId, access_token, fullname, phone);
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => HomeAdminPage(index: 2,)),

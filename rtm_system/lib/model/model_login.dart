@@ -12,8 +12,6 @@ class DataLogin {
       access_token: json['access_token'],
       role_id: json['role_id'],
       fullname: json['fullname'],
-      gender: json['gender'],
-      birthday: json['birthday'],
       phone: json['phone'],
     );
   }

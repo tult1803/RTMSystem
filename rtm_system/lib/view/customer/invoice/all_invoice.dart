@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:rtm_system/ultils/button.dart';
 import 'package:rtm_system/view/customer/invoice/detail_invoice.dart';
 import 'package:rtm_system/view/login_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -237,9 +238,11 @@ class _InvoicePageState extends State<InvoicePage> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
             ),
-            elevation: 10,
+            elevation: 1
           ),
         ),
+
+        btnLogout(context)
       ],
     );
   }

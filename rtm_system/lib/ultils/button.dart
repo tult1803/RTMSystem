@@ -439,7 +439,17 @@ Widget btnLogout(context) {
   );
 }
 
-Widget btnUpdateInfo(context, fullnamea, gendera, birthdaya, phonea) {
+Widget btnUpdateInfo(
+  context,
+  int id,
+  String cmnd,
+  int accountId,
+  String fullname,
+  int gender,
+  String phone,
+  String birthday,
+  String address,
+) {
   return Container(
     width: 320,
     child: RaisedButton(
@@ -449,10 +459,14 @@ Widget btnUpdateInfo(context, fullnamea, gendera, birthdaya, phonea) {
           context,
           MaterialPageRoute(
               builder: (context) => UpdateProfilePage(
-                    fullname: fullnamea,
-                    birthday: birthdaya,
-                    gender: gendera,
-                    phone: phonea,
+                    id: id,
+                    cmnd: cmnd,
+                    accountId: accountId,
+                    fullname: fullname,
+                    gender: gender,
+                    phone: phone,
+                    birthday: birthday,
+                    address: address,
                   )),
         );
       },
