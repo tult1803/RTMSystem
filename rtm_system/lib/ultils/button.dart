@@ -85,9 +85,7 @@ class StretchableButton extends StatelessWidget {
 //btnMain khong biet de ten gi cho hop ly
 // Dung cho 'Cap nhat gia', 'Don cho xu ly', 'Tao thong bao'
 Widget btnMain(BuildContext context, String tittle, Icon icon, Widget widget) {
-  var size = MediaQuery
-      .of(context)
-      .size;
+  var size = MediaQuery.of(context).size;
   return Stack(
     children: <Widget>[
       Container(
@@ -106,13 +104,13 @@ Widget btnMain(BuildContext context, String tittle, Icon icon, Widget widget) {
               child: icon),
           Expanded(
               child: Container(
-                height: size.height,
-                child: Center(
-                    child: AutoSizeText(
-                      "$tittle",
-                      style: TextStyle(fontWeight: FontWeight.w600),
-                    )),
-              ))
+            height: size.height,
+            child: Center(
+                child: AutoSizeText(
+              "$tittle",
+              style: TextStyle(fontWeight: FontWeight.w600),
+            )),
+          ))
         ]),
       ),
       Container(
@@ -135,9 +133,7 @@ Widget btnMain(BuildContext context, String tittle, Icon icon, Widget widget) {
 }
 
 Widget btnDateTime(BuildContext context, String tittle, Icon icon) {
-  var size = MediaQuery
-      .of(context)
-      .size;
+  var size = MediaQuery.of(context).size;
   return Stack(
     children: <Widget>[
       Container(
@@ -156,13 +152,13 @@ Widget btnDateTime(BuildContext context, String tittle, Icon icon) {
               child: icon),
           Expanded(
               child: Container(
-                height: size.height,
-                child: Center(
-                    child: AutoSizeText(
-                      "$tittle",
-                      style: TextStyle(fontWeight: FontWeight.w600),
-                    )),
-              ))
+            height: size.height,
+            child: Center(
+                child: AutoSizeText(
+              "$tittle",
+              style: TextStyle(fontWeight: FontWeight.w600),
+            )),
+          ))
         ]),
       ),
       Container(
@@ -194,9 +190,7 @@ Widget card(BuildContext context, String tittle, String type, String detailType,
   //Format lại giá
   final oCcy = new NumberFormat("#,##0", "en_US");
   //Lấy size của màn hình
-  var size = MediaQuery
-      .of(context)
-      .size;
+  var size = MediaQuery.of(context).size;
 
   return Card(
     margin: EdgeInsets.only(top: 15),
@@ -264,11 +258,9 @@ Widget card(BuildContext context, String tittle, String type, String detailType,
   );
 }
 
-Widget containerButton(BuildContext context, int id, String tittle,
-    String content, String date) {
-  var size = MediaQuery
-      .of(context)
-      .size;
+Widget containerButton(
+    BuildContext context, int id, String tittle, String content, String date) {
+  var size = MediaQuery.of(context).size;
   //Format lại ngày
   String dateTime = date.substring(8, 10) +
       "-" +
@@ -291,8 +283,11 @@ Widget containerButton(BuildContext context, int id, String tittle,
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) =>
-                  DetailOfNotice(titleNotice: tittle, contentNotice: content,)),
+              MaterialPageRoute(
+                  builder: (context) => DetailOfNotice(
+                        titleNotice: tittle,
+                        contentNotice: content,
+                      )),
             );
           },
           child: Column(
@@ -313,7 +308,6 @@ Widget containerButton(BuildContext context, int id, String tittle,
                   ),
                 ],
               ),
-
               SizedBox(
                 height: 10,
               ),
@@ -370,9 +364,9 @@ Widget buttonProfile(BuildContext context, double left, double right,
               children: [
                 Expanded(
                     child: Text(
-                      tittle,
-                      style: TextStyle(color: Colors.black54),
-                    )),
+                  tittle,
+                  style: TextStyle(color: Colors.black54),
+                )),
                 Icon(
                   Icons.arrow_forward_ios_outlined,
                   color: Colors.black54,
@@ -393,7 +387,6 @@ Widget buttonProfile(BuildContext context, double left, double right,
 }
 // design Notice bên customer, giống containerButton
 
-
 // Dùng cho đăng xuất, xóa thông tin.
 Widget btnLogout(context) {
   return Container(
@@ -401,18 +394,16 @@ Widget btnLogout(context) {
     child: Center(
       child: TextButton(
         onPressed: () async {
-          SharedPreferences prefs =
-          await SharedPreferences.getInstance();
+          SharedPreferences prefs = await SharedPreferences.getInstance();
           prefs.clear();
           print('Clear data login');
           Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(builder: (context) => LoginPage()),
-                  (route) => false);
+              (route) => false);
         },
         style: ButtonStyle(
-            shape:
-            MaterialStateProperty.all<RoundedRectangleBorder>(
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(18.0),
                     side: BorderSide(color: Colors.red)))),
@@ -448,7 +439,7 @@ Widget btnLogout(context) {
   );
 }
 
-Widget btnUpdateInfo(context) {
+Widget btnUpdateInfo(context, fullnamea, gendera, birthdaya, phonea) {
   return Container(
     width: 320,
     child: RaisedButton(
@@ -456,7 +447,13 @@ Widget btnUpdateInfo(context) {
       onPressed: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => UpdateProfilePage()),
+          MaterialPageRoute(
+              builder: (context) => UpdateProfilePage(
+                    fullname: fullnamea,
+                    birthday: birthdaya,
+                    gender: gendera,
+                    phone: phonea,
+                  )),
         );
       },
       child: Text(
@@ -476,9 +473,17 @@ Widget btnUpdateInfo(context) {
 
 //Widget này dùng cho các button "Tạo" hoặc "Hủy" vd: ở Trang Tạo thông báo
 //bool action = flase khi nhấn nút "Hủy" và bằng true khi nhấn "Tạo"
-Widget btnSubmitOrCancel(BuildContext context, double width, double height,
-    Color color, String tittleButtonAlertDialog, String mainTittle,
-    String content, String txtError, bool action, int indexOfBottomBar) {
+Widget btnSubmitOrCancel(
+    BuildContext context,
+    double width,
+    double height,
+    Color color,
+    String tittleButtonAlertDialog,
+    String mainTittle,
+    String content,
+    String txtError,
+    bool action,
+    int indexOfBottomBar) {
   return Container(
     height: height,
     width: width,
@@ -494,64 +499,81 @@ Widget btnSubmitOrCancel(BuildContext context, double width, double height,
             } else {
               int status = await postAPINotice(mainTittle, content);
               if (status == 200) {
-                showStatusAlertDialog(context, "Tạo thành công.",
-                    HomeAdminPage(index: indexOfBottomBar,), true);
+                showStatusAlertDialog(
+                    context,
+                    "Tạo thành công.",
+                    HomeAdminPage(
+                      index: indexOfBottomBar,
+                    ),
+                    true);
               } else
                 showStatusAlertDialog(
                     context, "Tạo thất bại. Xin thử lại !!!", null, false);
             }
           } else {
-            showAlertDialog(context, "Bạn muốn hủy tạo thông báo ?",
-                HomeAdminPage(index: indexOfBottomBar,));
+            showAlertDialog(
+                context,
+                "Bạn muốn hủy tạo thông báo ?",
+                HomeAdminPage(
+                  index: indexOfBottomBar,
+                ));
           }
         },
         child: Center(
             child: Text(
-              tittleButtonAlertDialog,
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500),
-            ))),
+          tittleButtonAlertDialog,
+          style: TextStyle(
+              color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
+        ))),
   );
 }
 // chấp nhận hoặc từ chối hóa đơn
 
-Widget btnAcceptOrReject(BuildContext context, double width,
-    Color color, String tittleButtonAlertDialog, bool action,
-    int indexOfBottomBar) {
+Widget btnAcceptOrReject(BuildContext context, double width, Color color,
+    String tittleButtonAlertDialog, bool action, int indexOfBottomBar) {
   return Container(
-    child: SizedBox(
-      width: width,
-      child: RaisedButton(
-        color: color,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        onPressed: () async {
-          if (action) {
-            int status = 200;
-            // await postAPINotice(mainTittle, content);
-            // gọi api trả lại gì đó khi chấp nhận hoặc từ chối
-            if (status == 200) {
-              //chở lại trang all invoice
-              showStatusAlertDialog(context, "Đã xác nhận/ từ chối thông tin.",
-                  HomeAdminPage(index: indexOfBottomBar,), true);
-            } else
-              showStatusAlertDialog(
-                  context, "Xác nhận thất bại", null, false);
-          } else {
+      child: SizedBox(
+    width: width,
+    child: RaisedButton(
+      color: color,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      onPressed: () async {
+        if (action) {
+          int status = 200;
+          // await postAPINotice(mainTittle, content);
+          // gọi api trả lại gì đó khi chấp nhận hoặc từ chối
+          if (status == 200) {
             //chở lại trang all invoice
-            showAlertDialog(context, "Từ chối xác nhận thông tin?",
-                HomeAdminPage(index: indexOfBottomBar,));
-          }
-        },
-        child: Center(
-          child: Text(
-            tittleButtonAlertDialog,
-            style: TextStyle(
-              color: Colors.white, fontSize: 16,),
-          ),),),
-    )
-  );
+            showStatusAlertDialog(
+                context,
+                "Đã xác nhận/ từ chối thông tin.",
+                HomeAdminPage(
+                  index: indexOfBottomBar,
+                ),
+                true);
+          } else
+            showStatusAlertDialog(context, "Xác nhận thất bại", null, false);
+        } else {
+          //chở lại trang all invoice
+          showAlertDialog(
+              context,
+              "Từ chối xác nhận thông tin?",
+              HomeAdminPage(
+                index: indexOfBottomBar,
+              ));
+        }
+      },
+      child: Center(
+        child: Text(
+          tittleButtonAlertDialog,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 16,
+          ),
+        ),
+      ),
+    ),
+  ));
 }
