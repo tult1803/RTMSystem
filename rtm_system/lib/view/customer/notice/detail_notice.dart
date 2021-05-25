@@ -18,20 +18,16 @@ class DetailOfNotice extends StatelessWidget {
               // Function callback for stretch
               return Future<void>.value();
             },
-            expandedHeight: 145.0,
+            expandedHeight: 200.0,
             flexibleSpace: FlexibleSpaceBar(
               stretchModes: const <StretchMode>[
                 StretchMode.zoomBackground,
                 StretchMode.blurBackground,
                 StretchMode.fadeTitle,
               ],
-              background: Stack(
-                fit: StackFit.expand,
-                children: <Widget>[
-                  Image(
-                    image: AssetImage("images/notice_detail.png"),
-                  ),
-                ],
+              background:  Image(
+                image: AssetImage("images/notice_detail.png"),
+                fit: BoxFit.cover,
               ),
             ),
           ),

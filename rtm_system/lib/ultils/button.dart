@@ -285,7 +285,11 @@ Widget containerButton(
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => DetailOfNotice( titleNotice: tittle, contentNotice: content,)),
+              MaterialPageRoute(
+                  builder: (context) => DetailOfNotice(
+                        titleNotice: tittle,
+                        contentNotice: content,
+                      )),
             );
           },
           child: Column(
@@ -306,7 +310,6 @@ Widget containerButton(
                   ),
                 ],
               ),
-
               SizedBox(
                 height: 10,
               ),
@@ -321,8 +324,6 @@ Widget containerButton(
               SizedBox(
                 height: 10,
               ),
-              // Row(
-              //   children: [
               AutoSizeText(
                 "$dateTime",
                 style: TextStyle(
@@ -331,17 +332,6 @@ Widget containerButton(
                 ),
                 textAlign: TextAlign.left,
               ),
-              // Expanded(
-              //     child: Container(
-              //   margin: EdgeInsets.only(right: 10),
-              //   alignment: Alignment.centerRight,
-              //   child: AutoSizeText(
-              //     "Chi tiết",
-              //     style: TextStyle(fontSize: 10, color: Colors.black54),
-              //   ),
-              // )),
-              //   ],
-              // ),
               SizedBox(
                 height: 9,
               ),
@@ -399,27 +389,24 @@ Widget buttonProfile(BuildContext context, double left, double right,
 }
 // design Notice bên customer, giống containerButton
 
-
 // Dùng cho đăng xuất, xóa thông tin.
-Widget btnLogout(context){
+Widget btnLogout(context) {
   return Container(
     margin: EdgeInsets.only(top: 30),
     width: 140,
     child: Center(
       child: TextButton(
         onPressed: () async {
-          SharedPreferences prefs =
-              await SharedPreferences.getInstance();
+          SharedPreferences prefs = await SharedPreferences.getInstance();
           prefs.clear();
           print('Clear data login');
           Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(builder: (context) => LoginPage()),
-                  (route) => false);
+              (route) => false);
         },
         style: ButtonStyle(
-            shape:
-            MaterialStateProperty.all<RoundedRectangleBorder>(
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(18.0),
                     side: BorderSide(color: Colors.red)))),
@@ -454,7 +441,18 @@ Widget btnLogout(context){
     ),
   );
 }
-Widget btnUpdateInfo(context){
+
+Widget btnUpdateInfo(
+  context,
+  int id,
+  String cmnd,
+  int accountId,
+  String fullname,
+  int gender,
+  String phone,
+  String birthday,
+  String address,
+) {
   return Container(
     width: 320,
     child: RaisedButton(
@@ -462,7 +460,17 @@ Widget btnUpdateInfo(context){
       onPressed: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => UpdateProfilePage()),
+          MaterialPageRoute(
+              builder: (context) => UpdateProfilePage(
+                    id: id,
+                    cmnd: cmnd,
+                    accountId: accountId,
+                    fullname: fullname,
+                    gender: gender,
+                    phone: phone,
+                    birthday: birthday,
+                    address: address,
+                  )),
         );
       },
       child: Text(
@@ -481,9 +489,18 @@ Widget btnUpdateInfo(context){
 }
 
 //Widget này dùng cho các button "Tạo" hoặc "Hủy" vd: ở Trang Tạo thông báo
-//bool action = flase khi nhấn nút "Hủy" và bằng true khi nhấn "Tạo" nhưng "Tạo" không validate
-Widget btnSubmitOrCancel(BuildContext context, double width, double height,
-    Color color, String tittleButtonAlertDialog, String mainTittle, String content, String txtError, bool action, int indexOfBottomBar) {
+//bool action = flase khi nhấn nút "Hủy" và bằng true khi nhấn "Tạo"
+Widget btnSubmitOrCancel(
+    BuildContext context,
+    double width,
+    double height,
+    Color color,
+    String tittleButtonAlertDialog,
+    String mainTittle,
+    String content,
+    String txtError,
+    bool action,
+    int indexOfBottomBar) {
   return Container(
     height: height,
     width: width,
@@ -491,36 +508,89 @@ Widget btnSubmitOrCancel(BuildContext context, double width, double height,
       color: color,
       borderRadius: BorderRadius.circular(5),
     ),
-    child: TextButton(
+    child: FlatButton(
         onPressed: () async {
           if (action) {
             if (mainTittle == "") {
               showStatusAlertDialog(context, txtError, null, false);
             } else {
-              if (indexOfBottomBar == 3) {
-                getNotice(context, mainTittle, content, indexOfBottomBar);
-              }
+              int status = await postAPINotice(mainTittle, content);
+              if (status == 200) {
+                showStatusAlertDialog(
+                    context,
+                    "Tạo thành công.",
+                    HomeAdminPage(
+                      index: indexOfBottomBar,
+                    ),
+                    true);
+              } else
+                showStatusAlertDialog(
+                    context, "Tạo thất bại. Xin thử lại !!!", null, false);
             }
           } else {
-            // Thông báo cho từng trang cụ thể khi nhấn huỷ
-            if (indexOfBottomBar == 3) {
-              showAlertDialog(context, "Bạn muốn hủy tạo thông báo ?",
-                  HomeAdminPage(index: indexOfBottomBar,));
-            } else if (indexOfBottomBar == 4) {
-              showAlertDialog(context, "Bạn muốn hủy tạo khách hàng ?",
-                  HomeAdminPage(index: indexOfBottomBar,));
-            }
+            showAlertDialog(
+                context,
+                "Bạn muốn hủy tạo thông báo ?",
+                HomeAdminPage(
+                  index: indexOfBottomBar,
+                ));
           }
         },
         child: Center(
             child: Text(
-              tittleButtonAlertDialog,
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500),
-            ))),
+          tittleButtonAlertDialog,
+          style: TextStyle(
+              color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
+        ))),
   );
 }
+// chấp nhận hoặc từ chối hóa đơn
 
-
+Widget btnAcceptOrReject(BuildContext context, double width, Color color,
+    String tittleButtonAlertDialog, bool action, int indexOfBottomBar) {
+  return Container(
+      child: SizedBox(
+    width: width,
+    child: RaisedButton(
+      color: color,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      onPressed: () async {
+        if (action) {
+          int status = 200;
+          // await postAPINotice(mainTittle, content);
+          // gọi api trả lại gì đó khi chấp nhận hoặc từ chối
+          if (status == 200) {
+            //chở lại trang all invoice
+            showStatusAlertDialog(
+                context,
+                "Đã xác nhận/ từ chối thông tin.",
+                HomeAdminPage(
+                  index: indexOfBottomBar,
+                ),
+                true);
+          } else
+            showStatusAlertDialog(context, "Xác nhận thất bại", null, false);
+        } else {
+          //chở lại trang all invoice
+          showAlertDialog(
+              context,
+              "Từ chối xác nhận thông tin?",
+              HomeAdminPage(
+                index: indexOfBottomBar,
+              ));
+        }
+      },
+      child: Center(
+        child: Text(
+          tittleButtonAlertDialog,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 16,
+          ),
+        ),
+      ),
+    ),
+  ));
+}

@@ -26,6 +26,9 @@ class LoginPageState extends State<LoginPage> {
   String password = "";
   String access_token = '';
   String fullname = "";
+  int gender = 0;
+  String phone ='';
+  String birthday ='';
   String error="";
   @override
   void initState() {
@@ -75,6 +78,7 @@ class LoginPageState extends State<LoginPage> {
       access_token = data.access_token;
       accountId = data.accountId;
       fullname = data.fullname;
+      phone = data.phone;
     });
   }
 
@@ -82,11 +86,12 @@ class LoginPageState extends State<LoginPage> {
     try {
       await LoginApi();
       print('Role ID: ${role_id}');
+      print('Birthday ${birthday}');
     }catch (e){
       print('Error from LoginApi !!!');
     }
     if (role_id == 3 && status == 200) {
-      savedInfoLogin(role_id, accountId, access_token, fullname);
+      savedInfoLogin(role_id, accountId, access_token, fullname, phone);
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => HomeCustomerPage()),
@@ -94,7 +99,7 @@ class LoginPageState extends State<LoginPage> {
       print('Status button: Done');
       _buttonState = ButtonState.normal;
     } else if (role_id == 2 && status == 200) {
-      savedInfoLogin(role_id, accountId, access_token, fullname);
+      savedInfoLogin(role_id, accountId, access_token, fullname, phone);
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => HomeAdminPage(index: 2,)),

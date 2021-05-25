@@ -206,12 +206,13 @@ void checkSaveLogin(BuildContext context) async {
   }
 }
 
-void savedInfoLogin(int role_id, int accountId, String access_token, String fullname) async {
+void savedInfoLogin(int role_id, int accountId, String access_token, String fullname, String phone) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   prefs.setBool("isLogin", true);
   prefs.setInt("role_id", role_id);
   prefs.setString("access_token", access_token);
   prefs.setInt("accountId", accountId);
   prefs.setString("fullname", fullname);
+  prefs.setString("phone", phone);
   print('Login is saved !!!!');
 }

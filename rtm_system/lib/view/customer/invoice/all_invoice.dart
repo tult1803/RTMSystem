@@ -1,6 +1,8 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:rtm_system/ultils/button.dart';
+import 'package:rtm_system/view/customer/invoice/detail_invoice.dart';
 import 'package:rtm_system/view/login_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -38,25 +40,32 @@ class _InvoicePageState extends State<InvoicePage> {
           child: Text("Tất cả hóa đơn"),
         ),
       ),
-      body: Container(
-          margin: EdgeInsets.only(top: 12, left: 12, right: 12),
-          child: Column(
-            children: [
-              _showProcessDate(),
-              SizedBox(
-                height: 12,
-              ),
-              _cardInvoice(
-                  'Mủ nước', '20/04/2021', '10,000,000', 'chưa trả'),
-              _showBottomButton(),
-            ],
-          )),
+      body: SingleChildScrollView(
+        child: Container(
+            margin: EdgeInsets.only(top: 12, ),
+            child: Column(
+              children: [
+                _showProcessDate(),
+                SizedBox(
+                  height: 12,
+                ),
+                _cardInvoice(
+                    'Mủ nước', '20/04/2021', '10,000,000', 'chưa trả'),
+                _showBottomButton(),
+              ],
+            )),
+      )
     );
   }
 
   Widget _cardInvoice(
       String product, String date, String price, String status) {
-    return Card(
+    return FlatButton(onPressed: (){
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => DetailInvoicePage()),
+      );
+    }, child: Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),
@@ -100,7 +109,7 @@ class _InvoicePageState extends State<InvoicePage> {
           ),
         ],
       ),
-    );
+    ));
   }
 
   Widget _showProcessDate() {
@@ -229,9 +238,11 @@ class _InvoicePageState extends State<InvoicePage> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
             ),
-            elevation: 10,
+            elevation: 1
           ),
         ),
+
+        btnLogout(context)
       ],
     );
   }
