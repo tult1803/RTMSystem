@@ -1,11 +1,7 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:rtm_system/model/postAPI_createNotice.dart';
 import 'package:rtm_system/ultils/button.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class showCreateNotice extends StatefulWidget {
   const showCreateNotice({Key key}) : super(key: key);
@@ -117,10 +113,3 @@ class _showCreateNoticeState extends State<showCreateNotice> {
   }
 }
 
-Future postAPINotice(String tittle, String content) async {
-  PostCreateNotice _createNotice = PostCreateNotice();
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  int status = await _createNotice.createNotice(
-      tittle, content, prefs.get("accountId"), prefs.get("access_token"));
-  return status;
-}

@@ -95,3 +95,23 @@ Widget txtCanClick(BuildContext context, Widget widget, String tittle) {
     ),
   );
 }
+
+//Hiện tại đang dùng cho "Phiếu xác nhận" của "Tạo khách hàng" trong profile
+Widget txtConfirm(BuildContext context, String tittle, String content){
+  var size = MediaQuery.of(context).size;
+  return Container(
+    width: size.width,
+    margin: EdgeInsets.only(left: 10,right: 10,top: 10),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        AutoSizeText(tittle, style: TextStyle(color: Colors.black54, fontSize: 15),),
+        SizedBox(height: 10,),
+        AutoSizeText("$content", style: TextStyle(fontSize: 18),),
+        SizedBox(height: 10,),
+        Container(width: size.width,height: 0.5,color: Colors.black54,)
+      ],
+    ),
+  );
+}

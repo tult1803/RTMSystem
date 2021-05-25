@@ -8,8 +8,8 @@ RegExp checkFormatCMND = RegExp(r'(^(?:[+0]9)?[0-9]{9,12}$)');
 String  patternPassword = r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
 // Nhập password có chữ hoặc số và độ dài tối thiểu là 8
 String  patternPassword1 = r'^(?=.*?[a-zA-Z0-9]).{8,}$';
-// Nhập password có chữ và số và độ dài tối thiểu là 4
-String  patternPassword2 = r'^(?=.*?[a-zA-Z])(?=.*?[0-9]).{4,}$';
+// Nhập password có chữ và số và độ dài tối thiểu là 6
+String  patternPassword2 = r'^(?=.*?[a-zA-Z])(?=.*?[0-9]).{6,}$';
 
 RegExp checkFormatPassword = RegExp(patternPassword2);
 

@@ -1,6 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:rtm_system/view/manager/product/processCreateCustomer.dart';
+import 'package:rtm_system/view/manager/profile/confirmCreateCustomer.dart';
 import 'package:rtm_system/ultils/button.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/ultils/src/regExp.dart';
@@ -15,7 +15,7 @@ class showCreateCustomer extends StatefulWidget {
 enum GenderCharacter { women, men }
 
 class _showCreateCustomerState extends State<showCreateCustomer> {
-  String fullname, phone, cmnd, address, username, password, birthday;
+  String fullname, phone, cmnd, address, password, birthday;
   String errFulname, errPhone, errCMND, errAddress, errUser, errPass, errBirth;
   GenderCharacter _character = GenderCharacter.men;
   List list;
@@ -25,24 +25,19 @@ class _showCreateCustomerState extends State<showCreateCustomer> {
     return Container(
       child: Column(
         children: [
-          _txtfield(
-              "Nhập họ tên", "Họ và tên", errFulname, 1, TextInputType.text),
-          //Ô nhập giới tính ở đây
-          radioButton(context),
-          _txtfield("Nhập số điện thoại", "Số điện thoại", errPhone, 1,
-              TextInputType.phone),
-          //Ô chọn ngày sinh ở đây
-          _txtfield("dd/MM/yyyy", "Ngày sinh", errBirth, 1,
-              TextInputType.datetime),
-          _txtfield(
-              "Nhập CMND/CCCD", "CMND/CCCD", errCMND, 1, TextInputType.phone),
-          _txtfield("Nhập địa chỉ", "Địa chỉ", errAddress, 1,
-              TextInputType.streetAddress),
-          _txtfield("Nhập tên đăng nhập", "Tài khoản", errUser, 1,
+          _txtfield(false, "Nhập họ tên", "Họ và tên", errFulname, 1,
               TextInputType.text),
-          _txtfield(
-              "Nhập mật khẩu", "Mật khẩu", errPass, 1, TextInputType.text),
-          //Ô chọn quyền cho tài khoản ở đây
+          _txtfield(false, "Nhập số điện thoại", "Số điện thoại", errPhone, 1,
+              TextInputType.phone),
+          _txtfield(true, "Nhập mật khẩu", "Mật khẩu", errPass, 1,
+              TextInputType.text),
+          radioButton(context),
+          _txtfield(false, "dd/MM/yyyy", "Ngày sinh", errBirth, 1,
+              TextInputType.datetime),
+          _txtfield(false, "Nhập CMND/CCCD", "CMND/CCCD", errCMND, 1,
+              TextInputType.phone),
+          _txtfield(false, "Nhập địa chỉ", "Địa chỉ", errAddress, 1,
+              TextInputType.streetAddress),
           SizedBox(
             height: 20,
           ),
@@ -53,19 +48,7 @@ class _showCreateCustomerState extends State<showCreateCustomer> {
                   "", null, false, 4),
               SizedBox(width: 20),
               btnSubmitValidate(
-                  context,
-                  120,
-                  40,
-                  welcome_color,
-                  "Kiểm tra",
-                  fullname,
-                  phone,
-                  birthday,
-                  cmnd,
-                  address,
-                  username,
-                  password,
-                  list),
+                  context, 120, 40, welcome_color, "Kiểm tra", list),
             ],
           ),
         ],
@@ -73,11 +56,12 @@ class _showCreateCustomerState extends State<showCreateCustomer> {
     );
   }
 
-  Widget _txtfield(String hintText, String tittle, String error, int maxLines,
-      TextInputType txtType) {
+  Widget _txtfield(bool obscureText, String hintText, String tittle,
+      String error, int maxLines, TextInputType txtType) {
     return Container(
       margin: EdgeInsets.only(top: 10, left: 10, right: 10),
       child: TextField(
+        obscureText: obscureText,
         onChanged: (value) {
           if (tittle == "Họ và tên") {
             fullname = value.trim();
@@ -89,8 +73,6 @@ class _showCreateCustomerState extends State<showCreateCustomer> {
             cmnd = value.trim();
           } else if (tittle == "Địa chỉ") {
             address = value.trim();
-          } else if (tittle == "Tài khoản") {
-            username = value.trim();
           } else if (tittle == "Mật khẩu") {
             password = value.trim();
           }
@@ -101,8 +83,8 @@ class _showCreateCustomerState extends State<showCreateCustomer> {
               phone,
               cmnd,
               address,
-              username,
-              password
+              password,
+              birthday
             ];
           });
         },
@@ -184,8 +166,8 @@ class _showCreateCustomerState extends State<showCreateCustomer> {
                         phone,
                         cmnd,
                         address,
-                        username,
-                        password
+                        password,
+                        birthday
                       ];
                     });
                   },
@@ -207,8 +189,8 @@ class _showCreateCustomerState extends State<showCreateCustomer> {
                           phone,
                           cmnd,
                           address,
-                          username,
-                          password
+                          password,
+                          birthday
                         ];
                       });
                     },
@@ -230,20 +212,8 @@ class _showCreateCustomerState extends State<showCreateCustomer> {
     );
   }
 
-  Widget btnSubmitValidate(
-      BuildContext context,
-      double width,
-      double height,
-      Color color,
-      String tittleButtonAlertDialog,
-      String fullname,
-      String phone,
-      String birthday,
-      String cmnd,
-      String address,
-      String username,
-      String password,
-      List listCustomer) {
+  Widget btnSubmitValidate(BuildContext context, double width, double height,
+      Color color, String tittleButtonAlertDialog, List listCustomer) {
     return Container(
         height: height,
         width: width,
@@ -259,7 +229,7 @@ class _showCreateCustomerState extends State<showCreateCustomer> {
               if (check) {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) =>
-                        ProcessCreateCustomer(listCustomer = listCustomer)));
+                        ConfirmCreateCustomer(listCustomer = listCustomer)));
               }
             });
           },
@@ -283,19 +253,20 @@ class _showCreateCustomerState extends State<showCreateCustomer> {
       // if (!checkFormatFullname.hasMatch(fullname)) {
       //   errFulname = "Họ tên chỉ nhập chữ";
       // } else {
-        errFulname = null;
+      errFulname = null;
       // }
     }
     if (phone == null || phone == "") {
       errPhone = "Số điện thoại trống";
     } else {
-      try{
+      try {
         int parseInt = int.parse(phone);
-      if (!checkFormatPhone.hasMatch(phone) || phone.length > 11) {
-        errPhone = "Số điện thoại sai (10-11 só)";
-      } else {
-        errPhone = null;
-      }}catch(_){
+        if (!checkFormatPhone.hasMatch(phone) || phone.length > 11) {
+          errPhone = "Số điện thoại sai (10-11 só)";
+        } else {
+          errPhone = null;
+        }
+      } catch (_) {
         errPhone = "Số điện thoại chỉ nhập số";
       }
     }
@@ -328,17 +299,14 @@ class _showCreateCustomerState extends State<showCreateCustomer> {
     } else {
       errAddress = null;
     }
-    if (username == null || username == "") {
-      errUser = "Tài khoản trống";
-    } else {
-      errUser = null;
-    }
     if (password == null || password == "") {
       errPass = "Mật khẩu trống";
     } else {
-      if(!checkFormatPassword.hasMatch(password)){
-        errPass = "Mật khẩu ít nhất 4 kí tự (chữ và số)";
-      }else{errPass = null;}
+      if (!checkFormatPassword.hasMatch(password)) {
+        errPass = "Mật khẩu ít nhất 6 kí tự (chữ và số)";
+      } else {
+        errPass = null;
+      }
     }
     if (errFulname == null &&
         errPhone == null &&
@@ -352,6 +320,3 @@ class _showCreateCustomerState extends State<showCreateCustomer> {
     return check;
   }
 }
-
-//Password có cần validate không ?
-//Check username API, sđt API, cmnd API

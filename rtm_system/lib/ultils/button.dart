@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:rtm_system/view/manager/product/processCreateCustomer.dart';
+import 'package:rtm_system/view/manager/profile/confirmCreateCustomer.dart';
 import 'package:rtm_system/presenter/Manager/notice/showCreateNotice.dart';
 import 'package:rtm_system/ultils/alertDialog.dart';
 import 'package:rtm_system/view/customer/Profile/update_profile.dart';
@@ -13,6 +13,7 @@ import 'package:rtm_system/view/manager/home_manager_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../view/login_page.dart';
 import 'component.dart';
+import 'getData.dart';
 import 'src/color_ultils.dart';
 
 const double defaultBorderRadius = 3.0;
@@ -497,7 +498,7 @@ Widget btnSubmitOrCancel(BuildContext context, double width, double height,
               showStatusAlertDialog(context, txtError, null, false);
             } else {
               if (indexOfBottomBar == 3) {
-                _getNotice(context, mainTittle, content, indexOfBottomBar);
+                getNotice(context, mainTittle, content, indexOfBottomBar);
               }
             }
           } else {
@@ -521,9 +522,5 @@ Widget btnSubmitOrCancel(BuildContext context, double width, double height,
             ))),
   );
 }
-  Future<void> _getNotice(BuildContext context,String mainTittle, String content, int indexOfBottomBar) async{
-    int status = await postAPINotice(mainTittle, content);
-    if(status == 200){
-      showStatusAlertDialog(context, "Tạo thành công.", HomeAdminPage(index: indexOfBottomBar,), true);
-    }else showStatusAlertDialog(context, "Tạo thất bại. Xin thử lại !!!", null, false);
-  }
+
+
