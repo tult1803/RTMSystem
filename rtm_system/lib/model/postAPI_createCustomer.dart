@@ -14,6 +14,7 @@ class PostCreateCustomer{
         'Authorization': 'Bearer $token',
       },
       body: jsonEncode(<String, dynamic>{
+        "username":"",
         "password": password,
         "role_id": 3,
         "fullname": fullname,
