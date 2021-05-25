@@ -4,16 +4,16 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
 
 class UpdateProfilePage extends StatefulWidget {
-  const UpdateProfilePage({Key key}) : super(key: key);
+  const UpdateProfilePage({Key key, this.fullname, this.birthday, this.phone, this.gender}) : super(key: key);
+  final String fullname, birthday, phone;
+  final int gender;
 
   @override
   _UpdateProfilePageState createState() => _UpdateProfilePageState();
 }
 
 class _UpdateProfilePageState extends State<UpdateProfilePage> {
-  String fullName = 'Thùy Trang';
   String title = "Thông tin cá nhân";
-  DateTime dt = DateTime.parse('2021-04-20');
   int selectedRadio;
 
   @override
@@ -21,7 +21,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
     // TODO: implement initState
     super.initState();
     //set value nam or nu
-    selectedRadio = 0;
+    selectedRadio = widget.gender;
   }
 
   setSelectedRadio(int val) {
@@ -57,7 +57,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              btnFullName(context, 'Thùy Trang'),
+              btnFullName(context, widget.fullname),
               radioBtn(context),
               SizedBox(
                 height: 2,
@@ -66,8 +66,8 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                   color: Color(0xFFBDBDBD),
                 ),
               ),
-              btnPhone(context, "0123456789"),
-              btnBirthday(context, dt),
+              btnPhone(context, widget.phone),
+              btnBirthday(context, widget.birthday),
               SizedBox(
                 height: 2,
                 child: Container(
@@ -75,7 +75,8 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                   color: Color(0xFFBDBDBD),
                 ),
               ),
-              btnCMND(context, '12354678'),
+              btnCMND(context, '12354678 dữ liệu này giả'),
+              btnAddress(context, 'abd giả'),
               SizedBox(
                 height: 10,
               ),
@@ -145,6 +146,9 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                 image: AssetImage("images/gender.png"),
               ),
             ),
+            SizedBox(
+              width: 30,
+            ),
             Text('Nữ'),
             Radio(
               value: 0,
@@ -154,6 +158,9 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                 print('$val');
                 setSelectedRadio(val);
               },
+            ),
+            SizedBox(
+              width: 30,
             ),
             Text('Nam'),
             Radio(
@@ -172,6 +179,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
   }
 
   Widget btnBirthday(context, valueField) {
+    DateTime dt = DateTime.parse(valueField);
     final f = new DateFormat('dd-MM-yyyy');
     return Container(
       child: Row(
@@ -248,6 +256,24 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
             return 'Vui lòng nhập CMND';
           }
           return value;
+        },
+      ),
+    );
+  }
+  Widget btnAddress(context, valueField) {
+    return Theme(
+      data: Theme.of(context).copyWith(primaryColor: Color(0xFF0BB791)),
+      child: TextFormField(
+        initialValue: valueField,
+        decoration: const InputDecoration(
+          icon: Icon(Icons.location_on),
+          fillColor: Colors.amberAccent,
+          hintText: 'Địa chỉ',
+          labelText: 'Địa chỉ',
+        ),
+        onChanged: (value) {
+          setState(() => valueField = value);
+          print('Value for field  saved as "$valueField"');
         },
       ),
     );
