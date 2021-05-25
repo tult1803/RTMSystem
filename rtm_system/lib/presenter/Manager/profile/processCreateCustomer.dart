@@ -24,6 +24,7 @@ class _processCreateCustomerState extends State<processCreateCustomer> {
       address = this.widget._listCustomer[4];
       password = this.widget._listCustomer[5];
       birthday = this.widget._listCustomer[6];
+      birthday = birthday.substring(6, 10) + '-' +birthday.substring(3, 5)+ '-' +birthday.substring(0, 2) ;
     });
   }
   @override

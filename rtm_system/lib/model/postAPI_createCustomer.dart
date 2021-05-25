@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 
 
 class PostCreateCustomer{
+
   createNotice(String token, String phone, String password, String fullname, int gender, String cmnd, String address, String birthday) async {
     final response = await http.post(
       Uri.http('${url_main}', '${url_createCustomer}'),
