@@ -5,6 +5,8 @@ import 'package:rtm_system/view/customer/Profile/profile.dart';
 import 'package:rtm_system/view/customer/invoice/all_invoice.dart';
 import 'package:rtm_system/view/customer/notice/all_notices.dart';
 
+import 'advance/all_advance.dart';
+
 
 class HomeCustomerPage extends StatefulWidget {
   @override
@@ -46,7 +48,7 @@ class _HomeCustomerPageState extends State<HomeCustomerPage> {
         onTap: (index) {
           setState(() {
             if (index == 0) {
-
+              _widget = AdvancePage();
             } else if (index == 1) {
               _widget = InvoicePage();
             } else if (index == 2) {
