@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+// import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
 
 class UpdateProfilePage extends StatefulWidget {
@@ -206,21 +206,21 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
             color: Colors.black38,
           ),
           FlatButton(
-            onPressed: () {
-              DatePicker.showDatePicker(
-                context,
-                showTitleActions: true,
-                onConfirm: (date) {
-                  setState(() {
-                    dt = date;
-                  });
-                },
-                currentTime: dt,
-                maxTime: DateTime(2050),
-                minTime: DateTime(2021),
-                locale: LocaleType.vi,
-              );
-            },
+            // onPressed: () {
+            //   DatePicker.showDatePicker(
+            //     context,
+            //     showTitleActions: true,
+            //     onConfirm: (date) {
+            //       setState(() {
+            //         dt = date;
+            //       });
+            //     },
+            //     currentTime: dt,
+            //     maxTime: DateTime(2050),
+            //     minTime: DateTime(2021),
+            //     locale: LocaleType.vi,
+            //   );
+            // },
             child: Text(
               '${f.format(dt)}',
               style: TextStyle(color: Colors.black, fontSize: 16),
