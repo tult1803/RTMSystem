@@ -271,8 +271,8 @@ Widget containerButton(
       date.substring(11, 16);
   return Container(
       margin: EdgeInsets.all(5),
-      // height: 96,
       child: Material(
+        color: Colors.white,
         child: TextButton(
           style: TextButton.styleFrom(
             primary: Colors.black, // foreground
