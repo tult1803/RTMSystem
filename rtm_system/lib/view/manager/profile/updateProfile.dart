@@ -13,13 +13,12 @@ class _updateProfileState extends State<updateProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         backgroundColor: welcome_color,
-        title: Center(
-          child: Text(
+        title: Text(
             "Cập nhật thông tin",
             style: TextStyle(
                 color: Colors.white, fontWeight: FontWeight.w500, fontSize: 22),
-          ),
         ),
       ),
       body: new Container(),

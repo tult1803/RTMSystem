@@ -15,14 +15,13 @@ class _SupportPageState extends State<SupportPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         backgroundColor: welcome_color,
-        title: Center(
-          child: AutoSizeText(
+        title: AutoSizeText(
             "Trung tâm hỗ trợ",
             style: TextStyle(
                 color: Colors.white, fontWeight: FontWeight.w500, fontSize: 22),
           ),
-        ),
 
       ),
       // body: new showAllBill(),

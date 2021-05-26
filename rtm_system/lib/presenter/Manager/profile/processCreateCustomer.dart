@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:rtm_system/ultils/getData.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 
@@ -12,9 +13,10 @@ class processCreateCustomer extends StatefulWidget {
 }
 
 class _processCreateCustomerState extends State<processCreateCustomer> {
-  String fullname, phone, cmnd, address, password, birthday;
+  String fullname, phone, cmnd, address, password;
+  DateTime birthday;
   int gender;
-
+  final fBirthday = new DateFormat('yyyy-MM-dd');
   Future<void> _getData() {
     setState(() {
       fullname = this.widget._listCustomer[0];
@@ -24,7 +26,6 @@ class _processCreateCustomerState extends State<processCreateCustomer> {
       address = this.widget._listCustomer[4];
       password = this.widget._listCustomer[5];
       birthday = this.widget._listCustomer[6];
-      birthday = birthday.substring(6, 10) + '-' +birthday.substring(3, 5)+ '-' +birthday.substring(0, 2) ;
     });
   }
   @override
@@ -46,7 +47,7 @@ class _processCreateCustomerState extends State<processCreateCustomer> {
       ),
       child: TextButton(
           onPressed: () {
-            doCreateCustomer(context, phone, password, fullname, gender, cmnd, address, birthday, 4);
+            doCreateCustomer(context, phone, password, fullname, gender, cmnd, address, "${fBirthday.format(birthday)}", 4);
           },
           child: Text(
             "${this.widget._tittle}",

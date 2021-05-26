@@ -1,4 +1,7 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:rtm_system/presenter/Manager/profile/processCreateCustomer.dart';
 import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
@@ -15,7 +18,9 @@ class ConfirmCreateCustomer extends StatefulWidget {
 }
 
 class _ConfirmCreateCustomerState extends State<ConfirmCreateCustomer> {
-  String fullname, phone, cmnd, address, password, birthday, gender;
+  String fullname, phone, cmnd, address, password, gender;
+  DateTime birthday;
+  final fBirthday = new DateFormat('dd/MM/yyyy');
 
   @override
   void initState() {
@@ -44,7 +49,9 @@ class _ConfirmCreateCustomerState extends State<ConfirmCreateCustomer> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Phiếu xác nhận"),
+          elevation: 0,
+          centerTitle: true,
+          title: Text("Phiếu xác nhận", style: TextStyle(fontSize: 20),),
           backgroundColor: welcome_color,
         ),
         backgroundColor: welcome_color,
@@ -58,7 +65,7 @@ class _ConfirmCreateCustomerState extends State<ConfirmCreateCustomer> {
                   txtConfirm(context, "Mật khẩu đăng nhập", password),
                   txtConfirm(context, "Họ và tên", fullname),
                   txtConfirm(context, "Giới tính", "$gender"),
-                  txtConfirm(context, "Ngày sinh", birthday),
+                  txtConfirm(context, "Ngày sinh", "${fBirthday.format(birthday)}"),
                   txtConfirm(context, "CMND/CCCD", cmnd),
                   txtConfirm(context, "Địa chỉ", address),
                   processCreateCustomer("Xác nhận", this.widget.listCustomer),

@@ -16,13 +16,12 @@ class _CreateCustomerState extends State<CreateCustomer> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: welcome_color,
-        title: Center(
-          child: Text(
+        centerTitle: true,
+        title:Text(
             "Tạo khách hàng",
             style: TextStyle(
                 color: Colors.white, fontWeight: FontWeight.w500, fontSize: 22),
           ),
-        ),
       ),
       body: SingleChildScrollView(child: new showCreateCustomer())
     );

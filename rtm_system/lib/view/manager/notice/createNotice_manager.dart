@@ -14,13 +14,12 @@ class _createNoticeState extends State<createNotice> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         backgroundColor: welcome_color,
-        title: Center(
-          child: Text(
+        title:  Text(
             "Tạo thông báo",
             style: TextStyle(
                 color: Colors.white, fontWeight: FontWeight.w500, fontSize: 22),
-          ),
         ),
       ),
       body: SingleChildScrollView(child: new showCreateNotice()),

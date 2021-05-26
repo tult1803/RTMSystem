@@ -1,7 +1,9 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:rtm_system/view/manager/profile/confirmCreateCustomer.dart';
-import 'package:rtm_system/ultils/button.dart';
+import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/ultils/src/regExp.dart';
 
@@ -15,10 +17,18 @@ class showCreateCustomer extends StatefulWidget {
 enum GenderCharacter { women, men }
 
 class _showCreateCustomerState extends State<showCreateCustomer> {
-  String fullname, phone, cmnd, address, password, birthday;
+  final f = new DateFormat('dd/MM/yyyy');
+  DateTime birthday = DateTime.parse("${DateTime.now()}");
+  String fullname, phone, cmnd, address, password;
   String errFulname, errPhone, errCMND, errAddress, errUser, errPass, errBirth;
   GenderCharacter _character = GenderCharacter.men;
   List list;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +42,7 @@ class _showCreateCustomerState extends State<showCreateCustomer> {
           _txtfield(true, "Nhập mật khẩu", "Mật khẩu", errPass, 1,
               TextInputType.text),
           radioButton(context),
-          _txtfield(false, "dd/MM/yyyy", "Ngày sinh", errBirth, 1,
-              TextInputType.datetime),
+          btnBirthday(context),
           _txtfield(false, "Nhập CMND/CCCD", "CMND/CCCD", errCMND, 1,
               TextInputType.phone),
           _txtfield(false, "Nhập địa chỉ", "Địa chỉ", errAddress, 1,
@@ -56,6 +65,80 @@ class _showCreateCustomerState extends State<showCreateCustomer> {
     );
   }
 
+  Widget btnBirthday(context) {
+    var size = MediaQuery.of(context).size;
+    return Container(
+      margin: EdgeInsets.only(top: 15),
+      child: Column(
+        children: [
+          GestureDetector(
+            onTap: () {
+              DatePicker.showDatePicker(
+                context,
+                showTitleActions: true,
+                onConfirm: (date) {
+                  setState(() {
+                    birthday = date;
+                    list = [
+                      fullname,
+                      _character.index,
+                      phone,
+                      cmnd,
+                      address,
+                      password,
+                      birthday
+                    ];
+                  });
+                },
+                currentTime: birthday,
+                maxTime: DateTime(DateTime.now().year, 12, 31),
+                minTime: DateTime(DateTime.now().year-111),
+                locale: LocaleType.vi,
+
+              );
+            },
+            child: Row(
+              children: [
+                Container(
+                  width: 100,
+                  margin: EdgeInsets.only(left: 15),
+                  child: AutoSizeText(
+                    "Ngày sinh",
+                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
+                  ),
+                ),
+                Expanded(
+                  child: Text(
+                    '${f.format(birthday)}',
+                    style: TextStyle(color: Colors.black54, fontSize: 16),
+                  ),
+                ),
+                Container(
+                  width: 70,
+                  child: Icon(
+                    Icons.calendar_today,
+                    color: Colors.black45,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 15,
+          ),
+          SizedBox(
+            height: 1,
+            child: Container(
+              margin: EdgeInsets.only(left: 10, right: 10),
+              width: size.width,
+              color: Colors.black45,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _txtfield(bool obscureText, String hintText, String tittle,
       String error, int maxLines, TextInputType txtType) {
     return Container(
@@ -67,8 +150,6 @@ class _showCreateCustomerState extends State<showCreateCustomer> {
             fullname = value.trim();
           } else if (tittle == "Số điện thoại") {
             phone = value.trim();
-          } else if (tittle == "Ngày sinh") {
-            birthday = value.trim();
           } else if (tittle == "CMND/CCCD") {
             cmnd = value.trim();
           } else if (tittle == "Địa chỉ") {
@@ -133,7 +214,7 @@ class _showCreateCustomerState extends State<showCreateCustomer> {
   Widget radioButton(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Padding(
-      padding: const EdgeInsets.only(top: 10, right: 10),
+      padding: const EdgeInsets.only(top: 0, right: 10),
       child: Column(
         children: [
           Row(
@@ -268,15 +349,6 @@ class _showCreateCustomerState extends State<showCreateCustomer> {
         }
       } catch (_) {
         errPhone = "Số điện thoại chỉ nhập số";
-      }
-    }
-    if (birthday == null || birthday == "") {
-      errBirth = "Ngày sinh trống";
-    } else {
-      if (!checkFormatDate.hasMatch(birthday)) {
-        errBirth = "Nhập sai ngày sinh (dd/MM/yyyy)";
-      } else {
-        errBirth = null;
       }
     }
     if (cmnd == null || cmnd == "") {

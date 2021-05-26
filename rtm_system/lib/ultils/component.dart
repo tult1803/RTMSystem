@@ -1,6 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:rtm_system/ultils/button.dart';
+import 'package:rtm_system/ultils/commonWidget.dart';
 
 // AutoSizeText chữ tự động co giãn theo kích thước mặc định
 // Hiện tại dùng cho trang "Product" và "Bill"
@@ -152,7 +152,7 @@ Widget txtPersonInvoice(context, String title, String content1, String content2)
   );
 }
 //show infor với 2 dòng, đang dùng: invoice detail
-Widget txtItemInvoice(context,String title, String content){
+Widget txtItemDetail(context,String title, String content){
   var size = MediaQuery.of(context).size;
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -267,23 +267,23 @@ Widget widgetContentInvoice(context, String status, String header) {
                     SizedBox(
                       height: 10,
                     ),
-                    txtItemInvoice(context,  'Test', 'Nguyen Van A'),
+                    txtItemDetail(context,  'Test', 'Nguyen Van A'),
                     SizedBox(
                       height: 10,
                     ),
-                    txtItemInvoice(context,  'Test', 'Nguyen Van A'),
+                    txtItemDetail(context,  'Test', 'Nguyen Van A'),
                     SizedBox(
                       height: 10,
                     ),
-                    txtItemInvoice(context, 'Test', 'Nguyen Van A'),
+                    txtItemDetail(context, 'Test', 'Nguyen Van A'),
                     SizedBox(
                       height: 10,
                     ),
-                    txtItemInvoice(context, 'Test', 'Nguyen Van A'),
+                    txtItemDetail(context, 'Test', 'Nguyen Van A'),
                     SizedBox(
                       height: 10,
                     ),
-                    txtItemInvoice(context, 'Test','Nguyen Van A'),
+                    txtItemDetail(context, 'Test','Nguyen Van A'),
                     if (status == 'Chờ xác nhận')
                       Center(
                         child: Row(
