@@ -1,28 +1,30 @@
+
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 
-class updatePriceProduct extends StatefulWidget {
-  const updatePriceProduct({Key key}) : super(key: key);
+class SupportPage extends StatefulWidget {
+  const SupportPage({Key key}) : super(key: key);
 
   @override
-  _updatePriceProductState createState() => _updatePriceProductState();
+  _SupportPageState createState() => _SupportPageState();
 }
 
-class _updatePriceProductState extends State<updatePriceProduct> {
+class _SupportPageState extends State<SupportPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         backgroundColor: welcome_color,
-        title: Center(
-          child: Text(
-            "Cập nhật giá",
+        title: AutoSizeText(
+            "Trung tâm hỗ trợ",
             style: TextStyle(
                 color: Colors.white, fontWeight: FontWeight.w500, fontSize: 22),
           ),
-        ),
+
       ),
-      body: new Container(),
+      // body: new showAllBill(),
     );
   }
 }

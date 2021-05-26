@@ -1,8 +1,9 @@
-
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:rtm_system/presenter/Manager/showCustomer.dart';
+import 'package:rtm_system/presenter/Manager/profile/showCustomer.dart';
+import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
+
+import 'createNewCustomer.dart';
 
 class AllCustomer extends StatefulWidget {
   const AllCustomer({Key key}) : super(key: key);
@@ -16,14 +17,16 @@ class _AllCustomerState extends State<AllCustomer> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         backgroundColor: welcome_color,
-        title: Center(
-          child: Text(
+        title: Text(
               "Quản lý khách hàng",
               style: TextStyle(
                   color: Colors.white, fontWeight: FontWeight.w500, fontSize: 22),
             ),
-        ),
+        bottom: PreferredSize(
+            child: btnMain(context, "Tạo khách hàng", Icon(Icons.person_add), CreateCustomer()),
+            preferredSize: Size.fromHeight(60.0)),
       ),
       body: new showAllCustomer(),
     );

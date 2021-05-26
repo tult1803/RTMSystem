@@ -1,25 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 
-class updateProfile extends StatefulWidget {
-  const updateProfile({Key key}) : super(key: key);
+class updatePriceProduct extends StatefulWidget {
+  const updatePriceProduct({Key key}) : super(key: key);
 
   @override
-  _updateProfileState createState() => _updateProfileState();
+  _updatePriceProductState createState() => _updatePriceProductState();
 }
 
-class _updateProfileState extends State<updateProfile> {
+class _updatePriceProductState extends State<updatePriceProduct> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         backgroundColor: welcome_color,
-        title: Center(
-          child: Text(
-            "Cập nhật thông tin",
+        title: Text(
+            "Cập nhật giá",
             style: TextStyle(
                 color: Colors.white, fontWeight: FontWeight.w500, fontSize: 22),
-          ),
         ),
       ),
       body: new Container(),

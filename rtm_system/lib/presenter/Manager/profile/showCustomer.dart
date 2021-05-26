@@ -10,6 +10,6 @@ class showAllCustomer extends StatefulWidget {
 class _showAllCustomerState extends State<showAllCustomer> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Center(child: Container(child: Text("Đang chờ API"),));
   }
 }

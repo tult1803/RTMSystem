@@ -1,25 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 
-class processBill extends StatefulWidget {
-  const processBill({Key key}) : super(key: key);
+class updateProfile extends StatefulWidget {
+  const updateProfile({Key key}) : super(key: key);
 
   @override
-  _processBillState createState() => _processBillState();
+  _updateProfileState createState() => _updateProfileState();
 }
 
-class _processBillState extends State<processBill> {
+class _updateProfileState extends State<updateProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         backgroundColor: welcome_color,
-        title: Center(
-          child: Text(
-            "Đơn chờ xủ lý",
+        title: Text(
+            "Cập nhật thông tin",
             style: TextStyle(
                 color: Colors.white, fontWeight: FontWeight.w500, fontSize: 22),
-          ),
         ),
       ),
       body: new Container(),

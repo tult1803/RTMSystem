@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rtm_system/model/notice/getAPI_all_notice.dart';
 import 'package:rtm_system/model/notice/model_all_notice.dart';
-import 'package:rtm_system/ultils/button.dart';
+import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class showAllNotice extends StatefulWidget {

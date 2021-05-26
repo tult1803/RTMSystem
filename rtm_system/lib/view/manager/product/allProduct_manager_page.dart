@@ -1,11 +1,9 @@
-import 'dart:ui';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:rtm_system/presenter/Manager/showProduct_manager.dart';
-import 'package:rtm_system/ultils/button.dart';
+import 'package:rtm_system/presenter/Manager/product/showProduct_manager.dart';
+import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
-import 'package:rtm_system/view/manager/updatePriceProduct_manager.dart';
+import 'package:rtm_system/view/manager/product/updatePriceProduct_manager.dart';
 class AllProduct extends StatefulWidget {
   const AllProduct({Key key}) : super(key: key);
 

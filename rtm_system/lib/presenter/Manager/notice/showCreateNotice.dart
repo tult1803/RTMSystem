@@ -1,11 +1,7 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:rtm_system/model/postAPI_createNotice.dart';
-import 'package:rtm_system/ultils/button.dart';
+import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class showCreateNotice extends StatefulWidget {
   const showCreateNotice({Key key}) : super(key: key);
@@ -27,7 +23,7 @@ class _showCreateNoticeState extends State<showCreateNotice> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Card(
-              margin: EdgeInsets.only(top: 30, left: 30, right: 30, bottom: 20),
+              margin: EdgeInsets.only(top: 20, left: 10, right: 10, bottom: 20),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
@@ -62,10 +58,10 @@ class _showCreateNoticeState extends State<showCreateNotice> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                btnSubmitOrCancel(context, 120, 40, Colors.redAccent, "Hủy",
+                btnSubmitOrCancel(context, 140, 40, Colors.redAccent, "Hủy",
                     tittle, description, null,false, 3),
                 SizedBox(width: 20),
-                btnSubmitOrCancel(context, 120, 40, welcome_color, "Tạo",
+                btnSubmitOrCancel(context, 140, 40, welcome_color, "Tạo",
                     tittle, description, "Tiêu để đang bị để trống.",true, 3),
               ],
             ),
@@ -117,10 +113,3 @@ class _showCreateNoticeState extends State<showCreateNotice> {
   }
 }
 
-Future postAPINotice(String tittle, String content) async {
-  PostCreateNotice _createNotice = PostCreateNotice();
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  int status = await _createNotice.createNotice(
-      tittle, content, prefs.get("accountId"), prefs.get("access_token"));
-  return status;
-}

@@ -1,17 +1,14 @@
-import 'dart:ui';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:rtm_system/presenter/Manager/showCreateNotice.dart';
 import 'package:rtm_system/ultils/alertDialog.dart';
 import 'package:rtm_system/view/customer/Profile/update_profile.dart';
-import 'package:rtm_system/view/customer/notice/detail_notice.dart';
-import 'package:rtm_system/view/manager/allNotice_manager.dart';
+import 'package:rtm_system/view/detail_notice.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../view/login_page.dart';
 import 'component.dart';
+import 'getData.dart';
 import 'src/color_ultils.dart';
 
 const double defaultBorderRadius = 3.0;
@@ -180,13 +177,10 @@ Widget btnDateTime(BuildContext context, String tittle, Icon icon) {
 }
 
 Widget card(BuildContext context, String tittle, String type, String detailType,
-    String price, String date, Color color) {
+    String price, String date, Color color, Widget widget) {
   //Format lại ngày
-  String dateTime = date.substring(8, 10) +
-      "-" +
-      date.substring(5, 7) +
-      "-" +
-      date.substring(0, 4);
+  DateTime _date = DateTime.parse(date);
+  final fBirthday = new DateFormat('dd/MM/yyyy');
   //Format lại giá
   final oCcy = new NumberFormat("#,##0", "en_US");
   //Lấy size của màn hình
@@ -206,8 +200,7 @@ Widget card(BuildContext context, String tittle, String type, String detailType,
           borderRadius: BorderRadius.circular(10),
         ),
         onPressed: () {
-          //Code navigate ở đây
-          print('Choose: $tittle');
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => widget));
         },
         child: Row(
           children: [
@@ -221,7 +214,7 @@ Widget card(BuildContext context, String tittle, String type, String detailType,
               width: size.width * 0.5,
               child: Padding(
                 padding: const EdgeInsets.only(top: 2.0),
-                child: componentCardS(tittle, "${type}", "${detailType}",
+                child: componentCardS(tittle, type, detailType,
                     CrossAxisAlignment.start, color),
               ),
             ),
@@ -235,22 +228,9 @@ Widget card(BuildContext context, String tittle, String type, String detailType,
                       bottomRight: Radius.circular(10)),
                 ),
                 child: componentCardE("${oCcy.format(double.parse(price))}đ",
-                    dateTime, CrossAxisAlignment.end, Colors.black54),
+                    "${fBirthday.format(_date)}", CrossAxisAlignment.end, Colors.black54),
               ),
             ),
-            // SizedBox(
-            //   width: 10,
-            // ),
-            // TextButton(
-            //     onPressed: () {
-            //       // Navigate here
-            //     },
-            //     child: Container(
-            //         height: size.height,
-            //         child: Center(
-            //           child: AutoSizeText("Chi tiết",
-            //               style: TextStyle(color: Colors.black54)),
-            //         ))),
           ],
         ),
       ),
@@ -258,17 +238,14 @@ Widget card(BuildContext context, String tittle, String type, String detailType,
   );
 }
 
+//Dùng cho trang notice để hiện thỉ các notice
 Widget containerButton(
     BuildContext context, int id, String tittle, String content, String date) {
   var size = MediaQuery.of(context).size;
   //Format lại ngày
-  String dateTime = date.substring(8, 10) +
-      "-" +
-      date.substring(5, 7) +
-      "-" +
-      date.substring(0, 4) +
-      " " +
-      date.substring(11, 16);
+  DateTime _date = DateTime.parse(date);
+  final fBirthday = new DateFormat('dd/MM/yyyy hh:mm');
+
   return Container(
       margin: EdgeInsets.all(5),
       child: Material(
@@ -323,10 +300,10 @@ Widget containerButton(
                 height: 10,
               ),
               AutoSizeText(
-                "$dateTime",
+                "${fBirthday.format(_date)}",
                 style: TextStyle(
                   fontSize: 12,
-                  color: Color(0xFF0BB791),
+                  color: welcome_color,
                 ),
                 textAlign: TextAlign.left,
               ),
@@ -334,9 +311,9 @@ Widget containerButton(
                 height: 9,
               ),
               SizedBox(
-                height: 1,
+                height: 0.5,
                 child: Container(
-                  color: Color(0xFFBDBDBD),
+                  color: Colors.black54,
                 ),
               ),
             ],
@@ -390,6 +367,7 @@ Widget buttonProfile(BuildContext context, double left, double right,
 // Dùng cho đăng xuất, xóa thông tin.
 Widget btnLogout(context) {
   return Container(
+    margin: EdgeInsets.only(top: 30),
     width: 140,
     child: Center(
       child: TextButton(
@@ -541,8 +519,8 @@ Widget btnSubmitOrCancel(
         ))),
   );
 }
-// chấp nhận hoặc từ chối hóa đơn
 
+// chấp nhận hoặc từ chối hóa đơn
 Widget btnAcceptOrReject(BuildContext context, double width, Color color,
     String tittleButtonAlertDialog, bool action, int indexOfBottomBar) {
   return Container(
@@ -590,4 +568,18 @@ Widget btnAcceptOrReject(BuildContext context, double width, Color color,
       ),
     ),
   ));
+}
+
+// Đang dùng cho các trang detail "Sản phẩm", "Hóa đơn", "Ứng tiền", "Khách hàng"
+Widget containerDetail(BuildContext context, Widget widget){
+  var size = MediaQuery.of(context).size;
+  return Container(
+    margin: EdgeInsets.only(top: 20, left: 10,right: 10),
+    width: size.width,
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(10),
+    ),
+    child: widget,
+  );
 }

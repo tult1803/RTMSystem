@@ -1,8 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:rtm_system/model/getAPI_product.dart';
 import 'package:rtm_system/model/model_product.dart';
-import 'package:rtm_system/ultils/button.dart';
+import 'package:rtm_system/ultils/commonWidget.dart';
+import 'package:rtm_system/view/manager/formForDetail_page.dart';
+import 'package:rtm_system/view/manager/product/detailProduct.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class showAllProduct extends StatefulWidget {
@@ -78,7 +79,17 @@ class _showAllProductState extends State<showAllProduct> {
                     "${snapshot.data[index].type}",
                     snapshot.data[index].price,
                     snapshot.data[index].date_time,
-                    Colors.black54);
+                    Colors.black54,
+                    FormForDetailPage(
+                      tittle: "Chi tiết sản phẩm",
+                        bodyPage: DetailProduct(
+                      id: snapshot.data[index].id,
+                      name: snapshot.data[index].name,
+                      description: snapshot.data[index].description,
+                      type: snapshot.data[index].type,
+                      date_time: snapshot.data[index].date_time,
+                      price: snapshot.data[index].price,
+                    )));
               },
             );
           }
