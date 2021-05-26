@@ -1,10 +1,7 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/view/customer/invoice/detail_invoice.dart';
-import 'package:rtm_system/view/login_page.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class InvoicePage extends StatefulWidget {
   const InvoicePage({Key key}) : super(key: key);
