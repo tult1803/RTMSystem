@@ -10,6 +10,7 @@ import 'package:rtm_system/ultils/src/regExp.dart';
 import 'manager/profile/confirmCreateCustomer.dart';
 
 //check: true là cho customer còn false là cho manager
+
 class formUpdateProfile extends StatefulWidget {
   String fullname, phone, cmnd, address, password;
   int gender;

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:rtm_system/model/postAPI_createCustomer.dart';
 import 'package:rtm_system/model/postAPI_createNotice.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
-import 'package:rtm_system/view/manager/profile/updateProfile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'alertDialog.dart';
@@ -28,7 +27,7 @@ Future<void> getNotice(BuildContext context,String mainTittle, String content, i
 Future postAPICreateCustomer(String phone, String password, String fullname, int gender, String cmnd, String address, String birthday) async {
   PostCreateCustomer _createCustomer = PostCreateCustomer();
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  int status = await _createCustomer.createNotice(prefs.get("access_token"), phone, password, fullname, gender, cmnd, address, birthday);
+  int status = await _createCustomer.createCustomer(prefs.get("access_token"), phone, password, fullname, gender, cmnd, address, birthday);
   return status;
 }
 
