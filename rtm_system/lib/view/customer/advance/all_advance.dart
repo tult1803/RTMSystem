@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:rtm_system/presenter/Customer/show_all_advance.dart';
 import 'package:rtm_system/ultils/component.dart';
+import 'package:rtm_system/view/customer/advance/create_request_advance.dart';
+import 'package:rtm_system/view/customer/process/process_all.dart';
 
 class AdvancePage extends StatefulWidget {
   const AdvancePage({Key key}) : super(key: key);
@@ -32,7 +34,7 @@ class _AdvancePageState extends State<AdvancePage> {
     return Scaffold(
       backgroundColor: Color(0xffEEEEEE),
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(20.0),
+        preferredSize: Size.fromHeight(0.0),
         child: AppBar(
           backgroundColor: Color(0xFF0BB791),
           elevation: 0,
@@ -43,7 +45,8 @@ class _AdvancePageState extends State<AdvancePage> {
             margin: EdgeInsets.only(bottom: 12,),
             child: Column(
               children: [
-                headerInvoice('Ứng tiền', 'Tổng số tiền phải trả', '37,000,000 VND'),
+                headerInvoice(
+                    'Ứng tiền', 'Tổng số tiền phải trả', '37,000,000 VND'),
                 _showProcessDate(),
                 SizedBox(
                   height: 12,
@@ -57,6 +60,7 @@ class _AdvancePageState extends State<AdvancePage> {
   }
 
   Widget _showProcessDate() {
+    int index = 1;
     return Column(
       children: [
         Row(
@@ -66,8 +70,12 @@ class _AdvancePageState extends State<AdvancePage> {
               width: 150,
               child: RaisedButton(
                 color: Color(0xFFF8D375),
-                onPressed: () => {
-                  // chuyển đến trang cần xử lý
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ProcessAllPage(indexPage: index)),
+                  );
                 },
                 child: Row(
                   children: [
@@ -173,7 +181,13 @@ class _AdvancePageState extends State<AdvancePage> {
           width: 320,
           child: RaisedButton(
               color: Color(0xFF0BB791),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => CreateRequestAdvance()),
+                );
+              },
               child: Text(
                 'Gửi yêu cầu bán hàng',
                 style: TextStyle(

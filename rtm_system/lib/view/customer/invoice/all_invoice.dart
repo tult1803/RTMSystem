@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/view/customer/invoice/detail_invoice.dart';
+import 'package:rtm_system/view/customer/process/process_all.dart';
 
 class InvoicePage extends StatefulWidget {
   const InvoicePage({Key key}) : super(key: key);
@@ -110,6 +111,7 @@ class _InvoicePageState extends State<InvoicePage> {
   }
 
   Widget _showProcessDate() {
+    int index = 0;
     return Column(
       children: [
         Row(
@@ -118,8 +120,12 @@ class _InvoicePageState extends State<InvoicePage> {
               width: 150,
               child: RaisedButton(
                 color: Color(0xFFF8D375),
-                onPressed: () => {
-                  // chuyển đến trang cần xử lý
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ProcessAllPage(indexPage: index)),
+                  );
                 },
                 child: Row(
                   children: [
