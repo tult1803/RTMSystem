@@ -15,6 +15,7 @@ class showProfile extends StatefulWidget {
 class _showProfileState extends State<showProfile> {
   GetAPIProfileCustomer getAPIProfileCustomer = GetAPIProfileCustomer();
   InfomationCustomer infomationCustomer = InfomationCustomer();
+  String password = '';
 
   @override
   void initState() {
@@ -28,14 +29,12 @@ class _showProfileState extends State<showProfile> {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     String token = sharedPreferences.getString('access_token');
     String phone = sharedPreferences.getString('phone');
+    password = sharedPreferences.getString('password');
     print(token);
-    print(phone);
     // Đỗ dữ liệu lấy từ api
     print('OKla');
     infomationCustomer =
         await getAPIProfileCustomer.getProfileCustomer(token, phone);
-    print(infomationCustomer.birthday + 'day nè');
-
     return infomationCustomer;
   }
 
@@ -57,7 +56,7 @@ class _showProfileState extends State<showProfile> {
         future: getAPIProfile(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
-            DateTime date = DateTime.parse(infomationCustomer.birthday);
+            DateTime date = infomationCustomer.birthday;
             final f = new DateFormat('dd-MM-yyyy');
             //show gender
             infomationCustomer.gender == 0
@@ -107,15 +106,16 @@ class _showProfileState extends State<showProfile> {
                   ),
                 ),
                 btnUpdateInfo(
-                    context,
-                    infomationCustomer.id,
-                    infomationCustomer.cmnd,
-                    infomationCustomer.accountId,
-                    infomationCustomer.fullname,
-                    infomationCustomer.gender,
-                    infomationCustomer.phone,
-                    infomationCustomer.birthday,
-                    infomationCustomer.address),
+                  context,
+                  infomationCustomer.cmnd,
+                  this.password,
+                  infomationCustomer.fullname,
+                  infomationCustomer.gender,
+                  infomationCustomer.phone,
+                  infomationCustomer.birthday,
+                  infomationCustomer.address,
+                  false,
+                ),
               ],
             );
           }
@@ -126,6 +126,7 @@ class _showProfileState extends State<showProfile> {
       ),
     );
   }
+
   Widget _item(context, header, value) {
     var size = MediaQuery.of(context).size;
     return Container(

@@ -63,12 +63,15 @@ class _ConfirmCreateCustomerState extends State<ConfirmCreateCustomer> {
             child: Container(
               child: Column(
                 children: [
-                  _checkPhone(),
+                  // _checkPhone(),
+                  txtConfirm(context, "Số điện thoại đăng nhập", phone),
                   txtConfirm(context, "Họ và tên", fullname),
                   txtConfirm(context, "Giới tính", "$gender"),
                   txtConfirm(context, "Ngày sinh", "${fBirthday.format(birthday)}"),
-                  _checkCMND(),
-                  _checkAddress(),
+                  // _checkCMND(),
+                  txtConfirm(context, "CMND/CCCD", cmnd),
+                  // _checkAddress(),
+                  txtConfirm(context, "Địa chỉ", address),
                   // txtConfirm(context, "Mật khẩu đăng nhập", password),
                   processCreateCustomer("Xác nhận", this.widget.listCustomer),
                 ],
