@@ -2,27 +2,28 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:rtm_system/view/formUpdateProfile.dart';
 
 class UpdateProfilePage extends StatefulWidget {
-  const UpdateProfilePage(
-      {Key key,
-      this.id,
-      this.accountId,
-      this.fullname,
-      this.birthday,
-      this.phone,
-      this.gender,
-      this.cmnd,
-      this.address})
-      : super(key: key);
-  final int id;
+  const UpdateProfilePage({
+    Key key,
+    this.fullname,
+    this.phone,
+    this.gender,
+    this.password,
+    this.cmnd,
+    this.address,
+    this.birthday,
+    this.check
+  }) : super(key: key);
   final String cmnd;
-  final int accountId;
   final String fullname;
   final int gender;
   final String phone;
-  final String birthday;
+  final String password;
+  final DateTime birthday;
   final String address;
+  final bool check;
 
   @override
   _UpdateProfilePageState createState() => _UpdateProfilePageState();
@@ -49,56 +50,30 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color(0xFFEEEEEE),
-        appBar: AppBar(
-          backgroundColor: Color(0xFF0BB791),
-          title: Container(
-            margin: EdgeInsets.only(left: 34),
-            child: Text(
-              title,
-            ),
+      backgroundColor: Color(0xFFEEEEEE),
+      appBar: AppBar(
+        backgroundColor: Color(0xFF0BB791),
+        title: Container(
+          margin: EdgeInsets.only(left: 34),
+          child: Text(
+            title,
           ),
         ),
-        body: SingleChildScrollView(
-            child: Container(
-          child: Column(
-            children: [
-              Container(
-                color: Colors.white,
-                margin: EdgeInsets.fromLTRB(0, 24, 0, 12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    btnFullName(context, widget.fullname),
-                    radioBtn(context),
-                    SizedBox(
-                      height: 2,
-                      child: Container(
-                        margin: EdgeInsets.only(left: 40),
-                        color: Color(0xFFBDBDBD),
-                      ),
-                    ),
-                    btnPhone(context, widget.phone),
-                    btnBirthday(context, widget.birthday),
-                    SizedBox(
-                      height: 2,
-                      child: Container(
-                        margin: EdgeInsets.only(left: 40),
-                        color: Color(0xFFBDBDBD),
-                      ),
-                    ),
-                    btnCMND(context, widget.cmnd),
-                    btnAddress(context, widget.address),
-                    SizedBox(
-                      height: 10,
-                    ),
-                  ],
-                ),
-              ),
-              btnSave(),
-            ],
-          ),
-        )));
+      ),
+      body: SingleChildScrollView(
+        child: new formUpdateProfile(
+          fullname: widget.fullname,
+          phone: widget.phone,
+          cmnd: widget.cmnd,
+          address: widget.address,
+          password: widget.password,
+          birthday: widget.birthday,
+          gender: widget.gender,
+          check: false,
+        ),
+       
+      ),
+    );
   }
 
   Widget btnSave() {

@@ -1,4 +1,3 @@
-
 class InfomationCustomer {
   int id;
   String cmnd;
@@ -9,7 +8,7 @@ class InfomationCustomer {
   String fullname;
   int gender;
   String phone;
-  String birthday;
+  DateTime birthday;
   String address;
 
   InfomationCustomer({
@@ -37,7 +36,7 @@ class InfomationCustomer {
       fullname: json["fullname"],
       gender: json["gender"],
       phone: json["phone"],
-      birthday: json["birthday"],
+      birthday: DateTime.parse(json["birthday"]),
       address: json["address"],
     );
 

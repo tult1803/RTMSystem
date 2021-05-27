@@ -22,7 +22,7 @@ class LoginPageState extends State<LoginPage> {
   static bool isLogin = false;
   var role_id = 0, accountId = 0;
   String username = "";
-  String password = "";
+  String password;
   String access_token = '';
   String fullname = "";
   int gender = 0;
@@ -199,7 +199,9 @@ class LoginPageState extends State<LoginPage> {
               child: TextField(
                 obscureText: true,
                 onChanged: (value1) {
-                  password = value1;
+                  setState(() {
+                    password = value1;
+                  });
                 },
                 decoration: InputDecoration(
                   border: InputBorder.none,
