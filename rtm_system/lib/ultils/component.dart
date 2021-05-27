@@ -5,7 +5,8 @@ import 'package:rtm_system/ultils/commonWidget.dart';
 // AutoSizeText chữ tự động co giãn theo kích thước mặc định
 // Hiện tại dùng cho trang "Product" và "Bill"
 //componentCardS là 1 phần bên phải của Card trong trang // E là End
-Widget componentCardE(String tittle, String type, CrossAxisAlignment cross, Color color){
+Widget componentCardE(
+    String tittle, String type, CrossAxisAlignment cross, Color color) {
   return Padding(
     padding: const EdgeInsets.only(left: 0.0, top: 10),
     child: Column(
@@ -19,11 +20,17 @@ Widget componentCardE(String tittle, String type, CrossAxisAlignment cross, Colo
         // Expanded(
         //   child: SizedBox(),
         // ),
-        SizedBox(height: 10,),
+        SizedBox(
+          height: 10,
+        ),
         AutoSizeText(
           "${type}",
           maxLines: 1,
-          style: TextStyle(fontWeight: FontWeight.w200, fontSize: 15, color: color,),
+          style: TextStyle(
+            fontWeight: FontWeight.w200,
+            fontSize: 15,
+            color: color,
+          ),
         ),
       ],
     ),
@@ -32,7 +39,8 @@ Widget componentCardE(String tittle, String type, CrossAxisAlignment cross, Colo
 
 // Hiện tại dùng cho trang "Product" và "Bill"
 //componentCardS là 1 phần bên trái của Card trong trang // S là Start
-Widget componentCardS(String tittle, String type, String detailType, CrossAxisAlignment cross, Color color){
+Widget componentCardS(String tittle, String type, String detailType,
+    CrossAxisAlignment cross, Color color) {
   return Padding(
     padding: const EdgeInsets.only(left: 0.0, top: 10),
     child: Column(
@@ -46,18 +54,28 @@ Widget componentCardS(String tittle, String type, String detailType, CrossAxisAl
         // Expanded(
         //   child: SizedBox(),
         // ),
-        SizedBox(height: 10,),
+        SizedBox(
+          height: 10,
+        ),
         Row(
           children: [
             AutoSizeText(
               "$type: ",
               maxLines: 1,
-              style: TextStyle(fontWeight: FontWeight.w400, fontSize: 15, color: Colors.black54,),
+              style: TextStyle(
+                fontWeight: FontWeight.w200,
+                fontSize: 15,
+                color: Colors.black54,
+              ),
             ),
             AutoSizeText(
               "${detailType}",
               maxLines: 1,
-              style: TextStyle(fontWeight: FontWeight.w400, fontSize: 15, color: color,),
+              style: TextStyle(
+                fontWeight: FontWeight.w200,
+                fontSize: 15,
+                color: color,
+              ),
             ),
           ],
         ),
@@ -82,7 +100,8 @@ Widget txtCanClick(BuildContext context, Widget widget, String tittle) {
     margin: EdgeInsets.only(left: 10),
     child: GestureDetector(
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => widget));
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => widget));
       },
       child: Row(
         children: [
@@ -90,7 +109,11 @@ Widget txtCanClick(BuildContext context, Widget widget, String tittle) {
             tittle,
             style: TextStyle(fontSize: 15, color: Colors.black54),
           ),
-          Icon(Icons.arrow_forward_ios_outlined, size: 13, color: Colors.black54,),
+          Icon(
+            Icons.arrow_forward_ios_outlined,
+            size: 13,
+            color: Colors.black54,
+          ),
         ],
       ),
     ),
@@ -98,7 +121,8 @@ Widget txtCanClick(BuildContext context, Widget widget, String tittle) {
 }
 
 //show infor với 3 dòng, đang dùng: invoice detail
-Widget txtPersonInvoice(context, String title, String content1, String content2){
+Widget txtPersonInvoice(
+    context, String title, String content1, String content2) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -151,6 +175,7 @@ Widget txtPersonInvoice(context, String title, String content1, String content2)
     ],
   );
 }
+
 //show infor với 2 dòng, đang dùng: invoice detail
 Widget txtItemDetail(context,String title, String content){
   var size = MediaQuery.of(context).size;
@@ -199,11 +224,15 @@ Widget txtItemDetail(context,String title, String content){
     ],
   );
 }
+
 //header của tất cả bill (customer đang dùng)
-Widget headerInvoice(String header1, String header2, String money){
-  return Column(
-    children: [
-      Container(
+Widget headerInvoice(String header1, String header2, String money) {
+  return Container(
+    color: Color(0xFF0BB791),
+    padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
+    child: Column(
+      children: [
+        Container(
           child: Center(
             child: Text(
               header1,
@@ -211,29 +240,34 @@ Widget headerInvoice(String header1, String header2, String money){
                 color: Colors.white,
                 fontSize: 24,
               ),
+              textAlign: TextAlign.center,
             ),
-          )),
-      Container(
-          child: Center(
-            child: Text(
-              header2,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-              ),
+          ),
+        ),
+        Container(
+            child: Center(
+          child: Text(
+            header2,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 20,
             ),
-          )),
-      Container(
-          child: Center(
-            child: Text(
-              money,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 34,
-              ),
+            textAlign: TextAlign.center,
+          ),
+        )),
+        Container(
+            child: Center(
+          child: Text(
+            money,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 34,
             ),
-          )),
-    ],
+            textAlign: TextAlign.center,
+          ),
+        )),
+      ],
+    ),
   );
 }
 
@@ -241,11 +275,13 @@ Widget headerInvoice(String header1, String header2, String money){
 Widget widgetContentInvoice(context, String status, String header) {
   return SingleChildScrollView(
       child: Container(
-        margin: EdgeInsets.only(bottom: 12,),
+        margin: EdgeInsets.only(
+          bottom: 12,
+        ),
         color: Color(0xFF0BB791),
         child: Column(
           children: [
-            headerInvoice(header, 'Số tiền', '50,000,000 VND' ),
+            headerInvoice(header, 'Số tiền', '50,000,000 VND'),
             //show data detail invoice
             Container(
               margin: EdgeInsets.fromLTRB(12, 12, 12, 12),
@@ -267,11 +303,11 @@ Widget widgetContentInvoice(context, String status, String header) {
                     SizedBox(
                       height: 10,
                     ),
-                    txtItemDetail(context,  'Test', 'Nguyen Van A'),
+                    txtItemDetail(context, 'Test', 'Nguyen Van A'),
                     SizedBox(
                       height: 10,
                     ),
-                    txtItemDetail(context,  'Test', 'Nguyen Van A'),
+                    txtItemDetail(context, 'Test', 'Nguyen Van A'),
                     SizedBox(
                       height: 10,
                     ),
@@ -283,15 +319,17 @@ Widget widgetContentInvoice(context, String status, String header) {
                     SizedBox(
                       height: 10,
                     ),
-                    txtItemDetail(context, 'Test','Nguyen Van A'),
+                    txtItemDetail(context, 'Test', 'Nguyen Van A'),
                     if (status == 'Chờ xác nhận')
                       Center(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            btnAcceptOrReject(context, 150, Colors.redAccent, 'Từ chối', false, 3),
+                            btnAcceptOrReject(context, 150, Colors.redAccent,
+                                'Từ chối', false, 3),
                             SizedBox(width: 20),
-                            btnAcceptOrReject(context, 150, Color(0xFF0BB791), 'Chấp nhận' ,true, 3),
+                            btnAcceptOrReject(context, 150, Color(0xFF0BB791),
+                                'Chấp nhận', true, 3),
                           ],
                         ),
                       ),
@@ -301,7 +339,7 @@ Widget widgetContentInvoice(context, String status, String header) {
             ),
 
             //button "Nhận tiền" show if status is "chưa trả", để hoàn thành đơn giao dịch
-            if(status == 'Chưa trả')
+            if (status == 'Chưa trả')
               Center(
                 child: SizedBox(
                   width: 150,
@@ -316,10 +354,95 @@ Widget widgetContentInvoice(context, String status, String header) {
                   ),
                 ),
               ),
-
           ],
         ),
       ));
+}
+
+Widget widgetContentAdvance(context, String status, String header1, header2) {
+  return SingleChildScrollView(
+      child: Container(
+    margin: EdgeInsets.only(
+      bottom: 12,
+    ),
+    color: Color(0xFF0BB791),
+    child: Column(
+      children: [
+        headerInvoice(header1, header2, '50,000,000 VND'),
+        //show data detail invoice
+        Container(
+          margin: EdgeInsets.fromLTRB(12, 12, 12, 12),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(Radius.circular(5.0)),
+          ),
+          // height: 96,
+          child: Container(
+            margin: EdgeInsets.fromLTRB(24, 12, 24, 12),
+            child: Column(
+              children: [
+                //có api chuyền thông tin cần show vô
+                txtPersonInvoice(context, 'Test', 'Nguyen Van A', '0123456789'),
+                SizedBox(
+                  height: 10,
+                ),
+                txtPersonInvoice(context, 'Test', 'Nguyen Van A', '087654322'),
+                SizedBox(
+                  height: 10,
+                ),
+                txtItemDetail(context, 'Test', 'Nguyen Van A'),
+                SizedBox(
+                  height: 10,
+                ),
+                txtItemDetail(context, 'Test', 'Nguyen Van A'),
+                SizedBox(
+                  height: 10,
+                ),
+                txtItemDetail(context, 'Test', 'Nguyen Van A'),
+                SizedBox(
+                  height: 10,
+                ),
+                if (status == 'Đã huy') txtItemDetail(context, 'Ly do', 'abc'),
+                SizedBox(
+                  height: 10,
+                ),
+                if (status == 'Chờ xác nhận')
+                  Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        btnAcceptOrReject(context, 150, Colors.redAccent,
+                            'Từ chối', false, 3),
+                        SizedBox(width: 20),
+                        btnAcceptOrReject(context, 150, Color(0xFF0BB791),
+                            'Chấp nhận', true, 3),
+                      ],
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ),
+
+        //button "Nhận tiền" show if status is "chưa trả", để hoàn thành đơn giao dịch
+        if (status == 'Dang cho')
+          Center(
+            child: SizedBox(
+              width: 150,
+              child: RaisedButton(
+                color: Color(0xffEEEEEE),
+                onPressed: () {},
+                child: Text('Trang chu'),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                elevation: 10,
+              ),
+            ),
+          ),
+      ],
+    ),
+  ));
 }
 
 //Hiện tại đang dùng cho "Phiếu xác nhận" của "Tạo khách hàng" trong profile
