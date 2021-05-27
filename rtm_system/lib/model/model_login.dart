@@ -13,6 +13,8 @@ class DataLogin {
       role_id: json['role_id'],
       fullname: json['fullname'],
       phone: json['phone'],
+      birthday: json['birthday'],
+      gender: json['gender'],
     );
   }
 }

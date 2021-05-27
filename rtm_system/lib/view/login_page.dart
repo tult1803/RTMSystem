@@ -7,7 +7,6 @@ import 'package:rtm_system/presenter/check_login.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/customer/home_customer_page.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -79,6 +78,8 @@ class LoginPageState extends State<LoginPage> {
       accountId = data.accountId;
       fullname = data.fullname;
       phone = data.phone;
+      birthday = data.birthday;
+      gender = data.gender;
     });
   }
 
@@ -86,12 +87,11 @@ class LoginPageState extends State<LoginPage> {
     try {
       await LoginApi();
       print('Role ID: ${role_id}');
-      print('Birthday ${birthday}');
     }catch (e){
       print('Error from LoginApi !!!');
     }
     if (role_id == 3 && status == 200) {
-      savedInfoLogin(role_id, accountId, access_token, fullname, phone);
+      savedInfoLogin(role_id, accountId, gender,access_token, fullname, phone,birthday, password);
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => HomeCustomerPage()),
@@ -99,7 +99,7 @@ class LoginPageState extends State<LoginPage> {
       print('Status button: Done');
       _buttonState = ButtonState.normal;
     } else if (role_id == 2 && status == 200) {
-      savedInfoLogin(role_id, accountId, access_token, fullname, phone);
+      savedInfoLogin(role_id, accountId, gender,access_token, fullname, phone, birthday, password);
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => HomeAdminPage(index: 2,)),
