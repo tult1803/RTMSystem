@@ -2,32 +2,50 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:rtm_system/view/manager/profile/confirmCreateCustomer.dart';
+import 'package:rtm_system/ultils/alertDialog.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/ultils/src/regExp.dart';
 
-class showCreateCustomer extends StatefulWidget {
-  const showCreateCustomer({Key key}) : super(key: key);
+import 'manager/profile/confirmCreateCustomer.dart';
+
+//check: true là cho customer còn false là cho manager
+class formUpdateProfile extends StatefulWidget {
+  String fullname, phone, cmnd, address, password;
+  int gender;
+  DateTime birthday;
+  final bool check;
+  List list;
+  formUpdateProfile(
+      {this.fullname,
+      this.phone,
+      this.cmnd,
+      this.address,
+      this.password,
+      this.birthday,
+      this.gender,
+      this.check,
+      this.list});
 
   @override
-  _showCreateCustomerState createState() => _showCreateCustomerState();
+  _formUpdateProfileState createState() => _formUpdateProfileState();
 }
 
 enum GenderCharacter { women, men }
 
-class _showCreateCustomerState extends State<showCreateCustomer> {
+class _formUpdateProfileState extends State<formUpdateProfile> {
   final f = new DateFormat('dd/MM/yyyy');
-  DateTime birthday = DateTime.parse("${DateTime.now()}");
-  String fullname, phone, cmnd, address, password;
   String errFulname, errPhone, errCMND, errAddress, errUser, errPass, errBirth;
-  GenderCharacter _character = GenderCharacter.men;
-  List list;
-
+  GenderCharacter character;
+  bool checkClick = false;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    if (this.widget.gender == 0) {
+      character = GenderCharacter.women;
+    } else
+      character = GenderCharacter.men;
   }
 
   @override
@@ -35,18 +53,31 @@ class _showCreateCustomerState extends State<showCreateCustomer> {
     return Container(
       child: Column(
         children: [
-          _txtfield(false, "Nhập họ tên", "Họ và tên", errFulname, 1,
-              TextInputType.text),
-          _txtfield(false, "Nhập số điện thoại", "Số điện thoại", errPhone, 1,
-              TextInputType.phone),
-          _txtfield(true, "Nhập mật khẩu", "Mật khẩu", errPass, 1,
-              TextInputType.text),
-          radioButton(context),
-          btnBirthday(context),
-          _txtfield(false, "Nhập CMND/CCCD", "CMND/CCCD", errCMND, 1,
-              TextInputType.phone),
-          _txtfield(false, "Nhập địa chỉ", "Địa chỉ", errAddress, 1,
-              TextInputType.streetAddress),
+          Column(
+            children: [
+              _txtfield(
+                  getDataTextField(this.widget.fullname),
+                  false,
+                  "Nhập họ tên",
+                  "Họ và tên",
+                  errFulname,
+                  1,
+                  TextInputType.text),
+              _txtfield(
+                  getDataTextField(this.widget.phone),
+                  false,
+                  "Nhập số điện thoại",
+                  "Số điện thoại",
+                  errPhone,
+                  1,
+                  TextInputType.phone),
+              _checkPassword(),
+              radioButton(context),
+              btnBirthday(context),
+              _checkCMND(),
+              _checkAddress(),
+            ],
+          ),
           SizedBox(
             height: 20,
           ),
@@ -57,12 +88,24 @@ class _showCreateCustomerState extends State<showCreateCustomer> {
                   "", null, false, 4),
               SizedBox(width: 20),
               btnSubmitValidate(
-                  context, 120, 40, welcome_color, "Kiểm tra", list),
+                  context, 120, 40, welcome_color, "Kiểm tra", this.widget.list, this.widget.check),
             ],
           ),
         ],
       ),
     );
+  }
+
+  TextEditingController getDataTextField(String txt) {
+    if (txt == null) {
+      txt = "";
+    }
+    final TextEditingController _controller = TextEditingController();
+    _controller.value = _controller.value.copyWith(
+      text: txt,
+      selection: TextSelection.collapsed(offset: txt.length),
+    );
+    return _controller;
   }
 
   Widget btnBirthday(context) {
@@ -78,23 +121,22 @@ class _showCreateCustomerState extends State<showCreateCustomer> {
                 showTitleActions: true,
                 onConfirm: (date) {
                   setState(() {
-                    birthday = date;
-                    list = [
-                      fullname,
-                      _character.index,
-                      phone,
-                      cmnd,
-                      address,
-                      password,
-                      birthday
+                    this.widget.birthday = date;
+                    this.widget.list = [
+                      this.widget.fullname,
+                      character.index,
+                      this.widget.phone,
+                      this.widget.cmnd,
+                      this.widget.address,
+                      this.widget.password,
+                      this.widget.birthday
                     ];
                   });
                 },
-                currentTime: birthday,
+                currentTime: this.widget.birthday,
                 maxTime: DateTime(DateTime.now().year, 12, 31),
-                minTime: DateTime(DateTime.now().year-111),
+                minTime: DateTime(DateTime.now().year - 111),
                 locale: LocaleType.vi,
-
               );
             },
             child: Row(
@@ -109,7 +151,7 @@ class _showCreateCustomerState extends State<showCreateCustomer> {
                 ),
                 Expanded(
                   child: Text(
-                    '${f.format(birthday)}',
+                    '${f.format(this.widget.birthday)}',
                     style: TextStyle(color: Colors.black54, fontSize: 16),
                   ),
                 ),
@@ -139,33 +181,41 @@ class _showCreateCustomerState extends State<showCreateCustomer> {
     );
   }
 
-  Widget _txtfield(bool obscureText, String hintText, String tittle,
-      String error, int maxLines, TextInputType txtType) {
+  Widget _txtfield(
+      TextEditingController _controller,
+      bool obscureText,
+      String hintText,
+      String tittle,
+      String error,
+      int maxLines,
+      TextInputType txtType) {
     return Container(
       margin: EdgeInsets.only(top: 10, left: 10, right: 10),
       child: TextField(
+        controller: _controller,
         obscureText: obscureText,
         onChanged: (value) {
           if (tittle == "Họ và tên") {
-            fullname = value.trim();
+            this.widget.fullname = value.trim();
           } else if (tittle == "Số điện thoại") {
-            phone = value.trim();
+            this.widget.phone = value.trim();
           } else if (tittle == "CMND/CCCD") {
-            cmnd = value.trim();
+            this.widget.cmnd = value.trim();
           } else if (tittle == "Địa chỉ") {
-            address = value.trim();
+            this.widget.address = value.trim();
           } else if (tittle == "Mật khẩu") {
-            password = value.trim();
+            this.widget.password = value.trim();
           }
           setState(() {
-            list = [
-              fullname,
-              _character.index,
-              phone,
-              cmnd,
-              address,
-              password,
-              birthday
+            checkClick = true;
+            this.widget.list = [
+              this.widget.fullname,
+              character.index,
+              this.widget.phone,
+              this.widget.cmnd,
+              this.widget.address,
+              this.widget.password,
+              this.widget.birthday
             ];
           });
         },
@@ -237,18 +287,18 @@ class _showCreateCustomerState extends State<showCreateCustomer> {
                     style: TextStyle(fontSize: 15),
                   ),
                   value: GenderCharacter.men,
-                  groupValue: _character,
+                  groupValue: character,
                   onChanged: (GenderCharacter value) {
                     setState(() {
-                      _character = value;
-                      list = [
-                        fullname,
-                        _character.index,
-                        phone,
-                        cmnd,
-                        address,
-                        password,
-                        birthday
+                      character = value;
+                      this.widget.list = [
+                        this.widget.fullname,
+                        character.index,
+                        this.widget.phone,
+                        this.widget.cmnd,
+                        this.widget.address,
+                        this.widget.password,
+                        this.widget.birthday
                       ];
                     });
                   },
@@ -258,20 +308,21 @@ class _showCreateCustomerState extends State<showCreateCustomer> {
                 child: Container(
                   height: 50,
                   child: RadioListTile<GenderCharacter>(
+                    activeColor: welcome_color,
                     title: const AutoSizeText('Nữ'),
                     value: GenderCharacter.women,
-                    groupValue: _character,
+                    groupValue: character,
                     onChanged: (GenderCharacter value) {
                       setState(() {
-                        _character = value;
-                        list = [
-                          fullname,
-                          _character.index,
-                          phone,
-                          cmnd,
-                          address,
-                          password,
-                          birthday
+                        character = value;
+                        this.widget.list = [
+                          this.widget.fullname,
+                          character.index,
+                          this.widget.phone,
+                          this.widget.cmnd,
+                          this.widget.address,
+                          this.widget.password,
+                          this.widget.birthday
                         ];
                       });
                     },
@@ -294,7 +345,7 @@ class _showCreateCustomerState extends State<showCreateCustomer> {
   }
 
   Widget btnSubmitValidate(BuildContext context, double width, double height,
-      Color color, String tittleButtonAlertDialog, List listCustomer) {
+      Color color, String tittleButtonAlertDialog, List listCustomer, bool checkProfile) {
     return Container(
         height: height,
         width: width,
@@ -306,11 +357,16 @@ class _showCreateCustomerState extends State<showCreateCustomer> {
           onPressed: () {
             setState(() {
               bool check = _validateData();
-              // if (!check) {}
+              if (checkClick) {
               if (check) {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) =>
-                        ConfirmCreateCustomer(listCustomer = listCustomer)));
+                        ConfirmCreateCustomer(listCustomer: listCustomer, check: checkProfile,)));
+              }}else{
+                if(checkProfile == false){
+                  showStatusAlertDialog(
+                      context, "Thông tin chưa thay đổi !!!", null, false);
+                }
               }
             });
           },
@@ -328,7 +384,7 @@ class _showCreateCustomerState extends State<showCreateCustomer> {
 
   bool _validateData() {
     bool check = false;
-    if (fullname == null || fullname == "") {
+    if (this.widget.fullname == null || this.widget.fullname == "") {
       errFulname = "Họ và tên trống";
     } else {
       // if (!checkFormatFullname.hasMatch(fullname)) {
@@ -337,12 +393,13 @@ class _showCreateCustomerState extends State<showCreateCustomer> {
       errFulname = null;
       // }
     }
-    if (phone == null || phone == "") {
+    if (this.widget.phone == null || this.widget.phone == "") {
       errPhone = "Số điện thoại trống";
     } else {
       try {
-        int parseInt = int.parse(phone);
-        if (!checkFormatPhone.hasMatch(phone) || phone.length > 11) {
+        int parseInt = int.parse(this.widget.phone);
+        if (!checkFormatPhone.hasMatch(this.widget.phone) ||
+            this.widget.phone.length > 11) {
           errPhone = "Số điện thoại sai (10-11 só)";
         } else {
           errPhone = null;
@@ -351,13 +408,13 @@ class _showCreateCustomerState extends State<showCreateCustomer> {
         errPhone = "Số điện thoại chỉ nhập số";
       }
     }
-    if (cmnd == null || cmnd == "") {
+    if (this.widget.cmnd == null || this.widget.cmnd == "") {
       errCMND = "CMND/CCCD trống";
     } else {
       //Lỗi RegExp nên không dùng nó mà dùng try-catch
       try {
-        int parseInt = int.parse(cmnd);
-        if (cmnd.length < 9 || cmnd.length > 12) {
+        int parseInt = int.parse(this.widget.cmnd);
+        if (this.widget.cmnd.length < 9 || this.widget.cmnd.length > 12) {
           errCMND = "CMND/CCCD sai";
         } else {
           errCMND = null;
@@ -366,15 +423,15 @@ class _showCreateCustomerState extends State<showCreateCustomer> {
         errCMND = "CMND/CCCD chỉ nhập số";
       }
     }
-    if (address == null || address == "") {
+    if (this.widget.address == null || this.widget.address == "") {
       errAddress = "Địa chỉ trống";
     } else {
       errAddress = null;
     }
-    if (password == null || password == "") {
+    if (this.widget.password == null || this.widget.password == "") {
       errPass = "Mật khẩu trống";
     } else {
-      if (!checkFormatPassword.hasMatch(password)) {
+      if (!checkFormatPassword.hasMatch(this.widget.password)) {
         errPass = "Mật khẩu ít nhất 6 kí tự (chữ và số)";
       } else {
         errPass = null;
@@ -390,5 +447,35 @@ class _showCreateCustomerState extends State<showCreateCustomer> {
       check = true;
     }
     return check;
+  }
+
+  Widget _checkCMND() {
+    if (this.widget.check) {
+      return _txtfield(getDataTextField(this.widget.cmnd), false,
+          "Nhập CMND/CCCD", "CMND/CCCD", errCMND, 1, TextInputType.phone);
+    } else
+      return Container();
+  }
+
+  Widget _checkAddress() {
+    if (this.widget.check) {
+      return _txtfield(
+          getDataTextField(this.widget.address),
+          false,
+          "Nhập địa chỉ",
+          "Địa chỉ",
+          errAddress,
+          1,
+          TextInputType.streetAddress);
+    } else
+      return Container();
+  }
+
+  Widget _checkPassword() {
+    if (this.widget.check) {
+      return _txtfield(getDataTextField(this.widget.password), true,
+          "Nhập mật khẩu", "Mật khẩu", errPass, 1, TextInputType.text);
+    } else
+      return Container();
   }
 }

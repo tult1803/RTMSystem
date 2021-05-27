@@ -8,8 +8,9 @@ class ConfirmCreateCustomer extends StatefulWidget {
   //Chuỗi dữ liệu của list được truyền vào sẽ theo thứ tự sau:
   // fullname, gender, phone, CMND, address, password
   final List listCustomer;
+  final bool check;
 
-  ConfirmCreateCustomer(this.listCustomer);
+  ConfirmCreateCustomer({this.listCustomer, this.check});
 
   @override
   _ConfirmCreateCustomerState createState() => _ConfirmCreateCustomerState();
@@ -30,11 +31,11 @@ class _ConfirmCreateCustomerState extends State<ConfirmCreateCustomer> {
   Future<void> _getData() {
     setState(() {
       fullname = this.widget.listCustomer[0];
-       if(this.widget.listCustomer[1] == 1){
-         gender = "Nam";
-       }else{
-         gender = "Nữ";
-       }
+      if (this.widget.listCustomer[1] == 1) {
+        gender = "Nam";
+      } else {
+        gender = "Nữ";
+      }
       phone = this.widget.listCustomer[2];
       cmnd = this.widget.listCustomer[3];
       address = this.widget.listCustomer[4];
@@ -49,7 +50,10 @@ class _ConfirmCreateCustomerState extends State<ConfirmCreateCustomer> {
         appBar: AppBar(
           elevation: 0,
           centerTitle: true,
-          title: Text("Phiếu xác nhận", style: TextStyle(fontSize: 20),),
+          title: Text(
+            "Phiếu xác nhận",
+            style: TextStyle(fontSize: 20),
+          ),
           backgroundColor: welcome_color,
         ),
         backgroundColor: welcome_color,
@@ -59,13 +63,13 @@ class _ConfirmCreateCustomerState extends State<ConfirmCreateCustomer> {
             child: Container(
               child: Column(
                 children: [
-                  txtConfirm(context, "Số điện thoại đăng nhập", phone),
-                  txtConfirm(context, "Mật khẩu đăng nhập", password),
+                  _checkPhone(),
                   txtConfirm(context, "Họ và tên", fullname),
                   txtConfirm(context, "Giới tính", "$gender"),
                   txtConfirm(context, "Ngày sinh", "${fBirthday.format(birthday)}"),
-                  txtConfirm(context, "CMND/CCCD", cmnd),
-                  txtConfirm(context, "Địa chỉ", address),
+                  _checkCMND(),
+                  _checkAddress(),
+                  // txtConfirm(context, "Mật khẩu đăng nhập", password),
                   processCreateCustomer("Xác nhận", this.widget.listCustomer),
                 ],
               ),
@@ -73,5 +77,25 @@ class _ConfirmCreateCustomerState extends State<ConfirmCreateCustomer> {
           ),
         ));
   }
-}
 
+  Widget _checkCMND() {
+    if (this.widget.check) {
+      return txtConfirm(context, "CMND/CCCD", cmnd);
+    } else
+      return Container();
+  }
+
+  Widget _checkAddress() {
+    if (this.widget.check) {
+      return txtConfirm(context, "Địa chỉ", address);
+    } else
+      return Container();
+  }
+
+  Widget _checkPhone() {
+    if (this.widget.check) {
+      return txtConfirm(context, "Số điện thoại đăng nhập", phone);
+    } else
+      return txtConfirm(context, "Số điện thoại", phone);
+  }
+}
