@@ -7,7 +7,8 @@ import 'package:rtm_system/view/customer/advance/create_request_advance.dart';
 import 'package:rtm_system/view/customer/process/process_all.dart';
 
 class AdvancePage extends StatefulWidget {
-  const AdvancePage({Key key}) : super(key: key);
+  const AdvancePage({Key key, this.money}) : super(key: key);
+  final String money;
 
   @override
   _AdvancePageState createState() => _AdvancePageState();
@@ -42,15 +43,14 @@ class _AdvancePageState extends State<AdvancePage> {
       ),
       body: SingleChildScrollView(
         child: Container(
-            margin: EdgeInsets.only(bottom: 12,),
+            margin: EdgeInsets.only(
+              bottom: 12,
+            ),
             child: Column(
               children: [
                 headerInvoice(
-                    'Ứng tiền', 'Tổng số tiền phải trả', '37,000,000 VND'),
+                    'Ứng tiền', 'Tổng số tiền phải trả', '${widget.money} VND'),
                 _showProcessDate(),
-                SizedBox(
-                  height: 12,
-                ),
                 _showBottomButton(),
                 showAdvance(),
               ],
@@ -60,14 +60,15 @@ class _AdvancePageState extends State<AdvancePage> {
   }
 
   Widget _showProcessDate() {
+    var size = MediaQuery.of(context).size;
     int index = 1;
     return Column(
       children: [
         Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            SizedBox(
-              width: 150,
+            Container(
+              width: size.width * 0.4,
               child: RaisedButton(
                 color: Color(0xFFF8D375),
                 onPressed: () {
@@ -103,9 +104,8 @@ class _AdvancePageState extends State<AdvancePage> {
                 elevation: 10,
               ),
             ),
-            Text('      '),
-            SizedBox(
-              width: 150,
+            Container(
+              width: size.width * 0.4,
               child: RaisedButton(
                 onPressed: () => _selectDate(context),
                 child: Row(
@@ -139,13 +139,14 @@ class _AdvancePageState extends State<AdvancePage> {
   }
 
   Widget _showBottomButton() {
+    var size = MediaQuery.of(context).size;
     return Column(
       children: [
         Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            SizedBox(
-              width: 150,
+            Container(
+              width: size.width * 0.4,
               child: RaisedButton(
                 color: Color(0xffEEEEEE),
                 onPressed: () {},
@@ -156,50 +157,32 @@ class _AdvancePageState extends State<AdvancePage> {
                 elevation: 10,
               ),
             ),
-            Text('      '),
-            SizedBox(
-              width: 150,
+            Container(
+              width: size.width * 0.4,
               child: RaisedButton(
-                color: Color(0xFF0BB791),
-                onPressed: () {},
-                child: Text(
-                  'Lấy tiền',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
+                  color: Color(0xFF0BB791),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => CreateRequestAdvance()),
+                    );
+                  },
+                  child: Text(
+                    'Ung tien',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                    ),
                   ),
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                elevation: 10,
-              ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  elevation: 1),
             ),
           ],
         ),
-        SizedBox(
-          width: 320,
-          child: RaisedButton(
-              color: Color(0xFF0BB791),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => CreateRequestAdvance()),
-                );
-              },
-              child: Text(
-                'Gửi yêu cầu bán hàng',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                ),
-              ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              elevation: 1),
-        ),
+
       ],
     );
   }

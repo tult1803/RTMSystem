@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
+import 'package:rtm_system/view/customer/home_customer_page.dart';
 
 // AutoSizeText chữ tự động co giãn theo kích thước mặc định
 // Hiện tại dùng cho trang "Product" và "Bill"
@@ -326,10 +327,10 @@ Widget widgetContentInvoice(context, String status, String header) {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         btnAcceptOrReject(context, 150, Colors.redAccent,
-                            'Từ chối', false, 3),
+                            'Từ chối', false, 1),
                         SizedBox(width: 20),
                         btnAcceptOrReject(context, 150, Color(0xFF0BB791),
-                            'Chấp nhận', true, 3),
+                            'Chấp nhận', true, 1),
                       ],
                     ),
                   ),
@@ -337,7 +338,6 @@ Widget widgetContentInvoice(context, String status, String header) {
             ),
           ),
         ),
-
         //button "Nhận tiền" show if status is "chưa trả", để hoàn thành đơn giao dịch
         if (status == 'Chưa trả')
           Center(
@@ -415,10 +415,10 @@ Widget widgetContentAdvance(context, String status, String header1, header2) {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         btnAcceptOrReject(context, 150, Colors.redAccent,
-                            'Từ chối', false, 3),
+                            'Từ chối', false, 0),
                         SizedBox(width: 20),
                         btnAcceptOrReject(context, 150, Color(0xFF0BB791),
-                            'Chấp nhận', true, 3),
+                            'Chấp nhận', true, 0),
                       ],
                     ),
                   ),
@@ -434,7 +434,13 @@ Widget widgetContentAdvance(context, String status, String header1, header2) {
               width: 150,
               child: RaisedButton(
                 color: Color(0xffEEEEEE),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => HomeCustomerPage(index: 0,)),
+                  );
+                },
                 child: Text('Trang chu'),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),

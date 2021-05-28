@@ -1,8 +1,12 @@
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:rtm_system/ultils/alertDialog.dart';
+import 'package:rtm_system/ultils/src/regExp.dart';
+import 'package:rtm_system/view/customer/advance/detail_advance.dart';
+import 'package:rtm_system/view/customer/home_customer_page.dart';
 
 class CreateRequestAdvance extends StatefulWidget {
   const CreateRequestAdvance({Key key}) : super(key: key);
@@ -11,10 +15,13 @@ class CreateRequestAdvance extends StatefulWidget {
   _CreateRequestAdvanceState createState() => _CreateRequestAdvanceState();
 }
 
+final _formKey = GlobalKey<FormState>();
+
 class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
   final f = new DateFormat('dd/MM/yyyy');
+  String money;
   DateTime dateNow = DateTime.now();
-  String errMoney;
+  String status = 'Dang cho';
   @override
   void initState() {
     // TODO: implement initState
@@ -23,132 +30,172 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color(0xffEEEEEE),
-        appBar: AppBar(
-          backgroundColor: Color(0xFF0BB791),
-          centerTitle: true,
-          title: Text(
-            "Tạo yêu cầu ứng tiền",
-            style: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.w500, fontSize: 22),
-          ),
+      backgroundColor: Color(0xffEEEEEE),
+      appBar: AppBar(
+        backgroundColor: Color(0xFF0BB791),
+        centerTitle: true,
+        title: Text(
+          "Tạo yêu cầu ứng tiền",
+          style: TextStyle(
+              color: Colors.white, fontWeight: FontWeight.w500, fontSize: 22),
         ),
-        body: SingleChildScrollView(
-          child: Container(
-            // color: Colors.white,
-              margin: EdgeInsets.only(top: 50),
-              child: Column(
+      ),
+      body: SingleChildScrollView(
+        child: Container(
+            color: Colors.white,
+            margin: EdgeInsets.only(
+              top: 50,
+            ),
+            child: Column(
               children: [
                 Column(
                   children: [
-                    _txtfield(getDataTextField(''), false,
-                        "Nhập số tiền", "Số tiền", errMoney, 1, TextInputType.text),
-                    SizedBox(height: 20,),
+                    _formMoney(false, "Nhập số tiền VND", "Số tiền",
+                        TextInputType.number),
+                    SizedBox(
+                      height: 20,
+                    ),
                     btnBirthday(context),
                   ],
                 ),
                 SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // btnSubmitOrCancel(context, 120, 40, Colors.redAccent, "Hủy", "",
-                    //     "", null, false, 4),
+                    btnCreateOrCancel(context, 120, 40, Colors.redAccent,
+                          "Hủy", "yeu cau ung tien", false, 0),
                     SizedBox(width: 20),
-                    // btnSubmitValidate(
-                    //     context, 120, 40, welcome_color, "Kiểm tra", this.widget.list, this.widget.check),
+                    btnCreateOrCancel(context, 140, 40, Color(0xFF0BB791),
+                        "Tạo", "yeu cau ung tien", true, 0),
                   ],
                 ),
+                SizedBox(
+                  height: 10,
+                ),
               ],
-            )
-          ),
-        ),
+            )),
+      ),
     );
   }
-  TextEditingController getDataTextField(String txt) {
-    if (txt == null) {
-      txt = "";
-    }
-    final TextEditingController _controller = TextEditingController();
-    _controller.value = _controller.value.copyWith(
-      text: txt,
-      selection: TextSelection.collapsed(offset: txt.length),
-    );
-    return _controller;
-  }
-  Widget _txtfield(
-      TextEditingController _controller,
-      bool obscureText,
-      String hintText,
-      String tittle,
-      String error,
-      int maxLines,
-      TextInputType txtType) {
+// use to create or cancel in create request advance/ invoice
+  Widget btnCreateOrCancel(
+      BuildContext context,
+      double width,
+      double height,
+      Color color,
+      String tittleButtonAlertDialog,
+      String contentFeature,
+      bool action,
+      int indexOfBottomBar,) {
     return Container(
-      margin: EdgeInsets.only(top: 10, left: 10, right: 10),
-      child: TextField(
-        controller: _controller,
-        obscureText: obscureText,
-        onChanged: (value) {
-          // if (tittle == "Họ và tên") {
-          //   this.widget.fullname = value.trim();
-          // } else if (tittle == "Số điện thoại") {
-          //   this.widget.phone = value.trim();
-          // } else if (tittle == "CMND/CCCD") {
-          //   this.widget.cmnd = value.trim();
-          // } else if (tittle == "Địa chỉ") {
-          //   this.widget.address = value.trim();
-          // } else if (tittle == "Mật khẩu") {
-          //   this.widget.password = value.trim();
-          // }
-          setState(() {
-          });
-        },
-        maxLines: maxLines,
-        keyboardType: txtType,
-        style: TextStyle(fontSize: 15),
-        cursorColor: Color(0xFF0BB791),
-        decoration: InputDecoration(
-          border: UnderlineInputBorder(),
-          hintText: '$hintText',
+      height: height,
+      width: width,
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: FlatButton(
+          onPressed: () async {
 
-          //Sau khi click vào "Nhập tiêu đề" thì màu viền sẽ đổi
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Color(0xFF0BB791),),
+              if (action) {
+                if (_formKey.currentState.validate()) {
+                  //call api post
+                  int status = 200;
+                  // await postAPINotice(mainTittle, content);
+                  if (status == 200) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => DetailAdvancePage(status: 'Dang cho')),
+                    );
+                  } else
+                    showStatusAlertDialog(
+                        context, "Tạo ${contentFeature} thất bại.\n Vui long thử lại!", null, false);
+                }
+              } else {
+                showAlertDialog(
+                    context,
+                    "Bạn muốn hủy tạo ${contentFeature} ?",
+                    HomeCustomerPage(
+                      index: indexOfBottomBar,
+                    ));
+              }
+          },
+          child: Center(
+              child: Text(
+                tittleButtonAlertDialog,
+                style: TextStyle(
+                    color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
+              ))),
+    );
+  }
+  Widget _formMoney(
+      bool obscureText, String hintText, String tittle, TextInputType txtType) {
+    return Form(
+      key: _formKey,
+      child: Container(
+        color: Colors.white,
+        margin: EdgeInsets.only(top: 10, left: 10, right: 10),
+        child: TextFormField(
+          // The validator receives the text that the user has entered.
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'So tien k de trong';
+            } else if (!checkFormatMoney.hasMatch(value)) {
+              return "Số tien chỉ nhập số";
+            } else if (!checkLengthMoney.hasMatch(value)) {
+              print(value);
+              return "So tien lon hon 10,000 VND";
+            }
+            return null;
+          },
+          maxLines: 1,
+          keyboardType: txtType,
+          inputFormatters: [ThousandsSeparatorInputFormatter()],
+          obscureText: obscureText,
+          onChanged: (value) {
+            this.money = value;
+            // print(value);
+            // print(errMoney);
+          },
+          style: TextStyle(fontSize: 16),
+          cursorColor: Color(0xFF0BB791),
+          decoration: InputDecoration(
+            border: UnderlineInputBorder(),
+            hintText: '$hintText',
+            //Sau khi click vào "Nhập so tien" thì màu viền sẽ đổi
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Color(0xFF0BB791),
+              ),
+            ),
+
+            //Hiển thị text góc phải
+            prefixIcon: Container(
+                margin: EdgeInsets.only(top: 15, left: 5),
+                width: 100,
+                child: AutoSizeText(
+                  "${tittle}",
+                  style: TextStyle(fontWeight: FontWeight.w500),
+                )),
+            //Hiển thị Icon góc phải
+            suffixIcon: Icon(
+              Icons.create,
+              color: Colors.black54,
+            ),
+            contentPadding: EdgeInsets.all(15),
           ),
-
-          //Hiển thị text góc phải
-          prefixIcon: Container(
-              margin: EdgeInsets.only(top: 15, left: 5),
-              width: 100,
-              child: AutoSizeText(
-                "${tittle}",
-                style: TextStyle(fontWeight: FontWeight.w500),
-              )),
-
-          //Hiển thị Icon góc phải
-          suffixIcon: Icon(
-            Icons.create,
-            color: Colors.black54,
-          ),
-
-          //Hiển thị lỗi
-          focusedErrorBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.redAccent),
-          ),
-          //Nhận thông báo lỗi
-          errorText: error,
-
-          contentPadding: EdgeInsets.all(15),
         ),
       ),
     );
   }
+
   Widget btnBirthday(context) {
     var size = MediaQuery.of(context).size;
     return Container(
-      margin: EdgeInsets.only(top: 15),
+      color: Colors.white,
       child: Column(
         children: [
           GestureDetector(
@@ -157,8 +204,7 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
                 context,
                 showTitleActions: true,
                 onConfirm: (date) {
-                  setState(() {
-                  });
+                  setState(() {});
                 },
                 currentTime: dateNow,
                 maxTime: DateTime(DateTime.now().year, 12, 31),
@@ -179,7 +225,7 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
                 Expanded(
                   child: Text(
                     '${f.format(dateNow)}',
-                    style: TextStyle(color: Colors.black54, fontSize: 16),
+                    style: TextStyle(fontSize: 16),
                   ),
                 ),
                 Container(

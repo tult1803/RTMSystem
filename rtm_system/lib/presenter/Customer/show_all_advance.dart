@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:rtm_system/model/notice/getAPI_all_notice.dart';
-import 'package:rtm_system/model/notice/model_all_notice.dart';
+import 'package:rtm_system/model/getAPI_product.dart';
+import 'package:rtm_system/model/model_product.dart';
 import 'package:rtm_system/view/customer/advance/detail_advance.dart';
-import 'package:rtm_system/view/customer/invoice/detail_invoice.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class showAdvance extends StatefulWidget {
@@ -13,26 +12,48 @@ class showAdvance extends StatefulWidget {
 }
 
 class _showAdvanceState extends State<showAdvance> {
-  GetAPIAllNotice getAPIAllNotice = GetAPIAllNotice();
-  Notice notice;
-  NoticeList noticeListsss;
-  List<NoticeList> noticeList;
+  String token;
+  List<DataProduct> dataListProduct = [];
+
+  Future _getToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      token = prefs.getString("access_token");
+    });
+  }
+
+  Future _getProduct() async {
+    List<dynamic> dataList = [];
+    GetProduct getProduct = GetProduct();
+    //Nếu dùng hàm này thì FutureBuilder sẽ chạy vòng lập vô hạn
+    //Phải gọi _getToken trước khi gọi hàm _getProduct
+    // await _getToken();
+    // gọi APIProduct và lấy dữ liệu
+
+    //Khi click nhiều lần vào button "Sản phẩm" thì sẽ có hiện tượng dữ liệu bị ghi đè
+    //Clear là để xoá dữ liệu cũ, ghi lại dữ liệu mới
+    dataListProduct.clear();
+
+    //Nếu ko có If khi FutureBuilder gọi hàm _getProduct lần đầu thì Token chưa trả về nên sẽ bằng null
+    //FutureBuilder sẽ gọi đến khi nào có giá trị trả về
+    //Ở lần gọi thứ 2 thì token mới có giá trị
+    if (token.isNotEmpty) {
+      dataList = await getProduct.createLogin(token, 0);
+      //Parse dữ liệu
+      dataList.forEach((element) {
+        Map<dynamic, dynamic> data = element;
+        dataListProduct.add(DataProduct.fromJson(data));
+      });
+
+      return dataListProduct;
+    }
+  }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    this.getAPINotice();
-  }
-  Future getAPINotice() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    String token = sharedPreferences.getString('access_token');
-    print(token);
-    // Đỗ dữ liệu lấy từ api
-    notice = await getAPIAllNotice.getNotices(token);
-    noticeList = notice.noticeList;
-    print(noticeList.length);
-    return noticeList;
+    _getToken();
   }
   @override
   Widget build(BuildContext context) {
@@ -41,11 +62,12 @@ class _showAdvanceState extends State<showAdvance> {
       height: size.height,
       width: size.width,
       child: new FutureBuilder(
-        future: getAPINotice(),
+        future: _getProduct(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
             return ListView.builder(
-              itemCount: snapshot.data.length,
+              itemCount: 3,
+              // snapshot.data.length,
               itemBuilder: (context, index) {
                 return Column(
                   children: [

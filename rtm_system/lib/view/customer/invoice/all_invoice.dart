@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
+import 'package:rtm_system/view/customer/invoice/create_request_invoice.dart';
 import 'package:rtm_system/view/customer/invoice/detail_invoice.dart';
 import 'package:rtm_system/view/customer/process/process_all.dart';
 
@@ -230,7 +231,13 @@ class _InvoicePageState extends State<InvoicePage> {
           width: 320,
           child: RaisedButton(
             color: Color(0xFF0BB791),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => CreateRequestInvoice()),
+              );
+            },
             child: Text(
               'Gửi yêu cầu bán hàng',
               style: TextStyle(
