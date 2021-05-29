@@ -165,7 +165,7 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
                 Expanded(
                   child: Text(
                     '${f.format(this.widget.birthday)}',
-                    style: TextStyle(color: Colors.black54, fontSize: 16),
+                    style: TextStyle( fontSize: 16),
                   ),
                 ),
                 Container(

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:rtm_system/ultils/alertDialog.dart';
 import 'package:rtm_system/view/customer/Profile/update_profile.dart';
+import 'package:rtm_system/view/customer/home_customer_page.dart';
 import 'package:rtm_system/view/detail_notice.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -538,13 +539,23 @@ Widget btnAcceptOrReject(BuildContext context, double width, Color color,
           // gọi api trả lại gì đó khi chấp nhận hoặc từ chối
           if (status == 200) {
             //chở lại trang all invoice
-            showStatusAlertDialog(
-                context,
-                "Đã xác nhận/ từ chối thông tin.",
-                HomeAdminPage(
-                  index: indexOfBottomBar,
-                ),
-                true);
+            if(tittleButtonAlertDialog == 'Từ chối'){
+              showStatusAlertDialog(
+                  context,
+                  "Đã từ chối thông tin.",
+                  HomeCustomerPage(
+                    index: indexOfBottomBar,
+                  ),
+                  true);
+            } else{
+              showStatusAlertDialog(
+                  context,
+                  "Đã xác nhận thông tin.",
+                  HomeCustomerPage(
+                    index: indexOfBottomBar,
+                  ),
+                  true);
+            }
           } else
             showStatusAlertDialog(context, "Xác nhận thất bại", null, false);
         } else {
