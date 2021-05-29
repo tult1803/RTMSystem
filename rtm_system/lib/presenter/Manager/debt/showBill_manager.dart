@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
+import 'package:rtm_system/view/manager/debt/processBill.dart';
 import 'package:rtm_system/view/manager/formForDetail_page.dart';
-import 'package:rtm_system/view/manager/invoice/processBill.dart';
 
 class showAllBill extends StatefulWidget {
   const showAllBill({Key key}) : super(key: key);
@@ -22,7 +22,7 @@ class _showAllBillState extends State<showAllBill> {
     super.initState();
 
     _nowDate = DateTime.now();
-    _lastDate = DateTime.now().subtract(Duration(days: -1));
+    _lastDate = DateTime.now().subtract(Duration(days: 2));
   }
 
   @override
@@ -40,7 +40,7 @@ class _showAllBillState extends State<showAllBill> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  btnDateTime(context, "${fDate.format(_nowDate)}",
+                  btnDateTime(context, "${fDate.format(_lastDate)}",
                       Icon(Icons.date_range)),
                   SizedBox(
                     width: 20,
@@ -53,7 +53,7 @@ class _showAllBillState extends State<showAllBill> {
                               style: TextStyle(fontSize: 20),
                             ))),
                   ),
-                  btnDateTime(context, "${fDate.format(_lastDate)}",
+                  btnDateTime(context, "${fDate.format(_nowDate)}",
                       Icon(Icons.date_range)),
                 ],
               ),
