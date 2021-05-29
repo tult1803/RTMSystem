@@ -114,9 +114,10 @@ class _showAllInvoiceState extends State<showAllInvoice> {
                       Icon(Icons.date_range), datePick()),
                 ],
               ),
+              SizedBox(height: 0.5, child: Container(color: Colors.black38,),),
               Expanded(
                   child: Container(
-                margin: EdgeInsets.only(top: 10, left: 20, right: 20),
+                margin: EdgeInsets.only(top: 0, left: 20, right: 20),
                 height: size.height,
                 width: size.width,
                 child: new FutureBuilder(

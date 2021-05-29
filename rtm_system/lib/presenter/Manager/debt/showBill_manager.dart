@@ -58,6 +58,7 @@ class _showAllBillState extends State<showAllBill> {
                       Icon(Icons.date_range), datePick()),
                 ],
               ),
+              SizedBox(height: 0.5, child: Container(color: Colors.black38,),),
               Expanded(
                   child: Container(
                 child: SingleChildScrollView(
