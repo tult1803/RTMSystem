@@ -22,40 +22,26 @@ class _CreateRequestInvoiceState extends State<CreateRequestInvoice> {
   String money;
   DateTime dateNow = DateTime.now();
   String status = 'Dang cho';
-
   String token;
   List<DataProduct> dataListProduct = [];
 
-  Future _getToken() async {
+  Future _getProduct() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       token = prefs.getString("access_token");
     });
-  }
-
-  Future _getProduct() async {
     List<dynamic> dataList = [];
     GetProduct getProduct = GetProduct();
-    //Nếu dùng hàm này thì FutureBuilder sẽ chạy vòng lập vô hạn
-    //Phải gọi _getToken trước khi gọi hàm _getProduct
-    // await _getToken();
-    // gọi APIProduct và lấy dữ liệu
-
-    //Khi click nhiều lần vào button "Sản phẩm" thì sẽ có hiện tượng dữ liệu bị ghi đè
-    //Clear là để xoá dữ liệu cũ, ghi lại dữ liệu mới
     dataListProduct.clear();
-
-    //Nếu ko có If khi FutureBuilder gọi hàm _getProduct lần đầu thì Token chưa trả về nên sẽ bằng null
-    //FutureBuilder sẽ gọi đến khi nào có giá trị trả về
-    //Ở lần gọi thứ 2 thì token mới có giá trị
     if (token.isNotEmpty) {
       dataList = await getProduct.createLogin(token, 0);
-      //Parse dữ liệu
       dataList.forEach((element) {
         Map<dynamic, dynamic> data = element;
         dataListProduct.add(DataProduct.fromJson(data));
       });
-
+      setState(() {
+        dataListProduct;
+      });
       return dataListProduct;
     }
   }
@@ -64,8 +50,11 @@ class _CreateRequestInvoiceState extends State<CreateRequestInvoice> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _getToken();
+    _getProduct();
   }
+
+  String _mySelection;
+  bool checkProduct = false;
 
   @override
   Widget build(BuildContext context) {
@@ -107,10 +96,14 @@ class _CreateRequestInvoiceState extends State<CreateRequestInvoice> {
                           SizedBox(
                             height: 10,
                           ),
+                          // show product from API
                           _dropdownList(),
+                          _txtItemProduct(context, 'So ky'),
                           SizedBox(
                             height: 10,
                           ),
+                          // if (checkProduct)
+                            _txtItemProduct(context, 'So do'),
                         ],
                       ),
                     ),
@@ -165,13 +158,12 @@ class _CreateRequestInvoiceState extends State<CreateRequestInvoice> {
                 int status = 200;
                 // await postAPINotice(mainTittle, content);
                 if (status == 200) {
-                  showStatusAlertDialog(
-                      context,
-                      "Đã tạo ${contentFeature} thành công.",
-                      HomeCustomerPage(
-                        index: indexOfBottomBar,
-                      ),
-                      true);
+                  // show success with infor (in detail)
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //       builder: (context) => DetailAdvancePage(status: 'Dang cho')),
+                  // );
                 } else
                   showStatusAlertDialog(
                       context,
@@ -217,29 +209,46 @@ class _CreateRequestInvoiceState extends State<CreateRequestInvoice> {
                 locale: LocaleType.vi,
               );
             },
-            child: Row(
+            child: Column(
               children: [
-                Container(
-                  width: 100,
-                  margin: EdgeInsets.only(left: 15),
-                  child: Text(
-                    "Ngày ban",
-                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
-                  ),
+                Row(
+                  children: [
+                    Container(
+                      width: 100,
+                      margin: EdgeInsets.only(left: 12),
+                      child: Text(
+                        "Ngày ban",
+                        style: TextStyle(
+                          color: Colors.black45,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                Expanded(
-                  child: Text(
-                    '${f.format(dateNow)}',
-                    style: TextStyle(fontSize: 16),
-                  ),
+                SizedBox(
+                  height: 20,
                 ),
-                Container(
-                  width: 70,
-                  child: Icon(
-                    Icons.calendar_today,
-                    color: Colors.black45,
-                  ),
-                ),
+                Row(
+                  children: [
+                    Expanded(
+                        child: Container(
+                            padding: EdgeInsets.only(left: 12, right: 12),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  '${f.format(dateNow)}',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                                Icon(
+                                  Icons.calendar_today,
+                                  color: Colors.black45,
+                                ),
+                              ],
+                            ))),
+                  ],
+                )
               ],
             ),
           ),
@@ -258,53 +267,108 @@ class _CreateRequestInvoiceState extends State<CreateRequestInvoice> {
       ),
     );
   }
-  //can get API all product
 
   Widget _dropdownList() {
-    String chosenValue;
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text('San pham',
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 16,
-            )),
-        DropdownButton<String>(
-          focusColor: Colors.white,
-          value: chosenValue,
-          //elevation: 5,
-          style: TextStyle(color: Colors.white),
-          iconEnabledColor: Colors.black,
-          items: <String>[
-            'Mu nuoc',
-            'Mu chen',
-            'Mu dong',
-            'Mu day',
-            'Mu dat',
-          ].map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(
-                value,
-                style: TextStyle(color: Colors.black),
-              ),
-            );
-          }).toList(),
-          hint: Text("",
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: <Widget>[
+        Row(
+          children: <Widget>[
+            Text(
+              'San pham',
               style: TextStyle(
-                color: Colors.black,
-                fontSize: 16,
-              )),
-          onChanged: (String value) {
-            print(value);
-            setState(() {
-              chosenValue = value;
-            });
-          },
-
+                color: Colors.black45,
+                fontSize: 12,
+              ),
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: DropdownButtonHideUnderline(
+                child: ButtonTheme(
+                  alignedDropdown: true,
+                  child: DropdownButton<String>(
+                    value: _mySelection,
+                    iconSize: 30,
+                    icon: (null),
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    hint: Text('Chon san pham'),
+                    onChanged: (String newValue) {
+                      setState(() {
+                        _mySelection = newValue;
+                      });
+                      if (_mySelection == 'Mủ nước')
+                        setState(() {
+                          checkProduct = true;
+                        });
+                    },
+                    items: dataListProduct?.map((item) {
+                          return new DropdownMenuItem(
+                            child: new Text(item.name),
+                            value: item.id.toString(),
+                          );
+                        })?.toList() ??
+                        [],
+                  ),
+                ),
+              ),
+            ),
+          ],
         )
+        // _underRow()
       ],
+    );
+  }
+
+  Widget _txtItemProduct(context, String title) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Text(
+              title,
+              style: TextStyle(
+                color: Colors.black45,
+                fontSize: 12,
+              ),
+              overflow: TextOverflow.clip,
+              textAlign: TextAlign.left,
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: TextField(
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+                textAlign: TextAlign.left,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _underRow() {
+    var size = MediaQuery.of(context).size;
+    return SizedBox(
+      height: 1,
+      child: Container(
+        // margin: EdgeInsets.only(left: 10, right: 10),
+        width: size.width,
+        color: Colors.black38,
+      ),
     );
   }
 }

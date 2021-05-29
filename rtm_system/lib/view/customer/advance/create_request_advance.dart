@@ -98,7 +98,6 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
       ),
       child: FlatButton(
           onPressed: () async {
-
               if (action) {
                 if (_formKey.currentState.validate()) {
                   //call api post
