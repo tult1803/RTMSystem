@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
+import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/manager/debt/processBill.dart';
 import 'package:rtm_system/view/manager/formForDetail_page.dart';
 
@@ -11,18 +12,17 @@ class showAllBill extends StatefulWidget {
   _showAllBillState createState() => _showAllBillState();
 }
 
-class _showAllBillState extends State<showAllBill> {
-  var fDate = new DateFormat('dd-MM-yyyy');
-  DateTime _nowDate;
-  DateTime _lastDate;
+DateTime fromDate;
+DateTime toDate;
+var fDate = new DateFormat('dd-MM-yyyy');
 
+class _showAllBillState extends State<showAllBill> {
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
-    _nowDate = DateTime.now();
-    _lastDate = DateTime.now().subtract(Duration(days: 2));
+    toDate = DateTime.now();
+    fromDate = DateTime.now().subtract(Duration(days: 2));
   }
 
   @override
@@ -36,12 +36,13 @@ class _showAllBillState extends State<showAllBill> {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              btnMain(context, "Đơn chờ xử lý", Icon(Icons.update), processBill()),
+              btnMain(
+                  context,150, "Đơn chờ xử lý", Icon(Icons.update), processBill()),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  btnDateTime(context, "${fDate.format(_lastDate)}",
-                      Icon(Icons.date_range)),
+                  btnDateTime(context, "${fDate.format(fromDate)}",
+                      Icon(Icons.date_range), datePick()),
                   SizedBox(
                     width: 20,
                     child: Center(
@@ -53,19 +54,70 @@ class _showAllBillState extends State<showAllBill> {
                               style: TextStyle(fontSize: 20),
                             ))),
                   ),
-                  btnDateTime(context, "${fDate.format(_nowDate)}",
-                      Icon(Icons.date_range)),
+                  btnDateTime(context, "${fDate.format(toDate)}",
+                      Icon(Icons.date_range), datePick()),
                 ],
               ),
-              Expanded(child: Container(
+              Expanded(
+                  child: Container(
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      card(context, "Lê Thanh Tú", "Trạng thái", "Hoàn thành", "10000000", "2021-05-20", Colors.green, FormForDetailPage(tittle: "Chi tiết ứng tiền",)),
-                      card(context, "Nguyen Thị C", "Trạng thái", "Trễ", "10000000", "2021-05-20", Colors.redAccent, FormForDetailPage(tittle: "Chi tiết ứng tiền",)),
-                      card(context, "Lê Thanh Tú", "Trạng thái", "Chờ", "10000000", "2021-05-20", Colors.orangeAccent, FormForDetailPage(tittle: "Chi tiết ứng tiền",)),
-                      card(context, "Lê Thanh Tú", "Trạng thái", "Hoàn thành", "10000000", "2021-05-20", Colors.green, FormForDetailPage(tittle: "Chi tiết ứng tiền",)),
-                      card(context, "Lê Thanh Tú", "Trạng thái", "Hoàn thành", "10000000", "2021-05-20", Colors.green, FormForDetailPage(tittle: "Chi tiết ứng tiền",)),
+                      card(
+                          context,
+                          "Lê Thanh Tú",
+                          "Trạng thái",
+                          "Hoàn thành",
+                          "10000000",
+                          "2021-05-20",
+                          Colors.green,
+                          FormForDetailPage(
+                            tittle: "Chi tiết ứng tiền",
+                          )),
+                      card(
+                          context,
+                          "Nguyen Thị C",
+                          "Trạng thái",
+                          "Trễ",
+                          "10000000",
+                          "2021-05-20",
+                          Colors.redAccent,
+                          FormForDetailPage(
+                            tittle: "Chi tiết ứng tiền",
+                          )),
+                      card(
+                          context,
+                          "Lê Thanh Tú",
+                          "Trạng thái",
+                          "Chờ",
+                          "10000000",
+                          "2021-05-20",
+                          Colors.orangeAccent,
+                          FormForDetailPage(
+                            tittle: "Chi tiết ứng tiền",
+                          )),
+                      card(
+                          context,
+                          "Lê Thanh Tú",
+                          "Trạng thái",
+                          "Hoàn thành",
+                          "10000000",
+                          "2021-05-20",
+                          Colors.green,
+                          FormForDetailPage(
+                            tittle: "Chi tiết ứng tiền",
+                          )),
+                      card(
+                          context,
+                          "Lê Thanh Tú",
+                          "Trạng thái",
+                          "Hoàn thành",
+                          "10000000",
+                          "2021-05-20",
+                          Colors.green,
+                          FormForDetailPage(
+                            tittle: "Chi tiết ứng tiền",
+                          )),
                     ],
                   ),
                 ),
@@ -75,5 +127,43 @@ class _showAllBillState extends State<showAllBill> {
         ),
       ),
     );
+  }
+
+  //Copy nó để tái sử dụng cho các trang khác nếu cần
+  // Không thể tách vì nó có hàm setState
+  Widget datePick() {
+    return TextButton(
+      onPressed: () {
+        setState(() {
+          pickedDate();
+        });
+      },
+    );
+
+  }
+
+  Future pickedDate() async {
+    final initialDateRange = DateTimeRange(
+        start: fromDate,
+        end: toDate);
+    DateTimeRange dateRange = await showDateRangePicker(
+        context: context,
+      firstDate: DateTime(2000),
+      lastDate: DateTime.now(),
+      initialDateRange: initialDateRange,
+      saveText: "Xác nhận",
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(
+              primary: welcome_color,)),
+          child: child,
+        );});
+    if(dateRange != null){
+      setState(() {
+        fromDate = dateRange.start;
+        toDate = dateRange.end;
+      });
+    }
   }
 }

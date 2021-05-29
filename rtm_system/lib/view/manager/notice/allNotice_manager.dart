@@ -29,7 +29,7 @@ class _AllNoticeState extends State<AllNotice> {
         ),
         bottom: PreferredSize(
             child: btnMain(
-                context, "Tạo thông báo", Icon(Icons.notifications_outlined), createNotice()),
+                context,150, "Tạo thông báo", Icon(Icons.notifications_outlined), createNotice()),
             preferredSize: Size.fromHeight(60.0)),
       ),
       body: new showAllNotice(),

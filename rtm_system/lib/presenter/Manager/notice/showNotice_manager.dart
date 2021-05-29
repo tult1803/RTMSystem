@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:rtm_system/model/notice/getAPI_all_notice.dart';
 import 'package:rtm_system/model/notice/model_all_notice.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
+import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class showAllNotice extends StatefulWidget {
@@ -64,7 +65,7 @@ class _showAllNoticeState extends State<showAllNotice> {
           }
           return Container(
               height: size.height * 0.7,
-              child: Center(child: CircularProgressIndicator()));
+              child: Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(welcome_color),)));
         },
       ),
     );

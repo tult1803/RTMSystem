@@ -25,7 +25,7 @@ class _AllProductState extends State<AllProduct> {
           ),
         ),
         bottom: PreferredSize(
-            child: btnMain(context, "Cập nhật giá", Icon(Icons.update), updatePriceProduct()),
+            child: btnMain(context,150, "Cập nhật giá", Icon(Icons.update), updatePriceProduct()),
             preferredSize: Size.fromHeight(60.0)),
       ),
       body: new showAllProduct()

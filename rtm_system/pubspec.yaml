@@ -21,13 +21,15 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.17.0
   flutter:
     sdk: flutter
   progress_button: ^0.0.2
   shared_preferences: ^2.0.5
   http: ^0.13.3
   curved_navigation_bar: ^0.3.7
-  intl: ^0.17.0
   auto_size_text: ^2.1.0
   firebase_messaging: ^10.0.0
   firebase_core: ^1.2.0

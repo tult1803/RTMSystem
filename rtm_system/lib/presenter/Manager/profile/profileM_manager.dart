@@ -71,7 +71,7 @@ class _profilePageState extends State<profilePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 txtFullNameProfile("$fullname"),
-                txtCanClick(context, updateProfile(),"Chỉnh sửa tài khoản"),
+                txtCanClick(context, updateProfile(),"Cập nhật thông tin"),
               ],
             )),
           ],

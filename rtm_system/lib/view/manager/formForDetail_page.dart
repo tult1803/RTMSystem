@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 //Đang dùng cho tran chi tiết sản phẩm, và sẽ dùng cho trang chi tiết ứng tiền, hóa đơn, khách hàng
@@ -21,7 +23,7 @@ class _FormForDetailPageState extends State<FormForDetailPage> {
           backgroundColor: Color(0xFF0BB791),
           elevation: 0,
           centerTitle: true,
-          title: Text("${this.widget.tittle}"),
+          title: Text("${this.widget.tittle}", style: TextStyle(color:Colors.white),),
         ),
       ),
       body: this.widget.bodyPage,

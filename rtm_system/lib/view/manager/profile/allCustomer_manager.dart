@@ -25,7 +25,7 @@ class _AllCustomerState extends State<AllCustomer> {
                   color: Colors.white, fontWeight: FontWeight.w500, fontSize: 22),
             ),
         bottom: PreferredSize(
-            child: btnMain(context, "Tạo khách hàng", Icon(Icons.person_add), CreateCustomer()),
+            child: btnMain(context,150, "Tạo khách hàng", Icon(Icons.person_add), CreateCustomer()),
             preferredSize: Size.fromHeight(60.0)),
       ),
       body: new showAllCustomer(),

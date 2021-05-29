@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:rtm_system/model/getAPI_product.dart';
 import 'package:rtm_system/model/model_product.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
+import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/manager/formForDetail_page.dart';
 import 'package:rtm_system/view/manager/product/detailProduct.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -95,7 +96,7 @@ class _showAllProductState extends State<showAllProduct> {
           }
           return Container(
               height: size.height * 0.7,
-              child: Center(child: CircularProgressIndicator()));
+              child: Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(welcome_color),)));
         },
       ),
     );
