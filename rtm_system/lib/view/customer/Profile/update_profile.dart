@@ -69,7 +69,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
           password: widget.password,
           birthday: widget.birthday,
           gender: widget.gender,
-          check: false,
+          check: true,
         ),
        
       ),

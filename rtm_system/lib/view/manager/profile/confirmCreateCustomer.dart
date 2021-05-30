@@ -73,7 +73,7 @@ class _ConfirmCreateCustomerState extends State<ConfirmCreateCustomer> {
                   // _checkAddress(),
                   txtConfirm(context, "Địa chỉ", address),
                   // txtConfirm(context, "Mật khẩu đăng nhập", password),
-                  processCreateCustomer("Xác nhận", this.widget.listCustomer),
+                  processCreateCustomer("Xác nhận", this.widget.listCustomer, this.widget.check),
                 ],
               ),
             ),
