@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:rtm_system/model/postAPI_createCustomer.dart';
 import 'package:rtm_system/model/postAPI_createNotice.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
-import 'package:rtm_system/view/manager/profile/updateProfile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'alertDialog.dart';

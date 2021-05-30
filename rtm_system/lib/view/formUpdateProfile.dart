@@ -10,6 +10,7 @@ import 'package:rtm_system/ultils/src/regExp.dart';
 import 'manager/profile/confirmCreateCustomer.dart';
 
 //check: true là cho customer còn false là cho manager
+
 class formUpdateProfile extends StatefulWidget {
   String fullname, phone, cmnd, address, password;
   int gender;
@@ -71,23 +72,11 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
                   errPhone,
                   1,
                   TextInputType.phone),
-              // _checkPassword(),
-              _txtfield(getDataTextField(this.widget.password), true,
-    "Nhập mật khẩu", "Mật khẩu", errPass, 1, TextInputType.text),
+              _checkPassword(),
               radioButton(context),
               btnBirthday(context),
-              // _checkCMND(),
-              _txtfield(getDataTextField(this.widget.cmnd), false,
-                  "Nhập CMND/CCCD", "CMND/CCCD", errCMND, 1, TextInputType.phone),
-              // _checkAddress(),
-              _txtfield(
-                  getDataTextField(this.widget.address),
-                  false,
-                  "Nhập địa chỉ",
-                  "Địa chỉ",
-                  errAddress,
-                  1,
-                  TextInputType.streetAddress),
+              _checkCMND(),
+              _checkAddress(),
             ],
           ),
           SizedBox(
