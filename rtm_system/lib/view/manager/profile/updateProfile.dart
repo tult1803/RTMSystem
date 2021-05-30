@@ -43,7 +43,7 @@ class _updateProfileState extends State<updateProfile> {
         birthday: birthday,
         phone: phone,
         gender: gender,
-        password: '${password}demo123',
+        password: password,
         address: "manager",
         cmnd: "01234567890",
         list: [fullname,gender,phone,"01234567890", "manager", password, birthday],
