@@ -17,6 +17,7 @@ class formUpdateProfile extends StatefulWidget {
   DateTime birthday;
   final bool check;
   List list;
+
   formUpdateProfile(
       {this.fullname,
       this.phone,
@@ -39,6 +40,7 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
   String errFulname, errPhone, errCMND, errAddress, errUser, errPass, errBirth;
   GenderCharacter character;
   bool checkClick = false;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -72,11 +74,26 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
                   errPhone,
                   1,
                   TextInputType.phone),
-              _checkPassword(),
+              _txtfield(getDataTextField(this.widget.password), true,
+                  "Nhập mật khẩu", "Mật khẩu", errPass, 1, TextInputType.text),
               radioButton(context),
               btnBirthday(context),
-              _checkCMND(),
-              _checkAddress(),
+              _txtfield(
+                  getDataTextField(this.widget.cmnd),
+                  false,
+                  "Nhập CMND/CCCD",
+                  "CMND/CCCD",
+                  errCMND,
+                  1,
+                  TextInputType.phone),
+              _txtfield(
+                  getDataTextField(this.widget.address),
+                  false,
+                  "Nhập địa chỉ",
+                  "Địa chỉ",
+                  errAddress,
+                  1,
+                  TextInputType.streetAddress),
             ],
           ),
           SizedBox(
@@ -88,8 +105,8 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
               btnSubmitOrCancel(context, 120, 40, Colors.redAccent, "Hủy", "",
                   "", null, false, 4),
               SizedBox(width: 20),
-              btnSubmitValidate(
-                  context, 120, 40, welcome_color, "Kiểm tra", this.widget.list, this.widget.check),
+              btnSubmitValidate(context, 120, 40, welcome_color, "Kiểm tra",
+                  this.widget.list, this.widget.check),
             ],
           ),
         ],
@@ -153,7 +170,7 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
                 Expanded(
                   child: Text(
                     '${f.format(this.widget.birthday)}',
-                    style: TextStyle( fontSize: 16),
+                    style: TextStyle(fontSize: 16),
                   ),
                 ),
                 Container(
@@ -345,8 +362,14 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
     );
   }
 
-  Widget btnSubmitValidate(BuildContext context, double width, double height,
-      Color color, String tittleButtonAlertDialog, List listCustomer, bool checkProfile) {
+  Widget btnSubmitValidate(
+      BuildContext context,
+      double width,
+      double height,
+      Color color,
+      String tittleButtonAlertDialog,
+      List listCustomer,
+      bool checkProfile) {
     return Container(
         height: height,
         width: width,
@@ -359,12 +382,15 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
             setState(() {
               bool check = _validateData();
               if (checkClick) {
-              if (check) {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) =>
-                        ConfirmCreateCustomer(listCustomer: listCustomer, check: checkProfile,)));
-              }}else{
-                if(checkProfile == false){
+                if (check) {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => ConfirmCreateCustomer(
+                            listCustomer: listCustomer,
+                            check: checkProfile,
+                          )));
+                }
+              } else {
+                if (checkProfile == false) {
                   showStatusAlertDialog(
                       context, "Thông tin chưa thay đổi !!!", null, false);
                 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rtm_system/model/postAPI_createCustomer.dart';
 import 'package:rtm_system/model/postAPI_createNotice.dart';
+import 'package:rtm_system/view/customer/home_customer_page.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -31,9 +32,13 @@ Future postAPICreateCustomer(String phone, String password, String fullname, int
   return status;
 }
 
-Future<void> doCreateCustomer(BuildContext context,String phone, String password, String fullname, int gender, String cmnd, String address, String birthday, int indexOfBottomBar) async{
+Future<void> doCreateCustomer(BuildContext context,String phone, String password, String fullname, int gender, String cmnd, String address, String birthday, bool check) async{
   int status = await postAPICreateCustomer(phone, password, fullname, gender, cmnd, address, birthday);
   if(status == 200){
-    showStatusAlertDialog(context, "Đã cập nhật.", HomeAdminPage(index: indexOfBottomBar,), true);
+    if(check){
+      showStatusAlertDialog(context, "Đã cập nhật.", HomeCustomerPage(index: 3,), true);
+    }else {
+      showStatusAlertDialog(context, "Đã cập nhật.", HomeAdminPage(index: 4,), true);
+    }
   }else showStatusAlertDialog(context, "Cập nhật thất bại. Xin thử lại !!!", null, false);
 }
