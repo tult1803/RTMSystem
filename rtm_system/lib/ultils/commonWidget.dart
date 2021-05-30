@@ -485,7 +485,8 @@ Widget btnSubmitOrCancel(BuildContext context,
     String content,
     String txtError,
     bool action,
-    int indexOfBottomBar) {
+    int indexOfBottomBar,
+    bool check) {
   return Container(
     height: height,
     width: width,
@@ -513,12 +514,22 @@ Widget btnSubmitOrCancel(BuildContext context,
                     context, "Tạo thất bại. Xin thử lại !!!", null, false);
             }
           } else {
-            showAlertDialog(
-                context,
-                "Bạn muốn hủy tạo thông báo ?",
-                HomeAdminPage(
-                  index: indexOfBottomBar,
-                ));
+            if(check){
+              showAlertDialog(
+                  context,
+                  "Bạn muốn hủy tạo thông báo ?",
+                  HomeCustomerPage(
+                    index: 3,
+                  ));
+            }else{
+              showAlertDialog(
+                  context,
+                  "Bạn muốn hủy tạo thông báo ?",
+                  HomeAdminPage(
+                    index: indexOfBottomBar,
+                  ));
+            }
+
           }
         },
         child: Center(

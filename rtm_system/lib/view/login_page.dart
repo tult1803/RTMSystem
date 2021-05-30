@@ -72,8 +72,10 @@ class LoginPageState extends State<LoginPage> {
     // Đỗ dữ liệu lấy từ api
     data = await getAPI.createLogin(username, password);
     status = await PostLogin.status;
+    print('STS ne');
+    print(status);
     setState(() {
-      role_id = data.role_id;
+      role_id = data.roles[0];
       access_token = data.access_token;
       accountId = data.accountId;
       fullname = data.fullname;
