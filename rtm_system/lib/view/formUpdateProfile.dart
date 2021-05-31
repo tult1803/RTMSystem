@@ -383,7 +383,6 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
               bool check = _validateData();
               if (checkClick) {
                 if (check) {
-                  print('day ne');
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => ConfirmCreateCustomer(
                             listCustomer: listCustomer,

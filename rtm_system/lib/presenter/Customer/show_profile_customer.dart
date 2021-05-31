@@ -117,6 +117,7 @@ class _showProfileState extends State<showProfile> {
                   false,
                   infomationCustomer.accountId,
                 ),
+                btnUpdatePw(context, this.password, infomationCustomer.accountId),
               ],
             );
           }

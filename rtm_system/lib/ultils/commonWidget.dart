@@ -1,13 +1,11 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:rtm_system/presenter/Manager/debt/showBill_manager.dart';
 import 'package:rtm_system/ultils/alertDialog.dart';
+import 'package:rtm_system/view/customer/Profile/update_password.dart';
 import 'package:rtm_system/view/customer/Profile/update_profile.dart';
 import 'package:rtm_system/view/customer/home_customer_page.dart';
 import 'package:rtm_system/view/detail_notice.dart';
-import 'package:rtm_system/view/formChangePW.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../view/login_page.dart';
@@ -85,10 +83,9 @@ class StretchableButton extends StatelessWidget {
 
 //btnMain khong biet de ten gi cho hop ly
 // Dung cho 'Cap nhat gia', 'Don cho xu ly', 'Tao thong bao'
-Widget btnMain(BuildContext context, double width, String tittle, Icon icon, Widget widget) {
-  var size = MediaQuery
-      .of(context)
-      .size;
+Widget btnMain(BuildContext context, double width, String tittle, Icon icon,
+    Widget widget) {
+  var size = MediaQuery.of(context).size;
   return Stack(
     children: <Widget>[
       Container(
@@ -107,13 +104,13 @@ Widget btnMain(BuildContext context, double width, String tittle, Icon icon, Wid
               child: icon),
           Expanded(
               child: Container(
-                height: size.height,
-                child: Center(
-                    child: AutoSizeText(
-                      "$tittle",
-                      style: TextStyle(fontWeight: FontWeight.w600),
-                    )),
-              ))
+            height: size.height,
+            child: Center(
+                child: AutoSizeText(
+              "$tittle",
+              style: TextStyle(fontWeight: FontWeight.w600),
+            )),
+          ))
         ]),
       ),
       Container(
@@ -135,10 +132,9 @@ Widget btnMain(BuildContext context, double width, String tittle, Icon icon, Wid
   );
 }
 
-Widget btnDateTime(BuildContext context, String tittle, Icon icon, Widget widget) {
-  var size = MediaQuery
-      .of(context)
-      .size;
+Widget btnDateTime(
+    BuildContext context, String tittle, Icon icon, Widget widget) {
+  var size = MediaQuery.of(context).size;
   return Stack(
     children: <Widget>[
       Container(
@@ -157,30 +153,27 @@ Widget btnDateTime(BuildContext context, String tittle, Icon icon, Widget widget
               child: icon),
           Expanded(
               child: Container(
-                height: size.height,
-                child: Center(
-                    child: AutoSizeText(
-                      "$tittle",
-                      style: TextStyle(fontWeight: FontWeight.w600),
-                    )),
-              ))
+            height: size.height,
+            child: Center(
+                child: AutoSizeText(
+              "$tittle",
+              style: TextStyle(fontWeight: FontWeight.w600),
+            )),
+          ))
         ]),
       ),
       Container(
-        decoration: BoxDecoration(
-          color: Colors.white10,
-          borderRadius: BorderRadius.circular(5),
-          // border: Border.all(color: Colors.black, width: 0.5),
-        ),
-        height: 35.0,
-        width: 120,
-        child: widget
-      ),
+          decoration: BoxDecoration(
+            color: Colors.white10,
+            borderRadius: BorderRadius.circular(5),
+            // border: Border.all(color: Colors.black, width: 0.5),
+          ),
+          height: 35.0,
+          width: 120,
+          child: widget),
     ],
   );
-
 }
-
 
 Widget card(BuildContext context, String tittle, String type, String detailType,
     String price, String date, Color color, Widget widget) {
@@ -190,9 +183,7 @@ Widget card(BuildContext context, String tittle, String type, String detailType,
   //Format lại giá
   final oCcy = new NumberFormat("#,##0", "en_US");
   //Lấy size của màn hình
-  var size = MediaQuery
-      .of(context)
-      .size;
+  var size = MediaQuery.of(context).size;
 
   return Card(
     margin: EdgeInsets.only(top: 15),
@@ -208,8 +199,8 @@ Widget card(BuildContext context, String tittle, String type, String detailType,
           borderRadius: BorderRadius.circular(10),
         ),
         onPressed: () {
-          Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => widget));
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => widget));
         },
         child: Row(
           children: [
@@ -223,8 +214,8 @@ Widget card(BuildContext context, String tittle, String type, String detailType,
               width: size.width * 0.5,
               child: Padding(
                 padding: const EdgeInsets.only(top: 2.0),
-                child: componentCardS(tittle, type, detailType,
-                    CrossAxisAlignment.start, color),
+                child: componentCardS(
+                    tittle, type, detailType, CrossAxisAlignment.start, color),
               ),
             ),
             Expanded(
@@ -236,8 +227,10 @@ Widget card(BuildContext context, String tittle, String type, String detailType,
                       topRight: Radius.circular(10),
                       bottomRight: Radius.circular(10)),
                 ),
-                child: componentCardE("${oCcy.format(double.parse(price))}đ",
-                    "${fBirthday.format(_date)}", CrossAxisAlignment.end,
+                child: componentCardE(
+                    "${oCcy.format(double.parse(price))}đ",
+                    "${fBirthday.format(_date)}",
+                    CrossAxisAlignment.end,
                     Colors.black54),
               ),
             ),
@@ -249,11 +242,9 @@ Widget card(BuildContext context, String tittle, String type, String detailType,
 }
 
 //Dùng cho trang notice để hiện thỉ các notice
-Widget containerButton(BuildContext context, int id, String tittle,
-    String content, String date) {
-  var size = MediaQuery
-      .of(context)
-      .size;
+Widget containerButton(
+    BuildContext context, int id, String tittle, String content, String date) {
+  var size = MediaQuery.of(context).size;
   //Format lại ngày
   DateTime _date = DateTime.parse(date);
   final fBirthday = new DateFormat('dd/MM/yyyy hh:mm');
@@ -273,8 +264,7 @@ Widget containerButton(BuildContext context, int id, String tittle,
             Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) =>
-                      DetailOfNotice(
+                  builder: (context) => DetailOfNotice(
                         titleNotice: tittle,
                         contentNotice: content,
                       )),
@@ -354,9 +344,9 @@ Widget buttonProfile(BuildContext context, double left, double right,
               children: [
                 Expanded(
                     child: Text(
-                      tittle,
-                      style: TextStyle(color: Colors.black54),
-                    )),
+                  tittle,
+                  style: TextStyle(color: Colors.black54),
+                )),
                 Icon(
                   Icons.arrow_forward_ios_outlined,
                   color: Colors.black54,
@@ -391,7 +381,7 @@ Widget btnLogout(context) {
           Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(builder: (context) => LoginPage()),
-                  (route) => false);
+              (route) => false);
         },
         style: ButtonStyle(
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -430,7 +420,8 @@ Widget btnLogout(context) {
   );
 }
 
-Widget btnUpdateInfo(context,
+Widget btnUpdateInfo(
+    context,
     String cmnd,
     String password,
     String fullname,
@@ -448,8 +439,7 @@ Widget btnUpdateInfo(context,
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  UpdateProfilePage(
+              builder: (context) => UpdateProfilePage(
                     cmnd: cmnd,
                     password: password,
                     fullname: fullname,
@@ -477,9 +467,44 @@ Widget btnUpdateInfo(context,
   );
 }
 
+//dung khi thay doi pw
+Widget btnUpdatePw(
+    context,
+    String password,
+    int account_id) {
+  return Container(
+    width: 320,
+    child: RaisedButton(
+      color: Color(0xFF0BB791),
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => UpdatePasswordPage(
+                    password: password,
+                    account_id: account_id,
+                  )),
+        );
+      },
+      child: Text(
+        'Thay đổi mật khẩu',
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 16,
+        ),
+      ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      elevation: 10,
+    ),
+  );
+}
+
 //Widget này dùng cho các button "Tạo" hoặc "Hủy" vd: ở Trang Tạo thông báo
 //bool action = flase khi nhấn nút "Hủy" và bằng true khi nhấn "Tạo"
-Widget btnSubmitOrCancel(BuildContext context,
+Widget btnSubmitOrCancel(
+    BuildContext context,
     double width,
     double height,
     Color color,
@@ -518,14 +543,14 @@ Widget btnSubmitOrCancel(BuildContext context,
                     context, "Tạo thất bại. Xin thử lại !!!", null, false);
             }
           } else {
-            if(isCustomer){
+            if (check) {
               showAlertDialog(
                   context,
                   messageShow,
                   HomeCustomerPage(
                     index: 3,
                   ));
-            }else{
+            } else {
               showAlertDialog(
                   context,
                   messageShow,
@@ -533,17 +558,14 @@ Widget btnSubmitOrCancel(BuildContext context,
                     index: indexOfBottomBar,
                   ));
             }
-
           }
         },
         child: Center(
             child: Text(
-              tittleButtonAlertDialog,
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500),
-            ))),
+          tittleButtonAlertDialog,
+          style: TextStyle(
+              color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
+        ))),
   );
 }
 
@@ -552,67 +574,64 @@ Widget btnAcceptOrReject(BuildContext context, double width, Color color,
     String tittleButtonAlertDialog, bool action, int indexOfBottomBar) {
   return Container(
       child: SizedBox(
-        width: width,
-        child: RaisedButton(
-          color: color,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          onPressed: () async {
-            if (action) {
-              int status = 200;
-              // await postAPINotice(mainTittle, content);
-              // gọi api trả lại gì đó khi chấp nhận hoặc từ chối
-              if (status == 200) {
-                //chở lại trang all invoice
-                if (tittleButtonAlertDialog == 'Từ chối') {
-                  showStatusAlertDialog(
-                      context,
-                      "Đã từ chối thông tin.",
-                      HomeCustomerPage(
-                        index: indexOfBottomBar,
-                      ),
-                      true);
-                } else {
-                  showStatusAlertDialog(
-                      context,
-                      "Đã xác nhận thông tin.",
-                      HomeCustomerPage(
-                        index: indexOfBottomBar,
-                      ),
-                      true);
-                }
-              } else
-                showStatusAlertDialog(
-                    context, "Xác nhận thất bại", null, false);
-            } else {
-              //chở lại trang all invoice
-              showAlertDialog(
+    width: width,
+    child: RaisedButton(
+      color: color,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      onPressed: () async {
+        if (action) {
+          int status = 200;
+          // await postAPINotice(mainTittle, content);
+          // gọi api trả lại gì đó khi chấp nhận hoặc từ chối
+          if (status == 200) {
+            //chở lại trang all invoice
+            if (tittleButtonAlertDialog == 'Từ chối') {
+              showStatusAlertDialog(
                   context,
-                  "Từ chối xác nhận thông tin?",
-                  HomeAdminPage(
+                  "Đã từ chối thông tin.",
+                  HomeCustomerPage(
                     index: indexOfBottomBar,
-                  ));
+                  ),
+                  true);
+            } else {
+              showStatusAlertDialog(
+                  context,
+                  "Đã xác nhận thông tin.",
+                  HomeCustomerPage(
+                    index: indexOfBottomBar,
+                  ),
+                  true);
             }
-          },
-          child: Center(
-            child: Text(
-              tittleButtonAlertDialog,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-              ),
-            ),
+          } else
+            showStatusAlertDialog(context, "Xác nhận thất bại", null, false);
+        } else {
+          //chở lại trang all invoice
+          showAlertDialog(
+              context,
+              "Từ chối xác nhận thông tin?",
+              HomeAdminPage(
+                index: indexOfBottomBar,
+              ));
+        }
+      },
+      child: Center(
+        child: Text(
+          tittleButtonAlertDialog,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 16,
           ),
         ),
-      ));
+      ),
+    ),
+  ));
 }
 
 // Đang dùng cho các trang detail "Sản phẩm", "Hóa đơn", "Ứng tiền", "Khách hàng"
 Widget containerDetail(BuildContext context, Widget widget) {
-  var size = MediaQuery
-      .of(context)
-      .size;
+  var size = MediaQuery.of(context).size;
   return Container(
     margin: EdgeInsets.only(top: 20, left: 10, right: 10),
     width: size.width,

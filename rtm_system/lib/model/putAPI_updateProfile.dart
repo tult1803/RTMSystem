@@ -23,8 +23,8 @@ class PutUpdateProfile{
         "birthday": birthday,
         "phone": phone,
         "cmnd": cmnd,
-        "address": address,
         "vip":false,
+        "address": address,
       }),
     );
     print("Status putAPI Update Profile:${response.statusCode}");
