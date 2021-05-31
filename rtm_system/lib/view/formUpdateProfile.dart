@@ -56,11 +56,9 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
       character = GenderCharacter.women;
     } else
       character = GenderCharacter.men;
-    if(this.widget.check){
+    if(this.widget.isUpdate){
       messageCancel = 'Bạn muốn huỷ cập nhật thông tin?';
-    }else{
-      messageCancel = 'Bạn muốn huỷ tạo thông báo?';
-    }
+    }else  messageCancel = 'Bạn muốn huỷ tạo khách hàng?';
 
   }
 
@@ -381,7 +379,6 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
               bool check = _validateData();
               if (checkClick) {
                 if (check) {
-                  print('day ne');
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => ConfirmCreateCustomer(
                             listCustomer: listCustomer,
