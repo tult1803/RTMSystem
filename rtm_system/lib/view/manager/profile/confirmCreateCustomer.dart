@@ -8,9 +8,9 @@ class ConfirmCreateCustomer extends StatefulWidget {
   //Chuỗi dữ liệu của list được truyền vào sẽ theo thứ tự sau:
   // fullname, gender, phone, CMND, address, password
   final List listCustomer;
-  final bool check;
-
-  ConfirmCreateCustomer({this.listCustomer, this.check});
+  final bool check, isUpdate;
+  final int typeOfUpdate, account_id;
+  ConfirmCreateCustomer({this.listCustomer, this.check, this.isUpdate,this.typeOfUpdate, this.account_id});
 
   @override
   _ConfirmCreateCustomerState createState() => _ConfirmCreateCustomerState();
@@ -63,17 +63,13 @@ class _ConfirmCreateCustomerState extends State<ConfirmCreateCustomer> {
             child: Container(
               child: Column(
                 children: [
-                  // _checkPhone(),
-                  txtConfirm(context, "Số điện thoại đăng nhập", phone),
+                  _checkPhone(),
                   txtConfirm(context, "Họ và tên", fullname),
                   txtConfirm(context, "Giới tính", "$gender"),
                   txtConfirm(context, "Ngày sinh", "${fBirthday.format(birthday)}"),
-                  // _checkCMND(),
-                  txtConfirm(context, "CMND/CCCD", cmnd),
-                  // _checkAddress(),
-                  txtConfirm(context, "Địa chỉ", address),
-                  // txtConfirm(context, "Mật khẩu đăng nhập", password),
-                  processCreateCustomer("Xác nhận", this.widget.listCustomer, this.widget.check),
+                  _checkCMND(),
+                  _checkAddress(),
+                  processCreateCustomer("Xác nhận", this.widget.listCustomer, this.widget.check, this.widget.isUpdate,this.widget.typeOfUpdate, this.widget.account_id),
                 ],
               ),
             ),

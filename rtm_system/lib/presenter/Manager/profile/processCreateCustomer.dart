@@ -6,8 +6,9 @@ import 'package:rtm_system/ultils/src/color_ultils.dart';
 class processCreateCustomer extends StatefulWidget {
   final String _tittle;
   final List _listCustomer;
-  final bool _check;
-  processCreateCustomer(this._tittle, this._listCustomer, this._check);
+  final bool _check, isUpdate;
+  final int typeOfUpdate, account_id;
+  processCreateCustomer(this._tittle, this._listCustomer, this._check, this.isUpdate,this.typeOfUpdate, this.account_id);
 
   @override
   _processCreateCustomerState createState() => _processCreateCustomerState();
@@ -48,7 +49,7 @@ class _processCreateCustomerState extends State<processCreateCustomer> {
       ),
       child: TextButton(
           onPressed: () {
-            doCreateCustomer(context, phone, password, fullname, gender, cmnd, address, "${fBirthday.format(birthday)}", this.widget._check);
+            doCreateCustomer(context, phone, password, fullname, gender, cmnd, address, "${fBirthday.format(birthday)}", this.widget._check, this.widget.isUpdate, this.widget.typeOfUpdate,this.widget.account_id);
           },
           child: Text(
             "${this.widget._tittle}",

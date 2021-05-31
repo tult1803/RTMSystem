@@ -16,6 +16,10 @@ class formUpdateProfile extends StatefulWidget {
   int gender;
   DateTime birthday;
   final bool check;
+  final int typeOfUpdate, account_id;
+
+  // True là sẽ gọi api update, false là gọi api createCustomer
+  final bool isUpdate;
   List list;
 
   formUpdateProfile(
@@ -27,6 +31,9 @@ class formUpdateProfile extends StatefulWidget {
       this.birthday,
       this.gender,
       this.check,
+      this.isUpdate,
+      this.typeOfUpdate,
+      this.account_id,
       this.list});
 
   @override
@@ -372,6 +379,9 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
                       builder: (context) => ConfirmCreateCustomer(
                             listCustomer: listCustomer,
                             check: checkProfile,
+                            account_id: this.widget.account_id,
+                            isUpdate: this.widget.isUpdate,
+                            typeOfUpdate: this.widget.typeOfUpdate,
                           )));
                 }
               } else {
@@ -420,31 +430,35 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
         errPhone = "Số điện thoại chỉ nhập số";
       }
     }
-    if (this.widget.cmnd == null || this.widget.cmnd == "") {
-      errCMND = "CMND/CCCD trống";
-    } else {
-      //Lỗi RegExp nên không dùng nó mà dùng try-catch
-      try {
-        int parseInt = int.parse(this.widget.cmnd);
-        if (this.widget.cmnd.length < 9 || this.widget.cmnd.length > 12) {
-          errCMND = "CMND/CCCD sai";
-        } else {
-          errCMND = null;
+    if (this.widget.check == true) {
+      if (this.widget.cmnd == null || this.widget.cmnd == "") {
+        errCMND = "CMND/CCCD trống";
+      } else {
+        //Lỗi RegExp nên không dùng nó mà dùng try-catch
+        try {
+          int parseInt = int.parse(this.widget.cmnd);
+          if (this.widget.cmnd.length < 9 || this.widget.cmnd.length > 12) {
+            errCMND = "CMND/CCCD sai";
+          } else {
+            errCMND = null;
+          }
+        } catch (_) {
+          errCMND = "CMND/CCCD chỉ nhập số";
         }
-      } catch (_) {
-        errCMND = "CMND/CCCD chỉ nhập số";
       }
-    }
-    if (this.widget.address == null || this.widget.address == "") {
-      errAddress = "Địa chỉ trống";
-    } else {
-      errAddress = null;
+      if (this.widget.address == null || this.widget.address == "") {
+        errAddress = "Địa chỉ trống";
+      } else {
+        errAddress = null;
+      }
     }
     if (this.widget.password == null || this.widget.password == "") {
       errPass = "Mật khẩu trống";
+      print("Mật khẩu trống");
     } else {
       if (!checkFormatPassword.hasMatch(this.widget.password)) {
         errPass = "Mật khẩu ít nhất 6 kí tự (chữ và số)";
+        print("Mật khẩu ít nhất 6 kí tự (chữ và số)");
       } else {
         errPass = null;
       }

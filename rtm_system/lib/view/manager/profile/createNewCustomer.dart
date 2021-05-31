@@ -30,6 +30,7 @@ class _CreateCustomerState extends State<CreateCustomer> {
         body: SingleChildScrollView(
             child: new formUpdateProfile(
               check: true,
+          isUpdate: false,
           birthday: DateTime.now(),
         )));
   }
