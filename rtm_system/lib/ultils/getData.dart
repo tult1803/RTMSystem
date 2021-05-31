@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rtm_system/model/postAPI_createCustomer.dart';
 import 'package:rtm_system/model/postAPI_createNotice.dart';
+import 'package:rtm_system/model/putAPI_updateProfile.dart';
 import 'package:rtm_system/view/customer/home_customer_page.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -24,19 +25,26 @@ Future<void> getNotice(BuildContext context,String mainTittle, String content, i
 
 
 
-//dung cho tạo khách hàng
-Future postAPICreateCustomer(String phone, String password, String fullname, int gender, String cmnd, String address, String birthday) async {
-  PostCreateCustomer _createCustomer = PostCreateCustomer();
+//dung cho tạo khách hàng, cap nhat khach hang
+Future post_put_ApiProfile(String phone, String password, String fullname, int gender, String cmnd, String address, String birthday, bool isUpdate, int typeOfUpdate, int account_id) async {
+  int status;
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  int status = await _createCustomer.createCustomer(prefs.get("access_token"), phone, password, fullname, gender, cmnd, address, birthday);
+  if(isUpdate){
+    PutUpdateProfile _putUpdate = PutUpdateProfile();
+    status = await _putUpdate.updateProfile(prefs.get("access_token"), phone, typeOfUpdate, account_id, password, fullname, gender, cmnd, address, birthday);
+  }else{
+    PostCreateCustomer _createCustomer = PostCreateCustomer();
+    status = await _createCustomer.createCustomer(prefs.get("access_token"), phone, password, fullname, gender, cmnd, address, birthday);
+
+  }
   return status;
 }
 
-Future<void> doCreateCustomer(BuildContext context,String phone, String password, String fullname, int gender, String cmnd, String address, String birthday, bool check) async{
-  int status = await postAPICreateCustomer(phone, password, fullname, gender, cmnd, address, birthday);
+Future<void> doCreateCustomer(BuildContext context,String phone, String password, String fullname, int gender, String cmnd, String address, String birthday, bool check, bool isUpdate, int typeOfUpdate, int account_id) async{
+  int status = await post_put_ApiProfile(phone, password, fullname, gender, cmnd, address, birthday, isUpdate, typeOfUpdate, account_id);
   if(status == 200){
     if(check){
-      showStatusAlertDialog(context, "Đã cập nhật.", HomeCustomerPage(index: 3,), true);
+      showStatusAlertDialog(context, "Đã cập nhật.", HomeCustomerPage(index: 4,), true);
     }else {
       showStatusAlertDialog(context, "Đã cập nhật.", HomeAdminPage(index: 4,), true);
     }

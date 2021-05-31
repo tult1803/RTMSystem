@@ -17,7 +17,7 @@ class _updateProfileState extends State<updateProfile> {
   DateTime birthday = DateTime.now();
   String date, password;
   String fullname,phone;
-  int gender;
+  int gender, account_id;
   GenderCharacter character;
 @override
   void initState() {
@@ -38,15 +38,17 @@ class _updateProfileState extends State<updateProfile> {
         ),
       ),
       body: SingleChildScrollView(child: new formUpdateProfile(
+        isUpdate: true,
+        typeOfUpdate: 1,
+        account_id: account_id,
         check: false,
         fullname: fullname,
         birthday: birthday,
         phone: phone,
         gender: gender,
-        password: password,
-        address: "manager",
-        cmnd: "01234567890",
-        list: [fullname,gender,phone,"01234567890", "manager", password, birthday],
+        // Tai password mau dang la 1 nen bi bat validate
+        password: "$password demo",
+        list: [fullname,gender,phone,"", "", password, birthday],
       ))
     );
   }
@@ -55,7 +57,9 @@ class _updateProfileState extends State<updateProfile> {
 //Dùng cho updateProfile hiện tại là chỉ manager
   Future getDataProfile() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
+
     setState(() {
+      account_id = prefs.get("accountId");
       fullname = prefs.getString("fullname");
       gender = prefs.get("gender");
       birthday = DateFormat("yyyy-MM-dd").parse(prefs.get("birthday"));

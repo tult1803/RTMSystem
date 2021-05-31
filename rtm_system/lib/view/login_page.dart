@@ -75,7 +75,7 @@ class LoginPageState extends State<LoginPage> {
     print('STS ne');
     print(status);
     setState(() {
-      role_id = data.roles[0];
+      role_id = data.role_id;
       access_token = data.access_token;
       accountId = data.accountId;
       fullname = data.fullname;
