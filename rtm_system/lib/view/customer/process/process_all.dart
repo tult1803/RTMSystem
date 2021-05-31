@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rtm_system/presenter/Customer/show_Notice.dart';
+import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/view/customer/advance/detail_advance.dart';
 import 'package:rtm_system/view/customer/invoice/detail_invoice.dart';
 
@@ -29,8 +30,12 @@ class _ProcessAllPageState extends State<ProcessAllPage> {
     return Scaffold(
       backgroundColor: Color(0xffEEEEEE),
       appBar: AppBar(
+        title: Text(title, style: TextStyle(
+          color: Colors.white,
+        ),),
+        leading: leadingAppbar(context),
+        centerTitle: true,
         backgroundColor: Color(0xFF0BB791),
-        title: Text(title),
       ),
       body: Padding(
         child: Column(

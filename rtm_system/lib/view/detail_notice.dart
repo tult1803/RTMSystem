@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rtm_system/ultils/component.dart';
 
 class DetailOfNotice extends StatelessWidget {
   const DetailOfNotice({Key key,  this.titleNotice, this.contentNotice})
@@ -13,6 +14,7 @@ class DetailOfNotice extends StatelessWidget {
               parent: AlwaysScrollableScrollPhysics()),
           slivers: <Widget>[
             SliverAppBar(
+              leading: leadingAppbar(context),
               stretch: true,
               onStretchTrigger: () {
                 // Function callback for stretch

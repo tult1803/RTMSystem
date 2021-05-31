@@ -43,46 +43,35 @@ class _showProfileState extends State<showProfile> {
     String genderShow = '';
 
     var size = MediaQuery.of(context).size;
-    return Container(
-      margin: EdgeInsets.fromLTRB(0, 24, 0, 0),
-      decoration: BoxDecoration(
-        color: Color(0xffEEEEEE),
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(15.0),
-          topRight: Radius.circular(15.0),
-        ),
-      ),
-      child: new FutureBuilder(
-        future: getAPIProfile(),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (snapshot.hasData) {
-            DateTime date = infomationCustomer.birthday;
-            final f = new DateFormat('dd-MM-yyyy');
-            //show gender
-            infomationCustomer.gender == 0
-                ? genderShow = 'Nữ'
-                : genderShow = 'Nam';
-            return Column(
+    return new FutureBuilder(
+      future: getAPIProfile(),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.hasData) {
+          DateTime date = infomationCustomer.birthday;
+          final f = new DateFormat('dd-MM-yyyy');
+          //show gender
+          infomationCustomer.gender == 0
+              ? genderShow = 'Nữ'
+              : genderShow = 'Nam';
+          return SingleChildScrollView(
+            child: Column(
               children: [
                 SizedBox(
                   height: 10,
                 ),
                 Container(
-                    width: 100,
-                    height: 100,
-                    child: Center(
-                      child: Image(
-                        image: AssetImage("images/avt.png"),
-                      ),
-                    )),
-                SizedBox(
-                  height: 10,
+                  width: 100,
+                  height: 100,
+                  child: Center(
+                    child: Image(
+                      image: AssetImage("images/avt.png"),
+                    ),
+                  ),
                 ),
                 btnLogout(context),
                 SizedBox(
-                  height: 10,
+                  height: 15,
                 ),
-
                 //data infor show here
                 Container(
                   margin: EdgeInsets.fromLTRB(0, 0, 0, 12),
@@ -93,8 +82,8 @@ class _showProfileState extends State<showProfile> {
                         _item(context, 'Họ và tên',
                             infomationCustomer.fullname),
                         _item(context, 'Ngày sinh', f.format(date)),
-                        _item(
-                            context, 'Số điện thoại', infomationCustomer.phone),
+                        _item(context, 'Số điện thoại',
+                            infomationCustomer.phone),
                         _item(context, 'Giới tính', genderShow),
                         _item(context, 'CMND', infomationCustomer.cmnd),
                         _item(context, 'Địa chỉ', infomationCustomer.address),
@@ -117,15 +106,16 @@ class _showProfileState extends State<showProfile> {
                   false,
                   infomationCustomer.accountId,
                 ),
-                btnUpdatePw(context, this.password, infomationCustomer.accountId),
+                btnUpdatePw(
+                    context, this.password, infomationCustomer.accountId, true),
               ],
-            );
-          }
-          return Container(
-              height: size.height,
-              child: Center(child: CircularProgressIndicator()));
-        },
-      ),
+            ),
+          );
+        }
+        return Container(
+            height: size.height,
+            child: Center(child: CircularProgressIndicator()));
+      },
     );
   }
 

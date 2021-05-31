@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/view/formUpdateProfile.dart';
 
 class UpdateProfilePage extends StatefulWidget {
@@ -26,6 +27,7 @@ class UpdateProfilePage extends StatefulWidget {
   final String address;
   final bool check;
   final int account_id;
+
 
   @override
   _UpdateProfilePageState createState() => _UpdateProfilePageState();
@@ -54,11 +56,13 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
     return Scaffold(
       backgroundColor: Color(0xFFEEEEEE),
       appBar: AppBar(
+        leading: leadingAppbar(context),
+        centerTitle: true,
         backgroundColor: Color(0xFF0BB791),
-        title: Container(
-          margin: EdgeInsets.only(left: 34),
-          child: Text(
-            title,
+        title: Text(
+          title,
+          style: TextStyle(
+            color: Colors.white,
           ),
         ),
       ),
@@ -75,6 +79,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
           isUpdate: true,
           typeOfUpdate: 1,
           account_id: widget.account_id,
+          isCustomer: true,
         ),
       ),
     );

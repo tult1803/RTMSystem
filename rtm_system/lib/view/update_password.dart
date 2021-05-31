@@ -15,7 +15,6 @@ class UpdatePasswordPage extends StatefulWidget {
 class _UpdateProfilePageState extends State<UpdatePasswordPage> {
   String title = "Thay đổi mật khẩu";
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,12 +23,9 @@ class _UpdateProfilePageState extends State<UpdatePasswordPage> {
         leading: leadingAppbar(context),
         backgroundColor: Color(0xFF0BB791),
         centerTitle: true,
-        title: Container(
-          margin: EdgeInsets.only(left: 34),
-          child: Text(
-            title,
-            style: TextStyle(color: Colors.white),
-          ),
+        title: Text(
+          title,
+          style: TextStyle(color: Colors.white),
         ),
       ),
       body: SingleChildScrollView(

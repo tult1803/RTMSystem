@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:rtm_system/ultils/alertDialog.dart';
+import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/src/regExp.dart';
 import 'package:rtm_system/view/customer/advance/detail_advance.dart';
 import 'package:rtm_system/view/customer/home_customer_page.dart';
@@ -32,8 +33,9 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
     return Scaffold(
       backgroundColor: Color(0xffEEEEEE),
       appBar: AppBar(
-        backgroundColor: Color(0xFF0BB791),
+        leading: leadingAppbar(context),
         centerTitle: true,
+        backgroundColor: Color(0xFF0BB791),
         title: Text(
           "Tạo yêu cầu ứng tiền",
           style: TextStyle(

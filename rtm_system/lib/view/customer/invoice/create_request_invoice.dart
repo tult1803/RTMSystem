@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:rtm_system/model/getAPI_product.dart';
 import 'package:rtm_system/model/model_product.dart';
 import 'package:rtm_system/ultils/alertDialog.dart';
+import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/src/regExp.dart';
 import 'package:rtm_system/view/customer/home_customer_page.dart';
@@ -74,6 +75,7 @@ class _CreateRequestInvoiceState extends State<CreateRequestInvoice> {
       appBar: AppBar(
         backgroundColor: Color(0xFF0BB791),
         centerTitle: true,
+        leading: leadingAppbar(context),
         title: Text(
           "Tạo yêu cầu ban hang",
           style: TextStyle(
@@ -132,8 +134,8 @@ class _CreateRequestInvoiceState extends State<CreateRequestInvoice> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    btnCancel(context, 120, 40, Colors.redAccent, "Hủy",
-                        "yeu cau ban hang", true, 1),
+                    btnSubmitOrCancel(context, 120, 40, Colors.redAccent, "Hủy", "",
+                        "", null, false, 1, true, 'Bạn muốn huỷ tạo yêu cầu bán hàng?'),
                     SizedBox(width: 20),
                     btnSubmitValidate(context, 140, 40, Color(0xFF0BB791),
                         "Tạo", "yeu cau ban hang", 1),
