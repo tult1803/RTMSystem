@@ -54,6 +54,7 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
     if (this.widget.gender == 0) {
       character = GenderCharacter.women;
     } else
@@ -77,7 +78,7 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
           Column(
             children: [
               _txtfield(
-                  null,
+                  getDataTextField(this.widget.fullname),
                   false,
                   "Nhập họ tên",
                   "Họ và tên",
@@ -85,7 +86,7 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
                   1,
                   TextInputType.text),
               _txtfield(
-                  null,
+                  getDataTextField(this.widget.phone),
                   false,
                   "Nhập số điện thoại",
                   "Số điện thoại",
@@ -119,14 +120,14 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
 
   //Dùng để chặn nhập khoản cách
   TextEditingController getDataTextField(String txt) {
-    if (txt == null) {
-      txt = "";
-    }
     final TextEditingController _controller = TextEditingController();
+    if (txt != null) {
     _controller.value = _controller.value.copyWith(
       text: txt,
-      selection: TextSelection.collapsed(offset: txt.length),
+      selection: TextSelection(baseOffset: txt.length, extentOffset: txt.length),
+      composing: TextRange.empty,
     );
+    }
     return _controller;
   }
 
@@ -496,7 +497,7 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
 
   Widget _checkCMND() {
     if (this.widget.check) {
-      return _txtfield(null, false,
+      return _txtfield(getDataTextField(this.widget.cmnd), false,
           "Nhập CMND/CCCD", "CMND/CCCD", errCMND, 1, TextInputType.phone);
     } else
       return Container();
@@ -505,7 +506,7 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
   Widget _checkAddress() {
     if (this.widget.check) {
       return _txtfield(
-          null,
+          getDataTextField(this.widget.address),
           false,
           "Nhập địa chỉ",
           "Địa chỉ",
