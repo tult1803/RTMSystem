@@ -57,13 +57,9 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
       character = GenderCharacter.women;
     } else
       character = GenderCharacter.men;
-    if(this.widget.isCustomer){
-      messageCancel = 'Bạn muốn huỷ tạo thông báo?';
-    }else{
       if(this.widget.isUpdate) {
         messageCancel = 'Bạn muốn huỷ cập nhật thông tin?';
       }else   messageCancel = 'Bạn muốn huỷ tạo khách hàng?';
-    }
 
   }
 
