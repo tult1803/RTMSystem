@@ -7,6 +7,7 @@ import 'package:rtm_system/ultils/alertDialog.dart';
 import 'package:rtm_system/view/customer/Profile/update_profile.dart';
 import 'package:rtm_system/view/customer/home_customer_page.dart';
 import 'package:rtm_system/view/detail_notice.dart';
+import 'package:rtm_system/view/formChangePW.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../view/login_page.dart';
@@ -437,7 +438,8 @@ Widget btnUpdateInfo(context,
     String phone,
     DateTime birthday,
     String address,
-    bool check) {
+    bool check,
+    int account_id) {
   return Container(
     width: 320,
     child: RaisedButton(
@@ -456,6 +458,7 @@ Widget btnUpdateInfo(context,
                     birthday: birthday,
                     address: address,
                     check: check,
+                    account_id: account_id,
                   )),
         );
       },
@@ -473,7 +476,36 @@ Widget btnUpdateInfo(context,
     ),
   );
 }
-
+//dung khi thay doi pw
+Widget btnUpdatePw(context, String password) {
+  return Container(
+    width: 320,
+    child: RaisedButton(
+      color: Color(0xFF0BB791),
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  UpdatePasswordPage(
+                    password: password,
+                  )),
+        );
+      },
+      child: Text(
+        'Thay đổi mật khẩu',
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 16,
+        ),
+      ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      elevation: 10,
+    ),
+  );
+}
 //Widget này dùng cho các button "Tạo" hoặc "Hủy" vd: ở Trang Tạo thông báo
 //bool action = flase khi nhấn nút "Hủy" và bằng true khi nhấn "Tạo"
 Widget btnSubmitOrCancel(BuildContext context,
@@ -486,7 +518,8 @@ Widget btnSubmitOrCancel(BuildContext context,
     String txtError,
     bool action,
     int indexOfBottomBar,
-    bool check) {
+    bool check,
+    String messageShow) {
   return Container(
     height: height,
     width: width,
@@ -517,14 +550,14 @@ Widget btnSubmitOrCancel(BuildContext context,
             if(check){
               showAlertDialog(
                   context,
-                  "Bạn muốn hủy tạo thông báo ?",
+                  messageShow,
                   HomeCustomerPage(
                     index: 3,
                   ));
             }else{
               showAlertDialog(
                   context,
-                  "Bạn muốn hủy tạo thông báo ?",
+                  messageShow,
                   HomeAdminPage(
                     index: indexOfBottomBar,
                   ));

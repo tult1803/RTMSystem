@@ -59,10 +59,10 @@ class _showCreateNoticeState extends State<showCreateNotice> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 btnSubmitOrCancel(context, 140, 40, Colors.redAccent, "Hủy",
-                    tittle, description, null,false, 3, false),
+                    tittle, description, null,false, 3, false, "Bạn muốn huỷ tạo thông báo?"),
                 SizedBox(width: 20),
                 btnSubmitOrCancel(context, 140, 40, welcome_color, "Tạo",
-                    tittle, description, "Tiêu để đang bị để trống.",true, 3, false),
+                    tittle, description, "Tiêu để đang bị để trống.",true, 3, false,''),
               ],
             ),
           ],
