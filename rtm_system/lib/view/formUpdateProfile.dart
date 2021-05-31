@@ -57,10 +57,12 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
       character = GenderCharacter.women;
     } else
       character = GenderCharacter.men;
-    if(this.widget.check){
-      messageCancel = 'Bạn muốn huỷ cập nhật thông tin?';
-    }else{
+    if(this.widget.isCustomer){
       messageCancel = 'Bạn muốn huỷ tạo thông báo?';
+    }else{
+      if(this.widget.isUpdate) {
+        messageCancel = 'Bạn muốn huỷ cập nhật thông tin?';
+      }else   messageCancel = 'Bạn muốn huỷ tạo khách hàng?';
     }
 
   }
@@ -102,7 +104,7 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               btnSubmitOrCancel(context, 120, 40, Colors.redAccent, "Hủy", "",
-                  "", null, false, 4, widget.check, messageCancel),
+                  "", null, false, 4, this.widget.isCustomer, messageCancel),
               SizedBox(width: 20),
               btnSubmitValidate(context, 120, 40, welcome_color, "Kiểm tra",
                   this.widget.list, this.widget.check),

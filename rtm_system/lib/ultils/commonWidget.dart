@@ -476,36 +476,7 @@ Widget btnUpdateInfo(context,
     ),
   );
 }
-//dung khi thay doi pw
-Widget btnUpdatePw(context, String password) {
-  return Container(
-    width: 320,
-    child: RaisedButton(
-      color: Color(0xFF0BB791),
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>
-                  UpdatePasswordPage(
-                    password: password,
-                  )),
-        );
-      },
-      child: Text(
-        'Thay đổi mật khẩu',
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 16,
-        ),
-      ),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-      elevation: 10,
-    ),
-  );
-}
+
 //Widget này dùng cho các button "Tạo" hoặc "Hủy" vd: ở Trang Tạo thông báo
 //bool action = flase khi nhấn nút "Hủy" và bằng true khi nhấn "Tạo"
 Widget btnSubmitOrCancel(BuildContext context,
@@ -518,7 +489,7 @@ Widget btnSubmitOrCancel(BuildContext context,
     String txtError,
     bool action,
     int indexOfBottomBar,
-    bool check,
+    bool isCustomer,
     String messageShow) {
   return Container(
     height: height,
@@ -547,7 +518,7 @@ Widget btnSubmitOrCancel(BuildContext context,
                     context, "Tạo thất bại. Xin thử lại !!!", null, false);
             }
           } else {
-            if(check){
+            if(isCustomer){
               showAlertDialog(
                   context,
                   messageShow,
