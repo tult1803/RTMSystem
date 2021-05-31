@@ -400,10 +400,8 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
                           )));
                 }
               } else {
-                if (checkProfile == false) {
-                  showStatusAlertDialog(
-                      context, "Thông tin chưa thay đổi !!!", null, false);
-                }
+                showStatusAlertDialog(
+                    context, "Thông tin chưa thay đổi !!!", null, false);
               }
             });
           },
@@ -467,17 +465,21 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
         errAddress = null;
       }
     }
-    if (this.widget.password == null || this.widget.password == "") {
-      errPass = "Mật khẩu trống";
-      print("Mật khẩu trống");
-    } else {
-      if (!checkFormatPassword.hasMatch(this.widget.password)) {
-        errPass = "Mật khẩu ít nhất 6 kí tự (chữ và số)";
-        print("Mật khẩu ít nhất 6 kí tự (chữ và số)");
-      } else {
-        errPass = null;
-      }
-    }
+   if(widget.isUpdate){
+     errPass = null;
+   }else{
+     if (this.widget.password == null || this.widget.password == "") {
+       errPass = "Mật khẩu trống";
+       print("Mật khẩu trống");
+     } else {
+       if (!checkFormatPassword.hasMatch(this.widget.password)) {
+         errPass = "Mật khẩu ít nhất 6 kí tự (chữ và số)";
+         print("Mật khẩu ít nhất 6 kí tự (chữ và số)");
+       } else {
+         errPass = null;
+       }
+     }
+   }
     if (errFulname == null &&
         errPhone == null &&
         errPass == null &&
@@ -513,10 +515,10 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
   }
 
   Widget _checkPassword() {
-    if (this.widget.check) {
+    if (this.widget.isUpdate) {
+      return Container();
+    } else
       return _txtfield(getDataTextField(this.widget.password), true,
           "Nhập mật khẩu", "Mật khẩu", errPass, 1, TextInputType.text);
-    } else
-      return Container();
   }
 }
