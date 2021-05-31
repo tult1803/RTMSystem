@@ -4,10 +4,10 @@ import 'package:rtm_system/ultils/getData.dart';
 import 'package:rtm_system/ultils/src/regExp.dart';
 
 class formUpdatePasswordPage extends StatefulWidget {
-  String currentPassword;
-  int account_id;
-
-  formUpdatePasswordPage({this.currentPassword, this.account_id});
+  final String currentPassword;
+  final int account_id;
+  final bool isCustomer;
+  formUpdatePasswordPage({this.currentPassword, this.account_id, this.isCustomer});
 
   @override
   _formUpdatePasswordPageState createState() => _formUpdatePasswordPageState();
@@ -183,7 +183,7 @@ class _formUpdatePasswordPageState extends State<formUpdatePasswordPage> {
               if (check) {
                 //chỉ cần pw và account_id để change pw, những field khác truyền để đủ field theo function
                 doCreateCustomer(context, '', newPassword, '', 0, '', '', '',
-                    true, true, 0, widget.account_id);
+                    this.widget.isCustomer, true, 0, this.widget.account_id);
               }
             });
           },

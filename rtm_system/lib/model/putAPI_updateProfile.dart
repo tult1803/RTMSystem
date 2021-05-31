@@ -28,7 +28,6 @@ class PutUpdateProfile{
       }),
     );
     print("Status putAPI Update Profile:${response.statusCode}");
-    print('$type - $account_id - $password - $fullname - $gender - $birthday - $phone - $cmnd - $address');
     return response.statusCode;
   }
 

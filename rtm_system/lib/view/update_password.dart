@@ -4,10 +4,10 @@ import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/view/formChangePW.dart';
 
 class UpdatePasswordPage extends StatefulWidget {
-  UpdatePasswordPage({this.password, this.account_id});
-  String password;
-  int account_id;
-
+  UpdatePasswordPage({this.password, this.account_id, this.isCustomer});
+  final String password;
+  final int account_id;
+  final bool isCustomer;
   @override
   _UpdateProfilePageState createState() => _UpdateProfilePageState();
 }
@@ -36,6 +36,7 @@ class _UpdateProfilePageState extends State<UpdatePasswordPage> {
         child: new formUpdatePasswordPage(
           currentPassword: widget.password,
           account_id: widget.account_id,
+          isCustomer: this.widget.isCustomer,
         ),
       ),
     );

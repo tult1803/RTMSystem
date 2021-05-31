@@ -46,7 +46,7 @@ class _profilePageState extends State<profilePage> {
         children: [
           headerProfile(),
           buttonProfile(context,15, 15, 20, 0, "Quản lý khách hàng", AllCustomer()),
-          buttonProfile(context,15, 15, 20, 0, "Thay đổi mật khẩu", UpdatePasswordPage(account_id: accountId, password: password,)),
+          buttonProfile(context,15, 15, 20, 0, "Thay đổi mật khẩu", UpdatePasswordPage(account_id: accountId, password: password, isCustomer: false,)),
           btnLogout(context),
         ],
       ),
