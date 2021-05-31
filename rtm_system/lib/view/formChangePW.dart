@@ -4,10 +4,10 @@ import 'package:rtm_system/ultils/getData.dart';
 import 'package:rtm_system/ultils/src/regExp.dart';
 
 class formUpdatePasswordPage extends StatefulWidget {
-  String currentPassword;
-  int account_id;
-
-  formUpdatePasswordPage({this.currentPassword, this.account_id});
+  final String currentPassword;
+  final int account_id;
+  final bool isCustomer;
+  formUpdatePasswordPage({this.currentPassword, this.account_id, this.isCustomer});
 
   @override
   _formUpdatePasswordPageState createState() => _formUpdatePasswordPageState();
@@ -26,7 +26,7 @@ class _formUpdatePasswordPageState extends State<formUpdatePasswordPage> {
       child: Column(
         children: [
           Container(
-            margin: EdgeInsets.only(left: 10, right: 5),
+            margin: EdgeInsets.only(top: 10, left: 10, right: 5),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -183,7 +183,7 @@ class _formUpdatePasswordPageState extends State<formUpdatePasswordPage> {
               if (check) {
                 //chỉ cần pw và account_id để change pw, những field khác truyền để đủ field theo function
                 doCreateCustomer(context, '', newPassword, '', 0, '', '', '',
-                    true, true, 0, widget.account_id);
+                    this.widget.isCustomer, true, 0, this.widget.account_id);
               }
             });
           },
@@ -198,6 +198,7 @@ class _formUpdatePasswordPageState extends State<formUpdatePasswordPage> {
           ),
         ));
   }
+
   bool _validateData() {
     bool check = false;
     if (this.password == null || this.password == "") {
@@ -236,31 +237,43 @@ class _formUpdatePasswordPageState extends State<formUpdatePasswordPage> {
 
   Widget btnShowOrHide() {
     return checkShow
-        ? TextButton(
-            child: Text(
-              "Hiển thị ",
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                color: Colors.black54,
+        ? GestureDetector(
+            child: Container(
+              margin: EdgeInsets.only(right: 0),
+              width: 80,
+              child: Center(
+                child: Text(
+                  "Hiển thị",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black54,
+                  ),
+                ),
               ),
             ),
-            onPressed: () {
+            onTap: () {
               setState(() {
                 checkShow = false;
               });
             },
           )
-        : TextButton(
-            child: Text(
-              "Ẩn",
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                color: Colors.black54,
+        : GestureDetector(
+            child: Container(
+              margin: EdgeInsets.only(right: 0),
+              width: 80,
+              child: Center(
+                child: Text(
+                  "Ẩn",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black54,
+                  ),
+                ),
               ),
             ),
-            onPressed: () {
+            onTap: () {
               setState(() {
                 checkShow = true;
               });

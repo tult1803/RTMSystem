@@ -176,7 +176,9 @@ class _showAllInvoiceState extends State<showAllInvoice> {
 
   Future pickedDate() async {
     final initialDateRange = DateTimeRange(start: fromDate, end: toDate);
+    final ThemeData theme = Theme.of(context);
     DateTimeRange dateRange = await showDateRangePicker(
+
         context: context,
         firstDate: DateTime(2000),
         lastDate: DateTime.now(),
@@ -185,6 +187,11 @@ class _showAllInvoiceState extends State<showAllInvoice> {
         builder: (context, child) {
           return Theme(
             data: Theme.of(context).copyWith(
+              //Dùng cho nút "X" của lịch
+              appBarTheme: AppBarTheme(
+              iconTheme: theme.primaryIconTheme.copyWith(color: Colors.white),
+            ),
+                //Dùng cho nút chọn ngày và background
                 colorScheme: ColorScheme.light(
               primary: welcome_color,
             )),

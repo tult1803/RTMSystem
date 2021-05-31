@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/formUpdateProfile.dart';
 
@@ -19,6 +20,7 @@ class _CreateCustomerState extends State<CreateCustomer> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          leading: leadingAppbar(context),
           backgroundColor: welcome_color,
           centerTitle: true,
           title: Text(
@@ -30,6 +32,7 @@ class _CreateCustomerState extends State<CreateCustomer> {
         body: SingleChildScrollView(
             child: new formUpdateProfile(
               check: true,
+          isCustomer: false,
           isUpdate: false,
           birthday: DateTime.now(),
         )));

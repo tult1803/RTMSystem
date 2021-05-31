@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rtm_system/presenter/Manager/profile/showCustomer.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
+import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 
 import 'createNewCustomer.dart';
@@ -17,6 +18,7 @@ class _AllCustomerState extends State<AllCustomer> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: leadingAppbar(context),
         centerTitle: true,
         backgroundColor: welcome_color,
         title: Text(

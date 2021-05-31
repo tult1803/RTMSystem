@@ -487,3 +487,10 @@ Widget txtConfirm(BuildContext context, String tittle, String content) {
     ),
   );
 }
+
+Widget leadingAppbar(BuildContext context){
+  return IconButton(
+    icon: Icon(Icons.arrow_back_ios_outlined, color: Colors.white),
+    onPressed: () => Navigator.of(context).pop(),
+  );
+}

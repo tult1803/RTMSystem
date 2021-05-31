@@ -4,11 +4,11 @@ import 'package:rtm_system/ultils/getData.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 
 class processCreateCustomer extends StatefulWidget {
-  final String _tittle;
-  final List _listCustomer;
-  final bool _check, isUpdate;
+  final String tittle;
+  final List listCustomer;
+  final bool isCustomer, isUpdate;
   final int typeOfUpdate, account_id;
-  processCreateCustomer(this._tittle, this._listCustomer, this._check, this.isUpdate,this.typeOfUpdate, this.account_id);
+  processCreateCustomer({this.tittle, this.listCustomer, this.isCustomer, this.isUpdate,this.typeOfUpdate, this.account_id});
 
   @override
   _processCreateCustomerState createState() => _processCreateCustomerState();
@@ -21,13 +21,13 @@ class _processCreateCustomerState extends State<processCreateCustomer> {
   final fBirthday = new DateFormat('yyyy-MM-dd');
   Future<void> _getData() {
     setState(() {
-      fullname = this.widget._listCustomer[0];
-      gender = this.widget._listCustomer[1];
-      phone = this.widget._listCustomer[2];
-      cmnd = this.widget._listCustomer[3];
-      address = this.widget._listCustomer[4];
-      password = this.widget._listCustomer[5];
-      birthday = this.widget._listCustomer[6];
+      fullname = this.widget.listCustomer[0];
+      gender = this.widget.listCustomer[1];
+      phone = this.widget.listCustomer[2];
+      cmnd = this.widget.listCustomer[3];
+      address = this.widget.listCustomer[4];
+      password = this.widget.listCustomer[5];
+      birthday = this.widget.listCustomer[6];
     });
   }
   @override
@@ -49,10 +49,10 @@ class _processCreateCustomerState extends State<processCreateCustomer> {
       ),
       child: TextButton(
           onPressed: () {
-            doCreateCustomer(context, phone, password, fullname, gender, cmnd, address, "${fBirthday.format(birthday)}", this.widget._check, this.widget.isUpdate, this.widget.typeOfUpdate,this.widget.account_id);
+            doCreateCustomer(context, phone, password, fullname, gender, cmnd, address, "${fBirthday.format(birthday)}", this.widget.isCustomer, this.widget.isUpdate, this.widget.typeOfUpdate,this.widget.account_id);
           },
           child: Text(
-            "${this.widget._tittle}",
+            "${this.widget.tittle}",
             style: TextStyle(
                 color: Colors.white, fontWeight: FontWeight.w500, fontSize: 18),
           )),

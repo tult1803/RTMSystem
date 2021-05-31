@@ -8,9 +8,9 @@ class ConfirmCreateCustomer extends StatefulWidget {
   //Chuỗi dữ liệu của list được truyền vào sẽ theo thứ tự sau:
   // fullname, gender, phone, CMND, address, password
   final List listCustomer;
-  final bool check, isUpdate;
+  final bool check, isUpdate, isCustomer;
   final int typeOfUpdate, account_id;
-  ConfirmCreateCustomer({this.listCustomer, this.check, this.isUpdate,this.typeOfUpdate, this.account_id});
+  ConfirmCreateCustomer({this.listCustomer, this.check, this.isUpdate,this.typeOfUpdate, this.account_id, this.isCustomer});
 
   @override
   _ConfirmCreateCustomerState createState() => _ConfirmCreateCustomerState();
@@ -48,11 +48,12 @@ class _ConfirmCreateCustomerState extends State<ConfirmCreateCustomer> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          leading: leadingAppbar(context),
           elevation: 0,
           centerTitle: true,
           title: Text(
             "Phiếu xác nhận",
-            style: TextStyle(fontSize: 20),
+            style: TextStyle(fontSize: 20, color: Colors.white),
           ),
           backgroundColor: welcome_color,
         ),
@@ -69,7 +70,13 @@ class _ConfirmCreateCustomerState extends State<ConfirmCreateCustomer> {
                   txtConfirm(context, "Ngày sinh", "${fBirthday.format(birthday)}"),
                   _checkCMND(),
                   _checkAddress(),
-                  processCreateCustomer("Xác nhận", this.widget.listCustomer, this.widget.check, this.widget.isUpdate,this.widget.typeOfUpdate, this.widget.account_id),
+                  processCreateCustomer(
+                      tittle: "Xác nhận",
+                      listCustomer:  this.widget.listCustomer,
+                      isCustomer: this.widget.isCustomer,
+                      isUpdate: this.widget.isUpdate,
+                      typeOfUpdate: this.widget.typeOfUpdate,
+                      account_id: this.widget.account_id),
                 ],
               ),
             ),
