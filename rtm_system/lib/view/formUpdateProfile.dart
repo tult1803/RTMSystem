@@ -71,7 +71,7 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
           Column(
             children: [
               _txtfield(
-                  getDataTextField(this.widget.fullname),
+                  null,
                   false,
                   "Nhập họ tên",
                   "Họ và tên",
@@ -79,7 +79,7 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
                   1,
                   TextInputType.text),
               _txtfield(
-                  getDataTextField(this.widget.phone),
+                  null,
                   false,
                   "Nhập số điện thoại",
                   "Số điện thoại",
@@ -111,6 +111,7 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
     );
   }
 
+  //Dùng để chặn nhập khoản cách
   TextEditingController getDataTextField(String txt) {
     if (txt == null) {
       txt = "";
@@ -208,6 +209,7 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
     return Container(
       margin: EdgeInsets.only(top: 10, left: 10, right: 10),
       child: TextField(
+
         controller: _controller,
         obscureText: obscureText,
         onChanged: (value) {
@@ -486,7 +488,7 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
 
   Widget _checkCMND() {
     if (this.widget.check) {
-      return _txtfield(getDataTextField(this.widget.cmnd), false,
+      return _txtfield(null, false,
           "Nhập CMND/CCCD", "CMND/CCCD", errCMND, 1, TextInputType.phone);
     } else
       return Container();
@@ -495,7 +497,7 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
   Widget _checkAddress() {
     if (this.widget.check) {
       return _txtfield(
-          getDataTextField(this.widget.address),
+          null,
           false,
           "Nhập địa chỉ",
           "Địa chỉ",
