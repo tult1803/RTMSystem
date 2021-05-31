@@ -486,7 +486,7 @@ Widget btnSubmitOrCancel(BuildContext context,
     String txtError,
     bool action,
     int indexOfBottomBar,
-    bool check) {
+    bool isCustomer) {
   return Container(
     height: height,
     width: width,
@@ -514,7 +514,7 @@ Widget btnSubmitOrCancel(BuildContext context,
                     context, "Tạo thất bại. Xin thử lại !!!", null, false);
             }
           } else {
-            if(check){
+            if(isCustomer){
               showAlertDialog(
                   context,
                   "Bạn muốn hủy tạo thông báo ?",

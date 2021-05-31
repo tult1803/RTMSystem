@@ -96,7 +96,7 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               btnSubmitOrCancel(context, 120, 40, Colors.redAccent, "Hủy", "",
-                  "", null, false, 4, widget.check),
+                  "", null, false, 4, this.widget.isCustomer),
               SizedBox(width: 20),
               btnSubmitValidate(context, 120, 40, welcome_color, "Kiểm tra",
                   this.widget.list, this.widget.check),
