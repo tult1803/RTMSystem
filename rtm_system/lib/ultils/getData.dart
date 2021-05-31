@@ -44,7 +44,7 @@ Future<void> doCreateCustomer(BuildContext context,String phone, String password
   int status = await post_put_ApiProfile(phone, password, fullname, gender, cmnd, address, birthday, isUpdate, typeOfUpdate, account_id);
   if(status == 200){
     if(check){
-      showStatusAlertDialog(context, "Đã cập nhật.", HomeCustomerPage(index: 4,), true);
+      showStatusAlertDialog(context, "Đã cập nhật.", HomeCustomerPage(index: 3,), true);
     }else {
       showStatusAlertDialog(context, "Đã cập nhật.", HomeAdminPage(index: 4,), true);
     }

@@ -14,7 +14,8 @@ class UpdateProfilePage extends StatefulWidget {
     this.cmnd,
     this.address,
     this.birthday,
-    this.check
+    this.check,
+    this.account_id,
   }) : super(key: key);
   final String cmnd;
   final String fullname;
@@ -24,6 +25,7 @@ class UpdateProfilePage extends StatefulWidget {
   final DateTime birthday;
   final String address;
   final bool check;
+  final int account_id;
 
   @override
   _UpdateProfilePageState createState() => _UpdateProfilePageState();
@@ -70,8 +72,10 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
           birthday: widget.birthday,
           gender: widget.gender,
           check: true,
+          isUpdate: true,
+          typeOfUpdate: 1,
+          account_id: widget.account_id,
         ),
-       
       ),
     );
   }
