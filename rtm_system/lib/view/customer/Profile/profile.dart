@@ -13,7 +13,15 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color(0xFF0BB791),
-        body: showProfile());
+      backgroundColor: Color(0xFFEEEEEE),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(0.0),
+        child: AppBar(
+          backgroundColor: Color(0xFF0BB791),
+          elevation: 0,
+        ),
+      ),
+      body: showProfile(),
+    );
   }
 }

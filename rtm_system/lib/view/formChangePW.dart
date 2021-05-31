@@ -18,7 +18,18 @@ class _formUpdatePasswordPageState extends State<formUpdatePasswordPage> {
   String password, newPassword, confirmPassword;
   bool checkClick = false;
   bool checkShow = true;
+  int indexOfBottomBar = 0;
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if(widget.isCustomer){
+      indexOfBottomBar = 3;
+    }else{
+      indexOfBottomBar = 4;
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -94,7 +105,7 @@ class _formUpdatePasswordPageState extends State<formUpdatePasswordPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               btnSubmitOrCancel(context, 120, 40, Colors.redAccent, "Hủy", "",
-                  "", null, false, 4, true, 'Bạn muốn huỷ thay đổi mật khẩu?'),
+                  "", null, false, indexOfBottomBar, widget.isCustomer, 'Bạn muốn huỷ thay đổi mật khẩu?'),
               SizedBox(width: 20),
               btnSubmitValidate(context, 120, 40, Color(0xFF0BB791), "Lưu"),
             ],

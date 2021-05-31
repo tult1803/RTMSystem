@@ -6,7 +6,6 @@ import 'package:rtm_system/ultils/alertDialog.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/ultils/src/regExp.dart';
-
 import 'manager/profile/confirmCreateCustomer.dart';
 
 //check: true là cho customer còn false là cho manager
@@ -49,6 +48,8 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
   GenderCharacter character;
   bool checkClick = false;
   String messageCancel = '';
+  int indexOfBottomBar = 0;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -57,10 +58,15 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
       character = GenderCharacter.women;
     } else
       character = GenderCharacter.men;
-      if(this.widget.isUpdate) {
-        messageCancel = 'Bạn muốn huỷ cập nhật thông tin?';
-      }else   messageCancel = 'Bạn muốn huỷ tạo khách hàng?';
-
+    if (this.widget.isUpdate) {
+      messageCancel = 'Bạn muốn huỷ cập nhật thông tin?';
+    } else
+      messageCancel = 'Bạn muốn huỷ tạo khách hàng?';
+    if(widget.check){
+      indexOfBottomBar = 3;
+    }else{
+      indexOfBottomBar = 4;
+    }
   }
 
   @override
@@ -100,7 +106,7 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               btnSubmitOrCancel(context, 120, 40, Colors.redAccent, "Hủy", "",
-                  "", null, false, 4, this.widget.isCustomer, messageCancel),
+                  "", null, false, indexOfBottomBar, this.widget.isCustomer, messageCancel),
               SizedBox(width: 20),
               btnSubmitValidate(context, 120, 40, welcome_color, "Kiểm tra",
                   this.widget.list, this.widget.check),
@@ -396,10 +402,8 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
                           )));
                 }
               } else {
-                if (checkProfile == false) {
-                  showStatusAlertDialog(
-                      context, "Thông tin chưa thay đổi !!!", null, false);
-                }
+                showStatusAlertDialog(
+                    context, "Thông tin chưa thay đổi !!!", null, false);
               }
             });
           },
@@ -463,17 +467,21 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
         errAddress = null;
       }
     }
-    if (this.widget.password == null || this.widget.password == "") {
-      errPass = "Mật khẩu trống";
-      print("Mật khẩu trống");
-    } else {
-      if (!checkFormatPassword.hasMatch(this.widget.password)) {
-        errPass = "Mật khẩu ít nhất 6 kí tự (chữ và số)";
-        print("Mật khẩu ít nhất 6 kí tự (chữ và số)");
-      } else {
-        errPass = null;
-      }
-    }
+   if(widget.isUpdate){
+     errPass = null;
+   }else{
+     if (this.widget.password == null || this.widget.password == "") {
+       errPass = "Mật khẩu trống";
+       print("Mật khẩu trống");
+     } else {
+       if (!checkFormatPassword.hasMatch(this.widget.password)) {
+         errPass = "Mật khẩu ít nhất 6 kí tự (chữ và số)";
+         print("Mật khẩu ít nhất 6 kí tự (chữ và số)");
+       } else {
+         errPass = null;
+       }
+     }
+   }
     if (errFulname == null &&
         errPhone == null &&
         errPass == null &&
@@ -509,10 +517,10 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
   }
 
   Widget _checkPassword() {
-    if (this.widget.check) {
+    if (this.widget.isUpdate) {
+      return Container();
+    } else
       return _txtfield(getDataTextField(this.widget.password), true,
           "Nhập mật khẩu", "Mật khẩu", errPass, 1, TextInputType.text);
-    } else
-      return Container();
   }
 }

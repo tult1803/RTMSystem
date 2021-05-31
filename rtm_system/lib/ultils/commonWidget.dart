@@ -370,7 +370,7 @@ Widget buttonProfile(BuildContext context, double left, double right,
 // Dùng cho đăng xuất, xóa thông tin.
 Widget btnLogout(context) {
   return Container(
-    margin: EdgeInsets.only(top: 30),
+    margin: EdgeInsets.only(top: 10),
     width: 140,
     child: Center(
       child: TextButton(
@@ -384,10 +384,13 @@ Widget btnLogout(context) {
               (route) => false);
         },
         style: ButtonStyle(
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18.0),
-                    side: BorderSide(color: Colors.red)))),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(18.0),
+              side: BorderSide(color: Colors.red),
+            ),
+          ),
+        ),
         child: Row(
           children: [
             Column(
@@ -468,10 +471,7 @@ Widget btnUpdateInfo(
 }
 
 //dung khi thay doi pw
-Widget btnUpdatePw(
-    context,
-    String password,
-    int account_id) {
+Widget btnUpdatePw(context, String password, int account_id, bool isCustomer) {
   return Container(
     width: 320,
     child: RaisedButton(
@@ -483,6 +483,7 @@ Widget btnUpdatePw(
               builder: (context) => UpdatePasswordPage(
                     password: password,
                     account_id: account_id,
+                    isCustomer: isCustomer,
                   )),
         );
       },
@@ -548,7 +549,7 @@ Widget btnSubmitOrCancel(
                   context,
                   messageShow,
                   HomeCustomerPage(
-                    index: 3,
+                    index: indexOfBottomBar,
                   ));
             } else {
               showAlertDialog(

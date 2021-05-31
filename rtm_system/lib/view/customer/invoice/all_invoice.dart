@@ -35,9 +35,10 @@ class _InvoicePageState extends State<InvoicePage> {
         backgroundColor: Color(0xffEEEEEE),
         appBar: AppBar(
           backgroundColor: Color(0xFF0BB791),
-          title: Center(
-            child: Text("Tất cả hóa đơn"),
-          ),
+          title: Text("Tất cả hóa đơn", style: TextStyle(
+            color:Colors.white,
+          ),),
+          centerTitle: true,
         ),
         body: SingleChildScrollView(
           child: Container(

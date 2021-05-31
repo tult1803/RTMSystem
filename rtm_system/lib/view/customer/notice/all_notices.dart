@@ -18,9 +18,10 @@ class _NoticesPageState extends State<NoticesPage> {
         backgroundColor: Color(0xffEEEEEE),
         appBar: AppBar(
           backgroundColor: Color(0xFF0BB791),
-          title: Center(
-            child: Text(widget.title),
-          ),
+          title: Text(widget.title, style: TextStyle(
+            color: Colors.white,
+          ),),
+          centerTitle: true,
         ),
         body: Container(
           margin: EdgeInsets.fromLTRB(0, 24, 0, 0),
