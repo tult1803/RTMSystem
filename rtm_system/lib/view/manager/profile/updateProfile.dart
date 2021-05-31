@@ -41,13 +41,14 @@ class _updateProfileState extends State<updateProfile> {
         isUpdate: true,
         typeOfUpdate: 1,
         account_id: account_id,
+        isCustomer: false,
         check: false,
         fullname: fullname,
         birthday: birthday,
         phone: phone,
         gender: gender,
         // Tai password mau dang la 1 nen bi bat validate
-        password: "$password demo",
+        password: password,
         list: [fullname,gender,phone,"", "", password, birthday],
       ))
     );

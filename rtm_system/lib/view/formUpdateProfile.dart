@@ -19,7 +19,7 @@ class formUpdateProfile extends StatefulWidget {
   final int typeOfUpdate, account_id;
 
   // True là sẽ gọi api update, false là gọi api createCustomer
-  final bool isUpdate;
+  final bool isUpdate, isCustomer;
   List list;
 
   formUpdateProfile(
@@ -34,6 +34,7 @@ class formUpdateProfile extends StatefulWidget {
       this.isUpdate,
       this.typeOfUpdate,
       this.account_id,
+      this.isCustomer,
       this.list});
 
   @override
@@ -131,6 +132,7 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
                 showTitleActions: true,
                 onConfirm: (date) {
                   setState(() {
+                    checkClick = true;
                     this.widget.birthday = date;
                     this.widget.list = [
                       this.widget.fullname,
@@ -300,6 +302,7 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
                   groupValue: character,
                   onChanged: (GenderCharacter value) {
                     setState(() {
+                      checkClick = true;
                       character = value;
                       this.widget.list = [
                         this.widget.fullname,
@@ -324,6 +327,7 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
                     groupValue: character,
                     onChanged: (GenderCharacter value) {
                       setState(() {
+                        this.checkClick = true;
                         character = value;
                         this.widget.list = [
                           this.widget.fullname,
@@ -379,6 +383,7 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
                       builder: (context) => ConfirmCreateCustomer(
                             listCustomer: listCustomer,
                             check: checkProfile,
+                            isCustomer: this.widget.isCustomer,
                             account_id: this.widget.account_id,
                             isUpdate: this.widget.isUpdate,
                             typeOfUpdate: this.widget.typeOfUpdate,

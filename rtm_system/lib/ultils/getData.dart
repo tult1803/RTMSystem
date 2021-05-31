@@ -40,11 +40,11 @@ Future post_put_ApiProfile(String phone, String password, String fullname, int g
   return status;
 }
 
-Future<void> doCreateCustomer(BuildContext context,String phone, String password, String fullname, int gender, String cmnd, String address, String birthday, bool check, bool isUpdate, int typeOfUpdate, int account_id) async{
+Future<void> doCreateCustomer(BuildContext context,String phone, String password, String fullname, int gender, String cmnd, String address, String birthday, bool isCustomer, bool isUpdate, int typeOfUpdate, int account_id) async{
   int status = await post_put_ApiProfile(phone, password, fullname, gender, cmnd, address, birthday, isUpdate, typeOfUpdate, account_id);
   if(status == 200){
-    if(check){
-      showStatusAlertDialog(context, "Đã cập nhật.", HomeCustomerPage(index: 4,), true);
+    if(isCustomer){
+      showStatusAlertDialog(context, "Đã cập nhật.", HomeCustomerPage(index: 3,), true);
     }else {
       showStatusAlertDialog(context, "Đã cập nhật.", HomeAdminPage(index: 4,), true);
     }
