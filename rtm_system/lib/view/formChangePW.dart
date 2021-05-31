@@ -26,7 +26,7 @@ class _formUpdatePasswordPageState extends State<formUpdatePasswordPage> {
       child: Column(
         children: [
           Container(
-            margin: EdgeInsets.only(left: 10, right: 5),
+            margin: EdgeInsets.only(top: 10, left: 10, right: 5),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -198,6 +198,7 @@ class _formUpdatePasswordPageState extends State<formUpdatePasswordPage> {
           ),
         ));
   }
+
   bool _validateData() {
     bool check = false;
     if (this.password == null || this.password == "") {
@@ -236,31 +237,43 @@ class _formUpdatePasswordPageState extends State<formUpdatePasswordPage> {
 
   Widget btnShowOrHide() {
     return checkShow
-        ? TextButton(
-            child: Text(
-              "Hiển thị ",
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                color: Colors.black54,
+        ? GestureDetector(
+            child: Container(
+              margin: EdgeInsets.only(right: 0),
+              width: 80,
+              child: Center(
+                child: Text(
+                  "Hiển thị",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black54,
+                  ),
+                ),
               ),
             ),
-            onPressed: () {
+            onTap: () {
               setState(() {
                 checkShow = false;
               });
             },
           )
-        : TextButton(
-            child: Text(
-              "Ẩn",
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                color: Colors.black54,
+        : GestureDetector(
+            child: Container(
+              margin: EdgeInsets.only(right: 0),
+              width: 80,
+              child: Center(
+                child: Text(
+                  "Ẩn",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black54,
+                  ),
+                ),
               ),
             ),
-            onPressed: () {
+            onTap: () {
               setState(() {
                 checkShow = true;
               });

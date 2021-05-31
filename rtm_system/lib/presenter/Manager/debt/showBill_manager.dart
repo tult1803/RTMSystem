@@ -144,6 +144,7 @@ class _showAllBillState extends State<showAllBill> {
   }
 
   Future pickedDate() async {
+    final ThemeData theme = Theme.of(context);
     final initialDateRange = DateTimeRange(
         start: fromDate,
         end: toDate);
@@ -156,6 +157,10 @@ class _showAllBillState extends State<showAllBill> {
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
+            //Dùng cho nút "X" của lịch
+              appBarTheme: AppBarTheme(
+                iconTheme: theme.primaryIconTheme.copyWith(color: Colors.white),
+              ),
             colorScheme: ColorScheme.light(
               primary: welcome_color,)),
           child: child,

@@ -2,11 +2,11 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:rtm_system/ultils/alertDialog.dart';
-import 'package:rtm_system/view/customer/Profile/update_password.dart';
 import 'package:rtm_system/view/customer/Profile/update_profile.dart';
 import 'package:rtm_system/view/customer/home_customer_page.dart';
 import 'package:rtm_system/view/detail_notice.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
+import 'package:rtm_system/view/update_password.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../view/login_page.dart';
 import 'component.dart';
@@ -543,7 +543,7 @@ Widget btnSubmitOrCancel(
                     context, "Tạo thất bại. Xin thử lại !!!", null, false);
             }
           } else {
-            if (check) {
+            if (isCustomer) {
               showAlertDialog(
                   context,
                   messageShow,

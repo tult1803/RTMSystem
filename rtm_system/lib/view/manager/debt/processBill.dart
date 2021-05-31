@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 
 class processBill extends StatefulWidget {
@@ -13,6 +14,7 @@ class _processBillState extends State<processBill> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: leadingAppbar(context),
         centerTitle: true,
         backgroundColor: welcome_color,
         title: Text(

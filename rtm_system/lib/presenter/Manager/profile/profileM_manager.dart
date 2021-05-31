@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/view/manager/profile/allCustomer_manager.dart';
-import 'package:rtm_system/view/manager/profile/support_page.dart';
 import 'package:rtm_system/view/manager/profile/updateProfile.dart';
+import 'package:rtm_system/view/update_password.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class profilePage extends StatefulWidget {
@@ -15,10 +15,13 @@ class profilePage extends StatefulWidget {
 
 class _profilePageState extends State<profilePage> {
   String fullname = " ";
-
+  String password;
+  int accountId;
   Future _getFullName() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
+       password = prefs.get("password");
+       accountId = prefs.get("accountId");
       if (prefs.getString("fullname") != null) {
         fullname = prefs.getString("fullname");
       }
@@ -43,7 +46,7 @@ class _profilePageState extends State<profilePage> {
         children: [
           headerProfile(),
           buttonProfile(context,15, 15, 20, 0, "Quản lý khách hàng", AllCustomer()),
-          buttonProfile(context,15, 15, 20, 0, "Trung tâm hỗ trợ", SupportPage()),
+          buttonProfile(context,15, 15, 20, 0, "Thay đổi mật khẩu", UpdatePasswordPage(account_id: accountId, password: password,)),
           btnLogout(context),
         ],
       ),

@@ -48,11 +48,12 @@ class _ConfirmCreateCustomerState extends State<ConfirmCreateCustomer> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          leading: leadingAppbar(context),
           elevation: 0,
           centerTitle: true,
           title: Text(
             "Phiếu xác nhận",
-            style: TextStyle(fontSize: 20),
+            style: TextStyle(fontSize: 20, color: Colors.white),
           ),
           backgroundColor: welcome_color,
         ),

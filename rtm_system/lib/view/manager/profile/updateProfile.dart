@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -29,6 +30,7 @@ class _updateProfileState extends State<updateProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: leadingAppbar(context),
         centerTitle: true,
         backgroundColor: welcome_color,
         title: Text(
