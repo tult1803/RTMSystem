@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
@@ -26,13 +27,13 @@ class _CreateRequestInvoiceState extends State<CreateRequestInvoice> {
   bool checkClick = false;
 
   //field to sales
-  String quantity, degree;
-  DateTime dateSale;
+  String quantity = '', degree = '';
+  DateTime dateSale = DateTime.now();
   String status = 'Dang cho';
   String personSale = '', phoneSale = '';
 
   String errQuantity, errDegree;
-  String errDateSale, errNameProduct;
+  String errNameProduct;
 
   Future _getProduct() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -41,7 +42,6 @@ class _CreateRequestInvoiceState extends State<CreateRequestInvoice> {
       personSale = prefs.getString("fullname");
       phoneSale = prefs.getString("phone");
     });
-    print(prefs.getString("fullname"));
     List<dynamic> dataList = [];
     GetProduct getProduct = GetProduct();
     dataListProduct.clear();
@@ -134,8 +134,19 @@ class _CreateRequestInvoiceState extends State<CreateRequestInvoice> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    btnSubmitOrCancel(context, 120, 40, Colors.redAccent, "Hủy", "",
-                        "", null, false, 1, true, 'Bạn muốn huỷ tạo yêu cầu bán hàng?'),
+                    btnSubmitOrCancel(
+                        context,
+                        120,
+                        40,
+                        Colors.redAccent,
+                        "Hủy",
+                        "",
+                        "",
+                        null,
+                        false,
+                        1,
+                        true,
+                        'Bạn muốn huỷ tạo yêu cầu bán hàng?'),
                     SizedBox(width: 20),
                     btnSubmitValidate(context, 140, 40, Color(0xFF0BB791),
                         "Tạo", "yeu cau ban hang", 1),
@@ -164,29 +175,58 @@ class _CreateRequestInvoiceState extends State<CreateRequestInvoice> {
 
   bool _validateData() {
     bool check = false;
-    if (!checkFormatNumber.hasMatch(this.quantity)) {
-      this.errQuantity = "Chỉ nhập số(ví dụ: 12,3 hoặc 12.3)";
+    if (this.quantity == null || this.quantity == "") {
+      setState(() {
+        this.errQuantity = null;
+      });
     } else {
-      this.errQuantity = null;
+      if (!checkFormatNumber.hasMatch(this.quantity)) {
+        setState(() {
+          this.errQuantity = "Chỉ nhập số(ví dụ: 12,3 hoặc 12.3)";
+        });
+      } else {
+        setState(() {
+          this.errQuantity = null;
+        });
+      }
     }
-    if (!checkFormatNumber.hasMatch(this.degree)) {
-      this.errDegree = "Chỉ nhập số(ví dụ: 12,3 hoặc 12.3)";
+    if (this.degree == null || this.degree == "") {
+      setState(() {
+        this.errDegree = null;
+      });
     } else {
-      this.errDegree = null;
+      if (!checkFormatNumber.hasMatch(this.degree)) {
+        setState(() {
+          this.errDegree = "Chỉ nhập số(ví dụ: 12,3 hoặc 12.3)";
+        });
+      } else {
+        setState(() {
+          this.errDegree = null;
+        });
+      }
     }
-    if (this.dateSale.isBefore(dateNow)) {
-      this.errDateSale = 'Thời gian trong quá khứ không hợp lệ.';
-    } else {
-      this.errDateSale = null;
-    }
+    // co check date thi dung cai nay
+    // if (this.dateSale.isBefore(dateNow)) {
+    //   setState(() {
+    //     this.errDateSale = 'Thời gian trong quá khứ không hợp lệ.';
+    //   });
+    // } else {
+    //   setState(() {
+    //     this.errDateSale = null;
+    //   });
+    // }
     if (this._mySelection == null || this._mySelection == '') {
-      this.errNameProduct = 'Sản phẩm không được để trống.';
+      setState(() {
+        this.errNameProduct = 'Sản phẩm không được để trống.';
+      });
     } else {
-      this.errNameProduct = null;
+      setState(() {
+        this.errNameProduct = null;
+      });
     }
     if (this.errQuantity == null &&
         this.errDegree == null &&
-        this.errDateSale == null) {
+        this.errNameProduct == null) {
       check = true;
     }
 
@@ -221,11 +261,12 @@ class _CreateRequestInvoiceState extends State<CreateRequestInvoice> {
           onPressed: () async {
             if (action) {
               showAlertDialog(
-                  context,
-                  "Bạn muốn hủy tạo ${contentFeature} ?",
-                  HomeCustomerPage(
-                    index: indexOfBottomBar,
-                  ),);
+                context,
+                "Bạn muốn hủy tạo ${contentFeature} ?",
+                HomeCustomerPage(
+                  index: indexOfBottomBar,
+                ),
+              );
             }
           },
           child: Center(
@@ -256,12 +297,12 @@ class _CreateRequestInvoiceState extends State<CreateRequestInvoice> {
       child: TextButton(
           onPressed: () {
             setState(() {
-              bool check = _validateData();
               if (checkClick) {
+                bool check = _validateData();
                 if (check) {
                   //call api show notice
                   int status = 200;
-                  // await postAPINotice(mainTittle, content);
+                  // await postAPIInvoice();
                   if (status == 200) {
                     showStatusAlertDialog(
                         context,
@@ -278,6 +319,9 @@ class _CreateRequestInvoiceState extends State<CreateRequestInvoice> {
                         false);
                   }
                 }
+              } else {
+                showStatusAlertDialog(
+                    context, "Thông tin chưa thay đổi !!!", null, false);
               }
             });
           },
@@ -307,11 +351,13 @@ class _CreateRequestInvoiceState extends State<CreateRequestInvoice> {
                 onConfirm: (date) {
                   setState(() {
                     this.dateSale = date;
+                    this.checkClick = true;
                   });
                 },
                 currentTime: dateNow,
-                maxTime: DateTime(DateTime.now().year, 12, 31),
-                minTime: DateTime(DateTime.now().year - 111),
+                maxTime: DateTime(DateTime.now().year + 100, 12, 31),
+                minTime: DateTime(DateTime.now().year, DateTime.now().month,
+                    DateTime.now().day),
                 locale: LocaleType.vi,
               );
             },
@@ -344,7 +390,7 @@ class _CreateRequestInvoiceState extends State<CreateRequestInvoice> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  '${f.format(dateNow)}',
+                                  '${f.format(dateSale)}',
                                   style: TextStyle(fontSize: 16),
                                 ),
                                 Icon(
@@ -354,7 +400,7 @@ class _CreateRequestInvoiceState extends State<CreateRequestInvoice> {
                               ],
                             ))),
                   ],
-                )
+                ),
               ],
             ),
           ),
@@ -409,7 +455,6 @@ class _CreateRequestInvoiceState extends State<CreateRequestInvoice> {
                       setState(() {
                         _mySelection = newValue;
                       });
-                      print(_mySelection);
                       if (_mySelection == '3') {
                         setState(() {
                           checkProduct = false;
@@ -438,16 +483,19 @@ class _CreateRequestInvoiceState extends State<CreateRequestInvoice> {
           ],
         ),
         errNameProduct != null && errNameProduct != ''
-            ? Row(
-                children: <Widget>[
-                  Text(
-                    errNameProduct,
-                    style: TextStyle(
-                      color: Colors.black45,
-                      fontSize: 12,
+            ? Container(
+                margin: EdgeInsets.only(left: 12, bottom: 5),
+                child: Row(
+                  children: <Widget>[
+                    Text(
+                      errNameProduct,
+                      style: TextStyle(
+                        color: Colors.redAccent,
+                        fontSize: 12,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               )
             : Container(),
         // _underRow()
@@ -469,7 +517,7 @@ class _CreateRequestInvoiceState extends State<CreateRequestInvoice> {
       children: [
         Row(
           children: [
-            Text(
+            AutoSizeText(
               title,
               style: TextStyle(
                 color: Colors.black45,

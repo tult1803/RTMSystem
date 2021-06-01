@@ -63,9 +63,9 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
       messageCancel = 'Bạn muốn huỷ cập nhật thông tin?';
     } else
       messageCancel = 'Bạn muốn huỷ tạo khách hàng?';
-    if(widget.check){
+    if (widget.check) {
       indexOfBottomBar = 3;
-    }else{
+    } else {
       indexOfBottomBar = 4;
     }
   }
@@ -77,14 +77,8 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
         children: [
           Column(
             children: [
-              _txtfield(
-                  getDataTextField(this.widget.fullname),
-                  false,
-                  "Nhập họ tên",
-                  "Họ và tên",
-                  errFulname,
-                  1,
-                  TextInputType.text),
+              _txtFormField(this.widget.fullname, false, "Nhập họ tên",
+                  "Họ và tên", errFulname, 1, TextInputType.text),
               _txtfield(
                   getDataTextField(this.widget.phone),
                   false,
@@ -106,8 +100,19 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              btnSubmitOrCancel(context, 120, 40, Colors.redAccent, "Hủy", "",
-                  "", null, false, indexOfBottomBar, this.widget.isCustomer, messageCancel),
+              btnSubmitOrCancel(
+                  context,
+                  120,
+                  40,
+                  Colors.redAccent,
+                  "Hủy",
+                  "",
+                  "",
+                  null,
+                  false,
+                  indexOfBottomBar,
+                  this.widget.isCustomer,
+                  messageCancel),
               SizedBox(width: 20),
               btnSubmitValidate(context, 120, 40, welcome_color, "Kiểm tra",
                   this.widget.list, this.widget.check),
@@ -218,6 +223,79 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
       child: TextField(
 
         controller: _controller,
+        obscureText: obscureText,
+        onChanged: (value) {
+          if (tittle == "Họ và tên") {
+            this.widget.fullname = value.trim();
+          } else if (tittle == "Số điện thoại") {
+            this.widget.phone = value.trim();
+          } else if (tittle == "CMND/CCCD") {
+            this.widget.cmnd = value.trim();
+          } else if (tittle == "Địa chỉ") {
+            this.widget.address = value.trim();
+          } else if (tittle == "Mật khẩu") {
+            this.widget.password = value.trim();
+          }
+          setState(() {
+            checkClick = true;
+            this.widget.list = [
+              this.widget.fullname,
+              character.index,
+              this.widget.phone,
+              this.widget.cmnd,
+              this.widget.address,
+              this.widget.password,
+              this.widget.birthday
+            ];
+          });
+        },
+        maxLines: maxLines,
+        keyboardType: txtType,
+        style: TextStyle(fontSize: 15),
+        cursorColor: welcome_color,
+        decoration: InputDecoration(
+          border: UnderlineInputBorder(),
+          hintText: '$hintText',
+
+          //Sau khi click vào "Nhập tiêu đề" thì màu viền sẽ đổi
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: welcome_color),
+          ),
+
+          //Hiển thị text góc phải
+          prefixIcon: Container(
+              margin: EdgeInsets.only(top: 15, left: 5),
+              width: 100,
+              child: AutoSizeText(
+                "${tittle}",
+                style: TextStyle(fontWeight: FontWeight.w500),
+              )),
+
+          //Hiển thị Icon góc phải
+          suffixIcon: Icon(
+            Icons.create,
+            color: Colors.black54,
+          ),
+
+          //Hiển thị lỗi
+          focusedErrorBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.redAccent),
+          ),
+          //Nhận thông báo lỗi
+          errorText: error,
+
+          contentPadding: EdgeInsets.all(15),
+        ),
+      ),
+    );
+  }
+
+  Widget _txtFormField(String value, bool obscureText, String hintText,
+      String tittle, String error, int maxLines, TextInputType txtType) {
+    return Container(
+      margin: EdgeInsets.only(top: 10, left: 10, right: 10),
+      child: TextFormField(
+        initialValue: value,
         obscureText: obscureText,
         onChanged: (value) {
           if (tittle == "Họ và tên") {
@@ -468,21 +546,21 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
         errAddress = null;
       }
     }
-   if(widget.isUpdate){
-     errPass = null;
-   }else{
-     if (this.widget.password == null || this.widget.password == "") {
-       errPass = "Mật khẩu trống";
-       print("Mật khẩu trống");
-     } else {
-       if (!checkFormatPassword.hasMatch(this.widget.password)) {
-         errPass = "Mật khẩu ít nhất 6 kí tự (chữ và số)";
-         print("Mật khẩu ít nhất 6 kí tự (chữ và số)");
-       } else {
-         errPass = null;
-       }
-     }
-   }
+    if (widget.isUpdate) {
+      errPass = null;
+    } else {
+      if (this.widget.password == null || this.widget.password == "") {
+        errPass = "Mật khẩu trống";
+        print("Mật khẩu trống");
+      } else {
+        if (!checkFormatPassword.hasMatch(this.widget.password)) {
+          errPass = "Mật khẩu ít nhất 6 kí tự (chữ và số)";
+          print("Mật khẩu ít nhất 6 kí tự (chữ và số)");
+        } else {
+          errPass = null;
+        }
+      }
+    }
     if (errFulname == null &&
         errPhone == null &&
         errPass == null &&
@@ -505,14 +583,8 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
 
   Widget _checkAddress() {
     if (this.widget.check) {
-      return _txtfield(
-          getDataTextField(this.widget.address),
-          false,
-          "Nhập địa chỉ",
-          "Địa chỉ",
-          errAddress,
-          1,
-          TextInputType.streetAddress);
+      return _txtFormField(this.widget.address, false, "Nhập địa chỉ",
+          "Địa chỉ", errAddress, 1, TextInputType.streetAddress);
     } else
       return Container();
   }
