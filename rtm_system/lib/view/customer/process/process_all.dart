@@ -3,6 +3,8 @@ import 'package:rtm_system/presenter/Customer/show_Notice.dart';
 import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/view/customer/advance/detail_advance.dart';
 import 'package:rtm_system/view/customer/invoice/detail_invoice.dart';
+import 'package:rtm_system/view/customer/process/process_advance.dart';
+import 'package:rtm_system/view/customer/process/process_invoice.dart';
 
 class ProcessAllPage extends StatefulWidget {
   const ProcessAllPage({Key key, this.indexPage}) : super(key: key);
@@ -63,7 +65,7 @@ class _ProcessAllPageState extends State<ProcessAllPage> {
                 topRight: Radius.circular(15.0),
               ),
             ),
-            child: Text('Thong bao invoice'),
+            child: new ProcessInvoicePage(),
           ),
           Container(
             margin: EdgeInsets.fromLTRB(0, 24, 0, 0),
@@ -74,7 +76,7 @@ class _ProcessAllPageState extends State<ProcessAllPage> {
                 topRight: Radius.circular(15.0),
               ),
             ),
-            child: Text('Thong bao advance'),
+            child: new ProcessAdvancePage(),
           ),
         ],
       ),

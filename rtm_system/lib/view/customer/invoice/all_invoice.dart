@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:rtm_system/model/getAPI_product.dart';
+import 'package:rtm_system/model/model_product.dart';
+import 'package:rtm_system/model/profile_customer/getAPI_customer_phone.dart';
+import 'package:rtm_system/model/profile_customer/model_profile_customer.dart';
+import 'package:rtm_system/presenter/Customer/show_product_in_invoice.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/view/customer/invoice/create_request_invoice.dart';
 import 'package:rtm_system/view/customer/invoice/detail_invoice.dart';
-import 'package:rtm_system/view/customer/process/process_all.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class InvoicePage extends StatefulWidget {
   const InvoicePage({Key key}) : super(key: key);
@@ -13,24 +17,10 @@ class InvoicePage extends StatefulWidget {
 }
 
 class _InvoicePageState extends State<InvoicePage> {
-  var currentDate = new DateTime.now();
-  var formatter = new DateFormat('dd-MM-yyyy');
-
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime pickedDate = await showDatePicker(
-        context: context,
-        initialDate: currentDate,
-        firstDate: DateTime(2015),
-        lastDate: DateTime(2050));
-    if (pickedDate != null && pickedDate != currentDate)
-      setState(() {
-        currentDate = pickedDate;
-      });
-  }
+  int index = 0;
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
     return Scaffold(
         backgroundColor: Color(0xffEEEEEE),
         appBar: AppBar(
@@ -47,194 +37,28 @@ class _InvoicePageState extends State<InvoicePage> {
               ),
               child: Column(
                 children: [
-                  _showProcessDate(),
                   SizedBox(
                     height: 12,
                   ),
-                  _cardInvoice(
-                      'Mủ nước', '20/04/2021', '10,000,000', 'chưa trả'),
                   _showBottomButton(),
+                  SizedBox(
+                    height: 12,
+                  ),
+                  new showProductInInvoice(),
                 ],
               )),
         ));
   }
 
-  Widget _cardInvoice(
-      String product, String date, String price, String status) {
-    return FlatButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => DetailInvoicePage()),
-          );
-        },
-        child: Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          elevation: 10,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ListTile(
-                title: Text(
-                  '${product}',
-                  style: TextStyle(
-                    fontSize: 16,
-                  ),
-                ),
-                subtitle: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          '${price} VND',
-                          style: TextStyle(
-                            fontSize: 14,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          '${date}',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Color(0xFF0BB791),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                trailing: Text('${status}'),
-              ),
-            ],
-          ),
-        ));
-  }
 
-  Widget _showProcessDate() {
-    int index = 0;
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-              width: 150,
-              child: RaisedButton(
-                color: Color(0xFFF8D375),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ProcessAllPage(indexPage: index)),
-                  );
-                },
-                child: Row(
-                  children: [
-                    Column(
-                      children: [
-                        Icon(Icons.access_time_outlined),
-                      ],
-                    ),
-                    Column(
-                      children: [Text('  ')],
-                    ),
-                    Column(
-                      children: [
-                        Text(
-                          'Chờ xử lý',
-                          style: TextStyle(),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                elevation: 10,
-              ),
-            ),
-            Text('      '),
-            SizedBox(
-              width: 150,
-              child: RaisedButton(
-                onPressed: () => _selectDate(context),
-                child: Row(
-                  children: [
-                    Column(
-                      children: [
-                        Icon(Icons.calendar_today),
-                      ],
-                    ),
-                    Column(
-                      children: [Text('  ')],
-                    ),
-                    Column(
-                      children: [
-                        Text(formatter.format(currentDate)),
-                      ],
-                    ),
-                  ],
-                ),
-                color: Color(0xffEEEEEE),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                elevation: 10,
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
 
   Widget _showBottomButton() {
-    return Column(
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-              width: 150,
-              child: RaisedButton(
-                color: Color(0xffEEEEEE),
-                onPressed: () {},
-                child: Text('Trả nợ'),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                elevation: 10,
-              ),
-            ),
-            Text('      '),
-            SizedBox(
-              width: 150,
-              child: RaisedButton(
-                color: Color(0xFF0BB791),
-                onPressed: () {},
-                child: Text(
-                  'Lấy tiền',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                  ),
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                elevation: 10,
-              ),
-            ),
-          ],
-        ),
+        btnWaitingProcess(context, index),
         SizedBox(
-          width: 320,
+          width: 200,
           child: RaisedButton(
               color: Color(0xFF0BB791),
               onPressed: () {
@@ -256,7 +80,6 @@ class _InvoicePageState extends State<InvoicePage> {
               ),
               elevation: 1),
         ),
-        btnLogout(context)
       ],
     );
   }

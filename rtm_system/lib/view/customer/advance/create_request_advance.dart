@@ -22,6 +22,7 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
   final f = new DateFormat('dd/MM/yyyy');
   String money;
   DateTime dateNow = DateTime.now();
+  DateTime dateSale = DateTime.now();
   String status = 'Dang cho';
   @override
   void initState() {
@@ -57,7 +58,7 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
                     SizedBox(
                       height: 20,
                     ),
-                    btnBirthday(context),
+                    btnDateSale(context),
                   ],
                 ),
                 SizedBox(
@@ -104,7 +105,7 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
                 if (_formKey.currentState.validate()) {
                   //call api post
                   int status = 200;
-                  // await postAPINotice(mainTittle, content);
+                  // await postAPIAdvance(money, dateSale);
                   if (status == 200) {
                     Navigator.push(
                       context,
@@ -193,7 +194,7 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
     );
   }
 
-  Widget btnBirthday(context) {
+  Widget btnDateSale(context) {
     var size = MediaQuery.of(context).size;
     return Container(
       color: Colors.white,
@@ -205,11 +206,14 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
                 context,
                 showTitleActions: true,
                 onConfirm: (date) {
-                  setState(() {});
+                  setState(() {
+                    dateSale = date;
+                  });
                 },
                 currentTime: dateNow,
-                maxTime: DateTime(DateTime.now().year, 12, 31),
-                minTime: DateTime(DateTime.now().year - 111),
+                maxTime: DateTime(DateTime.now().year + 100, 12, 31),
+                minTime: DateTime(DateTime.now().year, DateTime.now().month,
+                    DateTime.now().day),
                 locale: LocaleType.vi,
               );
             },
@@ -219,7 +223,7 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
                   width: 100,
                   margin: EdgeInsets.only(left: 15),
                   child: Text(
-                    "Ngày sinh",
+                    "Ngày bán",
                     style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
                   ),
                 ),

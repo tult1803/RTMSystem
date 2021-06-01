@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:rtm_system/ultils/alertDialog.dart';
 import 'package:rtm_system/view/customer/Profile/update_profile.dart';
 import 'package:rtm_system/view/customer/home_customer_page.dart';
+import 'package:rtm_system/view/customer/process/process_all.dart';
 import 'package:rtm_system/view/detail_notice.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
 import 'package:rtm_system/view/update_password.dart';
@@ -641,5 +642,44 @@ Widget containerDetail(BuildContext context, Widget widget) {
       borderRadius: BorderRadius.circular(10),
     ),
     child: widget,
+  );
+}
+Widget btnWaitingProcess(context, int index){
+  return  SizedBox(
+    width: 130,
+    child: RaisedButton(
+      color: Color(0xFFF8D375),
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => ProcessAllPage(indexPage: index)),
+        );
+      },
+      child: Row(
+        children: [
+          Column(
+            children: [
+              Icon(Icons.access_time_outlined),
+            ],
+          ),
+          Column(
+            children: [Text('  ')],
+          ),
+          Column(
+            children: [
+              Text(
+                'Chờ xử lý',
+                style: TextStyle(),
+              ),
+            ],
+          ),
+        ],
+      ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      elevation: 10,
+    ),
   );
 }

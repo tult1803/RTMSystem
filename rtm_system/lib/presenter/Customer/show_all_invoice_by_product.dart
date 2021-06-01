@@ -1,22 +1,30 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
-import 'package:rtm_system/model/getAPI_product.dart';
-import 'package:rtm_system/model/model_product.dart';
+import 'package:intl/intl.dart';
+import 'package:rtm_system/model/getAPI_invoice.dart';
+import 'package:rtm_system/model/model_invoice.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/manager/formForDetail_page.dart';
-import 'package:rtm_system/view/manager/product/detailProduct.dart';
+import 'package:rtm_system/view/manager/invoice/createInvoice.dart';
+import 'package:rtm_system/view/manager/invoice/processInvoice.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class showAllProduct extends StatefulWidget {
-  const showAllProduct({Key key}) : super(key: key);
+class showInvoiceByProduct extends StatefulWidget {
+  const showInvoiceByProduct({Key key}) : super(key: key);
 
   @override
-  _showAllProductState createState() => _showAllProductState();
+  _showInvoiceByProductState createState() => _showInvoiceByProductState();
 }
 
-class _showAllProductState extends State<showAllProduct> {
+DateTime fromDate;
+DateTime toDate;
+var fDate = new DateFormat('dd-MM-yyyy');
+
+class _showInvoiceByProductState extends State<showInvoiceByProduct> {
   String token;
-  List<DataProduct> dataListProduct = [];
+  List<DataInvoice> dataListInvoice = [];
 
   Future _getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -25,9 +33,9 @@ class _showAllProductState extends State<showAllProduct> {
     });
   }
 
-  Future _getProduct() async {
+  Future _getInvoice() async {
     List<dynamic> dataList = [];
-    GetProduct getProduct = GetProduct();
+    GetInvoice getInvoice = GetInvoice();
     //Nếu dùng hàm này thì FutureBuilder sẽ chạy vòng lập vô hạn
     //Phải gọi _getToken trước khi gọi hàm _getProduct
     // await _getToken();
@@ -35,20 +43,20 @@ class _showAllProductState extends State<showAllProduct> {
 
     //Khi click nhiều lần vào button "Sản phẩm" thì sẽ có hiện tượng dữ liệu bị ghi đè
     //Clear là để xoá dữ liệu cũ, ghi lại dữ liệu mới
-    dataListProduct.clear();
+    dataListInvoice.clear();
 
     //Nếu ko có If khi FutureBuilder gọi hàm _getProduct lần đầu thì Token chưa trả về nên sẽ bằng null
     //FutureBuilder sẽ gọi đến khi nào có giá trị trả về
     //Ở lần gọi thứ 2 thì token mới có giá trị
     if (token.isNotEmpty) {
-      dataList = await getProduct.getProduct(token, 0);
+      dataList = await getInvoice.createInvoice(token, 0, fromDate, toDate);
       //Parse dữ liệu
       dataList.forEach((element) {
         Map<dynamic, dynamic> data = element;
-        dataListProduct.add(DataProduct.fromJson(data));
+        dataListInvoice.add(DataInvoice.fromJson(data));
       });
 
-      return dataListProduct;
+      return dataListInvoice;
     }
   }
 
@@ -56,6 +64,8 @@ class _showAllProductState extends State<showAllProduct> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    toDate = DateTime.now();
+    fromDate = DateTime.now().subtract(Duration(days: 2));
     _getToken();
   }
 
@@ -63,11 +73,11 @@ class _showAllProductState extends State<showAllProduct> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Container(
-      margin: EdgeInsets.only(top: 10, left: 20, right: 20),
+      margin: EdgeInsets.only(top: 0, left: 20, right: 20),
       height: size.height,
       width: size.width,
       child: new FutureBuilder(
-        future: _getProduct(),
+        future: _getInvoice(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
             return ListView.builder(
@@ -75,28 +85,29 @@ class _showAllProductState extends State<showAllProduct> {
               itemBuilder: (context, index) {
                 return card(
                     context,
-                    snapshot.data[index].name,
-                    "Loại",
-                    "${snapshot.data[index].type}",
-                    snapshot.data[index].price,
-                    snapshot.data[index].date_time,
+                    "${snapshot.data[index].customer_name}",
+                    "Trạng thái",
+                    "${snapshot.data[index].status_id}",
+                    "${snapshot.data[index].total}",
+                    snapshot.data[index].create_time,
                     Colors.black54,
                     FormForDetailPage(
-                      tittle: "Chi tiết sản phẩm",
-                        bodyPage: DetailProduct(
-                      id: snapshot.data[index].id,
-                      name: snapshot.data[index].name,
-                      description: snapshot.data[index].description,
-                      type: snapshot.data[index].type,
-                      date_time: snapshot.data[index].date_time,
-                      price: snapshot.data[index].price,
-                    )));
+                        tittle: "Chi tiết hóa đơn", bodyPage: null));
               },
             );
+          } else {
+            if(GetInvoice.statusInvoice == 404){
+              return Container(
+                  child: Center(child: Text("Không có dữ liệu. Vui lòng chọn ngày khác",)));
+            }else{
+              return Container(
+                  height: size.height * 0.7,
+                  child: Center(
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(welcome_color),
+                      )));
+            }
           }
-          return Container(
-              height: size.height * 0.7,
-              child: Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(welcome_color),)));
         },
       ),
     );
