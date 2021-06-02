@@ -49,6 +49,7 @@ class _showAllInvoiceState extends State<showAllInvoice> {
     //Ở lần gọi thứ 2 thì token mới có giá trị
     if (token.isNotEmpty) {
       dataList = await getInvoice.createInvoice(token, 0, fromDate, toDate);
+      print('he');
       //Parse dữ liệu
       // dataList.forEach((element) {
       //   Map<dynamic, dynamic> data = element;
@@ -61,6 +62,7 @@ class _showAllInvoiceState extends State<showAllInvoice> {
       //   }
       // });
       dataList.forEach((element) {
+        print('1');
         print(element);
 
       });

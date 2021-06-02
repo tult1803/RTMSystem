@@ -39,3 +39,16 @@ class InvoiceList {
   );
 
 }
+
+
+class Invoice {
+  final List invoices;
+  final int total;
+
+  Invoice({this.invoices, this.total});
+
+  factory Invoice.fromJson(Map<String, dynamic> json) => Invoice(
+    invoices: json["invoices"],
+    total: json["total"],
+  );
+}

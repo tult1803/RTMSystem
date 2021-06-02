@@ -23,10 +23,8 @@ class GetInvoice{
     statusInvoice = response.statusCode;
 
     if (response.statusCode == 200) {
-      Map<String, dynamic> map;
-        map = jsonDecode(response.body);
-      List list = map["invoices"];
-      return list;
+
+      return Invoice.fromJson(jsonDecode(response.body));
     } else {
       // throw an exception.
       throw Exception('Failed to load data');
