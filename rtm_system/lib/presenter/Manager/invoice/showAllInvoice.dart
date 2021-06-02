@@ -24,7 +24,7 @@ var fDate = new DateFormat('dd-MM-yyyy');
 
 class _showAllInvoiceState extends State<showAllInvoice> {
   String token;
-  List dataListInvoice = [];
+  List<InvoiceList> dataListInvoice = [];
 
   Future _getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -49,7 +49,6 @@ class _showAllInvoiceState extends State<showAllInvoice> {
     //Ở lần gọi thứ 2 thì token mới có giá trị
     if (token.isNotEmpty) {
       dataList = await getInvoice.createInvoice(token, 0, fromDate, toDate);
-      dataListInvoice = dataList;
       //Parse dữ liệu
       // dataList.forEach((element) {
       //   Map<dynamic, dynamic> data = element;
@@ -61,6 +60,10 @@ class _showAllInvoiceState extends State<showAllInvoice> {
       //     print('loix');
       //   }
       // });
+      dataList.forEach((element) {
+        print(element);
+
+      });
       return dataListInvoice;
     }
   }

@@ -25,7 +25,8 @@ class GetInvoice{
     if (response.statusCode == 200) {
       Map<String, dynamic> map;
         map = jsonDecode(response.body);
-      return map['invoices'];
+      List list = map["invoices"];
+      return list;
     } else {
       // throw an exception.
       throw Exception('Failed to load data');
