@@ -82,13 +82,10 @@ class _AdvancePageState extends State<AdvancePage> {
                   ],
                 ),
                 SizedBox(
-                  height: 5,
-                ),
-                _showBottomButton(),
-                SizedBox(
-                  height: 5,
+                  height: 12,
                 ),
                 showAdvance(),
+                _showBottomButton(),
               ],
             )),
       ),
