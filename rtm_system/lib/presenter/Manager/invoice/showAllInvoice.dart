@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:rtm_system/model/getAPI_invoice.dart';
+import 'package:rtm_system/model/model_AllInvoice.dart';
 import 'package:rtm_system/model/model_invoice.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
@@ -24,7 +25,6 @@ var fDate = new DateFormat('dd-MM-yyyy');
 
 class _showAllInvoiceState extends State<showAllInvoice> {
   String token;
-  List<InvoiceList> dataListInvoice = [];
 
   Future _getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -34,7 +34,7 @@ class _showAllInvoiceState extends State<showAllInvoice> {
   }
 
   Future _getInvoice() async {
-    List<dynamic> dataList = [];
+    Invoice dataList;
     GetInvoice getInvoice = GetInvoice();
     //Nếu dùng hàm này thì FutureBuilder sẽ chạy vòng lập vô hạn
     //Phải gọi _getToken trước khi gọi hàm _getProduct
@@ -43,30 +43,18 @@ class _showAllInvoiceState extends State<showAllInvoice> {
 
     //Khi click nhiều lần vào button "Sản phẩm" thì sẽ có hiện tượng dữ liệu bị ghi đè
     //Clear là để xoá dữ liệu cũ, ghi lại dữ liệu mới
-    dataListInvoice.clear();
+    // dataListInvoice.clear();
     //Nếu ko có If khi FutureBuilder gọi hàm _getProduct lần đầu thì Token chưa trả về nên sẽ bằng null
     //FutureBuilder sẽ gọi đến khi nào có giá trị trả về
     //Ở lần gọi thứ 2 thì token mới có giá trị
     if (token.isNotEmpty) {
-      dataList = await getInvoice.createInvoice(token, 0, fromDate, toDate);
-      print('he');
-      //Parse dữ liệu
-      // dataList.forEach((element) {
-      //   Map<dynamic, dynamic> data = element;
-      //
-      //   try{
-      //     dataListInvoice.add(InvoiceList.fromJson(element));
-      //     print('ko');
-      //   }catch (_){
-      //     print('loix');
-      //   }
+      dataList = await getInvoice.createInvoice(token, 0, 10, 1, fromDate, toDate);
+      // dataList.invoices.forEach((element) {
+      //   Map<String, dynamic> map = element;
+      //   list.map((e) => null)
+      //   print(map["id"]);
       // });
-      dataList.forEach((element) {
-        print('1');
-        print(element);
-
-      });
-      return dataListInvoice;
+      return dataList.invoices;
     }
   }
 
@@ -139,11 +127,11 @@ class _showAllInvoiceState extends State<showAllInvoice> {
                         itemBuilder: (context, index) {
                           return card(
                               context,
-                              "${snapshot.data[index].customer_name}",
+                              "${snapshot.data[index]["customer_name"]}",
                               "Trạng thái",
-                              "${snapshot.data[index].status_id}",
-                              "${snapshot.data[index].total}",
-                              snapshot.data[index].create_time,
+                              "${snapshot.data[index]["status_id"]}",
+                              "${snapshot.data[index]["total"]}",
+                              snapshot.data[index]['create_time'],
                               Colors.black54,
                               FormForDetailPage(
                                   tittle: "Chi tiết hóa đơn", bodyPage: null));
