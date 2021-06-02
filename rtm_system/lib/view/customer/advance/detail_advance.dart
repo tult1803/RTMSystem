@@ -34,6 +34,11 @@ class _DetailAdvancePageState extends State<DetailAdvancePage> {
         header1 = 'Quy khach da tra tien thanh cong';
         header2 = 'Số tiền';
       });
+    } else if (widget.status == 'active') {
+      setState(() {
+        header1 = 'Số tiền quý khách cần trả là';
+        header2 = '';
+      });
     } else {
       setState(() {
         header1 = 'Giao dịch thành công';
@@ -60,6 +65,7 @@ class _DetailAdvancePageState extends State<DetailAdvancePage> {
         child: AppBar(
           backgroundColor: Color(0xFF0BB791),
           elevation: 0,
+          leading: leadingAppbar(context),
         ),
       ),
       body: widgetContentAdvance(context, widget.status, header1, header2),

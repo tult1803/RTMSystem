@@ -38,6 +38,7 @@ class _DetailInvoicePageState extends State<DetailInvoicePage> {
         child: AppBar(
           backgroundColor: Color(0xFF0BB791),
           elevation: 0,
+          leading: leadingAppbar(context),
         ),
       ),
       body: widgetContentInvoice(context, status, header),

@@ -50,3 +50,15 @@ Future<void> doCreateCustomer(BuildContext context,String phone, String password
     }
   }else showStatusAlertDialog(context, "Cập nhật thất bại. Xin thử lại !!!", null, false);
 }
+Future<void> put_API_PayAdvance(BuildContext context,) async{
+  int status = 200;
+  if(status == 200){
+      showStatusAlertDialog(context, "Đã trả tiền thành công.", HomeCustomerPage(index: 0,), true);
+  }else showStatusAlertDialog(context, "Trả tiền thất bại. Xin thử lại !!!", null, false);
+}
+Future<void> put_API_GetMoney(BuildContext context,) async{
+  int status = 200;
+  if(status == 200){
+    showStatusAlertDialog(context, "Quý khách đã nhận tiền.\n Hoàn thành giao dịch.", HomeCustomerPage(index: 1,), true);
+  }else showStatusAlertDialog(context, "Nhận tiền thất bại. Xin thử lại !!!", null, false);
+}

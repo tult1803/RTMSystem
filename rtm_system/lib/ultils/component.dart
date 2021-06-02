@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
+import 'package:rtm_system/ultils/getData.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/customer/home_customer_page.dart';
 import 'package:rtm_system/view/customer/invoice/detail_invoice.dart';
@@ -347,7 +348,10 @@ Widget widgetContentInvoice(context, String status, String header) {
               width: 150,
               child: RaisedButton(
                 color: Color(0xffEEEEEE),
-                onPressed: () {},
+                onPressed: () {
+                  //call api to update status hoan thanh don
+                  put_API_GetMoney(context);
+                },
                 child: Text('Nhận tiền'),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
@@ -394,41 +398,13 @@ Widget widgetContentAdvance(context, String status, String header1, header2) {
                 SizedBox(
                   height: 10,
                 ),
-                txtItemDetail(context, 'Ngày mượn', 'Nguyen Van A'),
-                SizedBox(
-                  height: 10,
-                ),
-                txtItemDetail(context, 'Trạng thái', 'Nguyen Van A'),
-                SizedBox(
-                  height: 10,
-                ),
-                txtItemDetail(context, 'Mã giao dịch', 'Nguyen Van A'),
-                SizedBox(
-                  height: 10,
-                ),
-                if (status == 'Đã huy') txtItemDetail(context, 'Ly do', 'abc'),
-                if (status == 'Đã huy')
-                  SizedBox(
-                    height: 10,
-                  ),
-                if (status == 'Chờ xác nhận')
-                  Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        btnAcceptOrReject(context, 150, Colors.redAccent,
-                            'Từ chối', false, 0),
-                        SizedBox(width: 20),
-                        btnAcceptOrReject(context, 150, Color(0xFF0BB791),
-                            'Chấp nhận', true, 0),
-                      ],
-                    ),
-                  ),
+                txtItemDetail(context, 'Ngày mượn', '20-05-2021'),
+                _showContentInAdvance(context,status),
               ],
             ),
           ),
         ),
-
+        _showBtnInAdvanceDetail(context, status),
         //button "Nhận tiền" show if status is "chưa trả", để hoàn thành đơn giao dịch
         if (status == 'Dang cho')
           Center(
@@ -451,11 +427,81 @@ Widget widgetContentAdvance(context, String status, String header1, header2) {
               ),
             ),
           ),
+
       ],
     ),
   ));
 }
+Widget _showBtnInAdvanceDetail(context, String status){
+  if (status == 'active')
+   return Center(
+      child: SizedBox(
+        width: 150,
+        child: RaisedButton(
+          color: Color(0xffEEEEEE),
+          onPressed: () {
+            put_API_PayAdvance(context);
+          },
+          child: Text('Xac nhan'),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          elevation: 10,
+        ),
+      ),
+    );
+}
+Widget _showContentInAdvance(context, String status){
+  if(status == 'active'){
+    return Column(
+      children: [
+        SizedBox(
+          height: 10,
+        ),
+        txtItemDetail(context, 'Ngày tra', '20-05-2021 now()'),
+        SizedBox(
+          height: 10,
+        ),
+        txtItemDetail(context, 'Tiền nợ còn lại', '1,000,000 VND'),
 
+      ],
+    );
+  }else{
+    return Column(
+      children: [
+        SizedBox(
+          height: 10,
+        ),
+        txtItemDetail(context, 'Trạng thái', 'Nguyen Van A'),
+        SizedBox(
+          height: 10,
+        ),
+        txtItemDetail(context, 'Mã giao dịch', 'Nguyen Van A'),
+        SizedBox(
+          height: 10,
+        ),
+        if (status == 'Đã huy') txtItemDetail(context, 'Ly do', 'abc'),
+        if (status == 'Đã huy')
+          SizedBox(
+            height: 10,
+          ),
+        if (status == 'Chờ xác nhận')
+          Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                btnAcceptOrReject(context, 150, Colors.redAccent,
+                    'Từ chối', false, 0),
+                SizedBox(width: 20),
+                btnAcceptOrReject(context, 150, Color(0xFF0BB791),
+                    'Chấp nhận', true, 0),
+              ],
+            ),
+          ),
+      ],
+    );
+  }
+}
 //Hiện tại đang dùng cho "Phiếu xác nhận" của "Tạo khách hàng" trong profile
 Widget txtConfirm(BuildContext context, String tittle, String content) {
   var size = MediaQuery.of(context).size;
