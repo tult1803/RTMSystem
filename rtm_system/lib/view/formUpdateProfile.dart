@@ -127,11 +127,12 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
   TextEditingController getDataTextField(String txt) {
     final TextEditingController _controller = TextEditingController();
     if (txt != null) {
-    _controller.value = _controller.value.copyWith(
-      text: txt,
-      selection: TextSelection(baseOffset: txt.length, extentOffset: txt.length),
-      composing: TextRange.empty,
-    );
+      _controller.value = _controller.value.copyWith(
+        text: txt,
+        selection:
+            TextSelection(baseOffset: txt.length, extentOffset: txt.length),
+        composing: TextRange.empty,
+      );
     }
     return _controller;
   }
@@ -221,7 +222,6 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
     return Container(
       margin: EdgeInsets.only(top: 10, left: 10, right: 10),
       child: TextField(
-
         controller: _controller,
         obscureText: obscureText,
         onChanged: (value) {
