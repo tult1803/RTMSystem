@@ -24,7 +24,7 @@ var fDate = new DateFormat('dd-MM-yyyy');
 
 class _showAllInvoiceState extends State<showAllInvoice> {
   String token;
-  List<DataInvoice> dataListInvoice = [];
+  List dataListInvoice = [];
 
   Future _getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -44,18 +44,23 @@ class _showAllInvoiceState extends State<showAllInvoice> {
     //Khi click nhiều lần vào button "Sản phẩm" thì sẽ có hiện tượng dữ liệu bị ghi đè
     //Clear là để xoá dữ liệu cũ, ghi lại dữ liệu mới
     dataListInvoice.clear();
-
     //Nếu ko có If khi FutureBuilder gọi hàm _getProduct lần đầu thì Token chưa trả về nên sẽ bằng null
     //FutureBuilder sẽ gọi đến khi nào có giá trị trả về
     //Ở lần gọi thứ 2 thì token mới có giá trị
     if (token.isNotEmpty) {
       dataList = await getInvoice.createInvoice(token, 0, fromDate, toDate);
+      dataListInvoice = dataList;
       //Parse dữ liệu
-      dataList.forEach((element) {
-        Map<dynamic, dynamic> data = element;
-        dataListInvoice.add(DataInvoice.fromJson(data));
-      });
-
+      // dataList.forEach((element) {
+      //   Map<dynamic, dynamic> data = element;
+      //
+      //   try{
+      //     dataListInvoice.add(InvoiceList.fromJson(element));
+      //     print('ko');
+      //   }catch (_){
+      //     print('loix');
+      //   }
+      // });
       return dataListInvoice;
     }
   }
@@ -140,10 +145,10 @@ class _showAllInvoiceState extends State<showAllInvoice> {
                         },
                       );
                     } else {
-                     if(GetInvoice.statusInvoice == 404){
+                      if(GetInvoice.statusInvoice == 404){
                        return Container(
                            child: Center(child: Text("Không có dữ liệu. Vui lòng chọn ngày khác",)));
-                     }else{
+                     }else {
                        return Container(
                            height: size.height * 0.7,
                            child: Center(

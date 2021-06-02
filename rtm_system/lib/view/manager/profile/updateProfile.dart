@@ -7,7 +7,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../formUpdateProfile.dart';
 
 class updateProfile extends StatefulWidget {
-  const updateProfile({Key key}) : super(key: key);
+
+  final String fullname, password;
+  final int account_id;
+
+  updateProfile({this.fullname, this.password, this.account_id});
 
   @override
   _updateProfileState createState() => _updateProfileState();
@@ -16,9 +20,9 @@ enum GenderCharacter { women, men }
 
 class _updateProfileState extends State<updateProfile> {
   DateTime birthday = DateTime.now();
-  String date, password;
-  String fullname,phone;
-  int gender, account_id;
+  String date;
+  String phone;
+  int gender;
   GenderCharacter character;
 @override
   void initState() {
@@ -42,16 +46,16 @@ class _updateProfileState extends State<updateProfile> {
       body: SingleChildScrollView(child: new formUpdateProfile(
         isUpdate: true,
         typeOfUpdate: 1,
-        account_id: account_id,
+        account_id: this.widget.account_id,
         isCustomer: false,
         check: false,
-        fullname: fullname,
+        fullname: this.widget.fullname,
         birthday: birthday,
         phone: phone,
         gender: gender,
         // Tai password mau dang la 1 nen bi bat validate
-        password: password,
-        list: [fullname,gender,phone,"", "", password, birthday],
+        password: this.widget.password,
+        list: [this.widget.fullname,gender,phone,"", "", this.widget.password, birthday],
       ))
     );
   }
@@ -62,12 +66,9 @@ class _updateProfileState extends State<updateProfile> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     setState(() {
-      account_id = prefs.get("accountId");
-      fullname = prefs.getString("fullname");
       gender = prefs.get("gender");
       birthday = DateFormat("yyyy-MM-dd").parse(prefs.get("birthday"));
       phone = prefs.get("phone");
-      password = prefs.get("password");
     });
   }
 }

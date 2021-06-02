@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'package:intl/intl.dart';
+import 'package:rtm_system/model/model_invoice.dart';
 import 'package:rtm_system/ultils/src/url_api.dart';
 import 'package:http/http.dart' as http;
+
 
 class GetInvoice{
   static int statusInvoice;
@@ -17,11 +19,13 @@ class GetInvoice{
 
     );
     print("Status getApi Invoice:${response.statusCode}");
+
     statusInvoice = response.statusCode;
-        if (response.statusCode == 200) {
-      List<dynamic> listInvoice = json.decode(response.body);
-      return listInvoice;
-      // return DataProduct.fromJson(json.decode(response.body));
+
+    if (response.statusCode == 200) {
+      Map<String, dynamic> map;
+        map = jsonDecode(response.body);
+      return map['invoices'];
     } else {
       // throw an exception.
       throw Exception('Failed to load data');
