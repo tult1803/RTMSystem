@@ -1,10 +1,11 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
 import 'package:rtm_system/model/getAPI_invoice.dart';
-import 'package:rtm_system/model/model_AllInvoice.dart';
 import 'package:rtm_system/model/model_invoice.dart';
+import 'package:rtm_system/presenter/infinite_scroll_pagination/common/character_search_input_sliver.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/manager/formForDetail_page.dart';
@@ -24,37 +25,41 @@ DateTime toDate;
 var fDate = new DateFormat('dd-MM-yyyy');
 
 class _showAllInvoiceState extends State<showAllInvoice> {
-  String token;
+  int _pageSize = 1;
+  final PagingController _pagingController =
+  PagingController(firstPageKey: 10);
 
-  Future _getToken() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      token = prefs.getString("access_token");
-    });
-  }
-
-  Future _getInvoice() async {
-    Invoice dataList;
-    GetInvoice getInvoice = GetInvoice();
-    //Nếu dùng hàm này thì FutureBuilder sẽ chạy vòng lập vô hạn
-    //Phải gọi _getToken trước khi gọi hàm _getProduct
-    // await _getToken();
-    // gọi APIProduct và lấy dữ liệu
-
-    //Khi click nhiều lần vào button "Sản phẩm" thì sẽ có hiện tượng dữ liệu bị ghi đè
-    //Clear là để xoá dữ liệu cũ, ghi lại dữ liệu mới
-    // dataListInvoice.clear();
-    //Nếu ko có If khi FutureBuilder gọi hàm _getProduct lần đầu thì Token chưa trả về nên sẽ bằng null
-    //FutureBuilder sẽ gọi đến khi nào có giá trị trả về
-    //Ở lần gọi thứ 2 thì token mới có giá trị
-    if (token.isNotEmpty) {
-      dataList = await getInvoice.createInvoice(token, 0, 10, 1, fromDate, toDate);
-      // dataList.invoices.forEach((element) {
-      //   Map<String, dynamic> map = element;
-      //   list.map((e) => null)
-      //   print(map["id"]);
-      // });
-      return dataList.invoices;
+  String _searchTerm;
+  Invoice invoice;
+  List invoiceList;
+  Future<void> _fetchPage(pageKey) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      GetInvoice getAPIAllInvoice = GetInvoice();
+      invoice = await getAPIAllInvoice.createInvoice(
+        prefs.get("access_token"),
+        0,
+        pageKey,
+        _pageSize,
+        fromDate,
+        toDate,
+        searchTerm: _searchTerm,
+      );
+      invoiceList =  invoice.invoices;
+      // print("${_pagingController}");
+      final isLastPage = invoiceList.length < pageKey;
+      if (isLastPage) {
+        _pagingController.appendLastPage(invoiceList);
+      } else {
+        setState(() {
+          _pageSize += 1;
+        });
+        final nextPageKey = pageKey;
+        _pagingController.appendPage(invoiceList, nextPageKey);
+      }
+    } catch (error) {
+      print(error);
+      _pagingController.error = error;
     }
   }
 
@@ -64,7 +69,26 @@ class _showAllInvoiceState extends State<showAllInvoice> {
     super.initState();
     toDate = DateTime.now();
     fromDate = DateTime.now().subtract(Duration(days: 2));
-    _getToken();
+    _pagingController.addPageRequestListener((pageKey) {
+      _fetchPage(pageKey);
+    });
+
+    _pagingController.addStatusListener((status) {
+      if (status == PagingStatus.subsequentPageError) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text(
+              'Something went wrong while fetching a new page.',
+            ),
+            action: SnackBarAction(
+              label: 'Retry',
+              onPressed: () => _pagingController.retryLastFailedRequest(),
+            ),
+          ),
+        );
+      }
+    });
+
   }
 
   @override
@@ -118,39 +142,20 @@ class _showAllInvoiceState extends State<showAllInvoice> {
                 margin: EdgeInsets.only(top: 0, left: 20, right: 20),
                 height: size.height,
                 width: size.width,
-                child: new FutureBuilder(
-                  future: _getInvoice(),
-                  builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    if (snapshot.hasData) {
-                      return ListView.builder(
-                        itemCount: snapshot.data.length,
-                        itemBuilder: (context, index) {
-                          return card(
-                              context,
-                              "${snapshot.data[index]["customer_name"]}",
-                              "Trạng thái",
-                              "${snapshot.data[index]["status_id"]}",
-                              "${snapshot.data[index]["total"]}",
-                              snapshot.data[index]['create_time'],
-                              Colors.black54,
-                              FormForDetailPage(
-                                  tittle: "Chi tiết hóa đơn", bodyPage: null));
-                        },
-                      );
-                    } else {
-                      if(GetInvoice.statusInvoice == 404){
-                       return Container(
-                           child: Center(child: Text("Không có dữ liệu. Vui lòng chọn ngày khác",)));
-                     }else {
-                       return Container(
-                           height: size.height * 0.7,
-                           child: Center(
-                               child: CircularProgressIndicator(
-                                 valueColor: AlwaysStoppedAnimation<Color>(welcome_color),
-                               )));
-                     }
-                    }
-                  },
+                child: new CustomScrollView(
+                  slivers: <Widget>[
+                    CharacterSearchInputSliver(
+                      onChanged: (searchTerm) => _updateSearchTerm(searchTerm),
+                    ),
+                    PagedSliverList(
+                      pagingController: _pagingController,
+                      builderDelegate: PagedChildBuilderDelegate(
+                          itemBuilder: (context, item, index) {
+                            return card(context, item["customer_name"], "Trạng thái", '${item['status_id']}', "${item['total']}", "${item['create_time']}", Colors.black54, null);
+                          }
+                      ),
+                    ),
+                  ],
                 ),
               ))
             ],
@@ -158,6 +163,17 @@ class _showAllInvoiceState extends State<showAllInvoice> {
         ),
       ),
     );
+  }
+
+  void _updateSearchTerm(String searchTerm) {
+    _searchTerm = searchTerm;
+    _pagingController.refresh();
+  }
+
+  @override
+  void dispose() {
+    _pagingController.dispose();
+    super.dispose();
   }
 
 //Copy nó để tái sử dụng cho các trang khác nếu cần
@@ -200,6 +216,7 @@ class _showAllInvoiceState extends State<showAllInvoice> {
       setState(() {
         fromDate = dateRange.start;
         toDate = dateRange.end;
+        _pagingController.refresh();
       });
     }
   }

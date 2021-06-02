@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rtm_system/presenter/infinite_scroll_pagination/search_snackbar/character_sliver_list.dart';
 import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 
@@ -23,7 +24,7 @@ class _updatePriceProductState extends State<updatePriceProduct> {
                 color: Colors.white, fontWeight: FontWeight.w500, fontSize: 22),
         ),
       ),
-      body: new Container(),
+      body: new CharacterSliverList(),
     );
   }
 }
