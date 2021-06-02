@@ -1,14 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:rtm_system/model/getAPI_product.dart';
-import 'package:rtm_system/model/model_product.dart';
-import 'package:rtm_system/model/profile_customer/getAPI_customer_phone.dart';
-import 'package:rtm_system/model/profile_customer/model_profile_customer.dart';
 import 'package:rtm_system/presenter/Customer/show_product_in_invoice.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/view/customer/invoice/create_request_invoice.dart';
-import 'package:rtm_system/view/customer/invoice/detail_invoice.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 class InvoicePage extends StatefulWidget {
   const InvoicePage({Key key}) : super(key: key);
 
@@ -78,7 +71,7 @@ class _InvoicePageState extends State<InvoicePage> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0),
               ),
-              elevation: 1),
+              elevation: 10),
         ),
       ],
     );

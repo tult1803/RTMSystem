@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rtm_system/presenter/Customer/show_Notice.dart';
 import 'package:rtm_system/ultils/component.dart';
-import 'package:rtm_system/view/customer/advance/detail_advance.dart';
-import 'package:rtm_system/view/customer/invoice/detail_invoice.dart';
 import 'package:rtm_system/view/customer/process/process_advance.dart';
 import 'package:rtm_system/view/customer/process/process_invoice.dart';
 

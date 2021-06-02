@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:rtm_system/presenter/Customer/show_all_invoice_by_product.dart';
 import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
+import 'package:rtm_system/view/customer/getMoney_or_payDebt.dart';
 
 class InvoiceByProductPage extends StatefulWidget {
   const InvoiceByProductPage({Key key, this.isVip, this.nameProduct})
@@ -150,6 +151,15 @@ class _InvoiceByProductPageState extends State<InvoiceByProductPage> {
             elevation: 10,
           ),
         ),
+        Container(
+            decoration: BoxDecoration(
+              color: Colors.white10,
+              borderRadius: BorderRadius.circular(5),
+              // border: Border.all(color: Colors.black, width: 0.5),
+            ),
+            height: 35.0,
+            width: 120,
+            child: widget),
       ],
     );
   }
@@ -164,7 +174,13 @@ class _InvoiceByProductPageState extends State<InvoiceByProductPage> {
               width: 150,
               child: RaisedButton(
                 color: Colors.white70,
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => GetMoneyOrPayDebt(isPay: true,)),
+                  );
+                },
                 child: Text('Trả nợ'),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),

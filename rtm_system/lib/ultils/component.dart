@@ -182,7 +182,6 @@ Widget txtPersonInvoice(
 
 //show infor với 2 dòng, đang dùng: invoice detail
 Widget txtItemDetail(context, String title, String content) {
-  var size = MediaQuery.of(context).size;
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [

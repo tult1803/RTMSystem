@@ -12,8 +12,10 @@ import 'package:rtm_system/view/manager/invoice/processInvoice.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class showInvoiceByProduct extends StatefulWidget {
-  const showInvoiceByProduct({Key key}) : super(key: key);
-
+  const showInvoiceByProduct({Key key, this.isDeposit,this.idProduct, this.msg404}) : super(key: key);
+  final bool isDeposit;
+  final String msg404;
+  final String idProduct;
   @override
   _showInvoiceByProductState createState() => _showInvoiceByProductState();
 }
@@ -72,43 +74,45 @@ class _showInvoiceByProductState extends State<showInvoiceByProduct> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    return Container(
-      margin: EdgeInsets.only(top: 0, left: 20, right: 20),
-      height: size.height,
-      width: size.width,
-      child: new FutureBuilder(
-        future: _getInvoice(),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (snapshot.hasData) {
-            return ListView.builder(
-              itemCount: snapshot.data.length,
-              itemBuilder: (context, index) {
-                return card(
-                    context,
-                    "${snapshot.data[index].customer_name}",
-                    "Trạng thái",
-                    "${snapshot.data[index].status_id}",
-                    "${snapshot.data[index].total}",
-                    snapshot.data[index].create_time,
-                    Colors.black54,
-                    FormForDetailPage(
-                        tittle: "Chi tiết hóa đơn", bodyPage: null));
-              },
-            );
-          } else {
-            if(GetInvoice.statusInvoice == 404){
-              return Container(
-                  child: Center(child: Text("Không có dữ liệu. Vui lòng chọn ngày khác",)));
-            }else{
-              return Container(
-                  height: size.height * 0.7,
-                  child: Center(
-                      child: CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(welcome_color),
-                      )));
+    return SingleChildScrollView(
+      child: Container(
+        margin: EdgeInsets.only(top: 0, left: 20, right: 20),
+        height:300,
+        width: size.width,
+        child: new FutureBuilder(
+          future: _getInvoice(),
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            if (snapshot.hasData) {
+              return ListView.builder(
+                itemCount: snapshot.data.length,
+                itemBuilder: (context, index) {
+                  return card(
+                      context,
+                      "${snapshot.data[index].customer_name}",
+                      "Trạng thái",
+                      "${snapshot.data[index].status_id}",
+                      "${snapshot.data[index].total}",
+                      snapshot.data[index].create_time,
+                      Colors.black54,
+                      FormForDetailPage(
+                          tittle: "Chi tiết hóa đơn", bodyPage: null));
+                },
+              );
+            } else {
+              if(GetInvoice.statusInvoice == 404){
+                return Container(
+                    child: Center(child: Text("Không có dữ liệu. ${widget.msg404}",)));
+              }else{
+                return Container(
+                    height: size.height * 0.7,
+                    child: Center(
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(welcome_color),
+                        )));
+              }
             }
-          }
-        },
+          },
+        ),
       ),
     );
   }

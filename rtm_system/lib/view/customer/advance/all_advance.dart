@@ -1,5 +1,4 @@
 import 'dart:ui';
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:rtm_system/presenter/Customer/show_all_advance.dart';
@@ -7,6 +6,7 @@ import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/customer/advance/create_request_advance.dart';
+import 'package:rtm_system/view/customer/getMoney_or_payDebt.dart';
 
 class AdvancePage extends StatefulWidget {
   const AdvancePage({Key key, this.money}) : super(key: key);
@@ -23,13 +23,12 @@ class _AdvancePageState extends State<AdvancePage> {
   DateTime fromDate;
   DateTime toDate;
   String search = '';
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     toDate = DateTime.now();
-    fromDate = DateTime.now().subtract(Duration(days: 2));
+    fromDate = DateTime.now().subtract(Duration(days: 30));
   }
 
   @override
@@ -155,6 +154,15 @@ class _AdvancePageState extends State<AdvancePage> {
             elevation: 10,
           ),
         ),
+        Container(
+            decoration: BoxDecoration(
+              color: Colors.white10,
+              borderRadius: BorderRadius.circular(5),
+              // border: Border.all(color: Colors.black, width: 0.5),
+            ),
+            height: 35.0,
+            width: 120,
+            child: widget),
       ],
     );
   }
@@ -170,7 +178,13 @@ class _AdvancePageState extends State<AdvancePage> {
               width: size.width * 0.4,
               child: RaisedButton(
                 color: Colors.white70,
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => GetMoneyOrPayDebt(isPay: true,)),
+                  );
+                },
                 child: Text('Trả nợ'),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
@@ -190,7 +204,7 @@ class _AdvancePageState extends State<AdvancePage> {
                     );
                   },
                   child: Text(
-                    'Ung tien',
+                    'Ứng tiền',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 16,
@@ -199,7 +213,7 @@ class _AdvancePageState extends State<AdvancePage> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
-                  elevation: 1),
+                  elevation: 10),
             ),
           ],
         ),
@@ -235,7 +249,6 @@ class _AdvancePageState extends State<AdvancePage> {
             Icons.search,
             color: Colors.black54,
           ),
-
           contentPadding: EdgeInsets.all(15),
         ),
       ),
