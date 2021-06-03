@@ -38,7 +38,7 @@ class _showAdvanceState extends State<showAdvance> {
     //FutureBuilder sẽ gọi đến khi nào có giá trị trả về
     //Ở lần gọi thứ 2 thì token mới có giá trị
     if (token.isNotEmpty) {
-      dataList = await getProduct.createLogin(token, 0);
+      dataList = await getProduct.getProduct(token, 0);
       //Parse dữ liệu
       dataList.forEach((element) {
         Map<dynamic, dynamic> data = element;
@@ -59,7 +59,7 @@ class _showAdvanceState extends State<showAdvance> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Container(
-      height: size.height,
+      height: size.height * 0.55,
       width: size.width,
       child: new FutureBuilder(
         future: _getProduct(),

@@ -1,8 +1,11 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
+import 'package:rtm_system/ultils/getData.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/customer/home_customer_page.dart';
+import 'package:rtm_system/view/customer/invoice/detail_invoice.dart';
 
 // AutoSizeText chữ tự động co giãn theo kích thước mặc định
 // Hiện tại dùng cho trang "Product" và "Bill"
@@ -180,7 +183,6 @@ Widget txtPersonInvoice(
 
 //show infor với 2 dòng, đang dùng: invoice detail
 Widget txtItemDetail(context, String title, String content) {
-  var size = MediaQuery.of(context).size;
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -346,7 +348,10 @@ Widget widgetContentInvoice(context, String status, String header) {
               width: 150,
               child: RaisedButton(
                 color: Color(0xffEEEEEE),
-                onPressed: () {},
+                onPressed: () {
+                  //call api to update status hoan thanh don
+                  put_API_GetMoney(context, 0);
+                },
                 child: Text('Nhận tiền'),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
@@ -393,41 +398,13 @@ Widget widgetContentAdvance(context, String status, String header1, header2) {
                 SizedBox(
                   height: 10,
                 ),
-                txtItemDetail(context, 'Ngày mượn', 'Nguyen Van A'),
-                SizedBox(
-                  height: 10,
-                ),
-                txtItemDetail(context, 'Trạng thái', 'Nguyen Van A'),
-                SizedBox(
-                  height: 10,
-                ),
-                txtItemDetail(context, 'Mã giao dịch', 'Nguyen Van A'),
-                SizedBox(
-                  height: 10,
-                ),
-                if (status == 'Đã huy') txtItemDetail(context, 'Ly do', 'abc'),
-                if (status == 'Đã huy')
-                  SizedBox(
-                    height: 10,
-                  ),
-                if (status == 'Chờ xác nhận')
-                  Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        btnAcceptOrReject(context, 150, Colors.redAccent,
-                            'Từ chối', false, 0),
-                        SizedBox(width: 20),
-                        btnAcceptOrReject(context, 150, Color(0xFF0BB791),
-                            'Chấp nhận', true, 0),
-                      ],
-                    ),
-                  ),
+                txtItemDetail(context, 'Ngày mượn', '20-05-2021'),
+                _showContentInAdvance(context,status),
               ],
             ),
           ),
         ),
-
+        _showBtnInAdvanceDetail(context, status),
         //button "Nhận tiền" show if status is "chưa trả", để hoàn thành đơn giao dịch
         if (status == 'Dang cho')
           Center(
@@ -450,11 +427,81 @@ Widget widgetContentAdvance(context, String status, String header1, header2) {
               ),
             ),
           ),
+
       ],
     ),
   ));
 }
+Widget _showBtnInAdvanceDetail(context, String status){
+  if (status == 'active')
+   return Center(
+      child: SizedBox(
+        width: 150,
+        child: RaisedButton(
+          color: Color(0xffEEEEEE),
+          onPressed: () {
+            put_API_PayAdvance(context);
+          },
+          child: Text('Xac nhan'),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          elevation: 10,
+        ),
+      ),
+    );
+}
+Widget _showContentInAdvance(context, String status){
+  if(status == 'active'){
+    return Column(
+      children: [
+        SizedBox(
+          height: 10,
+        ),
+        txtItemDetail(context, 'Ngày tra', '20-05-2021 now()'),
+        SizedBox(
+          height: 10,
+        ),
+        txtItemDetail(context, 'Tiền nợ còn lại', '1,000,000 VND'),
 
+      ],
+    );
+  }else{
+    return Column(
+      children: [
+        SizedBox(
+          height: 10,
+        ),
+        txtItemDetail(context, 'Trạng thái', 'Nguyen Van A'),
+        SizedBox(
+          height: 10,
+        ),
+        txtItemDetail(context, 'Mã giao dịch', 'Nguyen Van A'),
+        SizedBox(
+          height: 10,
+        ),
+        if (status == 'Đã huy') txtItemDetail(context, 'Ly do', 'abc'),
+        if (status == 'Đã huy')
+          SizedBox(
+            height: 10,
+          ),
+        if (status == 'Chờ xác nhận')
+          Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                btnAcceptOrReject(context, 150, Colors.redAccent,
+                    'Từ chối', false, 0),
+                SizedBox(width: 20),
+                btnAcceptOrReject(context, 150, Color(0xFF0BB791),
+                    'Chấp nhận', true, 0),
+              ],
+            ),
+          ),
+      ],
+    );
+  }
+}
 //Hiện tại đang dùng cho "Phiếu xác nhận" của "Tạo khách hàng" trong profile
 Widget txtConfirm(BuildContext context, String tittle, String content) {
   var size = MediaQuery.of(context).size;
@@ -522,4 +569,92 @@ Widget firstPageErrorIndicatorBuilder(BuildContext context, {String tittle}){
           TextStyle(color: Colors.black54, fontSize: 16),
         )),
   );
+}
+//Dùng cho trang notice để hiện thỉ các notice
+Widget btnProcess(
+    BuildContext context, int id, String tittle, String content, String date, bool isInvoice) {
+  var size = MediaQuery.of(context).size;
+  //Format lại ngày
+  DateTime _date = DateTime.parse(date);
+  final fBirthday = new DateFormat('dd/MM/yyyy hh:mm');
+
+  return Container(
+      margin: EdgeInsets.all(5),
+      child: Material(
+        color: Colors.white,
+        child: TextButton(
+          style: TextButton.styleFrom(
+            primary: Colors.black, // foreground
+            textStyle: TextStyle(
+              fontSize: 16,
+            ),
+          ),
+          onPressed: () {
+            if(isInvoice){
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => DetailInvoicePage()),
+              );
+            }else{
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => DetailInvoicePage( )),
+              );
+            }
+
+          },
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    child: AutoSizeText(
+                      "$tittle",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                      ),
+                      overflow: TextOverflow.clip,
+                      textAlign: TextAlign.left,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              AutoSizeText(
+                "$content",
+                style: TextStyle(
+                  fontSize: 14,
+                ),
+                textAlign: TextAlign.left,
+                overflow: TextOverflow.ellipsis,
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              AutoSizeText(
+                "${fBirthday.format(_date)}",
+                style: TextStyle(
+                  fontSize: 12,
+                  color: welcome_color,
+                ),
+                textAlign: TextAlign.left,
+              ),
+              SizedBox(
+                height: 9,
+              ),
+              SizedBox(
+                height: 0.5,
+                child: Container(
+                  color: Colors.black54,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ));
 }

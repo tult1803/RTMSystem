@@ -22,7 +22,6 @@ class _showProfileState extends State<showProfile> {
     // TODO: implement initState
     super.initState();
     this.getAPIProfile();
-    print('_showProfileState');
   }
 
   Future getAPIProfile() async {
@@ -140,4 +139,5 @@ class _showProfileState extends State<showProfile> {
       ),
     );
   }
+
 }

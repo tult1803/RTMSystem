@@ -46,7 +46,7 @@ class _CreateRequestInvoiceState extends State<CreateRequestInvoice> {
     GetProduct getProduct = GetProduct();
     dataListProduct.clear();
     if (token.isNotEmpty) {
-      dataList = await getProduct.createLogin(token, 0);
+      dataList = await getProduct.getProduct(token, 0);
       dataList.forEach((element) {
         Map<dynamic, dynamic> data = element;
         dataListProduct.add(DataProduct.fromJson(data));
@@ -77,7 +77,7 @@ class _CreateRequestInvoiceState extends State<CreateRequestInvoice> {
         centerTitle: true,
         leading: leadingAppbar(context),
         title: Text(
-          "Tạo yêu cầu ban hang",
+          "Tạo yêu cầu bán hàng",
           style: TextStyle(
               color: Colors.white, fontWeight: FontWeight.w500, fontSize: 22),
         ),
