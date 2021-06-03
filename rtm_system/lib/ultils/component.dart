@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
+import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/customer/home_customer_page.dart';
 
 // AutoSizeText chữ tự động co giãn theo kích thước mặc định
@@ -28,7 +29,7 @@ Widget componentCardE(
           "${type}",
           maxLines: 1,
           style: TextStyle(
-            fontWeight: FontWeight.w200,
+            fontWeight: FontWeight.w400,
             fontSize: 15,
             color: color,
           ),
@@ -64,7 +65,7 @@ Widget componentCardS(String tittle, String type, String detailType,
               "$type: ",
               maxLines: 1,
               style: TextStyle(
-                fontWeight: FontWeight.w200,
+                fontWeight: FontWeight.w400,
                 fontSize: 15,
                 color: Colors.black54,
               ),
@@ -73,7 +74,7 @@ Widget componentCardS(String tittle, String type, String detailType,
               "${detailType}",
               maxLines: 1,
               style: TextStyle(
-                fontWeight: FontWeight.w200,
+                fontWeight: FontWeight.w400,
                 fontSize: 15,
                 color: color,
               ),
@@ -488,9 +489,37 @@ Widget txtConfirm(BuildContext context, String tittle, String content) {
   );
 }
 
+//Đổi màu và icon cho nút back screen
 Widget leadingAppbar(BuildContext context){
   return IconButton(
     icon: Icon(Icons.arrow_back_ios_outlined, color: Colors.white),
     onPressed: () => Navigator.of(context).pop(),
+  );
+}
+
+// Dùng cho PagedChildBuilderDelegate trong PagedSliverList
+Widget firstPageProgressIndicatorBuilder(){
+  return Center(
+    child: SizedBox(
+      height: 60,
+      width: 60,
+      child: CircularProgressIndicator(
+        color: welcome_color,
+      ),
+    ),
+  );
+}
+// Dùng cho PagedChildBuilderDelegate trong PagedSliverList
+Widget firstPageErrorIndicatorBuilder(BuildContext context, {String tittle}){
+  var size = MediaQuery.of(context).size;
+  return Container(
+    width: size.width,
+    height: 50,
+    child: Center(
+        child: AutoSizeText(
+          "$tittle",
+          style:
+          TextStyle(color: Colors.black54, fontSize: 16),
+        )),
   );
 }

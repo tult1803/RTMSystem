@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
@@ -7,8 +5,8 @@ import 'package:rtm_system/model/getAPI_invoice.dart';
 import 'package:rtm_system/model/model_invoice.dart';
 import 'package:rtm_system/presenter/infinite_scroll_pagination/common/character_search_input_sliver.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
+import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
-import 'package:rtm_system/view/manager/formForDetail_page.dart';
 import 'package:rtm_system/view/manager/invoice/createInvoice.dart';
 import 'package:rtm_system/view/manager/invoice/processInvoice.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -26,12 +24,12 @@ var fDate = new DateFormat('dd-MM-yyyy');
 
 class _showAllInvoiceState extends State<showAllInvoice> {
   int _pageSize = 1;
-  final PagingController _pagingController =
-  PagingController(firstPageKey: 10);
+  final PagingController _pagingController = PagingController(firstPageKey: 10);
 
   String _searchTerm;
   Invoice invoice;
   List invoiceList;
+
   Future<void> _fetchPage(pageKey) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -45,7 +43,7 @@ class _showAllInvoiceState extends State<showAllInvoice> {
         toDate,
         searchTerm: _searchTerm,
       );
-      invoiceList =  invoice.invoices;
+      invoiceList = invoice.invoices;
       // print("${_pagingController}");
       final isLastPage = invoiceList.length < pageKey;
       if (isLastPage) {
@@ -88,7 +86,6 @@ class _showAllInvoiceState extends State<showAllInvoice> {
         );
       }
     });
-
   }
 
   @override
@@ -136,10 +133,15 @@ class _showAllInvoiceState extends State<showAllInvoice> {
                       Icon(Icons.date_range), datePick()),
                 ],
               ),
-              SizedBox(height: 0.5, child: Container(color: Colors.black38,),),
+              SizedBox(
+                height: 0.5,
+                child: Container(
+                  color: Colors.black38,
+                ),
+              ),
               Expanded(
                   child: Container(
-                margin: EdgeInsets.only(top: 0, left: 20, right: 20),
+                margin: EdgeInsets.only(top: 0, left: 5, right: 5),
                 height: size.height,
                 width: size.width,
                 child: new CustomScrollView(
@@ -150,10 +152,19 @@ class _showAllInvoiceState extends State<showAllInvoice> {
                     PagedSliverList(
                       pagingController: _pagingController,
                       builderDelegate: PagedChildBuilderDelegate(
+                          firstPageErrorIndicatorBuilder: (context) => firstPageErrorIndicatorBuilder(context,tittle: "Không có dữ liệu. Vui lòng chọn ngày khác."),
+                          firstPageProgressIndicatorBuilder: (context) => firstPageProgressIndicatorBuilder(),
                           itemBuilder: (context, item, index) {
-                            return card(context, item["customer_name"], "Trạng thái", '${item['status_id']}', "${item['total']}", "${item['create_time']}", Colors.black54, null);
-                          }
-                      ),
+                            return card(
+                                context,
+                                item["customer_name"],
+                                "Trạng thái",
+                                '${item['status_id']}',
+                                "${item['total']}",
+                                "${item['create_time']}",
+                                Colors.black54,
+                                null);
+                          }),
                     ),
                   ],
                 ),
@@ -192,7 +203,6 @@ class _showAllInvoiceState extends State<showAllInvoice> {
     final initialDateRange = DateTimeRange(start: fromDate, end: toDate);
     final ThemeData theme = Theme.of(context);
     DateTimeRange dateRange = await showDateRangePicker(
-
         context: context,
         firstDate: DateTime(2000),
         lastDate: DateTime.now(),
@@ -201,14 +211,15 @@ class _showAllInvoiceState extends State<showAllInvoice> {
         builder: (context, child) {
           return Theme(
             data: Theme.of(context).copyWith(
-              //Dùng cho nút "X" của lịch
-              appBarTheme: AppBarTheme(
-              iconTheme: theme.primaryIconTheme.copyWith(color: Colors.white),
-            ),
+                //Dùng cho nút "X" của lịch
+                appBarTheme: AppBarTheme(
+                  iconTheme:
+                      theme.primaryIconTheme.copyWith(color: Colors.white),
+                ),
                 //Dùng cho nút chọn ngày và background
                 colorScheme: ColorScheme.light(
-              primary: welcome_color,
-            )),
+                  primary: welcome_color,
+                )),
             child: child,
           );
         });

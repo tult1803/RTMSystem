@@ -24,7 +24,7 @@ class _updatePriceProductState extends State<updatePriceProduct> {
                 color: Colors.white, fontWeight: FontWeight.w500, fontSize: 22),
         ),
       ),
-      body: new CharacterSliverList(),
+      body: new Container(),
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rxdart/rxdart.dart';
 
 class CharacterSearchInputSliver extends StatefulWidget {
@@ -41,18 +42,20 @@ class _CharacterSearchInputSliverState
   }
 
   @override
-  Widget build(BuildContext context) => SliverToBoxAdapter(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: TextField(
-            decoration: const InputDecoration(
-              prefixIcon: Icon(Icons.search),
-              labelText: 'Tìm kiếm',
-            ),
-            onChanged: _textChangeStreamController.add,
+  Widget build(BuildContext context) {
+   return SliverToBoxAdapter(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: TextField(
+          decoration: const InputDecoration(
+            prefixIcon: Icon(Icons.search),
+            labelText: 'Tìm kiếm',
           ),
+          onChanged: _textChangeStreamController.add,
         ),
-      );
+      ),
+    );
+  }
 
   @override
   void dispose() {

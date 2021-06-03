@@ -3,8 +3,10 @@ import 'package:flutter/widgets.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:rtm_system/model/notice/getAPI_all_notice.dart';
 import 'package:rtm_system/model/notice/model_all_notice.dart';
-import 'package:rtm_system/presenter/infinite_scroll_pagination/common/character_list_item.dart';
 import 'package:rtm_system/presenter/infinite_scroll_pagination/common/character_search_input_sliver.dart';
+import 'package:rtm_system/ultils/commonWidget.dart';
+import 'package:rtm_system/ultils/component.dart';
+import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class showNotice extends StatefulWidget {
@@ -87,9 +89,26 @@ class _showNoticeState extends State<showNotice> {
       PagedSliverList<int, NoticeList>(
         pagingController: _pagingController,
         builderDelegate: PagedChildBuilderDelegate<NoticeList>(
-          itemBuilder: (context, item, index) => CharacterListItem(
-            character: item,
-          ),
+            firstPageErrorIndicatorBuilder: (context) {
+              return Column(
+                children: [
+                  firstPageErrorIndicatorBuilder(context,
+                      tittle: "Không có dữ liệu."),
+                  GestureDetector(
+                    onTap: () => _pagingController.refresh(),
+                    child: Text(
+                      "Nhấn để tải lại",
+                      style: TextStyle(color: welcome_color, fontSize: 18),
+                    ),
+                  ),
+                ],
+              );
+            },
+            firstPageProgressIndicatorBuilder: (context) =>
+                firstPageProgressIndicatorBuilder(),
+            itemBuilder: (context, item, index) {
+              return containerButton(context, item.id, item.title, item.content, "${item.createDate}");
+            }
         ),
       ),
     ],
