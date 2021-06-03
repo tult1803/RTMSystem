@@ -26,7 +26,7 @@ var fDate = new DateFormat('dd-MM-yyyy');
 
 class _showInvoiceByProductState extends State<showInvoiceByProduct> {
   String token;
-  List<DataInvoice> dataListInvoice = [];
+  // List<DataInvoice> dataListInvoice = [];
 
   Future _getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -45,21 +45,21 @@ class _showInvoiceByProductState extends State<showInvoiceByProduct> {
 
     //Khi click nhiều lần vào button "Sản phẩm" thì sẽ có hiện tượng dữ liệu bị ghi đè
     //Clear là để xoá dữ liệu cũ, ghi lại dữ liệu mới
-    dataListInvoice.clear();
-
-    //Nếu ko có If khi FutureBuilder gọi hàm _getProduct lần đầu thì Token chưa trả về nên sẽ bằng null
-    //FutureBuilder sẽ gọi đến khi nào có giá trị trả về
-    //Ở lần gọi thứ 2 thì token mới có giá trị
-    if (token.isNotEmpty) {
-      dataList = await getInvoice.createInvoice(token, 0, fromDate, toDate);
-      //Parse dữ liệu
-      dataList.forEach((element) {
-        Map<dynamic, dynamic> data = element;
-        dataListInvoice.add(DataInvoice.fromJson(data));
-      });
-
-      return dataListInvoice;
-    }
+    // dataListInvoice.clear();
+    //
+    // //Nếu ko có If khi FutureBuilder gọi hàm _getProduct lần đầu thì Token chưa trả về nên sẽ bằng null
+    // //FutureBuilder sẽ gọi đến khi nào có giá trị trả về
+    // //Ở lần gọi thứ 2 thì token mới có giá trị
+    // if (token.isNotEmpty) {
+    //   dataList = await getInvoice.createInvoice(token, 0, fromDate, toDate);
+    //   //Parse dữ liệu
+    //   dataList.forEach((element) {
+    //     Map<dynamic, dynamic> data = element;
+    //     dataListInvoice.add(DataInvoice.fromJson(data));
+    //   });
+    //
+    //   return dataListInvoice;
+    // }
   }
 
   @override

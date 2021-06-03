@@ -30,7 +30,7 @@ class _showProcessAdvanceState extends State<showProcessAdvance> {
     String token = sharedPreferences.getString('access_token');
     print(token);
     // Đỗ dữ liệu lấy từ api
-    notice = await getAPIAllNotice.getNotices(token);
+    // notice = await getAPIAllNotice.getNotices(token);
     noticeList = notice.noticeList;
     return noticeList;
   }
