@@ -54,6 +54,7 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
     if (this.widget.gender == 0) {
       character = GenderCharacter.women;
     } else
@@ -122,15 +123,17 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
     );
   }
 
+  //Dùng để chặn nhập khoản cách
   TextEditingController getDataTextField(String txt) {
-    if (txt == null) {
-      txt = "";
-    }
     final TextEditingController _controller = TextEditingController();
-    _controller.value = _controller.value.copyWith(
-      text: txt,
-      selection: TextSelection.collapsed(offset: txt.length),
-    );
+    if (txt != null) {
+      _controller.value = _controller.value.copyWith(
+        text: txt,
+        selection:
+            TextSelection(baseOffset: txt.length, extentOffset: txt.length),
+        composing: TextRange.empty,
+      );
+    }
     return _controller;
   }
 

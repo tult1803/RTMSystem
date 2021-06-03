@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:rtm_system/presenter/infinite_scroll_pagination/search_snackbar/character_sliver_list.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/welcome_page.dart';
 
@@ -31,7 +32,7 @@ void main() async{
       ),
       debugShowCheckedModeBanner: false,
       home: WelcomePage(),
-      // home:AllCustomer(),
+      // home:(),
     ),
   );
 }

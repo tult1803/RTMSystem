@@ -251,7 +251,7 @@ Widget containerButton(
   final fBirthday = new DateFormat('dd/MM/yyyy hh:mm');
 
   return Container(
-      margin: EdgeInsets.all(5),
+      margin: EdgeInsets.only(left: 5, right: 5),
       child: Material(
         color: Colors.white,
         child: TextButton(
