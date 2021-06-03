@@ -350,7 +350,7 @@ Widget widgetContentInvoice(context, String status, String header) {
                 color: Color(0xffEEEEEE),
                 onPressed: () {
                   //call api to update status hoan thanh don
-                  put_API_GetMoney(context);
+                  put_API_GetMoney(context, 0);
                 },
                 child: Text('Nhận tiền'),
                 shape: RoundedRectangleBorder(

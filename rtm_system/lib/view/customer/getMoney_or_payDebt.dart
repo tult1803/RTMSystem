@@ -7,6 +7,7 @@ import 'package:rtm_system/model/profile_customer/getAPI_customer_phone.dart';
 import 'package:rtm_system/model/profile_customer/model_profile_customer.dart';
 import 'package:rtm_system/presenter/Customer/show_all_invoice_by_product.dart';
 import 'package:rtm_system/ultils/component.dart';
+import 'package:rtm_system/ultils/getData.dart';
 import 'package:rtm_system/view/customer/advance/detail_advance.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -445,11 +446,8 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
           child: RaisedButton(
               color: Color(0xFF0BB791),
               onPressed: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //       builder: (context) => CreateRequestInvoice()),
-                // );
+                print('zooo');
+                put_API_GetMoney(context, 1);
               },
               child: Text(
                 'Lấy tiền',

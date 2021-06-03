@@ -7,6 +7,7 @@ import 'package:rtm_system/view/manager/home_manager_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'alertDialog.dart';
+
 //dùng cho tạo thông báo
 Future postAPINotice(String tittle, String content) async {
   PostCreateNotice _createNotice = PostCreateNotice();
@@ -16,49 +17,164 @@ Future postAPINotice(String tittle, String content) async {
   return status;
 }
 
-Future<void> getNotice(BuildContext context,String mainTittle, String content, int indexOfBottomBar) async{
+Future<void> getNotice(BuildContext context, String mainTittle, String content,
+    int indexOfBottomBar) async {
   int status = await postAPINotice(mainTittle, content);
-  if(status == 200){
-    showStatusAlertDialog(context, "Tạo thành công.", HomeAdminPage(index: indexOfBottomBar,), true);
-  }else showStatusAlertDialog(context, "Tạo thất bại. Xin thử lại !!!", null, false);
+  if (status == 200) {
+    showStatusAlertDialog(
+        context,
+        "Tạo thành công.",
+        HomeAdminPage(
+          index: indexOfBottomBar,
+        ),
+        true);
+  } else
+    showStatusAlertDialog(
+        context, "Tạo thất bại. Xin thử lại !!!", null, false);
 }
 
-
-
 //dung cho tạo khách hàng, cap nhat khach hang
-Future post_put_ApiProfile(String phone, String password, String fullname, int gender, String cmnd, String address, String birthday, bool isUpdate, int typeOfUpdate, int account_id) async {
+Future post_put_ApiProfile(
+    String phone,
+    String password,
+    String fullname,
+    int gender,
+    String cmnd,
+    String address,
+    String birthday,
+    bool isUpdate,
+    int typeOfUpdate,
+    int account_id) async {
   int status;
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  if(isUpdate){
+  if (isUpdate) {
     PutUpdateProfile _putUpdate = PutUpdateProfile();
-    status = await _putUpdate.updateProfile(prefs.get("access_token"), phone, typeOfUpdate, account_id, password, fullname, gender, cmnd, address, birthday);
-  }else{
+    status = await _putUpdate.updateProfile(
+        prefs.get("access_token"),
+        phone,
+        typeOfUpdate,
+        account_id,
+        password,
+        fullname,
+        gender,
+        cmnd,
+        address,
+        birthday);
+  } else {
     PostCreateCustomer _createCustomer = PostCreateCustomer();
-    status = await _createCustomer.createCustomer(prefs.get("access_token"), phone, password, fullname, gender, cmnd, address, birthday);
-
+    status = await _createCustomer.createCustomer(prefs.get("access_token"),
+        phone, password, fullname, gender, cmnd, address, birthday);
   }
   return status;
 }
 
-Future<void> doCreateCustomer(BuildContext context,String phone, String password, String fullname, int gender, String cmnd, String address, String birthday, bool isCustomer, bool isUpdate, int typeOfUpdate, int account_id) async{
-  int status = await post_put_ApiProfile(phone, password, fullname, gender, cmnd, address, birthday, isUpdate, typeOfUpdate, account_id);
-  if(status == 200){
-    if(isCustomer){
-      showStatusAlertDialog(context, "Đã cập nhật.", HomeCustomerPage(index: 3,), true);
-    }else {
-      showStatusAlertDialog(context, "Đã cập nhật.", HomeAdminPage(index: 4,), true);
+Future<void> doCreateCustomer(
+    BuildContext context,
+    String phone,
+    String password,
+    String fullname,
+    int gender,
+    String cmnd,
+    String address,
+    String birthday,
+    bool isCustomer,
+    bool isUpdate,
+    int typeOfUpdate,
+    int account_id) async {
+  int status = await post_put_ApiProfile(phone, password, fullname, gender,
+      cmnd, address, birthday, isUpdate, typeOfUpdate, account_id);
+  if (status == 200) {
+    if (isCustomer) {
+      showStatusAlertDialog(
+          context,
+          "Đã cập nhật.",
+          HomeCustomerPage(
+            index: 3,
+          ),
+          true);
+    } else {
+      showStatusAlertDialog(
+          context,
+          "Đã cập nhật.",
+          HomeAdminPage(
+            index: 4,
+          ),
+          true);
     }
-  }else showStatusAlertDialog(context, "Cập nhật thất bại. Xin thử lại !!!", null, false);
+  } else
+    showStatusAlertDialog(
+        context, "Cập nhật thất bại. Xin thử lại !!!", null, false);
 }
-Future<void> put_API_PayAdvance(BuildContext context,) async{
+
+Future<void> put_API_PayAdvance(
+  BuildContext context,
+) async {
   int status = 200;
-  if(status == 200){
-      showStatusAlertDialog(context, "Đã trả tiền thành công.", HomeCustomerPage(index: 0,), true);
-  }else showStatusAlertDialog(context, "Trả tiền thất bại. Xin thử lại !!!", null, false);
+  if (status == 200) {
+    showStatusAlertDialog(
+        context,
+        "Đã trả tiền thành công.",
+        HomeCustomerPage(
+          index: 0,
+        ),
+        true);
+  } else
+    showStatusAlertDialog(
+        context, "Trả tiền thất bại. Xin thử lại !!!", null, false);
 }
-Future<void> put_API_GetMoney(BuildContext context,) async{
+
+Future<void> put_API_GetMoney(BuildContext context, indexPage) async {
   int status = 200;
-  if(status == 200){
-    showStatusAlertDialog(context, "Quý khách đã nhận tiền.\n Hoàn thành giao dịch.", HomeCustomerPage(index: 1,), true);
-  }else showStatusAlertDialog(context, "Nhận tiền thất bại. Xin thử lại !!!", null, false);
+  //await post_put_ApiProfile();
+  showAlertDialogAPI(
+      context,
+      'Nhan tien nha?',
+      HomeCustomerPage(
+        index: indexPage,
+      ),
+      status);
+}
+//dung cho api getMoney
+showAlertDialogAPI(BuildContext context, String tittle, Widget widget, status) {
+  // Tạo button trong AlertDialog
+  Widget btnAlert(String tittleA, Color color, bool checkCreate) {
+    return FlatButton(
+      child: Text(
+        tittleA,
+        style: TextStyle(color: color),
+      ),
+      onPressed: () {
+        if (checkCreate) {
+          if (status == 200) {
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => widget),
+                (route) => false);
+          } else {
+            Navigator.of(context).pop();
+          }
+        } else {
+          Navigator.of(context).pop();
+        }
+      },
+    );
+  }
+
+  // Create AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("Thông báo"),
+    content: Text(tittle),
+    actions: [
+      btnAlert("Không", Colors.redAccent, false),
+      btnAlert("Có", Color(0xFF0BB791), true),
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
 }

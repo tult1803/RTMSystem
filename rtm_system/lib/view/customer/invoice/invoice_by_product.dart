@@ -193,7 +193,13 @@ class _InvoiceByProductPageState extends State<InvoiceByProductPage> {
               width: 150,
               child: RaisedButton(
                 color: Color(0xFF0BB791),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => GetMoneyOrPayDebt(isPay: false,)),
+                  );
+                },
                 child: Text(
                   'Lấy tiền',
                   style: TextStyle(
