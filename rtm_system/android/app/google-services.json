@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "238509483118",
+    "project_id": "rtm-sys",
+    "storage_bucket": "rtm-sys.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:238509483118:android:2faede5312d4a4588e327f",
+        "android_client_info": {
+          "package_name": "com.example.rtm_system"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "238509483118-hgjtljcl1s80hvqq0mk872a3o0u9ts84.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAuoNkVbpR6lCTCjp0WVsoeGwSJySJcuos"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "238509483118-hgjtljcl1s80hvqq0mk872a3o0u9ts84.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

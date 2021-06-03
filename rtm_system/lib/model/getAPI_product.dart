@@ -3,7 +3,7 @@ import 'package:rtm_system/ultils/src/url_api.dart';
 import 'package:http/http.dart' as http;
 
 class GetProduct{
-  createLogin(String token, int idProduct) async {
+  getProduct(String token, int idProduct) async {
     final response = await http.get(
       Uri.http('${url_main}', '${url_product}/$idProduct'),
       headers: <String, String>{

@@ -7,7 +7,6 @@ import 'package:rtm_system/presenter/check_login.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/customer/home_customer_page.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -23,9 +22,12 @@ class LoginPageState extends State<LoginPage> {
   static bool isLogin = false;
   var role_id = 0, accountId = 0;
   String username = "";
-  String password = "";
+  String password;
   String access_token = '';
   String fullname = "";
+  int gender = 0;
+  String phone ='';
+  String birthday ='';
   String error="";
   @override
   void initState() {
@@ -75,6 +77,9 @@ class LoginPageState extends State<LoginPage> {
       access_token = data.access_token;
       accountId = data.accountId;
       fullname = data.fullname;
+      phone = data.phone;
+      birthday = data.birthday;
+      gender = data.gender;
     });
   }
 
@@ -86,18 +91,18 @@ class LoginPageState extends State<LoginPage> {
       print('Error from LoginApi !!!');
     }
     if (role_id == 3 && status == 200) {
-      savedInfoLogin(role_id, accountId, access_token, fullname);
+      savedInfoLogin(role_id, accountId, gender,access_token, fullname, phone,birthday, password);
       Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => HomeCustomerPage()),
+          MaterialPageRoute(builder: (context) => HomeCustomerPage(index: 2,)),
           (route) => false);
       print('Status button: Done');
       _buttonState = ButtonState.normal;
     } else if (role_id == 2 && status == 200) {
-      savedInfoLogin(role_id, accountId, access_token, fullname);
+      savedInfoLogin(role_id, accountId, gender,access_token, fullname, phone, birthday, password);
       Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => HomeAdminPage()),
+          MaterialPageRoute(builder: (context) => HomeAdminPage(index: 2,)),
           (route) => false);
       print('Status button: Done');
       _buttonState = ButtonState.normal;
@@ -194,7 +199,9 @@ class LoginPageState extends State<LoginPage> {
               child: TextField(
                 obscureText: true,
                 onChanged: (value1) {
-                  password = value1;
+                  setState(() {
+                    password = value1;
+                  });
                 },
                 decoration: InputDecoration(
                   border: InputBorder.none,

@@ -1,14 +1,18 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
-import 'package:rtm_system/view/manager/allBill_manager.dart';
-import 'package:rtm_system/view/manager/allDebt_manager.dart';
-import 'package:rtm_system/view/manager/allNotice_manager.dart';
-import 'package:rtm_system/view/manager/allProduct_manager_page.dart';
-import 'package:rtm_system/view/manager/profile_manager.dart';
+import 'package:rtm_system/view/manager/debt/allDebt_manager.dart';
+import 'package:rtm_system/view/manager/notice/allNotice_manager.dart';
+import 'package:rtm_system/view/manager/product/allProduct_manager_page.dart';
+import 'package:rtm_system/view/manager/profile/profile_manager.dart';
+
+import 'invoice/allInvoice_manager.dart';
 
 
 class HomeAdminPage extends StatefulWidget {
+  final int index;
+  HomeAdminPage({this.index});
+
   @override
   _HomeAdminPageState createState() => _HomeAdminPageState();
 }
@@ -21,14 +25,18 @@ class _HomeAdminPageState extends State<HomeAdminPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    //
-    // if (LoginPageState.isLogin != true) {
-    //   Navigator.pushAndRemoveUntil(
-    //       context,
-    //       MaterialPageRoute(builder: (context) => LoginPage()),
-    //       (route) => false);
-    // }
-    _widget = AllProduct();
+    _index = widget.index;
+    if (_index == 0) {
+      _widget = AllInvoice();
+    } else if (_index == 1) {
+      _widget = AllDebt();
+    } else if (_index == 2) {
+      _widget = AllProduct();
+    } else if (_index == 3) {
+      _widget = AllNotice();
+    } else if (_index == 4) {
+      _widget = ProfileManager();
+    }
   }
 
   @override
@@ -54,9 +62,9 @@ class _HomeAdminPageState extends State<HomeAdminPage> {
         onTap: (index) {
           setState(() {
             if (index == 0) {
-              _widget = AllDebt();
+              _widget = AllInvoice();
             } else if (index == 1) {
-              _widget = AllBill();
+              _widget = AllDebt();
             } else if (index == 2) {
               _widget = AllProduct();
             } else if (index == 3) {

@@ -192,13 +192,13 @@ void checkSaveLogin(BuildContext context) async {
     if (prefs.getInt("role_id") == 3 && prefs.getBool("isLogin") == true) {
       Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => HomeCustomerPage()),
+          MaterialPageRoute(builder: (context) => HomeCustomerPage(index: 2,)),
           (route) => false);
     } else if (prefs.getInt("role_id") == 2 &&
         prefs.getBool("isLogin") == true) {
       Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => HomeAdminPage()),
+          MaterialPageRoute(builder: (context) => HomeAdminPage(index: 2,)),
           (route) => false);
     }
   } catch (e) {
@@ -206,12 +206,16 @@ void checkSaveLogin(BuildContext context) async {
   }
 }
 
-void savedInfoLogin(int role_id, int accountId, String access_token, String fullname) async {
+void savedInfoLogin(int role_id, int accountId, int gender, String access_token, String fullname, String phone, String birthday, String password) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   prefs.setBool("isLogin", true);
   prefs.setInt("role_id", role_id);
   prefs.setString("access_token", access_token);
   prefs.setInt("accountId", accountId);
   prefs.setString("fullname", fullname);
+  prefs.setString("phone", phone);
+  prefs.setInt("gender", gender);
+  prefs.setString("birthday", birthday);
+  prefs.setString("password", password);
   print('Login is saved !!!!');
 }

@@ -5,22 +5,38 @@ import 'package:rtm_system/view/customer/Profile/profile.dart';
 import 'package:rtm_system/view/customer/invoice/all_invoice.dart';
 import 'package:rtm_system/view/customer/notice/all_notices.dart';
 
+import 'advance/all_advance.dart';
+
 
 class HomeCustomerPage extends StatefulWidget {
+  final index;
+  HomeCustomerPage({this.index});
   @override
   _HomeCustomerPageState createState() => _HomeCustomerPageState();
 }
 
 class _HomeCustomerPageState extends State<HomeCustomerPage> {
   GlobalKey _bottomNavigationKey = GlobalKey();
-  int _index = 1;
+  int _index;
   String txt = "Tất cả thông báo";
   Widget _widget;
+  //call api return money advance
+  String money = '37,000,000';
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _widget = InvoicePage();
+    _index = widget.index;
+    if (_index == 0) {
+      _widget = AdvancePage(money: money,);
+    } else if (_index == 1) {
+      _widget = InvoicePage();
+    } else if (_index == 2) {
+      _widget = NoticesPage();
+    } else if (_index == 3){
+      _widget = ProfilePage();
+    }
   }
 
   @override
@@ -46,7 +62,7 @@ class _HomeCustomerPageState extends State<HomeCustomerPage> {
         onTap: (index) {
           setState(() {
             if (index == 0) {
-
+              _widget = AdvancePage(money: money,);
             } else if (index == 1) {
               _widget = InvoicePage();
             } else if (index == 2) {
