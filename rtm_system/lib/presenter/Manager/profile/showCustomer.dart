@@ -5,6 +5,7 @@ import 'package:rtm_system/model/model_AllCustomer.dart';
 import 'package:rtm_system/presenter/infinite_scroll_pagination/common/character_search_input_sliver.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/component.dart';
+import 'package:rtm_system/ultils/getStatus.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/manager/formForDetail_page.dart';
 import 'package:rtm_system/view/manager/profile/detail_customer.dart';
@@ -104,18 +105,14 @@ class _showAllCustomerState extends State<showAllCustomer> {
                   }else{
                     vip = "Thường";
                   }
-                  if(item['advance'] != 0){
-                    advanceColor = Colors.redAccent;
-                  }else advanceColor = Colors.black54;
-
                   return card(
                       context,
                       item["fullname"],
-                      "Nợ",
-                      '${item['advance']}',
+                      "Trạng thái",
+                      '${getStatus(status: item['status_id'])}',
                       "${vip}",
-                      "${item['birthday']}",
-                      advanceColor,
+                      'Nợ: ${item['advance']}',
+                      getColorStatus(status: item['status_id']),
                       FormForDetailPage(
                           tittle: "Chi tiết khách hàng",
                           bodyPage: DetailCustomer(map: item,)));

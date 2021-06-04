@@ -63,7 +63,6 @@ class _DetailCustomerState extends State<DetailCustomer> {
           ),
         ));
   }
-}
 
 Widget componentContainerDetailProduct(BuildContext context,
     {String status,
@@ -101,9 +100,9 @@ Widget componentContainerDetailProduct(BuildContext context,
         SizedBox(height: 10,),
         txtItemDetail(context, "Loại tài khoản", "$vip"),
         SizedBox(height: 10,),
-        txtItemDetail(context, "Trạng thái", "$status"),
+        txtItemDetail(context, "Trạng thái", "$status", colorContent: getColorStatus(status: this.widget.map["status_id"])),
         SizedBox(height: 5,),
       ],
     ),
   );
-}
+}}

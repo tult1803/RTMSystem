@@ -178,18 +178,21 @@ Widget btnDateTime(
 
 Widget card(BuildContext context, String tittle, String type, String detailType,
     String price, String date, Color color, Widget widget) {
-  //Format lại ngày
-  DateTime _date = DateTime.parse(date);
   final fBirthday = new DateFormat('dd/MM/yyyy');
   //Format lại giá
   final oCcy = new NumberFormat("#,##0", "en_US");
   //Lấy size của màn hình
   var size = MediaQuery.of(context).size;
   String Cprice;
+  String Cdate;
   try{
+    //Format lại ngày
+    DateTime _date = DateTime.parse(date);
     Cprice = "${oCcy.format(double.parse(price))}đ";
+    Cdate = "${fBirthday.format(_date)}";
   }catch (_){
     Cprice = "$price";
+    Cdate = "$date";
   }
   return Card(
     margin: EdgeInsets.only(top: 15),
@@ -235,7 +238,7 @@ Widget card(BuildContext context, String tittle, String type, String detailType,
                 ),
                 child: componentCardE(
                     "$Cprice",
-                    "${fBirthday.format(_date)}",
+                    "$Cdate",
                     CrossAxisAlignment.end,
                     Colors.black54),
               ),

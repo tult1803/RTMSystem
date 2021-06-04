@@ -164,7 +164,7 @@ class _showAllInvoiceState extends State<showAllInvoice> {
                                 '${getStatus(status: item['status_id'])}',
                                 "${item['total']}",
                                 "${item['create_time']}",
-                                Colors.black54,
+                                getColorStatus(status: item['status_id']),
                                 null);
                           }),
                     ),

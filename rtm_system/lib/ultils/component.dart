@@ -182,7 +182,7 @@ Widget txtPersonInvoice(
 }
 
 //show infor với 2 dòng, đang dùng: invoice detail
-Widget txtItemDetail(context, String title, String content) {
+Widget txtItemDetail(context, String title, String content, {Color colorContent}) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -208,6 +208,7 @@ Widget txtItemDetail(context, String title, String content) {
         content,
         style: TextStyle(
           fontSize: 16,
+          color: colorContent,
           fontWeight: FontWeight.w500,
         ),
         textAlign: TextAlign.left,
