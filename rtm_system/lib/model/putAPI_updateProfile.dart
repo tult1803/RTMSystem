@@ -22,11 +22,12 @@ class PutUpdateProfile{
         "gender": gender,
         "birthday": birthday,
         "phone": phone,
-        "cmnd": cmnd,
+        "cmnd": "$cmnd",
         "vip":false,
-        "address": address,
+        "address": "$address",
       }),
     );
+    print('$type - $account_id - $password - $fullname - $gender - $birthday - $phone - $cmnd - $address');
     print("Status putAPI Update Profile:${response.statusCode}");
     return response.statusCode;
   }
