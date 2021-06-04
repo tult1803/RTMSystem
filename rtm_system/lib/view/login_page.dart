@@ -134,8 +134,8 @@ class LoginPageState extends State<LoginPage> {
   bool isCheckP = false;
   Widget _checkLogin() {
     return Container(
-      width: 280,
       height: 45,
+      margin: EdgeInsets.only(left: 40,right: 40),
       child: Material(
           child: ProgressButton(
             child: Text(
@@ -199,7 +199,7 @@ class LoginPageState extends State<LoginPage> {
   }
   Widget _txtUsername() {
     return Container(
-      margin: EdgeInsets.only(left: 50,right: 50),
+      margin: EdgeInsets.only(left: 40,right: 40),
       child: Material(
         child: TextField(
           onChanged: (value) {
@@ -234,7 +234,7 @@ class LoginPageState extends State<LoginPage> {
 
   Widget _txtPassword() {
     return Container(
-      margin: EdgeInsets.only(left: 50,right: 50),
+      margin: EdgeInsets.only(left: 40,right: 40),
       child: Material(
         child: TextField(
           onChanged: (value1) {
