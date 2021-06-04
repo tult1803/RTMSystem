@@ -545,12 +545,20 @@ Widget leadingAppbar(BuildContext context){
   );
 }
 
+
+Widget newPageProgressIndicatorBuilder(){
+  return Center(
+    child: CircularProgressIndicator(
+      color: welcome_color,
+    ),
+  );
+}
 // Dùng cho PagedChildBuilderDelegate trong PagedSliverList
 Widget firstPageProgressIndicatorBuilder(){
   return Center(
-     child: CircularProgressIndicator(
+      child: CircularProgressIndicator(
         color: welcome_color,
-      ),
+    ),
   );
 }
 // Dùng cho PagedChildBuilderDelegate trong PagedSliverList

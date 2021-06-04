@@ -155,7 +155,7 @@ class _showAllInvoiceState extends State<showAllInvoice> {
                       builderDelegate: PagedChildBuilderDelegate(
                           firstPageErrorIndicatorBuilder: (context) => firstPageErrorIndicatorBuilder(context,tittle: "Không có dữ liệu. Vui lòng chọn ngày khác."),
                           firstPageProgressIndicatorBuilder: (context) => firstPageProgressIndicatorBuilder(),
-                          newPageProgressIndicatorBuilder: (context) => firstPageProgressIndicatorBuilder(),
+                          newPageProgressIndicatorBuilder: (context) => newPageProgressIndicatorBuilder(),
                           itemBuilder: (context, item, index) {
                             return card(
                                 context,

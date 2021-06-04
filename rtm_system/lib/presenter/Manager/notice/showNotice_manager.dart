@@ -104,7 +104,8 @@ class _showAllNoticeState extends State<showAllNotice> {
                 },
                 firstPageProgressIndicatorBuilder: (context) =>
                     firstPageProgressIndicatorBuilder(),
-                newPageProgressIndicatorBuilder: (context) => firstPageProgressIndicatorBuilder(),
+                newPageProgressIndicatorBuilder: (context) =>
+                    newPageProgressIndicatorBuilder(),
                 itemBuilder: (context, item, index) {
                   return containerButton(context, item.id, item.title,
                       item.content, "${item.createDate}");
