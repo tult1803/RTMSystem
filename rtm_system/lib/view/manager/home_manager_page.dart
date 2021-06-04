@@ -44,10 +44,11 @@ class _HomeAdminPageState extends State<HomeAdminPage> {
     return Scaffold(
       body: _widget,
       bottomNavigationBar: SafeArea(
+        bottom: true,
         child: CurvedNavigationBar(
           key: _bottomNavigationKey,
           index: _index,
-          height: 50.0,
+          height: 40.0,
           items: <Widget>[
             Icon(Icons.my_library_books_outlined, size: 30),
             Icon(Icons.attach_money, size: 30),
