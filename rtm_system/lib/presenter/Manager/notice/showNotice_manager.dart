@@ -81,9 +81,9 @@ class _showAllNoticeState extends State<showAllNotice> {
   @override
   Widget build(BuildContext context) => CustomScrollView(
         slivers: <Widget>[
-          CharacterSearchInputSliver(
-            onChanged: (searchTerm) => _updateSearchTerm(searchTerm),
-          ),
+          // CharacterSearchInputSliver(
+          //   onChanged: (searchTerm) => _updateSearchTerm(searchTerm),
+          // ),
           PagedSliverList<int, NoticeList>(
             pagingController: _pagingController,
             builderDelegate: PagedChildBuilderDelegate<NoticeList>(
@@ -104,6 +104,7 @@ class _showAllNoticeState extends State<showAllNotice> {
                 },
                 firstPageProgressIndicatorBuilder: (context) =>
                     firstPageProgressIndicatorBuilder(),
+                newPageProgressIndicatorBuilder: (context) => firstPageProgressIndicatorBuilder(),
                 itemBuilder: (context, item, index) {
                   return containerButton(context, item.id, item.title,
                       item.content, "${item.createDate}");

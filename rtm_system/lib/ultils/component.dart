@@ -547,13 +547,9 @@ Widget leadingAppbar(BuildContext context){
 // Dùng cho PagedChildBuilderDelegate trong PagedSliverList
 Widget firstPageProgressIndicatorBuilder(){
   return Center(
-    child: SizedBox(
-      height: 60,
-      width: 60,
-      child: CircularProgressIndicator(
+     child: CircularProgressIndicator(
         color: welcome_color,
       ),
-    ),
   );
 }
 // Dùng cho PagedChildBuilderDelegate trong PagedSliverList

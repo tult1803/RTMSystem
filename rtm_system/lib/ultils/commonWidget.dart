@@ -185,7 +185,12 @@ Widget card(BuildContext context, String tittle, String type, String detailType,
   final oCcy = new NumberFormat("#,##0", "en_US");
   //Lấy size của màn hình
   var size = MediaQuery.of(context).size;
-
+  String Cprice;
+  try{
+    Cprice = "${oCcy.format(double.parse(price))}đ";
+  }catch (_){
+    Cprice = "$price";
+  }
   return Card(
     margin: EdgeInsets.only(top: 15),
     color: Colors.white,
@@ -229,7 +234,7 @@ Widget card(BuildContext context, String tittle, String type, String detailType,
                       bottomRight: Radius.circular(10)),
                 ),
                 child: componentCardE(
-                    "${oCcy.format(double.parse(price))}đ",
+                    "$Cprice",
                     "${fBirthday.format(_date)}",
                     CrossAxisAlignment.end,
                     Colors.black54),

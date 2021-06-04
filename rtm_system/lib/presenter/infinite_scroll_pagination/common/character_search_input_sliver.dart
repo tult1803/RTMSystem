@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rxdart/rxdart.dart';
 
 class CharacterSearchInputSliver extends StatefulWidget {
@@ -47,9 +46,14 @@ class _CharacterSearchInputSliverState
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: TextField(
+          cursorColor: Color.fromARGB(255,11,183,145),
           decoration: const InputDecoration(
-            prefixIcon: Icon(Icons.search),
-            labelText: 'Tìm kiếm',
+            border: UnderlineInputBorder(),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Color.fromARGB(255,11,183,145)),
+            ),
+            prefixIcon: Icon(Icons.search, color: Colors.black54,),
+            hintText: 'Tìm kiếm',
           ),
           onChanged: _textChangeStreamController.add,
         ),
