@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/component.dart';
+import 'package:rtm_system/ultils/getStatus.dart';
 
 class DetailCustomer extends StatefulWidget {
   final Map<String, dynamic> map;
@@ -13,14 +14,14 @@ class DetailCustomer extends StatefulWidget {
 }
 
 class _DetailCustomerState extends State<DetailCustomer> {
-  int id, status_id, account_id, advance;
-  String cmnd, fullname, phone, birthday, address, gender;
+  int id, account_id, advance;
+  String cmnd, fullname, phone, birthday, address, gender, status;
   String vip;
 
   Future _getData(){
     setState(() {
       id = this.widget.map["id"];
-      status_id = this.widget.map["status_id"];
+      status = '${getStatus(status: this.widget.map["status_id"])}';
       account_id = this.widget.map["account_id"];
       advance = this.widget.map["advance"];
       cmnd = this.widget.map["cmnd"];
@@ -57,7 +58,7 @@ class _DetailCustomerState extends State<DetailCustomer> {
             cmnd: cmnd,
             gender: gender,
             phone: phone,
-            status_id: status_id,
+            status: status,
             vip: vip,
           ),
         ));
@@ -65,7 +66,7 @@ class _DetailCustomerState extends State<DetailCustomer> {
 }
 
 Widget componentContainerDetailProduct(BuildContext context,
-    {int status_id,
+    {String status,
     int account_id,
     int advance,
     String fullname,
@@ -100,7 +101,7 @@ Widget componentContainerDetailProduct(BuildContext context,
         SizedBox(height: 10,),
         txtItemDetail(context, "Loại tài khoản", "$vip"),
         SizedBox(height: 10,),
-        txtItemDetail(context, "Trạng thái", "$status_id"),
+        txtItemDetail(context, "Trạng thái", "$status"),
         SizedBox(height: 5,),
       ],
     ),
