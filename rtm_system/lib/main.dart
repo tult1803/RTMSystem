@@ -15,13 +15,13 @@ void main() async{
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: [
         const Locale('en'),
         const Locale('vi'),
       ],
       locale: const Locale('vi'),
-
       // chủ đề màu cho toàn bộ ứng dụng
       theme: new ThemeData(
         brightness: Brightness.light,

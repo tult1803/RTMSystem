@@ -6,6 +6,7 @@ import 'package:rtm_system/model/model_invoice.dart';
 import 'package:rtm_system/presenter/infinite_scroll_pagination/common/character_search_input_sliver.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/component.dart';
+import 'package:rtm_system/ultils/getStatus.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/manager/invoice/createInvoice.dart';
 import 'package:rtm_system/view/manager/invoice/processInvoice.dart';
@@ -154,15 +155,16 @@ class _showAllInvoiceState extends State<showAllInvoice> {
                       builderDelegate: PagedChildBuilderDelegate(
                           firstPageErrorIndicatorBuilder: (context) => firstPageErrorIndicatorBuilder(context,tittle: "Không có dữ liệu. Vui lòng chọn ngày khác."),
                           firstPageProgressIndicatorBuilder: (context) => firstPageProgressIndicatorBuilder(),
+                          newPageProgressIndicatorBuilder: (context) => newPageProgressIndicatorBuilder(),
                           itemBuilder: (context, item, index) {
                             return card(
                                 context,
                                 item["customer_name"],
                                 "Trạng thái",
-                                '${item['status_id']}',
+                                '${getStatus(status: item['status_id'])}',
                                 "${item['total']}",
                                 "${item['create_time']}",
-                                Colors.black54,
+                                getColorStatus(status: item['status_id']),
                                 null);
                           }),
                     ),

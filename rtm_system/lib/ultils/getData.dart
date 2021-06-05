@@ -81,6 +81,7 @@ Future<void> doCreateCustomer(
     bool isUpdate,
     int typeOfUpdate,
     int account_id) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
   int status = await post_put_ApiProfile(phone, password, fullname, gender,
       cmnd, address, birthday, isUpdate, typeOfUpdate, account_id);
   if (status == 200) {
@@ -93,6 +94,13 @@ Future<void> doCreateCustomer(
           ),
           true);
     } else {
+      if (isUpdate) {
+        prefs.setString("fullname", fullname);
+        prefs.setString("phone", phone);
+        prefs.setInt("gender", gender);
+        prefs.setString("birthday", birthday);
+      } else
+        prefs.setString("password", password);
       showStatusAlertDialog(
           context,
           "Đã cập nhật.",
@@ -134,6 +142,7 @@ Future<void> put_API_GetMoney(BuildContext context, indexPage) async {
       ),
       status);
 }
+
 //dung cho api getMoney
 showAlertDialogAPI(BuildContext context, String tittle, Widget widget, status) {
   // Tạo button trong AlertDialog
