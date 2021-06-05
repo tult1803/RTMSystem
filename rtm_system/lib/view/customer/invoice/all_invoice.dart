@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rtm_system/presenter/Customer/show_product_in_invoice.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
-import 'package:rtm_system/view/customer/invoice/create_request_invoice.dart';
+import 'package:rtm_system/view/add_product_in_invoice.dart';
 class InvoicePage extends StatefulWidget {
   const InvoicePage({Key key}) : super(key: key);
 
@@ -11,7 +11,6 @@ class InvoicePage extends StatefulWidget {
 
 class _InvoicePageState extends State<InvoicePage> {
   int index = 0;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,7 +57,7 @@ class _InvoicePageState extends State<InvoicePage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => CreateRequestInvoice()),
+                      builder: (context) => AddProductPage(isCustomer: true,)),
                 );
               },
               child: Text(

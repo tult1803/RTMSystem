@@ -59,7 +59,7 @@ class _showAdvanceState extends State<showAdvance> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Container(
-      height: size.height * 0.55,
+      height: size.height * 0.45,
       width: size.width,
       child: new FutureBuilder(
         future: _getProduct(),
