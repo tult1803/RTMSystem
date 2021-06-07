@@ -7,6 +7,8 @@ import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/customer/home_customer_page.dart';
 import 'package:rtm_system/view/customer/invoice/detail_invoice.dart';
 
+import 'getStatus.dart';
+
 // AutoSizeText chữ tự động co giãn theo kích thước mặc định
 // Hiện tại dùng cho trang "Product" và "Bill"
 //componentCardS là 1 phần bên phải của Card trong trang // E là End
@@ -682,7 +684,6 @@ Widget firstPageErrorIndicatorBuilder(BuildContext context, {String tittle}) {
 //Dùng cho trang notice để hiện thỉ các notice
 Widget btnProcess(BuildContext context, int id, String tittle, String content,
     String date, bool isInvoice) {
-  var size = MediaQuery.of(context).size;
   //Format lại ngày
   DateTime _date = DateTime.parse(date);
   final fBirthday = new DateFormat('dd/MM/yyyy hh:mm');
@@ -763,4 +764,187 @@ Widget btnProcess(BuildContext context, int id, String tittle, String content,
           ),
         ),
       ));
+}
+
+//Dùng cho trang chi tiết hóa đơn
+Widget componentContainerDetailInvoice(
+  BuildContext context, {
+  String status,
+  int statusId,
+  int id,
+  int product_id,
+  double quantity,
+  double total,
+  double degree,
+  String creater_name,
+  String customer_name,
+  String product_name,
+  String price,
+  String create_time,
+  String description,
+  String customer_confirm_date,
+  String manager_confirm_date,
+}) {
+  final oCcy = new NumberFormat("#,##0", "en_US");
+  final fBirthday = new DateFormat('dd/MM/yyyy hh:mm');
+  if (customer_confirm_date != null) {
+    customer_confirm_date =
+        "${fBirthday.format(DateTime.parse(customer_confirm_date))}";
+  } else
+    customer_confirm_date = "-----";
+
+  if (manager_confirm_date != null) {
+    manager_confirm_date =
+        "${fBirthday.format(DateTime.parse(manager_confirm_date))}";
+  } else
+    manager_confirm_date = "-----";
+  return Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: Column(
+      children: [
+        txtItemDetail(context, "ID hóa đơn", "$id"),
+        SizedBox(
+          height: 10,
+        ),
+        txtItemDetail(context, "Ngày tạo hóa đơn",
+            "${fBirthday.format(DateTime.parse(create_time))}"),
+        SizedBox(
+          height: 10,
+        ),
+        txtItemDetail(context, "Người tạo hóa đơn", "$creater_name"),
+        SizedBox(
+          height: 10,
+        ),
+        txtItemDetail(context, "Tên khách hàng", "$customer_name"),
+        SizedBox(
+          height: 10,
+        ),
+        txtItemDetail(context, "Tên sản phẩm", "$product_name"),
+        SizedBox(
+          height: 10,
+        ),
+        txtItemDetail(context, "Mô tả", "$description"),
+        SizedBox(
+          height: 10,
+        ),
+        txtItemDetail(context, "Giá sản phẩm (/1kg)",
+            "${oCcy.format(double.parse("${price}"))}đ"),
+        SizedBox(
+          height: 10,
+        ),
+        txtItemDetail(context, "Độ", "$degree"),
+        SizedBox(
+          height: 10,
+        ),
+        txtItemDetail(context, "Khối lượng", "$quantity kg"),
+        SizedBox(
+          height: 10,
+        ),
+        txtItemDetail(context, "Tổng hóa đơn",
+            "${oCcy.format(double.parse("${total}"))}đ"),
+        SizedBox(
+          height: 10,
+        ),
+        txtItemDetail(context, "Ngày xác nhận của khách hàng",
+            "${customer_confirm_date}"),
+        SizedBox(
+          height: 10,
+        ),
+        txtItemDetail(
+            context, "Ngày xác nhận của quản lý", "$manager_confirm_date"),
+        SizedBox(
+          height: 10,
+        ),
+        txtItemDetail(context, "Trạng thái", "$status",
+            colorContent: getColorStatus(status: statusId)),
+        SizedBox(
+          height: 5,
+        ),
+      ],
+    ),
+  );
+}
+
+//Dùng cho chi tiết sản phẩm
+Widget componentContainerDetailProduct(BuildContext context, Map item) {
+  final oCcy = new NumberFormat("#,##0", "en_US");
+  DateTime _date = DateTime.parse(item["updateDateTime"]);
+  final fBirthday = new DateFormat('dd/MM/yyyy hh:mm');
+  return Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: Column(
+      children: [
+        txtItemDetail(context, "Mã sản phẩm", "${item["id"]}"),
+        SizedBox(
+          height: 10,
+        ),
+        txtItemDetail(context, "Tên sản phẩm", item["name"]),
+        SizedBox(
+          height: 10,
+        ),
+        txtItemDetail(context, "Mô tả", item["description"]),
+        SizedBox(
+          height: 10,
+        ),
+        txtItemDetail(context, "Loại", "${item["type"]}"),
+        SizedBox(
+          height: 10,
+        ),
+        txtItemDetail(context, "Giá (1kg)",
+            "${oCcy.format(double.parse("${item["update_price"]}"))}đ"),
+        SizedBox(
+          height: 10,
+        ),
+        txtItemDetail(context, "Ngày cập nhật", "${fBirthday.format(_date)}"),
+        SizedBox(
+          height: 5,
+        ),
+      ],
+    ),
+  );
+}
+
+//Dùng cho trang chi tiết khách hàng
+Widget componentContainerDetailCustomer(BuildContext context,
+    {String status,
+      int account_id,
+      int statusId,
+      int advance,
+      String fullname,
+      String cmnd,
+      String phone,
+      String address,
+      String birthday,
+      String gender,
+      String vip}){
+  // final oCcy = new NumberFormat("#,##0", "en_US");
+  DateTime _date = DateTime.parse(birthday);
+  final fBirthday = new DateFormat('dd/MM/yyyy');
+  return  Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: Column(
+      children: [
+        txtItemDetail(context, "ID khách hàng", "$account_id"),
+        SizedBox(height: 10,),
+        txtItemDetail(context, "Họ và tên", "$fullname"),
+        SizedBox(height: 10,),
+        txtItemDetail(context, "Giới tính", "$gender"),
+        SizedBox(height: 10,),
+        txtItemDetail(context, "Điện thoại", "$phone"),
+        SizedBox(height: 10,),
+        txtItemDetail(context, "CMND/CCCD", "$cmnd"),
+        SizedBox(height: 10,),
+        txtItemDetail(context, "Ngày sinh", "${fBirthday.format(_date)}"),
+        SizedBox(height: 10,),
+        txtItemDetail(context, "Địa chỉ", "$address"),
+        SizedBox(height: 10,),
+        txtItemDetail(context, "Tổng nợ", "$advance"),
+        SizedBox(height: 10,),
+        txtItemDetail(context, "Loại tài khoản", "$vip"),
+        SizedBox(height: 10,),
+        txtItemDetail(context, "Trạng thái", "$status", colorContent: getColorStatus(status: statusId)),
+        SizedBox(height: 5,),
+      ],
+    ),
+  );
 }

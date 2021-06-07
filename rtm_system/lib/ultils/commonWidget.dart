@@ -643,7 +643,7 @@ Widget btnAcceptOrReject(BuildContext context, double width, Color color,
 Widget containerDetail(BuildContext context, Widget widget) {
   var size = MediaQuery.of(context).size;
   return Container(
-    margin: EdgeInsets.only(top: 20, left: 10, right: 10),
+    margin: EdgeInsets.only(left: 10, right: 10),
     width: size.width,
     decoration: BoxDecoration(
       color: Colors.white,

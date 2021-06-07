@@ -34,10 +34,10 @@ class _showAllNoticeState extends State<showAllNotice> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: const Text(
-              'Something went wrong while fetching a new page.',
+              'Có lỗi xảy ra',
             ),
             action: SnackBarAction(
-              label: 'Retry',
+              label: 'Thử lại',
               onPressed: () => _pagingController.retryLastFailedRequest(),
             ),
           ),
