@@ -5,10 +5,9 @@ import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/component.dart';
 
 class DetailProduct extends StatefulWidget {
-  final int id;
-  final String name, description, type, date_time, price;
 
-  DetailProduct({this.id, this.name, this.description, this.type, this.date_time, this.price});
+  final Map<String, dynamic> itemDetailProduct;
+  DetailProduct({this.itemDetailProduct});
 
   @override
   _DetailProductState createState() => _DetailProductState();
@@ -19,34 +18,35 @@ class _DetailProductState extends State<DetailProduct> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    print('${this.widget.id} - ${this.widget.name} - ${this.widget.description} - ${this.widget.type} - ${this.widget.price} - ${this.widget.date_time}');
+    print(this.widget.itemDetailProduct);
   }
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: containerDetail(context,
-      componentContainerDetailProduct(context, this.widget.id, this.widget.name, this.widget.description, this.widget.type, this.widget.price, this.widget.date_time),
-      ));
+      componentContainerDetailProduct(context, this.widget.itemDetailProduct),
+      )
+        );
   }
 }
 
-Widget componentContainerDetailProduct(BuildContext context, int id, String name, String description, String type, String price, String dateTime){
+Widget componentContainerDetailProduct(BuildContext context, Map item){
   final oCcy = new NumberFormat("#,##0", "en_US");
-  DateTime _date = DateTime.parse(dateTime);
+  DateTime _date = DateTime.parse(item["updateDateTime"]);
   final fBirthday = new DateFormat('dd/MM/yyyy hh:mm');
   return  Padding(
     padding: const EdgeInsets.all(8.0),
     child: Column(
       children: [
-        txtItemDetail(context, "Mã sản phẩm", "$id"),
+        txtItemDetail(context, "Mã sản phẩm", "${item["id"]}"),
         SizedBox(height: 10,),
-        txtItemDetail(context, "Tên sản phẩm", name),
+        txtItemDetail(context, "Tên sản phẩm", item["name"]),
         SizedBox(height: 10,),
-        txtItemDetail(context, "Mô tả", description),
+        txtItemDetail(context, "Mô tả", item["description"]),
         SizedBox(height: 10,),
-        txtItemDetail(context, "Loại", type),
+        txtItemDetail(context, "Loại", "${item["type"]}"),
         SizedBox(height: 10,),
-        txtItemDetail(context, "Giá (1kg)", "${oCcy.format(double.parse(price))}đ"),
+        txtItemDetail(context, "Giá (1kg)", "${oCcy.format(double.parse("${item["update_price"]}"))}đ"),
         SizedBox(height: 10,),
         txtItemDetail(context, "Ngày cập nhật", "${fBirthday.format(_date)}"),
         SizedBox(height: 5,),

@@ -91,7 +91,7 @@ class _showAllNoticeState extends State<showAllNotice> {
                   return Column(
                     children: [
                       firstPageErrorIndicatorBuilder(context,
-                          tittle: "Không có dữ liệu."),
+                          tittle: "Không có dữ liệu"),
                       GestureDetector(
                         onTap: () => _pagingController.refresh(),
                         child: Text(
