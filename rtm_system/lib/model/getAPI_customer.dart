@@ -12,7 +12,7 @@ class GetCustomer{
   createCustomer(String token, int accountId, int pageNum, int pageNo, {String searchTerm}) async {
     var fDate = new DateFormat('yyyy-MM-dd hh:mm:ss');
     final response = await http.get(
-      Uri.http('${url_main}', '${url_customer}/${accountId}', {"pageNum" : "${pageNum}" ,"pageNo" : "${pageNo}", }),
+      Uri.http('${url_main}', '${url_customer}/${accountId}', {"pageNum" : "${pageNum}" ,"pageNo" : "${pageNo}", "name": searchTerm }),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Accept': 'application/json',
@@ -21,7 +21,7 @@ class GetCustomer{
 
     );
     print("Status getApi Invoice:${response.statusCode}");
-
+    print(Uri.http('${url_main}', '${url_customer}/${accountId}', {"pageNum" : "${pageNum}" ,"pageNo" : "${pageNo}", "name": searchTerm}));
     statusInvoice = response.statusCode;
 
     if (response.statusCode == 200) {
@@ -31,6 +31,6 @@ class GetCustomer{
       throw Exception('Failed to load data');
     }
   }
-
+  // "name" : "$searchTerm"
 }
 

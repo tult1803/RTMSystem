@@ -153,7 +153,7 @@ class _showAllInvoiceState extends State<showAllInvoice> {
                     PagedSliverList(
                       pagingController: _pagingController,
                       builderDelegate: PagedChildBuilderDelegate(
-                          firstPageErrorIndicatorBuilder: (context) => firstPageErrorIndicatorBuilder(context,tittle: "Không có dữ liệu. Vui lòng chọn ngày khác."),
+                          firstPageErrorIndicatorBuilder: (context) => firstPageErrorIndicatorBuilder(context,tittle: "Không có dữ liệu"),
                           firstPageProgressIndicatorBuilder: (context) => firstPageProgressIndicatorBuilder(),
                           newPageProgressIndicatorBuilder: (context) => newPageProgressIndicatorBuilder(),
                           itemBuilder: (context, item, index) {

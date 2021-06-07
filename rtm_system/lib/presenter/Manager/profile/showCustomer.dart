@@ -67,10 +67,10 @@ class _showAllCustomerState extends State<showAllCustomer> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: const Text(
-              'Something went wrong while fetching a new page.',
+              'Có lỗi xảy ra',
             ),
             action: SnackBarAction(
-              label: 'Retry',
+              label: 'Thử lại',
               onPressed: () => _pagingController.retryLastFailedRequest(),
             ),
           ),
@@ -94,12 +94,26 @@ class _showAllCustomerState extends State<showAllCustomer> {
           PagedSliverList(
             pagingController: _pagingController,
             builderDelegate: PagedChildBuilderDelegate(
-                firstPageErrorIndicatorBuilder: (context) => firstPageErrorIndicatorBuilder(context,tittle: "Không có dữ liệu. Vui lòng chọn ngày khác."),
+                firstPageErrorIndicatorBuilder: (context) {
+                  return Column(
+                    children: [
+                      firstPageErrorIndicatorBuilder(context,
+                          tittle: "Không có dữ liệu"),
+                      GestureDetector(
+                        onTap: () => _pagingController.refresh(),
+                        child: Text(
+                          "Nhấn để tải lại",
+                          style: TextStyle(color: welcome_color, fontSize: 18),
+                        ),
+                      ),
+                    ],
+                  );
+                },
                 firstPageProgressIndicatorBuilder: (context) => firstPageProgressIndicatorBuilder(),
                 noItemsFoundIndicatorBuilder: (context) => noItemsFoundIndicatorBuilder(),
                 newPageProgressIndicatorBuilder: (context) => firstPageProgressIndicatorBuilder(),
                 itemBuilder: (context, item, index) {
-                  String vip;Color advanceColor;
+                  String vip;
                   if(item['vip']){
                     vip = "Vip";
                   }else{
@@ -138,7 +152,7 @@ class _showAllCustomerState extends State<showAllCustomer> {
     return Column(
       children: [
         firstPageErrorIndicatorBuilder(context,
-            tittle: "Không có dữ liệu khách hàng."),
+            tittle: "Không có dữ liệu khách hàng"),
         GestureDetector(
           onTap: () => _pagingController.refresh(),
           child: Text(
