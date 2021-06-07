@@ -18,7 +18,6 @@ class _DetailProductState extends State<DetailProduct> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    print(this.widget.itemDetailProduct);
   }
   @override
   Widget build(BuildContext context) {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
+import 'package:rtm_system/view/create_invoice.dart';
 
 class createInvoice extends StatefulWidget {
   const createInvoice({Key key}) : super(key: key);
@@ -23,7 +24,7 @@ class _createInvoiceState extends State<createInvoice> {
               color: Colors.white, fontWeight: FontWeight.w500, fontSize: 22),
         ),
       ),
-      body: Center(child: new Text("Tạo hóa đơn")),
+      // body: CreateInvoicePage()
     );
   }
 }

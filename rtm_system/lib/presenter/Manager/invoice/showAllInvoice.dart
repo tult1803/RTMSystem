@@ -111,7 +111,8 @@ class _showAllInvoiceState extends State<showAllInvoice> {
                     width: 20,
                   ),
                   btnMain(context, 120, "Tạo hóa đơn", Icon(Icons.post_add),
-                      createInvoice()),
+                      createInvoice()
+                  ),
                 ],
               ),
               Row(

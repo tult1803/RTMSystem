@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:rtm_system/model/postAPI_createCustomer.dart';
 import 'package:rtm_system/model/postAPI_createNotice.dart';
+import 'package:rtm_system/model/putAPI_updatePrice.dart';
 import 'package:rtm_system/model/putAPI_updateProfile.dart';
 import 'package:rtm_system/view/customer/home_customer_page.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'alertDialog.dart';
+
+
 
 //dùng cho tạo thông báo
 Future postAPINotice(String tittle, String content) async {
@@ -186,4 +189,28 @@ showAlertDialogAPI(BuildContext context, String tittle, Widget widget, status) {
       return alert;
     },
   );
+}
+
+
+Future<void> putAPIUpdatePrice(BuildContext context,int product_id, double price) async{
+  int status;
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  PutUpdatePrice putUpdatePrice = PutUpdatePrice();
+  status = await putUpdatePrice.updatePrice(
+      prefs.get("access_token"),
+      prefs.get("account_id"),
+      product_id,
+      price);
+
+  if (status == 200) {
+      showStatusAlertDialog(
+          context,
+          "Đã cập nhật.",
+          HomeAdminPage(
+            index: 2,
+          ),
+          true);
+  } else
+    showStatusAlertDialog(
+        context, "Cập nhật thất bại. Xin thử lại !!!", null, false);
 }
