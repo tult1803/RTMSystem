@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:rtm_system/model/putAPI_deactivateCustomer.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 
 //show khi nhấn các nút "Hủy" hoặc "Tạo"
-showAlertDialog(BuildContext context, String tittle, Widget widget) {
+showAlertDialog(BuildContext context, String tittle, Widget widget,
+    {bool isDeactivate, String token, int accountId}) {
   // Tạo button trong AlertDialog
   Widget btnAlert(String tittleA, Color color, bool checkCreate) {
     return FlatButton(
@@ -11,12 +13,24 @@ showAlertDialog(BuildContext context, String tittle, Widget widget) {
         tittleA,
         style: TextStyle(color: color),
       ),
-      onPressed: () {
+      onPressed: () async{
         if (checkCreate) {
-          Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (context) => widget),
-              (route) => false);
+          if (isDeactivate == true) {
+            PutDeactivateCustomer deactivateCustomer = PutDeactivateCustomer();
+            int status =await  deactivateCustomer.deactivateCustomer(token, accountId);
+            if(status == 200){
+              Navigator.of(context).pop();
+              showStatusAlertDialog(context, "Hủy kích hoạt thành công", widget, true);
+            }else{
+              Navigator.of(context).pop();
+              showStatusAlertDialog(context, "Có lỗi xảy ra. Xin thử lại", widget, false);
+            }
+          } else {
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => widget),
+                (route) => false);
+          }
         } else {
           Navigator.of(context).pop();
         }
@@ -92,7 +106,10 @@ Future showCupertinoAlertDialog(BuildContext context, String content) {
             content: new Text(content),
             actions: <Widget>[
               TextButton(
-                child: Text('Đóng',style: TextStyle(color: welcome_color),),
+                child: Text(
+                  'Đóng',
+                  style: TextStyle(color: welcome_color),
+                ),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },

@@ -69,7 +69,7 @@ class _showAllInvoiceState extends State<showAllInvoice> {
     // TODO: implement initState
     super.initState();
     toDate = DateTime.now();
-    fromDate = DateTime.now().subtract(Duration(days: 2));
+    fromDate = DateTime.now().subtract(Duration(days: 30));
     _pagingController.addPageRequestListener((pageKey) {
       _fetchPage(pageKey);
     });
@@ -170,7 +170,8 @@ class _showAllInvoiceState extends State<showAllInvoice> {
                                 getColorStatus(status: item['status_id']),
                                 FormForDetailPage(
                                     tittle: "Chi tiết hóa đơn",
-                                    bodyPage: DetailInvoice(map: item,)));
+                                    bodyPage: DetailInvoice(map: item,),
+                                ));
                           }),
                     ),
                   ],

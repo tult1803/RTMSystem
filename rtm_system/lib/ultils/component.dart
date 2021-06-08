@@ -905,46 +905,78 @@ Widget componentContainerDetailProduct(BuildContext context, Map item) {
 }
 
 //Dùng cho trang chi tiết khách hàng
+// Là các dòng trong trang chi tiết khách hàng
 Widget componentContainerDetailCustomer(BuildContext context,
     {String status,
-      int account_id,
-      int statusId,
-      int advance,
-      String fullname,
-      String cmnd,
-      String phone,
-      String address,
-      String birthday,
-      String gender,
-      String vip}){
+    String token,
+    int account_id,
+    int statusId,
+    int advance,
+    String fullname,
+    String cmnd,
+    String phone,
+    String address,
+    String birthday,
+    String gender,
+    String vip}) {
   // final oCcy = new NumberFormat("#,##0", "en_US");
   DateTime _date = DateTime.parse(birthday);
   final fBirthday = new DateFormat('dd/MM/yyyy');
-  return  Padding(
+  return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Column(
       children: [
         txtItemDetail(context, "ID khách hàng", "$account_id"),
-        SizedBox(height: 10,),
+        SizedBox(
+          height: 10,
+        ),
         txtItemDetail(context, "Họ và tên", "$fullname"),
-        SizedBox(height: 10,),
+        SizedBox(
+          height: 10,
+        ),
         txtItemDetail(context, "Giới tính", "$gender"),
-        SizedBox(height: 10,),
+        SizedBox(
+          height: 10,
+        ),
         txtItemDetail(context, "Điện thoại", "$phone"),
-        SizedBox(height: 10,),
+        SizedBox(
+          height: 10,
+        ),
         txtItemDetail(context, "CMND/CCCD", "$cmnd"),
-        SizedBox(height: 10,),
+        SizedBox(
+          height: 10,
+        ),
         txtItemDetail(context, "Ngày sinh", "${fBirthday.format(_date)}"),
-        SizedBox(height: 10,),
+        SizedBox(
+          height: 10,
+        ),
         txtItemDetail(context, "Địa chỉ", "$address"),
-        SizedBox(height: 10,),
+        SizedBox(
+          height: 10,
+        ),
         txtItemDetail(context, "Tổng nợ", "$advance"),
-        SizedBox(height: 10,),
+        SizedBox(
+          height: 10,
+        ),
         txtItemDetail(context, "Loại tài khoản", "$vip"),
-        SizedBox(height: 10,),
-        txtItemDetail(context, "Trạng thái", "$status", colorContent: getColorStatus(status: statusId)),
-        SizedBox(height: 5,),
+        SizedBox(
+          height: 10,
+        ),
+        txtItemDetail(context, "Trạng thái", "$status",
+            colorContent: getColorStatus(status: statusId)),
+        SizedBox(
+          height: 10,
+        ),
+        btnDeactivateCustomer(
+            token: token,
+            context: context,
+            status: status,
+            account_id: account_id),
+        SizedBox(
+          height: 5,
+        ),
       ],
     ),
   );
 }
+

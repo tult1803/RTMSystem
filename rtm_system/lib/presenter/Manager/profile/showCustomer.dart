@@ -21,7 +21,7 @@ class showAllCustomer extends StatefulWidget {
 class _showAllCustomerState extends State<showAllCustomer> {
   int _pageSize = 1;
   final PagingController _pagingController = PagingController(firstPageKey: 10);
-
+  String token;
   String _searchTerm;
   Customer customer;
   List customerList;
@@ -29,6 +29,7 @@ class _showAllCustomerState extends State<showAllCustomer> {
   Future<void> _fetchPage(pageKey) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
+      token = prefs.get("access_token");
       GetCustomer getAPIAllCustomer = GetCustomer();
       customer = await getAPIAllCustomer.createCustomer(
         prefs.get("access_token"),
@@ -129,7 +130,7 @@ class _showAllCustomerState extends State<showAllCustomer> {
                       getColorStatus(status: item['status_id']),
                       FormForDetailPage(
                           tittle: "Chi tiết khách hàng",
-                          bodyPage: DetailCustomer(map: item,)));
+                          bodyPage: DetailCustomer(map: item,token: token,)));
                 }),
           ),
         ],

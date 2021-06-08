@@ -24,7 +24,7 @@ class _createInvoiceState extends State<createInvoice> {
               color: Colors.white, fontWeight: FontWeight.w500, fontSize: 22),
         ),
       ),
-      // body: CreateInvoicePage()
+      // body: CreateInvoicePage(isNew: false, idProduct: "1",)
     );
   }
 }

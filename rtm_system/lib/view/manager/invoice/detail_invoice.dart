@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/getStatus.dart';
@@ -57,26 +56,27 @@ class _DetailInvoiceState extends State<DetailInvoice> {
     return Container(
       margin: EdgeInsets.only(top: 15),
       child: SingleChildScrollView(
-          child: containerDetail(
+        child: containerDetail(
+            context,
+            componentContainerDetailInvoice(
               context,
-              componentContainerDetailInvoice(
-                context,
-                id: id,
-                customer_name: customer_name,
-                price: "$price",
-                create_time: create_time,
-                product_name: product_name,
-                description: description,
-                creater_name: creater_name,
-                status: status,
-                statusId: this.widget.map["status_id"],
-                product_id: product_id,
-                quantity: quantity,
-                total: total,
-                degree: degree,
-                customer_confirm_date: customer_confirm_date,
-                manager_confirm_date: manager_confirm_date,
-              ))),
+              id: id,
+              customer_name: customer_name,
+              price: "$price",
+              create_time: create_time,
+              product_name: product_name,
+              description: description,
+              creater_name: creater_name,
+              status: status,
+              statusId: this.widget.map["status_id"],
+              product_id: product_id,
+              quantity: quantity,
+              total: total,
+              degree: degree,
+              customer_confirm_date: customer_confirm_date,
+              manager_confirm_date: manager_confirm_date,
+            )),
+      ),
     );
   }
 }

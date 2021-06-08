@@ -5,8 +5,8 @@ import 'package:rtm_system/ultils/getStatus.dart';
 
 class DetailCustomer extends StatefulWidget {
   final Map<String, dynamic> map;
-
-  DetailCustomer({this.map});
+  final String token;
+  DetailCustomer({this.token, this.map});
 
   @override
   _DetailCustomerState createState() => _DetailCustomerState();
@@ -52,6 +52,7 @@ class _DetailCustomerState extends State<DetailCustomer> {
           child: containerDetail(context,
             componentContainerDetailCustomer(
                 context,
+              token: this.widget.token,
               account_id: account_id,
               fullname: fullname,
               address: address,

@@ -7,6 +7,7 @@ import 'package:rtm_system/view/customer/home_customer_page.dart';
 import 'package:rtm_system/view/customer/process/process_all.dart';
 import 'package:rtm_system/view/detail_notice.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
+import 'package:rtm_system/view/manager/profile/allCustomer_manager.dart';
 import 'package:rtm_system/view/update_password.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../view/login_page.dart';
@@ -690,4 +691,34 @@ Widget btnWaitingProcess(context, int index){
       elevation: 10,
     ),
   );
+}
+
+//Đang dùng cho nút hủy kích hoạt tài khoản khách hàng
+Widget btnDeactivateCustomer(
+    {String status, int account_id, String token, BuildContext context}) {
+  if (status != "Không hoạt động") {
+    return Container(
+      width: 160,
+      height: 50,
+      decoration: BoxDecoration(
+        color: Colors.redAccent,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: TextButton(
+        onPressed: () {
+          if (status != "Không hoạt động") {
+            showAlertDialog(
+                context, "Bạn muốn hủy kích hoạt khách hàng", AllCustomer(),
+                isDeactivate: true, token: token, accountId: account_id);
+          }
+        },
+        child: AutoSizeText(
+          "Hủy kích hoạt",
+          style: TextStyle(color: Colors.white, fontSize: 17),
+        ),
+      ),
+    );
+  } else {
+    return Container();
+  }
 }
