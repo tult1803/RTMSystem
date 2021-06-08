@@ -504,11 +504,7 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
     if (this.widget.fullname == null || this.widget.fullname == "") {
       errFulname = "Họ và tên trống";
     } else {
-      // if (!checkFormatFullname.hasMatch(fullname)) {
-      //   errFulname = "Họ tên chỉ nhập chữ";
-      // } else {
       errFulname = null;
-      // }
     }
     if (this.widget.phone == null || this.widget.phone == "") {
       errPhone = "Số điện thoại trống";

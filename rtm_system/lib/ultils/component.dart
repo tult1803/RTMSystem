@@ -352,6 +352,7 @@ Widget widgetContentInvoice(context, String status, String header) {
           Center(
             child: SizedBox(
               width: 150,
+              // ignore: deprecated_member_use
               child: RaisedButton(
                 color: Color(0xffEEEEEE),
                 onPressed: () {
@@ -416,6 +417,7 @@ Widget widgetContentAdvance(context, String status, String header1, header2) {
           Center(
             child: SizedBox(
               width: 150,
+              // ignore: deprecated_member_use
               child: RaisedButton(
                 color: Color(0xffEEEEEE),
                 onPressed: () {
@@ -502,6 +504,7 @@ Widget widgetCreateInvoice(context, bool isNew, String product) {
           Center(
             child: SizedBox(
               width: 150,
+              // ignore: deprecated_member_use
               child: RaisedButton(
                 color: Color(0xffEEEEEE),
                 onPressed: () {
@@ -518,6 +521,7 @@ Widget widgetCreateInvoice(context, bool isNew, String product) {
         Center(
           child: SizedBox(
             width: 150,
+            // ignore: deprecated_member_use
             child: RaisedButton(
               color: Color(0xffEEEEEE),
               onPressed: () {
@@ -537,11 +541,13 @@ Widget widgetCreateInvoice(context, bool isNew, String product) {
   ));
 }
 
+// ignore: missing_return
 Widget _showBtnInAdvanceDetail(context, String status) {
   if (status == 'active')
     return Center(
       child: SizedBox(
         width: 150,
+        // ignore: deprecated_member_use
         child: RaisedButton(
           color: Color(0xffEEEEEE),
           onPressed: () {
@@ -979,4 +985,3 @@ Widget componentContainerDetailCustomer(BuildContext context,
     ),
   );
 }
-

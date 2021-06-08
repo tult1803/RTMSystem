@@ -68,6 +68,7 @@ class StretchableButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(borderRadius),
             side: bs,
           ),
+          // ignore: deprecated_member_use
           child: RaisedButton(
             onPressed: onPressed,
             color: buttonColor,
@@ -186,12 +187,12 @@ Widget card(BuildContext context, String tittle, String type, String detailType,
   var size = MediaQuery.of(context).size;
   String Cprice;
   String Cdate;
-  try{
+  try {
     //Format lại ngày
     DateTime _date = DateTime.parse(date);
     Cprice = "${oCcy.format(double.parse(price))}đ";
     Cdate = "${fBirthday.format(_date)}";
-  }catch (_){
+  } catch (_) {
     Cprice = "$price";
     Cdate = "$date";
   }
@@ -204,6 +205,7 @@ Widget card(BuildContext context, String tittle, String type, String detailType,
     ),
     child: Container(
       height: 78,
+      // ignore: deprecated_member_use
       child: FlatButton(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
@@ -237,11 +239,8 @@ Widget card(BuildContext context, String tittle, String type, String detailType,
                       topRight: Radius.circular(10),
                       bottomRight: Radius.circular(10)),
                 ),
-                child: componentCardE(
-                    "$Cprice",
-                    "$Cdate",
-                    CrossAxisAlignment.end,
-                    Colors.black54),
+                child: componentCardE("$Cprice", "$Cdate",
+                    CrossAxisAlignment.end, Colors.black54),
               ),
             ),
           ],
@@ -446,6 +445,7 @@ Widget btnUpdateInfo(
     int account_id) {
   return Container(
     width: 320,
+    // ignore: deprecated_member_use
     child: RaisedButton(
       color: Color(0xFF0BB791),
       onPressed: () {
@@ -484,6 +484,7 @@ Widget btnUpdateInfo(
 Widget btnUpdatePw(context, String password, int account_id, bool isCustomer) {
   return Container(
     width: 320,
+    // ignore: deprecated_member_use
     child: RaisedButton(
       color: Color(0xFF0BB791),
       onPressed: () {
@@ -534,6 +535,7 @@ Widget btnSubmitOrCancel(
       color: color,
       borderRadius: BorderRadius.circular(5),
     ),
+    // ignore: deprecated_member_use
     child: FlatButton(
         onPressed: () async {
           if (action) {
@@ -586,6 +588,7 @@ Widget btnAcceptOrReject(BuildContext context, double width, Color color,
   return Container(
       child: SizedBox(
     width: width,
+    // ignore: deprecated_member_use
     child: RaisedButton(
       color: color,
       shape: RoundedRectangleBorder(
@@ -653,9 +656,11 @@ Widget containerDetail(BuildContext context, Widget widget) {
     child: widget,
   );
 }
-Widget btnWaitingProcess(context, int index){
-  return  SizedBox(
+
+Widget btnWaitingProcess(context, int index) {
+  return SizedBox(
     width: 130,
+    // ignore: deprecated_member_use
     child: RaisedButton(
       color: Color(0xFFF8D375),
       onPressed: () {
