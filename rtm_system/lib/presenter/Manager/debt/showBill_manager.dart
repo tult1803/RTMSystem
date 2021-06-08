@@ -138,7 +138,7 @@ class _showAllBillState extends State<showAllBill> {
         setState(() {
           pickedDate();
         });
-      },
+      }, child: null,
     );
 
   }

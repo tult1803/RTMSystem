@@ -1,19 +1,23 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 
 //show khi nhấn các nút "Hủy" hoặc "Tạo"
 showAlertDialog(BuildContext context, String tittle, Widget widget) {
   // Tạo button trong AlertDialog
-  Widget btnAlert(String tittleA, Color color, bool checkCreate){
+  Widget btnAlert(String tittleA, Color color, bool checkCreate) {
     return FlatButton(
-      child: Text(tittleA, style: TextStyle(color: color),),
+      child: Text(
+        tittleA,
+        style: TextStyle(color: color),
+      ),
       onPressed: () {
-        if(checkCreate){
+        if (checkCreate) {
           Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(builder: (context) => widget),
-                  (route) => false);
-        }else{
+              (route) => false);
+        } else {
           Navigator.of(context).pop();
         }
       },
@@ -40,20 +44,24 @@ showAlertDialog(BuildContext context, String tittle, Widget widget) {
 }
 
 //Báo trạng thái sau khi thực hiện hành động
-showStatusAlertDialog(BuildContext context, String tittle, Widget widget, bool checkStatus) {
+showStatusAlertDialog(
+    BuildContext context, String tittle, Widget widget, bool checkStatus) {
   // Tạo button trong AlertDialog
-  Widget btnAlert(String tittleA, Color color){
+  Widget btnAlert(String tittleA, Color color) {
     return FlatButton(
-      child: Text(tittleA, style: TextStyle(color: color),),
+      child: Text(
+        tittleA,
+        style: TextStyle(color: color),
+      ),
       onPressed: () {
-          if(checkStatus){
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => widget),
-                    (route) => false);
-          }else{
-            Navigator.of(context).pop();
-          }
+        if (checkStatus) {
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => widget),
+              (route) => false);
+        } else {
+          Navigator.of(context).pop();
+        }
       },
     );
   }
@@ -74,4 +82,21 @@ showStatusAlertDialog(BuildContext context, String tittle, Widget widget, bool c
       return alert;
     },
   );
+}
+
+Future showCupertinoAlertDialog(BuildContext context, String content) {
+  return showDialog(
+      context: context,
+      builder: (_) => new CupertinoAlertDialog(
+            title: new Text("Thông báo"),
+            content: new Text(content),
+            actions: <Widget>[
+              TextButton(
+                child: Text('Đóng',style: TextStyle(color: welcome_color),),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          ));
 }
