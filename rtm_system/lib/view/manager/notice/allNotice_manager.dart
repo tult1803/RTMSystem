@@ -14,7 +14,6 @@ class AllNotice extends StatefulWidget {
 
 class _AllNoticeState extends State<AllNotice> {
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

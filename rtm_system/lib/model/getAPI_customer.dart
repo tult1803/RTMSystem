@@ -21,9 +21,7 @@ class GetCustomer{
 
     );
     print("Status getApi Invoice:${response.statusCode}");
-    print(Uri.http('${url_main}', '${url_customer}/${accountId}', {"pageNum" : "${pageNum}" ,"pageNo" : "${pageNo}", "name": searchTerm}));
     statusInvoice = response.statusCode;
-
     if (response.statusCode == 200) {
       return  Customer.fromJson(jsonDecode(response.body));
     } else {

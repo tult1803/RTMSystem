@@ -1,26 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/getStatus.dart';
 
 class DetailCustomer extends StatefulWidget {
   final Map<String, dynamic> map;
-
-  DetailCustomer({this.map});
+  final String token;
+  DetailCustomer({this.token, this.map});
 
   @override
   _DetailCustomerState createState() => _DetailCustomerState();
 }
 
 class _DetailCustomerState extends State<DetailCustomer> {
-  int id, account_id, advance;
+  int id, account_id, advance, statusId;
   String cmnd, fullname, phone, birthday, address, gender, status;
   String vip;
 
   Future _getData(){
     setState(() {
       id = this.widget.map["id"];
+      statusId = this.widget.map["status_id"];
       status = '${getStatus(status: this.widget.map["status_id"])}';
       account_id = this.widget.map["account_id"];
       advance = this.widget.map["advance"];
@@ -46,63 +46,26 @@ class _DetailCustomerState extends State<DetailCustomer> {
   }
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-        child: containerDetail(context,
-          componentContainerDetailProduct(
-              context,
-            account_id: account_id,
-            fullname: fullname,
-            address: address,
-            advance: advance,
-            birthday: birthday,
-            cmnd: cmnd,
-            gender: gender,
-            phone: phone,
-            status: status,
-            vip: vip,
-          ),
-        ));
+    return Container(
+      margin: EdgeInsets.only(top: 15),
+      child: SingleChildScrollView(
+          child: containerDetail(context,
+            componentContainerDetailCustomer(
+                context,
+              token: this.widget.token,
+              account_id: account_id,
+              fullname: fullname,
+              address: address,
+              advance: advance,
+              birthday: birthday,
+              cmnd: cmnd,
+              gender: gender,
+              phone: phone,
+              status: status,
+              vip: vip,
+              statusId: statusId,
+            ),
+          )),
+    );
   }
-
-Widget componentContainerDetailProduct(BuildContext context,
-    {String status,
-    int account_id,
-    int advance,
-    String fullname,
-    String cmnd,
-    String phone,
-    String address,
-    String birthday,
-    String gender,
-    String vip}){
-  // final oCcy = new NumberFormat("#,##0", "en_US");
-  DateTime _date = DateTime.parse(birthday);
-  final fBirthday = new DateFormat('dd/MM/yyyy');
-  return  Padding(
-    padding: const EdgeInsets.all(8.0),
-    child: Column(
-      children: [
-        txtItemDetail(context, "ID khách hàng", "$account_id"),
-        SizedBox(height: 10,),
-        txtItemDetail(context, "Họ và tên", "$fullname"),
-        SizedBox(height: 10,),
-        txtItemDetail(context, "Giới tính", "$gender"),
-        SizedBox(height: 10,),
-        txtItemDetail(context, "Điện thoại", "$phone"),
-        SizedBox(height: 10,),
-        txtItemDetail(context, "CMND/CCCD", "$cmnd"),
-        SizedBox(height: 10,),
-        txtItemDetail(context, "Ngày sinh", "${fBirthday.format(_date)}"),
-        SizedBox(height: 10,),
-        txtItemDetail(context, "Địa chỉ", "$address"),
-        SizedBox(height: 10,),
-        txtItemDetail(context, "Tổng nợ", "$advance"),
-        SizedBox(height: 10,),
-        txtItemDetail(context, "Loại tài khoản", "$vip"),
-        SizedBox(height: 10,),
-        txtItemDetail(context, "Trạng thái", "$status", colorContent: getColorStatus(status: this.widget.map["status_id"])),
-        SizedBox(height: 5,),
-      ],
-    ),
-  );
-}}
+}

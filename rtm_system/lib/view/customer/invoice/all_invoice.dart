@@ -57,7 +57,7 @@ class _InvoicePageState extends State<InvoicePage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => AddProductPage(isCustomer: true,)),
+                      builder: (context) => AddProductPage(isCustomer: true,tittle: "Tạo yêu cầu bán hàng",)),
                 );
               },
               child: Text(

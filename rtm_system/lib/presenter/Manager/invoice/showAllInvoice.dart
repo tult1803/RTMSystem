@@ -8,7 +8,9 @@ import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/getStatus.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
-import 'package:rtm_system/view/manager/invoice/createInvoice.dart';
+import 'package:rtm_system/view/add_product_in_invoice.dart';
+import 'package:rtm_system/view/manager/formForDetail_page.dart';
+import 'package:rtm_system/view/manager/invoice/detail_invoice.dart';
 import 'package:rtm_system/view/manager/invoice/processInvoice.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -67,7 +69,7 @@ class _showAllInvoiceState extends State<showAllInvoice> {
     // TODO: implement initState
     super.initState();
     toDate = DateTime.now();
-    fromDate = DateTime.now().subtract(Duration(days: 2));
+    fromDate = DateTime.now().subtract(Duration(days: 30));
     _pagingController.addPageRequestListener((pageKey) {
       _fetchPage(pageKey);
     });
@@ -77,10 +79,10 @@ class _showAllInvoiceState extends State<showAllInvoice> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: const Text(
-              'Something went wrong while fetching a new page.',
+              'Có lỗi xảy ra',
             ),
             action: SnackBarAction(
-              label: 'Retry',
+              label: 'Thử lại',
               onPressed: () => _pagingController.retryLastFailedRequest(),
             ),
           ),
@@ -111,7 +113,9 @@ class _showAllInvoiceState extends State<showAllInvoice> {
                     width: 20,
                   ),
                   btnMain(context, 120, "Tạo hóa đơn", Icon(Icons.post_add),
-                      createInvoice()),
+                      //Đây là trang create invoice
+                      AddProductPage(tittle: "Tạo hóa đơn", isCustomer: false,)
+                  ),
                 ],
               ),
               Row(
@@ -165,7 +169,10 @@ class _showAllInvoiceState extends State<showAllInvoice> {
                                 "${item['total']}",
                                 "${item['create_time']}",
                                 getColorStatus(status: item['status_id']),
-                                null);
+                                FormForDetailPage(
+                                    tittle: "Chi tiết hóa đơn",
+                                    bodyPage: DetailInvoice(map: item,),
+                                ));
                           }),
                     ),
                   ],

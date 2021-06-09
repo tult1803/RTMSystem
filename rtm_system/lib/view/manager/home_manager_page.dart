@@ -1,5 +1,9 @@
+import 'dart:async';
+
+import 'package:connectivity/connectivity.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:rtm_system/ultils/src/checkConnectivity.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/manager/debt/allDebt_manager.dart';
 import 'package:rtm_system/view/manager/notice/allNotice_manager.dart';
@@ -18,6 +22,7 @@ class HomeAdminPage extends StatefulWidget {
 }
 
 class _HomeAdminPageState extends State<HomeAdminPage> {
+  StreamSubscription<ConnectivityResult> subscription;
   GlobalKey _bottomNavigationKey = GlobalKey();
   int _index = 2;
   Widget _widget;
@@ -37,8 +42,19 @@ class _HomeAdminPageState extends State<HomeAdminPage> {
     } else if (_index == 4) {
       _widget = ProfileManager();
     }
-  }
+    subscription = Connectivity()
+          .onConnectivityChanged
+          .listen((ConnectivityResult result) {
+        checkConnectivity(context, result);
+      });
+    }
 
+    @override
+    void dispose() {
+      // TODO: implement dispose
+      super.dispose();
+      subscription.cancel();
+    }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

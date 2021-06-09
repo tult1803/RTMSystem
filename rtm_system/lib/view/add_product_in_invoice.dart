@@ -4,16 +4,19 @@ import 'package:rtm_system/model/getAPI_product.dart';
 import 'package:rtm_system/model/model_product.dart';
 import 'package:rtm_system/ultils/alertDialog.dart';
 import 'package:rtm_system/ultils/component.dart';
+import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/ultils/src/regExp.dart';
 import 'package:rtm_system/view/create_invoice.dart';
 import 'package:rtm_system/view/customer/home_customer_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AddProductPage extends StatefulWidget {
-  const AddProductPage({Key key, this.isCustomer}) : super(key: key);
+  final String tittle;
 
   //true is Customer role
   final bool isCustomer;
+
+  AddProductPage({this.tittle, this.isCustomer});
 
   @override
   _AddProductPageState createState() => _AddProductPageState();
@@ -73,7 +76,7 @@ class _AddProductPageState extends State<AddProductPage> {
         centerTitle: true,
         leading: leadingAppbar(context),
         title: Text(
-          "Tạo yêu cầu bán hàng",
+          this.widget.tittle,
           style: TextStyle(
               color: Colors.white, fontWeight: FontWeight.w500, fontSize: 22),
         ),
@@ -107,25 +110,21 @@ class _AddProductPageState extends State<AddProductPage> {
                         //sẽ làm add thêm dòng để nhập tiếp(giống form số ký) để
                         // khách có thể xem số lần mình nhập, hoặc chỉnh sửa.
                         // Chưa làm dk.
-                        FlatButton(
+                        SizedBox(
+                          height: 10,
+                        ),
+                        ElevatedButton(
                           onPressed: () {
-                            setState(() {
-                              // count += totalQuantity;
-                            });
-                            print('Show');
-                            // print(count);
+                            //Code here
                           },
-                          child: Container(
-                            margin: EdgeInsets.all(10),
-                            width: 40,
-                            height: 40,
-                            decoration: BoxDecoration(
-                                color: Color(0xFF0BB791),
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(20.0),
-                                )),
-                            child: Icon(Icons.add),
+                          style: ElevatedButton.styleFrom(
+                            primary: welcome_color,
+                            minimumSize: Size(40, 40),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(45)
+                            )
                           ),
+                          child: Icon(Icons.add, size: 30,),
                         ),
                         _checkNameProduct(),
                         SizedBox(

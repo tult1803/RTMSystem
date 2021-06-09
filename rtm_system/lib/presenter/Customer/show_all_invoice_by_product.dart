@@ -3,12 +3,9 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:rtm_system/model/getAPI_invoice.dart';
-import 'package:rtm_system/model/model_invoice.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/manager/formForDetail_page.dart';
-import 'package:rtm_system/view/manager/invoice/createInvoice.dart';
-import 'package:rtm_system/view/manager/invoice/processInvoice.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class showInvoiceByProduct extends StatefulWidget {

@@ -10,7 +10,6 @@ class AllInvoice extends StatefulWidget {
 }
 
 class _AllInvoiceState extends State<AllInvoice> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

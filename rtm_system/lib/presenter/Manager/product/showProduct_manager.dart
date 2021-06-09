@@ -16,6 +16,9 @@ class showAllProduct extends StatefulWidget {
   _showAllProductState createState() => _showAllProductState();
 }
 
+List<String> itemNameUpdatePrice = [];
+List<String> itemPriceUpdatePrice = [];
+List<int> itemIdUpdatePrice = [];
 class _showAllProductState extends State<showAllProduct> {
   // String token;
   List<DataProduct> dataListProduct = [];
@@ -102,6 +105,12 @@ class _showAllProductState extends State<showAllProduct> {
                 newPageProgressIndicatorBuilder: (context) =>
                     firstPageProgressIndicatorBuilder(),
                 itemBuilder: (context, item, index) {
+                  if(itemNameUpdatePrice.length < index){
+                    itemNameUpdatePrice.add(item["name"]);
+                    itemPriceUpdatePrice.add("${item["update_price"]}");
+                    itemIdUpdatePrice.add(item["id"]);
+                  }
+
                   return card(
                       context,
                       item["name"],
@@ -114,12 +123,6 @@ class _showAllProductState extends State<showAllProduct> {
                           tittle: "Chi tiết sản phẩm",
                           bodyPage: DetailProduct(
                             itemDetailProduct: item,
-                            // id: item["id"],
-                            // name: item["name"],
-                            // description: item["description"],
-                            // type: "${item["type"]}",
-                            // date_time: item["updateDateTime"],
-                            // price: "${item["update_price"]}",
                           ))
                   );
                 }),

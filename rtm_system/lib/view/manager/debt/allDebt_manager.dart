@@ -12,7 +12,6 @@ class AllDebt extends StatefulWidget {
 
 class _AllDebtState extends State<AllDebt> {
   String allMoney = "500.000.000đ";
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -15,18 +15,22 @@ class LoginPage extends StatefulWidget {
 }
 
 ButtonState _buttonState = ButtonState.normal;
+// ignore: unused_element
 Timer _timer;
 PostLogin getAPI = PostLogin();
 DataLogin data;
 
 class LoginPageState extends State<LoginPage> {
   bool obscureTextPassword = true;
-  Icon iconPassword = Icon(Icons.visibility_outlined, color: Colors.black54,);
+  Icon iconPassword = Icon(
+    Icons.visibility_outlined,
+    color: Colors.black54,
+  );
   static bool isLogin = false;
-  var role_id = 0, accountId = 0;
+  var roleId = 0, accountId = 0;
   String username = "";
   String password;
-  String access_token = '';
+  String accessToken = '';
   String fullname = "";
   int gender = 0;
   String phone = '';
@@ -58,7 +62,8 @@ class LoginPageState extends State<LoginPage> {
                     style: TextStyle(
                         fontSize: 13,
                         decoration: TextDecoration.none,
-                        color: Colors.redAccent, fontWeight: FontWeight.w500)),
+                        color: Colors.redAccent,
+                        fontWeight: FontWeight.w500)),
                 SizedBox(
                   height: 15,
                 ),
@@ -79,13 +84,14 @@ class LoginPageState extends State<LoginPage> {
 
   int status;
 
+  // ignore: non_constant_identifier_names
   Future LoginApi() async {
     // Đỗ dữ liệu lấy từ api
     data = await getAPI.createLogin(username, password);
-    status = await PostLogin.status;
+    status = PostLogin.status;
     setState(() {
-      role_id = data.role_id;
-      access_token = data.access_token;
+      roleId = data.role_id;
+      accessToken = data.access_token;
       accountId = data.accountId;
       fullname = data.fullname;
       phone = data.phone;
@@ -97,12 +103,12 @@ class LoginPageState extends State<LoginPage> {
   Future afterLogin() async {
     try {
       await LoginApi();
-      print('Role ID: ${role_id}');
+      print('Role ID: $roleId');
     } catch (e) {
       print('Error from LoginApi !!!');
     }
-    if (role_id == 3 && status == 200) {
-      savedInfoLogin(role_id, accountId, gender, access_token, fullname, phone,
+    if (roleId == 3 && status == 200) {
+      savedInfoLogin(roleId, accountId, gender, accessToken, fullname, phone,
           birthday, password);
       Navigator.pushAndRemoveUntil(
           context,
@@ -113,8 +119,8 @@ class LoginPageState extends State<LoginPage> {
           (route) => false);
       print('Status button: Done');
       _buttonState = ButtonState.normal;
-    } else if (role_id == 2 && status == 200) {
-      savedInfoLogin(role_id, accountId, gender, access_token, fullname, phone,
+    } else if (roleId == 2 && status == 200) {
+      savedInfoLogin(roleId, accountId, gender, accessToken, fullname, phone,
           birthday, password);
       Navigator.pushAndRemoveUntil(
           context,
@@ -132,26 +138,25 @@ class LoginPageState extends State<LoginPage> {
 
   bool isCheckU = false;
   bool isCheckP = false;
+
   Widget _checkLogin() {
     return Container(
       height: 45,
-      margin: EdgeInsets.only(left: 40,right: 40),
+      margin: EdgeInsets.only(left: 40, right: 40),
       child: Material(
           child: ProgressButton(
-            child: Text(
-              "Đăng nhập",
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w400),
-            ),
-            onPressed: () {
-              _checkTextLogin();
-            },
-            buttonState: _buttonState,
-            backgroundColor: welcome_color,
-            progressColor: Colors.white,
-          )),
+        child: Text(
+          "Đăng nhập",
+          style: TextStyle(
+              color: Colors.white, fontSize: 20, fontWeight: FontWeight.w400),
+        ),
+        onPressed: () {
+          _checkTextLogin();
+        },
+        buttonState: _buttonState,
+        backgroundColor: welcome_color,
+        progressColor: Colors.white,
+      )),
     );
   }
 
@@ -173,33 +178,34 @@ class LoginPageState extends State<LoginPage> {
     );
   }
 
-  void _checkTextLogin(){
+  void _checkTextLogin() {
     setState(() {
       error = "";
-      if(username == null || username == ""){
+      if (username == null || username == "") {
         isCheckU = false;
         errorUsername = "Tên đăng nhập trống";
-      }else{
+      } else {
         isCheckU = true;
-        errorUsername=null;
+        errorUsername = null;
       }
-      if(password == null || password == ""){
+      if (password == null || password == "") {
         isCheckP = false;
         errorPassword = "Mật khẩu trống";
-      }else{
+      } else {
         isCheckP = true;
-        errorPassword=null;
+        errorPassword = null;
       }
-      if(isCheckU && isCheckP){
+      if (isCheckU && isCheckP) {
         _buttonState = ButtonState.inProgress;
         print('Status button: Process');
         afterLogin();
       }
     });
   }
+
   Widget _txtUsername() {
     return Container(
-      margin: EdgeInsets.only(left: 40,right: 40),
+      margin: EdgeInsets.only(left: 40, right: 40),
       child: Material(
         child: TextField(
           onChanged: (value) {
@@ -234,7 +240,7 @@ class LoginPageState extends State<LoginPage> {
 
   Widget _txtPassword() {
     return Container(
-      margin: EdgeInsets.only(left: 40,right: 40),
+      margin: EdgeInsets.only(left: 40, right: 40),
       child: Material(
         child: TextField(
           onChanged: (value1) {
@@ -255,20 +261,24 @@ class LoginPageState extends State<LoginPage> {
             ),
             //Hiển thị Icon góc phải
             suffixIcon: GestureDetector(
-
-              onTap: () {
-                setState(() {
-                  if (obscureTextPassword == true) {
-                    obscureTextPassword = false;
-                    iconPassword = Icon(Icons.visibility, color: Colors.black54,);
-                  } else {
-                    obscureTextPassword = true;
-                    iconPassword = Icon(Icons.visibility_outlined, color: Colors.black54,);
-                  }
-                });
-              },
-              child: iconPassword
-            ),
+                onTap: () {
+                  setState(() {
+                    if (obscureTextPassword == true) {
+                      obscureTextPassword = false;
+                      iconPassword = Icon(
+                        Icons.visibility,
+                        color: Colors.black54,
+                      );
+                    } else {
+                      obscureTextPassword = true;
+                      iconPassword = Icon(
+                        Icons.visibility_outlined,
+                        color: Colors.black54,
+                      );
+                    }
+                  });
+                },
+                child: iconPassword),
             //Hiển thị lỗi
             focusedErrorBorder: OutlineInputBorder(
               borderSide: BorderSide(color: Colors.redAccent),
