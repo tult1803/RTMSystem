@@ -114,7 +114,9 @@ class _AddProductPageState extends State<AddProductPage> {
                           height: 10,
                         ),
                         ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            //Code here
+                          },
                           style: ElevatedButton.styleFrom(
                             primary: welcome_color,
                             minimumSize: Size(40, 40),

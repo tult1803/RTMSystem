@@ -223,7 +223,6 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
       margin: EdgeInsets.only(top: 10, left: 10, right: 10),
       child: TextField(
         controller: _controller,
-
         obscureText: obscureText,
         onChanged: (value) {
           if (tittle == "Họ và tên") {
