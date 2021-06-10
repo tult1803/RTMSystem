@@ -229,7 +229,7 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
                 ),
                 Expanded(
                   child: Text(
-                    '${f.format(dateNow)}',
+                    '${f.format(dateSale)}',
                     style: TextStyle(fontSize: 16),
                   ),
                 ),

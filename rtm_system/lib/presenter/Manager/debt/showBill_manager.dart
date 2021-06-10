@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
+import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/manager/debt/processBill.dart';
 import 'package:rtm_system/view/manager/formForDetail_page.dart';
@@ -138,7 +139,7 @@ class _showAllBillState extends State<showAllBill> {
         setState(() {
           pickedDate();
         });
-      },
+      }, child: null,
     );
 
   }

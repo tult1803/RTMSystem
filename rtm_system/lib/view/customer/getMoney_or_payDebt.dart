@@ -450,7 +450,7 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
                 put_API_GetMoney(context, 1);
               },
               child: Text(
-                'Lấy tiền',
+                'Xác nhận lấy tiền',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 16,

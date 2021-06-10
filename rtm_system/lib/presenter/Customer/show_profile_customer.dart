@@ -59,8 +59,8 @@ class _showProfileState extends State<showProfile> {
                   height: 10,
                 ),
                 Container(
-                  width: 100,
-                  height: 100,
+                  width: 110,
+                  height: 110,
                   child: Center(
                     child: Image(
                       image: AssetImage("images/avt.png"),
@@ -69,7 +69,7 @@ class _showProfileState extends State<showProfile> {
                 ),
                 btnLogout(context),
                 SizedBox(
-                  height: 15,
+                  height: 12,
                 ),
                 //data infor show here
                 Container(

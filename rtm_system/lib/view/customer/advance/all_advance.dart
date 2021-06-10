@@ -54,7 +54,7 @@ class _AdvancePageState extends State<AdvancePage> {
                 Container(
                   margin: EdgeInsets.only(top: 12, bottom: 5),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       _txtFormField(this.search, false, "Nhập mã hoá đơn", 1,
                           TextInputType.text),
@@ -220,8 +220,9 @@ class _AdvancePageState extends State<AdvancePage> {
 
   Widget _txtFormField(String value, bool obscureText, String hintText,
       int maxLines, TextInputType txtType) {
+    var size = MediaQuery.of(context).size;
     return SizedBox(
-      width: 250,
+      width:size.width * 0.6,
       child: TextFormField(
         initialValue: value,
         obscureText: obscureText,

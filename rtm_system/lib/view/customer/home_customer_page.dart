@@ -48,10 +48,9 @@ class _HomeCustomerPageState extends State<HomeCustomerPage> {
         index: _index,
         height: 50.0,
         items: <Widget>[
+          Icon(Icons.attach_money, size: 30),
           Icon(Icons.my_library_books_outlined, size: 30),
-          Icon(Icons.assignment_outlined, size: 30),
           Icon(Icons.notifications_none, size: 30),
-          // Icon(Icons.perm_contact_cal_outlined, size: 30),
           Icon(Icons.people_rounded, size: 30),
         ],
         color: Colors.white,

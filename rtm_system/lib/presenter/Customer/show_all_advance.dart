@@ -55,11 +55,12 @@ class _showAdvanceState extends State<showAdvance> {
     super.initState();
     _getToken();
   }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Container(
-      height: size.height * 0.55,
+      height: size.height * 0.45,
       width: size.width,
       child: new FutureBuilder(
         future: _getProduct(),
@@ -85,57 +86,63 @@ class _showAdvanceState extends State<showAdvance> {
       ),
     );
   }
+
   Widget _cardInvoice(
       String product, String date, String price, String status) {
-    return FlatButton(onPressed: (){
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => DetailAdvancePage()),
-      );
-    }, child: Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-      elevation: 10,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          ListTile(
-            title: Text(
-              '${product}',
-              style: TextStyle(
-                fontSize: 16,
-              ),
-            ),
-            subtitle: Column(
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      '${price} VND',
-                      style: TextStyle(
-                        fontSize: 14,
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Text(
-                      '${date}',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Color(0xFF0BB791),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            trailing: Text('${status}'),
+    return FlatButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => DetailAdvancePage(
+                      status: 'Chờ xác nhận',
+                    )),
+          );
+        },
+        child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
           ),
-        ],
-      ),
-    ));
+          elevation: 10,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                title: Text(
+                  '${product}',
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+                subtitle: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          '${price} VND',
+                          style: TextStyle(
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          '${date}',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Color(0xFF0BB791),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                trailing: Text('${status}'),
+              ),
+            ],
+          ),
+        ));
   }
 }

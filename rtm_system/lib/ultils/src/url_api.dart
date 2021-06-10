@@ -7,3 +7,6 @@ String url_profileCustomer = "api/rtm/v1/user/get-customer-cmphone";
 String url_createCustomer = "api/rtm/v1/user/create-account";
 String url_invoice = "api/rtm/v1/invoice/get-invoice";
 String url_updateProfile = "api/rtm/v1/user/update-account";
+String url_customer = "api/rtm/v1/user/get-customer";
+String url_updatePrice = "api/rtm/v1/product/update-price";
+String url_deactivateCustomer = "api/rtm/v1/user/deactivate-account";

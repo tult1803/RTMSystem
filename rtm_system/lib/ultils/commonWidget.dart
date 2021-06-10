@@ -7,6 +7,7 @@ import 'package:rtm_system/view/customer/home_customer_page.dart';
 import 'package:rtm_system/view/customer/process/process_all.dart';
 import 'package:rtm_system/view/detail_notice.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
+import 'package:rtm_system/view/manager/profile/allCustomer_manager.dart';
 import 'package:rtm_system/view/update_password.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../view/login_page.dart';
@@ -67,6 +68,7 @@ class StretchableButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(borderRadius),
             side: bs,
           ),
+          // ignore: deprecated_member_use
           child: RaisedButton(
             onPressed: onPressed,
             color: buttonColor,
@@ -178,14 +180,22 @@ Widget btnDateTime(
 
 Widget card(BuildContext context, String tittle, String type, String detailType,
     String price, String date, Color color, Widget widget) {
-  //Format lại ngày
-  DateTime _date = DateTime.parse(date);
   final fBirthday = new DateFormat('dd/MM/yyyy');
   //Format lại giá
   final oCcy = new NumberFormat("#,##0", "en_US");
   //Lấy size của màn hình
   var size = MediaQuery.of(context).size;
-
+  String Cprice;
+  String Cdate;
+  try {
+    //Format lại ngày
+    DateTime _date = DateTime.parse(date);
+    Cprice = "${oCcy.format(double.parse(price))}đ";
+    Cdate = "${fBirthday.format(_date)}";
+  } catch (_) {
+    Cprice = "$price";
+    Cdate = "$date";
+  }
   return Card(
     margin: EdgeInsets.only(top: 15),
     color: Colors.white,
@@ -195,6 +205,7 @@ Widget card(BuildContext context, String tittle, String type, String detailType,
     ),
     child: Container(
       height: 78,
+      // ignore: deprecated_member_use
       child: FlatButton(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
@@ -228,11 +239,8 @@ Widget card(BuildContext context, String tittle, String type, String detailType,
                       topRight: Radius.circular(10),
                       bottomRight: Radius.circular(10)),
                 ),
-                child: componentCardE(
-                    "${oCcy.format(double.parse(price))}đ",
-                    "${fBirthday.format(_date)}",
-                    CrossAxisAlignment.end,
-                    Colors.black54),
+                child: componentCardE("$Cprice", "$Cdate",
+                    CrossAxisAlignment.end, Colors.black54),
               ),
             ),
           ],
@@ -437,6 +445,7 @@ Widget btnUpdateInfo(
     int account_id) {
   return Container(
     width: 320,
+    // ignore: deprecated_member_use
     child: RaisedButton(
       color: Color(0xFF0BB791),
       onPressed: () {
@@ -475,6 +484,7 @@ Widget btnUpdateInfo(
 Widget btnUpdatePw(context, String password, int account_id, bool isCustomer) {
   return Container(
     width: 320,
+    // ignore: deprecated_member_use
     child: RaisedButton(
       color: Color(0xFF0BB791),
       onPressed: () {
@@ -525,6 +535,7 @@ Widget btnSubmitOrCancel(
       color: color,
       borderRadius: BorderRadius.circular(5),
     ),
+    // ignore: deprecated_member_use
     child: FlatButton(
         onPressed: () async {
           if (action) {
@@ -577,6 +588,7 @@ Widget btnAcceptOrReject(BuildContext context, double width, Color color,
   return Container(
       child: SizedBox(
     width: width,
+    // ignore: deprecated_member_use
     child: RaisedButton(
       color: color,
       shape: RoundedRectangleBorder(
@@ -635,7 +647,7 @@ Widget btnAcceptOrReject(BuildContext context, double width, Color color,
 Widget containerDetail(BuildContext context, Widget widget) {
   var size = MediaQuery.of(context).size;
   return Container(
-    margin: EdgeInsets.only(top: 20, left: 10, right: 10),
+    margin: EdgeInsets.only(left: 10, right: 10),
     width: size.width,
     decoration: BoxDecoration(
       color: Colors.white,
@@ -644,9 +656,11 @@ Widget containerDetail(BuildContext context, Widget widget) {
     child: widget,
   );
 }
-Widget btnWaitingProcess(context, int index){
-  return  SizedBox(
+
+Widget btnWaitingProcess(context, int index) {
+  return SizedBox(
     width: 130,
+    // ignore: deprecated_member_use
     child: RaisedButton(
       color: Color(0xFFF8D375),
       onPressed: () {
@@ -682,4 +696,34 @@ Widget btnWaitingProcess(context, int index){
       elevation: 10,
     ),
   );
+}
+
+//Đang dùng cho nút hủy kích hoạt tài khoản khách hàng
+Widget btnDeactivateCustomer(
+    {String status, int account_id, String token, BuildContext context}) {
+  if (status != "Không hoạt động") {
+    return Container(
+      width: 160,
+      height: 50,
+      decoration: BoxDecoration(
+        color: Colors.redAccent,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: TextButton(
+        onPressed: () {
+          if (status != "Không hoạt động") {
+            showAlertDialog(
+                context, "Bạn muốn hủy kích hoạt khách hàng", AllCustomer(),
+                isDeactivate: true, token: token, accountId: account_id);
+          }
+        },
+        child: AutoSizeText(
+          "Hủy kích hoạt",
+          style: TextStyle(color: Colors.white, fontSize: 17),
+        ),
+      ),
+    );
+  } else {
+    return Container();
+  }
 }

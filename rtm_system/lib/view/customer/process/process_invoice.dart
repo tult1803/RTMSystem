@@ -14,13 +14,6 @@ class _ProcessInvoicePageState extends State<ProcessInvoicePage> {
     return Scaffold(
         backgroundColor: Color(0xffEEEEEE),
         body: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(15.0),
-              topRight: Radius.circular(15.0),
-            ),
-          ),
           child: new showProcessInvoice(),
         ));
   }

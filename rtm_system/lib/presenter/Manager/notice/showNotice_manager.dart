@@ -34,10 +34,10 @@ class _showAllNoticeState extends State<showAllNotice> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: const Text(
-              'Something went wrong while fetching a new page.',
+              'Có lỗi xảy ra',
             ),
             action: SnackBarAction(
-              label: 'Retry',
+              label: 'Thử lại',
               onPressed: () => _pagingController.retryLastFailedRequest(),
             ),
           ),
@@ -81,9 +81,9 @@ class _showAllNoticeState extends State<showAllNotice> {
   @override
   Widget build(BuildContext context) => CustomScrollView(
         slivers: <Widget>[
-          CharacterSearchInputSliver(
-            onChanged: (searchTerm) => _updateSearchTerm(searchTerm),
-          ),
+          // CharacterSearchInputSliver(
+          //   onChanged: (searchTerm) => _updateSearchTerm(searchTerm),
+          // ),
           PagedSliverList<int, NoticeList>(
             pagingController: _pagingController,
             builderDelegate: PagedChildBuilderDelegate<NoticeList>(
@@ -91,7 +91,7 @@ class _showAllNoticeState extends State<showAllNotice> {
                   return Column(
                     children: [
                       firstPageErrorIndicatorBuilder(context,
-                          tittle: "Không có dữ liệu."),
+                          tittle: "Không có dữ liệu"),
                       GestureDetector(
                         onTap: () => _pagingController.refresh(),
                         child: Text(
@@ -104,6 +104,8 @@ class _showAllNoticeState extends State<showAllNotice> {
                 },
                 firstPageProgressIndicatorBuilder: (context) =>
                     firstPageProgressIndicatorBuilder(),
+                newPageProgressIndicatorBuilder: (context) =>
+                    newPageProgressIndicatorBuilder(),
                 itemBuilder: (context, item, index) {
                   return containerButton(context, item.id, item.title,
                       item.content, "${item.createDate}");
