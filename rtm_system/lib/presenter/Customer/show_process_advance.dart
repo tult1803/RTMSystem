@@ -22,10 +22,10 @@ class _showProcessAdvanceState extends State<showProcessAdvance> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    this.getAPINotice();
+    this.getAdvanceProcess();
   }
 
-  Future getAPINotice() async {
+  Future getAdvanceProcess() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     String token = sharedPreferences.getString('access_token');
     print(token);
@@ -42,7 +42,7 @@ class _showProcessAdvanceState extends State<showProcessAdvance> {
       height: size.height,
       width: size.width,
       child: new FutureBuilder(
-        future: getAPINotice(),
+        future: getAdvanceProcess(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
             return ListView.builder(

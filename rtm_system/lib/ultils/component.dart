@@ -543,7 +543,7 @@ Widget widgetCreateInvoice(context, bool isNew, String product) {
 
 // ignore: missing_return
 Widget _showBtnInAdvanceDetail(context, String status) {
-  if (status == 'active')
+  if (status == 'active') {
     return Center(
       child: SizedBox(
         width: 150,
@@ -561,6 +561,9 @@ Widget _showBtnInAdvanceDetail(context, String status) {
         ),
       ),
     );
+  } else {
+    return Container();
+  }
 }
 
 Widget _showContentInAdvance(context, String status) {
@@ -602,10 +605,10 @@ Widget _showContentInAdvance(context, String status) {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 btnAcceptOrReject(
-                    context, 150, Colors.redAccent, 'Từ chối', false, 0),
+                    context, 130, Colors.redAccent, 'Từ chối', false, 0),
                 SizedBox(width: 20),
                 btnAcceptOrReject(
-                    context, 150, Color(0xFF0BB791), 'Chấp nhận', true, 0),
+                    context, 130, Color(0xFF0BB791), 'Chấp nhận', true, 0),
               ],
             ),
           ),
