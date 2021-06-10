@@ -1,13 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:rtm_system/model/getAPI_product.dart';
 import 'package:rtm_system/model/model_product.dart';
 import 'package:rtm_system/ultils/alertDialog.dart';
 import 'package:rtm_system/ultils/component.dart';
-import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/ultils/src/regExp.dart';
 import 'package:rtm_system/view/create_invoice.dart';
-import 'package:rtm_system/view/customer/home_customer_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AddProductPage extends StatefulWidget {
@@ -24,11 +23,13 @@ class AddProductPage extends StatefulWidget {
 
 class _AddProductPageState extends State<AddProductPage> {
   String token;
+  List listQuantity = [];
   List<DataProduct> dataListProduct = [];
   bool checkClick = false;
+  var txtController = TextEditingController();
 
   //field to sales
-  String quantity = '', degree = '';
+  double quantity = 0, degree;
   String status = 'Dang cho';
   String personSale = '', phoneSale = '';
   String errQuantity, errDegree;
@@ -99,32 +100,24 @@ class _AddProductPageState extends State<AddProductPage> {
                         _mySelection == null
                             ? Container()
                             : _txtItemProduct(
-                                context,
-                                getDataTextField(this.quantity),
-                                false,
-                                'Nhap so ky',
-                                'So ky',
-                                1,
-                                TextInputType.numberWithOptions(decimal: true),
-                                errQuantity),
+                                context: context,
+                                hintText: 'Nhập số ký',
+                                maxLines: 1,
+                                isQuantity: true,
+                                error: errQuantity),
                         //sẽ làm add thêm dòng để nhập tiếp(giống form số ký) để
                         // khách có thể xem số lần mình nhập, hoặc chỉnh sửa.
                         // Chưa làm dk.
+                        Wrap(
+                          direction: Axis.horizontal,
+                          spacing: 5,
+                          children: listQuantity
+                              .map((value) => containerWeight(value: value))
+                              .toList()
+                              .cast<Widget>(),
+                        ),
                         SizedBox(
                           height: 10,
-                        ),
-                        ElevatedButton(
-                          onPressed: () {
-                            //Code here
-                          },
-                          style: ElevatedButton.styleFrom(
-                            primary: welcome_color,
-                            minimumSize: Size(40, 40),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(45)
-                            )
-                          ),
-                          child: Icon(Icons.add, size: 30,),
                         ),
                         _checkNameProduct(),
                         SizedBox(
@@ -138,7 +131,7 @@ class _AddProductPageState extends State<AddProductPage> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                'Tống so ky:',
+                                'Tống số ký:',
                                 style: TextStyle(
                                   color: Color(0xFF0BB791),
                                   fontSize: 14,
@@ -146,7 +139,7 @@ class _AddProductPageState extends State<AddProductPage> {
                               ),
                               // sẽ show số tổng các ký đã nhập
                               Text(
-                                '10.0 KG',
+                                '${quantity} kg',
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 16,
@@ -220,7 +213,7 @@ class _AddProductPageState extends State<AddProductPage> {
         this.errQuantity = null;
       });
     } else {
-      if (!checkFormatNumber.hasMatch(this.quantity)) {
+      if (!checkFormatNumber.hasMatch("${this.quantity}")) {
         setState(() {
           this.errQuantity = "Chỉ nhập số(ví dụ: 12,3 hoặc 12.3)";
         });
@@ -235,7 +228,7 @@ class _AddProductPageState extends State<AddProductPage> {
         this.errDegree = null;
       });
     } else {
-      if (!checkFormatNumber.hasMatch(this.degree)) {
+      if (!checkFormatNumber.hasMatch("${this.degree}")) {
         setState(() {
           this.errDegree = "Chỉ nhập số(ví dụ: 12,3 hoặc 12.3)";
         });
@@ -276,47 +269,52 @@ class _AddProductPageState extends State<AddProductPage> {
   Widget _checkNameProduct() {
     return checkProduct
         ? Container()
-        : _txtItemProduct(context, getDataTextField(this.quantity), false,
-            'Nhap so do', 'So do', 1, TextInputType.text, errDegree);
+        : _txtItemProduct(
+            context: context,
+            isQuantity: false,
+            hintText: 'Nhập số độ',
+            maxLines: 1,
+            error: errDegree);
   }
 
-  Widget btnCancel(
-    BuildContext context,
-    double width,
-    double height,
-    Color color,
-    String tittleButtonAlertDialog,
-    String contentFeature,
-    bool action,
-    int indexOfBottomBar,
-  ) {
-    return Container(
-      height: height,
-      width: width,
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(5),
-      ),
-      child: FlatButton(
-          onPressed: () async {
-            if (action) {
-              showAlertDialog(
-                context,
-                "Bạn muốn hủy tạo ${contentFeature} ?",
-                HomeCustomerPage(
-                  index: indexOfBottomBar,
-                ),
-              );
-            }
-          },
-          child: Center(
-              child: Text(
-            tittleButtonAlertDialog,
-            style: TextStyle(
-                color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
-          ))),
-    );
-  }
+  //
+  // Widget btnCancel(
+  //   BuildContext context,
+  //   double width,
+  //   double height,
+  //   Color color,
+  //   String tittleButtonAlertDialog,
+  //   String contentFeature,
+  //   bool action,
+  //   int indexOfBottomBar,
+  // ) {
+  //   return Container(
+  //     height: height,
+  //     width: width,
+  //     decoration: BoxDecoration(
+  //       color: color,
+  //       borderRadius: BorderRadius.circular(5),
+  //     ),
+  //     child: FlatButton(
+  //         onPressed: () async {
+  //           if (action) {
+  //             showAlertDialog(
+  //               context,
+  //               "Bạn muốn hủy tạo ${contentFeature} ?",
+  //               HomeCustomerPage(
+  //                 index: indexOfBottomBar,
+  //               ),
+  //             );
+  //           }
+  //         },
+  //         child: Center(
+  //             child: Text(
+  //           tittleButtonAlertDialog,
+  //           style: TextStyle(
+  //               color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
+  //         ))),
+  //   );
+  // }
 
   Widget btnSave(
     BuildContext context,
@@ -472,39 +470,43 @@ class _AddProductPageState extends State<AddProductPage> {
   }
 
   Widget _txtItemProduct(
-      context,
-      TextEditingController _controller,
-      bool obscureText,
+      {BuildContext context,
       String hintText,
-      String title,
       int maxLines,
-      TextInputType txtType,
-      String error) {
+      String error,
+      bool isQuantity}) {
     return Container(
       color: Colors.white,
-      // padding: EdgeInsets.fromLTRB(12, 12, 12, 12),
       child: TextField(
-        controller: _controller,
-        obscureText: obscureText,
-        onChanged: (value) {
-          if (title == "So ky") {
-            this.quantity = value.trim();
-          } else if (title == "So do") {
-            this.degree = value.trim();
+        controller: isQuantity ? txtController : null,
+        onSubmitted: (value) {
+          if (value.isNotEmpty) {
+            if (isQuantity) {
+              insertQuantity(value);
+              quantity = 0;
+              listQuantity.forEach((element) {
+                quantity += double.parse(element);
+              });
+              txtController.clear();
+            } else
+              this.degree = double.parse(value);
+            setState(() {
+              checkClick = true;
+            });
           }
-          setState(() {
-            checkClick = true;
-          });
         },
         maxLines: maxLines,
-        keyboardType: txtType,
+        keyboardType: TextInputType.number,
+        inputFormatters: [
+          FilteringTextInputFormatter.deny(RegExp(r'[-,/\\ ]'))
+        ],
         style: TextStyle(fontSize: 15),
         cursorColor: Colors.red,
         decoration: InputDecoration(
           border: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(5.0)),
           ),
-          labelText: title,
+          labelText: hintText,
           labelStyle: TextStyle(color: Colors.black54),
           contentPadding: EdgeInsets.only(top: 14, left: 10),
           //Sau khi click vào "Nhập tiêu đề" thì màu viền sẽ đổi
@@ -514,13 +516,10 @@ class _AddProductPageState extends State<AddProductPage> {
             ),
           ),
           //Hiển thị Icon góc phải
-          suffixIcon: IconButton(
-              icon: Icon(Icons.highlight_remove_sharp),
-              color: Colors.black54,
-              onPressed: () {
-                debugPrint('222');
-                _controller.clear();
-              }),
+          suffixIcon: Icon(
+            Icons.create_outlined,
+            color: Colors.black54,
+          ),
           //Hiển thị lỗi
           focusedErrorBorder: OutlineInputBorder(
             borderSide: BorderSide(color: Colors.redAccent),
@@ -530,5 +529,43 @@ class _AddProductPageState extends State<AddProductPage> {
         ),
       ),
     );
+  }
+
+  //Hiển thị ra các container nhỏ khi nhập số cân
+  Widget containerWeight({String value}) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          removeAtQuantity(value);
+          quantity = 0;
+          listQuantity.forEach((element) {
+            quantity += double.parse(element);
+          });
+        });
+      },
+      child: Container(
+          margin: EdgeInsets.only(top: 10),
+          width: 50,
+          height: 30,
+          decoration: BoxDecoration(
+            color: Colors.black38,
+            borderRadius: BorderRadius.circular(5),
+          ),
+          child: Center(
+              child: Text(
+            "$value",
+            style: TextStyle(color: Colors.white),
+          ))),
+    );
+  }
+
+  //Xóa các phần tử trong list cân
+  void removeAtQuantity(String value) {
+    return listQuantity.removeAt(listQuantity.indexOf(value));
+  }
+
+  //Thêm các phần tử trong list cân
+  void insertQuantity(String value) {
+    return listQuantity.add(value);
   }
 }
