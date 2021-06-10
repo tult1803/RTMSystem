@@ -108,13 +108,16 @@ class _AddProductPageState extends State<AddProductPage> {
                         //sẽ làm add thêm dòng để nhập tiếp(giống form số ký) để
                         // khách có thể xem số lần mình nhập, hoặc chỉnh sửa.
                         // Chưa làm dk.
-                        Wrap(
-                          direction: Axis.horizontal,
-                          spacing: 5,
-                          children: listQuantity
-                              .map((value) => containerWeight(value: value))
-                              .toList()
-                              .cast<Widget>(),
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          child: Wrap(
+                            direction: Axis.horizontal,
+                            spacing: 5,
+                            children: listQuantity
+                                .map((value) => containerWeight(value: value))
+                                .toList()
+                                .cast<Widget>(),
+                          ),
                         ),
                         SizedBox(
                           height: 10,
