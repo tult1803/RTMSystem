@@ -443,7 +443,8 @@ Widget widgetContentAdvance(context, String status, String header1, header2) {
 }
 
 //nội dung của bill, đang dùng: create invoice
-Widget widgetCreateInvoice(context, bool isNew, String product) {
+Widget widgetCreateInvoice(context, bool isNew, List product, String nameProduct,
+    DateTime dateTime) {
   var size = MediaQuery.of(context).size;
   return SingleChildScrollView(
       child: Container(
@@ -473,28 +474,28 @@ Widget widgetCreateInvoice(context, bool isNew, String product) {
                   height: 10,
                 ),
                 txtPersonInvoice(
-                    context, 'Người bán', 'Nguyen Van A', '087654322'),
+                    context, 'Người bán', 'Nguyen Van Anh', '087654322'),
                 SizedBox(
                   height: 10,
                 ),
-                txtItemDetail(context, 'Sản phẩm', 'Nguyen Van A'),
+                txtItemDetail(context, 'Sản phẩm', '${nameProduct}'),
                 SizedBox(
                   height: 10,
                 ),
-                txtItemDetail(context, 'Số ký', 'Nguyen Van A'),
+                txtItemDetail(context, 'Số ký', '${product[1]}'),
                 SizedBox(
                   height: 10,
                 ),
-                if (product == '3')
-                  txtItemDetail(context, 'Số độ', 'Nguyen Van A'),
+                if (product[0] == '3')
+                  txtItemDetail(context, 'Số độ', '${product[2]}'),
                 SizedBox(
                   height: 10,
                 ),
-                txtItemDetail(context, 'Ngày bán', 'Nguyen Van A'),
+                txtItemDetail(context, 'Ngày bán', '${dateTime}'),
                 SizedBox(
                   height: 10,
                 ),
-                txtItemDetail(context, 'Thành tiền', 'Nguyen Van A'),
+                txtItemDetail(context, 'Thành tiền', '1,000,000 VND'),
               ],
             ),
           ),

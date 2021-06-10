@@ -625,7 +625,7 @@ Widget btnAcceptOrReject(BuildContext context, double width, Color color,
           showAlertDialog(
               context,
               "Từ chối xác nhận thông tin?",
-              HomeAdminPage(
+              HomeCustomerPage(
                 index: indexOfBottomBar,
               ));
         }
