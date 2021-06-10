@@ -1,26 +1,31 @@
-
 import 'package:flutter/material.dart';
+
 //Chuyển trạng thái từ số thành chữ
 getStatus({int status}) {
-  String txtStatus = "";
-  if (status == 1) {
-    txtStatus = "Hoạt động";
-  } else if (status == 2) {
-    txtStatus = "Không hoạt động";
-  } else if (status == 3) {
-    txtStatus = "Hoàn thành";
-  } else if (status == 4) {
-    txtStatus = "Đang xử lý";
-  } else if (status == 5) {
-    txtStatus = "Từ chối";
-  } else if (status == 6) {
-    txtStatus = "Chấp nhận";
+  switch (status) {
+    case 1:
+      return "Hoạt động";
+      break;
+    case 2:
+      return "Không hoạt động";
+      break;
+    case 3:
+      return  "Hoàn thành";
+      break;
+    case 4:
+      return "Đang xử lý";
+      break;
+    case 5:
+      return "Từ chối";
+      break;
+    case 6:
+      return "Chấp nhận";
+      break;
   }
-  return txtStatus;
 }
 
 //Tạo màu cho trạng thái tương ứng với số
-getColorStatus({int status}){
+getColorStatus({int status}) {
   Color color = Colors.black54;
   if (status == 1 || status == 3 || status == 6) {
     color = Colors.green;
