@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:rtm_system/presenter/Customer/show_all_invoice_by_product.dart';
 import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
-import 'package:rtm_system/view/customer/getMoney_or_payDebt.dart';
 
 class InvoiceByProductPage extends StatefulWidget {
   const InvoiceByProductPage({Key key, this.isVip, this.nameProduct})
@@ -27,7 +26,7 @@ class _InvoiceByProductPageState extends State<InvoiceByProductPage> {
     // TODO: implement initState
     super.initState();
     toDate = DateTime.now();
-    fromDate = DateTime.now().subtract(Duration(days: 2));
+    fromDate = DateTime.now().subtract(Duration(days: 30));
     title = "Hóa đơn ${widget.nameProduct.toLowerCase()}";
     if(widget.nameProduct.toLowerCase() == 'mủ nước'){
       isShow = true;
@@ -82,7 +81,6 @@ class _InvoiceByProductPageState extends State<InvoiceByProductPage> {
                           Icon(Icons.date_range), datePick()),
                     ],
                   ),
-                  _showBottomButton(),
                   SizedBox(
                     height: 12,
                   ),
@@ -164,58 +162,5 @@ class _InvoiceByProductPageState extends State<InvoiceByProductPage> {
     );
   }
 
-  Widget _showBottomButton() {
-    return isShow? Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            SizedBox(
-              width: 150,
-              child: RaisedButton(
-                color: Colors.white70,
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => GetMoneyOrPayDebt(isPay: true,)),
-                  );
-                },
-                child: Text('Trả nợ'),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                elevation: 10,
-              ),
-            ),
-            Text(' '),
-            SizedBox(
-              width: 150,
-              child: RaisedButton(
-                color: Color(0xFF0BB791),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => GetMoneyOrPayDebt(isPay: false,)),
-                  );
-                },
-                child: Text(
-                  'Lấy tiền',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                  ),
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                elevation: 10,
-              ),
-            ),
-          ],
-        ),
-      ],
-    ): Container();
-  }
+
 }

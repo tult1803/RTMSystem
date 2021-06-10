@@ -54,25 +54,11 @@ class _ProcessAllPageState extends State<ProcessAllPage> {
         index: index,
         children: <Widget>[
           Container(
-            margin: EdgeInsets.fromLTRB(0, 24, 0, 0),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(15.0),
-                topRight: Radius.circular(15.0),
-              ),
-            ),
+            margin: EdgeInsets.fromLTRB(0, 12, 0, 0),
             child: new ProcessInvoicePage(),
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(0, 24, 0, 0),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(15.0),
-                topRight: Radius.circular(15.0),
-              ),
-            ),
+            margin: EdgeInsets.fromLTRB(0, 12, 0, 0),
             child: new ProcessAdvancePage(),
           ),
         ],
