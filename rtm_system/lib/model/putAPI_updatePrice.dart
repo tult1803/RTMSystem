@@ -20,6 +20,7 @@ class PutUpdatePrice{
         "price": price,
       }),
     );
+    print('$account_id - $product_id - $price');
     print("Status putAPI Update Price:${response.statusCode}");
     return response.statusCode;
   }

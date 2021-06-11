@@ -29,12 +29,6 @@ class _DetailCustomerState extends State<DetailCustomer> {
       phone = this.widget.map["phone"];
       birthday = this.widget.map["birthday"];
       address = this.widget.map["address"];
-      if(this.widget.map["vip"]){
-        vip = "VIP";
-      }else vip = "Thường";
-      if(this.widget.map["gender"] == 0){
-        gender ="Nữ";
-      }else gender = "Nam";
     });
   }
 
@@ -59,10 +53,10 @@ class _DetailCustomerState extends State<DetailCustomer> {
               advance: advance,
               birthday: birthday,
               cmnd: cmnd,
-              gender: gender,
+              gender: getGender(this.widget.map["gender"]),
               phone: phone,
               status: status,
-              vip: vip,
+              vip: getVip(this.widget.map["vip"]),
               statusId: statusId,
             ),
           )),

@@ -38,6 +38,19 @@ getColorStatus({int status}) {
   return color;
 }
 
+getGender(int gender){
+  switch(gender){
+    case 0: return "Nữ"; break;
+    case 1: return "Nam"; break;
+  }
+}
+
+getVip(bool vip){
+  switch(vip){
+    case true: return "VIP"; break;
+    case false: return "Thường"; break;
+  }
+}
 
 getPriceTotal(double price, double degree, double quantity){
   if(degree != 0){

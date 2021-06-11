@@ -198,7 +198,7 @@ Future<void> putAPIUpdatePrice(BuildContext context,int product_id, double price
   PutUpdatePrice putUpdatePrice = PutUpdatePrice();
   status = await putUpdatePrice.updatePrice(
       prefs.get("access_token"),
-      prefs.get("account_id"),
+      prefs.get("accountId"),
       product_id,
       price);
 
