@@ -189,18 +189,14 @@ Widget boxForInvoice(
     String date,
     int status,
     Widget widget}) {
-  final fBirthday = new DateFormat('dd/MM/yyyy hh:mm');
-  //Format lại giá
-  final oCcy = new NumberFormat("#,##0", "en_US");
-  //Lấy size của màn hình
-  var size = MediaQuery.of(context).size;
   String Ctotal;
   String Cdate;
+
   try {
     //Format lại ngày
     DateTime _date = DateTime.parse(date);
-    Ctotal = "${oCcy.format(double.parse(total))}đ";
-    Cdate = "${fBirthday.format(_date)}";
+    Ctotal = "${getFormatPrice(total)}đ";
+    Cdate = "${getDateTime(date)}";
   } catch (_) {
     Ctotal = "$total";
     Cdate = "$date";
