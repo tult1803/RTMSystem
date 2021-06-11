@@ -349,7 +349,7 @@ Widget card(BuildContext context, String tittle, String type, String detailType,
       borderRadius: BorderRadius.circular(10),
     ),
     child: Container(
-      height: 78,
+      height: 80,
       // ignore: deprecated_member_use
       child: FlatButton(
         shape: RoundedRectangleBorder(
@@ -797,6 +797,13 @@ Widget containerDetail(BuildContext context, Widget widget) {
     decoration: BoxDecoration(
       color: Colors.white,
       borderRadius: BorderRadius.circular(10),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black54,
+          blurRadius: 4,
+          offset: Offset(1, 2), // Shadow position
+        ),
+      ],
     ),
     child: widget,
   );
