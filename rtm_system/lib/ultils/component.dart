@@ -8,7 +8,7 @@ import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/customer/home_customer_page.dart';
 import 'package:rtm_system/view/customer/invoice/detail_invoice.dart';
 
-import 'getStatus.dart';
+import 'helpers.dart';
 
 // AutoSizeText chữ tự động co giãn theo kích thước mặc định
 // Hiện tại dùng cho trang "Product" và "Bill"
@@ -934,7 +934,7 @@ Widget componentContainerDetailCustomer(BuildContext context,
     padding: const EdgeInsets.all(8.0),
     child: Column(
       children: [
-        txtItemDetail(context, "ID khách hàng", "$account_id"),
+        txtItemDetail(context, "ID khách hàng", "#$account_id"),
         SizedBox(
           height: 10,
         ),
@@ -979,11 +979,110 @@ Widget componentContainerDetailCustomer(BuildContext context,
             token: token,
             context: context,
             status: status,
-            account_id: account_id),
+            accountId: account_id),
         SizedBox(
           height: 5,
         ),
       ],
+    ),
+  );
+}
+
+//Dùng cho các container nhỏ vd như trong trang quản lý khách hàng
+//Và đang dùng cho component "Mã" và "Trạng thái hóa đơn" trong quản lý hóa đơn
+// là những component container nhỏ trong từng khách hàng
+Widget miniContainer({
+  String tittle,
+  double height,
+  double width,
+  Color colorContainer,
+  Color colorText,
+  double marginLeft,
+  double marginRight,
+  double marginTop,
+  double marginBottom,
+  double borderRadius,
+  double paddingLeftOfText,
+  double paddingRightOfText,
+  double paddingTopOfText,
+  double paddingBottomOfText,
+  FontWeight fontWeightText,
+}) {
+  return Container(
+    margin: EdgeInsets.only(
+      right: marginRight == null ? 0 : marginRight,
+      top: marginTop == null ? 0 : marginTop,
+      bottom: marginBottom == null ? 0 : marginBottom,
+      left: marginLeft == null ? 0 : marginLeft,
+    ),
+    height: height,
+    width: width,
+    decoration: BoxDecoration(
+      borderRadius:
+          BorderRadius.circular(borderRadius == null ? 0 : borderRadius),
+      color: colorContainer,
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black54,
+          blurRadius: 3,
+          offset: Offset(1, 1), // Shadow position
+        ),
+      ],
+    ),
+    child: Center(
+      child: Padding(
+        padding: EdgeInsets.only(
+            left: paddingLeftOfText == null ? 0 : paddingLeftOfText,
+            right: paddingRightOfText == null ? 0 : paddingRightOfText,
+            bottom: paddingBottomOfText == null ? 0 : paddingBottomOfText,
+            top: paddingTopOfText == null ? 0 : paddingTopOfText),
+        child: Text(
+          tittle,
+          style:
+              GoogleFonts.roboto(color: colorText, fontWeight: fontWeightText),
+        ),
+      ),
+    ),
+  );
+}
+
+//Dùng cho container chứ Text trong quản lý hóa đơn
+Widget containerTextInvoice({
+  String tittle,
+  FontWeight fontWeight,
+  Alignment alignment,
+  double marginLeft,
+  double marginRight,
+  double marginTop,
+  double marginBottom,
+  double borderRadius,
+  double paddingLeftOfText,
+  double paddingRightOfText,
+  double paddingTopOfText,
+  double paddingBottomOfText,
+  double height,
+  double width,
+}){
+  return Container(
+    height: height,
+    width: width,
+    margin: EdgeInsets.only(
+      right: marginRight == null ? 0 : marginRight,
+      top: marginTop == null ? 0 : marginTop,
+      bottom: marginBottom == null ? 0 : marginBottom,
+      left: marginLeft == null ? 0 : marginLeft,
+    ),
+    alignment: alignment,
+    child: Padding(
+      padding: EdgeInsets.only(
+          left: paddingLeftOfText == null ? 0 : paddingLeftOfText,
+          right: paddingRightOfText == null ? 0 : paddingRightOfText,
+          bottom: paddingBottomOfText == null ? 0 : paddingBottomOfText,
+          top: paddingTopOfText == null ? 0 : paddingTopOfText),
+      child: Text(
+        tittle,
+        style: GoogleFonts.roboto(fontWeight: fontWeight),
+      ),
     ),
   );
 }

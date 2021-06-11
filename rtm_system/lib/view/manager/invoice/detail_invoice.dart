@@ -1,8 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/component.dart';
-import 'package:rtm_system/ultils/getStatus.dart';
-
 class DetailInvoice extends StatefulWidget {
   final Map<String, dynamic> map;
 
@@ -34,8 +34,8 @@ class _DetailInvoiceState extends State<DetailInvoice> {
               price: "${this.widget.map["price"]}",
               degree: this.widget.map["degree"],
               quantity: this.widget.map["quantity"],
-              customerConfirmDate: this.widget.map["customer_confirm_date"],
-              managerConfirmDate: this.widget.map["manager_confirm_date"],
+              customerConfirmDate: this.widget.map["customer_sign_date"],
+              managerConfirmDate: this.widget.map["manager_sign_date"],
               statusId: this.widget.map["status_id"],
               customerId: this.widget.map["customer_id"],
               managerId: this.widget.map["manager_id"],

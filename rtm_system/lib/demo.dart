@@ -132,7 +132,8 @@
 // import 'package:flutter/cupertino.dart';
 // import 'package:flutter/material.dart';
 // import 'package:google_fonts/google_fonts.dart';
-// import 'package:rtm_system/ultils/getStatus.dart';
+// import 'package:rtm_system/ultils/component.dart';
+// import 'package:rtm_system/ultils/helpers.dart';
 // import 'package:rtm_system/ultils/src/color_ultils.dart';
 //
 // class SimpleAnimatedList extends StatefulWidget {
@@ -141,7 +142,6 @@
 //   @override
 //   _SimpleAnimatedListState createState() => _SimpleAnimatedListState();
 // }
-//
 //
 // class _SimpleAnimatedListState extends State<SimpleAnimatedList> {
 //   @override
@@ -155,9 +155,8 @@
 //           crossAxisAlignment: CrossAxisAlignment.center,
 //           mainAxisAlignment: MainAxisAlignment.center,
 //           children: [
-//             boxForInvoice(status: 3),
-//             boxForInvoice(status: 4),
-//             boxForInvoice(status: 5),
+//             boxForCustomer(
+//                 status: 1, advance: 1, name: "aaaa", phone: "0946", vip: true),
 //           ],
 //         ),
 //       ),
@@ -165,16 +164,10 @@
 //   }
 // }
 //
-// Widget boxForInvoice(
-//     {int id,
-//     String name,
-//     String product,
-//     String total,
-//     DateTime dateTime,
-//     int status}){
+// Widget boxForCustomer(
+//     {String name, int advance, String phone, bool vip, int status}) {
 //   return Container(
 //     margin: EdgeInsets.only(top: 15, left: 10, right: 10),
-//     height: 100,
 //     decoration: BoxDecoration(
 //       color: Colors.white,
 //       borderRadius: BorderRadius.circular(5),
@@ -190,84 +183,80 @@
 //       children: [
 //         Row(
 //           children: [
-//             Container(
-//               margin: EdgeInsets.all(5),
-//               height: 30,
-//               decoration: BoxDecoration(
-//                   color: colorHexa("#f9ee75"),
-//                   borderRadius: BorderRadius.circular(5)),
-//               child: Center(
-//                   child: Padding(
-//                     padding: const EdgeInsets.only(left: 10.0, right: 10),
-//                     child: Text("Mã #1"),
-//                   )),
-//             ),
-//             Flexible(
-//               child: Container(
-//                 alignment: Alignment.centerRight,
-//                 color: Colors.white,
-//                 height: 30,
-//                 child: Padding(
-//                   padding: const EdgeInsets.only(left: 10.0, right: 10),
-//                   child: Text("19/06/2021 13:21", style: GoogleFonts.roboto(fontWeight: FontWeight.w600),),
+//             Row(
+//               children: [
+//                 Padding(
+//                   padding: const EdgeInsets.all(8.0),
+//                   child: CircleAvatar(
+//                     backgroundColor: colorHexa("AEDFD4"),
+//                     child: Icon(
+//                       Icons.person_outline_sharp,
+//                       color: Colors.black54,
+//                     ),
+//                   ),
 //                 ),
-//               ),
+//                 Column(
+//                   crossAxisAlignment: CrossAxisAlignment.start,
+//                   children: [
+//                     Container(
+//                       child: Text(
+//                         name,
+//                         style: GoogleFonts.roboto(fontWeight: FontWeight.w700),
+//                       ),
+//                     ),
+//                     Container(
+//                       child: Text(
+//                         phone,
+//                         style: GoogleFonts.roboto(
+//                             fontWeight: FontWeight.w400, color: Colors.black54),
+//                       ),
+//                     ),
+//                   ],
+//                 ),
+//               ],
+//             ),
+//             Expanded(child: SizedBox()),
+//             miniContainer(
+//               borderRadius: 5,
+//               height: 30,
+//               width: 100,
+//               colorContainer: Colors.white,
+//               colorText: Colors.black,
+//               fontWeightText: FontWeight.w500,
+//               marginRight: 10,
+//               tittle: "${getVip(vip)}",
 //             ),
 //           ],
-//         ),
-//         Container(
-//           alignment: Alignment.topLeft,
-//           child: Padding(
-//             padding: const EdgeInsets.only(left: 10.0, right: 10),
-//             child: Text("Lê Thanh Tú", style: GoogleFonts.roboto(fontWeight: FontWeight.w700),),
-//           ),
 //         ),
 //         Row(
 //           mainAxisAlignment: MainAxisAlignment.start,
 //           children: [
-//             Expanded(
-//               child: Column(
-//                 crossAxisAlignment: CrossAxisAlignment.start,
-//                 children: [
-//                   Container(
-//                     margin: EdgeInsets.only(top: 2),
-//                     alignment: Alignment.topLeft,
-//                     child: Padding(
-//                       padding:
-//                       const EdgeInsets.only(left: 10.0, right: 10),
-//                       child: Text("Sản phẩm: Mủ chén", style: GoogleFonts.roboto(fontWeight: FontWeight.w400),),
-//                     ),
-//                   ),
-//                   Container(
-//                     margin: EdgeInsets.only(top: 2),
-//                     alignment: Alignment.topLeft,
-//                     child: Padding(
-//                       padding:
-//                       const EdgeInsets.only(left: 10.0, right: 10),
-//                       child: Text("Tổng cộng: 100.000.000đ", style:  GoogleFonts.roboto(fontWeight: FontWeight.w400),),
-//                     ),
-//                   ),
-//                 ],
-//               ),
+//             miniContainer(
+//               borderRadius: 5,
+//               height: 30,
+//               width: 130,
+//               colorContainer: getColorStatus(status: status),
+//               colorText: Colors.white,
+//               fontWeightText: FontWeight.w500,
+//               marginLeft: 10,
+//               tittle: "${getStatus(status: status)}",
 //             ),
-//             Container(
-//               margin: EdgeInsets.only(right: 10),
+//             Expanded(child: SizedBox()),
+//             miniContainer(
+//               borderRadius: 5,
 //               height: 30,
 //               width: 100,
-//               decoration: BoxDecoration(
-//                 borderRadius: BorderRadius.circular(5),
-//                 color: getColorStatus(status: status),
-//               ),
-//               child: Center(
-//                   child: Padding(
-//                     padding:
-//                     const EdgeInsets.only(left: 10.0, right: 10),
-//                     child: Text("${getStatus(status: status)}", style: TextStyle(color: Colors.white),),
-//                   ),
-//               ),
-//             )
+//               colorContainer: colorHexa("#FF8F84"),
+//               colorText: Colors.white,
+//               fontWeightText: FontWeight.w500,
+//               marginRight: 10,
+//               tittle: "Nợ: $advance",
+//             ),
 //           ],
-//         )
+//         ),
+//         SizedBox(
+//           height: 10,
+//         ),
 //       ],
 //     ),
 //   );

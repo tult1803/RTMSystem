@@ -6,7 +6,7 @@ import 'package:rtm_system/presenter/Manager/product/showProduct_manager.dart';
 import 'package:rtm_system/ultils/alertDialog.dart';
 import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/getData.dart';
-import 'package:rtm_system/ultils/getStatus.dart';
+import 'package:rtm_system/ultils/helpers.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 
 class updatePriceProduct extends StatefulWidget {
@@ -21,7 +21,7 @@ class _updatePriceProductState extends State<updatePriceProduct> {
   String _chosenValue;
   int indexValue, productId;
   String error;
-  double price;
+  double price, currentPrice;
   bool isClick = false;
 
   @override
@@ -112,6 +112,7 @@ class _updatePriceProductState extends State<updatePriceProduct> {
               _chosenValue = value;
               indexValue = itemNameUpdatePrice.indexOf(value);
               price = double.parse(itemPriceUpdatePrice[indexValue]);
+              currentPrice = double.parse(itemPriceUpdatePrice[indexValue]);
               productId = itemIdUpdatePrice[indexValue];
               getDataTextField("${getFormatPrice("$price")}");
             });
@@ -202,10 +203,13 @@ class _updatePriceProductState extends State<updatePriceProduct> {
               if (isClick) {
                if(price != null){
                  if(price > 1000){
-                   // itemIdUpdatePrice.clear();
-                   // itemPriceUpdatePrice.clear();
-                   // itemNameUpdatePrice.clear();
-                   putAPIUpdatePrice(context,productId, price);
+                   // ignore: unnecessary_statements
+                   currentPrice == price ? showStatusAlertDialog(context, "Xin nhập giá mới", null, false):{
+                     itemIdUpdatePrice.clear(),
+                     itemPriceUpdatePrice.clear(),
+                     itemNameUpdatePrice.clear(),
+                     putAPIUpdatePrice(context,productId, price),
+                   };
                  }else {
                    showStatusAlertDialog(
                        context, "Giá phải lớn hơn 1000đ", null, false);
@@ -229,12 +233,4 @@ class _updatePriceProductState extends State<updatePriceProduct> {
         ));
   }
 
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    itemIdUpdatePrice.clear();
-    itemPriceUpdatePrice.clear();
-    itemNameUpdatePrice.clear();
-  }
 }
