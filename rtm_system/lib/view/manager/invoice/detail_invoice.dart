@@ -13,44 +13,6 @@ class DetailInvoice extends StatefulWidget {
 }
 
 class _DetailInvoiceState extends State<DetailInvoice> {
-  int id, product_id;
-  double quantity, total, degree;
-  String customer_name,
-      creater_name,
-      product_name,
-      price,
-      description,
-      customer_confirm_date,
-      manager_confirm_date,
-      status,
-      create_time;
-
-  Future _getData() {
-    setState(() {
-      id = this.widget.map["id"];
-      status = '${getStatus(status: this.widget.map["status_id"])}';
-      customer_name = this.widget.map["customer_name"];
-      creater_name = this.widget.map["creater_name"];
-      product_name = this.widget.map["product_name"];
-      price = "${this.widget.map["price"]}";
-      description = this.widget.map["description"];
-      customer_confirm_date = this.widget.map["customer_confirm_date"];
-      manager_confirm_date = this.widget.map["manager_confirm_date"];
-      product_id = this.widget.map["product_id"];
-      create_time = this.widget.map["create_time"];
-      quantity = this.widget.map["quantity"];
-      total = this.widget.map["total"];
-      degree = this.widget.map["degree"];
-    });
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _getData();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -60,21 +22,24 @@ class _DetailInvoiceState extends State<DetailInvoice> {
             context,
             componentContainerDetailInvoice(
               context,
-              id: id,
-              customer_name: customer_name,
-              price: "$price",
-              create_time: create_time,
-              product_name: product_name,
-              description: description,
-              creater_name: creater_name,
-              status: status,
+              id: this.widget.map["id"],
+              customerName: this.widget.map["customer_name"],
+              managerName: this.widget.map["manager_name"],
+              managerPhone: this.widget.map["manager_phone"],
+              customerPhone: this.widget.map["customer_phone"],
+              createTime: this.widget.map["create_time"],
+              productId: this.widget.map["product_id"],
+              productName: this.widget.map["product_name"],
+              description: this.widget.map["description"],
+              price: "${this.widget.map["price"]}",
+              degree: this.widget.map["degree"],
+              quantity: this.widget.map["quantity"],
+              customerConfirmDate: this.widget.map["customer_confirm_date"],
+              managerConfirmDate: this.widget.map["manager_confirm_date"],
               statusId: this.widget.map["status_id"],
-              product_id: product_id,
-              quantity: quantity,
-              total: total,
-              degree: degree,
-              customer_confirm_date: customer_confirm_date,
-              manager_confirm_date: manager_confirm_date,
+              customerId: this.widget.map["customer_id"],
+              managerId: this.widget.map["manager_id"],
+              activeDate: this.widget.map["active_date"],
             )),
       ),
     );

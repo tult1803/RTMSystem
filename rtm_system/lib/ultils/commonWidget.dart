@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:rtm_system/ultils/alertDialog.dart';
 import 'package:rtm_system/view/customer/Profile/update_profile.dart';
@@ -13,6 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../view/login_page.dart';
 import 'component.dart';
 import 'getData.dart';
+import 'getStatus.dart';
 import 'src/color_ultils.dart';
 
 const double defaultBorderRadius = 3.0;
@@ -178,20 +180,163 @@ Widget btnDateTime(
   );
 }
 
-Widget card(BuildContext context, String tittle, String type, String detailType,
-    String price, String date, Color color, Widget widget) {
-  final fBirthday = new DateFormat('dd/MM/yyyy');
+Widget boxForInvoice(
+    {BuildContext context,
+    int id,
+    String name,
+    String product,
+    String total,
+    String date,
+    int status,
+    Widget widget}) {
+  final fBirthday = new DateFormat('dd/MM/yyyy hh:mm');
   //Format lại giá
   final oCcy = new NumberFormat("#,##0", "en_US");
+  //Lấy size của màn hình
+  var size = MediaQuery.of(context).size;
+  String Ctotal;
+  String Cdate;
+  try {
+    //Format lại ngày
+    DateTime _date = DateTime.parse(date);
+    Ctotal = "${oCcy.format(double.parse(total))}đ";
+    Cdate = "${fBirthday.format(_date)}";
+  } catch (_) {
+    Ctotal = "$total";
+    Cdate = "$date";
+  }
+  return GestureDetector(
+    onTap: () {
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => widget));
+    },
+    child: Container(
+      margin: EdgeInsets.only(top: 15, left: 10, right: 10),
+      height: 100,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(5),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black54,
+            blurRadius: 4,
+            offset: Offset(1, 2), // Shadow position
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Container(
+                margin: EdgeInsets.all(5),
+                height: 30,
+                decoration: BoxDecoration(
+                    color: colorHexa("#f9ee75"),
+                    borderRadius: BorderRadius.circular(5)),
+                child: Center(
+                    child: Padding(
+                  padding: const EdgeInsets.only(left: 10.0, right: 10),
+                  child: Text("Mã #$id"),
+                )),
+              ),
+              Flexible(
+                child: Container(
+                  alignment: Alignment.centerRight,
+                  color: Colors.white,
+                  height: 30,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 10.0, right: 10),
+                    child: Text(
+                      "$Cdate",
+                      style: GoogleFonts.roboto(fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Container(
+            alignment: Alignment.topLeft,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 10.0, right: 10),
+              child: Text(
+                name,
+                style: GoogleFonts.roboto(fontWeight: FontWeight.w700),
+              ),
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(top: 2),
+                      alignment: Alignment.topLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 10.0, right: 10),
+                        child: Text(
+                          "Sản phẩm: $product",
+                          style:
+                              GoogleFonts.roboto(fontWeight: FontWeight.w400),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 2),
+                      alignment: Alignment.topLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 10.0, right: 10),
+                        child: Text(
+                          "Tổng cộng: $Ctotal",
+                          style:
+                              GoogleFonts.roboto(fontWeight: FontWeight.w400),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(right: 10),
+                height: 30,
+                width: 100,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color: getColorStatus(status: status),
+                ),
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 10.0, right: 10),
+                    child: Text(
+                      "${getStatus(status: status)}",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+              )
+            ],
+          )
+        ],
+      ),
+    ),
+  );
+}
+
+
+Widget card(BuildContext context, String tittle, String type, String detailType,
+    String price, String date, Color color, Widget widget) {
   //Lấy size của màn hình
   var size = MediaQuery.of(context).size;
   String Cprice;
   String Cdate;
   try {
     //Format lại ngày
-    DateTime _date = DateTime.parse(date);
-    Cprice = "${oCcy.format(double.parse(price))}đ";
-    Cdate = "${fBirthday.format(_date)}";
+    Cprice = "${getFormatPrice(price)}đ";
+    Cdate = "${getDateTime(date)}";
   } catch (_) {
     Cprice = "$price";
     Cdate = "$date";

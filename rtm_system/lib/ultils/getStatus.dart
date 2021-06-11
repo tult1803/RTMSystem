@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 //Chuyển trạng thái từ số thành chữ
 getStatus({int status}) {
@@ -35,4 +36,24 @@ getColorStatus({int status}) {
     color = Colors.orangeAccent;
   }
   return color;
+}
+
+
+getPriceTotal(double price, double degree, double quantity){
+  if(degree != 0){
+    return price * degree * quantity;
+  }else  return price * quantity;
+}
+
+getDateTime(String date){
+  final fBirthday = new DateFormat('dd/MM/yyyy hh:mm');
+  if (date != null) {
+    return "${fBirthday.format(DateTime.parse(date))}";
+  } else
+     return "-----";
+}
+
+getFormatPrice(String price){
+  final oCcy = new NumberFormat("#,##0", "en_US");
+  return oCcy.format(double.parse("${price}"));
 }

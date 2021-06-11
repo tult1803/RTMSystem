@@ -105,13 +105,10 @@ class _AddProductPageState extends State<AddProductPage> {
                                 maxLines: 1,
                                 isQuantity: true,
                                 error: errQuantity),
-                        //sẽ làm add thêm dòng để nhập tiếp(giống form số ký) để
-                        // khách có thể xem số lần mình nhập, hoặc chỉnh sửa.
-                        // Chưa làm dk.
+
                         Container(
                           width: MediaQuery.of(context).size.width,
                           child: Wrap(
-                            direction: Axis.horizontal,
                             spacing: 5,
                             children: listQuantity
                                 .map((value) => containerWeight(value: value))
@@ -548,10 +545,10 @@ class _AddProductPageState extends State<AddProductPage> {
       },
       child: Container(
           margin: EdgeInsets.only(top: 10),
-          width: 50,
+          width: 60,
           height: 30,
           decoration: BoxDecoration(
-            color: Colors.black38,
+            color: Colors.black26,
             borderRadius: BorderRadius.circular(5),
           ),
           child: Center(

@@ -6,7 +6,6 @@ import 'package:rtm_system/model/model_invoice.dart';
 import 'package:rtm_system/presenter/infinite_scroll_pagination/common/character_search_input_sliver.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/component.dart';
-import 'package:rtm_system/ultils/getStatus.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/add_product_in_invoice.dart';
 import 'package:rtm_system/view/manager/formForDetail_page.dart';
@@ -39,7 +38,8 @@ class _showAllInvoiceState extends State<showAllInvoice> {
       GetInvoice getAPIAllInvoice = GetInvoice();
       invoice = await getAPIAllInvoice.createInvoice(
         prefs.get("access_token"),
-        0,
+        0, //Customer Id: truyền 0 là get All cho manager
+        0, //Product Id: truyền 0 là get All cho manager
         pageKey,
         _pageSize,
         fromDate,
@@ -112,10 +112,16 @@ class _showAllInvoiceState extends State<showAllInvoice> {
                   SizedBox(
                     width: 20,
                   ),
-                  btnMain(context, 120, "Tạo hóa đơn", Icon(Icons.post_add),
+                  btnMain(
+                      context,
+                      120,
+                      "Tạo hóa đơn",
+                      Icon(Icons.post_add),
                       //Đây là trang create invoice
-                      AddProductPage(tittle: "Tạo hóa đơn", isCustomer: false,)
-                  ),
+                      AddProductPage(
+                        tittle: "Tạo hóa đơn",
+                        isCustomer: false,
+                      )),
                 ],
               ),
               Row(
@@ -157,21 +163,27 @@ class _showAllInvoiceState extends State<showAllInvoice> {
                     PagedSliverList(
                       pagingController: _pagingController,
                       builderDelegate: PagedChildBuilderDelegate(
-                          firstPageErrorIndicatorBuilder: (context) => firstPageErrorIndicatorBuilder(context,tittle: "Không có dữ liệu"),
-                          firstPageProgressIndicatorBuilder: (context) => firstPageProgressIndicatorBuilder(),
-                          newPageProgressIndicatorBuilder: (context) => newPageProgressIndicatorBuilder(),
+                          firstPageErrorIndicatorBuilder: (context) =>
+                              firstPageErrorIndicatorBuilder(context,
+                                  tittle: "Không có dữ liệu"),
+                          firstPageProgressIndicatorBuilder: (context) =>
+                              firstPageProgressIndicatorBuilder(),
+                          newPageProgressIndicatorBuilder: (context) =>
+                              newPageProgressIndicatorBuilder(),
                           itemBuilder: (context, item, index) {
-                            return card(
-                                context,
-                                item["customer_name"],
-                                "Trạng thái",
-                                '${getStatus(status: item['status_id'])}',
-                                "${item['total']}",
-                                "${item['create_time']}",
-                                getColorStatus(status: item['status_id']),
-                                FormForDetailPage(
-                                    tittle: "Chi tiết hóa đơn",
-                                    bodyPage: DetailInvoice(map: item,),
+                            return boxForInvoice(
+                                context: context,
+                                status: item['status_id'],
+                                date: "${item['create_time']}",
+                                total: "${item['price']}",
+                                id: item['id'],
+                                name: item["customer_name"],
+                                product: item["product_name"],
+                                widget: FormForDetailPage(
+                                  tittle: "Chi tiết hóa đơn",
+                                  bodyPage: DetailInvoice(
+                                    map: item,
+                                  ),
                                 ));
                           }),
                     ),
