@@ -38,6 +38,7 @@ getColorStatus({int status}) {
   return color;
 }
 
+//Chuyển giới tính từ số thành chữ
 getGender(int gender){
   switch(gender){
     case 0: return "Nữ"; break;
@@ -45,6 +46,7 @@ getGender(int gender){
   }
 }
 
+//Kiểm tra trạng thái Vip
 getVip(bool vip){
   switch(vip){
     case true: return "VIP"; break;
@@ -52,12 +54,14 @@ getVip(bool vip){
   }
 }
 
+//Tính tổng giá tiền
 getPriceTotal(double price, double degree, double quantity){
   if(degree != 0){
     return price * degree * quantity;
   }else  return price * quantity;
 }
 
+//Parse dateTime
 getDateTime(String date){
   final fBirthday = new DateFormat('dd/MM/yyyy hh:mm');
   if (date != null) {
@@ -66,6 +70,7 @@ getDateTime(String date){
      return "-----";
 }
 
+//Format giá 100.000.000
 getFormatPrice(String price){
   final oCcy = new NumberFormat("#,##0", "en_US");
   return oCcy.format(double.parse("${price}"));
