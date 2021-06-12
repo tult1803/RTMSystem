@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:intl/intl.dart';
 import 'package:rtm_system/model/getAPI_invoice.dart';
 import 'package:rtm_system/model/model_invoice.dart';
 import 'package:rtm_system/presenter/infinite_scroll_pagination/common/character_search_input_sliver.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/component.dart';
+import 'package:rtm_system/ultils/helpers.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/add_product_in_invoice.dart';
 import 'package:rtm_system/view/manager/formForDetail_page.dart';
@@ -22,7 +22,6 @@ class showAllInvoice extends StatefulWidget {
 
 DateTime fromDate;
 DateTime toDate;
-var fDate = new DateFormat('dd-MM-yyyy');
 
 class _showAllInvoiceState extends State<showAllInvoice> {
   int _pageSize = 1;
@@ -127,7 +126,7 @@ class _showAllInvoiceState extends State<showAllInvoice> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  btnDateTime(context, "${fDate.format(fromDate)}",
+                  btnDateTime(context, "${getDateTime("$fromDate", dateFormat: "dd/MM/yyyy")}",
                       Icon(Icons.date_range), datePick()),
                   SizedBox(
                     width: 20,
@@ -140,7 +139,7 @@ class _showAllInvoiceState extends State<showAllInvoice> {
                               style: TextStyle(fontSize: 20),
                             ))),
                   ),
-                  btnDateTime(context, "${fDate.format(toDate)}",
+                  btnDateTime(context, "${getDateTime("$toDate", dateFormat: "dd/MM/yyyy")}",
                       Icon(Icons.date_range), datePick()),
                 ],
               ),
@@ -215,8 +214,9 @@ class _showAllInvoiceState extends State<showAllInvoice> {
       onPressed: () {
         setState(() {
           pickedDate();
+          _pageSize = 1;
         });
-      },
+      }, child: null,
     );
   }
 

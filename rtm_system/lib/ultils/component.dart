@@ -928,8 +928,6 @@ Widget componentContainerDetailCustomer(BuildContext context,
     String birthday,
     String gender,
     String vip}) {
-  DateTime _date = DateTime.parse(birthday);
-  final fBirthday = new DateFormat('dd/MM/yyyy');
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Column(
@@ -954,7 +952,7 @@ Widget componentContainerDetailCustomer(BuildContext context,
         SizedBox(
           height: 10,
         ),
-        txtItemDetail(context, "Ngày sinh", "${fBirthday.format(_date)}"),
+        txtItemDetail(context, "Ngày sinh", "${getDateTime(birthday, dateFormat: 'dd/MM/yyyy')}"),
         SizedBox(
           height: 10,
         ),
