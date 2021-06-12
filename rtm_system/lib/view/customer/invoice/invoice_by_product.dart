@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:rtm_system/presenter/Customer/show_all_invoice_by_product.dart';
+import 'package:rtm_system/presenter/Customer/show_all_invoice.dart';
 import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 
 class InvoiceByProductPage extends StatefulWidget {
-  const InvoiceByProductPage({Key key, this.isVip, this.nameProduct})
+  const InvoiceByProductPage({Key key, this.isVip, this.nameProduct, this.idProduct})
       : super(key: key);
   final bool isVip;
   final String nameProduct;
+  final String idProduct;
 
   @override
   _InvoiceByProductPageState createState() => _InvoiceByProductPageState();
@@ -19,7 +20,6 @@ class _InvoiceByProductPageState extends State<InvoiceByProductPage> {
   String title = '';
   DateTime fromDate;
   DateTime toDate;
-  bool isShow = false;
 
   @override
   void initState() {
@@ -28,20 +28,11 @@ class _InvoiceByProductPageState extends State<InvoiceByProductPage> {
     toDate = DateTime.now();
     fromDate = DateTime.now().subtract(Duration(days: 30));
     title = "Hóa đơn ${widget.nameProduct.toLowerCase()}";
-    if(widget.nameProduct.toLowerCase() == 'mủ nước'){
-      isShow = true;
-    }else{
-      if(widget.isVip){
-        isShow = true;
-      }else{
-        isShow = false;
-      }
-    }
+    print(widget.idProduct+ "ne");
   }
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
     return Scaffold(
         backgroundColor: Color(0xffEEEEEE),
         appBar: AppBar(
@@ -81,10 +72,8 @@ class _InvoiceByProductPageState extends State<InvoiceByProductPage> {
                           Icon(Icons.date_range), datePick()),
                     ],
                   ),
-                  SizedBox(
-                    height: 12,
-                  ),
-                  new showInvoiceByProduct(),
+
+                  new showAllInvoicePage(idProduct: widget.idProduct,isAll: true,),
                 ],
               )),
         ));

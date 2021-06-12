@@ -300,7 +300,7 @@ Widget boxForInvoice(
     String total,
     String date,
     int status,
-    Widget widget}) {
+    Widget widget, bool isCustomer}) {
   String totalAfterFormat;
   String dateAfterFormat;
 
@@ -356,7 +356,8 @@ Widget boxForInvoice(
               ),
             ],
           ),
-          containerTextInvoice(
+          if(!isCustomer)
+            containerTextInvoice(
             alignment: Alignment.topLeft,
             paddingLeftOfText: 10,
             paddingRightOfText: 10,
@@ -370,6 +371,14 @@ Widget boxForInvoice(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    isCustomer? containerTextInvoice(
+                      marginTop: 2,
+                      alignment: Alignment.topLeft,
+                      paddingLeftOfText: 10,
+                      paddingRightOfText: 10,
+                      tittle: "$product",
+                      fontWeight: FontWeight.w700,
+                    ):
                     containerTextInvoice(
                       marginTop: 2,
                       alignment: Alignment.topLeft,

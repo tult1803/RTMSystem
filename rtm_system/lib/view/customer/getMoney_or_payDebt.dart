@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:rtm_system/model/getAPI_product.dart';
 import 'package:rtm_system/model/model_product.dart';
-import 'package:rtm_system/model/profile_customer/getAPI_customer_phone.dart';
-import 'package:rtm_system/model/profile_customer/model_profile_customer.dart';
-import 'package:rtm_system/presenter/Customer/show_all_invoice_by_product.dart';
+import 'package:rtm_system/presenter/Customer/show_all_invoice.dart';
 import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/getData.dart';
 import 'package:rtm_system/view/customer/advance/detail_advance.dart';
@@ -28,7 +26,6 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
   String _mySelection;
   bool checkProduct = true;
   int idProduct;
-  bool isVip = false;
 
   Future _getProduct() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -50,21 +47,6 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
       return dataListProduct;
     }
   }
-
-  GetAPIProfileCustomer getAPIProfileCustomer = GetAPIProfileCustomer();
-  InfomationCustomer infomationCustomer = InfomationCustomer();
-
-  Future getAPIProfile() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    String token = sharedPreferences.getString('access_token');
-    String phone = sharedPreferences.getString('phone');
-    // Đỗ dữ liệu lấy từ api
-    infomationCustomer =
-        await getAPIProfileCustomer.getProfileCustomer(token, phone);
-    this.isVip = infomationCustomer.vip;
-    return infomationCustomer;
-  }
-
   @override
   void initState() {
     // TODO: implement initState
@@ -72,19 +54,12 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
     toDate = DateTime.now();
     fromDate = DateTime.now().subtract(Duration(days: 60));
     _getProduct();
-    this.getAPIProfile();
   }
 
   String msg = '';
 
   @override
   Widget build(BuildContext context) {
-    print(isVip);
-    if (isVip) {
-      msg = 'Vui long chon san pham khac';
-    } else {
-      msg = 'Vui long chon khoang thoi gian khac';
-    }
     return Scaffold(
       backgroundColor: Color(0xffEEEEEE),
       appBar: AppBar(
@@ -126,22 +101,12 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
                 padding: EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(10.0),
-                    topRight: Radius.circular(10.0),
-                  ),
+                  borderRadius: BorderRadius.all(  Radius.circular(10.0),                  ),
                 ),
                 child: Center(
                   child: Text('Các hóa đơn sẽ được thanh toán:'),
                 ),
               ),
-              SizedBox(
-                height: 1,
-                child: Container(
-                  color: Color(0xFFBDBDBD),
-                ),
-              ),
-              _showProduct(),
               SizedBox(
                 height: 12,
               ),
@@ -164,7 +129,7 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
                       Icon(Icons.date_range), datePick()),
                 ],
               ),
-              _showList(),
+              new showAllInvoicePage(idProduct: '3', isAll: false,),
               SizedBox(
                 height: 12,
               ),
@@ -198,34 +163,7 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
     );
   }
 
-  Widget _showProduct() {
-   return isVip
-        ? Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(10.0),
-                bottomRight: Radius.circular(10.0),
-              ),
-            ),
-            padding: EdgeInsets.all(12),
-            child: _dropdownList(),
-          )
-        : Container();
-  }
 
-  Widget _showList() {
-    return _mySelection != null?
-    new showInvoiceByProduct(
-      isDeposit: true,
-      idProduct: _mySelection,
-      msg404: msg,
-    ): new showInvoiceByProduct(
-      isDeposit: true,
-      idProduct: '3',
-      msg404: msg,
-    );
-  }
 
   Widget datePick() {
     return TextButton(
@@ -387,24 +325,6 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
         // _underRow()
       ],
     );
-  }
-
-  bool _validateData() {
-    bool check = false;
-    if (this._mySelection == null || this._mySelection == '') {
-      setState(() {
-        this.errNameProduct = 'Sản phẩm không được để trống.';
-      });
-    } else {
-      setState(() {
-        this.errNameProduct = null;
-      });
-    }
-    if (this.errNameProduct == null) {
-      check = true;
-    }
-
-    return check;
   }
   Widget _showBottomButton() {
     var size = MediaQuery.of(context).size;

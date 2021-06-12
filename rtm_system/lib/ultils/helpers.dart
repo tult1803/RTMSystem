@@ -21,6 +21,8 @@ getStatus({int status}) {
       break;
     case 6:
       return "Chấp nhận";
+    case 7:
+      return "Chưa nhận tiền";
       break;
   }
 }
@@ -34,6 +36,8 @@ getColorStatus({int status}) {
     color = Colors.redAccent;
   } else if (status == 4) {
     color = Colors.orangeAccent;
+  }else if (status == 7) {
+    color = Colors.indigoAccent;
   }
   return color;
 }
