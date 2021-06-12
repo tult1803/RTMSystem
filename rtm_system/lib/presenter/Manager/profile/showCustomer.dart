@@ -40,7 +40,6 @@ class _showAllCustomerState extends State<showAllCustomer> {
         searchTerm: _searchTerm,
       );
       customerList = customer.customerList;
-      // print("${_pagingController}");
       final isLastPage = customerList.length < pageKey;
       if (isLastPage) {
         _pagingController.appendLastPage(customerList);
@@ -92,7 +91,12 @@ class _showAllCustomerState extends State<showAllCustomer> {
       child: new CustomScrollView(
         slivers: <Widget>[
           CharacterSearchInputSliver(
-            onChanged: (searchTerm) => _updateSearchTerm(searchTerm),
+            onChanged: (searchTerm) {
+              _updateSearchTerm(searchTerm);
+              setState(() {
+                _pageSize = 1;
+              });
+            },
           ),
           PagedSliverList(
             pagingController: _pagingController,

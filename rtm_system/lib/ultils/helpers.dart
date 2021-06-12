@@ -65,9 +65,10 @@ getPriceTotal(double price, double degree, double quantity){
   }else  return price * quantity;
 }
 
-//Parse dateTime
-getDateTime(String date){
-  final fBirthday = new DateFormat('dd/MM/yyyy hh:mm');
+//Parse dateTime ra chuỗi String
+//nếu ko truyền dateFormat thì mặc định sẽ là 'dd/MM/yyyy hh:mm'
+getDateTime(String date, {String dateFormat}){
+  final fBirthday = new DateFormat(dateFormat == null ? 'dd/MM/yyyy hh:mm' : dateFormat);
   if (date != null) {
     return "${fBirthday.format(DateTime.parse(date))}";
   } else
@@ -79,3 +80,4 @@ getFormatPrice(String price){
   final oCcy = new NumberFormat("#,##0", "en_US");
   return oCcy.format(double.parse("${price}"));
 }
+

@@ -417,6 +417,106 @@ Widget boxForInvoice(
   );
 }
 
+
+//Dùng cho trang Quản lý hóa đơn và để show các hóa đơn
+Widget boxForProduct(
+    {BuildContext context,
+      int id,
+      String productName,
+      String typeOfProduct,
+      String price,
+      String date,
+      Widget widget}) {
+  return GestureDetector(
+    onTap: () {
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => widget));
+    },
+    child: Container(
+      margin: EdgeInsets.only(top: 15, left: 10, right: 10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(5),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black54,
+            blurRadius: 4,
+            offset: Offset(1, 2), // Shadow position
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              miniContainer(
+                tittle: "Mã #$id",
+                marginRight: 5,
+                marginBottom: 5,
+                marginLeft: 10,
+                marginTop: 10,
+                borderRadius: 5,
+                height: 30,
+                colorContainer: colorHexa("#f9ee75"),
+                paddingRightOfText: 10,
+                paddingLeftOfText: 10,
+              ),
+              Flexible(
+                child: containerTextInvoice(
+                  alignment: Alignment.centerRight,
+                  paddingLeftOfText: 10,
+                  paddingRightOfText: 10,
+                  tittle: "${getDateTime(date, dateFormat: "dd/MM/yyyy")}",
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    containerTextInvoice(
+                      alignment: Alignment.topLeft,
+                      paddingLeftOfText: 10,
+                      paddingRightOfText: 10,
+                      tittle: productName,
+                      fontWeight: FontWeight.w700,
+                    ),
+                    containerTextInvoice(
+                      marginTop: 2,
+                      alignment: Alignment.topLeft,
+                      paddingLeftOfText: 10,
+                      paddingRightOfText: 10,
+                      tittle: "Loại: $typeOfProduct",
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ],
+                ),
+              ),
+              miniContainer(
+                tittle: "${getFormatPrice(price)}đ",
+                colorText: Colors.black87,
+                fontWeightText: FontWeight.w500,
+                fontSize: 16,
+                height: 30,
+                width: 100,
+                colorContainer: Colors.white,
+                borderRadius: 5,
+                marginRight: 10,
+              ),
+            ],
+          ),
+          SizedBox(height: 10,)
+        ],
+      ),
+    ),
+  );
+}
+
 //Dùng cho trang notice để hiện thỉ các notice
 Widget containerButton(
     BuildContext context, int id, String tittle, String content, String date) {
