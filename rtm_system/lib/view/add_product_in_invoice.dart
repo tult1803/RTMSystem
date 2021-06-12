@@ -5,7 +5,6 @@ import 'package:rtm_system/model/getAPI_product.dart';
 import 'package:rtm_system/model/model_product.dart';
 import 'package:rtm_system/ultils/alertDialog.dart';
 import 'package:rtm_system/ultils/component.dart';
-import 'package:rtm_system/ultils/src/regExp.dart';
 import 'package:rtm_system/view/create_invoice.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -54,6 +53,7 @@ class _AddProductPageState extends State<AddProductPage> {
         dataListProduct.add(DataProduct.fromJson(data));
       });
       setState(() {
+        // ignore: unnecessary_statements
         dataListProduct;
       });
       return dataListProduct;
@@ -317,6 +317,7 @@ class _AddProductPageState extends State<AddProductPage> {
     );
     return _controller;
   }
+
 
   Widget _txtItemProduct(
       {BuildContext context, String hintText, int maxLines, bool isQuantity}) {

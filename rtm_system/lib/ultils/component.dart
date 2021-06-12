@@ -9,88 +9,6 @@ import 'package:rtm_system/view/customer/invoice/detail_invoice.dart';
 
 import 'helpers.dart';
 
-// AutoSizeText chữ tự động co giãn theo kích thước mặc định
-// Hiện tại dùng cho trang "Product" và "Bill"
-//componentCardS là 1 phần bên phải của Card trong trang // E là End
-Widget componentCardE(
-    String tittle, String type, CrossAxisAlignment cross, Color color) {
-  return Padding(
-    padding: const EdgeInsets.only(left: 0.0, top: 10),
-    child: Column(
-      crossAxisAlignment: cross,
-      children: [
-        AutoSizeText(
-          tittle,
-          maxLines: 1,
-          style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
-        ),
-        // Expanded(
-        //   child: SizedBox(),
-        // ),
-        SizedBox(
-          height: 10,
-        ),
-        AutoSizeText(
-          "${type}",
-          maxLines: 1,
-          style: TextStyle(
-            fontWeight: FontWeight.w400,
-            fontSize: 15,
-            color: color,
-          ),
-        ),
-      ],
-    ),
-  );
-}
-
-// Hiện tại dùng cho trang "Product" và "Bill"
-//componentCardS là 1 phần bên trái của Card trong trang // S là Start
-Widget componentCardS(String tittle, String type, String detailType,
-    CrossAxisAlignment cross, Color color) {
-  return Padding(
-    padding: const EdgeInsets.only(left: 0.0, top: 10),
-    child: Column(
-      crossAxisAlignment: cross,
-      children: [
-        AutoSizeText(
-          tittle,
-          maxLines: 1,
-          style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
-        ),
-        // Expanded(
-        //   child: SizedBox(),
-        // ),
-        SizedBox(
-          height: 10,
-        ),
-        Row(
-          children: [
-            AutoSizeText(
-              "$type: ",
-              maxLines: 1,
-              style: TextStyle(
-                fontWeight: FontWeight.w400,
-                fontSize: 15,
-                color: Colors.black54,
-              ),
-            ),
-            AutoSizeText(
-              "${detailType}",
-              maxLines: 1,
-              style: TextStyle(
-                fontWeight: FontWeight.w400,
-                fontSize: 15,
-                color: color,
-              ),
-            ),
-          ],
-        ),
-      ],
-    ),
-  );
-}
-
 // Hiện tại dùng cho trang "Profile"
 Widget txtFullNameProfile(String tittle) {
   return Container(
@@ -451,8 +369,8 @@ Widget widgetContentAdvance(context, String status, String header1, header2) {
 }
 
 //nội dung của bill, đang dùng: create invoice
-Widget widgetCreateInvoice(context, bool isNew, List product, String nameProduct,
-    DateTime dateTime) {
+Widget widgetCreateInvoice(
+    context, bool isNew, List product, String nameProduct, DateTime dateTime) {
   var size = MediaQuery.of(context).size;
   return SingleChildScrollView(
       child: Container(
@@ -952,7 +870,8 @@ Widget componentContainerDetailCustomer(BuildContext context,
         SizedBox(
           height: 10,
         ),
-        txtItemDetail(context, "Ngày sinh", "${getDateTime(birthday, dateFormat: 'dd/MM/yyyy')}"),
+        txtItemDetail(context, "Ngày sinh",
+            "${getDateTime(birthday, dateFormat: 'dd/MM/yyyy')}"),
         SizedBox(
           height: 10,
         ),
@@ -989,56 +908,73 @@ Widget componentContainerDetailCustomer(BuildContext context,
 //Dùng cho các container nhỏ vd như trong trang quản lý khách hàng
 //Và đang dùng cho component "Mã" và "Trạng thái hóa đơn" trong quản lý hóa đơn
 // là những component container nhỏ trong từng khách hàng
-Widget miniContainer({
-  String tittle,
-  double height,
-  double width,
-  Color colorContainer,
-  Color colorText,
-  double marginLeft,
-  double marginRight,
-  double marginTop,
-  double marginBottom,
-  double borderRadius,
-  double paddingLeftOfText,
-  double paddingRightOfText,
-  double paddingTopOfText,
-  double paddingBottomOfText,
-  double fontSize,
-  FontWeight fontWeightText,
-}) {
-  return Container(
-    margin: EdgeInsets.only(
-      right: marginRight == null ? 0 : marginRight,
-      top: marginTop == null ? 0 : marginTop,
-      bottom: marginBottom == null ? 0 : marginBottom,
-      left: marginLeft == null ? 0 : marginLeft,
-    ),
-    height: height,
-    width: width,
-    decoration: BoxDecoration(
-      borderRadius:
-          BorderRadius.circular(borderRadius == null ? 0 : borderRadius),
-      color: colorContainer,
-      boxShadow: [
-        BoxShadow(
-          color: Colors.black54,
-          blurRadius: 3,
-          offset: Offset(1, 1), // Shadow position
-        ),
-      ],
-    ),
-    child: Center(
-      child: Padding(
-        padding: EdgeInsets.only(
-            left: paddingLeftOfText == null ? 0 : paddingLeftOfText,
-            right: paddingRightOfText == null ? 0 : paddingRightOfText,
-            bottom: paddingBottomOfText == null ? 0 : paddingBottomOfText,
-            top: paddingTopOfText == null ? 0 : paddingTopOfText),
-        child: Text(
-          tittle,
-          style:
-              GoogleFonts.roboto(color: colorText, fontWeight: fontWeightText, fontSize: fontSize == null ? null : fontSize),
+
+//Có tính năng Navigator nếu muốn navigator sang trang khác thì  widget ko được null
+//Nếu muốn sử dụng navigator.pop thì widget có thể null nhưng trạng thái " doNavigate " được null phải true hoặc false
+//Nhớ phải thêm context để navigator
+
+Widget miniContainer(
+    {BuildContext context,
+    String tittle,
+    double height,
+    double width,
+    Color colorContainer,
+    Color colorText,
+    double marginLeft,
+    double marginRight,
+    double marginTop,
+    double marginBottom,
+    double borderRadius,
+    double paddingLeftOfText,
+    double paddingRightOfText,
+    double paddingTopOfText,
+    double paddingBottomOfText,
+    double fontSize,
+    FontWeight fontWeightText,
+    bool doNavigate,
+    Widget widget}) {
+  return GestureDetector(
+    onTap: () => widget == null
+        ? doNavigate == null
+            ? null
+            : Navigator.of(context).pop()
+        : Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => widget)),
+    child: Container(
+      margin: EdgeInsets.only(
+        right: marginRight == null ? 0 : marginRight,
+        top: marginTop == null ? 0 : marginTop,
+        bottom: marginBottom == null ? 0 : marginBottom,
+        left: marginLeft == null ? 0 : marginLeft,
+      ),
+      height: height,
+      width: width,
+      decoration: BoxDecoration(
+        borderRadius:
+            BorderRadius.circular(borderRadius == null ? 0 : borderRadius),
+        color: colorContainer,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black54,
+            blurRadius: 3,
+            offset: Offset(1, 1), // Shadow position
+          ),
+        ],
+      ),
+      child: Center(
+        child: Padding(
+          padding: EdgeInsets.only(
+              left: paddingLeftOfText == null ? 0 : paddingLeftOfText,
+              right: paddingRightOfText == null ? 0 : paddingRightOfText,
+              bottom: paddingBottomOfText == null ? 0 : paddingBottomOfText,
+              top: paddingTopOfText == null ? 0 : paddingTopOfText),
+          child: Text(
+            tittle,
+            style: GoogleFonts.roboto(
+                color: colorText,
+                fontWeight: fontWeightText,
+                fontSize: fontSize == null ? null : fontSize),
+          ),
         ),
       ),
     ),
@@ -1061,7 +997,7 @@ Widget containerTextInvoice({
   double paddingBottomOfText,
   double height,
   double width,
-}){
+}) {
   return Container(
     height: height,
     width: width,

@@ -1,10 +1,11 @@
+
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
-import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/manager/debt/processBill.dart';
-import 'package:rtm_system/view/manager/formForDetail_page.dart';
 
 class showAllBill extends StatefulWidget {
   const showAllBill({Key key}) : super(key: key);
@@ -61,69 +62,17 @@ class _showAllBillState extends State<showAllBill> {
               ),
               SizedBox(height: 0.5, child: Container(color: Colors.black38,),),
               Expanded(
-                  child: Container(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      card(
-                          context,
-                          "Lê Thanh Tú",
-                          "Trạng thái",
-                          "Hoàn thành",
-                          "10000000",
-                          "2021-05-20",
-                          Colors.green,
-                          FormForDetailPage(
-                            tittle: "Chi tiết ứng tiền",
-                          )),
-                      card(
-                          context,
-                          "Nguyen Thị C",
-                          "Trạng thái",
-                          "Trễ",
-                          "10000000",
-                          "2021-05-20",
-                          Colors.redAccent,
-                          FormForDetailPage(
-                            tittle: "Chi tiết ứng tiền",
-                          )),
-                      card(
-                          context,
-                          "Lê Thanh Tú",
-                          "Trạng thái",
-                          "Chờ",
-                          "10000000",
-                          "2021-05-20",
-                          Colors.orangeAccent,
-                          FormForDetailPage(
-                            tittle: "Chi tiết ứng tiền",
-                          )),
-                      card(
-                          context,
-                          "Lê Thanh Tú",
-                          "Trạng thái",
-                          "Hoàn thành",
-                          "10000000",
-                          "2021-05-20",
-                          Colors.green,
-                          FormForDetailPage(
-                            tittle: "Chi tiết ứng tiền",
-                          )),
-                      card(
-                          context,
-                          "Lê Thanh Tú",
-                          "Trạng thái",
-                          "Hoàn thành",
-                          "10000000",
-                          "2021-05-20",
-                          Colors.green,
-                          FormForDetailPage(
-                            tittle: "Chi tiết ứng tiền",
-                          )),
-                    ],
-                  ),
-                ),
-              ))
+                child: Center(child: Text("Chờ API", style: TextStyle(color: Colors.black54),)),
+                //   child: SingleChildScrollView(
+                //       child: Column(
+                //         mainAxisAlignment: MainAxisAlignment.center,
+                //         crossAxisAlignment: CrossAxisAlignment.center,
+                //         children: [
+                //           //Code here
+                //         ],
+                //     ),
+                // ),
+              )
             ],
           ),
         ),

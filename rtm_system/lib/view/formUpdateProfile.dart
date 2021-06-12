@@ -570,26 +570,23 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
   }
 
   Widget _checkCMND() {
-    if (this.widget.check) {
-      return _txtfield(getDataTextField(this.widget.cmnd), false,
-          "Nhập CMND/CCCD", "CMND/CCCD", errCMND, 1, TextInputType.phone);
-    } else
-      return Container();
+    return this.widget.check
+        ? _txtfield(getDataTextField(this.widget.cmnd), false, "Nhập CMND/CCCD",
+            "CMND/CCCD", errCMND, 1, TextInputType.phone)
+        : Container();
   }
 
   Widget _checkAddress() {
-    if (this.widget.check) {
-      return _txtFormField(this.widget.address, false, "Nhập địa chỉ",
-          "Địa chỉ", errAddress, 1, TextInputType.streetAddress);
-    } else
-      return Container();
+    return this.widget.check
+        ? _txtFormField(this.widget.address, false, "Nhập địa chỉ", "Địa chỉ",
+            errAddress, 1, TextInputType.streetAddress)
+        : Container();
   }
 
   Widget _checkPassword() {
-    if (this.widget.isUpdate) {
-      return Container();
-    } else
-      return _txtfield(getDataTextField(this.widget.password), true,
-          "Nhập mật khẩu", "Mật khẩu", errPass, 1, TextInputType.text);
+    return this.widget.isUpdate
+        ? Container()
+        : _txtfield(getDataTextField(this.widget.password), true,
+            "Nhập mật khẩu", "Mật khẩu", errPass, 1, TextInputType.text);
   }
 }

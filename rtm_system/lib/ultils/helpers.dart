@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:rtm_system/ultils/src/color_ultils.dart';
 
 //Chuyển trạng thái từ số thành chữ
 getStatus({int status}) {
@@ -22,7 +23,7 @@ getStatus({int status}) {
     case 6:
       return "Chấp nhận";
     case 7:
-      return "Chưa nhận tiền";
+      return "Ký gửi";
       break;
   }
 }
@@ -37,7 +38,7 @@ getColorStatus({int status}) {
   } else if (status == 4) {
     color = Colors.orangeAccent;
   }else if (status == 7) {
-    color = Colors.indigoAccent;
+    color = colorHexa("#FF6F3D");
   }
   return color;
 }

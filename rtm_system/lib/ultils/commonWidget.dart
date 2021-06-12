@@ -98,7 +98,13 @@ Widget btnMain(BuildContext context, double width, String tittle, Icon icon,
         decoration: BoxDecoration(
           color: button_color,
           borderRadius: BorderRadius.circular(5),
-          border: Border.all(color: Colors.black, width: 0.5),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black54,
+              blurRadius: 3,
+              offset: Offset(1, 1), // Shadow position
+            ),
+          ],
         ),
         height: 35.0,
         width: width,
@@ -113,7 +119,7 @@ Widget btnMain(BuildContext context, double width, String tittle, Icon icon,
             child: Center(
                 child: AutoSizeText(
               "$tittle",
-              style: TextStyle(fontWeight: FontWeight.w600),
+              style: GoogleFonts.roboto(fontWeight: FontWeight.w600),
             )),
           ))
         ]),
@@ -126,11 +132,11 @@ Widget btnMain(BuildContext context, double width, String tittle, Icon icon,
         ),
         height: 35.0,
         width: width,
-        child: FlatButton(
+        child: TextButton(
           onPressed: () {
             Navigator.push(
                 context, MaterialPageRoute(builder: (context) => widget));
-          },
+          }, child: null,
         ),
       ),
     ],
@@ -245,6 +251,7 @@ Widget boxForCustomer(
               ),
               Expanded(child: SizedBox()),
               miniContainer(
+                context: context,
                 borderRadius: 5,
                 height: 30,
                 width: 100,
@@ -260,6 +267,7 @@ Widget boxForCustomer(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               miniContainer(
+                context: context,
                 borderRadius: 5,
                 height: 30,
                 width: 130,
@@ -271,6 +279,7 @@ Widget boxForCustomer(
               ),
               Expanded(child: SizedBox()),
               miniContainer(
+                context: context,
                 borderRadius: 5,
                 height: 30,
                 width: 100,
@@ -312,10 +321,8 @@ Widget boxForInvoice(
     dateAfterFormat = "$date";
   }
   return GestureDetector(
-    onTap: () {
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => widget));
-    },
+    onTap: () => Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => widget)),
     child: Container(
       margin: EdgeInsets.only(top: 15, left: 10, right: 10),
       decoration: BoxDecoration(
@@ -334,6 +341,7 @@ Widget boxForInvoice(
           Row(
             children: [
               miniContainer(
+                context: context,
                 tittle: "Mã #$id",
                 marginRight: 5,
                 marginBottom: 5,
@@ -399,6 +407,7 @@ Widget boxForInvoice(
                 ),
               ),
               miniContainer(
+                context: context,
                 tittle: "${getStatus(status: status)}",
                 colorText: Colors.white,
                 fontWeightText: FontWeight.w500,
@@ -428,10 +437,8 @@ Widget boxForProduct(
       String date,
       Widget widget}) {
   return GestureDetector(
-    onTap: () {
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => widget));
-    },
+    onTap: () => Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => widget)),
     child: Container(
       margin: EdgeInsets.only(top: 15, left: 10, right: 10),
       decoration: BoxDecoration(
@@ -450,6 +457,7 @@ Widget boxForProduct(
           Row(
             children: [
               miniContainer(
+                context: context,
                 tittle: "Mã #$id",
                 marginRight: 5,
                 marginBottom: 5,
@@ -609,10 +617,8 @@ Widget buttonProfile(BuildContext context, double left, double right,
     //Nếu dùng "GestureDetector" thì click sẽ không tạo ra hiệu ứng button
     //Nếu muốn tạo hiệu ứng button có thể dùng FlatButton hoặc RaiseButton
     child: GestureDetector(
-      onTap: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => widget));
-      },
+      onTap: () => Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => widget)),
       child: Column(
         children: [
           Container(
@@ -1000,75 +1006,4 @@ Widget btnDeactivateCustomer(
   } else {
     return Container();
   }
-}
-
-//Để tạm thời mốt xóa sau
-//******************************************************************************************************************
-
-Widget card(BuildContext context, String tittle, String type, String detailType,
-    String price, String date, Color color, Widget widget) {
-  //Lấy size của màn hình
-  var size = MediaQuery.of(context).size;
-  String priceAfterFormat;
-  String dateAfterFormat;
-  try {
-    //Format lại ngày
-    priceAfterFormat = "${getFormatPrice(price)}đ";
-    dateAfterFormat = "${getDateTime(date)}";
-  } catch (_) {
-    priceAfterFormat = "$price";
-    dateAfterFormat = "$date";
-  }
-  return Card(
-    margin: EdgeInsets.only(top: 15),
-    color: Colors.white,
-    shape: RoundedRectangleBorder(
-      side: BorderSide(color: Colors.black, width: 0.5),
-      borderRadius: BorderRadius.circular(10),
-    ),
-    child: Container(
-      height: 80,
-      // ignore: deprecated_member_use
-      child: FlatButton(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        onPressed: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => widget));
-        },
-        child: Row(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    bottomLeft: Radius.circular(10)),
-              ),
-              alignment: Alignment.centerLeft,
-              width: size.width * 0.5,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 2.0),
-                child: componentCardS(
-                    tittle, type, detailType, CrossAxisAlignment.start, color),
-              ),
-            ),
-            Expanded(
-              child: Container(
-                margin: EdgeInsets.only(top: 2.0),
-                alignment: Alignment.centerRight,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(10),
-                      bottomRight: Radius.circular(10)),
-                ),
-                child: componentCardE("$priceAfterFormat", "$dateAfterFormat",
-                    CrossAxisAlignment.end, Colors.black54),
-              ),
-            ),
-          ],
-        ),
-      ),
-    ),
-  );
 }

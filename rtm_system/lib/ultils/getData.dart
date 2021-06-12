@@ -9,8 +9,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'alertDialog.dart';
 
-
-
 //dùng cho tạo thông báo
 Future postAPINotice(String tittle, String content) async {
   PostCreateNotice _createNotice = PostCreateNotice();
@@ -149,25 +147,25 @@ Future<void> put_API_GetMoney(BuildContext context, indexPage) async {
       status);
 }
 
-Future<void> putAPIUpdatePrice(BuildContext context,int productId, double price) async{
+Future<void> putAPIUpdatePrice(
+    BuildContext context, int productId, double price) async {
   int status;
   SharedPreferences prefs = await SharedPreferences.getInstance();
   PutUpdatePrice putUpdatePrice = PutUpdatePrice();
   status = await putUpdatePrice.updatePrice(
-      prefs.get("access_token"),
-      prefs.get("accountId"),
-      productId,
-      price);
+      prefs.get("access_token"), prefs.get("accountId"), productId, price);
 
   if (status == 200) {
-      showStatusAlertDialog(
-          context,
-          "Đã cập nhật.",
-          HomeAdminPage(
-            index: 2,
-          ),
-          true);
+    showCustomDialog(context,
+        isSuccess: true,
+        content: "Giá sản phẩm đã cập nhật",
+        widgetToNavigator: HomeAdminPage(
+          index: 2,
+        ));
   } else
-    showStatusAlertDialog(
-        context, "Cập nhật thất bại. Xin thử lại !!!", null, false);
+    showCustomDialog(
+      context,
+      isSuccess: false,
+      content: "Cập nhật giá thất bại",
+    );
 }

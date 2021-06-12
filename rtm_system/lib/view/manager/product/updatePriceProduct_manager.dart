@@ -177,9 +177,9 @@ class _updatePriceProductState extends State<updatePriceProduct> {
         ),
         onChanged: (value) {
           setState(() {
-            if(value.isEmpty){
+            if (value.isEmpty) {
               price = null;
-            }else{
+            } else {
               price = double.parse(value);
               getDataTextField("${getFormatPrice("$price")}");
             }
@@ -200,26 +200,16 @@ class _updatePriceProductState extends State<updatePriceProduct> {
         ),
         child: TextButton(
           onPressed: () {
-              if (isClick) {
-               if(price != null){
-                 if(price > 1000){
-                   // ignore: unnecessary_statements
-                   currentPrice == price ? showStatusAlertDialog(context, "Xin nhập giá mới", null, false):{
-                     itemIdUpdatePrice.clear(),
-                     itemPriceUpdatePrice.clear(),
-                     itemNameUpdatePrice.clear(),
-                     putAPIUpdatePrice(context,productId, price),
-                   };
-                 }else {
-                   showStatusAlertDialog(
-                       context, "Giá phải lớn hơn 1000đ", null, false);
-                 }}else {
-                 showStatusAlertDialog(
-                     context, "Giá đang trống", null, false);
-               }} else {
-                showStatusAlertDialog(
-                    context, "Hãy chọn sản phẩm", null, false);
-              }
+            if (_checkSubmit()) {
+              currentPrice == price
+                  ? showCustomDialog(context,
+                      content: "Xin hãy nhập giá mới", isSuccess: false)
+                  // ignore: unnecessary_statements
+                  : { itemIdUpdatePrice.clear(),
+                      itemPriceUpdatePrice.clear(),
+                      itemNameUpdatePrice.clear(),
+                      putAPIUpdatePrice(context, productId, price),};
+            }
           },
           child: Center(
             child: Text(
@@ -233,4 +223,23 @@ class _updatePriceProductState extends State<updatePriceProduct> {
         ));
   }
 
+  _checkSubmit() {
+    if (isClick) {
+      if (price != null) {
+        if (price > 1000) {
+          return true;
+        } else {
+          showCustomDialog(context,
+              content: "Giá phải lớn hơn 1000đ", isSuccess: false);
+          return false;
+        }
+      } else {
+        showCustomDialog(context, content: "Giá đang trống", isSuccess: false);
+        return false;
+      }
+    } else {
+      showCustomDialog(context, content: "Hãy chọn sản phẩm", isSuccess: false);
+      return false;
+    }
+  }
 }
