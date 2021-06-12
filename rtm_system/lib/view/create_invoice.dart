@@ -36,7 +36,6 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
       dataList.forEach((element) {
         Map<dynamic, dynamic> data = element;
         dataListProduct.add(DataProduct.fromJson(data));
-        print(data);
       });
       setState(() {
         dataListProduct;

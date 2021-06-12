@@ -96,15 +96,7 @@ class _AddProductPageState extends State<AddProductPage> {
                       child: Column(children: [
                         // show product from API
                         _dropdownList(),
-                        _mySelection == null
-                            ? Container()
-                            : _txtItemProduct(
-                                context: context,
-                                hintText: 'Nhập số ký',
-                                maxLines: 1,
-                                isQuantity: true,
-                                error: errQuantity),
-
+                        _checkShowQuantity(),
                         Container(
                           width: MediaQuery.of(context).size.width,
                           child: Wrap(
@@ -343,6 +335,11 @@ class _AddProductPageState extends State<AddProductPage> {
               txtController.clear();
             } else
               this.degree = double.parse(value);
+            this.listInforProduct = [
+              this._mySelection,
+              this.quantity,
+              this.degree
+            ];
             setState(() {
               checkClick = true;
             });
