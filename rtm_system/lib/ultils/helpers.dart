@@ -4,12 +4,26 @@ import 'package:intl/intl.dart';
 //Chuyển trạng thái từ số thành chữ
 getStatus({int status}) {
   switch (status) {
-    case 1: return "Hoạt động"; break;
-    case 2: return "Không hoạt động"; break;
-    case 3: return  "Hoàn thành"; break;
-    case 4: return "Đang xử lý"; break;
-    case 5: return "Từ chối"; break;
-    case 6: return "Chấp nhận"; break;
+    case 1:
+      return "Hoạt động";
+      break;
+    case 2:
+      return "Không hoạt động";
+      break;
+    case 3:
+      return  "Hoàn thành";
+      break;
+    case 4:
+      return "Đang xử lý";
+      break;
+    case 5:
+      return "Từ chối";
+      break;
+    case 6:
+      return "Chấp nhận";
+    case 7:
+      return "Chưa nhận tiền";
+      break;
   }
 }
 
@@ -22,6 +36,8 @@ getColorStatus({int status}) {
     color = Colors.redAccent;
   } else if (status == 4) {
     color = Colors.orangeAccent;
+  }else if (status == 7) {
+    color = Colors.indigoAccent;
   }
   return color;
 }

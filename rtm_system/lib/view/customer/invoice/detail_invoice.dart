@@ -1,47 +1,47 @@
-import 'package:flutter/material.dart';
-import 'package:rtm_system/ultils/component.dart';
+import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:rtm_system/ultils/commonWidget.dart';
+import 'package:rtm_system/ultils/component.dart';
 class DetailInvoicePage extends StatefulWidget {
-  const DetailInvoicePage({Key key}) : super(key: key);
+  final Map<String, dynamic> map;
+
+  DetailInvoicePage({this.map});
 
   @override
   _DetailInvoicePageState createState() => _DetailInvoicePageState();
 }
 
 class _DetailInvoicePageState extends State<DetailInvoicePage> {
-  String status = 'Chưa trả';
-  String header;
-  void _showHeader(){
-    if( status == 'Chờ xác nhận'){
-      setState(() {
-        header = 'Xác nhận thông tin giao dịch';
-      });
-    } else {
-      setState(() {
-        header = 'Giao dịch thành công';
-      });
-    }
-  }
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    this._showHeader();
-  }
-  // Chờ xác nhận
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(0xFF0BB791),
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(30.0),
-        child: AppBar(
-          backgroundColor: Color(0xFF0BB791),
-          elevation: 0,
-          leading: leadingAppbar(context),
-        ),
+    return Container(
+      margin: EdgeInsets.only(top: 15),
+      child: SingleChildScrollView(
+        child: containerDetail(
+            context,
+            componentContainerDetailInvoice(
+              context,
+              id: this.widget.map["id"],
+              customerName: this.widget.map["customer_name"],
+              managerName: this.widget.map["manager_name"],
+              managerPhone: this.widget.map["manager_phone"],
+              customerPhone: this.widget.map["customer_phone"],
+              createTime: this.widget.map["create_time"],
+              productId: this.widget.map["product_id"],
+              productName: this.widget.map["product_name"],
+              description: this.widget.map["description"],
+              price: "${this.widget.map["price"]}",
+              degree: this.widget.map["degree"],
+              quantity: this.widget.map["quantity"],
+              customerConfirmDate: this.widget.map["customer_sign_date"],
+              managerConfirmDate: this.widget.map["manager_sign_date"],
+              statusId: this.widget.map["status_id"],
+              customerId: this.widget.map["customer_id"],
+              managerId: this.widget.map["manager_id"],
+              activeDate: this.widget.map["active_date"],
+            )),
       ),
-      body: widgetContentInvoice(context, status, header),
     );
   }
 }

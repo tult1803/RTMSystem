@@ -23,17 +23,19 @@ class AddProductPage extends StatefulWidget {
 
 class _AddProductPageState extends State<AddProductPage> {
   String token;
+  String personSale = '', phoneSale = '';
   List listQuantity = [];
   List<DataProduct> dataListProduct = [];
   bool checkClick = false;
   var txtController = TextEditingController();
 
   //field to sales
-  double quantity = 0, degree;
+  double quantity = 0, degree = 0;
   String status = 'Dang cho';
-  String personSale = '', phoneSale = '';
-  String errQuantity, errDegree;
-  String errNameProduct;
+  List listInforProduct;
+
+  String _mySelection;
+  bool checkProduct = true;
 
   Future _getProduct() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -65,9 +67,6 @@ class _AddProductPageState extends State<AddProductPage> {
     _getProduct();
   }
 
-  String _mySelection;
-  bool checkProduct = true;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -97,15 +96,7 @@ class _AddProductPageState extends State<AddProductPage> {
                       child: Column(children: [
                         // show product from API
                         _dropdownList(),
-                        _mySelection == null
-                            ? Container()
-                            : _txtItemProduct(
-                                context: context,
-                                hintText: 'Nhập số ký',
-                                maxLines: 1,
-                                isQuantity: true,
-                                error: errQuantity),
-
+                        _checkShowQuantity(),
                         Container(
                           width: MediaQuery.of(context).size.width,
                           child: Wrap(
@@ -119,63 +110,17 @@ class _AddProductPageState extends State<AddProductPage> {
                         SizedBox(
                           height: 10,
                         ),
-                        _checkNameProduct(),
+                        _checkShowDegree(),
                         SizedBox(
                           height: 10,
                         ),
-                        Container(
-                          color: Colors.white,
-                          padding: EdgeInsets.only(left: 12, right: 12),
-                          height: 45,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Tống số ký:',
-                                style: TextStyle(
-                                  color: Color(0xFF0BB791),
-                                  fontSize: 14,
-                                ),
-                              ),
-                              // sẽ show số tổng các ký đã nhập
-                              Text(
-                                '${quantity} kg',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                        _showMoneyOrQuantity("Tống số ký", this.quantity),
                         SizedBox(
                           height: 10,
                         ),
-                        Container(
-                          color: Colors.white,
-                          padding: EdgeInsets.only(left: 12, right: 12),
-                          height: 45,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Thành tiền:',
-                                style: TextStyle(
-                                  color: Color(0xFF0BB791),
-                                  fontSize: 14,
-                                ),
-                              ),
-                              // sẽ show số tổng các ký đã nhập
-                              Text(
-                                '1,000,000 VND',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
+                        //Khi manager tạo hoá đơn thì mới có giá lúc bán để show
+                        if (!widget.isCustomer)
+                          _showMoneyOrQuantity("Thành tiền", this.quantity),
                       ]),
                     ),
                   ],
@@ -183,8 +128,7 @@ class _AddProductPageState extends State<AddProductPage> {
                 SizedBox(
                   height: 10,
                 ),
-                btnSave(context, 140, 40, Color(0xFF0BB791), "Tạo",
-                    "yeu cau ban hang", 1),
+                btnSave(context, 140, 40, Color(0xFF0BB791), "Tạo", 1),
                 SizedBox(
                   height: 10,
                 ),
@@ -194,79 +138,35 @@ class _AddProductPageState extends State<AddProductPage> {
     );
   }
 
-  TextEditingController getDataTextField(txt) {
-    if (txt == null) {
-      txt = "";
-    }
-    final TextEditingController _controller = TextEditingController();
-    _controller.value = _controller.value.copyWith(
-      text: txt,
-      selection: TextSelection.collapsed(offset: txt.length),
+  Widget _showMoneyOrQuantity(String title, value) {
+    return Container(
+      color: Colors.white,
+      padding: EdgeInsets.only(left: 12, right: 12),
+      height: 45,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            '${title}:',
+            style: TextStyle(
+              color: Color(0xFF0BB791),
+              fontSize: 14,
+            ),
+          ),
+          // sẽ show số tổng các ký đã nhập
+          Text(
+            '${value} kg',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 16,
+            ),
+          ),
+        ],
+      ),
     );
-    return _controller;
   }
 
-  bool _validateData() {
-    bool check = false;
-    if (this.quantity == null || this.quantity == "") {
-      setState(() {
-        this.errQuantity = null;
-      });
-    } else {
-      if (!checkFormatNumber.hasMatch("${this.quantity}")) {
-        setState(() {
-          this.errQuantity = "Chỉ nhập số(ví dụ: 12,3 hoặc 12.3)";
-        });
-      } else {
-        setState(() {
-          this.errQuantity = null;
-        });
-      }
-    }
-    if (this.degree == null || this.degree == "") {
-      setState(() {
-        this.errDegree = null;
-      });
-    } else {
-      if (!checkFormatNumber.hasMatch("${this.degree}")) {
-        setState(() {
-          this.errDegree = "Chỉ nhập số(ví dụ: 12,3 hoặc 12.3)";
-        });
-      } else {
-        setState(() {
-          this.errDegree = null;
-        });
-      }
-    }
-    // co check date thi dung cai nay
-    // if (this.dateSale.isBefore(dateNow)) {
-    //   setState(() {
-    //     this.errDateSale = 'Thời gian trong quá khứ không hợp lệ.';
-    //   });
-    // } else {
-    //   setState(() {
-    //     this.errDateSale = null;
-    //   });
-    // }
-    if (this._mySelection == null || this._mySelection == '') {
-      setState(() {
-        this.errNameProduct = 'Sản phẩm không được để trống.';
-      });
-    } else {
-      setState(() {
-        this.errNameProduct = null;
-      });
-    }
-    if (this.errQuantity == null &&
-        this.errDegree == null &&
-        this.errNameProduct == null) {
-      check = true;
-    }
-
-    return check;
-  }
-
-  Widget _checkNameProduct() {
+  Widget _checkShowDegree() {
     return checkProduct
         ? Container()
         : _txtItemProduct(
@@ -274,47 +174,19 @@ class _AddProductPageState extends State<AddProductPage> {
             isQuantity: false,
             hintText: 'Nhập số độ',
             maxLines: 1,
-            error: errDegree);
+          );
   }
 
-  //
-  // Widget btnCancel(
-  //   BuildContext context,
-  //   double width,
-  //   double height,
-  //   Color color,
-  //   String tittleButtonAlertDialog,
-  //   String contentFeature,
-  //   bool action,
-  //   int indexOfBottomBar,
-  // ) {
-  //   return Container(
-  //     height: height,
-  //     width: width,
-  //     decoration: BoxDecoration(
-  //       color: color,
-  //       borderRadius: BorderRadius.circular(5),
-  //     ),
-  //     child: FlatButton(
-  //         onPressed: () async {
-  //           if (action) {
-  //             showAlertDialog(
-  //               context,
-  //               "Bạn muốn hủy tạo ${contentFeature} ?",
-  //               HomeCustomerPage(
-  //                 index: indexOfBottomBar,
-  //               ),
-  //             );
-  //           }
-  //         },
-  //         child: Center(
-  //             child: Text(
-  //           tittleButtonAlertDialog,
-  //           style: TextStyle(
-  //               color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
-  //         ))),
-  //   );
-  // }
+  Widget _checkShowQuantity() {
+    return _mySelection == null
+        ? Container()
+        : _txtItemProduct(
+            context: context,
+            hintText: 'Nhập số ký',
+            maxLines: 1,
+            isQuantity: true,
+          );
+  }
 
   Widget btnSave(
     BuildContext context,
@@ -322,7 +194,6 @@ class _AddProductPageState extends State<AddProductPage> {
     double height,
     Color color,
     String tittleButtonAlertDialog,
-    String contentFeature,
     int indexOfBottomBar,
   ) {
     var size = MediaQuery.of(context).size;
@@ -338,21 +209,18 @@ class _AddProductPageState extends State<AddProductPage> {
           onPressed: () {
             setState(() {
               if (checkClick) {
-                bool check = _validateData();
-                if (check) {
-                  //chuyen page
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => CreateInvoicePage(
-                              isNew: true,
-                              idProduct: _mySelection,
-                            )),
-                  );
-                }
+                //chuyen page
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => CreateInvoicePage(
+                            isNew: true,
+                            listProduct: listInforProduct,
+                          )),
+                );
               } else {
                 showStatusAlertDialog(
-                    context, "Thông tin chưa thay đổi !!!", null, false);
+                    context, "Thông tin chưa thay đổi!", null, false);
               }
             });
           },
@@ -372,26 +240,6 @@ class _AddProductPageState extends State<AddProductPage> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
-        Row(
-          children: <Widget>[
-            errNameProduct != null && errNameProduct != ''
-                ? Container(
-                    margin: EdgeInsets.only(left: 12, bottom: 5),
-                    child: Row(
-                      children: <Widget>[
-                        Text(
-                          errNameProduct,
-                          style: TextStyle(
-                            color: Colors.redAccent,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                : Container(),
-          ],
-        ),
         Row(
           children: [
             Expanded(
@@ -419,6 +267,11 @@ class _AddProductPageState extends State<AddProductPage> {
                       onChanged: (String newValue) {
                         setState(() {
                           _mySelection = newValue;
+                          this.listInforProduct = [
+                            this._mySelection,
+                            this.quantity,
+                            this.degree
+                          ];
                         });
                         if (_mySelection == '3') {
                           setState(() {
@@ -448,33 +301,25 @@ class _AddProductPageState extends State<AddProductPage> {
             ),
           ],
         ),
-        errNameProduct != null && errNameProduct != ''
-            ? Container(
-                margin: EdgeInsets.only(left: 12, bottom: 5),
-                child: Row(
-                  children: <Widget>[
-                    Text(
-                      errNameProduct,
-                      style: TextStyle(
-                        color: Colors.redAccent,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            : Container(),
         // _underRow()
       ],
     );
   }
 
+  TextEditingController getDataTextField(txt) {
+    if (txt == null) {
+      txt = "";
+    }
+    final TextEditingController _controller = TextEditingController();
+    _controller.value = _controller.value.copyWith(
+      text: txt,
+      selection: TextSelection.collapsed(offset: txt.length),
+    );
+    return _controller;
+  }
+
   Widget _txtItemProduct(
-      {BuildContext context,
-      String hintText,
-      int maxLines,
-      String error,
-      bool isQuantity}) {
+      {BuildContext context, String hintText, int maxLines, bool isQuantity}) {
     return Container(
       color: Colors.white,
       child: TextField(
@@ -490,6 +335,11 @@ class _AddProductPageState extends State<AddProductPage> {
               txtController.clear();
             } else
               this.degree = double.parse(value);
+            this.listInforProduct = [
+              this._mySelection,
+              this.quantity,
+              this.degree
+            ];
             setState(() {
               checkClick = true;
             });
@@ -498,7 +348,7 @@ class _AddProductPageState extends State<AddProductPage> {
         maxLines: maxLines,
         keyboardType: TextInputType.number,
         inputFormatters: [
-          FilteringTextInputFormatter.deny(RegExp(r'[-,/\\ ]'))
+          FilteringTextInputFormatter.deny(RegExp(r'[-,/\\ [a-zA-Z]'))
         ],
         style: TextStyle(fontSize: 15),
         cursorColor: Colors.red,
@@ -520,12 +370,6 @@ class _AddProductPageState extends State<AddProductPage> {
             Icons.create_outlined,
             color: Colors.black54,
           ),
-          //Hiển thị lỗi
-          focusedErrorBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.redAccent),
-          ),
-          //Nhận thông báo lỗi
-          errorText: errQuantity,
         ),
       ),
     );
@@ -541,6 +385,11 @@ class _AddProductPageState extends State<AddProductPage> {
           listQuantity.forEach((element) {
             quantity += double.parse(element);
           });
+          this.listInforProduct = [
+            this._mySelection,
+            this.quantity,
+            this.degree
+          ];
         });
       },
       child: Container(

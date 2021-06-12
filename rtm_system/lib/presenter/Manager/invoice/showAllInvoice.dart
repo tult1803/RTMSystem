@@ -37,8 +37,10 @@ class _showAllInvoiceState extends State<showAllInvoice> {
       GetInvoice getAPIAllInvoice = GetInvoice();
       invoice = await getAPIAllInvoice.createInvoice(
         prefs.get("access_token"),
-        0, //Customer Id: truyền 0 là get All cho manager
-        0, //Product Id: truyền 0 là get All cho manager
+        0,
+        //Customer Id: truyền 0 là get All cho manager
+        0,
+        //Product Id: truyền 0 là get All cho manager
         pageKey,
         _pageSize,
         fromDate,
@@ -183,7 +185,8 @@ class _showAllInvoiceState extends State<showAllInvoice> {
                                   bodyPage: DetailInvoice(
                                     map: item,
                                   ),
-                                ));
+                                ),
+                                isCustomer: false);
                           }),
                     ),
                   ],
