@@ -149,53 +149,6 @@ Future<void> put_API_GetMoney(BuildContext context, indexPage) async {
       status);
 }
 
-//dung cho api getMoney
-showAlertDialogAPI(BuildContext context, String tittle, Widget widget, status) {
-  // Tạo button trong AlertDialog
-  Widget btnAlert(String tittleA, Color color, bool checkCreate) {
-    // ignore: deprecated_member_use
-    return FlatButton(
-      child: Text(
-        tittleA,
-        style: TextStyle(color: color),
-      ),
-      onPressed: () {
-        if (checkCreate) {
-          if (status == 200) {
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => widget),
-                (route) => false);
-          } else {
-            Navigator.of(context).pop();
-          }
-        } else {
-          Navigator.of(context).pop();
-        }
-      },
-    );
-  }
-
-  // Create AlertDialog
-  AlertDialog alert = AlertDialog(
-    title: Text("Thông báo"),
-    content: Text(tittle),
-    actions: [
-      btnAlert("Không", Colors.redAccent, false),
-      btnAlert("Có", Color(0xFF0BB791), true),
-    ],
-  );
-
-  // show the dialog
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return alert;
-    },
-  );
-}
-
-
 Future<void> putAPIUpdatePrice(BuildContext context,int productId, double price) async{
   int status;
   SharedPreferences prefs = await SharedPreferences.getInstance();

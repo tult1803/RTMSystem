@@ -64,3 +64,4 @@ getFormatPrice(String price){
   final oCcy = new NumberFormat("#,##0", "en_US");
   return oCcy.format(double.parse("${price}"));
 }
+

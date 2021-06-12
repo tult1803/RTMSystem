@@ -20,9 +20,7 @@ class GetInvoice{
 
     );
     print("Status getApi Invoice:${response.statusCode}");
-
     statusInvoice = response.statusCode;
-    print(Uri.http('${url_main}', '${url_invoice}', { "customer_id" : "$customer_id", "product_id": "$product_id","pageNum" : "${pageNum}" ,"pageNo" : "${pageNo}"}));
     if (response.statusCode == 200) {
       return  Invoice.fromJson(jsonDecode(response.body));
     } else {

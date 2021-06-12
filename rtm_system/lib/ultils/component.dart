@@ -1,7 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/getData.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
@@ -208,7 +207,7 @@ Widget txtItemDetail(context, String tittle, String content,
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          AutoSizeText(
+          Text(
             content,
             style: GoogleFonts.roboto(
               fontSize: 16,
@@ -216,7 +215,7 @@ Widget txtItemDetail(context, String tittle, String content,
               fontWeight: FontWeight.w500,
             ),
             textAlign: TextAlign.left,
-            overflow: TextOverflow.ellipsis,
+            overflow: TextOverflow.clip,
           ),
           subContent == null
               ? Container()
@@ -882,7 +881,7 @@ Widget componentContainerDetailProduct(BuildContext context, Map item) {
     padding: const EdgeInsets.all(8.0),
     child: Column(
       children: [
-        txtItemDetail(context, "Mã sản phẩm", "${item["id"]}"),
+        txtItemDetail(context, "Mã sản phẩm", "#${item["id"]}"),
         SizedBox(
           height: 10,
         ),
@@ -1004,6 +1003,7 @@ Widget miniContainer({
   double paddingRightOfText,
   double paddingTopOfText,
   double paddingBottomOfText,
+  double fontSize,
   FontWeight fontWeightText,
 }) {
   return Container(
@@ -1037,7 +1037,7 @@ Widget miniContainer({
         child: Text(
           tittle,
           style:
-              GoogleFonts.roboto(color: colorText, fontWeight: fontWeightText),
+              GoogleFonts.roboto(color: colorText, fontWeight: fontWeightText, fontSize: fontSize == null ? null : fontSize),
         ),
       ),
     ),
