@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:rtm_system/ultils/alertDialog.dart';
 import 'package:rtm_system/view/customer/Profile/update_profile.dart';
@@ -13,6 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../view/login_page.dart';
 import 'component.dart';
 import 'getData.dart';
+import 'helpers.dart';
 import 'src/color_ultils.dart';
 
 const double defaultBorderRadius = 3.0;
@@ -178,73 +180,229 @@ Widget btnDateTime(
   );
 }
 
-Widget card(BuildContext context, String tittle, String type, String detailType,
-    String price, String date, Color color, Widget widget) {
-  final fBirthday = new DateFormat('dd/MM/yyyy');
-  //Format lại giá
-  final oCcy = new NumberFormat("#,##0", "en_US");
-  //Lấy size của màn hình
-  var size = MediaQuery.of(context).size;
-  String Cprice;
-  String Cdate;
-  try {
-    //Format lại ngày
-    DateTime _date = DateTime.parse(date);
-    Cprice = "${oCcy.format(double.parse(price))}đ";
-    Cdate = "${fBirthday.format(_date)}";
-  } catch (_) {
-    Cprice = "$price";
-    Cdate = "$date";
-  }
-  return Card(
-    margin: EdgeInsets.only(top: 15),
-    color: Colors.white,
-    shape: RoundedRectangleBorder(
-      side: BorderSide(color: Colors.black, width: 0.5),
-      borderRadius: BorderRadius.circular(10),
-    ),
+//Dùng cho show All customer
+Widget boxForCustomer(
+    {BuildContext context,
+    String name,
+    String phone,
+    bool vip,
+    int status,
+    int advance,
+    Widget widget}) {
+  return GestureDetector(
+    onTap: () => Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => widget)),
     child: Container(
-      height: 78,
-      // ignore: deprecated_member_use
-      child: FlatButton(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        onPressed: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => widget));
-        },
-        child: Row(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    bottomLeft: Radius.circular(10)),
+      margin: EdgeInsets.only(top: 15, left: 10, right: 10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(5),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black54,
+            blurRadius: 4,
+            offset: Offset(1, 2), // Shadow position
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: CircleAvatar(
+                      backgroundColor: colorHexa("AEDFD4"),
+                      child: Icon(
+                        Icons.person_outline_sharp,
+                        color: Colors.black54,
+                      ),
+                    ),
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        child: Text(
+                          name,
+                          style:
+                              GoogleFonts.roboto(fontWeight: FontWeight.w700),
+                        ),
+                      ),
+                      Container(
+                        child: Text(
+                          phone,
+                          style: GoogleFonts.roboto(
+                              fontWeight: FontWeight.w400,
+                              color: Colors.black54),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-              alignment: Alignment.centerLeft,
-              width: size.width * 0.5,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 2.0),
-                child: componentCardS(
-                    tittle, type, detailType, CrossAxisAlignment.start, color),
+              Expanded(child: SizedBox()),
+              miniContainer(
+                borderRadius: 5,
+                height: 30,
+                width: 100,
+                colorContainer: Colors.white,
+                colorText: Colors.black,
+                fontWeightText: FontWeight.w500,
+                marginRight: 10,
+                tittle: "${getVip(vip)}",
               ),
-            ),
-            Expanded(
-              child: Container(
-                margin: EdgeInsets.only(top: 2.0),
-                alignment: Alignment.centerRight,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(10),
-                      bottomRight: Radius.circular(10)),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              miniContainer(
+                borderRadius: 5,
+                height: 30,
+                width: 130,
+                colorContainer: getColorStatus(status: status),
+                colorText: Colors.white,
+                fontWeightText: FontWeight.w500,
+                marginLeft: 10,
+                tittle: "${getStatus(status: status)}",
+              ),
+              Expanded(child: SizedBox()),
+              miniContainer(
+                borderRadius: 5,
+                height: 30,
+                width: 100,
+                colorContainer: colorHexa("#FF8F84"),
+                colorText: Colors.white,
+                fontWeightText: FontWeight.w500,
+                marginRight: 10,
+                tittle: "Nợ: $advance",
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 10,
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+//Dùng cho trang Quản lý hóa đơn và để show các hóa đơn
+Widget boxForInvoice(
+    {BuildContext context,
+    int id,
+    String name,
+    String product,
+    String total,
+    String date,
+    int status,
+    Widget widget}) {
+  String totalAfterFormat;
+  String dateAfterFormat;
+
+  try {
+    totalAfterFormat = "${getFormatPrice(total)}đ";
+    dateAfterFormat = "${getDateTime(date)}";
+  } catch (_) {
+    totalAfterFormat = "$total";
+    dateAfterFormat = "$date";
+  }
+  return GestureDetector(
+    onTap: () {
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => widget));
+    },
+    child: Container(
+      margin: EdgeInsets.only(top: 15, left: 10, right: 10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(5),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black54,
+            blurRadius: 4,
+            offset: Offset(1, 2), // Shadow position
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              miniContainer(
+                tittle: "Mã #$id",
+                marginRight: 5,
+                marginBottom: 5,
+                marginLeft: 10,
+                marginTop: 10,
+                borderRadius: 5,
+                height: 30,
+                colorContainer: colorHexa("#f9ee75"),
+                paddingRightOfText: 10,
+                paddingLeftOfText: 10,
+              ),
+              Flexible(
+                child: containerTextInvoice(
+                  alignment: Alignment.centerRight,
+                  paddingLeftOfText: 10,
+                  paddingRightOfText: 10,
+                  tittle: "$dateAfterFormat",
+                  fontWeight: FontWeight.w600,
                 ),
-                child: componentCardE("$Cprice", "$Cdate",
-                    CrossAxisAlignment.end, Colors.black54),
               ),
-            ),
-          ],
-        ),
+            ],
+          ),
+          containerTextInvoice(
+            alignment: Alignment.topLeft,
+            paddingLeftOfText: 10,
+            paddingRightOfText: 10,
+            tittle: name,
+            fontWeight: FontWeight.w700,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    containerTextInvoice(
+                      marginTop: 2,
+                      alignment: Alignment.topLeft,
+                      paddingLeftOfText: 10,
+                      paddingRightOfText: 10,
+                      tittle: "Sản phẩm: $product",
+                      fontWeight: FontWeight.w400,
+                    ),
+                    containerTextInvoice(
+                      marginTop: 2,
+                      alignment: Alignment.topLeft,
+                      paddingLeftOfText: 10,
+                      paddingRightOfText: 10,
+                      tittle: "Tổng cộng: $totalAfterFormat",
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ],
+                ),
+              ),
+              miniContainer(
+                tittle: "${getStatus(status: status)}",
+                colorText: Colors.white,
+                fontWeightText: FontWeight.w500,
+                height: 30,
+                width: 100,
+                colorContainer: getColorStatus(status: status),
+                borderRadius: 5,
+                marginRight: 10,
+              ),
+            ],
+          ),
+          SizedBox(height: 10,)
+        ],
       ),
     ),
   );
@@ -442,7 +600,7 @@ Widget btnUpdateInfo(
     DateTime birthday,
     String address,
     bool check,
-    int account_id) {
+    int accountId) {
   return Container(
     width: 320,
     // ignore: deprecated_member_use
@@ -461,7 +619,7 @@ Widget btnUpdateInfo(
                     birthday: birthday,
                     address: address,
                     check: check,
-                    account_id: account_id,
+                    account_id: accountId,
                   )),
         );
       },
@@ -481,7 +639,7 @@ Widget btnUpdateInfo(
 }
 
 //dung khi thay doi pw
-Widget btnUpdatePw(context, String password, int account_id, bool isCustomer) {
+Widget btnUpdatePw(context, String password, int accountId, bool isCustomer) {
   return Container(
     width: 320,
     // ignore: deprecated_member_use
@@ -493,7 +651,7 @@ Widget btnUpdatePw(context, String password, int account_id, bool isCustomer) {
           MaterialPageRoute(
               builder: (context) => UpdatePasswordPage(
                     password: password,
-                    account_id: account_id,
+                    account_id: accountId,
                     isCustomer: isCustomer,
                   )),
         );
@@ -652,6 +810,13 @@ Widget containerDetail(BuildContext context, Widget widget) {
     decoration: BoxDecoration(
       color: Colors.white,
       borderRadius: BorderRadius.circular(10),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black54,
+          blurRadius: 4,
+          offset: Offset(1, 2), // Shadow position
+        ),
+      ],
     ),
     child: widget,
   );
@@ -700,7 +865,7 @@ Widget btnWaitingProcess(context, int index) {
 
 //Đang dùng cho nút hủy kích hoạt tài khoản khách hàng
 Widget btnDeactivateCustomer(
-    {String status, int account_id, String token, BuildContext context}) {
+    {String status, int accountId, String token, BuildContext context}) {
   if (status != "Không hoạt động") {
     return Container(
       width: 160,
@@ -714,7 +879,7 @@ Widget btnDeactivateCustomer(
           if (status != "Không hoạt động") {
             showAlertDialog(
                 context, "Bạn muốn hủy kích hoạt khách hàng", AllCustomer(),
-                isDeactivate: true, token: token, accountId: account_id);
+                isDeactivate: true, token: token, accountId: accountId);
           }
         },
         child: AutoSizeText(
@@ -726,4 +891,75 @@ Widget btnDeactivateCustomer(
   } else {
     return Container();
   }
+}
+
+//Để tạm thời mốt xóa sau
+//******************************************************************************************************************
+
+Widget card(BuildContext context, String tittle, String type, String detailType,
+    String price, String date, Color color, Widget widget) {
+  //Lấy size của màn hình
+  var size = MediaQuery.of(context).size;
+  String priceAfterFormat;
+  String dateAfterFormat;
+  try {
+    //Format lại ngày
+    priceAfterFormat = "${getFormatPrice(price)}đ";
+    dateAfterFormat = "${getDateTime(date)}";
+  } catch (_) {
+    priceAfterFormat = "$price";
+    dateAfterFormat = "$date";
+  }
+  return Card(
+    margin: EdgeInsets.only(top: 15),
+    color: Colors.white,
+    shape: RoundedRectangleBorder(
+      side: BorderSide(color: Colors.black, width: 0.5),
+      borderRadius: BorderRadius.circular(10),
+    ),
+    child: Container(
+      height: 80,
+      // ignore: deprecated_member_use
+      child: FlatButton(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        onPressed: () {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => widget));
+        },
+        child: Row(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    bottomLeft: Radius.circular(10)),
+              ),
+              alignment: Alignment.centerLeft,
+              width: size.width * 0.5,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 2.0),
+                child: componentCardS(
+                    tittle, type, detailType, CrossAxisAlignment.start, color),
+              ),
+            ),
+            Expanded(
+              child: Container(
+                margin: EdgeInsets.only(top: 2.0),
+                alignment: Alignment.centerRight,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(10),
+                      bottomRight: Radius.circular(10)),
+                ),
+                child: componentCardE("$priceAfterFormat", "$dateAfterFormat",
+                    CrossAxisAlignment.end, Colors.black54),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
 }

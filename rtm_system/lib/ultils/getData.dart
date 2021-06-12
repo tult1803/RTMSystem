@@ -37,6 +37,7 @@ Future<void> getNotice(BuildContext context, String mainTittle, String content,
 }
 
 //dung cho tạo khách hàng, cap nhat khach hang
+// ignore: non_constant_identifier_names
 Future post_put_ApiProfile(
     String phone,
     String password,
@@ -47,7 +48,7 @@ Future post_put_ApiProfile(
     String birthday,
     bool isUpdate,
     int typeOfUpdate,
-    int account_id) async {
+    int accountId) async {
   int status;
   SharedPreferences prefs = await SharedPreferences.getInstance();
   if (isUpdate) {
@@ -56,7 +57,7 @@ Future post_put_ApiProfile(
         prefs.get("access_token"),
         phone,
         typeOfUpdate,
-        account_id,
+        accountId,
         password,
         fullname,
         gender,
@@ -83,10 +84,10 @@ Future<void> doCreateCustomer(
     bool isCustomer,
     bool isUpdate,
     int typeOfUpdate,
-    int account_id) async {
+    int accountId) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   int status = await post_put_ApiProfile(phone, password, fullname, gender,
-      cmnd, address, birthday, isUpdate, typeOfUpdate, account_id);
+      cmnd, address, birthday, isUpdate, typeOfUpdate, accountId);
   if (status == 200) {
     if (isCustomer) {
       showStatusAlertDialog(
@@ -117,6 +118,7 @@ Future<void> doCreateCustomer(
         context, "Cập nhật thất bại. Xin thử lại !!!", null, false);
 }
 
+// ignore: non_constant_identifier_names
 Future<void> put_API_PayAdvance(
   BuildContext context,
 ) async {
@@ -134,6 +136,7 @@ Future<void> put_API_PayAdvance(
         context, "Trả tiền thất bại. Xin thử lại !!!", null, false);
 }
 
+// ignore: non_constant_identifier_names
 Future<void> put_API_GetMoney(BuildContext context, indexPage) async {
   int status = 200;
   //await post_put_ApiProfile();
@@ -150,6 +153,7 @@ Future<void> put_API_GetMoney(BuildContext context, indexPage) async {
 showAlertDialogAPI(BuildContext context, String tittle, Widget widget, status) {
   // Tạo button trong AlertDialog
   Widget btnAlert(String tittleA, Color color, bool checkCreate) {
+    // ignore: deprecated_member_use
     return FlatButton(
       child: Text(
         tittleA,
@@ -192,14 +196,14 @@ showAlertDialogAPI(BuildContext context, String tittle, Widget widget, status) {
 }
 
 
-Future<void> putAPIUpdatePrice(BuildContext context,int product_id, double price) async{
+Future<void> putAPIUpdatePrice(BuildContext context,int productId, double price) async{
   int status;
   SharedPreferences prefs = await SharedPreferences.getInstance();
   PutUpdatePrice putUpdatePrice = PutUpdatePrice();
   status = await putUpdatePrice.updatePrice(
       prefs.get("access_token"),
-      prefs.get("account_id"),
-      product_id,
+      prefs.get("accountId"),
+      productId,
       price);
 
   if (status == 200) {

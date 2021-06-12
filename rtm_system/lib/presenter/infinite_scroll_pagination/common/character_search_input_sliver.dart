@@ -21,8 +21,7 @@ class _CharacterSearchInputSliverState
     extends State<CharacterSearchInputSliver> {
   final StreamController<String> _textChangeStreamController =
       StreamController();
-   StreamSubscription _textChangesSubscription;
-
+  StreamSubscription _textChangesSubscription;
   @override
   void initState() {
     _textChangesSubscription = _textChangeStreamController.stream
@@ -42,17 +41,20 @@ class _CharacterSearchInputSliverState
 
   @override
   Widget build(BuildContext context) {
-   return SliverToBoxAdapter(
+    return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: TextField(
-          cursorColor: Color.fromARGB(255,11,183,145),
+          cursorColor: Color.fromARGB(255, 11, 183, 145),
           decoration: const InputDecoration(
             border: UnderlineInputBorder(),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Color.fromARGB(255,11,183,145)),
+              borderSide: BorderSide(color: Color.fromARGB(255, 11, 183, 145)),
             ),
-            prefixIcon: Icon(Icons.search, color: Colors.black54,),
+            prefixIcon: Icon(
+              Icons.search,
+              color: Colors.black54,
+            ),
             hintText: 'Tìm kiếm',
           ),
           onChanged: _textChangeStreamController.add,

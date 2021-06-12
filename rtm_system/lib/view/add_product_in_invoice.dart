@@ -96,11 +96,18 @@ class _AddProductPageState extends State<AddProductPage> {
                       child: Column(children: [
                         // show product from API
                         _dropdownList(),
-                        _checkShowQuantity(),
+                        _mySelection == null
+                            ? Container()
+                            : _txtItemProduct(
+                                context: context,
+                                hintText: 'Nhập số ký',
+                                maxLines: 1,
+                                isQuantity: true,
+                                error: errQuantity),
+
                         Container(
                           width: MediaQuery.of(context).size.width,
                           child: Wrap(
-                            direction: Axis.horizontal,
                             spacing: 5,
                             children: listQuantity
                                 .map((value) => containerWeight(value: value))
@@ -390,10 +397,10 @@ class _AddProductPageState extends State<AddProductPage> {
       },
       child: Container(
           margin: EdgeInsets.only(top: 10),
-          width: 50,
+          width: 60,
           height: 30,
           decoration: BoxDecoration(
-            color: Colors.black38,
+            color: Colors.black26,
             borderRadius: BorderRadius.circular(5),
           ),
           child: Center(

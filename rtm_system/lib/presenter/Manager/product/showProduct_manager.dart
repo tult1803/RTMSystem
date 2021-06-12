@@ -105,7 +105,7 @@ class _showAllProductState extends State<showAllProduct> {
                 newPageProgressIndicatorBuilder: (context) =>
                     firstPageProgressIndicatorBuilder(),
                 itemBuilder: (context, item, index) {
-                  if(itemNameUpdatePrice.length < index){
+                  if(itemNameUpdatePrice.length <= index){
                     itemNameUpdatePrice.add(item["name"]);
                     itemPriceUpdatePrice.add("${item["update_price"]}");
                     itemIdUpdatePrice.add(item["id"]);
