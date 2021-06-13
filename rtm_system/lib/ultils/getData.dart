@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rtm_system/model/PostCreateRequestInvoice.dart';
 import 'package:rtm_system/model/postAPI_createCustomer.dart';
 import 'package:rtm_system/model/postAPI_createNotice.dart';
 import 'package:rtm_system/model/putAPI_updatePrice.dart';
@@ -170,4 +171,39 @@ Future<void> putAPIUpdatePrice(BuildContext context,int productId, double price)
   } else
     showStatusAlertDialog(
         context, "Cập nhật thất bại. Xin thử lại !!!", null, false);
+}
+
+Future<void> doCreateRequestInvoiceOrInvoice(
+    BuildContext context,
+    int productId,
+    String sell_date,
+    int customerId,
+    int quantity,
+    int degree,
+    int invoice_request_id,
+    bool isCustomer) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  int status;
+  if(isCustomer) {
+    PostCreateRequestInvoice postCreateRequestInvoice = PostCreateRequestInvoice();
+    status = await postCreateRequestInvoice.createRequestInvoice(
+        prefs.get("access_token"),productId, sell_date);
+  }else{
+    //call api tao invoice cua manager
+  }
+  if (status == 200) {
+    if (isCustomer) {
+      showStatusAlertDialog(
+          context,
+          "Đã gửi yêu cầu bán hàng.",
+          HomeCustomerPage(
+            index: 1,
+          ),
+          true);
+    } else {
+      //chuyen trang và thong báo
+    }
+  } else
+    showStatusAlertDialog(
+        context, "Cập nhật thất bại. Xin thử lại!", null, false);
 }

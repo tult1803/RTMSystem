@@ -35,12 +35,11 @@ class _showAllInvoiceState extends State<showAllInvoice> {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       GetInvoice getAPIAllInvoice = GetInvoice();
-      invoice = await getAPIAllInvoice.createInvoice(
+      invoice = await getAPIAllInvoice.getInvoice(
         prefs.get("access_token"),
+        0, //Customer Id: truyền 0 là get All cho manager
+        0, //Product Id: truyền 0 là get All cho manager
         0,
-        //Customer Id: truyền 0 là get All cho manager
-        0,
-        //Product Id: truyền 0 là get All cho manager
         pageKey,
         _pageSize,
         fromDate,

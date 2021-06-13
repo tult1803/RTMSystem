@@ -87,7 +87,6 @@ class _showAdvanceState extends State<showProductInInvoice> {
   }
 
   Widget _cardItem(int id, String product, bool isVip) {
-    print('id ' + id.toString());
     return FlatButton(
         onPressed: () {
           Navigator.push(

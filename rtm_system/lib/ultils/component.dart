@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/getData.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
@@ -450,10 +451,17 @@ Widget widgetContentAdvance(context, String status, String header1, header2) {
   ));
 }
 
-//nội dung của bill, đang dùng: create invoice
-Widget widgetCreateInvoice(context, bool isNew, List product, String nameProduct,
-    DateTime dateTime) {
+//nội dung của bill, đang dùng: create invoice/ request
+Widget widgetCreateInvoice(
+    context,
+    bool isNew,
+    List product,
+    String nameProduct,
+    String name,
+    String phone,
+    bool isCustomer) {
   var size = MediaQuery.of(context).size;
+  final date = new DateFormat('yyyy-MM-dd HH:mm:ss');
   return SingleChildScrollView(
       child: Container(
     height: size.height,
@@ -475,14 +483,7 @@ Widget widgetCreateInvoice(context, bool isNew, List product, String nameProduct
             margin: EdgeInsets.fromLTRB(24, 12, 24, 12),
             child: Column(
               children: [
-                //có api chuyền thông tin cần show vô
-                txtPersonInvoice(
-                    context, 'Người mua', 'Nguyen Van A', '0123456789'),
-                SizedBox(
-                  height: 10,
-                ),
-                txtPersonInvoice(
-                    context, 'Người bán', 'Nguyen Van Anh', '087654322'),
+                txtPersonInvoice(context, 'Người tạo', '${name}', '${phone}'),
                 SizedBox(
                   height: 10,
                 ),
@@ -490,20 +491,14 @@ Widget widgetCreateInvoice(context, bool isNew, List product, String nameProduct
                 SizedBox(
                   height: 10,
                 ),
-                txtItemDetail(context, 'Số ký', '${product[1]}'),
-                SizedBox(
-                  height: 10,
-                ),
+                txtItemDetail(context, 'Ngày đến bán', '${product[3]}'),
+                _showComponetCreateInvoice(context,'Số ký',product[1],
+                    isCustomer),
                 if (product[0] == '3')
-                  txtItemDetail(context, 'Số độ', '${product[2]}'),
-                SizedBox(
-                  height: 10,
-                ),
-                txtItemDetail(context, 'Ngày bán', '${dateTime}'),
-                SizedBox(
-                  height: 10,
-                ),
-                txtItemDetail(context, 'Thành tiền', '1,000,000 VND'),
+                _showComponetCreateInvoice(context,'Số độ',product[2],
+                    isCustomer),
+                _showComponetCreateInvoice(context,'Thành tiền','100',
+                    isCustomer),
               ],
             ),
           ),
@@ -534,8 +529,9 @@ Widget widgetCreateInvoice(context, bool isNew, List product, String nameProduct
             child: RaisedButton(
               color: Color(0xffEEEEEE),
               onPressed: () {
-                //call api to create new invoice
-                // put_API_GetMoney(context, 0);
+                print('ZOOO');
+                doCreateRequestInvoiceOrInvoice( context, int.parse(product[0]),
+                    date.format(product[3]) , 0,0,0,0, isCustomer );
               },
               child: Text('Xác nhận'),
               shape: RoundedRectangleBorder(
@@ -549,7 +545,14 @@ Widget widgetCreateInvoice(context, bool isNew, List product, String nameProduct
     ),
   ));
 }
-
+Widget _showComponetCreateInvoice(context, title, value, isCustomer) {
+  print(isCustomer);
+  if (!isCustomer) {
+    return txtItemDetail(context, '${title}́', '${value}');
+  } else {
+    return Container();
+  }
+}
 // ignore: missing_return
 Widget _showBtnInAdvanceDetail(context, String status) {
   if (status == 'active') {
@@ -571,7 +574,18 @@ Widget _showBtnInAdvanceDetail(context, String status) {
       ),
     );
   } else {
-    return Container();
+    return Column(
+      children: [
+        SizedBox(
+          height: 10,
+        ),
+        txtItemDetail(context, 'Ngày tra', '20-05-2021 now()'),
+        SizedBox(
+          height: 10,
+        ),
+        txtItemDetail(context, 'Tiền nợ còn lại', '1,000,000 VND'),
+      ],
+    );
   }
 }
 
@@ -952,7 +966,8 @@ Widget componentContainerDetailCustomer(BuildContext context,
         SizedBox(
           height: 10,
         ),
-        txtItemDetail(context, "Ngày sinh", "${getDateTime(birthday, dateFormat: 'dd/MM/yyyy')}"),
+        txtItemDetail(context, "Ngày sinh",
+            "${getDateTime(birthday, dateFormat: 'dd/MM/yyyy')}"),
         SizedBox(
           height: 10,
         ),
@@ -1037,8 +1052,10 @@ Widget miniContainer({
             top: paddingTopOfText == null ? 0 : paddingTopOfText),
         child: Text(
           tittle,
-          style:
-              GoogleFonts.roboto(color: colorText, fontWeight: fontWeightText, fontSize: fontSize == null ? null : fontSize),
+          style: GoogleFonts.roboto(
+              color: colorText,
+              fontWeight: fontWeightText,
+              fontSize: fontSize == null ? null : fontSize),
         ),
       ),
     ),
@@ -1061,7 +1078,7 @@ Widget containerTextInvoice({
   double paddingBottomOfText,
   double height,
   double width,
-}){
+}) {
   return Container(
     height: height,
     width: width,

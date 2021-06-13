@@ -5,13 +5,13 @@ import 'package:rtm_system/ultils/component.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CreateInvoicePage extends StatefulWidget {
-  const CreateInvoicePage({Key key, this.isNew, this.listProduct})
-      : super(key: key);
+  const CreateInvoicePage({Key key, this.isNew, this.listProduct,
+    this.isCustomer}): super(key: key);
 
   //false will show btn 'Sửa lại sản phẩm'
   final bool isNew;
   final List listProduct;
-
+  final bool isCustomer;
   @override
   _CreateInvoicePageState createState() => _CreateInvoicePageState();
 }
@@ -81,7 +81,8 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
         ),
       ),
       body: widgetCreateInvoice(
-          context, widget.isNew, widget.listProduct, nameProduct,date),
+          context, widget.isNew, widget.listProduct, nameProduct,
+          personSale, phoneSale, widget.isCustomer),
     );
   }
 }

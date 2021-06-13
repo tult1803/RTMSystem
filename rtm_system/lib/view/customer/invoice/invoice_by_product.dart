@@ -72,8 +72,8 @@ class _InvoiceByProductPageState extends State<InvoiceByProductPage> {
                           Icon(Icons.date_range), datePick()),
                     ],
                   ),
-
-                  new showAllInvoicePage(idProduct: widget.idProduct,isAll: true,),
+                  new showAllInvoicePage(idProduct: widget.idProduct,
+                    isAll: true, status: 0,),
                 ],
               )),
         ));

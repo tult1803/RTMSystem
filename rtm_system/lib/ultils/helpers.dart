@@ -3,6 +3,12 @@ import 'package:intl/intl.dart';
 
 //Chuyển trạng thái từ số thành chữ
 getStatus({int status}) {
+  // 1,Active
+  // 2,Inactive
+  // 3,Done
+  // 4,Processing
+  // 6,Accept
+  // 5,Undone
   switch (status) {
     case 1:
       return "Hoạt động";
@@ -17,12 +23,10 @@ getStatus({int status}) {
       return "Đang xử lý";
       break;
     case 5:
-      return "Từ chối";
+      return "Ký gửi";
       break;
     case 6:
       return "Chấp nhận";
-    case 7:
-      return "Chưa nhận tiền";
       break;
   }
 }

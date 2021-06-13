@@ -11,9 +11,12 @@ import 'package:rtm_system/view/manager/invoice/detail_invoice.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class showAllInvoicePage extends StatefulWidget {
-  const showAllInvoicePage({Key key, this.idProduct, this.isAll}) : super(key: key);
+  const showAllInvoicePage({Key key, this.idProduct, this.isAll,
+  this.status}) : super(key: key);
   final String idProduct;
   final bool isAll;
+  //status = 0 is load all
+  final int status;
   @override
   _showAllInvoicePageState createState() => _showAllInvoicePageState();
 }
@@ -34,10 +37,11 @@ class _showAllInvoicePageState extends State<showAllInvoicePage> {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       GetInvoice getAPIAllInvoice = GetInvoice();
-      invoice = await getAPIAllInvoice.createInvoice(
+      invoice = await getAPIAllInvoice.getInvoice(
         prefs.get("access_token"),
         prefs.get("accountId"),
         int.parse(widget.idProduct),
+        widget.status,
         pageKey,
         _pageSize,
         fromDate,
