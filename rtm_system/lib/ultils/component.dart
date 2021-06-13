@@ -896,7 +896,7 @@ Widget componentContainerDetailCustomer(BuildContext context,
             token: token,
             context: context,
             status: status,
-            accountId: account_id),
+            deactivateId: account_id),
         SizedBox(
           height: 5,
         ),

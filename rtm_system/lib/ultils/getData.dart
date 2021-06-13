@@ -5,6 +5,7 @@ import 'package:rtm_system/model/putAPI_updatePrice.dart';
 import 'package:rtm_system/model/putAPI_updateProfile.dart';
 import 'package:rtm_system/view/customer/home_customer_page.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
+import 'package:rtm_system/view/manager/profile/allCustomer_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'alertDialog.dart';
@@ -71,18 +72,20 @@ Future post_put_ApiProfile(
 }
 
 Future<void> doCreateCustomer(
-    BuildContext context,
-    String phone,
-    String password,
-    String fullname,
-    int gender,
-    String cmnd,
-    String address,
-    String birthday,
-    bool isCustomer,
-    bool isUpdate,
-    int typeOfUpdate,
-    int accountId) async {
+  BuildContext context,
+  String phone,
+  String password,
+  String fullname,
+  int gender,
+  String cmnd,
+  String address,
+  String birthday,
+  bool isCustomer,
+  bool isUpdate,
+  int typeOfUpdate,
+  int accountId,
+    {bool isCreate}
+    ) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   int status = await post_put_ApiProfile(phone, password, fullname, gender,
       cmnd, address, birthday, isUpdate, typeOfUpdate, accountId);
@@ -90,7 +93,7 @@ Future<void> doCreateCustomer(
     if (isCustomer) {
       showStatusAlertDialog(
           context,
-          "Đã cập nhật.",
+          "Đã cập nhật",
           HomeCustomerPage(
             index: 3,
           ),
@@ -105,10 +108,12 @@ Future<void> doCreateCustomer(
         prefs.setString("password", password);
       showStatusAlertDialog(
           context,
-          "Đã cập nhật.",
-          HomeAdminPage(
-            index: 4,
-          ),
+          "Đã cập nhật",
+          isCreate == null
+              ? HomeAdminPage(
+                  index: 4,
+                )
+              : AllCustomer(),
           true);
     }
   } else

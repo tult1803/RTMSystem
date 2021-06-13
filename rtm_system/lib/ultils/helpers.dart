@@ -9,7 +9,7 @@ getStatus({int status}) {
       return "Hoạt động";
       break;
     case 2:
-      return "Không hoạt động";
+      return "Từ chối";
       break;
     case 3:
       return  "Hoàn thành";
@@ -18,11 +18,6 @@ getStatus({int status}) {
       return "Đang xử lý";
       break;
     case 5:
-      return "Từ chối";
-      break;
-    case 6:
-      return "Chấp nhận";
-    case 7:
       return "Ký gửi";
       break;
   }
@@ -31,13 +26,13 @@ getStatus({int status}) {
 //Tạo màu cho trạng thái tương ứng với số
 getColorStatus({int status}) {
   Color color = Colors.black54;
-  if (status == 1 || status == 3 || status == 6) {
+  if (status == 1 || status == 3) {
     color = Colors.green;
-  } else if (status == 2 || status == 5) {
+  } else if (status == 2) {
     color = Colors.redAccent;
   } else if (status == 4) {
     color = Colors.orangeAccent;
-  }else if (status == 7) {
+  }else if (status == 5) {
     color = colorHexa("#FF6F3D");
   }
   return color;

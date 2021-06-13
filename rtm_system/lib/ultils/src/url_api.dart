@@ -10,3 +10,4 @@ String url_updateProfile = "api/rtm/v1/user/update-account";
 String url_customer = "api/rtm/v1/user/get-customer";
 String url_updatePrice = "api/rtm/v1/product/update-price";
 String url_deactivateCustomer = "api/rtm/v1/user/deactivate-account";
+String url_deactivateNotice ="api/rtm/v1/notice/deactivate-notice";

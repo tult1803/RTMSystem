@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rtm_system/presenter/Manager/invoice/showProcessInvoice.dart';
 import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 
@@ -23,7 +24,7 @@ class _processInvoiceState extends State<processInvoice> {
               color: Colors.white, fontWeight: FontWeight.w500, fontSize: 22),
         ),
       ),
-      body: Center(child: new Text("Hóa đơn chờ xử lý")),
+      body: showProcessInvoiceManager(),
     );
   }
 }

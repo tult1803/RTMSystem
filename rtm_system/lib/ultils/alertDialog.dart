@@ -2,13 +2,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rtm_system/model/putAPI_deactivateCustomer.dart';
+import 'package:rtm_system/model/deleteAPI_deactivateNotice.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 
 import 'component.dart';
 
 //show khi nhấn các nút "Hủy" hoặc "Tạo"
+//Nếu muốn xóa thông báo thì truyền trạng thái vào isDeactivateNotice
 showAlertDialog(BuildContext context, String tittle, Widget widget,
-    {bool isDeactivate, String token, int accountId}) {
+    {bool isDeactivate,
+    String token,
+    int deactivateId,
+    bool isDeactivateNotice}) {
   // Tạo button trong AlertDialog
   Widget btnAlert(String tittleA, Color color, bool checkCreate) {
     return FlatButton(
@@ -20,12 +25,20 @@ showAlertDialog(BuildContext context, String tittle, Widget widget,
         if (checkCreate) {
           if (isDeactivate == true) {
             PutDeactivateCustomer deactivateCustomer = PutDeactivateCustomer();
-            int status =
-                await deactivateCustomer.deactivateCustomer(token, accountId);
+            DeleteDeactivateNotice deactivateNotice = DeleteDeactivateNotice();
+            int status = isDeactivateNotice == null
+                ? await deactivateCustomer.deactivateCustomer(
+                    token, deactivateId)
+                : await deactivateNotice.deactivateNotice(token, deactivateId);
             if (status == 200) {
               Navigator.of(context).pop();
               showStatusAlertDialog(
-                  context, "Hủy kích hoạt thành công", widget, true);
+                  context,
+                  isDeactivateNotice == null
+                      ? "Hủy kích hoạt thành công"
+                      : "Ẩn thông báo thành công",
+                  widget,
+                  true);
             } else {
               Navigator.of(context).pop();
               showStatusAlertDialog(

@@ -2,28 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:rtm_system/model/getAPI_invoice.dart';
 import 'package:rtm_system/model/model_invoice.dart';
-import 'package:rtm_system/presenter/infinite_scroll_pagination/common/character_search_input_sliver.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/helpers.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
-import 'package:rtm_system/view/add_product_in_invoice.dart';
 import 'package:rtm_system/view/manager/formForDetail_page.dart';
 import 'package:rtm_system/view/manager/invoice/detail_invoice.dart';
-import 'package:rtm_system/view/manager/invoice/processInvoice.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class showAllInvoice extends StatefulWidget {
-  const showAllInvoice({Key key}) : super(key: key);
+// ignore: camel_case_types
+class showProcessInvoiceManager extends StatefulWidget {
+  const showProcessInvoiceManager({Key key}) : super(key: key);
 
   @override
-  _showAllInvoiceState createState() => _showAllInvoiceState();
+  _showProcessInvoiceManagerState createState() => _showProcessInvoiceManagerState();
 }
 
 DateTime fromDate;
 DateTime toDate;
 
-class _showAllInvoiceState extends State<showAllInvoice> {
+class _showProcessInvoiceManagerState extends State<showProcessInvoiceManager> {
   int _pageSize = 1;
   final PagingController _pagingController = PagingController(firstPageKey: 10);
 
@@ -39,7 +37,7 @@ class _showAllInvoiceState extends State<showAllInvoice> {
         prefs.get("access_token"),
         0, //Customer Id: truyền 0 là get All cho manager
         0, //Product Id: truyền 0 là get All cho manager
-        -1, //Status Id: truyền -1 là get all invoice trừ invoice đang ở trạng thái process
+        4, //Status Id: truyền 4 là get all process invoice
         pageKey,
         _pageSize,
         fromDate,
@@ -107,26 +105,6 @@ class _showAllInvoiceState extends State<showAllInvoice> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  btnMain(context, 110, "Chờ xử lý", Icon(Icons.update),
-                      processInvoice()),
-                  SizedBox(
-                    width: 20,
-                  ),
-                  btnMain(
-                      context,
-                      120,
-                      "Tạo hóa đơn",
-                      Icon(Icons.post_add),
-                      //Đây là trang create invoice
-                      AddProductPage(
-                        tittle: "Tạo hóa đơn",
-                        isCustomer: false,
-                      )),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
                   btnDateTime(context, "${getDateTime("$fromDate", dateFormat: "dd/MM/yyyy")}",
                       Icon(Icons.date_range), datePick()),
                   SizedBox(
@@ -152,45 +130,42 @@ class _showAllInvoiceState extends State<showAllInvoice> {
               ),
               Expanded(
                   child: Container(
-                margin: EdgeInsets.only(top: 0, left: 5, right: 5),
-                height: size.height,
-                width: size.width,
-                child: new CustomScrollView(
-                  slivers: <Widget>[
-                    CharacterSearchInputSliver(
-                      onChanged: (searchTerm) => _updateSearchTerm(searchTerm),
+                    margin: EdgeInsets.only(top: 0, left: 5, right: 5),
+                    height: size.height,
+                    width: size.width,
+                    child: new CustomScrollView(
+                      slivers: <Widget>[
+                        PagedSliverList(
+                          pagingController: _pagingController,
+                          builderDelegate: PagedChildBuilderDelegate(
+                              firstPageErrorIndicatorBuilder: (context) =>
+                                  firstPageErrorIndicatorBuilder(context,
+                                      tittle: "Không có dữ liệu"),
+                              firstPageProgressIndicatorBuilder: (context) =>
+                                  firstPageProgressIndicatorBuilder(),
+                              newPageProgressIndicatorBuilder: (context) =>
+                                  newPageProgressIndicatorBuilder(),
+                              itemBuilder: (context, item, index) {
+                                return boxForInvoice(
+                                    context: context,
+                                    status: item['status_id'],
+                                    date: "${item['create_time']}",
+                                    total: "${item['price']}",
+                                    id: item['id'],
+                                    name: item["customer_name"],
+                                    product: item["product_name"],
+                                    widget: FormForDetailPage(
+                                      tittle: "Chi tiết hóa đơn",
+                                      bodyPage: DetailInvoice(
+                                        map: item,
+                                      ),
+                                    ),
+                                    isCustomer: false);
+                              }),
+                        ),
+                      ],
                     ),
-                    PagedSliverList(
-                      pagingController: _pagingController,
-                      builderDelegate: PagedChildBuilderDelegate(
-                          firstPageErrorIndicatorBuilder: (context) =>
-                              firstPageErrorIndicatorBuilder(context,
-                                  tittle: "Không có dữ liệu"),
-                          firstPageProgressIndicatorBuilder: (context) =>
-                              firstPageProgressIndicatorBuilder(),
-                          newPageProgressIndicatorBuilder: (context) =>
-                              newPageProgressIndicatorBuilder(),
-                          itemBuilder: (context, item, index) {
-                            return boxForInvoice(
-                                context: context,
-                                status: item['status_id'],
-                                date: "${item['create_time']}",
-                                total: "${item['price']}",
-                                id: item['id'],
-                                name: item["customer_name"],
-                                product: item["product_name"],
-                                widget: FormForDetailPage(
-                                  tittle: "Chi tiết hóa đơn",
-                                  bodyPage: DetailInvoice(
-                                    map: item,
-                                  ),
-                                ),
-                                isCustomer: false);
-                          }),
-                    ),
-                  ],
-                ),
-              ))
+                  ))
             ],
           ),
         ),
@@ -234,10 +209,10 @@ class _showAllInvoiceState extends State<showAllInvoice> {
         builder: (context, child) {
           return Theme(
             data: Theme.of(context).copyWith(
-                //Dùng cho nút "X" của lịch
+              //Dùng cho nút "X" của lịch
                 appBarTheme: AppBarTheme(
                   iconTheme:
-                      theme.primaryIconTheme.copyWith(color: Colors.white),
+                  theme.primaryIconTheme.copyWith(color: Colors.white),
                 ),
                 //Dùng cho nút chọn ngày và background
                 colorScheme: ColorScheme.light(

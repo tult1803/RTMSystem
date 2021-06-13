@@ -1,7 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 import 'package:rtm_system/ultils/alertDialog.dart';
 import 'package:rtm_system/view/customer/Profile/update_profile.dart';
 import 'package:rtm_system/view/customer/home_customer_page.dart';
@@ -136,7 +135,8 @@ Widget btnMain(BuildContext context, double width, String tittle, Icon icon,
           onPressed: () {
             Navigator.push(
                 context, MaterialPageRoute(builder: (context) => widget));
-          }, child: null,
+          },
+          child: null,
         ),
       ),
     ],
@@ -309,7 +309,8 @@ Widget boxForInvoice(
     String total,
     String date,
     int status,
-    Widget widget, bool isCustomer}) {
+    Widget widget,
+    bool isCustomer}) {
   String totalAfterFormat;
   String dateAfterFormat;
 
@@ -364,14 +365,14 @@ Widget boxForInvoice(
               ),
             ],
           ),
-          if(!isCustomer)
+          if (!isCustomer)
             containerTextInvoice(
-            alignment: Alignment.topLeft,
-            paddingLeftOfText: 10,
-            paddingRightOfText: 10,
-            tittle: name,
-            fontWeight: FontWeight.w700,
-          ),
+              alignment: Alignment.topLeft,
+              paddingLeftOfText: 10,
+              paddingRightOfText: 10,
+              tittle: name,
+              fontWeight: FontWeight.w700,
+            ),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -379,22 +380,23 @@ Widget boxForInvoice(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    isCustomer? containerTextInvoice(
-                      marginTop: 2,
-                      alignment: Alignment.topLeft,
-                      paddingLeftOfText: 10,
-                      paddingRightOfText: 10,
-                      tittle: "$product",
-                      fontWeight: FontWeight.w700,
-                    ):
-                    containerTextInvoice(
-                      marginTop: 2,
-                      alignment: Alignment.topLeft,
-                      paddingLeftOfText: 10,
-                      paddingRightOfText: 10,
-                      tittle: "Sản phẩm: $product",
-                      fontWeight: FontWeight.w400,
-                    ),
+                    isCustomer
+                        ? containerTextInvoice(
+                            marginTop: 2,
+                            alignment: Alignment.topLeft,
+                            paddingLeftOfText: 10,
+                            paddingRightOfText: 10,
+                            tittle: "$product",
+                            fontWeight: FontWeight.w700,
+                          )
+                        : containerTextInvoice(
+                            marginTop: 2,
+                            alignment: Alignment.topLeft,
+                            paddingLeftOfText: 10,
+                            paddingRightOfText: 10,
+                            tittle: "Sản phẩm: $product",
+                            fontWeight: FontWeight.w400,
+                          ),
                     containerTextInvoice(
                       marginTop: 2,
                       alignment: Alignment.topLeft,
@@ -419,23 +421,24 @@ Widget boxForInvoice(
               ),
             ],
           ),
-          SizedBox(height: 10,)
+          SizedBox(
+            height: 10,
+          )
         ],
       ),
     ),
   );
 }
 
-
 //Dùng cho trang Quản lý hóa đơn và để show các hóa đơn
 Widget boxForProduct(
     {BuildContext context,
-      int id,
-      String productName,
-      String typeOfProduct,
-      String price,
-      String date,
-      Widget widget}) {
+    int id,
+    String productName,
+    String typeOfProduct,
+    String price,
+    String date,
+    Widget widget}) {
   return GestureDetector(
     onTap: () => Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => widget)),
@@ -518,7 +521,9 @@ Widget boxForProduct(
               ),
             ],
           ),
-          SizedBox(height: 10,)
+          SizedBox(
+            height: 10,
+          )
         ],
       ),
     ),
@@ -529,9 +534,6 @@ Widget boxForProduct(
 Widget containerButton(
     BuildContext context, int id, String tittle, String content, String date) {
   var size = MediaQuery.of(context).size;
-  //Format lại ngày
-  DateTime _date = DateTime.parse(date);
-  final fBirthday = new DateFormat('dd/MM/yyyy hh:mm');
 
   return Container(
       margin: EdgeInsets.only(left: 5, right: 5),
@@ -549,6 +551,7 @@ Widget containerButton(
               context,
               MaterialPageRoute(
                   builder: (context) => DetailOfNotice(
+                        noticeId: id,
                         titleNotice: tittle,
                         contentNotice: content,
                       )),
@@ -587,7 +590,7 @@ Widget containerButton(
                 height: 10,
               ),
               AutoSizeText(
-                "${fBirthday.format(_date)}",
+                "${getDateTime(date)}",
                 style: TextStyle(
                   fontSize: 12,
                   color: welcome_color,
@@ -980,7 +983,11 @@ Widget btnWaitingProcess(context, int index) {
 
 //Đang dùng cho nút hủy kích hoạt tài khoản khách hàng
 Widget btnDeactivateCustomer(
-    {String status, int accountId, String token, BuildContext context}) {
+    {String status,
+    int deactivateId,
+    String token,
+    BuildContext context,
+    bool isDeactivateNotice}) {
   if (status != "Không hoạt động") {
     return Container(
       width: 160,
@@ -993,12 +1000,19 @@ Widget btnDeactivateCustomer(
         onPressed: () {
           if (status != "Không hoạt động") {
             showAlertDialog(
-                context, "Bạn muốn hủy kích hoạt khách hàng", AllCustomer(),
-                isDeactivate: true, token: token, accountId: accountId);
+                context,
+                isDeactivateNotice == null
+                    ? "Bạn muốn hủy kích hoạt khách hàng"
+                    : "Bạn muốn ẩn thông báo ?",
+                isDeactivateNotice == null ? AllCustomer() : HomeAdminPage(index: 3),
+                isDeactivate: true,
+                token: token,
+                deactivateId: deactivateId,
+                isDeactivateNotice: isDeactivateNotice);
           }
         },
         child: AutoSizeText(
-          "Hủy kích hoạt",
+          isDeactivateNotice == null ? "Hủy kích hoạt" : "Ẩn thông báo",
           style: TextStyle(color: Colors.white, fontSize: 17),
         ),
       ),

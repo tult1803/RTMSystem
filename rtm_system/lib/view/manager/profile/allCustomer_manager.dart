@@ -4,6 +4,7 @@ import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 
+import '../home_manager_page.dart';
 import 'createNewCustomer.dart';
 
 class AllCustomer extends StatefulWidget {
@@ -18,7 +19,9 @@ class _AllCustomerState extends State<AllCustomer> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: leadingAppbar(context),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios_outlined, color: Colors.white),
+          onPressed: () => Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context)=> HomeAdminPage(index: 4)), (route) => false)),
         centerTitle: true,
         backgroundColor: welcome_color,
         title: Text(

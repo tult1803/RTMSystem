@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:rtm_system/ultils/getData.dart';
+import 'package:rtm_system/ultils/helpers.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 
 class processCreateCustomer extends StatefulWidget {
   final String tittle;
   final List listCustomer;
-  final bool isCustomer, isUpdate;
+  final bool isCustomer, isUpdate, isCreate;
   final int typeOfUpdate, account_id;
-  processCreateCustomer({this.tittle, this.listCustomer, this.isCustomer, this.isUpdate,this.typeOfUpdate, this.account_id});
+  processCreateCustomer({this.tittle, this.listCustomer, this.isCustomer, this.isUpdate,this.typeOfUpdate, this.account_id, this.isCreate});
 
   @override
   _processCreateCustomerState createState() => _processCreateCustomerState();
@@ -49,7 +50,7 @@ class _processCreateCustomerState extends State<processCreateCustomer> {
       ),
       child: TextButton(
           onPressed: () {
-            doCreateCustomer(context, phone, password, fullname, gender, cmnd, address, "${fBirthday.format(birthday)}", this.widget.isCustomer, this.widget.isUpdate, this.widget.typeOfUpdate,this.widget.account_id);
+            doCreateCustomer(context, phone, password, fullname, gender, cmnd, address, "${getDateTime("$birthday", dateFormat: 'yyyy-MM-dd')}", this.widget.isCustomer, this.widget.isUpdate, this.widget.typeOfUpdate,this.widget.account_id, isCreate: this.widget.isCreate);
           },
           child: Text(
             "${this.widget.tittle}",

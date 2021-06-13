@@ -15,7 +15,7 @@ class formUpdateProfile extends StatefulWidget {
   String fullname, phone, cmnd, address, password;
   int gender;
   DateTime birthday;
-  final bool check;
+  final bool check, isCreate;
   final int typeOfUpdate, account_id;
 
   // True là sẽ gọi api update, false là gọi api createCustomer
@@ -31,6 +31,7 @@ class formUpdateProfile extends StatefulWidget {
       this.birthday,
       this.gender,
       this.check,
+      this.isCreate,
       this.isUpdate,
       this.typeOfUpdate,
       this.account_id,
@@ -115,7 +116,8 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
                   messageCancel),
               SizedBox(width: 20),
               btnSubmitValidate(context, 120, 40, welcome_color, "Kiểm tra",
-                  this.widget.list, this.widget.check),
+                  this.widget.list, this.widget.check,
+                  isCreate: this.widget.isCreate),
             ],
           ),
         ],
@@ -456,7 +458,8 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
       Color color,
       String tittleButtonAlertDialog,
       List listCustomer,
-      bool checkProfile) {
+      bool checkProfile,
+      {bool isCreate}) {
     return Container(
         height: height,
         width: width,
@@ -478,6 +481,7 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
                             account_id: this.widget.account_id,
                             isUpdate: this.widget.isUpdate,
                             typeOfUpdate: this.widget.typeOfUpdate,
+                            isCreate: isCreate,
                           )));
                 }
               } else {

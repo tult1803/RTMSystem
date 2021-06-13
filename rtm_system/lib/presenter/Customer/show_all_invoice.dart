@@ -37,6 +37,7 @@ class _showAllInvoicePageState extends State<showAllInvoicePage> {
       invoice = await getAPIAllInvoice.createInvoice(
         prefs.get("access_token"),
         prefs.get("accountId"),
+        -1, //Status Id: truyền -1 là get all invoice trừ invoice đang ở trạng thái process
         int.parse(widget.idProduct),
         pageKey,
         _pageSize,
