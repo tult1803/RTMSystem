@@ -28,7 +28,6 @@ class _InvoiceByProductPageState extends State<InvoiceByProductPage> {
     toDate = DateTime.now();
     fromDate = DateTime.now().subtract(Duration(days: 30));
     title = "Hóa đơn ${widget.nameProduct.toLowerCase()}";
-    print(widget.idProduct+ "ne");
   }
 
   @override

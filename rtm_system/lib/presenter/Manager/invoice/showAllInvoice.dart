@@ -8,8 +8,8 @@ import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/helpers.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/add_product_in_invoice.dart';
+import 'package:rtm_system/view/detailInvoice.dart';
 import 'package:rtm_system/view/manager/formForDetail_page.dart';
-import 'package:rtm_system/view/manager/invoice/detail_invoice.dart';
 import 'package:rtm_system/view/manager/invoice/processInvoice.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

@@ -5,22 +5,25 @@ import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/component.dart';
 class DetailInvoice extends StatefulWidget {
   final Map<String, dynamic> map;
-
-  DetailInvoice({this.map});
-
+  final bool isCustomer;
+  DetailInvoice({this.map, this.isCustomer});
   @override
   _DetailInvoiceState createState() => _DetailInvoiceState();
 }
 
 class _DetailInvoiceState extends State<DetailInvoice> {
   @override
+  void initState() {
+    print(widget.isCustomer);
+  }
+  @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: 15),
       child: SingleChildScrollView(
         child: containerDetail(
-            context,
-            componentContainerDetailInvoice(
+          context,
+          componentContainerDetailInvoice(
               context,
               id: this.widget.map["id"],
               customerName: this.widget.map["customer_name"],
@@ -40,7 +43,9 @@ class _DetailInvoiceState extends State<DetailInvoice> {
               customerId: this.widget.map["customer_id"],
               managerId: this.widget.map["manager_id"],
               activeDate: this.widget.map["active_date"],
-            )),
+              isCustomer: widget.isCustomer
+          ),
+        ),
       ),
     );
   }

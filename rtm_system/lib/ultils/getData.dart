@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:rtm_system/model/PostCreateRequestInvoice.dart';
 import 'package:rtm_system/model/postAPI_createCustomer.dart';
 import 'package:rtm_system/model/postAPI_createNotice.dart';
+import 'package:rtm_system/model/putAPI_confirmInvoice.dart';
+import 'package:rtm_system/model/putAPI_signInvoice.dart';
 import 'package:rtm_system/model/putAPI_updatePrice.dart';
 import 'package:rtm_system/model/putAPI_updateProfile.dart';
 import 'package:rtm_system/view/customer/home_customer_page.dart';
@@ -196,6 +198,48 @@ Future<void> doCreateRequestInvoiceOrInvoice(
       showStatusAlertDialog(
           context,
           "Đã gửi yêu cầu bán hàng.",
+          HomeCustomerPage(
+            index: 1,
+          ),
+          true);
+    } else {
+      //chuyen trang và thong báo
+    }
+  } else
+    showStatusAlertDialog(
+        context, "Cập nhật thất bại. Xin thử lại!", null, false);
+}
+// Xac nhan hoa don, cho ca manager va customer
+// Customer : truyền invoice_id để xác nhận
+Future<void> doConfirmOrAcceptOrRejectInvoice(
+    BuildContext context,
+    int invoiceId,
+    int type,
+    bool isCustomer) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  int status;
+  if(isCustomer) {
+    // 1 is sign invoice, 2 is accept invoice, 3 is reject invoice
+    if(type == 1){
+      PutSignInvoice putSignInvoiceInvoice = PutSignInvoice();
+      status = await putSignInvoiceInvoice.putSignInvoice(
+          prefs.get("access_token"),invoiceId);
+    }else if( type == 2){
+      PutConfirmInvoice putConfirmInvoice = PutConfirmInvoice();
+      status = await putConfirmInvoice.putConfirmInvoice(
+          prefs.get("access_token"),invoiceId);
+    }else if( type == 3){
+      //call api to reject
+    }
+
+  }else{
+    //call api tao invoice cua manager
+  }
+  if (status == 200) {
+    if (isCustomer) {
+      showStatusAlertDialog(
+          context,
+          "Xác nhận thành công.",
           HomeCustomerPage(
             index: 1,
           ),

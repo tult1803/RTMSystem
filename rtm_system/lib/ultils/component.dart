@@ -815,6 +815,7 @@ Widget componentContainerDetailInvoice(
   String customerConfirmDate,
   String managerConfirmDate,
   String activeDate,
+      bool isCustomer
 }) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
@@ -885,11 +886,76 @@ Widget componentContainerDetailInvoice(
         SizedBox(
           height: 5,
         ),
+        _showBtnProcessInvoice(context, statusId, id, isCustomer),
       ],
     ),
   );
 }
-
+Widget _showBtnProcessInvoice(context, int statusId,int id, bool isCustomer){
+  //show button để xử lý hoàn thành đơn
+  //status = 5 là cho customer gọi api để confirm ,
+  // status = 1 là manager confirm
+  // status = 4 là accept or reject cua customer
+  if(statusId == 5 || statusId == 1){
+    return SizedBox(
+      width: 150,
+      child: RaisedButton(
+        color: Color(0xFF0BB791),
+        onPressed: () {
+          doConfirmOrAcceptOrRejectInvoice( context, id, 1,isCustomer );
+        },
+        child: Text('Xác nhận', style: TextStyle(
+            color: Colors.white,
+            fontSize: 16
+        ),),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        elevation: 10,
+      ),
+    );
+  }else if(statusId == 4){
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        SizedBox(
+          width: 150,
+          child: RaisedButton(
+            color: Colors.redAccent,
+            onPressed: () {
+              doConfirmOrAcceptOrRejectInvoice( context, id, 3,isCustomer );
+            },
+            child: Text('Từ chối', style: TextStyle(
+                color: Colors.white,
+                fontSize: 16
+            ),),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            elevation: 10,
+          ),
+        ),
+        SizedBox(
+          width: 150,
+          child: RaisedButton(
+            color: Color(0xFF0BB791),
+            onPressed: () {
+              doConfirmOrAcceptOrRejectInvoice( context, id, 2,isCustomer );
+            },
+            child: Text('Chấp nhận', style: TextStyle(
+                color: Colors.white,
+                fontSize: 16
+            ),),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            elevation: 10,
+          ),
+        )
+      ],
+    );
+  }
+}
 //Dùng cho chi tiết sản phẩm
 Widget componentContainerDetailProduct(BuildContext context, Map item) {
   return Padding(
