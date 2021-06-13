@@ -18,9 +18,6 @@ class showProcessInvoiceManager extends StatefulWidget {
   _showProcessInvoiceManagerState createState() => _showProcessInvoiceManagerState();
 }
 
-DateTime fromDate;
-DateTime toDate;
-
 class _showProcessInvoiceManagerState extends State<showProcessInvoiceManager> {
   int _pageSize = 1;
   final PagingController _pagingController = PagingController(firstPageKey: 10);
@@ -40,8 +37,8 @@ class _showProcessInvoiceManagerState extends State<showProcessInvoiceManager> {
         4, //Status Id: truyền 4 là get all process invoice
         pageKey,
         _pageSize,
-        fromDate,
-        toDate,
+        "",
+        "",
         searchTerm: _searchTerm,
       );
       invoiceList = invoice.invoices;
@@ -66,8 +63,6 @@ class _showProcessInvoiceManagerState extends State<showProcessInvoiceManager> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    toDate = DateTime.now();
-    fromDate = DateTime.now().subtract(Duration(days: 30));
     _pagingController.addPageRequestListener((pageKey) {
       _fetchPage(pageKey);
     });
@@ -102,26 +97,6 @@ class _showProcessInvoiceManagerState extends State<showProcessInvoiceManager> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  btnDateTime(context, "${getDateTime("$fromDate", dateFormat: "dd/MM/yyyy")}",
-                      Icon(Icons.date_range), datePick()),
-                  SizedBox(
-                    width: 20,
-                    child: Center(
-                        child: Container(
-                            alignment: Alignment.topCenter,
-                            height: 45,
-                            child: Text(
-                              "-",
-                              style: TextStyle(fontSize: 20),
-                            ))),
-                  ),
-                  btnDateTime(context, "${getDateTime("$toDate", dateFormat: "dd/MM/yyyy")}",
-                      Icon(Icons.date_range), datePick()),
-                ],
-              ),
               SizedBox(
                 height: 0.5,
                 child: Container(
@@ -184,49 +159,4 @@ class _showProcessInvoiceManagerState extends State<showProcessInvoiceManager> {
     super.dispose();
   }
 
-//Copy nó để tái sử dụng cho các trang khác nếu cần
-// Không thể tách vì nó có hàm setState
-  Widget datePick() {
-    return TextButton(
-      onPressed: () {
-        setState(() {
-          pickedDate();
-          _pageSize = 1;
-        });
-      }, child: null,
-    );
-  }
-
-  Future pickedDate() async {
-    final initialDateRange = DateTimeRange(start: fromDate, end: toDate);
-    final ThemeData theme = Theme.of(context);
-    DateTimeRange dateRange = await showDateRangePicker(
-        context: context,
-        firstDate: DateTime(2000),
-        lastDate: DateTime.now(),
-        initialDateRange: initialDateRange,
-        saveText: "Xác nhận",
-        builder: (context, child) {
-          return Theme(
-            data: Theme.of(context).copyWith(
-              //Dùng cho nút "X" của lịch
-                appBarTheme: AppBarTheme(
-                  iconTheme:
-                  theme.primaryIconTheme.copyWith(color: Colors.white),
-                ),
-                //Dùng cho nút chọn ngày và background
-                colorScheme: ColorScheme.light(
-                  primary: welcome_color,
-                )),
-            child: child,
-          );
-        });
-    if (dateRange != null) {
-      setState(() {
-        fromDate = dateRange.start;
-        toDate = dateRange.end;
-        _pagingController.refresh();
-      });
-    }
-  }
 }

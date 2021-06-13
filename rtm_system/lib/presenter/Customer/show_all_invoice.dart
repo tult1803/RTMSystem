@@ -5,6 +5,7 @@ import 'package:rtm_system/model/getAPI_invoice.dart';
 import 'package:rtm_system/model/model_invoice.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/component.dart';
+import 'package:rtm_system/ultils/helpers.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/manager/formForDetail_page.dart';
 import 'package:rtm_system/view/manager/invoice/detail_invoice.dart';
@@ -41,8 +42,8 @@ class _showAllInvoicePageState extends State<showAllInvoicePage> {
         int.parse(widget.idProduct),
         pageKey,
         _pageSize,
-        fromDate,
-        toDate,
+        getDateTime("$fromDate", dateFormat: 'yyyy-MM-dd hh:mm:ss'),
+        getDateTime("$toDate", dateFormat: 'yyyy-MM-dd hh:mm:ss'),
         searchTerm: _searchTerm,
       );
       invoiceList = invoice.invoices;

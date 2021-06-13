@@ -42,8 +42,8 @@ class _showAllInvoiceState extends State<showAllInvoice> {
         -1, //Status Id: truyền -1 là get all invoice trừ invoice đang ở trạng thái process
         pageKey,
         _pageSize,
-        fromDate,
-        toDate,
+        getDateTime("$fromDate", dateFormat: 'yyyy-MM-dd hh:mm:ss'),
+        getDateTime("$toDate", dateFormat: 'yyyy-MM-dd hh:mm:ss'),
         searchTerm: _searchTerm,
       );
       invoiceList = invoice.invoices;
