@@ -123,7 +123,6 @@ class _InvoiceByProductPageState extends State<InvoiceByProductPage> {
 
   Widget btnDateTime(
       BuildContext context, String tittle, Icon icon, Widget widget) {
-    var size = MediaQuery.of(context).size;
     return Stack(
       children: <Widget>[
         SizedBox(
