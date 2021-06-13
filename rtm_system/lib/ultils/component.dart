@@ -954,6 +954,8 @@ Widget _showBtnProcessInvoice(context, int statusId,int id, bool isCustomer){
         )
       ],
     );
+  }else{
+    return Container();
   }
 }
 //Dùng cho chi tiết sản phẩm
