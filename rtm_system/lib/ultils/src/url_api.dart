@@ -13,3 +13,4 @@ String url_deactivateCustomer = "api/rtm/v1/user/deactivate-account";
 String url_createRequestInvoice = "api/rtm/v1/invoice/create-invoice-request";
 String url_signInvoice= "api/rtm/v1/invoice/sign-invoice";
 String url_confirmInvoice= "api/rtm/v1/invoice/confirm-invoice";
+String url_invoice_request = "api/rtm/v1/invoice/get-invoice-request";

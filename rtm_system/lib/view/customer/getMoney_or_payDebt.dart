@@ -52,7 +52,7 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
     // TODO: implement initState
     super.initState();
     toDate = DateTime.now();
-    fromDate = DateTime.now().subtract(Duration(days: 60));
+    fromDate = DateTime.now().subtract(Duration(days: 30));
     _getProduct();
   }
 
@@ -129,7 +129,9 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
                       Icon(Icons.date_range), datePick()),
                 ],
               ),
-              new showAllInvoicePage(idProduct: '3', isAll: false,status: 5,),
+              new showAllInvoicePage(idProduct: '0', isAll: false, status: 5,
+                from: fromDate,
+                to: toDate,),
               SizedBox(
                 height: 12,
               ),

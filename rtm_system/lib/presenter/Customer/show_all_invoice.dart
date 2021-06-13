@@ -11,12 +11,17 @@ import 'package:rtm_system/view/manager/formForDetail_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class showAllInvoicePage extends StatefulWidget {
-  const showAllInvoicePage({Key key, this.idProduct, this.isAll,
-  this.status}) : super(key: key);
+  const showAllInvoicePage(
+      {Key key, this.idProduct, this.isAll, this.status, this.from, this.to})
+      : super(key: key);
   final String idProduct;
   final bool isAll;
+  final DateTime from;
+  final DateTime to;
+
   //status = 0 is load all
   final int status;
+
   @override
   _showAllInvoicePageState createState() => _showAllInvoicePageState();
 }
@@ -24,7 +29,7 @@ class showAllInvoicePage extends StatefulWidget {
 DateTime fromDate;
 DateTime toDate;
 var fDate = new DateFormat('dd-MM-yyyy');
-
+var date = new DateFormat('yyyy-MM-dd hh:mm:ss');
 class _showAllInvoicePageState extends State<showAllInvoicePage> {
   int _pageSize = 1;
   final PagingController _pagingController = PagingController(firstPageKey: 10);
@@ -70,12 +75,16 @@ class _showAllInvoicePageState extends State<showAllInvoicePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    toDate = DateTime.now();
-    fromDate = DateTime.now().subtract(Duration(days: 30));
     _pagingController.addPageRequestListener((pageKey) {
       _fetchPage(pageKey);
     });
+    setState(() {
+      fromDate = widget.from;
+      toDate = widget.to;
+    });
 
+    // toDate = DateTime.now();
+    // fromDate = DateTime.now().subtract(Duration(days: 30));
     _pagingController.addStatusListener((status) {
       if (status == PagingStatus.subsequentPageError) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -99,7 +108,7 @@ class _showAllInvoicePageState extends State<showAllInvoicePage> {
 
     return Container(
       margin: EdgeInsets.only(top: 0, left: 5, right: 5),
-      height: widget.isAll? size.height : size.height * 0.5,
+      height: widget.isAll ? size.height : size.height * 0.5,
       width: size.width,
       child: new CustomScrollView(
         slivers: <Widget>[
@@ -129,7 +138,8 @@ class _showAllInvoicePageState extends State<showAllInvoicePage> {
                           isCustomer: true,
                         ),
                       ),
-                      isCustomer: true);
+                      isCustomer: true,
+                      isRequest: false);
                 }),
           ),
         ],
@@ -167,10 +177,10 @@ class _showAllInvoicePageState extends State<showAllInvoicePage> {
         builder: (context, child) {
           return Theme(
             data: Theme.of(context).copyWith(
-              //Dùng cho nút "X" của lịch
+                //Dùng cho nút "X" của lịch
                 appBarTheme: AppBarTheme(
                   iconTheme:
-                  theme.primaryIconTheme.copyWith(color: Colors.white),
+                      theme.primaryIconTheme.copyWith(color: Colors.white),
                 ),
                 //Dùng cho nút chọn ngày và background
                 colorScheme: ColorScheme.light(
@@ -180,7 +190,7 @@ class _showAllInvoicePageState extends State<showAllInvoicePage> {
           );
         });
     if (dateRange != null) {
-      print('Date '+ fromDate.toString());
+      print('Date ' + fromDate.toString());
       setState(() {
         fromDate = dateRange.start;
         toDate = dateRange.end;

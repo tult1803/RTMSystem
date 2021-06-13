@@ -6,8 +6,6 @@ import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/getData.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/customer/home_customer_page.dart';
-import 'package:rtm_system/view/customer/invoice/detail_invoice.dart';
-
 import 'helpers.dart';
 
 // AutoSizeText chữ tự động co giãn theo kích thước mặc định
@@ -713,87 +711,6 @@ Widget firstPageErrorIndicatorBuilder(BuildContext context, {String tittle}) {
   );
 }
 
-//Dùng cho trang notice để hiện thỉ các notice
-Widget btnProcess(BuildContext context, int id, String tittle, String content,
-    String date, bool isInvoice) {
-  return Container(
-      margin: EdgeInsets.all(5),
-      child: Material(
-        color: Colors.white,
-        child: TextButton(
-          style: TextButton.styleFrom(
-            primary: Colors.black, // foreground
-            textStyle: TextStyle(
-              fontSize: 16,
-            ),
-          ),
-          onPressed: () {
-            if (isInvoice) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => DetailInvoicePage()),
-              );
-            } else {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => DetailInvoicePage()),
-              );
-            }
-          },
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Container(
-                    child: AutoSizeText(
-                      "$tittle",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                      ),
-                      overflow: TextOverflow.clip,
-                      textAlign: TextAlign.left,
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              AutoSizeText(
-                "$content",
-                style: TextStyle(
-                  fontSize: 14,
-                ),
-                textAlign: TextAlign.left,
-                overflow: TextOverflow.ellipsis,
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              AutoSizeText(
-                "${getDateTime(date)}",
-                style: TextStyle(
-                  fontSize: 12,
-                  color: welcome_color,
-                ),
-                textAlign: TextAlign.left,
-              ),
-              SizedBox(
-                height: 9,
-              ),
-              SizedBox(
-                height: 0.5,
-                child: Container(
-                  color: Colors.black54,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ));
-}
-
 //Dùng cho trang chi tiết hóa đơn
 Widget componentContainerDetailInvoice(
   BuildContext context, {
@@ -886,7 +803,7 @@ Widget componentContainerDetailInvoice(
         SizedBox(
           height: 5,
         ),
-        _showBtnProcessInvoice(context, statusId, id, isCustomer),
+        // chỗ này show btn accpet or reject của manager
       ],
     ),
   );
@@ -1167,6 +1084,61 @@ Widget containerTextInvoice({
         tittle,
         style: GoogleFonts.roboto(fontWeight: fontWeight),
       ),
+    ),
+  );
+}
+
+//Dùng cho trang chi tiết yêu cầu bán hàng
+Widget componentContainerInvoiceRequest(
+    BuildContext context, {
+      int statusId,
+      int id,
+      int productId,
+      int customerId,
+      String customerName,
+      String customerPhone,
+      String productName,
+      String price,
+      String createDate,
+      String sellDate,
+      bool isCustomer
+    }) {
+  return Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: Column(
+      children: [
+        txtItemDetail(context, "ID hóa đơn", "$id"),
+        SizedBox(
+          height: 10,
+        ),
+        txtItemDetail(
+            context, "Ngày tạo hóa đơn", "${getDateTime(createDate)}"),
+        SizedBox(
+          height: 10,
+        ),
+        txtItemDetail(context, "Người tạo hóa đơn", "$customerName",
+            subContent: customerPhone),
+        SizedBox(
+          height: 10,
+        ),
+        txtItemDetail(context, "Tên sản phẩm", "$productName"),
+        SizedBox(
+          height: 10,
+        ),
+        txtItemDetail(
+            context, "Giá sản phẩm (/1kg)", "${getFormatPrice(price)}đ"),
+         SizedBox(
+          height: 10,
+        ),
+        txtItemDetail(context, "Ngày muốn đến bán",
+            "${getDateTime(sellDate)}"),
+        txtItemDetail(context, "Trạng thái", "${getStatus(status: statusId)}",
+            colorContent: getColorStatus(status: statusId)),
+        SizedBox(
+          height: 5,
+        ),
+        _showBtnProcessInvoice(context, statusId, id, isCustomer),
+      ],
     ),
   );
 }

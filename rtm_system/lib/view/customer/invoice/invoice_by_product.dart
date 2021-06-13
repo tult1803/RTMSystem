@@ -72,7 +72,9 @@ class _InvoiceByProductPageState extends State<InvoiceByProductPage> {
                     ],
                   ),
                   new showAllInvoicePage(idProduct: widget.idProduct,
-                    isAll: true, status: 0,),
+                    isAll: true, status: 0,
+                    from: fromDate,
+                    to: toDate,),
                 ],
               )),
         ));

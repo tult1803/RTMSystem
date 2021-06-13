@@ -17,7 +17,6 @@ class AdvancePage extends StatefulWidget {
 }
 
 class _AdvancePageState extends State<AdvancePage> {
-  int index = 1;
   var currentDate = new DateTime.now();
   var formatter = new DateFormat('dd-MM-yyyy');
   DateTime fromDate;
@@ -58,7 +57,7 @@ class _AdvancePageState extends State<AdvancePage> {
                     children: [
                       _txtFormField(this.search, false, "Nhập mã hoá đơn", 1,
                           TextInputType.text),
-                      btnWaitingProcess(context, index),
+                      btnWaitingProcess(context, false),
                     ],
                   ),
                 ),

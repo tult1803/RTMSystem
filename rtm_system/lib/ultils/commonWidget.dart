@@ -5,7 +5,8 @@ import 'package:intl/intl.dart';
 import 'package:rtm_system/ultils/alertDialog.dart';
 import 'package:rtm_system/view/customer/Profile/update_profile.dart';
 import 'package:rtm_system/view/customer/home_customer_page.dart';
-import 'package:rtm_system/view/customer/process/process_all.dart';
+import 'package:rtm_system/view/customer/notice/all_notices.dart';
+import 'package:rtm_system/view/customer/process/process_all_invoice.dart';
 import 'package:rtm_system/view/detail_notice.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
 import 'package:rtm_system/view/manager/profile/allCustomer_manager.dart';
@@ -300,10 +301,12 @@ Widget boxForInvoice(
     String total,
     String date,
     int status,
-    Widget widget, bool isCustomer}) {
+    Widget widget, bool isCustomer,
+    bool isRequest}) {
   String totalAfterFormat;
   String dateAfterFormat;
-
+  String titlePrice;
+  isRequest? titlePrice = 'Giá': titlePrice = 'Tổng cộng';
   try {
     totalAfterFormat = "${getFormatPrice(total)}đ";
     dateAfterFormat = "${getDateTime(date)}";
@@ -392,7 +395,7 @@ Widget boxForInvoice(
                       alignment: Alignment.topLeft,
                       paddingLeftOfText: 10,
                       paddingRightOfText: 10,
-                      tittle: "Tổng cộng: $totalAfterFormat",
+                      tittle: "$titlePrice: $totalAfterFormat",
                       fontWeight: FontWeight.w400,
                     ),
                   ],
@@ -931,17 +934,23 @@ Widget containerDetail(BuildContext context, Widget widget) {
   );
 }
 
-Widget btnWaitingProcess(context, int index) {
+Widget btnWaitingProcess(context, bool isInvoice) {
   return SizedBox(
     width: 130,
     // ignore: deprecated_member_use
     child: RaisedButton(
       color: Color(0xFFF8D375),
       onPressed: () {
+        isInvoice ?
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => ProcessAllPage(indexPage: index)),
+              builder: (context) => ProcessAllPage( isInvoice: isInvoice,)),
+        ) :
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => ProcessAllPage( isInvoice: false,)),
         );
       },
       child: Row(
