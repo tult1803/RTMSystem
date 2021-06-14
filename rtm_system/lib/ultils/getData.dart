@@ -156,7 +156,7 @@ Future<void> put_API_GetMoney(BuildContext context, indexPage) async {
 }
 
 Future<void> putAPIUpdatePrice(
-    BuildContext context, int productId, double price) async {
+    BuildContext context, int productId, double price, String productName) async {
   int status;
   SharedPreferences prefs = await SharedPreferences.getInstance();
   PutUpdatePrice putUpdatePrice = PutUpdatePrice();
@@ -164,6 +164,7 @@ Future<void> putAPIUpdatePrice(
       prefs.get("access_token"), prefs.get("accountId"), productId, price);
 
   if (status == 200) {
+    prefs.setString("$productName", "$price");
     showCustomDialog(context,
         isSuccess: true,
         content: "Giá sản phẩm đã cập nhật",

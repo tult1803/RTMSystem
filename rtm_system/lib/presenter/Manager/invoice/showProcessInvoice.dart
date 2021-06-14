@@ -4,6 +4,7 @@ import 'package:rtm_system/model/getAPI_invoice.dart';
 import 'package:rtm_system/model/model_invoice.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/component.dart';
+import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/detailInvoice.dart';
 import 'package:rtm_system/view/manager/formForDetail_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,7 +14,8 @@ class showProcessInvoiceManager extends StatefulWidget {
   const showProcessInvoiceManager({Key key}) : super(key: key);
 
   @override
-  _showProcessInvoiceManagerState createState() => _showProcessInvoiceManagerState();
+  _showProcessInvoiceManagerState createState() =>
+      _showProcessInvoiceManagerState();
 }
 
 class _showProcessInvoiceManagerState extends State<showProcessInvoiceManager> {
@@ -30,9 +32,12 @@ class _showProcessInvoiceManagerState extends State<showProcessInvoiceManager> {
       GetInvoice getAPIAllInvoice = GetInvoice();
       invoice = await getAPIAllInvoice.getInvoice(
         prefs.get("access_token"),
-        0, //Customer Id: truyền 0 là get All cho manager
-        0, //Product Id: truyền 0 là get All cho manager
-        4, //Status Id: truyền 4 là get all process invoice
+        0,
+        //Customer Id: truyền 0 là get All cho manager
+        0,
+        //Product Id: truyền 0 là get All cho manager
+        4,
+        //Status Id: truyền 4 là get all process invoice
         pageKey,
         _pageSize,
         "",
@@ -103,42 +108,55 @@ class _showProcessInvoiceManagerState extends State<showProcessInvoiceManager> {
               ),
               Expanded(
                   child: Container(
-                    margin: EdgeInsets.only(top: 0, left: 5, right: 5),
-                    height: size.height,
-                    width: size.width,
-                    child: new CustomScrollView(
-                      slivers: <Widget>[
-                        PagedSliverList(
-                          pagingController: _pagingController,
-                          builderDelegate: PagedChildBuilderDelegate(
-                              firstPageErrorIndicatorBuilder: (context) =>
-                                  firstPageErrorIndicatorBuilder(context,
-                                      tittle: "Không có dữ liệu"),
-                              firstPageProgressIndicatorBuilder: (context) =>
-                                  firstPageProgressIndicatorBuilder(),
-                              newPageProgressIndicatorBuilder: (context) =>
-                                  newPageProgressIndicatorBuilder(),
-                              itemBuilder: (context, item, index) {
-                                return boxForInvoice(
-                                    context: context,
-                                    status: item['status_id'],
-                                    date: "${item['create_time']}",
-                                    total: "${item['price']}",
-                                    id: item['id'],
-                                    name: item["customer_name"],
-                                    product: item["product_name"],
-                                    widget: FormForDetailPage(
-                                      tittle: "Chi tiết hóa đơn",
-                                      bodyPage: DetailInvoice(
-                                        map: item,
-                                      ),
-                                    ),
-                                    isCustomer: false);
-                              }),
-                        ),
-                      ],
+                margin: EdgeInsets.only(top: 0, left: 5, right: 5),
+                height: size.height,
+                width: size.width,
+                child: new CustomScrollView(
+                  slivers: <Widget>[
+                    PagedSliverList(
+                      pagingController: _pagingController,
+                      builderDelegate: PagedChildBuilderDelegate(
+                          firstPageErrorIndicatorBuilder: (context) {
+                            return Column(
+                              children: [
+                                firstPageErrorIndicatorBuilder(context,
+                                    tittle: "Không có dữ liệu"),
+                                GestureDetector(
+                                  onTap: () => _pagingController.refresh(),
+                                  child: Text(
+                                    "Nhấn để tải lại",
+                                    style: TextStyle(
+                                        color: welcome_color, fontSize: 18),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                          firstPageProgressIndicatorBuilder: (context) =>
+                              firstPageProgressIndicatorBuilder(),
+                          newPageProgressIndicatorBuilder: (context) =>
+                              newPageProgressIndicatorBuilder(),
+                          itemBuilder: (context, item, index) {
+                            return boxForInvoice(
+                                context: context,
+                                status: item['status_id'],
+                                date: "${item['create_time']}",
+                                total: "${item['price']}",
+                                id: item['id'],
+                                name: item["customer_name"],
+                                product: item["product_name"],
+                                widget: FormForDetailPage(
+                                  tittle: "Chi tiết hóa đơn",
+                                  bodyPage: DetailInvoice(
+                                    map: item,
+                                  ),
+                                ),
+                                isCustomer: false);
+                          }),
                     ),
-                  ))
+                  ],
+                ),
+              ))
             ],
           ),
         ),
@@ -156,5 +174,4 @@ class _showProcessInvoiceManagerState extends State<showProcessInvoiceManager> {
     _pagingController.dispose();
     super.dispose();
   }
-
 }

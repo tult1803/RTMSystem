@@ -208,7 +208,7 @@ class _updatePriceProductState extends State<updatePriceProduct> {
                   : { itemIdUpdatePrice.clear(),
                       itemPriceUpdatePrice.clear(),
                       itemNameUpdatePrice.clear(),
-                      putAPIUpdatePrice(context, productId, price),};
+                      putAPIUpdatePrice(context, productId, price, _chosenValue),};
             }
           },
           child: Center(
