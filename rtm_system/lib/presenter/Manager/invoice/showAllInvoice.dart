@@ -47,7 +47,6 @@ class _showAllInvoiceState extends State<showAllInvoice> {
         searchTerm: _searchTerm,
       );
       invoiceList = invoice.invoices;
-      // print("${_pagingController}");
       final isLastPage = invoiceList.length < pageKey;
       if (isLastPage) {
         _pagingController.appendLastPage(invoiceList);

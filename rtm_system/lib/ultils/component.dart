@@ -457,7 +457,6 @@ Widget widgetCreateInvoice(context, bool isNew, List product,
 }
 
 Widget _showComponetCreateInvoice(context, title, value, isCustomer) {
-  print(isCustomer);
   if (!isCustomer) {
     return txtItemDetail(context, '${title}́', '${value}');
   } else {

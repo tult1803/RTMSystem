@@ -12,10 +12,7 @@ class DetailInvoice extends StatefulWidget {
 }
 
 class _DetailInvoiceState extends State<DetailInvoice> {
-  @override
-  void initState() {
-    print(widget.isCustomer);
-  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
