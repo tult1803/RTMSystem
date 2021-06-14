@@ -28,7 +28,6 @@ class _InvoiceByProductPageState extends State<InvoiceByProductPage> {
     toDate = DateTime.now();
     fromDate = DateTime.now().subtract(Duration(days: 30));
     title = "Hóa đơn ${widget.nameProduct.toLowerCase()}";
-    print(widget.idProduct+ "ne");
   }
 
   @override
@@ -72,8 +71,10 @@ class _InvoiceByProductPageState extends State<InvoiceByProductPage> {
                           Icon(Icons.date_range), datePick()),
                     ],
                   ),
-
-                  new showAllInvoicePage(idProduct: widget.idProduct,isAll: true,),
+                  new showAllInvoicePage(idProduct: widget.idProduct,
+                    isAll: true, status: 0,
+                    from: fromDate,
+                    to: toDate,),
                 ],
               )),
         ));
@@ -123,7 +124,6 @@ class _InvoiceByProductPageState extends State<InvoiceByProductPage> {
 
   Widget btnDateTime(
       BuildContext context, String tittle, Icon icon, Widget widget) {
-    var size = MediaQuery.of(context).size;
     return Stack(
       children: <Widget>[
         SizedBox(

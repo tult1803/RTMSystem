@@ -74,7 +74,7 @@ class _showAdvanceState extends State<showProductInInvoice> {
               itemCount: snapshot.data.length,
               itemBuilder: (context, index) {
                 return _cardItem(
-                    snapshot.data[index].id, snapshot.data[index].name, this.isVip);
+                    snapshot.data[index].id, snapshot.data[index].name);
               },
             );
           }
@@ -86,8 +86,7 @@ class _showAdvanceState extends State<showProductInInvoice> {
     );
   }
 
-  Widget _cardItem(int id, String product, bool isVip) {
-    print('id ' + id.toString());
+  Widget _cardItem(int id, String product) {
     return FlatButton(
         onPressed: () {
           Navigator.push(

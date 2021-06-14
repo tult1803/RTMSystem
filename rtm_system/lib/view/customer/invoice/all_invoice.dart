@@ -11,7 +11,6 @@ class InvoicePage extends StatefulWidget {
 }
 
 class _InvoicePageState extends State<InvoicePage> {
-  int index = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +49,7 @@ class _InvoicePageState extends State<InvoicePage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        btnWaitingProcess(context, index),
+        btnWaitingProcess(context, true),
         SizedBox(
           width: 200,
           child: RaisedButton(

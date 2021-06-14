@@ -8,8 +8,8 @@ import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/helpers.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/add_product_in_invoice.dart';
+import 'package:rtm_system/view/detailInvoice.dart';
 import 'package:rtm_system/view/manager/formForDetail_page.dart';
-import 'package:rtm_system/view/manager/invoice/detail_invoice.dart';
 import 'package:rtm_system/view/manager/invoice/processInvoice.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -35,7 +35,7 @@ class _showAllInvoiceState extends State<showAllInvoice> {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       GetInvoice getAPIAllInvoice = GetInvoice();
-      invoice = await getAPIAllInvoice.createInvoice(
+      invoice = await getAPIAllInvoice.getInvoice(
         prefs.get("access_token"),
         0, //Customer Id: truyền 0 là get All cho manager
         0, //Product Id: truyền 0 là get All cho manager
@@ -47,7 +47,6 @@ class _showAllInvoiceState extends State<showAllInvoice> {
         searchTerm: _searchTerm,
       );
       invoiceList = invoice.invoices;
-      // print("${_pagingController}");
       final isLastPage = invoiceList.length < pageKey;
       if (isLastPage) {
         _pagingController.appendLastPage(invoiceList);
@@ -185,7 +184,8 @@ class _showAllInvoiceState extends State<showAllInvoice> {
                                     map: item,
                                   ),
                                 ),
-                                isCustomer: false);
+                                isCustomer: false,
+                            isRequest: false);
                           }),
                     ),
                   ],

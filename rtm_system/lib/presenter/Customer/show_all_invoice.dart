@@ -7,14 +7,22 @@ import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/helpers.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
+import 'package:rtm_system/view/detailInvoice.dart';
 import 'package:rtm_system/view/manager/formForDetail_page.dart';
-import 'package:rtm_system/view/manager/invoice/detail_invoice.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class showAllInvoicePage extends StatefulWidget {
-  const showAllInvoicePage({Key key, this.idProduct, this.isAll}) : super(key: key);
+  const showAllInvoicePage(
+      {Key key, this.idProduct, this.isAll, this.status, this.from, this.to})
+      : super(key: key);
   final String idProduct;
   final bool isAll;
+  final DateTime from;
+  final DateTime to;
+
+  //status = 0 is load all
+  final int status;
+
   @override
   _showAllInvoicePageState createState() => _showAllInvoicePageState();
 }
@@ -22,7 +30,7 @@ class showAllInvoicePage extends StatefulWidget {
 DateTime fromDate;
 DateTime toDate;
 var fDate = new DateFormat('dd-MM-yyyy');
-
+var date = new DateFormat('yyyy-MM-dd hh:mm:ss');
 class _showAllInvoicePageState extends State<showAllInvoicePage> {
   int _pageSize = 1;
   final PagingController _pagingController = PagingController(firstPageKey: 10);
@@ -35,11 +43,11 @@ class _showAllInvoicePageState extends State<showAllInvoicePage> {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       GetInvoice getAPIAllInvoice = GetInvoice();
-      invoice = await getAPIAllInvoice.createInvoice(
+      invoice = await getAPIAllInvoice.getInvoice(
         prefs.get("access_token"),
         prefs.get("accountId"),
-        -1, //Status Id: truyền -1 là get all invoice trừ invoice đang ở trạng thái process
         int.parse(widget.idProduct),
+        widget.status,
         pageKey,
         _pageSize,
         getDateTime("$fromDate", dateFormat: 'yyyy-MM-dd hh:mm:ss'),
@@ -68,12 +76,16 @@ class _showAllInvoicePageState extends State<showAllInvoicePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    toDate = DateTime.now();
-    fromDate = DateTime.now().subtract(Duration(days: 30));
     _pagingController.addPageRequestListener((pageKey) {
       _fetchPage(pageKey);
     });
+    setState(() {
+      fromDate = widget.from;
+      toDate = widget.to;
+    });
 
+    // toDate = DateTime.now();
+    // fromDate = DateTime.now().subtract(Duration(days: 30));
     _pagingController.addStatusListener((status) {
       if (status == PagingStatus.subsequentPageError) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -97,7 +109,7 @@ class _showAllInvoicePageState extends State<showAllInvoicePage> {
 
     return Container(
       margin: EdgeInsets.only(top: 0, left: 5, right: 5),
-      height: widget.isAll? size.height : size.height * 0.5,
+      height: widget.isAll ? size.height : size.height * 0.5,
       width: size.width,
       child: new CustomScrollView(
         slivers: <Widget>[
@@ -124,9 +136,11 @@ class _showAllInvoicePageState extends State<showAllInvoicePage> {
                         tittle: "Chi tiết hóa đơn",
                         bodyPage: DetailInvoice(
                           map: item,
+                          isCustomer: true,
                         ),
                       ),
-                      isCustomer: true);
+                      isCustomer: true,
+                      isRequest: false);
                 }),
           ),
         ],
@@ -177,7 +191,7 @@ class _showAllInvoicePageState extends State<showAllInvoicePage> {
           );
         });
     if (dateRange != null) {
-      print('Date '+ fromDate.toString());
+      print('Date ' + fromDate.toString());
       setState(() {
         fromDate = dateRange.start;
         toDate = dateRange.end;
