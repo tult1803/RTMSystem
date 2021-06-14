@@ -130,8 +130,8 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
                 ],
               ),
               new showAllInvoicePage(idProduct: '0', isAll: false, status: 5,
-                from: fromDate,
-                to: toDate,),
+                from: " ",
+                to: " ",),
               SizedBox(
                 height: 12,
               ),

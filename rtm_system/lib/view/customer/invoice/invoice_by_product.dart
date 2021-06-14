@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:rtm_system/presenter/Customer/show_all_invoice.dart';
 import 'package:rtm_system/ultils/component.dart';
+import 'package:rtm_system/ultils/helpers.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 
 class InvoiceByProductPage extends StatefulWidget {
@@ -73,8 +74,8 @@ class _InvoiceByProductPageState extends State<InvoiceByProductPage> {
                   ),
                   new showAllInvoicePage(idProduct: widget.idProduct,
                     isAll: true, status: 0,
-                    from: fromDate,
-                    to: toDate,),
+                    from: getDateTime("$fromDate", dateFormat: 'yyyy-MM-dd hh:mm:ss'),
+                    to: getDateTime("$toDate", dateFormat: 'yyyy-MM-dd hh:mm:ss'),),
                 ],
               )),
         ));

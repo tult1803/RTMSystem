@@ -17,8 +17,8 @@ class showAllInvoicePage extends StatefulWidget {
       : super(key: key);
   final String idProduct;
   final bool isAll;
-  final DateTime from;
-  final DateTime to;
+  final String from;
+  final String to;
 
   //status = 0 is load all
   final int status;
@@ -50,8 +50,10 @@ class _showAllInvoicePageState extends State<showAllInvoicePage> {
         widget.status,
         pageKey,
         _pageSize,
-        getDateTime("$fromDate", dateFormat: 'yyyy-MM-dd hh:mm:ss'),
-        getDateTime("$toDate", dateFormat: 'yyyy-MM-dd hh:mm:ss'),
+        widget.from,
+        widget.to,
+        // getDateTime("$fromDate", dateFormat: 'yyyy-MM-dd hh:mm:ss'),
+        // getDateTime("$toDate", dateFormat: 'yyyy-MM-dd hh:mm:ss'),
         searchTerm: _searchTerm,
       );
       invoiceList = invoice.invoices;
@@ -79,11 +81,11 @@ class _showAllInvoicePageState extends State<showAllInvoicePage> {
     _pagingController.addPageRequestListener((pageKey) {
       _fetchPage(pageKey);
     });
-    setState(() {
-      fromDate = widget.from;
-      toDate = widget.to;
-    });
-
+    // setState(() {
+    //   fromDate = widget.from;
+    //   toDate = widget.to;
+    // });
+    print(widget.from);
     // toDate = DateTime.now();
     // fromDate = DateTime.now().subtract(Duration(days: 30));
     _pagingController.addStatusListener((status) {
