@@ -19,6 +19,7 @@ class showAllProduct extends StatefulWidget {
 List<String> itemNameUpdatePrice = [];
 List<String> itemPriceUpdatePrice = [];
 List<int> itemIdUpdatePrice = [];
+
 class _showAllProductState extends State<showAllProduct> {
   // String token;
   List<DataProduct> dataListProduct = [];
@@ -105,26 +106,38 @@ class _showAllProductState extends State<showAllProduct> {
                 newPageProgressIndicatorBuilder: (context) =>
                     firstPageProgressIndicatorBuilder(),
                 itemBuilder: (context, item, index) {
-                  if(itemNameUpdatePrice.length < index){
+                  if (itemNameUpdatePrice.length <= index) {
                     itemNameUpdatePrice.add(item["name"]);
                     itemPriceUpdatePrice.add("${item["update_price"]}");
                     itemIdUpdatePrice.add(item["id"]);
                   }
 
-                  return card(
-                      context,
-                      item["name"],
-                      "Loại",
-                      "${item["type"]}",
-                      "${item["update_price"]}",
-                      item["updateDateTime"],
-                      Colors.black54,
-                      FormForDetailPage(
+                  // return card(
+                  //     context,
+                  //     item["name"],
+                  //     "Loại",
+                  //     "${item["type"]}",
+                  //     "${item["update_price"]}",
+                  //     item["updateDateTime"],
+                  //     Colors.black54,
+                  //     FormForDetailPage(
+                  //         tittle: "Chi tiết sản phẩm",
+                  //         bodyPage: DetailProduct(
+                  //           itemDetailProduct: item,
+                  //         ))
+                  // );
+                  return boxForProduct(
+                      context: context,
+                      id: item["id"],
+                      productName: item["name"],
+                      date: item["updateDateTime"],
+                      typeOfProduct: "${item["type"]}",
+                      price: "${item["update_price"]}",
+                      widget: FormForDetailPage(
                           tittle: "Chi tiết sản phẩm",
                           bodyPage: DetailProduct(
                             itemDetailProduct: item,
-                          ))
-                  );
+                          )));
                 }),
           ),
         ],

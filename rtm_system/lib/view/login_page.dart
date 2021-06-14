@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:rtm_system/model/model_login.dart';
 import 'package:rtm_system/model/postAPI_login.dart';
 import 'package:rtm_system/presenter/check_login.dart';
@@ -59,8 +60,8 @@ class LoginPageState extends State<LoginPage> {
                   child: Image(image: AssetImage("images/icon.png")),
                 ),
                 Text(error,
-                    style: TextStyle(
-                        fontSize: 13,
+                    style: GoogleFonts.roboto(
+                        fontSize: 14,
                         decoration: TextDecoration.none,
                         color: Colors.redAccent,
                         fontWeight: FontWeight.w500)),
@@ -84,8 +85,7 @@ class LoginPageState extends State<LoginPage> {
 
   int status;
 
-  // ignore: non_constant_identifier_names
-  Future LoginApi() async {
+  Future loginApi() async {
     // Đỗ dữ liệu lấy từ api
     data = await getAPI.createLogin(username, password);
     status = PostLogin.status;
@@ -102,7 +102,7 @@ class LoginPageState extends State<LoginPage> {
 
   Future afterLogin() async {
     try {
-      await LoginApi();
+      await loginApi();
       print('Role ID: $roleId');
     } catch (e) {
       print('Error from LoginApi !!!');

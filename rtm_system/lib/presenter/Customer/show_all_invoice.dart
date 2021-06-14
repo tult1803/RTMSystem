@@ -1,28 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
-import 'package:rtm_system/model/getAPI_allInvoiceRequest.dart';
+import 'package:rtm_system/model/getAPI_invoice.dart';
 import 'package:rtm_system/model/model_invoice.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
-import 'package:rtm_system/view/customer/process/detail_invoice_request.dart';
+import 'package:rtm_system/view/detailInvoice.dart';
 import 'package:rtm_system/view/manager/formForDetail_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class showProcessInvoicePage extends StatefulWidget {
-  const showProcessInvoicePage({Key key, this.idProduct, this.isAll}) : super(key: key);
-  final int idProduct;
+class showAllInvoicePage extends StatefulWidget {
+  const showAllInvoicePage(
+      {Key key, this.idProduct, this.isAll, this.status, this.from, this.to})
+      : super(key: key);
+  final String idProduct;
   final bool isAll;
+  final DateTime from;
+  final DateTime to;
+
+  //status = 0 is load all
+  final int status;
+
   @override
-  _showProcessInvoicePageState createState() => _showProcessInvoicePageState();
+  _showAllInvoicePageState createState() => _showAllInvoicePageState();
 }
 
 DateTime fromDate;
 DateTime toDate;
 var fDate = new DateFormat('dd-MM-yyyy');
-
-class _showProcessInvoicePageState extends State<showProcessInvoicePage> {
+var date = new DateFormat('yyyy-MM-dd hh:mm:ss');
+class _showAllInvoicePageState extends State<showAllInvoicePage> {
   int _pageSize = 1;
   final PagingController _pagingController = PagingController(firstPageKey: 10);
 
@@ -33,11 +41,12 @@ class _showProcessInvoicePageState extends State<showProcessInvoicePage> {
   Future<void> _fetchPage(pageKey) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      GetInvoiceRequest getInvoiceRequest = GetInvoiceRequest();
-      invoice = await getInvoiceRequest.getInvoiceRequest(
+      GetInvoice getAPIAllInvoice = GetInvoice();
+      invoice = await getAPIAllInvoice.getInvoice(
         prefs.get("access_token"),
         prefs.get("accountId"),
-        widget.idProduct,
+        int.parse(widget.idProduct),
+        widget.status,
         pageKey,
         _pageSize,
         fromDate,
@@ -66,12 +75,16 @@ class _showProcessInvoicePageState extends State<showProcessInvoicePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    toDate = DateTime.now();
-    fromDate = DateTime.now().subtract(Duration(days: 30));
     _pagingController.addPageRequestListener((pageKey) {
       _fetchPage(pageKey);
     });
+    setState(() {
+      fromDate = widget.from;
+      toDate = widget.to;
+    });
 
+    // toDate = DateTime.now();
+    // fromDate = DateTime.now().subtract(Duration(days: 30));
     _pagingController.addStatusListener((status) {
       if (status == PagingStatus.subsequentPageError) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -95,7 +108,7 @@ class _showProcessInvoicePageState extends State<showProcessInvoicePage> {
 
     return Container(
       margin: EdgeInsets.only(top: 0, left: 5, right: 5),
-      height: widget.isAll? size.height : size.height * 0.5,
+      height: widget.isAll ? size.height : size.height * 0.5,
       width: size.width,
       child: new CustomScrollView(
         slivers: <Widget>[
@@ -112,6 +125,7 @@ class _showProcessInvoicePageState extends State<showProcessInvoicePage> {
                 itemBuilder: (context, item, index) {
                   return boxForInvoice(
                       context: context,
+                      status: item['status_id'],
                       date: "${item['create_time']}",
                       total: "${item['price']}",
                       id: item['id'],
@@ -119,14 +133,13 @@ class _showProcessInvoicePageState extends State<showProcessInvoicePage> {
                       product: item["product_name"],
                       widget: FormForDetailPage(
                         tittle: "Chi tiết hóa đơn",
-                        bodyPage: DetailInvoiceRequest(
+                        bodyPage: DetailInvoice(
                           map: item,
                           isCustomer: true,
                         ),
                       ),
                       isCustomer: true,
-                    isRequest: true,
-                  );
+                      isRequest: false);
                 }),
           ),
         ],
@@ -164,10 +177,10 @@ class _showProcessInvoicePageState extends State<showProcessInvoicePage> {
         builder: (context, child) {
           return Theme(
             data: Theme.of(context).copyWith(
-              //Dùng cho nút "X" của lịch
+                //Dùng cho nút "X" của lịch
                 appBarTheme: AppBarTheme(
                   iconTheme:
-                  theme.primaryIconTheme.copyWith(color: Colors.white),
+                      theme.primaryIconTheme.copyWith(color: Colors.white),
                 ),
                 //Dùng cho nút chọn ngày và background
                 colorScheme: ColorScheme.light(
@@ -177,7 +190,7 @@ class _showProcessInvoicePageState extends State<showProcessInvoicePage> {
           );
         });
     if (dateRange != null) {
-      print('Date '+ fromDate.toString());
+      print('Date ' + fromDate.toString());
       setState(() {
         fromDate = dateRange.start;
         toDate = dateRange.end;

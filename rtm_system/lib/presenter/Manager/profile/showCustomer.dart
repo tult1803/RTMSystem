@@ -5,7 +5,7 @@ import 'package:rtm_system/model/model_AllCustomer.dart';
 import 'package:rtm_system/presenter/infinite_scroll_pagination/common/character_search_input_sliver.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/component.dart';
-import 'package:rtm_system/ultils/getStatus.dart';
+import 'package:rtm_system/ultils/helpers.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/manager/formForDetail_page.dart';
 import 'package:rtm_system/view/manager/profile/detail_customer.dart';
@@ -33,13 +33,13 @@ class _showAllCustomerState extends State<showAllCustomer> {
       GetCustomer getAPIAllCustomer = GetCustomer();
       customer = await getAPIAllCustomer.createCustomer(
         prefs.get("access_token"),
-        0, // account_id sẽ truyền không để lấy hết customer vì customer đc quản lý chung
+        0,
+        // account_id sẽ truyền không để lấy hết customer vì customer đc quản lý chung
         pageKey,
         _pageSize,
         searchTerm: _searchTerm,
       );
       customerList = customer.customerList;
-      // print("${_pagingController}");
       final isLastPage = customerList.length < pageKey;
       if (isLastPage) {
         _pagingController.appendLastPage(customerList);
@@ -80,6 +80,7 @@ class _showAllCustomerState extends State<showAllCustomer> {
     });
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -90,7 +91,12 @@ class _showAllCustomerState extends State<showAllCustomer> {
       child: new CustomScrollView(
         slivers: <Widget>[
           CharacterSearchInputSliver(
-            onChanged: (searchTerm) => _updateSearchTerm(searchTerm),
+            onChanged: (searchTerm) {
+              _updateSearchTerm(searchTerm);
+              setState(() {
+                _pageSize = 1;
+              });
+            },
           ),
           PagedSliverList(
             pagingController: _pagingController,
@@ -110,27 +116,26 @@ class _showAllCustomerState extends State<showAllCustomer> {
                     ],
                   );
                 },
-                firstPageProgressIndicatorBuilder: (context) => firstPageProgressIndicatorBuilder(),
-                noItemsFoundIndicatorBuilder: (context) => noItemsFoundIndicatorBuilder(),
-                newPageProgressIndicatorBuilder: (context) => firstPageProgressIndicatorBuilder(),
+                firstPageProgressIndicatorBuilder: (context) =>
+                    firstPageProgressIndicatorBuilder(),
+                noItemsFoundIndicatorBuilder: (context) =>
+                    noItemsFoundIndicatorBuilder(),
+                newPageProgressIndicatorBuilder: (context) =>
+                    firstPageProgressIndicatorBuilder(),
                 itemBuilder: (context, item, index) {
-                  String vip;
-                  if(item['vip']){
-                    vip = "Vip";
-                  }else{
-                    vip = "Thường";
-                  }
-                  return card(
-                      context,
-                      item["fullname"],
-                      "Trạng thái",
-                      '${getStatus(status: item['status_id'])}',
-                      "${vip}",
-                      'Nợ: ${item['advance']}',
-                      getColorStatus(status: item['status_id']),
-                      FormForDetailPage(
+                  return boxForCustomer(
+                      context: context,
+                      status: item['status_id'],
+                      vip: item['vip'],
+                      phone: item['phone'],
+                      name: item["fullname"],
+                      advance: item['advance'],
+                      widget: FormForDetailPage(
                           tittle: "Chi tiết khách hàng",
-                          bodyPage: DetailCustomer(map: item,token: token,)));
+                          bodyPage: DetailCustomer(
+                            map: item,
+                            token: token,
+                          )));
                 }),
           ),
         ],
@@ -149,7 +154,7 @@ class _showAllCustomerState extends State<showAllCustomer> {
     super.dispose();
   }
 
-  Widget noItemsFoundIndicatorBuilder(){
+  Widget noItemsFoundIndicatorBuilder() {
     return Column(
       children: [
         firstPageErrorIndicatorBuilder(context,

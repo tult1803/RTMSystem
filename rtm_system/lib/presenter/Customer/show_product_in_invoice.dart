@@ -70,12 +70,11 @@ class _showAdvanceState extends State<showProductInInvoice> {
         future: _getProduct(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
-            print(isVip);
             return ListView.builder(
               itemCount: snapshot.data.length,
               itemBuilder: (context, index) {
                 return _cardItem(
-                    snapshot.data[index].id, snapshot.data[index].name, this.isVip);
+                    snapshot.data[index].id, snapshot.data[index].name);
               },
             );
           }
@@ -87,12 +86,13 @@ class _showAdvanceState extends State<showProductInInvoice> {
     );
   }
 
-  Widget _cardItem(int id, String product, bool isVip) {
+  Widget _cardItem(int id, String product) {
     return FlatButton(
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => InvoiceByProductPage(isVip: isVip, nameProduct: product,)),
+            MaterialPageRoute(builder: (context) => InvoiceByProductPage(
+              isVip: isVip, nameProduct: product, idProduct: id.toString(),)),
           );
         },
         child: Card(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/component.dart';
-import 'package:rtm_system/ultils/getStatus.dart';
+import 'package:rtm_system/ultils/helpers.dart';
 
 class DetailCustomer extends StatefulWidget {
   final Map<String, dynamic> map;
@@ -13,8 +13,8 @@ class DetailCustomer extends StatefulWidget {
 }
 
 class _DetailCustomerState extends State<DetailCustomer> {
-  int id, account_id, advance, statusId;
-  String cmnd, fullname, phone, birthday, address, gender, status;
+  int id, accountId, advance, statusId;
+  String cmnd, fullName, phone, birthday, address, gender, status;
   String vip;
 
   Future _getData(){
@@ -22,19 +22,13 @@ class _DetailCustomerState extends State<DetailCustomer> {
       id = this.widget.map["id"];
       statusId = this.widget.map["status_id"];
       status = '${getStatus(status: this.widget.map["status_id"])}';
-      account_id = this.widget.map["account_id"];
+      accountId = this.widget.map["account_id"];
       advance = this.widget.map["advance"];
       cmnd = this.widget.map["cmnd"];
-      fullname = this.widget.map["fullname"];
+      fullName = this.widget.map["fullname"];
       phone = this.widget.map["phone"];
       birthday = this.widget.map["birthday"];
       address = this.widget.map["address"];
-      if(this.widget.map["vip"]){
-        vip = "VIP";
-      }else vip = "Thường";
-      if(this.widget.map["gender"] == 0){
-        gender ="Nữ";
-      }else gender = "Nam";
     });
   }
 
@@ -53,16 +47,16 @@ class _DetailCustomerState extends State<DetailCustomer> {
             componentContainerDetailCustomer(
                 context,
               token: this.widget.token,
-              account_id: account_id,
-              fullname: fullname,
+              account_id: accountId,
+              fullname: fullName,
               address: address,
               advance: advance,
               birthday: birthday,
               cmnd: cmnd,
-              gender: gender,
+              gender: getGender(this.widget.map["gender"]),
               phone: phone,
               status: status,
-              vip: vip,
+              vip: getVip(this.widget.map["vip"]),
               statusId: statusId,
             ),
           )),

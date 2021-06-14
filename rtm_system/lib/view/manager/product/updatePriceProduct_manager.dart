@@ -2,11 +2,11 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
 import 'package:rtm_system/presenter/Manager/product/showProduct_manager.dart';
 import 'package:rtm_system/ultils/alertDialog.dart';
 import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/getData.dart';
+import 'package:rtm_system/ultils/helpers.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 
 class updatePriceProduct extends StatefulWidget {
@@ -18,11 +18,10 @@ class updatePriceProduct extends StatefulWidget {
 
 class _updatePriceProductState extends State<updatePriceProduct> {
   TextEditingController _controller = TextEditingController();
-  final oCcy = new NumberFormat("#,##0", "en_US");
   String _chosenValue;
   int indexValue, productId;
   String error;
-  double price;
+  double price, currentPrice;
   bool isClick = false;
 
   @override
@@ -113,8 +112,9 @@ class _updatePriceProductState extends State<updatePriceProduct> {
               _chosenValue = value;
               indexValue = itemNameUpdatePrice.indexOf(value);
               price = double.parse(itemPriceUpdatePrice[indexValue]);
+              currentPrice = double.parse(itemPriceUpdatePrice[indexValue]);
               productId = itemIdUpdatePrice[indexValue];
-              getDataTextField("${oCcy.format(price)}");
+              getDataTextField("${getFormatPrice("$price")}");
             });
           },
         ),
@@ -181,7 +181,7 @@ class _updatePriceProductState extends State<updatePriceProduct> {
               price = null;
             }else{
               price = double.parse(value);
-              getDataTextField("${oCcy.format(price)}");
+              getDataTextField("${getFormatPrice("$price")}");
             }
           });
         },
@@ -203,10 +203,13 @@ class _updatePriceProductState extends State<updatePriceProduct> {
               if (isClick) {
                if(price != null){
                  if(price > 1000){
-                   itemIdUpdatePrice.clear();
-                   itemPriceUpdatePrice.clear();
-                   itemNameUpdatePrice.clear();
-                   putAPIUpdatePrice(context, productId, price);
+                   // ignore: unnecessary_statements
+                   currentPrice == price ? showStatusAlertDialog(context, "Xin nhập giá mới", null, false):{
+                     itemIdUpdatePrice.clear(),
+                     itemPriceUpdatePrice.clear(),
+                     itemNameUpdatePrice.clear(),
+                     putAPIUpdatePrice(context,productId, price),
+                   };
                  }else {
                    showStatusAlertDialog(
                        context, "Giá phải lớn hơn 1000đ", null, false);
@@ -229,4 +232,5 @@ class _updatePriceProductState extends State<updatePriceProduct> {
           ),
         ));
   }
+
 }

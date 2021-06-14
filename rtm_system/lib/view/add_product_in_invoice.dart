@@ -1,18 +1,17 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:rtm_system/model/getAPI_product.dart';
 import 'package:rtm_system/model/model_product.dart';
 import 'package:rtm_system/ultils/alertDialog.dart';
 import 'package:rtm_system/ultils/component.dart';
-import 'package:rtm_system/ultils/src/color_ultils.dart';
-import 'package:rtm_system/ultils/src/regExp.dart';
 import 'package:rtm_system/view/create_invoice.dart';
-import 'package:rtm_system/view/customer/home_customer_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AddProductPage extends StatefulWidget {
   final String tittle;
-
   //true is Customer role
   final bool isCustomer;
 
@@ -24,16 +23,23 @@ class AddProductPage extends StatefulWidget {
 
 class _AddProductPageState extends State<AddProductPage> {
   String token;
+  String personSale = '', phoneSale = '';
+  List listQuantity = [];
   List<DataProduct> dataListProduct = [];
   bool checkClick = false;
+  var txtController = TextEditingController();
 
   //field to sales
-  String quantity = '', degree = '';
+  double quantity = 0, degree = 0;
   String status = 'Dang cho';
-  String personSale = '', phoneSale = '';
-  String errQuantity, errDegree;
-  String errNameProduct;
+  List listInforProduct;
 
+  String _mySelection;
+  bool checkProduct = true;
+
+  final f = new DateFormat('dd-MM-yyyy');
+  DateTime dateNow = DateTime.now();
+  DateTime dateSale = DateTime.now();
   Future _getProduct() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -64,9 +70,6 @@ class _AddProductPageState extends State<AddProductPage> {
     _getProduct();
   }
 
-  String _mySelection;
-  bool checkProduct = true;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -96,93 +99,36 @@ class _AddProductPageState extends State<AddProductPage> {
                       child: Column(children: [
                         // show product from API
                         _dropdownList(),
-                        _mySelection == null
-                            ? Container()
-                            : _txtItemProduct(
-                                context,
-                                getDataTextField(this.quantity),
-                                false,
-                                'Nhap so ky',
-                                'So ky',
-                                1,
-                                TextInputType.numberWithOptions(decimal: true),
-                                errQuantity),
-                        //sẽ làm add thêm dòng để nhập tiếp(giống form số ký) để
-                        // khách có thể xem số lần mình nhập, hoặc chỉnh sửa.
-                        // Chưa làm dk.
-                        SizedBox(
-                          height: 10,
-                        ),
-                        ElevatedButton(
-                          onPressed: () {
-                            //Code here
-                          },
-                          style: ElevatedButton.styleFrom(
-                            primary: welcome_color,
-                            minimumSize: Size(40, 40),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(45)
-                            )
-                          ),
-                          child: Icon(Icons.add, size: 30,),
-                        ),
-                        _checkNameProduct(),
-                        SizedBox(
-                          height: 10,
-                        ),
+                        _checkShowQuantity(),
                         Container(
-                          color: Colors.white,
-                          padding: EdgeInsets.only(left: 12, right: 12),
-                          height: 45,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Tống so ky:',
-                                style: TextStyle(
-                                  color: Color(0xFF0BB791),
-                                  fontSize: 14,
-                                ),
-                              ),
-                              // sẽ show số tổng các ký đã nhập
-                              Text(
-                                '10.0 KG',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ],
+                          width: MediaQuery.of(context).size.width,
+                          child: Wrap(
+                            spacing: 5,
+                            children: listQuantity
+                                .map((value) => containerWeight(value: value))
+                                .toList()
+                                .cast<Widget>(),
                           ),
                         ),
                         SizedBox(
                           height: 10,
                         ),
-                        Container(
-                          color: Colors.white,
-                          padding: EdgeInsets.only(left: 12, right: 12),
-                          height: 45,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Thành tiền:',
-                                style: TextStyle(
-                                  color: Color(0xFF0BB791),
-                                  fontSize: 14,
-                                ),
-                              ),
-                              // sẽ show số tổng các ký đã nhập
-                              Text(
-                                '1,000,000 VND',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
+                        _checkShowDegree(),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        btnDateSale(context),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        if (!widget.isCustomer)
+                        _showMoneyOrQuantity("Tống số ký", this.quantity),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        //Khi manager tạo hoá đơn thì mới có giá lúc bán để show
+                        if (!widget.isCustomer)
+                          _showMoneyOrQuantity("Thành tiền", this.quantity),
                       ]),
                     ),
                   ],
@@ -190,8 +136,7 @@ class _AddProductPageState extends State<AddProductPage> {
                 SizedBox(
                   height: 10,
                 ),
-                btnSave(context, 140, 40, Color(0xFF0BB791), "Tạo",
-                    "yeu cau ban hang", 1),
+                btnSave(context, 140, 40, Color(0xFF0BB791), "Tạo", 1),
                 SizedBox(
                   height: 10,
                 ),
@@ -201,121 +146,54 @@ class _AddProductPageState extends State<AddProductPage> {
     );
   }
 
-  TextEditingController getDataTextField(txt) {
-    if (txt == null) {
-      txt = "";
-    }
-    final TextEditingController _controller = TextEditingController();
-    _controller.value = _controller.value.copyWith(
-      text: txt,
-      selection: TextSelection.collapsed(offset: txt.length),
-    );
-    return _controller;
-  }
-
-  bool _validateData() {
-    bool check = false;
-    if (this.quantity == null || this.quantity == "") {
-      setState(() {
-        this.errQuantity = null;
-      });
-    } else {
-      if (!checkFormatNumber.hasMatch(this.quantity)) {
-        setState(() {
-          this.errQuantity = "Chỉ nhập số(ví dụ: 12,3 hoặc 12.3)";
-        });
-      } else {
-        setState(() {
-          this.errQuantity = null;
-        });
-      }
-    }
-    if (this.degree == null || this.degree == "") {
-      setState(() {
-        this.errDegree = null;
-      });
-    } else {
-      if (!checkFormatNumber.hasMatch(this.degree)) {
-        setState(() {
-          this.errDegree = "Chỉ nhập số(ví dụ: 12,3 hoặc 12.3)";
-        });
-      } else {
-        setState(() {
-          this.errDegree = null;
-        });
-      }
-    }
-    // co check date thi dung cai nay
-    // if (this.dateSale.isBefore(dateNow)) {
-    //   setState(() {
-    //     this.errDateSale = 'Thời gian trong quá khứ không hợp lệ.';
-    //   });
-    // } else {
-    //   setState(() {
-    //     this.errDateSale = null;
-    //   });
-    // }
-    if (this._mySelection == null || this._mySelection == '') {
-      setState(() {
-        this.errNameProduct = 'Sản phẩm không được để trống.';
-      });
-    } else {
-      setState(() {
-        this.errNameProduct = null;
-      });
-    }
-    if (this.errQuantity == null &&
-        this.errDegree == null &&
-        this.errNameProduct == null) {
-      check = true;
-    }
-
-    return check;
-  }
-
-  Widget _checkNameProduct() {
-    return checkProduct
-        ? Container()
-        : _txtItemProduct(context, getDataTextField(this.quantity), false,
-            'Nhap so do', 'So do', 1, TextInputType.text, errDegree);
-  }
-
-  Widget btnCancel(
-    BuildContext context,
-    double width,
-    double height,
-    Color color,
-    String tittleButtonAlertDialog,
-    String contentFeature,
-    bool action,
-    int indexOfBottomBar,
-  ) {
+  Widget _showMoneyOrQuantity(String title, value) {
     return Container(
-      height: height,
-      width: width,
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(5),
-      ),
-      child: FlatButton(
-          onPressed: () async {
-            if (action) {
-              showAlertDialog(
-                context,
-                "Bạn muốn hủy tạo ${contentFeature} ?",
-                HomeCustomerPage(
-                  index: indexOfBottomBar,
-                ),
-              );
-            }
-          },
-          child: Center(
-              child: Text(
-            tittleButtonAlertDialog,
+      color: Colors.white,
+      padding: EdgeInsets.only(left: 12, right: 12),
+      height: 45,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            '${title}:',
             style: TextStyle(
-                color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
-          ))),
+              color: Color(0xFF0BB791),
+              fontSize: 14,
+            ),
+          ),
+          // sẽ show số tổng các ký đã nhập
+          Text(
+            '${value} kg',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 16,
+            ),
+          ),
+        ],
+      ),
     );
+  }
+
+  Widget _checkShowDegree() {
+    return checkProduct || widget.isCustomer
+        ? Container()
+        : _txtItemProduct(
+            context: context,
+            isQuantity: false,
+            hintText: 'Nhập số độ',
+            maxLines: 1,
+          );
+  }
+
+  Widget _checkShowQuantity() {
+    return widget.isCustomer
+        ? Container()
+        : _txtItemProduct(
+            context: context,
+            hintText: 'Nhập số ký',
+            maxLines: 1,
+            isQuantity: true,
+          );
   }
 
   Widget btnSave(
@@ -324,7 +202,6 @@ class _AddProductPageState extends State<AddProductPage> {
     double height,
     Color color,
     String tittleButtonAlertDialog,
-    String contentFeature,
     int indexOfBottomBar,
   ) {
     var size = MediaQuery.of(context).size;
@@ -340,21 +217,19 @@ class _AddProductPageState extends State<AddProductPage> {
           onPressed: () {
             setState(() {
               if (checkClick) {
-                bool check = _validateData();
-                if (check) {
-                  //chuyen page
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => CreateInvoicePage(
-                              isNew: true,
-                              idProduct: _mySelection,
-                            )),
-                  );
-                }
+                //chuyen page
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => CreateInvoicePage(
+                            isNew: true,
+                            listProduct: listInforProduct,
+                          isCustomer: widget.isCustomer
+                          )),
+                );
               } else {
                 showStatusAlertDialog(
-                    context, "Thông tin chưa thay đổi !!!", null, false);
+                    context, "Thông tin chưa thay đổi!", null, false);
               }
             });
           },
@@ -374,26 +249,6 @@ class _AddProductPageState extends State<AddProductPage> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
-        Row(
-          children: <Widget>[
-            errNameProduct != null && errNameProduct != ''
-                ? Container(
-                    margin: EdgeInsets.only(left: 12, bottom: 5),
-                    child: Row(
-                      children: <Widget>[
-                        Text(
-                          errNameProduct,
-                          style: TextStyle(
-                            color: Colors.redAccent,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                : Container(),
-          ],
-        ),
         Row(
           children: [
             Expanded(
@@ -421,6 +276,12 @@ class _AddProductPageState extends State<AddProductPage> {
                       onChanged: (String newValue) {
                         setState(() {
                           _mySelection = newValue;
+                          this.listInforProduct = [
+                            this._mySelection,
+                            this.quantity,
+                            this.degree,
+                            this.dateSale
+                          ];
                         });
                         if (_mySelection == '3') {
                           setState(() {
@@ -450,61 +311,63 @@ class _AddProductPageState extends State<AddProductPage> {
             ),
           ],
         ),
-        errNameProduct != null && errNameProduct != ''
-            ? Container(
-                margin: EdgeInsets.only(left: 12, bottom: 5),
-                child: Row(
-                  children: <Widget>[
-                    Text(
-                      errNameProduct,
-                      style: TextStyle(
-                        color: Colors.redAccent,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            : Container(),
         // _underRow()
       ],
     );
   }
 
+  TextEditingController getDataTextField(txt) {
+    if (txt == null) {
+      txt = "";
+    }
+    final TextEditingController _controller = TextEditingController();
+    _controller.value = _controller.value.copyWith(
+      text: txt,
+      selection: TextSelection.collapsed(offset: txt.length),
+    );
+    return _controller;
+  }
+
   Widget _txtItemProduct(
-      context,
-      TextEditingController _controller,
-      bool obscureText,
-      String hintText,
-      String title,
-      int maxLines,
-      TextInputType txtType,
-      String error) {
+      {BuildContext context, String hintText, int maxLines, bool isQuantity}) {
     return Container(
       color: Colors.white,
-      // padding: EdgeInsets.fromLTRB(12, 12, 12, 12),
       child: TextField(
-        controller: _controller,
-        obscureText: obscureText,
-        onChanged: (value) {
-          if (title == "So ky") {
-            this.quantity = value.trim();
-          } else if (title == "So do") {
-            this.degree = value.trim();
+        controller: isQuantity ? txtController : null,
+        onSubmitted: (value) {
+          if (value.isNotEmpty) {
+            if (isQuantity) {
+              insertQuantity(value);
+              quantity = 0;
+              listQuantity.forEach((element) {
+                quantity += double.parse(element);
+              });
+              txtController.clear();
+            } else
+              this.degree = double.parse(value);
+            this.listInforProduct = [
+              this._mySelection,
+              this.quantity,
+              this.degree,
+              this.dateSale
+            ];
+            setState(() {
+              checkClick = true;
+            });
           }
-          setState(() {
-            checkClick = true;
-          });
         },
         maxLines: maxLines,
-        keyboardType: txtType,
+        keyboardType: TextInputType.number,
+        inputFormatters: [
+          FilteringTextInputFormatter.deny(RegExp(r'[-,/\\ [a-zA-Z]'))
+        ],
         style: TextStyle(fontSize: 15),
         cursorColor: Colors.red,
         decoration: InputDecoration(
           border: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(5.0)),
           ),
-          labelText: title,
+          labelText: hintText,
           labelStyle: TextStyle(color: Colors.black54),
           contentPadding: EdgeInsets.only(top: 14, left: 10),
           //Sau khi click vào "Nhập tiêu đề" thì màu viền sẽ đổi
@@ -514,20 +377,125 @@ class _AddProductPageState extends State<AddProductPage> {
             ),
           ),
           //Hiển thị Icon góc phải
-          suffixIcon: IconButton(
-              icon: Icon(Icons.highlight_remove_sharp),
-              color: Colors.black54,
-              onPressed: () {
-                debugPrint('222');
-                _controller.clear();
-              }),
-          //Hiển thị lỗi
-          focusedErrorBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.redAccent),
+          suffixIcon: Icon(
+            Icons.create_outlined,
+            color: Colors.black54,
           ),
-          //Nhận thông báo lỗi
-          errorText: errQuantity,
         ),
+      ),
+    );
+  }
+
+  //Hiển thị ra các container nhỏ khi nhập số cân
+  Widget containerWeight({String value}) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          removeAtQuantity(value);
+          quantity = 0;
+          listQuantity.forEach((element) {
+            quantity += double.parse(element);
+          });
+          this.listInforProduct = [
+            this._mySelection,
+            this.quantity,
+            this.degree,
+            this.dateSale
+          ];
+        });
+      },
+      child: Container(
+          margin: EdgeInsets.only(top: 10),
+          width: 60,
+          height: 30,
+          decoration: BoxDecoration(
+            color: Colors.black26,
+            borderRadius: BorderRadius.circular(5),
+          ),
+          child: Center(
+              child: Text(
+            "$value",
+            style: TextStyle(color: Colors.white),
+          ))),
+    );
+  }
+
+  //Xóa các phần tử trong list cân
+  void removeAtQuantity(String value) {
+    return listQuantity.removeAt(listQuantity.indexOf(value));
+  }
+
+  //Thêm các phần tử trong list cân
+  void insertQuantity(String value) {
+    return listQuantity.add(value);
+  }
+  //Show date để chọn ngày đến bán( customer đang dùng)
+  Widget btnDateSale(context) {
+    var size = MediaQuery.of(context).size;
+    return Container(
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.all(
+            Radius.circular(10.0),
+          )),
+      child: Column(
+        children: [
+          SizedBox(
+            height: 10,
+          ),
+          GestureDetector(
+            onTap: () {
+              DatePicker.showDatePicker(
+                context,
+                showTitleActions: true,
+                onConfirm: (date) {
+                  setState(() {
+                    dateSale = date;
+                    this.listInforProduct = [
+                      this._mySelection,
+                      this.quantity,
+                      this.degree,
+                      this.dateSale
+                    ];
+                  });
+                },
+                currentTime: dateNow,
+                maxTime: DateTime(DateTime.now().year + 100, 12, 31),
+                minTime: DateTime(DateTime.now().year, DateTime.now().month,
+                    DateTime.now().day),
+                locale: LocaleType.vi,
+              );
+            },
+            child: Row(
+              children: [
+                Container(
+                  width: 130,
+                  margin: EdgeInsets.only(left: 15),
+                  child: Text(
+                    "Ngày đến bán",
+                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
+                  ),
+                ),
+                Expanded(
+                  child: Text(
+                    '${f.format(dateSale)}',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
+                Container(
+                  width: 70,
+                  child: Icon(
+                    Icons.calendar_today,
+                    color: Colors.black45,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+        ],
       ),
     );
   }

@@ -6,12 +6,12 @@ import 'package:http/http.dart' as http;
 
 
 
-class GetInvoice{
+class GetInvoiceRequest{
   static int statusInvoice;
-  getInvoice(String token, int customer_id, int product_id, int status_id,int pageNum, int pageNo,DateTime from, DateTime to, {String searchTerm}) async {
+  getInvoiceRequest(String token, int account_id, int product_id, int pageNum, int pageNo,DateTime from, DateTime to, {String searchTerm}) async {
     var fDate = new DateFormat('yyyy-MM-dd hh:mm:ss');
     final response = await http.get(
-      Uri.http('${url_main}', '${url_invoice}', { "customer_id" : "$customer_id", "product_id": "$product_id","status_id": "$status_id","pageNum" : "${pageNum}" ,"pageNo" : "${pageNo}", "from" : "${fDate.format(from)}", "to" : "${fDate.format(to)}" }),
+      Uri.http('${url_main}', '${url_invoice_request}', { "account_id" : "$account_id", "product_id": "$product_id","pageNum" : "${pageNum}" ,"pageNo" : "${pageNo}", "from" : "${fDate.format(from)}", "to" : "${fDate.format(to)}" }),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Accept': 'application/json',
@@ -19,7 +19,7 @@ class GetInvoice{
       },
 
     );
-    print("Status getApi Invoice:${response.statusCode}");
+    print("Status getInvoiceRequest:${response.statusCode}");
     statusInvoice = response.statusCode;
     if (response.statusCode == 200) {
       return  Invoice.fromJson(jsonDecode(response.body));

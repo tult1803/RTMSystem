@@ -1,13 +1,12 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/getData.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/customer/home_customer_page.dart';
-import 'package:rtm_system/view/customer/invoice/detail_invoice.dart';
-
-import 'getStatus.dart';
+import 'helpers.dart';
 
 // AutoSizeText chữ tự động co giãn theo kích thước mặc định
 // Hiện tại dùng cho trang "Product" và "Bill"
@@ -184,38 +183,46 @@ Widget txtPersonInvoice(
 }
 
 //show infor với 2 dòng, đang dùng: invoice detail
-Widget txtItemDetail(context, String title, String content,
-    {Color colorContent}) {
+Widget txtItemDetail(context, String tittle, String content,
+    {Color colorContent, String subContent}) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Row(
-        children: [
-          Container(
-            child: AutoSizeText(
-              title,
-              style: TextStyle(
-                color: Colors.black45,
-                fontSize: 12,
-              ),
-              overflow: TextOverflow.clip,
-              textAlign: TextAlign.left,
-            ),
+      Container(
+        child: AutoSizeText(
+          tittle,
+          style: TextStyle(
+            color: Colors.black45,
+            fontSize: 12,
           ),
-        ],
+          overflow: TextOverflow.clip,
+          textAlign: TextAlign.left,
+        ),
       ),
       SizedBox(
         height: 10,
       ),
-      AutoSizeText(
-        content,
-        style: TextStyle(
-          fontSize: 16,
-          color: colorContent,
-          fontWeight: FontWeight.w500,
-        ),
-        textAlign: TextAlign.left,
-        overflow: TextOverflow.ellipsis,
+      Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            content,
+            style: GoogleFonts.roboto(
+              fontSize: 16,
+              color: colorContent,
+              fontWeight: FontWeight.w500,
+            ),
+            textAlign: TextAlign.left,
+            overflow: TextOverflow.clip,
+          ),
+          subContent == null
+              ? Container()
+              : Padding(
+                  padding: const EdgeInsets.only(top: 5.0),
+                  child: Text("$subContent"),
+                ),
+        ],
       ),
       SizedBox(
         height: 10,
@@ -442,9 +449,17 @@ Widget widgetContentAdvance(context, String status, String header1, header2) {
   ));
 }
 
-//nội dung của bill, đang dùng: create invoice
-Widget widgetCreateInvoice(context, bool isNew, String product) {
+//nội dung của bill, đang dùng: create invoice/ request
+Widget widgetCreateInvoice(
+    context,
+    bool isNew,
+    List product,
+    String nameProduct,
+    String name,
+    String phone,
+    bool isCustomer) {
   var size = MediaQuery.of(context).size;
+  final date = new DateFormat('yyyy-MM-dd HH:mm:ss');
   return SingleChildScrollView(
       child: Container(
     height: size.height,
@@ -466,35 +481,22 @@ Widget widgetCreateInvoice(context, bool isNew, String product) {
             margin: EdgeInsets.fromLTRB(24, 12, 24, 12),
             child: Column(
               children: [
-                //có api chuyền thông tin cần show vô
-                txtPersonInvoice(
-                    context, 'Người mua', 'Nguyen Van A', '0123456789'),
+                txtPersonInvoice(context, 'Người tạo', '${name}', '${phone}'),
                 SizedBox(
                   height: 10,
                 ),
-                txtPersonInvoice(
-                    context, 'Người bán', 'Nguyen Van A', '087654322'),
+                txtItemDetail(context, 'Sản phẩm', '${nameProduct}'),
                 SizedBox(
                   height: 10,
                 ),
-                txtItemDetail(context, 'Sản phẩm', 'Nguyen Van A'),
-                SizedBox(
-                  height: 10,
-                ),
-                txtItemDetail(context, 'Số ký', 'Nguyen Van A'),
-                SizedBox(
-                  height: 10,
-                ),
-                if (product == '3')
-                  txtItemDetail(context, 'Số độ', 'Nguyen Van A'),
-                SizedBox(
-                  height: 10,
-                ),
-                txtItemDetail(context, 'Ngày bán', 'Nguyen Van A'),
-                SizedBox(
-                  height: 10,
-                ),
-                txtItemDetail(context, 'Thành tiền', 'Nguyen Van A'),
+                txtItemDetail(context, 'Ngày đến bán', '${product[3]}'),
+                _showComponetCreateInvoice(context,'Số ký',product[1],
+                    isCustomer),
+                if (product[0] == '3')
+                _showComponetCreateInvoice(context,'Số độ',product[2],
+                    isCustomer),
+                _showComponetCreateInvoice(context,'Thành tiền','100',
+                    isCustomer),
               ],
             ),
           ),
@@ -525,8 +527,9 @@ Widget widgetCreateInvoice(context, bool isNew, String product) {
             child: RaisedButton(
               color: Color(0xffEEEEEE),
               onPressed: () {
-                //call api to create new invoice
-                // put_API_GetMoney(context, 0);
+                print('ZOOO');
+                doCreateRequestInvoiceOrInvoice( context, int.parse(product[0]),
+                    date.format(product[3]) , 0,0,0,0, isCustomer );
               },
               child: Text('Xác nhận'),
               shape: RoundedRectangleBorder(
@@ -540,7 +543,14 @@ Widget widgetCreateInvoice(context, bool isNew, String product) {
     ),
   ));
 }
-
+Widget _showComponetCreateInvoice(context, title, value, isCustomer) {
+  print(isCustomer);
+  if (!isCustomer) {
+    return txtItemDetail(context, '${title}́', '${value}');
+  } else {
+    return Container();
+  }
+}
 // ignore: missing_return
 Widget _showBtnInAdvanceDetail(context, String status) {
   if (status == 'active') {
@@ -562,7 +572,18 @@ Widget _showBtnInAdvanceDetail(context, String status) {
       ),
     );
   } else {
-    return Container();
+    return Column(
+      children: [
+        SizedBox(
+          height: 10,
+        ),
+        txtItemDetail(context, 'Ngày tra', '20-05-2021 now()'),
+        SizedBox(
+          height: 10,
+        ),
+        txtItemDetail(context, 'Tiền nợ còn lại', '1,000,000 VND'),
+      ],
+    );
   }
 }
 
@@ -690,123 +711,29 @@ Widget firstPageErrorIndicatorBuilder(BuildContext context, {String tittle}) {
   );
 }
 
-//Dùng cho trang notice để hiện thỉ các notice
-Widget btnProcess(BuildContext context, int id, String tittle, String content,
-    String date, bool isInvoice) {
-  //Format lại ngày
-  DateTime _date = DateTime.parse(date);
-  final fBirthday = new DateFormat('dd/MM/yyyy hh:mm');
-
-  return Container(
-      margin: EdgeInsets.all(5),
-      child: Material(
-        color: Colors.white,
-        child: TextButton(
-          style: TextButton.styleFrom(
-            primary: Colors.black, // foreground
-            textStyle: TextStyle(
-              fontSize: 16,
-            ),
-          ),
-          onPressed: () {
-            if (isInvoice) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => DetailInvoicePage()),
-              );
-            } else {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => DetailInvoicePage()),
-              );
-            }
-          },
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Container(
-                    child: AutoSizeText(
-                      "$tittle",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                      ),
-                      overflow: TextOverflow.clip,
-                      textAlign: TextAlign.left,
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              AutoSizeText(
-                "$content",
-                style: TextStyle(
-                  fontSize: 14,
-                ),
-                textAlign: TextAlign.left,
-                overflow: TextOverflow.ellipsis,
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              AutoSizeText(
-                "${fBirthday.format(_date)}",
-                style: TextStyle(
-                  fontSize: 12,
-                  color: welcome_color,
-                ),
-                textAlign: TextAlign.left,
-              ),
-              SizedBox(
-                height: 9,
-              ),
-              SizedBox(
-                height: 0.5,
-                child: Container(
-                  color: Colors.black54,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ));
-}
-
 //Dùng cho trang chi tiết hóa đơn
 Widget componentContainerDetailInvoice(
   BuildContext context, {
-  String status,
   int statusId,
   int id,
-  int product_id,
+  int productId,
+  int customerId,
+  int managerId,
   double quantity,
-  double total,
   double degree,
-  String creater_name,
-  String customer_name,
-  String product_name,
+  String managerName,
+  managerPhone,
+  String customerName,
+  customerPhone,
+  String productName,
   String price,
-  String create_time,
+  String createTime,
   String description,
-  String customer_confirm_date,
-  String manager_confirm_date,
+  String customerConfirmDate,
+  String managerConfirmDate,
+  String activeDate,
+      bool isCustomer
 }) {
-  final oCcy = new NumberFormat("#,##0", "en_US");
-  final fBirthday = new DateFormat('dd/MM/yyyy hh:mm');
-  if (customer_confirm_date != null) {
-    customer_confirm_date =
-        "${fBirthday.format(DateTime.parse(customer_confirm_date))}";
-  } else
-    customer_confirm_date = "-----";
-
-  if (manager_confirm_date != null) {
-    manager_confirm_date =
-        "${fBirthday.format(DateTime.parse(manager_confirm_date))}";
-  } else
-    manager_confirm_date = "-----";
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Column(
@@ -815,20 +742,22 @@ Widget componentContainerDetailInvoice(
         SizedBox(
           height: 10,
         ),
-        txtItemDetail(context, "Ngày tạo hóa đơn",
-            "${fBirthday.format(DateTime.parse(create_time))}"),
+        txtItemDetail(
+            context, "Ngày tạo hóa đơn", "${getDateTime(createTime)}"),
         SizedBox(
           height: 10,
         ),
-        txtItemDetail(context, "Người tạo hóa đơn", "$creater_name"),
+        txtItemDetail(context, "Người tạo hóa đơn", "$managerName",
+            subContent: managerPhone),
         SizedBox(
           height: 10,
         ),
-        txtItemDetail(context, "Tên khách hàng", "$customer_name"),
+        txtItemDetail(context, "Tên khách hàng", "$customerName",
+            subContent: customerPhone),
         SizedBox(
           height: 10,
         ),
-        txtItemDetail(context, "Tên sản phẩm", "$product_name"),
+        txtItemDetail(context, "Tên sản phẩm", "$productName"),
         SizedBox(
           height: 10,
         ),
@@ -836,8 +765,8 @@ Widget componentContainerDetailInvoice(
         SizedBox(
           height: 10,
         ),
-        txtItemDetail(context, "Giá sản phẩm (/1kg)",
-            "${oCcy.format(double.parse("${price}"))}đ"),
+        txtItemDetail(
+            context, "Giá sản phẩm (/1kg)", "${getFormatPrice(price)}đ"),
         SizedBox(
           height: 10,
         ),
@@ -850,40 +779,109 @@ Widget componentContainerDetailInvoice(
           height: 10,
         ),
         txtItemDetail(context, "Tổng hóa đơn",
-            "${oCcy.format(double.parse("${total}"))}đ"),
+            "${getFormatPrice("${getPriceTotal(double.parse(price), degree, quantity)}")} đ"),
         SizedBox(
           height: 10,
         ),
         txtItemDetail(context, "Ngày xác nhận của khách hàng",
-            "${customer_confirm_date}"),
+            "${getDateTime(customerConfirmDate)}"),
+        SizedBox(
+          height: 10,
+        ),
+        txtItemDetail(context, "Ngày xác nhận của quản lý",
+            "${getDateTime(managerConfirmDate)}"),
+        SizedBox(
+          height: 10,
+        ),
         SizedBox(
           height: 10,
         ),
         txtItemDetail(
-            context, "Ngày xác nhận của quản lý", "$manager_confirm_date"),
-        SizedBox(
-          height: 10,
-        ),
-        txtItemDetail(context, "Trạng thái", "$status",
+            context, "Ngày hoá đơn có hiệu lực", "${getDateTime(activeDate)}"),
+        txtItemDetail(context, "Trạng thái", "${getStatus(status: statusId)}",
             colorContent: getColorStatus(status: statusId)),
         SizedBox(
           height: 5,
         ),
+        // chỗ này show btn accpet or reject của manager
       ],
     ),
   );
 }
-
+Widget _showBtnProcessInvoice(context, int statusId,int id, bool isCustomer){
+  //show button để xử lý hoàn thành đơn
+  //status = 5 là cho customer gọi api để confirm ,
+  // status = 1 là manager confirm
+  // status = 4 là accept or reject cua customer
+  if(statusId == 5 || statusId == 1){
+    return SizedBox(
+      width: 150,
+      child: RaisedButton(
+        color: Color(0xFF0BB791),
+        onPressed: () {
+          doConfirmOrAcceptOrRejectInvoice( context, id, 1,isCustomer );
+        },
+        child: Text('Xác nhận', style: TextStyle(
+            color: Colors.white,
+            fontSize: 16
+        ),),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        elevation: 10,
+      ),
+    );
+  }else if(statusId == 4){
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        SizedBox(
+          width: 150,
+          child: RaisedButton(
+            color: Colors.redAccent,
+            onPressed: () {
+              doConfirmOrAcceptOrRejectInvoice( context, id, 3,isCustomer );
+            },
+            child: Text('Từ chối', style: TextStyle(
+                color: Colors.white,
+                fontSize: 16
+            ),),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            elevation: 10,
+          ),
+        ),
+        SizedBox(
+          width: 150,
+          child: RaisedButton(
+            color: Color(0xFF0BB791),
+            onPressed: () {
+              doConfirmOrAcceptOrRejectInvoice( context, id, 2,isCustomer );
+            },
+            child: Text('Chấp nhận', style: TextStyle(
+                color: Colors.white,
+                fontSize: 16
+            ),),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            elevation: 10,
+          ),
+        )
+      ],
+    );
+  }else{
+    return Container();
+  }
+}
 //Dùng cho chi tiết sản phẩm
 Widget componentContainerDetailProduct(BuildContext context, Map item) {
-  final oCcy = new NumberFormat("#,##0", "en_US");
-  DateTime _date = DateTime.parse(item["updateDateTime"]);
-  final fBirthday = new DateFormat('dd/MM/yyyy hh:mm');
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Column(
       children: [
-        txtItemDetail(context, "Mã sản phẩm", "${item["id"]}"),
+        txtItemDetail(context, "Mã sản phẩm", "#${item["id"]}"),
         SizedBox(
           height: 10,
         ),
@@ -900,11 +898,12 @@ Widget componentContainerDetailProduct(BuildContext context, Map item) {
           height: 10,
         ),
         txtItemDetail(context, "Giá (1kg)",
-            "${oCcy.format(double.parse("${item["update_price"]}"))}đ"),
+            "${getFormatPrice("${item["update_price"]}")} đ"),
         SizedBox(
           height: 10,
         ),
-        txtItemDetail(context, "Ngày cập nhật", "${fBirthday.format(_date)}"),
+        txtItemDetail(
+            context, "Ngày cập nhật", "${getDateTime(item["updateDateTime"])}"),
         SizedBox(
           height: 5,
         ),
@@ -928,14 +927,11 @@ Widget componentContainerDetailCustomer(BuildContext context,
     String birthday,
     String gender,
     String vip}) {
-  // final oCcy = new NumberFormat("#,##0", "en_US");
-  DateTime _date = DateTime.parse(birthday);
-  final fBirthday = new DateFormat('dd/MM/yyyy');
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Column(
       children: [
-        txtItemDetail(context, "ID khách hàng", "$account_id"),
+        txtItemDetail(context, "ID khách hàng", "#$account_id"),
         SizedBox(
           height: 10,
         ),
@@ -955,7 +951,8 @@ Widget componentContainerDetailCustomer(BuildContext context,
         SizedBox(
           height: 10,
         ),
-        txtItemDetail(context, "Ngày sinh", "${fBirthday.format(_date)}"),
+        txtItemDetail(context, "Ngày sinh",
+            "${getDateTime(birthday, dateFormat: 'dd/MM/yyyy')}"),
         SizedBox(
           height: 10,
         ),
@@ -980,10 +977,167 @@ Widget componentContainerDetailCustomer(BuildContext context,
             token: token,
             context: context,
             status: status,
-            account_id: account_id),
+            accountId: account_id),
         SizedBox(
           height: 5,
         ),
+      ],
+    ),
+  );
+}
+
+//Dùng cho các container nhỏ vd như trong trang quản lý khách hàng
+//Và đang dùng cho component "Mã" và "Trạng thái hóa đơn" trong quản lý hóa đơn
+// là những component container nhỏ trong từng khách hàng
+Widget miniContainer({
+  String tittle,
+  double height,
+  double width,
+  Color colorContainer,
+  Color colorText,
+  double marginLeft,
+  double marginRight,
+  double marginTop,
+  double marginBottom,
+  double borderRadius,
+  double paddingLeftOfText,
+  double paddingRightOfText,
+  double paddingTopOfText,
+  double paddingBottomOfText,
+  double fontSize,
+  FontWeight fontWeightText,
+}) {
+  return Container(
+    margin: EdgeInsets.only(
+      right: marginRight == null ? 0 : marginRight,
+      top: marginTop == null ? 0 : marginTop,
+      bottom: marginBottom == null ? 0 : marginBottom,
+      left: marginLeft == null ? 0 : marginLeft,
+    ),
+    height: height,
+    width: width,
+    decoration: BoxDecoration(
+      borderRadius:
+          BorderRadius.circular(borderRadius == null ? 0 : borderRadius),
+      color: colorContainer,
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black54,
+          blurRadius: 3,
+          offset: Offset(1, 1), // Shadow position
+        ),
+      ],
+    ),
+    child: Center(
+      child: Padding(
+        padding: EdgeInsets.only(
+            left: paddingLeftOfText == null ? 0 : paddingLeftOfText,
+            right: paddingRightOfText == null ? 0 : paddingRightOfText,
+            bottom: paddingBottomOfText == null ? 0 : paddingBottomOfText,
+            top: paddingTopOfText == null ? 0 : paddingTopOfText),
+        child: Text(
+          tittle,
+          style: GoogleFonts.roboto(
+              color: colorText,
+              fontWeight: fontWeightText,
+              fontSize: fontSize == null ? null : fontSize),
+        ),
+      ),
+    ),
+  );
+}
+
+//Dùng cho container chứ Text trong quản lý hóa đơn
+Widget containerTextInvoice({
+  String tittle,
+  FontWeight fontWeight,
+  Alignment alignment,
+  double marginLeft,
+  double marginRight,
+  double marginTop,
+  double marginBottom,
+  double borderRadius,
+  double paddingLeftOfText,
+  double paddingRightOfText,
+  double paddingTopOfText,
+  double paddingBottomOfText,
+  double height,
+  double width,
+}) {
+  return Container(
+    height: height,
+    width: width,
+    margin: EdgeInsets.only(
+      right: marginRight == null ? 0 : marginRight,
+      top: marginTop == null ? 0 : marginTop,
+      bottom: marginBottom == null ? 0 : marginBottom,
+      left: marginLeft == null ? 0 : marginLeft,
+    ),
+    alignment: alignment,
+    child: Padding(
+      padding: EdgeInsets.only(
+          left: paddingLeftOfText == null ? 0 : paddingLeftOfText,
+          right: paddingRightOfText == null ? 0 : paddingRightOfText,
+          bottom: paddingBottomOfText == null ? 0 : paddingBottomOfText,
+          top: paddingTopOfText == null ? 0 : paddingTopOfText),
+      child: Text(
+        tittle,
+        style: GoogleFonts.roboto(fontWeight: fontWeight),
+      ),
+    ),
+  );
+}
+
+//Dùng cho trang chi tiết yêu cầu bán hàng
+Widget componentContainerInvoiceRequest(
+    BuildContext context, {
+      int statusId,
+      int id,
+      int productId,
+      int customerId,
+      String customerName,
+      String customerPhone,
+      String productName,
+      String price,
+      String createDate,
+      String sellDate,
+      bool isCustomer
+    }) {
+  return Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: Column(
+      children: [
+        txtItemDetail(context, "ID hóa đơn", "$id"),
+        SizedBox(
+          height: 10,
+        ),
+        txtItemDetail(
+            context, "Ngày tạo hóa đơn", "${getDateTime(createDate)}"),
+        SizedBox(
+          height: 10,
+        ),
+        txtItemDetail(context, "Người tạo hóa đơn", "$customerName",
+            subContent: customerPhone),
+        SizedBox(
+          height: 10,
+        ),
+        txtItemDetail(context, "Tên sản phẩm", "$productName"),
+        SizedBox(
+          height: 10,
+        ),
+        txtItemDetail(
+            context, "Giá sản phẩm (/1kg)", "${getFormatPrice(price)}đ"),
+         SizedBox(
+          height: 10,
+        ),
+        txtItemDetail(context, "Ngày muốn đến bán",
+            "${getDateTime(sellDate)}"),
+        txtItemDetail(context, "Trạng thái", "${getStatus(status: statusId)}",
+            colorContent: getColorStatus(status: statusId)),
+        SizedBox(
+          height: 5,
+        ),
+        _showBtnProcessInvoice(context, statusId, id, isCustomer),
       ],
     ),
   );

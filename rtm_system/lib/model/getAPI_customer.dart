@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:intl/intl.dart';
 import 'package:rtm_system/ultils/src/url_api.dart';
 import 'package:http/http.dart' as http;
 
@@ -10,7 +9,6 @@ import 'model_AllCustomer.dart';
 class GetCustomer{
   static int statusInvoice;
   createCustomer(String token, int accountId, int pageNum, int pageNo, {String searchTerm}) async {
-    var fDate = new DateFormat('yyyy-MM-dd hh:mm:ss');
     final response = await http.get(
       Uri.http('${url_main}', '${url_customer}/${accountId}', {"pageNum" : "${pageNum}" ,"pageNo" : "${pageNo}", "name": searchTerm }),
       headers: <String, String>{
@@ -18,7 +16,6 @@ class GetCustomer{
         'Accept': 'application/json',
         'Authorization': 'Bearer $token',
       },
-
     );
     print("Status getApi Invoice:${response.statusCode}");
     statusInvoice = response.statusCode;
@@ -29,6 +26,5 @@ class GetCustomer{
       throw Exception('Failed to load data');
     }
   }
-  // "name" : "$searchTerm"
-}
 
+}

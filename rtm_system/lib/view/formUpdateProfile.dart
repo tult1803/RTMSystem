@@ -4,6 +4,7 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:rtm_system/ultils/alertDialog.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
+import 'package:rtm_system/ultils/helpers.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/ultils/src/regExp.dart';
 import 'manager/profile/confirmCreateCustomer.dart';
@@ -43,7 +44,6 @@ class formUpdateProfile extends StatefulWidget {
 enum GenderCharacter { women, men }
 
 class _formUpdateProfileState extends State<formUpdateProfile> {
-  final f = new DateFormat('dd/MM/yyyy');
   String errFulname, errPhone, errCMND, errAddress, errUser, errPass, errBirth;
   GenderCharacter character;
   bool checkClick = false;
@@ -181,7 +181,7 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
                 ),
                 Expanded(
                   child: Text(
-                    '${f.format(this.widget.birthday)}',
+                    '${getDateTime("${this.widget.birthday}", dateFormat: "dd/MM/yyyy")}',
                     style: TextStyle(fontSize: 16),
                   ),
                 ),
