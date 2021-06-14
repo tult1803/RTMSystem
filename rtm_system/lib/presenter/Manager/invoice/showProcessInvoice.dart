@@ -113,9 +113,21 @@ class _showProcessInvoiceManagerState extends State<showProcessInvoiceManager> {
                         PagedSliverList(
                           pagingController: _pagingController,
                           builderDelegate: PagedChildBuilderDelegate(
-                              firstPageErrorIndicatorBuilder: (context) =>
-                                  firstPageErrorIndicatorBuilder(context,
-                                      tittle: "Không có dữ liệu"),
+                              firstPageErrorIndicatorBuilder: (context) {
+                                return Column(
+                                  children: [
+                                    firstPageErrorIndicatorBuilder(context,
+                                        tittle: "Không có dữ liệu"),
+                                    GestureDetector(
+                                      onTap: () => _pagingController.refresh(),
+                                      child: Text(
+                                        "Nhấn để tải lại",
+                                        style: TextStyle(color: welcome_color, fontSize: 18),
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
                               firstPageProgressIndicatorBuilder: (context) =>
                                   firstPageProgressIndicatorBuilder(),
                               newPageProgressIndicatorBuilder: (context) =>
