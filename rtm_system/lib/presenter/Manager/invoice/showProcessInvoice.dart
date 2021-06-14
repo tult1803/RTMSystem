@@ -4,10 +4,8 @@ import 'package:rtm_system/model/getAPI_invoice.dart';
 import 'package:rtm_system/model/model_invoice.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/component.dart';
-import 'package:rtm_system/ultils/helpers.dart';
-import 'package:rtm_system/ultils/src/color_ultils.dart';
+import 'package:rtm_system/view/detailInvoice.dart';
 import 'package:rtm_system/view/manager/formForDetail_page.dart';
-import 'package:rtm_system/view/manager/invoice/detail_invoice.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: camel_case_types
@@ -30,7 +28,7 @@ class _showProcessInvoiceManagerState extends State<showProcessInvoiceManager> {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       GetInvoice getAPIAllInvoice = GetInvoice();
-      invoice = await getAPIAllInvoice.createInvoice(
+      invoice = await getAPIAllInvoice.getInvoice(
         prefs.get("access_token"),
         0, //Customer Id: truyền 0 là get All cho manager
         0, //Product Id: truyền 0 là get All cho manager

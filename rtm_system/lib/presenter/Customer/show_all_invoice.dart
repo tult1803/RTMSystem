@@ -46,7 +46,6 @@ class _showAllInvoicePageState extends State<showAllInvoicePage> {
       invoice = await getAPIAllInvoice.getInvoice(
         prefs.get("access_token"),
         prefs.get("accountId"),
-        -1, //Status Id: truyền -1 là get all invoice trừ invoice đang ở trạng thái process
         int.parse(widget.idProduct),
         widget.status,
         pageKey,
@@ -179,10 +178,10 @@ class _showAllInvoicePageState extends State<showAllInvoicePage> {
         builder: (context, child) {
           return Theme(
             data: Theme.of(context).copyWith(
-                //Dùng cho nút "X" của lịch
+              //Dùng cho nút "X" của lịch
                 appBarTheme: AppBarTheme(
                   iconTheme:
-                      theme.primaryIconTheme.copyWith(color: Colors.white),
+                  theme.primaryIconTheme.copyWith(color: Colors.white),
                 ),
                 //Dùng cho nút chọn ngày và background
                 colorScheme: ColorScheme.light(

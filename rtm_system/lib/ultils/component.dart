@@ -368,14 +368,8 @@ Widget widgetContentAdvance(context, String status, String header1, header2) {
 }
 
 //nội dung của bill, đang dùng: create invoice/ request
-Widget widgetCreateInvoice(
-    context,
-    bool isNew,
-    List product,
-    String nameProduct,
-    String name,
-    String phone,
-    bool isCustomer) {
+Widget widgetCreateInvoice(context, bool isNew, List product,
+    String nameProduct, String name, String phone, bool isCustomer) {
   var size = MediaQuery.of(context).size;
   final date = new DateFormat('yyyy-MM-dd HH:mm:ss');
   return SingleChildScrollView(
@@ -408,13 +402,13 @@ Widget widgetCreateInvoice(
                   height: 10,
                 ),
                 txtItemDetail(context, 'Ngày đến bán', '${product[3]}'),
-                _showComponetCreateInvoice(context,'Số ký',product[1],
-                    isCustomer),
+                _showComponetCreateInvoice(
+                    context, 'Số ký', product[1], isCustomer),
                 if (product[0] == '3')
-                _showComponetCreateInvoice(context,'Số độ',product[2],
-                    isCustomer),
-                _showComponetCreateInvoice(context,'Thành tiền','100',
-                    isCustomer),
+                  _showComponetCreateInvoice(
+                      context, 'Số độ', product[2], isCustomer),
+                _showComponetCreateInvoice(
+                    context, 'Thành tiền', '100', isCustomer),
               ],
             ),
           ),
@@ -446,8 +440,8 @@ Widget widgetCreateInvoice(
               color: Color(0xffEEEEEE),
               onPressed: () {
                 print('ZOOO');
-                doCreateRequestInvoiceOrInvoice( context, int.parse(product[0]),
-                    date.format(product[3]) , 0,0,0,0, isCustomer );
+                doCreateRequestInvoiceOrInvoice(context, int.parse(product[0]),
+                    date.format(product[3]), 0, 0, 0, 0, isCustomer);
               },
               child: Text('Xác nhận'),
               shape: RoundedRectangleBorder(
@@ -461,6 +455,7 @@ Widget widgetCreateInvoice(
     ),
   ));
 }
+
 Widget _showComponetCreateInvoice(context, title, value, isCustomer) {
   print(isCustomer);
   if (!isCustomer) {
@@ -469,6 +464,7 @@ Widget _showComponetCreateInvoice(context, title, value, isCustomer) {
     return Container();
   }
 }
+
 // ignore: missing_return
 Widget _showBtnInAdvanceDetail(context, String status) {
   if (status == 'active') {
@@ -630,28 +626,26 @@ Widget firstPageErrorIndicatorBuilder(BuildContext context, {String tittle}) {
 }
 
 //Dùng cho trang chi tiết hóa đơn
-Widget componentContainerDetailInvoice(
-  BuildContext context, {
-  int statusId,
-  int id,
-  int productId,
-  int customerId,
-  int managerId,
-  double quantity,
-  double degree,
-  String managerName,
-  managerPhone,
-  String customerName,
-  customerPhone,
-  String productName,
-  String price,
-  String createTime,
-  String description,
-  String customerConfirmDate,
-  String managerConfirmDate,
-  String activeDate,
-      bool isCustomer
-}) {
+Widget componentContainerDetailInvoice(BuildContext context,
+    {int statusId,
+    int id,
+    int productId,
+    int customerId,
+    int managerId,
+    double quantity,
+    double degree,
+    String managerName,
+    managerPhone,
+    String customerName,
+    customerPhone,
+    String productName,
+    String price,
+    String createTime,
+    String description,
+    String customerConfirmDate,
+    String managerConfirmDate,
+    String activeDate,
+    bool isCustomer}) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Column(
@@ -722,34 +716,36 @@ Widget componentContainerDetailInvoice(
           height: 5,
         ),
         // chỗ này show btn accpet or reject của manager
+        _showBtnProcessInvoice(context, statusId, id, isCustomer),
       ],
     ),
   );
 }
-Widget _showBtnProcessInvoice(context, int statusId,int id, bool isCustomer){
+
+Widget _showBtnProcessInvoice(context, int statusId, int id, bool isCustomer) {
   //show button để xử lý hoàn thành đơn
   //status = 5 là cho customer gọi api để confirm ,
   // status = 1 là manager confirm
   // status = 4 là accept or reject cua customer
-  if(statusId == 5 || statusId == 1){
+  if (statusId == 5 || statusId == 1) {
     return SizedBox(
       width: 150,
       child: RaisedButton(
         color: Color(0xFF0BB791),
         onPressed: () {
-          doConfirmOrAcceptOrRejectInvoice( context, id, 1,isCustomer );
+          doConfirmOrAcceptOrRejectInvoice(context, id, 1, isCustomer);
         },
-        child: Text('Xác nhận', style: TextStyle(
-            color: Colors.white,
-            fontSize: 16
-        ),),
+        child: Text(
+          'Xác nhận',
+          style: TextStyle(color: Colors.white, fontSize: 16),
+        ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
         ),
         elevation: 10,
       ),
     );
-  }else if(statusId == 4){
+  } else if (statusId == 4) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -758,12 +754,12 @@ Widget _showBtnProcessInvoice(context, int statusId,int id, bool isCustomer){
           child: RaisedButton(
             color: Colors.redAccent,
             onPressed: () {
-              doConfirmOrAcceptOrRejectInvoice( context, id, 3,isCustomer );
+              doConfirmOrAcceptOrRejectInvoice(context, id, 3, isCustomer);
             },
-            child: Text('Từ chối', style: TextStyle(
-                color: Colors.white,
-                fontSize: 16
-            ),),
+            child: Text(
+              'Từ chối',
+              style: TextStyle(color: Colors.white, fontSize: 16),
+            ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
             ),
@@ -775,12 +771,12 @@ Widget _showBtnProcessInvoice(context, int statusId,int id, bool isCustomer){
           child: RaisedButton(
             color: Color(0xFF0BB791),
             onPressed: () {
-              doConfirmOrAcceptOrRejectInvoice( context, id, 2,isCustomer );
+              doConfirmOrAcceptOrRejectInvoice(context, id, 2, isCustomer);
             },
-            child: Text('Chấp nhận', style: TextStyle(
-                color: Colors.white,
-                fontSize: 16
-            ),),
+            child: Text(
+              'Chấp nhận',
+              style: TextStyle(color: Colors.white, fontSize: 16),
+            ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
             ),
@@ -789,10 +785,11 @@ Widget _showBtnProcessInvoice(context, int statusId,int id, bool isCustomer){
         )
       ],
     );
-  }else{
+  } else {
     return Container();
   }
 }
+
 //Dùng cho chi tiết sản phẩm
 Widget componentContainerDetailProduct(BuildContext context, Map item) {
   return Padding(
@@ -933,67 +930,50 @@ Widget miniContainer(
     bool doNavigate,
     Widget widget}) {
   return GestureDetector(
-    onTap: () => widget == null
-        ? doNavigate == null
-            ? null
-            : Navigator.of(context).pop()
-        : Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => widget)),
-    child: Container(
-      margin: EdgeInsets.only(
-        right: marginRight == null ? 0 : marginRight,
-        top: marginTop == null ? 0 : marginTop,
-        bottom: marginBottom == null ? 0 : marginBottom,
-        left: marginLeft == null ? 0 : marginLeft,
-      ),
-      height: height,
-      width: width,
-      decoration: BoxDecoration(
-        borderRadius:
-            BorderRadius.circular(borderRadius == null ? 0 : borderRadius),
-        color: colorContainer,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black54,
-            blurRadius: 3,
-            offset: Offset(1, 1), // Shadow position
-          ),
-        ],
-      ),
-      child: Center(
-        child: Padding(
-          padding: EdgeInsets.only(
-              left: paddingLeftOfText == null ? 0 : paddingLeftOfText,
-              right: paddingRightOfText == null ? 0 : paddingRightOfText,
-              bottom: paddingBottomOfText == null ? 0 : paddingBottomOfText,
-              top: paddingTopOfText == null ? 0 : paddingTopOfText),
-          child: Text(
-            tittle,
-            style: GoogleFonts.roboto(
-                color: colorText,
-                fontWeight: fontWeightText,
-                fontSize: fontSize == null ? null : fontSize),
+      onTap: () => widget == null
+          ? doNavigate == null
+              ? null
+              : Navigator.of(context).pop()
+          : Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => widget)),
+      child: Container(
+        margin: EdgeInsets.only(
+          right: marginRight == null ? 0 : marginRight,
+          top: marginTop == null ? 0 : marginTop,
+          bottom: marginBottom == null ? 0 : marginBottom,
+          left: marginLeft == null ? 0 : marginLeft,
+        ),
+        height: height,
+        width: width,
+        decoration: BoxDecoration(
+          borderRadius:
+              BorderRadius.circular(borderRadius == null ? 0 : borderRadius),
+          color: colorContainer,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black54,
+              blurRadius: 3,
+              offset: Offset(1, 1), // Shadow position
+            ),
+          ],
+        ),
+        child: Center(
+          child: Padding(
+            padding: EdgeInsets.only(
+                left: paddingLeftOfText == null ? 0 : paddingLeftOfText,
+                right: paddingRightOfText == null ? 0 : paddingRightOfText,
+                bottom: paddingBottomOfText == null ? 0 : paddingBottomOfText,
+                top: paddingTopOfText == null ? 0 : paddingTopOfText),
+            child: Text(
+              tittle,
+              style: GoogleFonts.roboto(
+                  color: colorText,
+                  fontWeight: fontWeightText,
+                  fontSize: fontSize == null ? null : fontSize),
+            ),
           ),
         ),
-      ],
-    ),
-    child: Center(
-      child: Padding(
-        padding: EdgeInsets.only(
-            left: paddingLeftOfText == null ? 0 : paddingLeftOfText,
-            right: paddingRightOfText == null ? 0 : paddingRightOfText,
-            bottom: paddingBottomOfText == null ? 0 : paddingBottomOfText,
-            top: paddingTopOfText == null ? 0 : paddingTopOfText),
-        child: Text(
-          tittle,
-          style: GoogleFonts.roboto(
-              color: colorText,
-              fontWeight: fontWeightText,
-              fontSize: fontSize == null ? null : fontSize),
-        ),
-      ),
-    ),
-  );
+      ));
 }
 
 //Dùng cho container chứ Text trong quản lý hóa đơn
@@ -1038,20 +1018,18 @@ Widget containerTextInvoice({
 }
 
 //Dùng cho trang chi tiết yêu cầu bán hàng
-Widget componentContainerInvoiceRequest(
-    BuildContext context, {
-      int statusId,
-      int id,
-      int productId,
-      int customerId,
-      String customerName,
-      String customerPhone,
-      String productName,
-      String price,
-      String createDate,
-      String sellDate,
-      bool isCustomer
-    }) {
+Widget componentContainerInvoiceRequest(BuildContext context,
+    {int statusId,
+    int id,
+    int productId,
+    int customerId,
+    String customerName,
+    String customerPhone,
+    String productName,
+    String price,
+    String createDate,
+    String sellDate,
+    bool isCustomer}) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Column(
@@ -1076,11 +1054,10 @@ Widget componentContainerInvoiceRequest(
         ),
         txtItemDetail(
             context, "Giá sản phẩm (/1kg)", "${getFormatPrice(price)}đ"),
-         SizedBox(
+        SizedBox(
           height: 10,
         ),
-        txtItemDetail(context, "Ngày muốn đến bán",
-            "${getDateTime(sellDate)}"),
+        txtItemDetail(context, "Ngày muốn đến bán", "${getDateTime(sellDate)}"),
         txtItemDetail(context, "Trạng thái", "${getStatus(status: statusId)}",
             colorContent: getColorStatus(status: statusId)),
         SizedBox(

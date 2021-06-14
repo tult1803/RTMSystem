@@ -405,7 +405,6 @@ Widget boxForInvoice(
                       paddingLeftOfText: 10,
                       paddingRightOfText: 10,
                       tittle: "Tổng cộng: $totalAfterFormat",
-                      tittle: "Sản phẩm: $product",
                       fontWeight: FontWeight.w400,
                     ),
                     containerTextInvoice(
