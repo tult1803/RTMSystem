@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:rtm_system/model/getAPI_product.dart';
 import 'package:rtm_system/model/model_product.dart';
 import 'package:rtm_system/ultils/alertDialog.dart';
@@ -10,7 +12,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AddProductPage extends StatefulWidget {
   final String tittle;
-
   //true is Customer role
   final bool isCustomer;
 
@@ -36,6 +37,9 @@ class _AddProductPageState extends State<AddProductPage> {
   String _mySelection;
   bool checkProduct = true;
 
+  final f = new DateFormat('dd-MM-yyyy');
+  DateTime dateNow = DateTime.now();
+  DateTime dateSale = DateTime.now();
   Future _getProduct() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -114,6 +118,11 @@ class _AddProductPageState extends State<AddProductPage> {
                         SizedBox(
                           height: 10,
                         ),
+                        btnDateSale(context),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        if (!widget.isCustomer)
                         _showMoneyOrQuantity("Tống số ký", this.quantity),
                         SizedBox(
                           height: 10,
@@ -167,7 +176,7 @@ class _AddProductPageState extends State<AddProductPage> {
   }
 
   Widget _checkShowDegree() {
-    return checkProduct
+    return checkProduct || widget.isCustomer
         ? Container()
         : _txtItemProduct(
             context: context,
@@ -178,7 +187,7 @@ class _AddProductPageState extends State<AddProductPage> {
   }
 
   Widget _checkShowQuantity() {
-    return _mySelection == null
+    return widget.isCustomer
         ? Container()
         : _txtItemProduct(
             context: context,
@@ -216,6 +225,7 @@ class _AddProductPageState extends State<AddProductPage> {
                       builder: (context) => CreateInvoicePage(
                             isNew: true,
                             listProduct: listInforProduct,
+                          isCustomer: widget.isCustomer
                           )),
                 );
               } else {
@@ -270,7 +280,8 @@ class _AddProductPageState extends State<AddProductPage> {
                           this.listInforProduct = [
                             this._mySelection,
                             this.quantity,
-                            this.degree
+                            this.degree,
+                            this.dateSale
                           ];
                         });
                         if (_mySelection == '3') {
@@ -339,7 +350,8 @@ class _AddProductPageState extends State<AddProductPage> {
             this.listInforProduct = [
               this._mySelection,
               this.quantity,
-              this.degree
+              this.degree,
+              this.dateSale
             ];
             setState(() {
               checkClick = true;
@@ -389,7 +401,8 @@ class _AddProductPageState extends State<AddProductPage> {
           this.listInforProduct = [
             this._mySelection,
             this.quantity,
-            this.degree
+            this.degree,
+            this.dateSale
           ];
         });
       },
@@ -417,5 +430,75 @@ class _AddProductPageState extends State<AddProductPage> {
   //Thêm các phần tử trong list cân
   void insertQuantity(String value) {
     return listQuantity.add(value);
+  }
+  //Show date để chọn ngày đến bán( customer đang dùng)
+  Widget btnDateSale(context) {
+    var size = MediaQuery.of(context).size;
+    return Container(
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.all(
+            Radius.circular(10.0),
+          )),
+      child: Column(
+        children: [
+          SizedBox(
+            height: 10,
+          ),
+          GestureDetector(
+            onTap: () {
+              DatePicker.showDatePicker(
+                context,
+                showTitleActions: true,
+                onConfirm: (date) {
+                  setState(() {
+                    dateSale = date;
+                    this.listInforProduct = [
+                      this._mySelection,
+                      this.quantity,
+                      this.degree,
+                      this.dateSale
+                    ];
+                  });
+                },
+                currentTime: dateNow,
+                maxTime: DateTime(DateTime.now().year + 100, 12, 31),
+                minTime: DateTime(DateTime.now().year, DateTime.now().month,
+                    DateTime.now().day),
+                locale: LocaleType.vi,
+              );
+            },
+            child: Row(
+              children: [
+                Container(
+                  width: 130,
+                  margin: EdgeInsets.only(left: 15),
+                  child: Text(
+                    "Ngày đến bán",
+                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
+                  ),
+                ),
+                Expanded(
+                  child: Text(
+                    '${f.format(dateSale)}',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
+                Container(
+                  width: 70,
+                  child: Icon(
+                    Icons.calendar_today,
+                    color: Colors.black45,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+        ],
+      ),
+    );
   }
 }

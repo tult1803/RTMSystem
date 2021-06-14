@@ -4,9 +4,15 @@ import 'package:rtm_system/ultils/src/color_ultils.dart';
 
 //Chuyển trạng thái từ số thành chữ
 getStatus({int status}) {
+  // 1,Active
+  // 2,Inactive
+  // 3,Done
+  // 4,Processing
+  // 6,Accept
+  // 5,Undone
   switch (status) {
     case 1:
-      return "Hoạt động";
+      return "Có hiệu lực";
       break;
     case 2:
       return "Từ chối";

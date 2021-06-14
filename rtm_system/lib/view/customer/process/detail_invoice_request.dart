@@ -3,44 +3,41 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/component.dart';
-class DetailInvoice extends StatefulWidget {
+class DetailInvoiceRequest extends StatefulWidget {
   final Map<String, dynamic> map;
-
-  DetailInvoice({this.map});
-
+  final bool isCustomer;
+  DetailInvoiceRequest({this.map, this.isCustomer});
   @override
-  _DetailInvoiceState createState() => _DetailInvoiceState();
+  _DetailInvoiceRequestState createState() => _DetailInvoiceRequestState();
 }
 
-class _DetailInvoiceState extends State<DetailInvoice> {
+class _DetailInvoiceRequestState extends State<DetailInvoiceRequest> {
+  @override
+  void initState() {
+    print(widget.isCustomer);
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: 15),
       child: SingleChildScrollView(
         child: containerDetail(
-            context,
-            componentContainerDetailInvoice(
+          context,
+          componentContainerInvoiceRequest(
               context,
               id: this.widget.map["id"],
               customerName: this.widget.map["customer_name"],
-              managerName: this.widget.map["manager_name"],
-              managerPhone: this.widget.map["manager_phone"],
               customerPhone: this.widget.map["customer_phone"],
-              createTime: this.widget.map["create_time"],
+              createDate: this.widget.map["create_date"],
               productId: this.widget.map["product_id"],
               productName: this.widget.map["product_name"],
-              description: this.widget.map["description"],
               price: "${this.widget.map["price"]}",
-              degree: this.widget.map["degree"],
-              quantity: this.widget.map["quantity"],
-              customerConfirmDate: this.widget.map["customer_sign_date"],
-              managerConfirmDate: this.widget.map["manager_sign_date"],
               statusId: this.widget.map["status_id"],
               customerId: this.widget.map["customer_id"],
-              managerId: this.widget.map["manager_id"],
-              activeDate: this.widget.map["active_date"],
-            )),
+              sellDate: this.widget.map["sell_date"],
+              isCustomer: widget.isCustomer
+          ),
+        ),
       ),
     );
   }

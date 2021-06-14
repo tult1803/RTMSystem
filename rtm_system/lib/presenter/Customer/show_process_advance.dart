@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rtm_system/model/notice/getAPI_all_notice.dart';
 import 'package:rtm_system/model/notice/model_all_notice.dart';
-import 'package:rtm_system/ultils/commonWidget.dart';
-import 'package:rtm_system/ultils/component.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class showProcessAdvance extends StatefulWidget {
@@ -48,13 +46,13 @@ class _showProcessAdvanceState extends State<showProcessAdvance> {
             return ListView.builder(
               itemCount: snapshot.data.length,
               itemBuilder: (context, index) {
-                return btnProcess(
-                    context,
-                    snapshot.data[index].id,
-                    snapshot.data[index].title,
-                    snapshot.data[index].content,
-                    "${snapshot.data[index].createDate}",
-                    false);
+                // return btnProcess(
+                //     context,
+                //     snapshot.data[index].id,
+                //     snapshot.data[index].title,
+                //     snapshot.data[index].content,
+                //     "${snapshot.data[index].createDate}",
+                //     false);
               },
             );
           }
