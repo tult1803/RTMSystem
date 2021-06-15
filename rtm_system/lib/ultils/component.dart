@@ -905,7 +905,7 @@ Widget componentContainerDetailCustomer(BuildContext context,
 // là những component container nhỏ trong từng khách hàng
 
 //Có tính năng Navigator nếu muốn navigator sang trang khác thì  widget ko được null
-//Nếu muốn sử dụng navigator.pop thì widget có thể null nhưng trạng thái " doNavigate " được null phải true hoặc false
+//Nếu muốn sử dụng navigator.pop thì widget có thể null nhưng trạng thái " doNavigate " không được null phải true hoặc false
 //Nhớ phải thêm context để navigator
 
 Widget miniContainer(
@@ -926,11 +926,11 @@ Widget miniContainer(
     double paddingBottomOfText,
     double fontSize,
     FontWeight fontWeightText,
-    bool doNavigate,
+    bool doPopNavigate,
     Widget widget}) {
   return GestureDetector(
       onTap: () => widget == null
-          ? doNavigate == null
+          ? doPopNavigate == null
               ? null
               : Navigator.of(context).pop()
           : Navigator.of(context)

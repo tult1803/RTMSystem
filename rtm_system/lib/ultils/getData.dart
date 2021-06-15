@@ -8,6 +8,7 @@ import 'package:rtm_system/model/putAPI_updatePrice.dart';
 import 'package:rtm_system/model/putAPI_updateProfile.dart';
 import 'package:rtm_system/view/customer/home_customer_page.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
+import 'package:rtm_system/view/manager/invoice/processInvoice.dart';
 import 'package:rtm_system/view/manager/profile/allCustomer_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -75,20 +76,19 @@ Future post_put_ApiProfile(
 }
 
 Future<void> doCreateCustomer(
-  BuildContext context,
-  String phone,
-  String password,
-  String fullname,
-  int gender,
-  String cmnd,
-  String address,
-  String birthday,
-  bool isCustomer,
-  bool isUpdate,
-  int typeOfUpdate,
-  int accountId,
-    {bool isCreate}
-    ) async {
+    BuildContext context,
+    String phone,
+    String password,
+    String fullname,
+    int gender,
+    String cmnd,
+    String address,
+    String birthday,
+    bool isCustomer,
+    bool isUpdate,
+    int typeOfUpdate,
+    int accountId,
+    {bool isCreate}) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   int status = await post_put_ApiProfile(phone, password, fullname, gender,
       cmnd, address, birthday, isUpdate, typeOfUpdate, accountId);
@@ -155,8 +155,8 @@ Future<void> put_API_GetMoney(BuildContext context, indexPage) async {
       status);
 }
 
-Future<void> putAPIUpdatePrice(
-    BuildContext context, int productId, double price, String productName) async {
+Future<void> putAPIUpdatePrice(BuildContext context, int productId,
+    double price, String productName) async {
   int status;
   SharedPreferences prefs = await SharedPreferences.getInstance();
   PutUpdatePrice putUpdatePrice = PutUpdatePrice();
@@ -190,11 +190,12 @@ Future<void> doCreateRequestInvoiceOrInvoice(
     bool isCustomer) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   int status;
-  if(isCustomer) {
-    PostCreateRequestInvoice postCreateRequestInvoice = PostCreateRequestInvoice();
+  if (isCustomer) {
+    PostCreateRequestInvoice postCreateRequestInvoice =
+        PostCreateRequestInvoice();
     status = await postCreateRequestInvoice.createRequestInvoice(
-        prefs.get("access_token"),productId, sell_date);
-  }else{
+        prefs.get("access_token"), productId, sell_date);
+  } else {
     //call api tao invoice cua manager
   }
   if (status == 200) {
@@ -213,45 +214,51 @@ Future<void> doCreateRequestInvoiceOrInvoice(
     showStatusAlertDialog(
         context, "Cập nhật thất bại. Xin thử lại!", null, false);
 }
+
 // Xac nhan hoa don, cho ca manager va customer
 // Customer : truyền invoice_id để xác nhận
 Future<void> doConfirmOrAcceptOrRejectInvoice(
-    BuildContext context,
-    int invoiceId,
-    int type,
-    bool isCustomer) async {
+    BuildContext context, int invoiceId, int type, bool isCustomer) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   int status;
-  if(isCustomer) {
+  if (isCustomer) {
     // 1 is sign invoice, 2 is accept invoice, 3 is reject invoice
-    if(type == 1){
+    if (type == 1) {
       PutSignInvoice putSignInvoiceInvoice = PutSignInvoice();
       status = await putSignInvoiceInvoice.putSignInvoice(
-          prefs.get("access_token"),invoiceId);
-    }else if( type == 2){
+          prefs.get("access_token"), invoiceId);
+    } else if (type == 2) {
       PutConfirmInvoice putConfirmInvoice = PutConfirmInvoice();
       status = await putConfirmInvoice.putConfirmInvoice(
-          prefs.get("access_token"),invoiceId);
-    }else if( type == 3){
+          prefs.get("access_token"), invoiceId);
+    } else if (type == 3) {
       //call api to reject
     }
-
-  }else{
+  } else {
     //call api tao invoice cua manager
-  }
-  if (status == 200) {
-    if (isCustomer) {
-      showStatusAlertDialog(
-          context,
-          "Xác nhận thành công.",
-          HomeCustomerPage(
-            index: 1,
-          ),
-          true);
-    } else {
-      //chuyen trang và thong báo
+    switch (type) {
+      case 1: break;
+      case 2: break;
+      case 3: break;
     }
-  } else
-    showStatusAlertDialog(
-        context, "Cập nhật thất bại. Xin thử lại!", null, false);
+  }
+
+  //Code ở đây sai
+  // if (status == 200) {
+  //   if (isCustomer) {
+  //     showStatusAlertDialog(
+  //         context,
+  //         "Xác nhận thành công.",
+  //         HomeCustomerPage(
+  //           index: 1,
+  //         ),
+  //         true);
+  //   } else {
+  //     //chuyen trang và thong báo
+  //   }
+  // } else
+  //   showCustomDialog(context,
+  //       content: "Có lỗi xảy ra. Xin thử lại", isSuccess: false);
+  // showStatusAlertDialog(
+  //     context, "Cập nhật thất bại. Xin thử lại!", null, false);
 }

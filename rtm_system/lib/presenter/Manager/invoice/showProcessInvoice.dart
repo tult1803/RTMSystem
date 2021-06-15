@@ -148,10 +148,12 @@ class _showProcessInvoiceManagerState extends State<showProcessInvoiceManager> {
                                 widget: FormForDetailPage(
                                   tittle: "Chi tiết hóa đơn",
                                   bodyPage: DetailInvoice(
+                                    isCustomer: false,
                                     map: item,
                                   ),
                                 ),
-                                isCustomer: false);
+                                isCustomer: false,
+                                isRequest: false);
                           }),
                     ),
                   ],
@@ -162,11 +164,6 @@ class _showProcessInvoiceManagerState extends State<showProcessInvoiceManager> {
         ),
       ),
     );
-  }
-
-  void _updateSearchTerm(String searchTerm) {
-    _searchTerm = searchTerm;
-    _pagingController.refresh();
   }
 
   @override

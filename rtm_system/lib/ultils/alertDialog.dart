@@ -184,10 +184,12 @@ showAlertDialogAPI(BuildContext context, String tittle, Widget widget, status) {
 }
 
 //Đang thử nghiệm
+//Nếu muốn sử dụng navigator.pop thì trạng thái " doNavigate " không được null phải true hoặc false
+//isSuccess là thể hiện hành động đã thành công hay thất bại
 Future<Dialog> showCustomDialog(BuildContext context,
     {bool isSuccess,
     String content,
-    bool doNavigate,
+    bool doPopNavigate,
     Widget widgetToNavigator}) {
   return showDialog(
       context: context,
@@ -250,7 +252,7 @@ Future<Dialog> showCustomDialog(BuildContext context,
                           colorContainer: Colors.white,
                           borderRadius: 10,
                           fontSize: 18,
-                          doNavigate: doNavigate == null ? false : doNavigate,
+                          doPopNavigate: doPopNavigate == null ? false : doPopNavigate,
                           widget: widgetToNavigator == null
                               ? null
                               : widgetToNavigator,

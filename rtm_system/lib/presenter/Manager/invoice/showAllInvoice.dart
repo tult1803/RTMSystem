@@ -181,6 +181,7 @@ class _showAllInvoiceState extends State<showAllInvoice> {
                                 widget: FormForDetailPage(
                                   tittle: "Chi tiết hóa đơn",
                                   bodyPage: DetailInvoice(
+                                    isCustomer: false,
                                     map: item,
                                   ),
                                 ),

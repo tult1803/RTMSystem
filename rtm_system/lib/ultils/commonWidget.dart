@@ -310,12 +310,13 @@ Widget boxForInvoice(
     String total,
     String date,
     int status,
-    Widget widget, bool isCustomer,
+    Widget widget,
+    bool isCustomer,
     bool isRequest}) {
   String totalAfterFormat;
   String dateAfterFormat;
   String titlePrice;
-  isRequest? titlePrice = 'Giá': titlePrice = 'Tổng cộng';
+  isRequest ? titlePrice = 'Giá' : titlePrice = 'Tổng cộng';
   try {
     totalAfterFormat = "${getFormatPrice(total)}đ";
     dateAfterFormat = "${getDateTime(date)}";
@@ -399,14 +400,6 @@ Widget boxForInvoice(
                             tittle: "Sản phẩm: $product",
                             fontWeight: FontWeight.w400,
                           ),
-                    containerTextInvoice(
-                      marginTop: 2,
-                      alignment: Alignment.topLeft,
-                      paddingLeftOfText: 10,
-                      paddingRightOfText: 10,
-                      tittle: "Tổng cộng: $totalAfterFormat",
-                      fontWeight: FontWeight.w400,
-                    ),
                     containerTextInvoice(
                       marginTop: 2,
                       alignment: Alignment.topLeft,
@@ -672,7 +665,7 @@ Widget btnLogout(context) {
         onPressed: () async {
           SharedPreferences prefs = await SharedPreferences.getInstance();
           prefs.clear();
-          print('Clear data login');
+          print('Data Login đã xóa');
           Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(builder: (context) => LoginPage()),
@@ -801,6 +794,7 @@ Widget btnUpdatePw(context, String password, int accountId, bool isCustomer) {
 
 //Widget này dùng cho các button "Tạo" hoặc "Hủy" vd: ở Trang Tạo thông báo
 //bool action = flase khi nhấn nút "Hủy" và bằng true khi nhấn "Tạo"
+
 Widget btnSubmitOrCancel(
     BuildContext context,
     double width,
@@ -830,16 +824,9 @@ Widget btnSubmitOrCancel(
             } else {
               int status = await postAPINotice(mainTittle, content);
               if (status == 200) {
-                showStatusAlertDialog(
-                    context,
-                    "Tạo thành công.",
-                    HomeAdminPage(
-                      index: indexOfBottomBar,
-                    ),
-                    true);
+                showCustomDialog(context, isSuccess: true, content: "Tạo thành công",doPopNavigate: true);
               } else
-                showStatusAlertDialog(
-                    context, "Tạo thất bại. Xin thử lại !!!", null, false);
+                showCustomDialog(context, isSuccess: false, content:  "Tạo thất bại. Xin thử lại",doPopNavigate: true);
             }
           } else {
             if (isCustomer) {
@@ -957,17 +944,21 @@ Widget btnWaitingProcess(context, bool isInvoice) {
     child: RaisedButton(
       color: Color(0xFFF8D375),
       onPressed: () {
-        isInvoice ?
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => ProcessAllPage( isInvoice: isInvoice,)),
-        ) :
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => ProcessAllPage( isInvoice: false,)),
-        );
+        isInvoice
+            ? Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ProcessAllPage(
+                          isInvoice: isInvoice,
+                        )),
+              )
+            : Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ProcessAllPage(
+                          isInvoice: false,
+                        )),
+              );
       },
       child: Row(
         children: [
@@ -1020,7 +1011,9 @@ Widget btnDeactivateCustomer(
                 isDeactivateNotice == null
                     ? "Bạn muốn hủy kích hoạt khách hàng"
                     : "Bạn muốn ẩn thông báo ?",
-                isDeactivateNotice == null ? AllCustomer() : HomeAdminPage(index: 3),
+                isDeactivateNotice == null
+                    ? AllCustomer()
+                    : HomeAdminPage(index: 3),
                 isDeactivate: true,
                 token: token,
                 deactivateId: deactivateId,
