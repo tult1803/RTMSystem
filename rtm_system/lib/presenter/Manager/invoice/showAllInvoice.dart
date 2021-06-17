@@ -121,7 +121,11 @@ class _showAllInvoiceState extends State<showAllInvoice> {
   //Để show thanh hiển thị tên các loại hóa đơn
   Widget _wrapToShowTittleBar() {
     return Container(
-      child: Wrap(crossAxisAlignment: WrapCrossAlignment.center, children: [
+      child: Wrap(
+          crossAxisAlignment: WrapCrossAlignment.center,
+          alignment: WrapAlignment.center,
+
+          children: [
         tittleBarForInvoice("Đang xử lý", isChoose: index == 0 ? true : null),
         spaceTittleBarForInvoice(),
         tittleBarForInvoice("Ký gửi", isChoose: index == 1 ? true : null),
