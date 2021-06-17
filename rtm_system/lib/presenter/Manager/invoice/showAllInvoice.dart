@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:rtm_system/model/getAPI_invoice.dart';
 import 'package:rtm_system/model/model_invoice.dart';
-import 'package:rtm_system/presenter/Manager/invoice/showProcessInvoice.dart';
+import 'package:rtm_system/presenter/Manager/invoice/showInvoice.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/helpers.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/add_product_in_invoice.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class showAllInvoice extends StatefulWidget {
   const showAllInvoice({Key key}) : super(key: key);
@@ -21,48 +18,10 @@ DateTime toDate;
 
 class _showAllInvoiceState extends State<showAllInvoice> {
   final PageController _pageController = PageController();
-  final PagingController _pagingController = PagingController(firstPageKey: 10);
-  int _pageSize = 1;
   int index;
-  String _searchTerm;
   Invoice invoice;
   List invoiceList;
-
-  Future<void> _fetchPage(pageKey) async {
-    try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      GetInvoice getAPIAllInvoice = GetInvoice();
-      invoice = await getAPIAllInvoice.getInvoice(
-        prefs.get("access_token"),
-        0,
-        //Customer Id: truyền 0 là get All cho manager
-        0,
-        //Product Id: truyền 0 là get All cho manager
-        -1,
-        //Status Id: truyền -1 là get all invoice trừ invoice đang ở trạng thái process
-        pageKey,
-        _pageSize,
-        getDateTime("$fromDate", dateFormat: 'yyyy-MM-dd hh:mm:ss'),
-        getDateTime("$toDate", dateFormat: 'yyyy-MM-dd hh:mm:ss'),
-        searchTerm: _searchTerm,
-      );
-      invoiceList = invoice.invoices;
-      final isLastPage = invoiceList.length < pageKey;
-      if (isLastPage) {
-        _pagingController.appendLastPage(invoiceList);
-      } else {
-        setState(() {
-          _pageSize += 1;
-        });
-        final nextPageKey = pageKey;
-        _pagingController.appendPage(invoiceList, nextPageKey);
-      }
-    } catch (error) {
-      print(error);
-      _pagingController.error = error;
-    }
-  }
-
+  String getFromDate, getToDate;
   @override
   void initState() {
     // TODO: implement initState
@@ -70,32 +29,14 @@ class _showAllInvoiceState extends State<showAllInvoice> {
     index = 0;
     toDate = DateTime.now();
     fromDate = DateTime.now().subtract(Duration(days: 30));
-    _pagingController.addPageRequestListener((pageKey) {
-      _fetchPage(pageKey);
-    });
-
-    _pagingController.addStatusListener((status) {
-      if (status == PagingStatus.subsequentPageError) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text(
-              'Có lỗi xảy ra',
-            ),
-            action: SnackBarAction(
-              label: 'Thử lại',
-              onPressed: () => _pagingController.retryLastFailedRequest(),
-            ),
-          ),
-        );
-      }
-    });
+    getFromDate =
+        "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd hh:mm:ss")}";
+    getToDate = "${getDateTime("$toDate", dateFormat: "yyyy-MM-dd hh:mm:ss")}";
   }
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery
-        .of(context)
-        .size;
+    var size = MediaQuery.of(context).size;
     return Container(
       height: size.height,
       width: size.width,
@@ -116,81 +57,9 @@ class _showAllInvoiceState extends State<showAllInvoice> {
                     tittle: "Tạo hóa đơn",
                     isCustomer: false,
                   )),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  btnDateTime(
-                      context,
-                      "${getDateTime("$fromDate", dateFormat: "dd/MM/yyyy")}",
-                      Icon(Icons.date_range),
-                      datePick()),
-                  SizedBox(
-                    width: 20,
-                    child: Center(
-                        child: Container(
-                            alignment: Alignment.topCenter,
-                            height: 45,
-                            child: Text(
-                              "-",
-                              style: TextStyle(fontSize: 20),
-                            ))),
-                  ),
-                  btnDateTime(
-                      context,
-                      "${getDateTime("$toDate", dateFormat: "dd/MM/yyyy")}",
-                      Icon(Icons.date_range),
-                      datePick()),
-                ],
-              ),
-              Container(
-                child: Wrap(
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: [
-                      tittleBarForInvoice("Đang xử lý",
-                          isChoose: index == 0 ? true : null),
-                      spaceTittleBarForInvoice(),
-                      tittleBarForInvoice("Ký gửi",
-                          isChoose: index == 1 ? true : null),
-                      spaceTittleBarForInvoice(),
-                      tittleBarForInvoice("Hoàn thành",
-                          isChoose: index == 2 ? true : null),
-                      spaceTittleBarForInvoice(),
-                      tittleBarForInvoice("Từ chối",
-                          isChoose: index == 3 ? true : null),
-                      spaceTittleBarForInvoice(),
-                      tittleBarForInvoice("Có hiệu lực",
-                          isChoose: index == 4 ? true : null),
-                    ]),
-              ),
-              Expanded(
-                child: Container(
-                    child: PageView(
-                      controller: _pageController,
-                      scrollDirection: Axis.horizontal,
-                      onPageChanged: (value) {
-                        setState(() {
-                          index = value;
-                        });
-                      },
-                      children: [
-                        Scaffold(
-                          body: showInvoiceManager(4),
-                        ),
-                        Scaffold(
-                          body: showInvoiceManager(5),
-                        ),
-                        Scaffold(
-                          body: showInvoiceManager(3),
-                        ),
-                        Scaffold(
-                          body: showInvoiceManager(2),
-                        ),
-                        Scaffold(
-                          body: showInvoiceManager(1),
-                        ),
-                      ],
-                    )),
-              ),
+              rowButtonDatetime(),
+              _wrapToShowTittleBar(),
+              Expanded(child: pageViewInvocie()),
             ],
           ),
         ),
@@ -198,14 +67,76 @@ class _showAllInvoiceState extends State<showAllInvoice> {
     );
   }
 
-  void _updateSearchTerm(String searchTerm) {
-    _searchTerm = searchTerm;
-    _pagingController.refresh();
+  //Dùng để show 2 cái nút để chọn ngày
+  Widget rowButtonDatetime() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        btnDateTime(
+            context,
+            "${getDateTime("$fromDate", dateFormat: "dd/MM/yyyy")}",
+            Icon(Icons.date_range),
+            datePick()),
+        SizedBox(
+          width: 20,
+          child: Center(
+              child: Container(
+                  alignment: Alignment.topCenter,
+                  height: 45,
+                  child: Text(
+                    "-",
+                    style: TextStyle(fontSize: 20),
+                  ))),
+        ),
+        btnDateTime(
+            context,
+            "${getDateTime("$toDate", dateFormat: "dd/MM/yyyy")}",
+            Icon(Icons.date_range),
+            datePick()),
+      ],
+    );
+  }
+
+  //Để show các hóa đơn dựa trên _wrapToShowTittleBar tương ứng
+  Widget pageViewInvocie() {
+    return Container(
+        child: PageView(
+      controller: _pageController,
+      scrollDirection: Axis.horizontal,
+      onPageChanged: (value) {
+        setState(() {
+          index = value;
+        });
+      },
+      children: [
+        new showInvoiceManager(4, fromDate: getFromDate, toDate: getToDate),
+        new showInvoiceManager(5, fromDate: getFromDate, toDate: getToDate),
+        new showInvoiceManager(3, fromDate: getFromDate, toDate: getToDate),
+        new showInvoiceManager(2, fromDate: getFromDate, toDate: getToDate),
+        new showInvoiceManager(1, fromDate: getFromDate, toDate: getToDate),
+      ],
+    ));
+  }
+
+  //Để show thanh hiển thị tên các loại hóa đơn
+  Widget _wrapToShowTittleBar() {
+    return Container(
+      child: Wrap(crossAxisAlignment: WrapCrossAlignment.center, children: [
+        tittleBarForInvoice("Đang xử lý", isChoose: index == 0 ? true : null),
+        spaceTittleBarForInvoice(),
+        tittleBarForInvoice("Ký gửi", isChoose: index == 1 ? true : null),
+        spaceTittleBarForInvoice(),
+        tittleBarForInvoice("Hoàn thành", isChoose: index == 2 ? true : null),
+        spaceTittleBarForInvoice(),
+        tittleBarForInvoice("Từ chối", isChoose: index == 3 ? true : null),
+        spaceTittleBarForInvoice(),
+        tittleBarForInvoice("Có hiệu lực", isChoose: index == 4 ? true : null),
+      ]),
+    );
   }
 
   @override
   void dispose() {
-    _pagingController.dispose();
     _pageController.dispose();
     super.dispose();
   }
@@ -217,7 +148,6 @@ class _showAllInvoiceState extends State<showAllInvoice> {
       onPressed: () {
         setState(() {
           pickedDate();
-          _pageSize = 1;
         });
       },
       child: null,
@@ -236,10 +166,10 @@ class _showAllInvoiceState extends State<showAllInvoice> {
         builder: (context, child) {
           return Theme(
             data: Theme.of(context).copyWith(
-              //Dùng cho nút "X" của lịch
+                //Dùng cho nút "X" của lịch
                 appBarTheme: AppBarTheme(
                   iconTheme:
-                  theme.primaryIconTheme.copyWith(color: Colors.white),
+                      theme.primaryIconTheme.copyWith(color: Colors.white),
                 ),
                 //Dùng cho nút chọn ngày và background
                 colorScheme: ColorScheme.light(
@@ -252,7 +182,11 @@ class _showAllInvoiceState extends State<showAllInvoice> {
       setState(() {
         fromDate = dateRange.start;
         toDate = dateRange.end;
-        _pagingController.refresh();
+        getFromDate =
+            "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd hh:mm:ss")}";
+        getToDate =
+            "${getDateTime("$toDate", dateFormat: "yyyy-MM-dd hh:mm:ss")}";
+        _pageController.jumpToPage(index);
       });
     }
   }
@@ -261,12 +195,22 @@ class _showAllInvoiceState extends State<showAllInvoice> {
     return GestureDetector(
       onTap: () {
         setState(() {
-          switch(tittle){
-            case "Đang xử lý": _pageController.jumpToPage(0); break;
-            case "Ký gửi": _pageController.jumpToPage(1); break;
-            case "Hoàn thành": _pageController.jumpToPage(2); break;
-            case "Từ chối": _pageController.jumpToPage(3); break;
-            case "Có hiệu lực": _pageController.jumpToPage(4); break;
+          switch (tittle) {
+            case "Đang xử lý":
+              _pageController.jumpToPage(0);
+              break;
+            case "Ký gửi":
+              _pageController.jumpToPage(1);
+              break;
+            case "Hoàn thành":
+              _pageController.jumpToPage(2);
+              break;
+            case "Từ chối":
+              _pageController.jumpToPage(3);
+              break;
+            case "Có hiệu lực":
+              _pageController.jumpToPage(4);
+              break;
           }
         });
       },
