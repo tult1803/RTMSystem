@@ -10,15 +10,17 @@ import 'package:rtm_system/view/manager/formForDetail_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: camel_case_types
-class showProcessInvoiceManager extends StatefulWidget {
-  const showProcessInvoiceManager({Key key}) : super(key: key);
+class showInvoiceManager extends StatefulWidget {
+  int statusId;
+
+  showInvoiceManager(this.statusId);
 
   @override
-  _showProcessInvoiceManagerState createState() =>
-      _showProcessInvoiceManagerState();
+  _showInvoiceManagerState createState() =>
+      _showInvoiceManagerState();
 }
 
-class _showProcessInvoiceManagerState extends State<showProcessInvoiceManager> {
+class _showInvoiceManagerState extends State<showInvoiceManager> {
   int _pageSize = 1;
   final PagingController _pagingController = PagingController(firstPageKey: 10);
 
@@ -36,7 +38,7 @@ class _showProcessInvoiceManagerState extends State<showProcessInvoiceManager> {
         //Customer Id: truyền 0 là get All cho manager
         0,
         //Product Id: truyền 0 là get All cho manager
-        4,
+        this.widget.statusId,
         //Status Id: truyền 4 là get all process invoice
         pageKey,
         _pageSize,
