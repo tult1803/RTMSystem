@@ -19,7 +19,6 @@ DateTime toDate;
 class _showAllInvoiceState extends State<showAllInvoice> {
   final PageController _pageController = PageController();
   int index;
-  bool check;
   Invoice invoice;
   List invoiceList;
   String getFromDate, getToDate;
@@ -60,7 +59,7 @@ class _showAllInvoiceState extends State<showAllInvoice> {
                   )),
               rowButtonDatetime(),
               _wrapToShowTittleBar(),
-              Expanded(child: check == null ? pageViewInvocie() : loadingPage()),
+              Expanded(child:pageViewInvocie()),
             ],
           ),
         ),
