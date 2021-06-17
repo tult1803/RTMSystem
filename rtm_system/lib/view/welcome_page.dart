@@ -20,7 +20,6 @@ class _WelcomePageState extends State<WelcomePage> {
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
     return Container(
       color: welcome_color,
         child: Image(image: AssetImage("images/rtmLogo.png"), )

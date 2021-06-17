@@ -1,7 +1,17 @@
-
-//String url_main = 'https://passioemployee.azurewebsites.net';
 String url_main = '3.137.137.156:5000';
 String url_login = 'api/auth/v1/login';
 String url_product= 'api/rtm/v1/product/get-product-list';
-String url_notice = 'api/rtm/v1/notice/get-notice-list?pageNum=3&pageNo=1';
-//'${url_main}/${url_get_by_date}/$empId?date=$date',
+String url_notice = 'api/rtm/v1/notice/get-notice-list';
+String url_createNotice = "api/rtm/v1/notice/create-notice";
+String url_profileCustomer = "api/rtm/v1/user/get-customer-cmphone";
+String url_createCustomer = "api/rtm/v1/user/create-account";
+String url_invoice = "api/rtm/v1/invoice/get-invoice";
+String url_updateProfile = "api/rtm/v1/user/update-account";
+String url_customer = "api/rtm/v1/user/get-customer";
+String url_updatePrice = "api/rtm/v1/product/update-price";
+String url_deactivateCustomer = "api/rtm/v1/user/deactivate-account";
+String url_deactivateNotice ="api/rtm/v1/notice/deactivate-notice";
+String url_createRequestInvoice = "api/rtm/v1/invoice/create-invoice-request";
+String url_signInvoice= "api/rtm/v1/invoice/sign-invoice";
+String url_confirmInvoice= "api/rtm/v1/invoice/confirm-invoice";
+String url_invoice_request = "api/rtm/v1/invoice/get-invoice-request";

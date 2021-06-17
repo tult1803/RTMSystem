@@ -1,7 +1,8 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-
+import 'package:rtm_system/presenter/Customer/show_product_in_invoice.dart';
+import 'package:rtm_system/ultils/commonWidget.dart';
+import 'package:rtm_system/view/add_product_in_invoice.dart';
+import 'package:rtm_system/view/customer/getMoney_or_payDebt.dart';
 class InvoicePage extends StatefulWidget {
   const InvoicePage({Key key}) : super(key: key);
 
@@ -10,108 +11,125 @@ class InvoicePage extends StatefulWidget {
 }
 
 class _InvoicePageState extends State<InvoicePage> {
-  var currentDate = new DateTime.now();
-  var formatter = new DateFormat('dd-MM-yyyy');
-
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime pickedDate = await showDatePicker(
-        context: context,
-        initialDate: currentDate,
-        firstDate: DateTime(2015),
-        lastDate: DateTime(2050));
-    if (pickedDate != null && pickedDate != currentDate)
-      setState(() {
-        currentDate = pickedDate;
-      });
-  }
-
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: Color(0xffEEEEEE),
-      appBar: AppBar(
-        backgroundColor: Color(0xFF0BB791),
-        title: Center(
-          child: Text("Tất cả hóa đơn"),
+        backgroundColor: Color(0xffEEEEEE),
+        appBar: AppBar(
+          backgroundColor: Color(0xFF0BB791),
+          title: Text("Tất cả hóa đơn", style: TextStyle(
+            color:Colors.white,
+          ),),
+          centerTitle: true,
         ),
-      ),
-      body: Container(
-          margin: EdgeInsets.only(top: 12, left: 12, right: 12),
-          child: Column(
-            children: [
-              Row(
+        body: SingleChildScrollView(
+          child: Container(
+              margin: EdgeInsets.only(
+                top: 12,
+              ),
+              child: Column(
                 children: [
-                  Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        RaisedButton(
-                          onPressed: () => {
-                            // chuyển đến trang cần xử lý
-                          },
-                          child: Row(
-                            children: [
-                              Column(children: [
-                                Icon(Icons.access_time_outlined),
-                              ],),
-                              Column(children: [ Text('  ')],),
-                              Column(
-                                children: [
-                                Text('Chờ xử lý'),
-                              ],),
-                            ],
-                          ),
-                          color: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          elevation: 10,
-                        ),
-                      ],
-                    ),
+                  SizedBox(
+                    height: 12,
                   ),
-                  Expanded(
-                    child: Container(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          RaisedButton(
-                            onPressed: () => _selectDate(context),
-                            child: Text(formatter.format(currentDate)),
-                            color: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            elevation: 10,
-                          ),
-                        ],
-                      ),
-                    ),
-                  )
+                  _showBottomButton(),
+                  _showProcessButton(),
+                  SizedBox(
+                    height: 12,
+                  ),
+                  new showProductInInvoice(),
                 ],
+              )),
+        ));
+  }
+
+
+
+  Widget _showBottomButton() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        btnWaitingProcess(context, true),
+        SizedBox(
+          width: 200,
+          child: RaisedButton(
+              color: Color(0xFF0BB791),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => AddProductPage(isCustomer: true,tittle: "Tạo yêu cầu bán hàng",)),
+                );
+              },
+              child: Text(
+                'Gửi yêu cầu bán hàng',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                ),
               ),
-              SizedBox(
-                height: 12,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
               ),
-              Card(
+              elevation: 10),
+        ),
+      ],
+    );
+  }
+
+
+  Widget _showProcessButton() {
+    return  Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            SizedBox(
+              width: 150,
+              child: RaisedButton(
+                color: Colors.white70,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => GetMoneyOrPayDebt(isPay: true, )),
+                  );
+                },
+                child: Text('Trả nợ'),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
                 elevation: 10,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    ListTile(
-                      title: Text('10,000,000'),
-                      subtitle: Text('20/04/2021'),
-                      trailing: Text('Chưa trả'),
-                    ),
-                  ],
-                ),
               ),
-            ],
-          )),
+            ),
+            Text(' '),
+            SizedBox(
+              width: 150,
+              child: RaisedButton(
+                color: Color(0xFF0BB791),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => GetMoneyOrPayDebt(isPay: false,)),
+                  );
+                },
+                child: Text(
+                  'Lấy tiền',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                  ),
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                elevation: 10,
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

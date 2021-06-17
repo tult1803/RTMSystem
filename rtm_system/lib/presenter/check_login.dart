@@ -6,7 +6,6 @@ import 'package:rtm_system/view/customer/home_customer_page.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 /// A button that animates between state changes.
 /// Progress state is just a small circle with a progress indicator inside
 /// Error state is a vibrating error animation
@@ -20,11 +19,11 @@ class ProgressButton extends StatefulWidget {
 
   ProgressButton(
       {Key key,
-        @required this.buttonState,
-        @required this.onPressed,
-        this.child,
-        this.backgroundColor,
-        this.progressColor})
+      @required this.buttonState,
+      @required this.onPressed,
+      this.child,
+      this.backgroundColor,
+      this.progressColor})
       : super(key: key);
 
   @override
@@ -47,9 +46,7 @@ class _ProgressButtonState extends State<ProgressButton>
       _borderAnimation.value ?? BorderRadius.circular(12);
 
   Color get backgroundColor =>
-      widget.backgroundColor ?? Theme
-          .of(context)
-          .primaryColor;
+      widget.backgroundColor ?? Theme.of(context).primaryColor;
 
   Color get progressColor => widget.progressColor ?? Colors.white;
 
@@ -123,14 +120,12 @@ class _ProgressButtonState extends State<ProgressButton>
         builder: (context, child) {
           return SlideTransition(
               position: _errorAnimation,
-              child: LayoutBuilder(builder: getProgressAnimatedBuilder
-              )
-          );
+              child: LayoutBuilder(builder: getProgressAnimatedBuilder));
         });
   }
 
-  AnimatedBuilder getProgressAnimatedBuilder(BuildContext context,
-      BoxConstraints constraints) {
+  AnimatedBuilder getProgressAnimatedBuilder(
+      BuildContext context, BoxConstraints constraints) {
     var buttonHeight = constraints.maxHeight;
     // If there is no constraint on height, we should constrain it
     if (buttonHeight == double.infinity) buttonHeight = 48;
@@ -138,11 +133,10 @@ class _ProgressButtonState extends State<ProgressButton>
     // These animation configurations can be tweaked to have
     // however you like it
     _borderAnimation = BorderRadiusTween(
-        begin: BorderRadius.circular(buttonHeight / 6),
-        end: BorderRadius.circular(buttonHeight / 2))
+            begin: BorderRadius.circular(buttonHeight / 6),
+            end: BorderRadius.circular(buttonHeight / 2))
         .animate(CurvedAnimation(
-        parent: _progressAnimationController,
-        curve: Curves.linear));
+            parent: _progressAnimationController, curve: Curves.linear));
 
     _widthAnimation = Tween<double>(
       begin: constraints.maxWidth,
@@ -163,12 +157,11 @@ class _ProgressButtonState extends State<ProgressButton>
           child: Padding(
             padding: EdgeInsets.all(8),
             child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(
-                  progressColor ?? Colors.white),
+              valueColor:
+                  AlwaysStoppedAnimation<Color>(progressColor ?? Colors.white),
               strokeWidth: 3,
             ),
-          )
-      );
+          ));
     }
 
     return AnimatedBuilder(
@@ -183,8 +176,7 @@ class _ProgressButtonState extends State<ProgressButton>
                 width: buttonWidth,
                 height: buttonHeight,
                 decoration: BoxDecoration(
-                    borderRadius: borderRadius,
-                    color: backgroundColor),
+                    borderRadius: borderRadius, color: backgroundColor),
                 child: Center(child: buttonContent),
               ),
             ));
@@ -193,31 +185,37 @@ class _ProgressButtonState extends State<ProgressButton>
   }
 }
 
-void checkSaveLogin(BuildContext context) async{
+void checkSaveLogin(BuildContext context) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   print('Role: ${prefs.getInt("role_id")}');
   try {
     if (prefs.getInt("role_id") == 3 && prefs.getBool("isLogin") == true) {
-      Navigator.pushAndRemoveUntil(context,
-          MaterialPageRoute(builder: (context) => HomeCustomerPage())
-          , (route) => false);
-    } else
-    if (prefs.getInt("role_id") == 2 && prefs.getBool("isLogin") == true) {
-      Navigator.pushAndRemoveUntil(context,
-          MaterialPageRoute(builder: (context) => HomeAdminPage())
-          , (route) => false);
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => HomeCustomerPage(index: 2,)),
+          (route) => false);
+    } else if (prefs.getInt("role_id") == 2 &&
+        prefs.getBool("isLogin") == true) {
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => HomeAdminPage(index: 2,)),
+          (route) => false);
     }
-  }catch(e){
+  } catch (e) {
     print('_isLogin co van de !!!');
   }
 }
 
-void savedInfoLogin(int role_id,int accountId, String access_token) async{
+void savedInfoLogin(int role_id, int accountId, int gender, String access_token, String fullname, String phone, String birthday, String password) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   prefs.setBool("isLogin", true);
   prefs.setInt("role_id", role_id);
   prefs.setString("access_token", access_token);
   prefs.setInt("accountId", accountId);
+  prefs.setString("fullname", fullname);
+  prefs.setString("phone", phone);
+  prefs.setInt("gender", gender);
+  prefs.setString("birthday", birthday);
+  prefs.setString("password", password);
   print('Login is saved !!!!');
 }
-
