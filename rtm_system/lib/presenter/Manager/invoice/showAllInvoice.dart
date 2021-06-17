@@ -19,6 +19,7 @@ DateTime toDate;
 class _showAllInvoiceState extends State<showAllInvoice> {
   final PageController _pageController = PageController();
   int index;
+  bool check;
   Invoice invoice;
   List invoiceList;
   String getFromDate, getToDate;
@@ -59,7 +60,7 @@ class _showAllInvoiceState extends State<showAllInvoice> {
                   )),
               rowButtonDatetime(),
               _wrapToShowTittleBar(),
-              Expanded(child: pageViewInvocie()),
+              Expanded(child: check == null ? pageViewInvocie() : loadingPage()),
             ],
           ),
         ),
@@ -105,7 +106,7 @@ class _showAllInvoiceState extends State<showAllInvoice> {
       scrollDirection: Axis.horizontal,
       onPageChanged: (value) {
         setState(() {
-          index = value;
+            index = value;
         });
       },
       children: [
@@ -141,6 +142,11 @@ class _showAllInvoiceState extends State<showAllInvoice> {
     super.dispose();
   }
 
+  Widget loadingPage(){
+    return Container(
+      child: Center(child: Container(width: 35,height: 35,child: CircularProgressIndicator(color: welcome_color))),
+    );
+  }
 //Copy nó để tái sử dụng cho các trang khác nếu cần
 // Không thể tách vì nó có hàm setState
   Widget datePick() {
@@ -186,7 +192,10 @@ class _showAllInvoiceState extends State<showAllInvoice> {
             "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd hh:mm:ss")}";
         getToDate =
             "${getDateTime("$toDate", dateFormat: "yyyy-MM-dd hh:mm:ss")}";
-        _pageController.jumpToPage(index);
+        _pageController.jumpToPage(index+1);
+       Future.delayed(Duration(milliseconds: 100), (){
+         _pageController.jumpToPage(index-1);
+       });
       });
     }
   }

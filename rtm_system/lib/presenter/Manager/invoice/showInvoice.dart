@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:rtm_system/model/getAPI_invoice.dart';
@@ -21,7 +22,6 @@ class showInvoiceManager extends StatefulWidget {
 }
 
 class showInvoiceManagerState extends State<showInvoiceManager> {
-  bool checkCall;
   int _pageSize = 1;
   final PagingController _pagingController = PagingController(firstPageKey: 10);
   String _searchTerm;
@@ -59,7 +59,7 @@ class showInvoiceManagerState extends State<showInvoiceManager> {
         _pagingController.appendPage(invoiceList, nextPageKey);
       }
     } catch (error) {
-      print(error);
+      // print(error);
       _pagingController.error = error;
     }
   }
@@ -71,27 +71,10 @@ class showInvoiceManagerState extends State<showInvoiceManager> {
     _pagingController.addPageRequestListener((pageKey) {
       _fetchPage(pageKey);
     });
-
-    _pagingController.addStatusListener((status) {
-      if (status == PagingStatus.subsequentPageError) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text(
-              'Có lỗi xảy ra',
-            ),
-            action: SnackBarAction(
-              label: 'Thử lại',
-              onPressed: () => _pagingController.retryLastFailedRequest(),
-            ),
-          ),
-        );
-      }
-    });
   }
 
   @override
   Widget build(BuildContext context) {
-    print('Hello');
     var size = MediaQuery.of(context).size;
     return Scaffold(
       body: Container(
@@ -136,6 +119,8 @@ class showInvoiceManagerState extends State<showInvoiceManager> {
                                 ],
                               );
                             },
+                            newPageErrorIndicatorBuilder: (context) => firstPageErrorIndicatorBuilder(context,
+                                tittle: "Không có dữ liệu"),
                             firstPageProgressIndicatorBuilder: (context) =>
                                 firstPageProgressIndicatorBuilder(),
                             newPageProgressIndicatorBuilder: (context) =>
