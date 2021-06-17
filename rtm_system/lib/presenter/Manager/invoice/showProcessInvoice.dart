@@ -152,8 +152,8 @@ class _showProcessInvoiceManagerState extends State<showProcessInvoiceManager> {
                                     map: item,
                                   ),
                                 ),
-                                isCustomer: false,
-                                isRequest: false);
+                                isRequest: false,
+                                isCustomer: false);
                           }),
                     ),
                   ],
