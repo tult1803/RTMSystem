@@ -586,10 +586,10 @@ Widget txtConfirm(BuildContext context, String tittle, String content) {
 }
 
 //Đổi màu và icon cho nút back screen
-Widget leadingAppbar(BuildContext context) {
+Widget leadingAppbar(BuildContext context, {Widget widget}) {
   return IconButton(
     icon: Icon(Icons.arrow_back_ios_outlined, color: Colors.white),
-    onPressed: () => Navigator.of(context).pop(),
+    onPressed: () => widget != null ? Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => widget), (route) => false) :Navigator.of(context).pop(),
   );
 }
 

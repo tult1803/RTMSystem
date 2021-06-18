@@ -124,7 +124,6 @@ class _showAllInvoiceState extends State<showAllInvoice> {
       child: Wrap(
           crossAxisAlignment: WrapCrossAlignment.center,
           alignment: WrapAlignment.center,
-
           children: [
         tittleBarForInvoice("Đang xử lý", isChoose: index == 0 ? true : null),
         spaceTittleBarForInvoice(),

@@ -32,7 +32,6 @@ class _showAllProductState extends State<showAllProduct> {
       GetProduct getProduct = GetProduct();
       dataList =
           await getProduct.getProduct(prefs.getString("access_token"), 0);
-      // print("${_pagingController}");
       final isLastPage = dataList.length < pageKey;
       if (isLastPage) {
         _pagingController.appendLastPage(dataList);

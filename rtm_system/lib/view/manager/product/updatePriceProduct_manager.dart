@@ -1,3 +1,4 @@
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -24,36 +25,38 @@ class _updatePriceProductState extends State<updatePriceProduct> {
   String error;
   double price, currentPrice;
   bool isClick = false;
-
+  String _value;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     isNotEmptyChoose();
-
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    this.widget.chosenValue = null;
   }
 
   void isNotEmptyChoose(){
     if(this.widget.chosenValue != null){
-      isClick = true;
-      indexValue = itemNameUpdatePrice.indexOf(this.widget.chosenValue);
-      price = double.parse(itemPriceUpdatePrice[indexValue]);
-      currentPrice = double.parse(itemPriceUpdatePrice[indexValue]);
-      productId = itemIdUpdatePrice[indexValue];
-      getDataTextField("${getFormatPrice("$price")}");
+      setState(() {
+        isClick = true;
+        _value = this.widget.chosenValue;
+        indexValue = itemNameUpdatePrice.indexOf(this.widget.chosenValue);
+        price = double.parse(itemPriceUpdatePrice[indexValue]);
+        currentPrice = double.parse(itemPriceUpdatePrice[indexValue]);
+        productId = itemIdUpdatePrice[indexValue];
+        getDataTextField("${getFormatPrice("$price")}");
+      });
     }
   }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        // leading: leadingAppbar(context, widget: HomeAdminPage(index: 2,)),
         leading: leadingAppbar(context),
         centerTitle: true,
         backgroundColor: welcome_color,
@@ -76,7 +79,8 @@ class _updatePriceProductState extends State<updatePriceProduct> {
               padding: const EdgeInsets.only(top: 20.0),
               child: btnSubmitValidate(
                   context, 200, 40, welcome_color, "Cập nhật"),
-            )
+            ),
+
           ],
         ),
       ),
@@ -107,7 +111,7 @@ class _updatePriceProductState extends State<updatePriceProduct> {
         padding: const EdgeInsets.all(8.0),
         child: DropdownButton<String>(
           focusColor: Colors.white,
-          value: this.widget.chosenValue,
+          value: _value,
           //elevation: 5,
           style: TextStyle(color: Colors.white),
           iconEnabledColor: Colors.black,
@@ -129,7 +133,7 @@ class _updatePriceProductState extends State<updatePriceProduct> {
           onChanged: (String value) {
             setState(() {
               isClick = true;
-              this.widget.chosenValue = value;
+              _value = value;
               indexValue = itemNameUpdatePrice.indexOf(value);
               price = double.parse(itemPriceUpdatePrice[indexValue]);
               currentPrice = double.parse(itemPriceUpdatePrice[indexValue]);
