@@ -10,7 +10,9 @@ import 'package:rtm_system/ultils/helpers.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 
 class updatePriceProduct extends StatefulWidget {
-  const updatePriceProduct({Key key}) : super(key: key);
+  String chosenValue;
+
+  updatePriceProduct({this.chosenValue});
 
   @override
   _updatePriceProductState createState() => _updatePriceProductState();
@@ -18,7 +20,6 @@ class updatePriceProduct extends StatefulWidget {
 
 class _updatePriceProductState extends State<updatePriceProduct> {
   TextEditingController _controller = TextEditingController();
-  String _chosenValue;
   int indexValue, productId;
   String error;
   double price, currentPrice;
@@ -28,8 +29,27 @@ class _updatePriceProductState extends State<updatePriceProduct> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    isNotEmptyChoose();
+
   }
 
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    this.widget.chosenValue = null;
+  }
+
+  void isNotEmptyChoose(){
+    if(this.widget.chosenValue != null){
+      isClick = true;
+      indexValue = itemNameUpdatePrice.indexOf(this.widget.chosenValue);
+      price = double.parse(itemPriceUpdatePrice[indexValue]);
+      currentPrice = double.parse(itemPriceUpdatePrice[indexValue]);
+      productId = itemIdUpdatePrice[indexValue];
+      getDataTextField("${getFormatPrice("$price")}");
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,7 +71,7 @@ class _updatePriceProductState extends State<updatePriceProduct> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             _dropDownList(),
-            _txt(_chosenValue),
+            _txt(this.widget.chosenValue),
             Padding(
               padding: const EdgeInsets.only(top: 20.0),
               child: btnSubmitValidate(
@@ -87,7 +107,7 @@ class _updatePriceProductState extends State<updatePriceProduct> {
         padding: const EdgeInsets.all(8.0),
         child: DropdownButton<String>(
           focusColor: Colors.white,
-          value: _chosenValue,
+          value: this.widget.chosenValue,
           //elevation: 5,
           style: TextStyle(color: Colors.white),
           iconEnabledColor: Colors.black,
@@ -109,7 +129,7 @@ class _updatePriceProductState extends State<updatePriceProduct> {
           onChanged: (String value) {
             setState(() {
               isClick = true;
-              _chosenValue = value;
+              this.widget.chosenValue = value;
               indexValue = itemNameUpdatePrice.indexOf(value);
               price = double.parse(itemPriceUpdatePrice[indexValue]);
               currentPrice = double.parse(itemPriceUpdatePrice[indexValue]);
@@ -208,7 +228,7 @@ class _updatePriceProductState extends State<updatePriceProduct> {
                   : { itemIdUpdatePrice.clear(),
                       itemPriceUpdatePrice.clear(),
                       itemNameUpdatePrice.clear(),
-                      putAPIUpdatePrice(context, productId, price, _chosenValue),};
+                      putAPIUpdatePrice(context, productId, price, this.widget.chosenValue),};
             }
           },
           child: Center(

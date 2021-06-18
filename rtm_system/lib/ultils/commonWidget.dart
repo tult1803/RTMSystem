@@ -8,6 +8,7 @@ import 'package:rtm_system/view/customer/notice/all_notices.dart';
 import 'package:rtm_system/view/customer/process/process_all_invoice.dart';
 import 'package:rtm_system/view/detail_notice.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
+import 'package:rtm_system/view/manager/product/updatePriceProduct_manager.dart';
 import 'package:rtm_system/view/manager/profile/allCustomer_manager.dart';
 import 'package:rtm_system/view/update_password.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -512,6 +513,7 @@ Widget boxForProduct(
                 ),
               ),
               miniContainer(
+                context: context,
                 tittle: "${getFormatPrice(price)}đ",
                 colorText: Colors.black87,
                 fontWeightText: FontWeight.w500,
@@ -521,6 +523,7 @@ Widget boxForProduct(
                 colorContainer: Colors.white,
                 borderRadius: 5,
                 marginRight: 10,
+                widget: updatePriceProduct(chosenValue: productName,),
               ),
             ],
           ),
