@@ -1,3 +1,4 @@
+import 'dart:html';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -82,7 +83,14 @@ class _processInvoiceAdvanceState extends State<processInvoiceAdvance> {
           },
           children: [
             new showInvoiceManager(4, fromDate: "", toDate: ""),
-            new Container(),
+            //Chờ API Advance Bill
+            new Container(
+              width: size.width,
+              height: size.height,
+              child: Center(
+                child: Text("Chờ API"),
+              ),
+            ),
           ],
         ));
   }
@@ -115,7 +123,9 @@ class _processInvoiceAdvanceState extends State<processInvoiceAdvance> {
         onTap: () {
           setState(() {
             title == "Hoá đơn" ? isInvoice = true : isInvoice = false;
-            title == "Hoá đơn" ? _pageController.jumpToPage(0) : _pageController.jumpToPage(1);
+            title == "Hoá đơn"
+                ? _pageController.jumpToPage(0)
+                : _pageController.jumpToPage(1);
           });
         },
         child: Container(
