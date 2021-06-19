@@ -8,9 +8,9 @@ import 'model_AllCustomer.dart';
 
 class GetCustomer{
   static int statusInvoice;
-  createCustomer(String token, int accountId, int pageNum, int pageNo, {String searchTerm}) async {
+  createCustomer(String token, int type, String accountId, int pageNum, int pageNo, {String searchTerm}) async {
     final response = await http.get(
-      Uri.http('${url_main}', '${url_customer}/${accountId}', {"pageNum" : "${pageNum}" ,"pageNo" : "${pageNo}", "name": searchTerm }),
+      Uri.http('${url_main}', '${url_customer}/${type}', { "accountId":"${accountId}", "pageNum" : "${pageNum}" ,"pageNo" : "${pageNo}", "name": searchTerm }),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Accept': 'application/json',

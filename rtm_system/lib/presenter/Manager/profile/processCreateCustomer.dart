@@ -5,10 +5,10 @@ import 'package:rtm_system/ultils/helpers.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 
 class processCreateCustomer extends StatefulWidget {
-  final String tittle;
+  final String tittle, account_id;
   final List listCustomer;
   final bool isCustomer, isUpdate, isCreate;
-  final int typeOfUpdate, account_id;
+  final int typeOfUpdate;
   processCreateCustomer({this.tittle, this.listCustomer, this.isCustomer, this.isUpdate,this.typeOfUpdate, this.account_id, this.isCreate});
 
   @override

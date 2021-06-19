@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 
 class GetInvoiceRequest{
   static int statusInvoice;
-  getInvoiceRequest(String token, int account_id, int product_id, int pageNum, int pageNo,DateTime from, DateTime to, {String searchTerm}) async {
+  getInvoiceRequest(String token, String account_id, String product_id, int pageNum, int pageNo,DateTime from, DateTime to, {String searchTerm}) async {
     var fDate = new DateFormat('yyyy-MM-dd hh:mm:ss');
     final response = await http.get(
       Uri.http('${url_main}', '${url_invoice_request}', { "account_id" : "$account_id", "product_id": "$product_id","pageNum" : "${pageNum}" ,"pageNo" : "${pageNo}", "from" : "${fDate.format(from)}", "to" : "${fDate.format(to)}" }),

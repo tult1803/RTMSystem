@@ -12,7 +12,7 @@ import 'component.dart';
 showAlertDialog(BuildContext context, String tittle, Widget widget,
     {bool isDeactivate,
     String token,
-    int deactivateId,
+    String deactivateId,
     bool isDeactivateNotice}) {
   // Tạo button trong AlertDialog
   Widget btnAlert(String tittleA, Color color, bool checkCreate) {
@@ -252,7 +252,8 @@ Future<Dialog> showCustomDialog(BuildContext context,
                           colorContainer: Colors.white,
                           borderRadius: 10,
                           fontSize: 18,
-                          doPopNavigate: doPopNavigate == null ? false : doPopNavigate,
+                          doPopNavigate:
+                              doPopNavigate == null ? false : doPopNavigate,
                           widget: widgetToNavigator == null
                               ? null
                               : widgetToNavigator,

@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 //CMND mà trống là update manager, ngược lại là update Customer
 class PutDeactivateCustomer{
 
-  deactivateCustomer(String token, int accountId) async {
+  deactivateCustomer(String token, String accountId) async {
     final response = await http.put(
       Uri.http('${url_main}', '${url_deactivateCustomer}/$accountId'),
       headers: <String, String>{

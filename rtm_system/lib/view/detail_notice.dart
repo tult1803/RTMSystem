@@ -7,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class DetailOfNotice extends StatefulWidget {
   final String titleNotice ,contentNotice;
-  final int noticeId;
+  final String noticeId;
 
 
   DetailOfNotice({this.titleNotice, this.contentNotice, this.noticeId});

@@ -588,7 +588,8 @@ Widget txtConfirm(BuildContext context, String tittle, String content) {
 //Đổi màu và icon cho nút back screen
 Widget leadingAppbar(BuildContext context, {Widget widget, Color colorIcon}) {
   return IconButton(
-    icon: Icon(Icons.arrow_back_ios_outlined, color: colorIcon == null ? Colors.white : colorIcon),
+    icon: Icon(Icons.arrow_back_ios_outlined,
+        color: colorIcon == null ? Colors.white : colorIcon),
     onPressed: () => widget != null
         ? Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => widget), (route) => false)
@@ -630,10 +631,10 @@ Widget firstPageErrorIndicatorBuilder(BuildContext context, {String tittle}) {
 //Dùng cho trang chi tiết hóa đơn
 Widget componentContainerDetailInvoice(BuildContext context,
     {int statusId,
-    int id,
-    int productId,
-    int customerId,
-    int managerId,
+    String id,
+    String productId,
+    String customerId,
+    String managerId,
     double quantity,
     double degree,
     String managerName,
@@ -724,7 +725,8 @@ Widget componentContainerDetailInvoice(BuildContext context,
   );
 }
 
-Widget _showBtnProcessInvoice(context, int statusId, int id, bool isCustomer) {
+Widget _showBtnProcessInvoice(
+    context, int statusId, String id, bool isCustomer) {
   //show button để xử lý hoàn thành đơn
   //status = 5 là cho customer gọi api để confirm ,
   // status = 1 là manager confirm
@@ -798,7 +800,7 @@ Widget componentContainerDetailProduct(BuildContext context, Map item) {
     padding: const EdgeInsets.all(8.0),
     child: Column(
       children: [
-        txtItemDetail(context, "Mã sản phẩm", "#${item["id"]}"),
+        txtItemDetail(context, "Mã sản phẩm", "${item["id"]}"),
         SizedBox(
           height: 10,
         ),
@@ -834,7 +836,7 @@ Widget componentContainerDetailProduct(BuildContext context, Map item) {
 Widget componentContainerDetailCustomer(BuildContext context,
     {String status,
     String token,
-    int account_id,
+    String account_id,
     int statusId,
     int advance,
     String fullname,
@@ -848,7 +850,7 @@ Widget componentContainerDetailCustomer(BuildContext context,
     padding: const EdgeInsets.all(8.0),
     child: Column(
       children: [
-        txtItemDetail(context, "ID khách hàng", "#$account_id"),
+        txtItemDetail(context, "ID khách hàng", "$account_id"),
         SizedBox(
           height: 10,
         ),
@@ -936,8 +938,9 @@ Widget miniContainer(
           ? doPopNavigate == null
               ? null
               : Navigator.of(context).pop()
-          : Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => widget)),
+          : Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) => widget),
+              (route) => false),
       child: Container(
         margin: EdgeInsets.only(
           right: marginRight == null ? 0 : marginRight,
@@ -1022,9 +1025,9 @@ Widget containerTextInvoice({
 //Dùng cho trang chi tiết yêu cầu bán hàng
 Widget componentContainerInvoiceRequest(BuildContext context,
     {int statusId,
-    int id,
-    int productId,
-    int customerId,
+    String id,
+    String productId,
+    String customerId,
     String customerName,
     String customerPhone,
     String productName,

@@ -52,7 +52,7 @@ class _AddProductPageState extends State<AddProductPage> {
     GetProduct getProduct = GetProduct();
     dataListProduct.clear();
     if (token.isNotEmpty) {
-      dataList = await getProduct.getProduct(token, 0);
+      dataList = await getProduct.getProduct(token, "");
       dataList.forEach((element) {
         Map<dynamic, dynamic> data = element;
         dataListProduct.add(DataProduct.fromJson(data));
@@ -298,16 +298,8 @@ class _AddProductPageState extends State<AddProductPage> {
                             getDateTime("$dateSale", dateFormat: "dd/MM/yyyy")
                           ];
                         });
-                        if (_mySelection == '3') {
-                          setState(() {
-                            checkProduct = false;
-                          });
-                        } else if (_mySelection != '3') {
-                          setState(() {
-                            checkProduct = true;
-                          });
-                        }
                         setState(() {
+                          _mySelection == "SP-1000003" ? checkProduct = false : checkProduct = true;
                           checkClick = true;
                         });
                       },
@@ -437,10 +429,13 @@ class _AddProductPageState extends State<AddProductPage> {
   }
 
   //Lấy giá tiền
-  Future _getCurrentPrice(String index) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+  Future _getCurrentPrice(String value)  {
     setState(() {
-      price = prefs.get("${dataListProduct[int.tryParse(index) - 3].name}");
+      dataListProduct.forEach((element) {
+        if(element.id == value){
+          price = element.price;
+        }
+      });
     });
   }
 

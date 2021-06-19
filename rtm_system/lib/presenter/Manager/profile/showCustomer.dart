@@ -34,6 +34,7 @@ class _showAllCustomerState extends State<showAllCustomer> {
         prefs.get("access_token"),
         0,
         // account_id sẽ truyền không để lấy hết customer vì customer đc quản lý chung
+        prefs.get("accountId"),
         pageKey,
         _pageSize,
         searchTerm: _searchTerm,

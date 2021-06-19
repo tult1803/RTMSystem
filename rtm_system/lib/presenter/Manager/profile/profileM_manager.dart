@@ -16,7 +16,7 @@ class profilePage extends StatefulWidget {
 class _profilePageState extends State<profilePage> {
   String fullname = " ";
   String password;
-  int accountId;
+  String accountId;
   Future _getFullName() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {

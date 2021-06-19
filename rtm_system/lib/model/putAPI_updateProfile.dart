@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 //CMND mà trống là update manager, ngược lại là update Customer
 class PutUpdateProfile{
 
-  updateProfile(String token, String phone, int type, int account_id, String password, String fullname, int gender, String cmnd, String address, String birthday) async {
+  updateProfile(String token, String phone, int type, String account_id, String password, String fullname, int gender, String cmnd, String address, String birthday) async {
     final response = await http.put(
       Uri.http('${url_main}', '${url_updateProfile}'),
       headers: <String, String>{

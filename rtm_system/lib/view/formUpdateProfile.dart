@@ -12,11 +12,11 @@ import 'manager/profile/confirmCreateCustomer.dart';
 //check: true là cho customer còn false là cho manager
 
 class formUpdateProfile extends StatefulWidget {
-  String fullname, phone, cmnd, address, password;
+  String fullname, phone, cmnd, address, password, account_id;
   int gender;
   DateTime birthday;
   final bool check, isCreate;
-  final int typeOfUpdate, account_id;
+  final int typeOfUpdate;
 
   // True là sẽ gọi api update, false là gọi api createCustomer
   final bool isUpdate, isCustomer;

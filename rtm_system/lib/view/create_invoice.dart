@@ -32,7 +32,7 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
     GetProduct getProduct = GetProduct();
     dataListProduct.clear();
     if (token.isNotEmpty) {
-      dataList = await getProduct.getProduct(token, 0);
+      dataList = await getProduct.getProduct(token, null);
       dataList.forEach((element) {
         Map<dynamic, dynamic> data = element;
         dataListProduct.add(DataProduct.fromJson(data));

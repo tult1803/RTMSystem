@@ -8,8 +8,7 @@ import '../../formUpdateProfile.dart';
 
 class updateProfile extends StatefulWidget {
 
-  final String fullname, password;
-  final int account_id;
+  final String fullname, password, account_id;
 
   updateProfile({this.fullname, this.password, this.account_id});
 

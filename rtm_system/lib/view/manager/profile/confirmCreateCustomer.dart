@@ -10,7 +10,8 @@ class ConfirmCreateCustomer extends StatefulWidget {
   // fullname, gender, phone, CMND, address, password
   final List listCustomer;
   final bool check, isUpdate, isCustomer, isCreate;
-  final int typeOfUpdate, account_id;
+  final String account_id;
+  final int typeOfUpdate;
   ConfirmCreateCustomer({this.listCustomer, this.check, this.isUpdate,this.typeOfUpdate, this.account_id, this.isCustomer, this.isCreate});
 
   @override
