@@ -89,9 +89,7 @@ class showInvoiceManagerState extends State<showInvoiceManager> {
               children: [
                 SizedBox(
                   height: 0.5,
-                  child: Container(
-                    color: Colors.black38,
-                  ),
+                  child: Container(),
                 ),
                 Expanded(
                     child: Container(
@@ -119,8 +117,9 @@ class showInvoiceManagerState extends State<showInvoiceManager> {
                                 ],
                               );
                             },
-                            newPageErrorIndicatorBuilder: (context) => firstPageErrorIndicatorBuilder(context,
-                                tittle: "Không có dữ liệu"),
+                            newPageErrorIndicatorBuilder: (context) =>
+                                firstPageErrorIndicatorBuilder(context,
+                                    tittle: "Không có dữ liệu"),
                             firstPageProgressIndicatorBuilder: (context) =>
                                 firstPageProgressIndicatorBuilder(),
                             newPageProgressIndicatorBuilder: (context) =>

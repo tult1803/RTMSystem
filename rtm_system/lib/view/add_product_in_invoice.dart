@@ -12,11 +12,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AddProductPage extends StatefulWidget {
   final String tittle;
-
+  final Widget widgetToNavigator;
   //true is Customer role
   final bool isCustomer;
 
-  AddProductPage({this.tittle, this.isCustomer});
+  AddProductPage({this.tittle, this.isCustomer, this.widgetToNavigator});
 
   @override
   _AddProductPageState createState() => _AddProductPageState();
@@ -79,7 +79,7 @@ class _AddProductPageState extends State<AddProductPage> {
       appBar: AppBar(
         backgroundColor: Color(0xFF0BB791),
         centerTitle: true,
-        leading: leadingAppbar(context),
+        leading: leadingAppbar(context, widget: this.widget.widgetToNavigator),
         title: Text(
           this.widget.tittle,
           style: TextStyle(

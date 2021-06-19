@@ -9,11 +9,12 @@ import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/getData.dart';
 import 'package:rtm_system/ultils/helpers.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
+import 'package:rtm_system/view/manager/home_manager_page.dart';
 
 class updatePriceProduct extends StatefulWidget {
   String chosenValue;
-
-  updatePriceProduct({this.chosenValue});
+  Widget widgetToNavigate;
+  updatePriceProduct({this.chosenValue, this.widgetToNavigate});
 
   @override
   _updatePriceProductState createState() => _updatePriceProductState();
@@ -56,8 +57,8 @@ class _updatePriceProductState extends State<updatePriceProduct> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // leading: leadingAppbar(context, widget: HomeAdminPage(index: 2,)),
-        leading: leadingAppbar(context),
+        leading: leadingAppbar(context, widget: this.widget.widgetToNavigate),
+        // leading: leadingAppbar(context),
         centerTitle: true,
         backgroundColor: welcome_color,
         title: Text(
