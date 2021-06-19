@@ -5,6 +5,7 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:rtm_system/ultils/alertDialog.dart';
 import 'package:rtm_system/ultils/component.dart';
+import 'package:rtm_system/ultils/src/messageList.dart';
 import 'package:rtm_system/ultils/src/regExp.dart';
 import 'package:rtm_system/view/customer/advance/detail_advance.dart';
 import 'package:rtm_system/view/customer/home_customer_page.dart';
@@ -144,12 +145,12 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
           // The validator receives the text that the user has entered.
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return 'So tien k de trong';
+              return showMessage(tittle, MSG001);
             } else if (!checkFormatMoney.hasMatch(value)) {
-              return "Số tien chỉ nhập số";
+              return showMessage('', MSG026);
             } else if (!checkLengthMoney.hasMatch(value)) {
               print(value);
-              return "So tien lon hon 10,000 VND";
+              return showMessage('', MSG006);
             }
             return null;
           },
