@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/component.dart';
@@ -12,10 +10,7 @@ class DetailInvoice extends StatefulWidget {
 }
 
 class _DetailInvoiceState extends State<DetailInvoice> {
-  @override
-  void initState() {
-    print(widget.isCustomer);
-  }
+
   @override
   Widget build(BuildContext context) {
     return Container(

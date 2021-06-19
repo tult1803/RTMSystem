@@ -1,3 +1,4 @@
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -8,9 +9,12 @@ import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/getData.dart';
 import 'package:rtm_system/ultils/helpers.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
+import 'package:rtm_system/view/manager/home_manager_page.dart';
 
 class updatePriceProduct extends StatefulWidget {
-  const updatePriceProduct({Key key}) : super(key: key);
+  String chosenValue;
+  Widget widgetToNavigate;
+  updatePriceProduct({this.chosenValue, this.widgetToNavigate});
 
   @override
   _updatePriceProductState createState() => _updatePriceProductState();
@@ -18,23 +22,43 @@ class updatePriceProduct extends StatefulWidget {
 
 class _updatePriceProductState extends State<updatePriceProduct> {
   TextEditingController _controller = TextEditingController();
-  String _chosenValue;
   int indexValue, productId;
   String error;
   double price, currentPrice;
   bool isClick = false;
-
+  String _value;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    isNotEmptyChoose();
   }
 
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  void isNotEmptyChoose(){
+    if(this.widget.chosenValue != null){
+      setState(() {
+        isClick = true;
+        _value = this.widget.chosenValue;
+        indexValue = itemNameUpdatePrice.indexOf(this.widget.chosenValue);
+        price = double.parse(itemPriceUpdatePrice[indexValue]);
+        currentPrice = double.parse(itemPriceUpdatePrice[indexValue]);
+        productId = itemIdUpdatePrice[indexValue];
+        getDataTextField("${getFormatPrice("$price")}");
+      });
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: leadingAppbar(context),
+        leading: leadingAppbar(context, widget: this.widget.widgetToNavigate),
+        // leading: leadingAppbar(context),
         centerTitle: true,
         backgroundColor: welcome_color,
         title: Text(
@@ -51,12 +75,13 @@ class _updatePriceProductState extends State<updatePriceProduct> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             _dropDownList(),
-            _txt(_chosenValue),
+            _txt(this.widget.chosenValue),
             Padding(
               padding: const EdgeInsets.only(top: 20.0),
               child: btnSubmitValidate(
                   context, 200, 40, welcome_color, "Cập nhật"),
-            )
+            ),
+
           ],
         ),
       ),
@@ -87,7 +112,7 @@ class _updatePriceProductState extends State<updatePriceProduct> {
         padding: const EdgeInsets.all(8.0),
         child: DropdownButton<String>(
           focusColor: Colors.white,
-          value: _chosenValue,
+          value: _value,
           //elevation: 5,
           style: TextStyle(color: Colors.white),
           iconEnabledColor: Colors.black,
@@ -109,7 +134,7 @@ class _updatePriceProductState extends State<updatePriceProduct> {
           onChanged: (String value) {
             setState(() {
               isClick = true;
-              _chosenValue = value;
+              _value = value;
               indexValue = itemNameUpdatePrice.indexOf(value);
               price = double.parse(itemPriceUpdatePrice[indexValue]);
               currentPrice = double.parse(itemPriceUpdatePrice[indexValue]);
@@ -177,9 +202,9 @@ class _updatePriceProductState extends State<updatePriceProduct> {
         ),
         onChanged: (value) {
           setState(() {
-            if(value.isEmpty){
+            if (value.isEmpty) {
               price = null;
-            }else{
+            } else {
               price = double.parse(value);
               getDataTextField("${getFormatPrice("$price")}");
             }
@@ -200,26 +225,16 @@ class _updatePriceProductState extends State<updatePriceProduct> {
         ),
         child: TextButton(
           onPressed: () {
-              if (isClick) {
-               if(price != null){
-                 if(price > 1000){
-                   // ignore: unnecessary_statements
-                   currentPrice == price ? showStatusAlertDialog(context, "Xin nhập giá mới", null, false):{
-                     itemIdUpdatePrice.clear(),
-                     itemPriceUpdatePrice.clear(),
-                     itemNameUpdatePrice.clear(),
-                     putAPIUpdatePrice(context,productId, price),
-                   };
-                 }else {
-                   showStatusAlertDialog(
-                       context, "Giá phải lớn hơn 1000đ", null, false);
-                 }}else {
-                 showStatusAlertDialog(
-                     context, "Giá đang trống", null, false);
-               }} else {
-                showStatusAlertDialog(
-                    context, "Hãy chọn sản phẩm", null, false);
-              }
+            if (_checkSubmit()) {
+              currentPrice == price
+                  ? showCustomDialog(context,
+                      content: "Xin hãy nhập giá mới", isSuccess: false)
+                  // ignore: unnecessary_statements
+                  : { itemIdUpdatePrice.clear(),
+                      itemPriceUpdatePrice.clear(),
+                      itemNameUpdatePrice.clear(),
+                      putAPIUpdatePrice(context, productId, price, this.widget.chosenValue),};
+            }
           },
           child: Center(
             child: Text(
@@ -233,4 +248,23 @@ class _updatePriceProductState extends State<updatePriceProduct> {
         ));
   }
 
+  _checkSubmit() {
+    if (isClick) {
+      if (price != null) {
+        if (price > 1000) {
+          return true;
+        } else {
+          showCustomDialog(context,
+              content: "Giá phải lớn hơn 1000đ", isSuccess: false);
+          return false;
+        }
+      } else {
+        showCustomDialog(context, content: "Giá đang trống", isSuccess: false);
+        return false;
+      }
+    } else {
+      showCustomDialog(context, content: "Hãy chọn sản phẩm", isSuccess: false);
+      return false;
+    }
+  }
 }

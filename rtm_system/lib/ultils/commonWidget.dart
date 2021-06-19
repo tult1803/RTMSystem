@@ -1,7 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 import 'package:rtm_system/ultils/alertDialog.dart';
 import 'package:rtm_system/view/customer/Profile/update_profile.dart';
 import 'package:rtm_system/view/customer/home_customer_page.dart';
@@ -9,6 +8,7 @@ import 'package:rtm_system/view/customer/notice/all_notices.dart';
 import 'package:rtm_system/view/customer/process/process_all_invoice.dart';
 import 'package:rtm_system/view/detail_notice.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
+import 'package:rtm_system/view/manager/product/updatePriceProduct_manager.dart';
 import 'package:rtm_system/view/manager/profile/allCustomer_manager.dart';
 import 'package:rtm_system/view/update_password.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -99,7 +99,13 @@ Widget btnMain(BuildContext context, double width, String tittle, Icon icon,
         decoration: BoxDecoration(
           color: button_color,
           borderRadius: BorderRadius.circular(5),
-          border: Border.all(color: Colors.black, width: 0.5),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black54,
+              blurRadius: 3,
+              offset: Offset(1, 1), // Shadow position
+            ),
+          ],
         ),
         height: 35.0,
         width: width,
@@ -114,7 +120,7 @@ Widget btnMain(BuildContext context, double width, String tittle, Icon icon,
             child: Center(
                 child: AutoSizeText(
               "$tittle",
-              style: TextStyle(fontWeight: FontWeight.w600),
+              style: GoogleFonts.roboto(fontWeight: FontWeight.w600),
             )),
           ))
         ]),
@@ -127,11 +133,12 @@ Widget btnMain(BuildContext context, double width, String tittle, Icon icon,
         ),
         height: 35.0,
         width: width,
-        child: FlatButton(
+        child: TextButton(
           onPressed: () {
             Navigator.push(
                 context, MaterialPageRoute(builder: (context) => widget));
           },
+          child: null,
         ),
       ),
     ],
@@ -246,6 +253,7 @@ Widget boxForCustomer(
               ),
               Expanded(child: SizedBox()),
               miniContainer(
+                context: context,
                 borderRadius: 5,
                 height: 30,
                 width: 100,
@@ -261,6 +269,7 @@ Widget boxForCustomer(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               miniContainer(
+                context: context,
                 borderRadius: 5,
                 height: 30,
                 width: 130,
@@ -272,6 +281,7 @@ Widget boxForCustomer(
               ),
               Expanded(child: SizedBox()),
               miniContainer(
+                context: context,
                 borderRadius: 5,
                 height: 30,
                 width: 100,
@@ -301,12 +311,13 @@ Widget boxForInvoice(
     String total,
     String date,
     int status,
-    Widget widget, bool isCustomer,
+    Widget widget,
+    bool isCustomer,
     bool isRequest}) {
   String totalAfterFormat;
   String dateAfterFormat;
   String titlePrice;
-  isRequest? titlePrice = 'Giá': titlePrice = 'Tổng cộng';
+  isRequest ? titlePrice = 'Giá' : titlePrice = 'Tổng cộng';
   try {
     totalAfterFormat = "${getFormatPrice(total)}đ";
     dateAfterFormat = "${getDateTime(date)}";
@@ -315,10 +326,8 @@ Widget boxForInvoice(
     dateAfterFormat = "$date";
   }
   return GestureDetector(
-    onTap: () {
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => widget));
-    },
+    onTap: () => Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => widget)),
     child: Container(
       margin: EdgeInsets.only(top: 15, left: 10, right: 10),
       decoration: BoxDecoration(
@@ -337,6 +346,7 @@ Widget boxForInvoice(
           Row(
             children: [
               miniContainer(
+                context: context,
                 tittle: "Mã #$id",
                 marginRight: 5,
                 marginBottom: 5,
@@ -359,14 +369,14 @@ Widget boxForInvoice(
               ),
             ],
           ),
-          if(!isCustomer)
+          if (!isCustomer)
             containerTextInvoice(
-            alignment: Alignment.topLeft,
-            paddingLeftOfText: 10,
-            paddingRightOfText: 10,
-            tittle: name,
-            fontWeight: FontWeight.w700,
-          ),
+              alignment: Alignment.topLeft,
+              paddingLeftOfText: 10,
+              paddingRightOfText: 10,
+              tittle: name,
+              fontWeight: FontWeight.w700,
+            ),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -374,22 +384,23 @@ Widget boxForInvoice(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    isCustomer? containerTextInvoice(
-                      marginTop: 2,
-                      alignment: Alignment.topLeft,
-                      paddingLeftOfText: 10,
-                      paddingRightOfText: 10,
-                      tittle: "$product",
-                      fontWeight: FontWeight.w700,
-                    ):
-                    containerTextInvoice(
-                      marginTop: 2,
-                      alignment: Alignment.topLeft,
-                      paddingLeftOfText: 10,
-                      paddingRightOfText: 10,
-                      tittle: "Sản phẩm: $product",
-                      fontWeight: FontWeight.w400,
-                    ),
+                    isCustomer
+                        ? containerTextInvoice(
+                            marginTop: 2,
+                            alignment: Alignment.topLeft,
+                            paddingLeftOfText: 10,
+                            paddingRightOfText: 10,
+                            tittle: "$product",
+                            fontWeight: FontWeight.w700,
+                          )
+                        : containerTextInvoice(
+                            marginTop: 2,
+                            alignment: Alignment.topLeft,
+                            paddingLeftOfText: 10,
+                            paddingRightOfText: 10,
+                            tittle: "Sản phẩm: $product",
+                            fontWeight: FontWeight.w400,
+                          ),
                     containerTextInvoice(
                       marginTop: 2,
                       alignment: Alignment.topLeft,
@@ -402,6 +413,7 @@ Widget boxForInvoice(
                 ),
               ),
               miniContainer(
+                context: context,
                 tittle: "${getStatus(status: status)}",
                 colorText: Colors.white,
                 fontWeightText: FontWeight.w500,
@@ -413,28 +425,27 @@ Widget boxForInvoice(
               ),
             ],
           ),
-          SizedBox(height: 10,)
+          SizedBox(
+            height: 10,
+          )
         ],
       ),
     ),
   );
 }
 
-
 //Dùng cho trang Quản lý hóa đơn và để show các hóa đơn
 Widget boxForProduct(
     {BuildContext context,
-      int id,
-      String productName,
-      String typeOfProduct,
-      String price,
-      String date,
-      Widget widget}) {
+    int id,
+    String productName,
+    String typeOfProduct,
+    String price,
+    String date,
+    Widget widget}) {
   return GestureDetector(
-    onTap: () {
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => widget));
-    },
+    onTap: () => Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => widget)),
     child: Container(
       margin: EdgeInsets.only(top: 15, left: 10, right: 10),
       decoration: BoxDecoration(
@@ -453,6 +464,7 @@ Widget boxForProduct(
           Row(
             children: [
               miniContainer(
+                context: context,
                 tittle: "Mã #$id",
                 marginRight: 5,
                 marginBottom: 5,
@@ -501,6 +513,7 @@ Widget boxForProduct(
                 ),
               ),
               miniContainer(
+                context: context,
                 tittle: "${getFormatPrice(price)}đ",
                 colorText: Colors.black87,
                 fontWeightText: FontWeight.w500,
@@ -510,10 +523,13 @@ Widget boxForProduct(
                 colorContainer: Colors.white,
                 borderRadius: 5,
                 marginRight: 10,
+                widget: updatePriceProduct(chosenValue: productName,),
               ),
             ],
           ),
-          SizedBox(height: 10,)
+          SizedBox(
+            height: 10,
+          )
         ],
       ),
     ),
@@ -524,9 +540,6 @@ Widget boxForProduct(
 Widget containerButton(
     BuildContext context, int id, String tittle, String content, String date) {
   var size = MediaQuery.of(context).size;
-  //Format lại ngày
-  DateTime _date = DateTime.parse(date);
-  final fBirthday = new DateFormat('dd/MM/yyyy hh:mm');
 
   return Container(
       margin: EdgeInsets.only(left: 5, right: 5),
@@ -544,6 +557,7 @@ Widget containerButton(
               context,
               MaterialPageRoute(
                   builder: (context) => DetailOfNotice(
+                        noticeId: id,
                         titleNotice: tittle,
                         contentNotice: content,
                       )),
@@ -582,7 +596,7 @@ Widget containerButton(
                 height: 10,
               ),
               AutoSizeText(
-                "${fBirthday.format(_date)}",
+                "${getDateTime(date)}",
                 style: TextStyle(
                   fontSize: 12,
                   color: welcome_color,
@@ -612,10 +626,8 @@ Widget buttonProfile(BuildContext context, double left, double right,
     //Nếu dùng "GestureDetector" thì click sẽ không tạo ra hiệu ứng button
     //Nếu muốn tạo hiệu ứng button có thể dùng FlatButton hoặc RaiseButton
     child: GestureDetector(
-      onTap: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => widget));
-      },
+      onTap: () => Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => widget)),
       child: Column(
         children: [
           Container(
@@ -656,7 +668,7 @@ Widget btnLogout(context) {
         onPressed: () async {
           SharedPreferences prefs = await SharedPreferences.getInstance();
           prefs.clear();
-          print('Clear data login');
+          print('Data Login đã xóa');
           Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(builder: (context) => LoginPage()),
@@ -785,6 +797,7 @@ Widget btnUpdatePw(context, String password, int accountId, bool isCustomer) {
 
 //Widget này dùng cho các button "Tạo" hoặc "Hủy" vd: ở Trang Tạo thông báo
 //bool action = flase khi nhấn nút "Hủy" và bằng true khi nhấn "Tạo"
+
 Widget btnSubmitOrCancel(
     BuildContext context,
     double width,
@@ -814,16 +827,9 @@ Widget btnSubmitOrCancel(
             } else {
               int status = await postAPINotice(mainTittle, content);
               if (status == 200) {
-                showStatusAlertDialog(
-                    context,
-                    "Tạo thành công.",
-                    HomeAdminPage(
-                      index: indexOfBottomBar,
-                    ),
-                    true);
+                showCustomDialog(context, isSuccess: true, content: "Tạo thành công",doPopNavigate: true);
               } else
-                showStatusAlertDialog(
-                    context, "Tạo thất bại. Xin thử lại !!!", null, false);
+                showCustomDialog(context, isSuccess: false, content:  "Tạo thất bại. Xin thử lại",doPopNavigate: true);
             }
           } else {
             if (isCustomer) {
@@ -941,17 +947,21 @@ Widget btnWaitingProcess(context, bool isInvoice) {
     child: RaisedButton(
       color: Color(0xFFF8D375),
       onPressed: () {
-        isInvoice ?
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => ProcessAllPage( isInvoice: isInvoice,)),
-        ) :
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => ProcessAllPage( isInvoice: false,)),
-        );
+        isInvoice
+            ? Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ProcessAllPage(
+                          isInvoice: isInvoice,
+                        )),
+              )
+            : Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ProcessAllPage(
+                          isInvoice: false,
+                        )),
+              );
       },
       child: Row(
         children: [
@@ -983,7 +993,11 @@ Widget btnWaitingProcess(context, bool isInvoice) {
 
 //Đang dùng cho nút hủy kích hoạt tài khoản khách hàng
 Widget btnDeactivateCustomer(
-    {String status, int accountId, String token, BuildContext context}) {
+    {String status,
+    int deactivateId,
+    String token,
+    BuildContext context,
+    bool isDeactivateNotice}) {
   if (status != "Không hoạt động") {
     return Container(
       width: 160,
@@ -996,12 +1010,21 @@ Widget btnDeactivateCustomer(
         onPressed: () {
           if (status != "Không hoạt động") {
             showAlertDialog(
-                context, "Bạn muốn hủy kích hoạt khách hàng", AllCustomer(),
-                isDeactivate: true, token: token, accountId: accountId);
+                context,
+                isDeactivateNotice == null
+                    ? "Bạn muốn hủy kích hoạt khách hàng"
+                    : "Bạn muốn ẩn thông báo ?",
+                isDeactivateNotice == null
+                    ? AllCustomer()
+                    : HomeAdminPage(index: 3),
+                isDeactivate: true,
+                token: token,
+                deactivateId: deactivateId,
+                isDeactivateNotice: isDeactivateNotice);
           }
         },
         child: AutoSizeText(
-          "Hủy kích hoạt",
+          isDeactivateNotice == null ? "Hủy kích hoạt" : "Ẩn thông báo",
           style: TextStyle(color: Colors.white, fontSize: 17),
         ),
       ),
@@ -1009,75 +1032,4 @@ Widget btnDeactivateCustomer(
   } else {
     return Container();
   }
-}
-
-//Để tạm thời mốt xóa sau
-//******************************************************************************************************************
-
-Widget card(BuildContext context, String tittle, String type, String detailType,
-    String price, String date, Color color, Widget widget) {
-  //Lấy size của màn hình
-  var size = MediaQuery.of(context).size;
-  String priceAfterFormat;
-  String dateAfterFormat;
-  try {
-    //Format lại ngày
-    priceAfterFormat = "${getFormatPrice(price)}đ";
-    dateAfterFormat = "${getDateTime(date)}";
-  } catch (_) {
-    priceAfterFormat = "$price";
-    dateAfterFormat = "$date";
-  }
-  return Card(
-    margin: EdgeInsets.only(top: 15),
-    color: Colors.white,
-    shape: RoundedRectangleBorder(
-      side: BorderSide(color: Colors.black, width: 0.5),
-      borderRadius: BorderRadius.circular(10),
-    ),
-    child: Container(
-      height: 80,
-      // ignore: deprecated_member_use
-      child: FlatButton(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        onPressed: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => widget));
-        },
-        child: Row(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    bottomLeft: Radius.circular(10)),
-              ),
-              alignment: Alignment.centerLeft,
-              width: size.width * 0.5,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 2.0),
-                child: componentCardS(
-                    tittle, type, detailType, CrossAxisAlignment.start, color),
-              ),
-            ),
-            Expanded(
-              child: Container(
-                margin: EdgeInsets.only(top: 2.0),
-                alignment: Alignment.centerRight,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(10),
-                      bottomRight: Radius.circular(10)),
-                ),
-                child: componentCardE("$priceAfterFormat", "$dateAfterFormat",
-                    CrossAxisAlignment.end, Colors.black54),
-              ),
-            ),
-          ],
-        ),
-      ),
-    ),
-  );
 }

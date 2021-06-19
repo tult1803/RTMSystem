@@ -10,6 +10,7 @@ String url_updateProfile = "api/rtm/v1/user/update-account";
 String url_customer = "api/rtm/v1/user/get-customer";
 String url_updatePrice = "api/rtm/v1/product/update-price";
 String url_deactivateCustomer = "api/rtm/v1/user/deactivate-account";
+String url_deactivateNotice ="api/rtm/v1/notice/deactivate-notice";
 String url_createRequestInvoice = "api/rtm/v1/invoice/create-invoice-request";
 String url_signInvoice= "api/rtm/v1/invoice/sign-invoice";
 String url_confirmInvoice= "api/rtm/v1/invoice/confirm-invoice";

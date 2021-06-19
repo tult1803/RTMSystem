@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:rtm_system/demo.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
+import 'package:rtm_system/view/manager/home_manager_page.dart';
 import 'package:rtm_system/view/welcome_page.dart';
 
 void main() async {

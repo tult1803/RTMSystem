@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:rtm_system/presenter/Manager/profile/processCreateCustomer.dart';
 import 'package:rtm_system/ultils/component.dart';
+import 'package:rtm_system/ultils/helpers.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 
 class ConfirmCreateCustomer extends StatefulWidget {
   //Chuỗi dữ liệu của list được truyền vào sẽ theo thứ tự sau:
   // fullname, gender, phone, CMND, address, password
   final List listCustomer;
-  final bool check, isUpdate, isCustomer;
+  final bool check, isUpdate, isCustomer, isCreate;
   final int typeOfUpdate, account_id;
-  ConfirmCreateCustomer({this.listCustomer, this.check, this.isUpdate,this.typeOfUpdate, this.account_id, this.isCustomer});
+  ConfirmCreateCustomer({this.listCustomer, this.check, this.isUpdate,this.typeOfUpdate, this.account_id, this.isCustomer, this.isCreate});
 
   @override
   _ConfirmCreateCustomerState createState() => _ConfirmCreateCustomerState();
@@ -19,7 +20,6 @@ class ConfirmCreateCustomer extends StatefulWidget {
 class _ConfirmCreateCustomerState extends State<ConfirmCreateCustomer> {
   String fullname, phone, cmnd, address, password, gender;
   DateTime birthday;
-  final fBirthday = new DateFormat('dd/MM/yyyy');
 
   @override
   void initState() {
@@ -67,11 +67,12 @@ class _ConfirmCreateCustomerState extends State<ConfirmCreateCustomer> {
                   _checkPhone(),
                   txtConfirm(context, "Họ và tên", fullname),
                   txtConfirm(context, "Giới tính", "$gender"),
-                  txtConfirm(context, "Ngày sinh", "${fBirthday.format(birthday)}"),
+                  txtConfirm(context, "Ngày sinh", "${getDateTime("$birthday", dateFormat: 'dd/MM/yyyy')}"),
                   _checkCMND(),
                   _checkAddress(),
                   processCreateCustomer(
                       tittle: "Xác nhận",
+                      isCreate: this.widget.isCreate,
                       listCustomer:  this.widget.listCustomer,
                       isCustomer: this.widget.isCustomer,
                       isUpdate: this.widget.isUpdate,

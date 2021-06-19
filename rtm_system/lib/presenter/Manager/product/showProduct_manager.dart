@@ -32,7 +32,6 @@ class _showAllProductState extends State<showAllProduct> {
       GetProduct getProduct = GetProduct();
       dataList =
           await getProduct.getProduct(prefs.getString("access_token"), 0);
-      // print("${_pagingController}");
       final isLastPage = dataList.length < pageKey;
       if (isLastPage) {
         _pagingController.appendLastPage(dataList);
@@ -111,21 +110,7 @@ class _showAllProductState extends State<showAllProduct> {
                     itemPriceUpdatePrice.add("${item["update_price"]}");
                     itemIdUpdatePrice.add(item["id"]);
                   }
-
-                  // return card(
-                  //     context,
-                  //     item["name"],
-                  //     "Loại",
-                  //     "${item["type"]}",
-                  //     "${item["update_price"]}",
-                  //     item["updateDateTime"],
-                  //     Colors.black54,
-                  //     FormForDetailPage(
-                  //         tittle: "Chi tiết sản phẩm",
-                  //         bodyPage: DetailProduct(
-                  //           itemDetailProduct: item,
-                  //         ))
-                  // );
+                  _savedProductPrice(item["name"], "${item["update_price"]}");
                   return boxForProduct(
                       context: context,
                       id: item["id"],
@@ -145,6 +130,10 @@ class _showAllProductState extends State<showAllProduct> {
     );
   }
 
+  Future _savedProductPrice(String name, String value) async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString(name, value);
+  }
   @override
   void dispose() {
     _pagingController.dispose();

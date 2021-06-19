@@ -2,26 +2,28 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:intl/intl.dart';
 import 'package:rtm_system/model/getAPI_product.dart';
 import 'package:rtm_system/model/model_product.dart';
 import 'package:rtm_system/ultils/alertDialog.dart';
 import 'package:rtm_system/ultils/component.dart';
+import 'package:rtm_system/ultils/helpers.dart';
 import 'package:rtm_system/view/create_invoice.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AddProductPage extends StatefulWidget {
   final String tittle;
+  final Widget widgetToNavigator;
   //true is Customer role
   final bool isCustomer;
 
-  AddProductPage({this.tittle, this.isCustomer});
+  AddProductPage({this.tittle, this.isCustomer, this.widgetToNavigator});
 
   @override
   _AddProductPageState createState() => _AddProductPageState();
 }
 
 class _AddProductPageState extends State<AddProductPage> {
+  String price = '0';
   String token;
   String personSale = '', phoneSale = '';
   List listQuantity = [];
@@ -31,15 +33,14 @@ class _AddProductPageState extends State<AddProductPage> {
 
   //field to sales
   double quantity = 0, degree = 0;
-  String status = 'Dang cho';
   List listInforProduct;
 
   String _mySelection;
   bool checkProduct = true;
 
-  final f = new DateFormat('dd-MM-yyyy');
   DateTime dateNow = DateTime.now();
   DateTime dateSale = DateTime.now();
+
   Future _getProduct() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -57,6 +58,7 @@ class _AddProductPageState extends State<AddProductPage> {
         dataListProduct.add(DataProduct.fromJson(data));
       });
       setState(() {
+        // ignore: unnecessary_statements
         dataListProduct;
       });
       return dataListProduct;
@@ -77,7 +79,7 @@ class _AddProductPageState extends State<AddProductPage> {
       appBar: AppBar(
         backgroundColor: Color(0xFF0BB791),
         centerTitle: true,
-        leading: leadingAppbar(context),
+        leading: leadingAppbar(context, widget: this.widget.widgetToNavigator),
         title: Text(
           this.widget.tittle,
           style: TextStyle(
@@ -121,14 +123,20 @@ class _AddProductPageState extends State<AddProductPage> {
                         SizedBox(
                           height: 10,
                         ),
+                        btnCurrentPrice(context, price),
+                        SizedBox(
+                          height: 10,
+                        ),
                         if (!widget.isCustomer)
-                        _showMoneyOrQuantity("Tống số ký", this.quantity),
+                          _showMoneyOrQuantity(
+                              "Tống số ký", "${this.quantity} kg"),
                         SizedBox(
                           height: 10,
                         ),
                         //Khi manager tạo hoá đơn thì mới có giá lúc bán để show
                         if (!widget.isCustomer)
-                          _showMoneyOrQuantity("Thành tiền", this.quantity),
+                          _showMoneyOrQuantity("Thành tiền",
+                              "${getFormatPrice('${getPriceTotal(double.tryParse(price), degree, quantity)}')}đ"),
                       ]),
                     ),
                   ],
@@ -163,7 +171,7 @@ class _AddProductPageState extends State<AddProductPage> {
           ),
           // sẽ show số tổng các ký đã nhập
           Text(
-            '${value} kg',
+            '${value}',
             style: TextStyle(
               color: Colors.black,
               fontSize: 16,
@@ -216,21 +224,27 @@ class _AddProductPageState extends State<AddProductPage> {
       child: TextButton(
           onPressed: () {
             setState(() {
-              if (checkClick) {
-                //chuyen page
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => CreateInvoicePage(
-                            isNew: true,
-                            listProduct: listInforProduct,
-                          isCustomer: widget.isCustomer
-                          )),
-                );
-              } else {
-                showStatusAlertDialog(
-                    context, "Thông tin chưa thay đổi!", null, false);
-              }
+              _mySelection == null
+                  ? showCustomDialog(
+                      context,
+                      content: "Chưa chọn sản phẩm",
+                      isSuccess: false,
+                    )
+                  : quantity == 0
+                      ? showCustomDialog(
+                          context,
+                          content: "Số ký đang trống",
+                          isSuccess: false,
+                        )
+                      : Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => CreateInvoicePage(
+                                  isNew: true,
+                                  listProduct: listInforProduct,
+                                  isCustomer: widget.isCustomer)),
+                        );
+              // }
             });
           },
           child: Center(
@@ -273,14 +287,15 @@ class _AddProductPageState extends State<AddProductPage> {
                         fontWeight: FontWeight.w500,
                       ),
                       hint: Text('Chon san pham'),
-                      onChanged: (String newValue) {
+                      onChanged: (String newValue) async {
                         setState(() {
                           _mySelection = newValue;
+                          _getCurrentPrice(newValue);
                           this.listInforProduct = [
                             this._mySelection,
                             this.quantity,
                             this.degree,
-                            this.dateSale
+                            getDateTime("$dateSale", dateFormat: "dd/MM/yyyy")
                           ];
                         });
                         if (_mySelection == '3') {
@@ -349,7 +364,7 @@ class _AddProductPageState extends State<AddProductPage> {
               this._mySelection,
               this.quantity,
               this.degree,
-              this.dateSale
+              getDateTime("$dateSale", dateFormat: "dd/MM/yyyy")
             ];
             setState(() {
               checkClick = true;
@@ -357,9 +372,10 @@ class _AddProductPageState extends State<AddProductPage> {
           }
         },
         maxLines: maxLines,
-        keyboardType: TextInputType.number,
+        keyboardType:
+            TextInputType.numberWithOptions(signed: true, decimal: true),
         inputFormatters: [
-          FilteringTextInputFormatter.deny(RegExp(r'[-,/\\ [a-zA-Z]'))
+          FilteringTextInputFormatter.allow(RegExp(r'[.[0-9]')),
         ],
         style: TextStyle(fontSize: 15),
         cursorColor: Colors.red,
@@ -400,7 +416,7 @@ class _AddProductPageState extends State<AddProductPage> {
             this._mySelection,
             this.quantity,
             this.degree,
-            this.dateSale
+            getDateTime("$dateSale", dateFormat: "dd/MM/yyyy")
           ];
         });
       },
@@ -420,6 +436,14 @@ class _AddProductPageState extends State<AddProductPage> {
     );
   }
 
+  //Lấy giá tiền
+  Future _getCurrentPrice(String index) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      price = prefs.get("${dataListProduct[int.tryParse(index) - 3].name}");
+    });
+  }
+
   //Xóa các phần tử trong list cân
   void removeAtQuantity(String value) {
     return listQuantity.removeAt(listQuantity.indexOf(value));
@@ -429,6 +453,7 @@ class _AddProductPageState extends State<AddProductPage> {
   void insertQuantity(String value) {
     return listQuantity.add(value);
   }
+
   //Show date để chọn ngày đến bán( customer đang dùng)
   Widget btnDateSale(context) {
     var size = MediaQuery.of(context).size;
@@ -455,7 +480,7 @@ class _AddProductPageState extends State<AddProductPage> {
                       this._mySelection,
                       this.quantity,
                       this.degree,
-                      this.dateSale
+                      getDateTime("$dateSale", dateFormat: "dd/MM/yyyy")
                     ];
                   });
                 },
@@ -472,13 +497,13 @@ class _AddProductPageState extends State<AddProductPage> {
                   width: 130,
                   margin: EdgeInsets.only(left: 15),
                   child: Text(
-                    "Ngày đến bán",
+                    "Ngày bán",
                     style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
                   ),
                 ),
                 Expanded(
                   child: Text(
-                    '${f.format(dateSale)}',
+                    '${getDateTime("$dateSale", dateFormat: "dd/MM/yyyy")}',
                     style: TextStyle(fontSize: 16),
                   ),
                 ),
@@ -495,6 +520,43 @@ class _AddProductPageState extends State<AddProductPage> {
           SizedBox(
             height: 10,
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget btnCurrentPrice(context, String price) {
+    return Container(
+      height: 45,
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.all(
+            Radius.circular(10.0),
+          )),
+      child: Row(
+        children: [
+          Container(
+            width: 130,
+            margin: EdgeInsets.only(left: 15),
+            child: Text(
+              "Giá hiên tại",
+              style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
+            ),
+          ),
+          Expanded(
+            child: Container(
+              alignment: Alignment.centerRight,
+              child: Text(
+                '${"${getFormatPrice(price)}" == "0" ? "000.000" : getFormatPrice(price)}',
+                style: TextStyle(fontSize: 16),
+              ),
+            ),
+          ),
+          Container(
+              alignment: Alignment.centerRight,
+              margin: EdgeInsets.only(right: 20),
+              width: 70,
+              child: Text("VNĐ")),
         ],
       ),
     );

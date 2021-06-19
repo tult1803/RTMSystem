@@ -5,6 +5,7 @@ import 'package:rtm_system/model/getAPI_invoice.dart';
 import 'package:rtm_system/model/model_invoice.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/component.dart';
+import 'package:rtm_system/ultils/helpers.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/detailInvoice.dart';
 import 'package:rtm_system/view/manager/formForDetail_page.dart';
@@ -49,8 +50,8 @@ class _showAllInvoicePageState extends State<showAllInvoicePage> {
         widget.status,
         pageKey,
         _pageSize,
-        fromDate,
-        toDate,
+        getDateTime("$fromDate", dateFormat: 'yyyy-MM-dd hh:mm:ss'),
+        getDateTime("$toDate", dateFormat: 'yyyy-MM-dd hh:mm:ss'),
         searchTerm: _searchTerm,
       );
       invoiceList = invoice.invoices;
@@ -177,10 +178,10 @@ class _showAllInvoicePageState extends State<showAllInvoicePage> {
         builder: (context, child) {
           return Theme(
             data: Theme.of(context).copyWith(
-                //Dùng cho nút "X" của lịch
+              //Dùng cho nút "X" của lịch
                 appBarTheme: AppBarTheme(
                   iconTheme:
-                      theme.primaryIconTheme.copyWith(color: Colors.white),
+                  theme.primaryIconTheme.copyWith(color: Colors.white),
                 ),
                 //Dùng cho nút chọn ngày và background
                 colorScheme: ColorScheme.light(
