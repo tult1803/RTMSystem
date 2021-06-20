@@ -186,8 +186,34 @@ Widget btnDateTime(
           child: widget),
     ],
   );
+}Widget btnDateTimeForCustomer(
+    BuildContext context, String tittle, Icon icon, Widget widget) {
+  return Stack(
+    children: <Widget>[
+      SizedBox(
+        width: 140,
+        child: RaisedButton(
+          color: Colors.white70,
+          onPressed: () {},
+          child: Text('$tittle'),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          elevation: 10,
+        ),
+      ),
+      Container(
+          decoration: BoxDecoration(
+            color: Colors.white10,
+            borderRadius: BorderRadius.circular(5),
+            // border: Border.all(color: Colors.black, width: 0.5),
+          ),
+          height: 35.0,
+          width: 120,
+          child: widget),
+    ],
+  );
 }
-
 //Dùng cho show All customer
 Widget boxForCustomer(
     {BuildContext context,
@@ -537,14 +563,20 @@ Widget boxForProduct(
 }
 
 //Dùng cho trang notice để hiện thỉ các notice
+//isCustomer: true is Customer. Used to hide the button  in page of manager.
 Widget containerButton(
-    BuildContext context, String id, String tittle, String content, String date) {
+    BuildContext context, String id, String tittle, String content, String date,
+    bool isCustomer) {
   var size = MediaQuery.of(context).size;
-
   return Container(
-      margin: EdgeInsets.only(left: 5, right: 5),
-      child: Material(
-        color: Colors.white,
+    margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(15.0),
+        topRight: Radius.circular(15.0),
+      ),
+    ),
         child: TextButton(
           style: TextButton.styleFrom(
             primary: Colors.black, // foreground
@@ -553,14 +585,15 @@ Widget containerButton(
             ),
           ),
           onPressed: () {
-            Navigator.push(
+             Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => DetailOfNotice(
-                        noticeId: id,
-                        titleNotice: tittle,
-                        contentNotice: content,
-                      )),
+                    noticeId: id,
+                    titleNotice: tittle,
+                    contentNotice: content,
+                    isCustomer: isCustomer,
+                  )),
             );
           },
           child: Column(
@@ -575,7 +608,7 @@ Widget containerButton(
                       style: TextStyle(
                         fontWeight: FontWeight.w500,
                       ),
-                      overflow: TextOverflow.clip,
+                      overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.left,
                     ),
                   ),
@@ -615,7 +648,7 @@ Widget containerButton(
             ],
           ),
         ),
-      ));
+      );
 }
 
 //Hiện tại đang dùng cho trang "Profile"

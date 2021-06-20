@@ -192,7 +192,7 @@ void checkSaveLogin(BuildContext context) async {
     if (prefs.getInt("role_id") == 3 && prefs.getBool("isLogin") == true) {
       Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => HomeCustomerPage(index: 2,)),
+          MaterialPageRoute(builder: (context) => HomeCustomerPage(index: 0,)),
           (route) => false);
     } else if (prefs.getInt("role_id") == 2 &&
         prefs.getBool("isLogin") == true) {

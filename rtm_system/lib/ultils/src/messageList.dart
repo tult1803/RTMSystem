@@ -30,6 +30,7 @@ String MSG023 = "Vui lòng chọn sản phẩm.";
 String MSG024 = "Tạo thất bại";
 String MSG025 = "Cập nhật thất bại";
 String MSG026 = "Vui lòng chỉ nhập số";
+String MSG027 = "Vui lòng thử lại";
 
 
 //use to show message
