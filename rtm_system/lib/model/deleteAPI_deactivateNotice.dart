@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 //CMND mà trống là update manager, ngược lại là update Customer
 class DeleteDeactivateNotice{
 
-  deactivateNotice(String token, int noticeId ) async {
+  deactivateNotice(String token, String noticeId ) async {
     final response = await http.delete(
       Uri.http('${url_main}', '${url_deactivateNotice}/$noticeId'),
       headers: <String, String>{

@@ -32,7 +32,7 @@ class _showAdvanceState extends State<showProductInInvoice> {
     GetProduct getProduct = GetProduct();
     dataListProduct.clear();
     if (token.isNotEmpty) {
-      dataList = await getProduct.getProduct(token, 0);
+      dataList = await getProduct.getProduct(token, "");
       //Parse dữ liệu
       dataList.forEach((element) {
         Map<dynamic, dynamic> data = element;

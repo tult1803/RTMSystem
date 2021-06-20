@@ -194,10 +194,6 @@ class _showAllInvoiceState extends State<showAllInvoice> {
             "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd hh:mm:ss")}";
         getToDate =
             "${getDateTime("$toDate", dateFormat: "yyyy-MM-dd hh:mm:ss")}";
-        _pageController.jumpToPage(index+1);
-       Future.delayed(Duration(milliseconds: 100), (){
-         _pageController.jumpToPage(index-1);
-       });
       });
     }
   }

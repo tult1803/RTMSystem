@@ -6,7 +6,7 @@ import 'package:rtm_system/view/formChangePW.dart';
 class UpdatePasswordPage extends StatefulWidget {
   UpdatePasswordPage({this.password, this.account_id, this.isCustomer});
   final String password;
-  final int account_id;
+  final String account_id;
   final bool isCustomer;
   @override
   _UpdateProfilePageState createState() => _UpdateProfilePageState();

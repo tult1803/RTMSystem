@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 
 
 class PostCreateNotice{
-  createNotice(String tittle, String content, int account_id, String token) async {
+  createNotice(String tittle, String content, String account_id, String token) async {
     final response = await http.post(
       Uri.http('${url_main}', '${url_createNotice}'),
       headers: <String, String>{

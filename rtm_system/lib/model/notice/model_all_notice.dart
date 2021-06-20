@@ -32,10 +32,10 @@ class NoticeList {
     this.createDate,
   });
 
-  int id;
+  String id;
   String title;
   String content;
-  int accountId;
+  String accountId;
   DateTime createDate;
 
   factory NoticeList.fromJson(Map<String, dynamic> json) => NoticeList(

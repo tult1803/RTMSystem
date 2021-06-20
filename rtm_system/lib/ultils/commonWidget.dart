@@ -305,7 +305,7 @@ Widget boxForCustomer(
 //Dùng cho trang Quản lý hóa đơn và để show các hóa đơn
 Widget boxForInvoice(
     {BuildContext context,
-    int id,
+    String id,
     String name,
     String product,
     String total,
@@ -437,7 +437,7 @@ Widget boxForInvoice(
 //Dùng cho trang Quản lý hóa đơn và để show các hóa đơn
 Widget boxForProduct(
     {BuildContext context,
-    int id,
+    String id,
     String productName,
     String typeOfProduct,
     String price,
@@ -465,7 +465,7 @@ Widget boxForProduct(
             children: [
               miniContainer(
                 context: context,
-                tittle: "Mã #$id",
+                tittle: "$id",
                 marginRight: 5,
                 marginBottom: 5,
                 marginLeft: 10,
@@ -523,7 +523,7 @@ Widget boxForProduct(
                 colorContainer: Colors.white,
                 borderRadius: 5,
                 marginRight: 10,
-                widget: updatePriceProduct(chosenValue: productName,),
+                widget: updatePriceProduct(chosenValue: productName,widgetToNavigate: HomeAdminPage(index: 2),),
               ),
             ],
           ),
@@ -538,7 +538,7 @@ Widget boxForProduct(
 
 //Dùng cho trang notice để hiện thỉ các notice
 Widget containerButton(
-    BuildContext context, int id, String tittle, String content, String date) {
+    BuildContext context, String id, String tittle, String content, String date) {
   var size = MediaQuery.of(context).size;
 
   return Container(
@@ -724,7 +724,7 @@ Widget btnUpdateInfo(
     DateTime birthday,
     String address,
     bool check,
-    int accountId) {
+    String accountId) {
   return Container(
     width: 320,
     // ignore: deprecated_member_use
@@ -763,7 +763,7 @@ Widget btnUpdateInfo(
 }
 
 //dung khi thay doi pw
-Widget btnUpdatePw(context, String password, int accountId, bool isCustomer) {
+Widget btnUpdatePw(context, String password, String accountId, bool isCustomer) {
   return Container(
     width: 320,
     // ignore: deprecated_member_use
@@ -810,7 +810,8 @@ Widget btnSubmitOrCancel(
     bool action,
     int indexOfBottomBar,
     bool isCustomer,
-    String messageShow) {
+    String messageShow,
+    {Widget widgetToNavigator}) {
   return Container(
     height: height,
     width: width,
@@ -827,7 +828,7 @@ Widget btnSubmitOrCancel(
             } else {
               int status = await postAPINotice(mainTittle, content);
               if (status == 200) {
-                showCustomDialog(context, isSuccess: true, content: "Tạo thành công",doPopNavigate: true);
+                showCustomDialog(context, isSuccess: true, content: "Tạo thành công",doPopNavigate: true, widgetToNavigator: widgetToNavigator);
               } else
                 showCustomDialog(context, isSuccess: false, content:  "Tạo thất bại. Xin thử lại",doPopNavigate: true);
             }
@@ -994,7 +995,7 @@ Widget btnWaitingProcess(context, bool isInvoice) {
 //Đang dùng cho nút hủy kích hoạt tài khoản khách hàng
 Widget btnDeactivateCustomer(
     {String status,
-    int deactivateId,
+      String deactivateId,
     String token,
     BuildContext context,
     bool isDeactivateNotice}) {

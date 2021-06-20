@@ -22,8 +22,8 @@ class updatePriceProduct extends StatefulWidget {
 
 class _updatePriceProductState extends State<updatePriceProduct> {
   TextEditingController _controller = TextEditingController();
-  int indexValue, productId;
-  String error;
+  int indexValue;
+  String error, productId;
   double price, currentPrice;
   bool isClick = false;
   String _value;

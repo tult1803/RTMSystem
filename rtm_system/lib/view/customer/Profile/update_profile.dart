@@ -26,7 +26,7 @@ class UpdateProfilePage extends StatefulWidget {
   final DateTime birthday;
   final String address;
   final bool check;
-  final int account_id;
+  final String account_id;
 
 
   @override

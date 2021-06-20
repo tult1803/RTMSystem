@@ -18,7 +18,7 @@ class showAllProduct extends StatefulWidget {
 
 List<String> itemNameUpdatePrice = [];
 List<String> itemPriceUpdatePrice = [];
-List<int> itemIdUpdatePrice = [];
+List<String> itemIdUpdatePrice = [];
 
 class _showAllProductState extends State<showAllProduct> {
   // String token;
@@ -31,7 +31,7 @@ class _showAllProductState extends State<showAllProduct> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       GetProduct getProduct = GetProduct();
       dataList =
-          await getProduct.getProduct(prefs.getString("access_token"), 0);
+          await getProduct.getProduct(prefs.getString("access_token"), "");
       final isLastPage = dataList.length < pageKey;
       if (isLastPage) {
         _pagingController.appendLastPage(dataList);
@@ -44,6 +44,7 @@ class _showAllProductState extends State<showAllProduct> {
       _pagingController.error = error;
     }
   }
+
 
   @override
   void initState() {
@@ -108,8 +109,7 @@ class _showAllProductState extends State<showAllProduct> {
                   if (itemNameUpdatePrice.length <= index) {
                     itemNameUpdatePrice.add(item["name"]);
                     itemPriceUpdatePrice.add("${item["update_price"]}");
-                    itemIdUpdatePrice.add(item["id"]);
-                  }
+                    itemIdUpdatePrice.add(item["id"]);}
                   _savedProductPrice(item["name"], "${item["update_price"]}");
                   return boxForProduct(
                       context: context,

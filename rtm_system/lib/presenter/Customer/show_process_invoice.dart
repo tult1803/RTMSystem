@@ -12,7 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class showProcessInvoicePage extends StatefulWidget {
   const showProcessInvoicePage({Key key, this.idProduct, this.isAll}) : super(key: key);
-  final int idProduct;
+  final String idProduct;
   final bool isAll;
   @override
   _showProcessInvoicePageState createState() => _showProcessInvoicePageState();

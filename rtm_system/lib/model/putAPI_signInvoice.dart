@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 
 class PutSignInvoice{
 
-  putSignInvoice(String token, int id) async {
+  putSignInvoice(String token, String id) async {
     final response = await http.put(
       Uri.http('${url_main}', '${url_signInvoice}/$id'),
       headers: <String, String>{

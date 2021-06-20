@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
+import 'package:rtm_system/view/manager/home_manager_page.dart';
 
 class showCreateNotice extends StatefulWidget {
   const showCreateNotice({Key key}) : super(key: key);
@@ -62,7 +63,7 @@ class _showCreateNoticeState extends State<showCreateNotice> {
                     tittle, description, null,false, 3, false, "Bạn muốn huỷ tạo thông báo?"),
                 SizedBox(width: 20),
                 btnSubmitOrCancel(context, 140, 40, welcome_color, "Tạo",
-                    tittle, description, "Tiêu để đang bị để trống.",true, 3, false,''),
+                    tittle, description, "Tiêu để đang bị để trống.",true, 3, false,'', widgetToNavigator: HomeAdminPage(index: 3,)),
               ],
             ),
           ],

@@ -46,7 +46,7 @@ class _showAllInvoicePageState extends State<showAllInvoicePage> {
       invoice = await getAPIAllInvoice.getInvoice(
         prefs.get("access_token"),
         prefs.get("accountId"),
-        int.parse(widget.idProduct),
+        widget.idProduct,
         widget.status,
         pageKey,
         _pageSize,

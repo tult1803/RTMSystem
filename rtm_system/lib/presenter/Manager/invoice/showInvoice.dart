@@ -34,9 +34,9 @@ class showInvoiceManagerState extends State<showInvoiceManager> {
       GetInvoice getAPIAllInvoice = GetInvoice();
       invoice = await getAPIAllInvoice.getInvoice(
         prefs.get("access_token"),
-        0,
+        "",
         //Customer Id: truyền 0 là get All cho manager
-        0,
+        "",
         //Product Id: truyền 0 là get All cho manager
         this.widget.statusId,
         //Status Id: truyền 4 là get all process invoice
@@ -61,6 +61,16 @@ class showInvoiceManagerState extends State<showInvoiceManager> {
     } catch (error) {
       // print(error);
       _pagingController.error = error;
+    }
+  }
+
+  //Hàm này nhận biết sự thay đổi của Widget để thực hiện hành động
+  @override
+  void didUpdateWidget(covariant showInvoiceManager oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+    if(oldWidget.toDate != this.widget.toDate){
+      _pagingController.refresh();
     }
   }
 

@@ -3,7 +3,7 @@ class InfomationCustomer {
   String cmnd;
   bool vip;
   int statusId;
-  int accountId;
+  String accountId;
   int advance;
   String fullname;
   int gender;

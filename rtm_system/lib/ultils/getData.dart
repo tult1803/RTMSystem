@@ -50,7 +50,7 @@ Future post_put_ApiProfile(
     String birthday,
     bool isUpdate,
     int typeOfUpdate,
-    int accountId) async {
+    String accountId) async {
   int status;
   SharedPreferences prefs = await SharedPreferences.getInstance();
   if (isUpdate) {
@@ -86,7 +86,7 @@ Future<void> doCreateCustomer(
     bool isCustomer,
     bool isUpdate,
     int typeOfUpdate,
-    int accountId,
+    String accountId,
     {bool isCreate}) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   int status = await post_put_ApiProfile(phone, password, fullname, gender,
@@ -154,7 +154,7 @@ Future<void> put_API_GetMoney(BuildContext context, indexPage) async {
       status);
 }
 
-Future<void> putAPIUpdatePrice(BuildContext context, int productId,
+Future<void> putAPIUpdatePrice(BuildContext context, String productId,
     double price, String productName) async {
   int status;
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -217,7 +217,7 @@ Future<void> doCreateRequestInvoiceOrInvoice(
 // Xac nhan hoa don, cho ca manager va customer
 // Customer : truyền invoice_id để xác nhận
 Future<void> doConfirmOrAcceptOrRejectInvoice(
-    BuildContext context, int invoiceId, int type, bool isCustomer) async {
+    BuildContext context, String invoiceId, int type, bool isCustomer) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   int status;
   if (isCustomer) {

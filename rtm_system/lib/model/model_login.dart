@@ -1,11 +1,16 @@
 class DataLogin {
-  final  int accountId;
-  final String access_token, fullname;
-  int role_id;
-  int gender;
+  final String access_token, fullname, accountId;
+  int role_id, gender;
   String birthday, phone;
 
-  DataLogin({this.accountId, this.role_id, this.access_token, this.fullname, this.gender, this.birthday, this.phone});
+  DataLogin(
+      {this.accountId,
+      this.role_id,
+      this.access_token,
+      this.fullname,
+      this.gender,
+      this.birthday,
+      this.phone});
 
   factory DataLogin.fromJson(Map<String, dynamic> json) {
     return DataLogin(

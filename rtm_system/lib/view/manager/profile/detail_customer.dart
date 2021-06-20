@@ -13,8 +13,8 @@ class DetailCustomer extends StatefulWidget {
 }
 
 class _DetailCustomerState extends State<DetailCustomer> {
-  int id, accountId, advance, statusId;
-  String cmnd, fullName, phone, birthday, address, gender, status;
+  int id, advance, statusId;
+  String cmnd, fullName, phone, birthday, address, gender, status, accountId;
   String vip;
 
   Future _getData(){

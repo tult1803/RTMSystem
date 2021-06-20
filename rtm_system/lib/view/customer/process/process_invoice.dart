@@ -14,7 +14,7 @@ class _ProcessInvoicePageState extends State<ProcessInvoicePage> {
     return Scaffold(
         backgroundColor: Color(0xffEEEEEE),
         body: Container(
-          child: new showProcessInvoicePage(isAll: true,idProduct: 0,),
+          child: new showProcessInvoicePage(isAll: true,idProduct: "0",),
         ));
   }
 

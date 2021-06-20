@@ -28,8 +28,8 @@ class LoginPageState extends State<LoginPage> {
     color: Colors.black54,
   );
   static bool isLogin = false;
-  var roleId = 0, accountId = 0;
-  String username = "";
+  var roleId = 0;
+  String username = "", accountId = "";
   String password;
   String accessToken = '';
   String fullname = "";

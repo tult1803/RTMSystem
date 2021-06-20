@@ -5,7 +5,7 @@ import 'package:rtm_system/ultils/src/regExp.dart';
 
 class formUpdatePasswordPage extends StatefulWidget {
   final String currentPassword;
-  final int account_id;
+  final String account_id;
   final bool isCustomer;
   formUpdatePasswordPage({this.currentPassword, this.account_id, this.isCustomer});
 
