@@ -10,7 +10,11 @@ class DetailInvoice extends StatefulWidget {
 }
 
 class _DetailInvoiceState extends State<DetailInvoice> {
-
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -38,7 +42,8 @@ class _DetailInvoiceState extends State<DetailInvoice> {
               customerId: this.widget.map["customer_id"],
               managerId: this.widget.map["manager_id"],
               activeDate: this.widget.map["active_date"],
-              isCustomer: widget.isCustomer
+              isCustomer: widget.isCustomer,
+
           ),
         ),
       ),

@@ -9,8 +9,6 @@ class NoticesPage extends StatefulWidget {
   _NoticesPageState createState() => _NoticesPageState();
 }
 
-
-
 class _NoticesPageState extends State<NoticesPage> {
   @override
   Widget build(BuildContext context) {

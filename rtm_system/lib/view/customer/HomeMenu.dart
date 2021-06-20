@@ -43,7 +43,7 @@ class _HomeMenuState extends State<HomeMenu> {
               HomeCustomerPage(index: 1), ),
             SizedBox(height: 40,),
             twoBtnBody( "Liên hệ",Icons.contact_page, "",
-              null, HomeCustomerPage(index: 2),
+              null, HomeCustomerPage(index: 4),
               null, ),
           ],
         )

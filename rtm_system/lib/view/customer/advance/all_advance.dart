@@ -1,12 +1,10 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:rtm_system/presenter/Customer/show_all_advance.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:rtm_system/presenter/Customer/show_all_invoice.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
-import 'package:rtm_system/ultils/component.dart';
+import 'package:rtm_system/ultils/helpers.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
-import 'package:rtm_system/view/customer/advance/create_request_advance.dart';
-import 'package:rtm_system/view/customer/getMoney_or_payDebt.dart';
 
 class AdvancePage extends StatefulWidget {
   const AdvancePage({Key key, this.money}) : super(key: key);
@@ -15,79 +13,90 @@ class AdvancePage extends StatefulWidget {
   @override
   _AdvancePageState createState() => _AdvancePageState();
 }
-
+DateTime fromDate;
+DateTime toDate;
 class _AdvancePageState extends State<AdvancePage> {
-  var currentDate = new DateTime.now();
-  var formatter = new DateFormat('dd-MM-yyyy');
-  DateTime fromDate;
-  DateTime toDate;
-  String search = '';
+  final PageController _pageController = PageController();
+  String getFromDate, getToDate, search;
+  int index ;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    index = 0;
     toDate = DateTime.now();
     fromDate = DateTime.now().subtract(Duration(days: 30));
+    getFromDate =
+    "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
+    getToDate = "${getDateTime("$toDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
   }
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: Color(0xffEEEEEE),
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(0.0),
-        child: AppBar(
+        backgroundColor: Color(0xffEEEEEE),
+        appBar: AppBar(
           backgroundColor: Color(0xFF0BB791),
-          elevation: 0,
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Container(
-            margin: EdgeInsets.only(
-              bottom: 12,
+          title: Text(
+            "Ứng tiền",
+            style: TextStyle(
+              color: Colors.white,
             ),
-            child: Column(
-              children: [
-                headerInvoice(
-                    'Ứng tiền', 'Tổng số tiền phải trả', '${widget.money} VND'),
-                Container(
-                  margin: EdgeInsets.only(top: 12, bottom: 5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      _txtFormField(this.search, false, "Nhập mã hoá đơn", 1,
-                          TextInputType.text),
-                      btnWaitingProcess(context, false),
-                    ],
-                  ),
+          ),
+          centerTitle: true,
+        ),
+        body: Container(
+          margin: EdgeInsets.only(left: 5, top: 12, right: 5),
+          child: Column(
+            children: [
+              Container(
+                padding: EdgeInsets.only(top: size.height * 0.01),
+                height: size.height * 0.045,
+                width: size.width * 0.5,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(15),
+                  // border: Border.all(color: Colors.white, width: 0.5),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    btnDateTime(context, "${formatter.format(fromDate)}",
-                        Icon(Icons.date_range), datePick()),
-                    SizedBox(
-                      child: Center(
-                          child: Container(
-                              alignment: Alignment.topCenter,
-                              height: 20,
-                              child: Text(
-                                "-",
-                                style: TextStyle(fontSize: 20),
-                              ))),
-                    ),
-                    btnDateTime(context, "${formatter.format(toDate)}",
-                        Icon(Icons.date_range), datePick()),
-                  ],
-                ),
-                SizedBox(
-                  height: 12,
-                ),
-                showAdvance(),
-                _showBottomButton(),
-              ],
-            )),
-      ),
+                child: _wrapToShowTittleBar(),
+              ),
+              SizedBox(
+                height: 12,
+              ),
+              rowButtonDatetime(),
+              Expanded(child: pageViewInvocie()),
+            ],
+          ),
+        ));
+  }
+
+  Widget rowButtonDatetime() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        btnDateTimeForCustomer(
+            context,
+            "${getDateTime("$fromDate", dateFormat: "dd-MM-yyyy")}",
+            Icon(Icons.date_range),
+            datePick()),
+        SizedBox(
+          child: Center(
+              child: Container(
+                  alignment: Alignment.topCenter,
+                  height: 20,
+                  child: Text(
+                    "-",
+                    style: TextStyle(fontSize: 20),
+                  ))),
+        ),
+        btnDateTimeForCustomer(
+            context,
+            "${getDateTime("$toDate", dateFormat: "dd-MM-yyyy")}",
+            Icon(Icons.date_range),
+            datePick()),
+      ],
     );
   }
 
@@ -98,6 +107,7 @@ class _AdvancePageState extends State<AdvancePage> {
           pickedDate();
         });
       },
+      child: null,
     );
   }
 
@@ -113,10 +123,10 @@ class _AdvancePageState extends State<AdvancePage> {
         builder: (context, child) {
           return Theme(
             data: Theme.of(context).copyWith(
-                //Dùng cho nút "X" của lịch
+              //Dùng cho nút "X" của lịch
                 appBarTheme: AppBarTheme(
                   iconTheme:
-                      theme.primaryIconTheme.copyWith(color: Colors.white),
+                  theme.primaryIconTheme.copyWith(color: Colors.white),
                 ),
                 //Dùng cho nút chọn ngày và background
                 colorScheme: ColorScheme.light(
@@ -128,92 +138,69 @@ class _AdvancePageState extends State<AdvancePage> {
     if (dateRange != null) {
       setState(() {
         fromDate = dateRange.start;
-        toDate = dateRange.end;
+        toDate = dateRange.end.add(Duration(days: 1));
+        getFromDate =
+        "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
+        getToDate =
+        "${getDateTime("$toDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
       });
     }
   }
+  Widget _wrapToShowTittleBar() {
+    return Container(
+      child: Wrap(
+          crossAxisAlignment: WrapCrossAlignment.center,
+          alignment: WrapAlignment.center,
+          children: [
+            if(index == 0)
+              tittleBarForInvoice("Yêu cầu ứng tiền", isChoose: index == 0 ? true : null),
+            if(index == 1)
+              tittleBarForInvoice("Hoá đơn ứng tiền", isChoose: index == 1 ? true : null),
+          ]),
+    );
+  }
+  Widget tittleBarForInvoice(String tittle, {bool isChoose}) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          switch (tittle) {
+            case "Yêu cầu ứng tiền":
+              _pageController.jumpToPage(0);
+              break;
+            case "Hoá đơn ứng tiền":
+              _pageController.jumpToPage(1);
+              break;
 
-  Widget btnDateTime(
-      BuildContext context, String tittle, Icon icon, Widget widget) {
-    var size = MediaQuery.of(context).size;
-    return Stack(
-      children: <Widget>[
-        SizedBox(
-          width: 140,
-          child: RaisedButton(
-            color: Colors.white70,
-            onPressed: () {},
-            child: Text('$tittle'),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            elevation: 10,
-          ),
-        ),
-        Container(
-            decoration: BoxDecoration(
-              color: Colors.white10,
-              borderRadius: BorderRadius.circular(5),
-              // border: Border.all(color: Colors.black, width: 0.5),
-            ),
-            height: 35.0,
-            width: 120,
-            child: widget),
-      ],
+          }
+        });
+      },
+      child: Text(tittle,
+          style: GoogleFonts.roboto(
+            fontSize: 16,
+            fontWeight: FontWeight.normal,
+            color: welcome_color,
+          )),
+
     );
   }
 
-  Widget _showBottomButton() {
-    var size = MediaQuery.of(context).size;
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Container(
-              width: size.width * 0.4,
-              child: RaisedButton(
-                color: Colors.white70,
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => GetMoneyOrPayDebt(isPay: true,)),
-                  );
-                },
-                child: Text('Trả nợ'),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                elevation: 10,
-              ),
-            ),
-            Container(
-              width: size.width * 0.4,
-              child: RaisedButton(
-                  color: Color(0xFF0BB791),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => CreateRequestAdvance()),
-                    );
-                  },
-                  child: Text(
-                    'Ứng tiền',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                    ),
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  elevation: 10),
-            ),
-          ],
-        ),
-      ],
+
+  //Để show các hóa đơn dựa trên _wrapToShowTittleBar tương ứng
+  Widget pageViewInvocie() {
+    return Container(
+      child: PageView(
+        controller: _pageController,
+        scrollDirection: Axis.horizontal,
+        onPageChanged: (value) {
+          setState(() {
+            index = value;
+          });
+        },
+        children: [
+          new showAllInvoicePage(4, fromDate: getFromDate, toDate: getToDate),
+          new showAllInvoicePage(1, fromDate: getFromDate, toDate: getToDate),
+        ],
+      ),
     );
   }
 
@@ -221,7 +208,7 @@ class _AdvancePageState extends State<AdvancePage> {
       int maxLines, TextInputType txtType) {
     var size = MediaQuery.of(context).size;
     return SizedBox(
-      width:size.width * 0.6,
+      width:size.width * 0.9,
       child: TextFormField(
         initialValue: value,
         obscureText: obscureText,

@@ -4,8 +4,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:rtm_system/ultils/alertDialog.dart';
 import 'package:rtm_system/view/customer/Profile/update_profile.dart';
 import 'package:rtm_system/view/customer/home_customer_page.dart';
-import 'package:rtm_system/view/customer/notice/all_notices.dart';
-import 'package:rtm_system/view/customer/process/process_all_invoice.dart';
 import 'package:rtm_system/view/detail_notice.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
 import 'package:rtm_system/view/manager/product/updatePriceProduct_manager.dart';
@@ -188,12 +186,13 @@ Widget btnDateTime(
   );
 }Widget btnDateTimeForCustomer(
     BuildContext context, String tittle, Icon icon, Widget widget) {
+  var size = MediaQuery.of(context).size;
   return Stack(
     children: <Widget>[
       SizedBox(
-        width: 140,
+        width: size.width * 0.35,
         child: RaisedButton(
-          color: Colors.white70,
+          color: Colors.white,
           onPressed: () {},
           child: Text('$tittle'),
           shape: RoundedRectangleBorder(
@@ -208,8 +207,8 @@ Widget btnDateTime(
             borderRadius: BorderRadius.circular(5),
             // border: Border.all(color: Colors.black, width: 0.5),
           ),
-          height: 35.0,
-          width: 120,
+          height: size.height * 0.05,
+          width: size.width * 0.35,
           child: widget),
     ],
   );
@@ -328,7 +327,9 @@ Widget boxForCustomer(
   );
 }
 
-//Dùng cho trang Quản lý hóa đơn và để show các hóa đơn
+//Dùng cho trang Quản lý hóa đơn và để show các hóa đơn. Dùng cho cả show yêu cầu bán hàng.
+// isRequest: true là yêu cầu bán hàng. Thay đổi chữ Tổng cộng thành Giá ( giá này là giá sản phẩm )
+//isCustomer : true is customer. Used to show infor need
 Widget boxForInvoice(
     {BuildContext context,
     String id,
@@ -343,6 +344,7 @@ Widget boxForInvoice(
   String totalAfterFormat;
   String dateAfterFormat;
   String titlePrice;
+  // thay đổi title , và truyền totalAfterFormat sẽ là giá sản phẩm.
   isRequest ? titlePrice = 'Giá' : titlePrice = 'Tổng cộng';
   try {
     totalAfterFormat = "${getFormatPrice(total)}đ";
@@ -971,57 +973,6 @@ Widget containerDetail(BuildContext context, Widget widget) {
       ],
     ),
     child: widget,
-  );
-}
-
-Widget btnWaitingProcess(context, bool isInvoice) {
-  return SizedBox(
-    width: 130,
-    // ignore: deprecated_member_use
-    child: RaisedButton(
-      color: Color(0xFFF8D375),
-      onPressed: () {
-        isInvoice
-            ? Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => ProcessAllPage(
-                          isInvoice: isInvoice,
-                        )),
-              )
-            : Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => ProcessAllPage(
-                          isInvoice: false,
-                        )),
-              );
-      },
-      child: Row(
-        children: [
-          Column(
-            children: [
-              Icon(Icons.access_time_outlined),
-            ],
-          ),
-          Column(
-            children: [Text('  ')],
-          ),
-          Column(
-            children: [
-              Text(
-                'Chờ xử lý',
-                style: TextStyle(),
-              ),
-            ],
-          ),
-        ],
-      ),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-      elevation: 10,
-    ),
   );
 }
 

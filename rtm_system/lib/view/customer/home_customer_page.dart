@@ -50,7 +50,7 @@ class _HomeCustomerPageState extends State<HomeCustomerPage> {
       bottomNavigationBar: CurvedNavigationBar(
         key: _bottomNavigationKey,
         index: _index,
-        height: 50.0,
+        height: 60.0,
         items: <Widget>[
           Icon( Icons.home, size: 30, ),
           Icon(Icons.my_library_books_outlined, size: 30),

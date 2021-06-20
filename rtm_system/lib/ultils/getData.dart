@@ -6,6 +6,7 @@ import 'package:rtm_system/model/putAPI_confirmInvoice.dart';
 import 'package:rtm_system/model/putAPI_signInvoice.dart';
 import 'package:rtm_system/model/putAPI_updatePrice.dart';
 import 'package:rtm_system/model/putAPI_updateProfile.dart';
+import 'package:rtm_system/ultils/src/messageList.dart';
 import 'package:rtm_system/view/customer/home_customer_page.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
 import 'package:rtm_system/view/manager/profile/allCustomer_manager.dart';
@@ -221,7 +222,7 @@ Future<void> doConfirmOrAcceptOrRejectInvoice(
   SharedPreferences prefs = await SharedPreferences.getInstance();
   int status;
   if (isCustomer) {
-    // 1 is sign invoice, 2 is accept invoice, 3 is reject invoice
+    // 1 is sign invoice, 2 is accept invoice
     if (type == 1) {
       PutSignInvoice putSignInvoiceInvoice = PutSignInvoice();
       status = await putSignInvoiceInvoice.putSignInvoice(
@@ -230,8 +231,18 @@ Future<void> doConfirmOrAcceptOrRejectInvoice(
       PutConfirmInvoice putConfirmInvoice = PutConfirmInvoice();
       status = await putConfirmInvoice.putConfirmInvoice(
           prefs.get("access_token"), invoiceId);
-    } else if (type == 3) {
-      //call api to reject
+    }
+    if (status == 200) {
+        showStatusAlertDialog(
+            context,
+            showMessage("", MSG012),
+            HomeCustomerPage(
+              index: 1,
+            ),
+            true);
+    } else{
+      showStatusAlertDialog(
+          context, showMessage(MSG025, MSG027), null, false);
     }
   } else {
     //call api tao invoice cua manager
@@ -242,22 +253,5 @@ Future<void> doConfirmOrAcceptOrRejectInvoice(
     }
   }
 
-  //Code ở đây sai
-  // if (status == 200) {
-  //   if (isCustomer) {
-  //     showStatusAlertDialog(
-  //         context,
-  //         "Xác nhận thành công.",
-  //         HomeCustomerPage(
-  //           index: 1,
-  //         ),
-  //         true);
-  //   } else {
-  //     //chuyen trang và thong báo
-  //   }
-  // } else
-  //   showCustomDialog(context,
-  //       content: "Có lỗi xảy ra. Xin thử lại", isSuccess: false);
-  // showStatusAlertDialog(
-  //     context, "Cập nhật thất bại. Xin thử lại!", null, false);
+
 }

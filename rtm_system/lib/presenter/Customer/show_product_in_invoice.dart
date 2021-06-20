@@ -3,7 +3,6 @@ import 'package:rtm_system/model/getAPI_product.dart';
 import 'package:rtm_system/model/model_product.dart';
 import 'package:rtm_system/model/profile_customer/getAPI_customer_phone.dart';
 import 'package:rtm_system/model/profile_customer/model_profile_customer.dart';
-import 'package:rtm_system/view/customer/invoice/invoice_by_product.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class showProductInInvoice extends StatefulWidget {
@@ -89,11 +88,11 @@ class _showAdvanceState extends State<showProductInInvoice> {
   Widget _cardItem(int id, String product) {
     return FlatButton(
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => InvoiceByProductPage(
-              isVip: isVip, nameProduct: product, idProduct: id.toString(),)),
-          );
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(builder: (context) => InvoiceByProductPage(
+          //     isVip: isVip, nameProduct: product, idProduct: id.toString(),)),
+          // );
         },
         child: Card(
           clipBehavior: Clip.antiAlias,

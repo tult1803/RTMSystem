@@ -192,7 +192,7 @@ void checkSaveLogin(BuildContext context) async {
     if (prefs.getInt("role_id") == 3 && prefs.getBool("isLogin") == true) {
       Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => HomeCustomerPage(index: 0,)),
+          MaterialPageRoute(builder: (context) => HomeCustomerPage(index: 1,)),
           (route) => false);
     } else if (prefs.getInt("role_id") == 2 &&
         prefs.getBool("isLogin") == true) {
@@ -207,6 +207,7 @@ void checkSaveLogin(BuildContext context) async {
 }
 
 void savedInfoLogin(int role_id, String accountId, int gender, String access_token, String fullname, String phone, String birthday, String password) async {
+  print('login '+ accountId);
   SharedPreferences prefs = await SharedPreferences.getInstance();
   prefs.setBool("isLogin", true);
   prefs.setInt("role_id", role_id);
