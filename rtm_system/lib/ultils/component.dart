@@ -908,7 +908,7 @@ Widget componentContainerInvoiceRequest(BuildContext context,
         SizedBox(
           height: 5,
         ),
-        _showBtnProcessInvoice(context, 4, id, isCustomer),
+        _showBtnProcessInvoice(context, 0, id, isCustomer),
       ],
     ),
   );
