@@ -30,8 +30,8 @@ class _showAllInvoiceState extends State<showAllInvoice> {
     toDate = DateTime.now();
     fromDate = DateTime.now().subtract(Duration(days: 30));
     getFromDate =
-        "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd hh:mm:ss")}";
-    getToDate = "${getDateTime("$toDate", dateFormat: "yyyy-MM-dd hh:mm:ss")}";
+        "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
+    getToDate = "${getDateTime("$toDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
   }
 
   @override

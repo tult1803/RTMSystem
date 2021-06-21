@@ -181,7 +181,7 @@ Future<void> putAPIUpdatePrice(BuildContext context, String productId,
 
 Future<void> doCreateRequestInvoiceOrInvoice(
     BuildContext context,
-    int productId,
+    String productId,
     String sell_date,
     int customerId,
     int quantity,
@@ -204,7 +204,7 @@ Future<void> doCreateRequestInvoiceOrInvoice(
           context,
           "Đã gửi yêu cầu bán hàng.",
           HomeCustomerPage(
-            index: 1,
+            index: 0,
           ),
           true);
     } else {

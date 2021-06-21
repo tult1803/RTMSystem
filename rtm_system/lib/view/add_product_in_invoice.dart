@@ -224,26 +224,44 @@ class _AddProductPageState extends State<AddProductPage> {
       child: TextButton(
           onPressed: () {
             setState(() {
-              _mySelection == null
-                  ? showCustomDialog(
-                      context,
-                      content: "Chưa chọn sản phẩm",
-                      isSuccess: false,
-                    )
-                  : quantity == 0
-                      ? showCustomDialog(
-                          context,
-                          content: "Số ký đang trống",
-                          isSuccess: false,
-                        )
-                      : Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => CreateInvoicePage(
-                                  isNew: true,
-                                  listProduct: listInforProduct,
-                                  isCustomer: widget.isCustomer)),
-                        );
+              if(widget.isCustomer){
+                _mySelection == null
+                    ? showCustomDialog(
+                  context,
+                  content: "Chưa chọn sản phẩm",
+                  isSuccess: false,
+                )
+                    : Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => CreateInvoicePage(
+                          isNew: true,
+                          listProduct: listInforProduct,
+                          isCustomer: widget.isCustomer)),
+                );
+              }else{
+                _mySelection == null
+                    ? showCustomDialog(
+                  context,
+                  content: "Chưa chọn sản phẩm",
+                  isSuccess: false,
+                )
+                    : quantity == 0
+                    ? showCustomDialog(
+                  context,
+                  content: "Số ký đang trống",
+                  isSuccess: false,
+                )
+                    : Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => CreateInvoicePage(
+                          isNew: true,
+                          listProduct: listInforProduct,
+                          isCustomer: widget.isCustomer)),
+                );
+              }
+
               // }
             });
           },
@@ -295,7 +313,7 @@ class _AddProductPageState extends State<AddProductPage> {
                             this._mySelection,
                             this.quantity,
                             this.degree,
-                            getDateTime("$dateSale", dateFormat: "dd/MM/yyyy")
+                            getDateTime("$dateSale", dateFormat: "yyyy-MM-dd HH:mm:ss")
                           ];
                         });
                         setState(() {
@@ -356,7 +374,7 @@ class _AddProductPageState extends State<AddProductPage> {
               this._mySelection,
               this.quantity,
               this.degree,
-              getDateTime("$dateSale", dateFormat: "dd/MM/yyyy")
+              getDateTime("$dateSale", dateFormat: "yyyy-MM-dd HH:mm:ss")
             ];
             setState(() {
               checkClick = true;
@@ -408,7 +426,7 @@ class _AddProductPageState extends State<AddProductPage> {
             this._mySelection,
             this.quantity,
             this.degree,
-            getDateTime("$dateSale", dateFormat: "dd/MM/yyyy")
+            getDateTime("$dateSale", dateFormat: "yyyy-MM-dd HH:mm:ss")
           ];
         });
       },
@@ -475,7 +493,7 @@ class _AddProductPageState extends State<AddProductPage> {
                       this._mySelection,
                       this.quantity,
                       this.degree,
-                      getDateTime("$dateSale", dateFormat: "dd/MM/yyyy")
+                      getDateTime("$dateSale", dateFormat: "yyyy-MM-dd HH:mm:ss")
                     ];
                   });
                 },

@@ -162,7 +162,6 @@ Widget txtItemDetail(context, String tittle, String content,
 Widget widgetCreateInvoice(context, bool isNew, List product,
     String nameProduct, String name, String phone, bool isCustomer) {
   var size = MediaQuery.of(context).size;
-  final date = new DateFormat('yyyy-MM-dd HH:mm:ss');
   return SingleChildScrollView(
       child: Container(
     height: size.height,
@@ -230,9 +229,8 @@ Widget widgetCreateInvoice(context, bool isNew, List product,
             child: RaisedButton(
               color: Color(0xffEEEEEE),
               onPressed: () {
-                print('ZOOO');
-                doCreateRequestInvoiceOrInvoice(context, int.parse(product[0]),
-                    date.format(product[3]), 0, 0, 0, 0, isCustomer);
+                doCreateRequestInvoiceOrInvoice(context, product[0],
+                    product[3], 0, 0, 0, 0, isCustomer);
               },
               child: Text('Xác nhận'),
               shape: RoundedRectangleBorder(

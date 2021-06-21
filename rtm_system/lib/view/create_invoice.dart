@@ -20,7 +20,6 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
   String token, personSale = '', phoneSale = '', nameProduct;
   DateTime date = DateTime.now();
   List<DataProduct> dataListProduct = [];
-
   Future _getProduct() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -32,12 +31,13 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
     GetProduct getProduct = GetProduct();
     dataListProduct.clear();
     if (token.isNotEmpty) {
-      dataList = await getProduct.getProduct(token, null);
+      dataList = await getProduct.getProduct(token, "");
       dataList.forEach((element) {
         Map<dynamic, dynamic> data = element;
         dataListProduct.add(DataProduct.fromJson(data));
       });
       setState(() {
+        // ignore: unnecessary_statements
         dataListProduct;
         nameProduct = _nameProduct();
       });
@@ -49,9 +49,8 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
     String name;
     if (dataListProduct != null) {
       dataListProduct?.map((item) {
-            if (item.id.toString() == widget.listProduct[0]) {
+            if (item.id== widget.listProduct[0]) {
               name = item.name;
-              print('Name' + name);
             }
           })?.toList() ??
           [];
