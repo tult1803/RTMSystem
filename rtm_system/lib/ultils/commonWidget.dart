@@ -1018,5 +1018,3 @@ Widget btnDeactivateCustomer(
     return Container();
   }
 }
-
-

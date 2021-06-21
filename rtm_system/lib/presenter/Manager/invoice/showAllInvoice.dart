@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:rtm_system/model/model_invoice.dart';
 import 'package:rtm_system/presenter/Manager/invoice/showInvoice.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
+import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/helpers.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 
@@ -78,7 +79,6 @@ class _showAllInvoiceState extends State<showAllInvoice> {
     return Expanded(
       child: GestureDetector(
           onTap: () {
-            setState(() {
               switch (tittle) {
                 case "Xử lý":
                   _pageController.jumpToPage(0);
@@ -96,7 +96,6 @@ class _showAllInvoiceState extends State<showAllInvoice> {
                   _pageController.jumpToPage(4);
                   break;
               }
-            });
           },
           child: Container(
             color: welcome_color,

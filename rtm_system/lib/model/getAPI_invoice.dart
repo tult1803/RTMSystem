@@ -19,6 +19,7 @@ class GetInvoice{
 
     );
     statusInvoice = response.statusCode;
+    print('Status GetAPI Invoice: $statusInvoice');
     if (response.statusCode == 200) {
       return  Invoice.fromJson(jsonDecode(response.body));
     } else {
