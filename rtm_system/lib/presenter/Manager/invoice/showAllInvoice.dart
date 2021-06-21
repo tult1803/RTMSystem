@@ -22,6 +22,7 @@ class _showAllInvoiceState extends State<showAllInvoice> {
   Invoice invoice;
   List invoiceList;
   String getFromDate, getToDate;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -59,7 +60,7 @@ class _showAllInvoiceState extends State<showAllInvoice> {
                   )),
               rowButtonDatetime(),
               _wrapToShowTittleBar(),
-              Expanded(child:pageViewInvocie()),
+              Expanded(child: pageViewInvocie()),
             ],
           ),
         ),
@@ -105,15 +106,15 @@ class _showAllInvoiceState extends State<showAllInvoice> {
       scrollDirection: Axis.horizontal,
       onPageChanged: (value) {
         setState(() {
-            index = value;
+          index = value;
         });
       },
       children: [
         new showInvoiceManager(4, fromDate: getFromDate, toDate: getToDate),
         new showInvoiceManager(5, fromDate: getFromDate, toDate: getToDate),
+        new showInvoiceManager(1, fromDate: getFromDate, toDate: getToDate),
         new showInvoiceManager(3, fromDate: getFromDate, toDate: getToDate),
         new showInvoiceManager(2, fromDate: getFromDate, toDate: getToDate),
-        new showInvoiceManager(1, fromDate: getFromDate, toDate: getToDate),
       ],
     ));
   }
@@ -125,16 +126,16 @@ class _showAllInvoiceState extends State<showAllInvoice> {
           crossAxisAlignment: WrapCrossAlignment.center,
           alignment: WrapAlignment.center,
           children: [
-        tittleBarForInvoice("Đang xử lý", isChoose: index == 0 ? true : null),
-        spaceTittleBarForInvoice(),
-        tittleBarForInvoice("Ký gửi", isChoose: index == 1 ? true : null),
-        spaceTittleBarForInvoice(),
-        tittleBarForInvoice("Hoàn thành", isChoose: index == 2 ? true : null),
-        spaceTittleBarForInvoice(),
-        tittleBarForInvoice("Từ chối", isChoose: index == 3 ? true : null),
-        spaceTittleBarForInvoice(),
-        tittleBarForInvoice("Có hiệu lực", isChoose: index == 4 ? true : null),
-      ]),
+            tittleBarForInvoice("Xử lý", isChoose: index == 0 ? true : null),
+            spaceTittleBarForInvoice(),
+            tittleBarForInvoice("Ký gửi", isChoose: index == 1 ? true : null),
+            spaceTittleBarForInvoice(),
+            tittleBarForInvoice("Hiệu lực", isChoose: index == 2 ? true : null),
+            spaceTittleBarForInvoice(),
+            tittleBarForInvoice("Hoàn thành", isChoose: index == 3 ? true : null),
+            spaceTittleBarForInvoice(),
+            tittleBarForInvoice("Từ chối", isChoose: index == 4 ? true : null),
+          ]),
     );
   }
 
@@ -144,11 +145,16 @@ class _showAllInvoiceState extends State<showAllInvoice> {
     super.dispose();
   }
 
-  Widget loadingPage(){
+  Widget loadingPage() {
     return Container(
-      child: Center(child: Container(width: 35,height: 35,child: CircularProgressIndicator(color: welcome_color))),
+      child: Center(
+          child: Container(
+              width: 35,
+              height: 35,
+              child: CircularProgressIndicator(color: welcome_color))),
     );
   }
+
 //Copy nó để tái sử dụng cho các trang khác nếu cần
 // Không thể tách vì nó có hàm setState
   Widget datePick() {
@@ -209,13 +215,13 @@ class _showAllInvoiceState extends State<showAllInvoice> {
             case "Ký gửi":
               _pageController.jumpToPage(1);
               break;
-            case "Hoàn thành":
+            case "Có hiệu lực":
               _pageController.jumpToPage(2);
               break;
-            case "Từ chối":
+            case "Hoàn thành":
               _pageController.jumpToPage(3);
               break;
-            case "Có hiệu lực":
+            case "Từ chối":
               _pageController.jumpToPage(4);
               break;
           }
