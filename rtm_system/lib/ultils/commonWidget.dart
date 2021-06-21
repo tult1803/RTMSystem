@@ -375,7 +375,7 @@ Widget boxForInvoice(
             children: [
               miniContainer(
                 context: context,
-                tittle: "Mã #$id",
+                tittle: "$id",
                 marginRight: 5,
                 marginBottom: 5,
                 marginLeft: 10,
@@ -1018,3 +1018,5 @@ Widget btnDeactivateCustomer(
     return Container();
   }
 }
+
+

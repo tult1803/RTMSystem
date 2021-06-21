@@ -21,7 +21,7 @@ class _profilePageState extends State<profilePage> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
        password = prefs.get("password");
-       accountId = prefs.get("accountId");
+       accountId = "${prefs.get("accountId")}";
       if (prefs.getString("fullname") != null) {
         fullname = prefs.getString("fullname");
       }

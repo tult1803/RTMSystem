@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:rtm_system/model/getAPI_invoice.dart';
 import 'package:rtm_system/model/model_invoice.dart';
+import 'package:rtm_system/presenter/infinite_scroll_pagination/common/character_search_input_sliver.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
@@ -92,14 +93,27 @@ class showInvoiceManagerState extends State<showInvoiceManager> {
         width: size.width,
         child: Center(
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(0.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(
-                  height: 0.5,
-                  child: Container(),
+                Container(
+                  width: size.width,
+                  height: 70,
+                  child: new CustomScrollView(
+                    physics: NeverScrollableScrollPhysics(),
+                    slivers: [
+                      CharacterSearchInputSliver(
+                        onChanged: (searchTerm) {
+                          _updateSearchTerm(searchTerm);
+                          setState(() {
+                            _pageSize = 1;
+                          });
+                        },
+                      ),
+                    ],
+                  )
                 ),
                 Expanded(
                     child: Container(

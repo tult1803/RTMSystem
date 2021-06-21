@@ -6,11 +6,7 @@ import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/detailInvoiceRequest.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
-<<<<<<< HEAD:rtm_system/lib/presenter/Customer/show_process_invoice.dart
-=======
 import 'package:rtm_system/ultils/src/messageList.dart';
-import 'package:rtm_system/view/detailInvoice.dart';
->>>>>>> TrangBTT_Rev01:rtm_system/lib/presenter/Customer/show_invoice_request.dart
 import 'package:rtm_system/view/manager/formForDetail_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -85,44 +81,6 @@ class showAllInvoiceRequestPageState extends State<showAllInvoiceRequestPage> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-<<<<<<< HEAD:rtm_system/lib/presenter/Customer/show_process_invoice.dart
-
-    return Container(
-      margin: EdgeInsets.only(top: 0, left: 5, right: 5),
-      height: widget.isAll? size.height : size.height * 0.5,
-      width: size.width,
-      child: new CustomScrollView(
-        slivers: <Widget>[
-          PagedSliverList(
-            pagingController: _pagingController,
-            builderDelegate: PagedChildBuilderDelegate(
-                firstPageErrorIndicatorBuilder: (context) =>
-                    firstPageErrorIndicatorBuilder(context,
-                        tittle: "Không có dữ liệu"),
-                firstPageProgressIndicatorBuilder: (context) =>
-                    firstPageProgressIndicatorBuilder(),
-                newPageProgressIndicatorBuilder: (context) =>
-                    newPageProgressIndicatorBuilder(),
-                itemBuilder: (context, item, index) {
-                  return boxForInvoice(
-                      context: context,
-                      date: "${item['create_time']}",
-                      total: "${item['price']}",
-                      id: item['id'],
-                      name: item["customer_name"],
-                      product: item["product_name"],
-                      widget: FormForDetailPage(
-                        tittle: "Chi tiết hóa đơn",
-                        // bodyPage: DetailInvoiceRequest(
-                        //   map: item,
-                        //   isCustomer: true,
-                        // ),
-                      ),
-                      isCustomer: true,
-                    isRequest: true,
-                  );
-                }),
-=======
     return SingleChildScrollView(
       child: Container(
         height: size.height,
@@ -196,7 +154,6 @@ class showAllInvoiceRequestPageState extends State<showAllInvoiceRequestPage> {
                   ),)
               ],
             ),
->>>>>>> TrangBTT_Rev01:rtm_system/lib/presenter/Customer/show_invoice_request.dart
           ),
         ),
       ),
@@ -210,3 +167,4 @@ class showAllInvoiceRequestPageState extends State<showAllInvoiceRequestPage> {
   }
 
 }
+
