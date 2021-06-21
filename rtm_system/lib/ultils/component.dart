@@ -527,6 +527,7 @@ Widget _showBtnProcessInvoice(
     if (statusId == 5 && isCustomer == true) {
       return SizedBox(
         width: size.width * 0.5,
+        // ignore: deprecated_member_use
         child: RaisedButton(
           color: Color(0xFF0BB791),
           onPressed: () {
@@ -542,9 +543,10 @@ Widget _showBtnProcessInvoice(
           elevation: 10,
         ),
       );
-    } else if(statusId == 1 && isCustomer == false) {
+    } else if (statusId == 1 && isCustomer == false) {
       return SizedBox(
         width: size.width * 0.5,
+        // ignore: deprecated_member_use
         child: RaisedButton(
           color: Color(0xFF0BB791),
           onPressed: () {
@@ -560,7 +562,7 @@ Widget _showBtnProcessInvoice(
           elevation: 10,
         ),
       );
-    }else {
+    } else {
       return Container();
     }
   } else if (statusId == 4) {
@@ -584,10 +586,10 @@ Widget _showBtnProcessInvoice(
       );
     } else {
       return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          SizedBox(
-            width: size.width * 0.05,
+          Flexible(
+            // ignore: deprecated_member_use
             child: RaisedButton(
               color: Colors.redAccent,
               onPressed: () {
@@ -603,8 +605,8 @@ Widget _showBtnProcessInvoice(
               elevation: 10,
             ),
           ),
-          SizedBox(
-            width: size.width * 0.05,
+          Flexible(
+            // ignore: deprecated_member_use
             child: RaisedButton(
               color: Color(0xFF0BB791),
               onPressed: () {
@@ -619,7 +621,7 @@ Widget _showBtnProcessInvoice(
               ),
               elevation: 10,
             ),
-          )
+          ),
         ],
       );
     }

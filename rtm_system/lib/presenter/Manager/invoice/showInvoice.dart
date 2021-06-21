@@ -72,7 +72,6 @@ class showInvoiceManagerState extends State<showInvoiceManager> {
     if(oldWidget.toDate != this.widget.toDate){
       _pagingController.refresh();
     }
-    print(widget.toDate);
   }
 
   @override

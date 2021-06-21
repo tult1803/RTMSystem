@@ -209,13 +209,13 @@ class _showAllInvoiceState extends State<showAllInvoice> {
       onTap: () {
         setState(() {
           switch (tittle) {
-            case "Đang xử lý":
+            case "Xử lý":
               _pageController.jumpToPage(0);
               break;
             case "Ký gửi":
               _pageController.jumpToPage(1);
               break;
-            case "Có hiệu lực":
+            case "Hiệu lực":
               _pageController.jumpToPage(2);
               break;
             case "Hoàn thành":
