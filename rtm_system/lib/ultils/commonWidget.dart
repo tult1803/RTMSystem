@@ -375,7 +375,7 @@ Widget boxForInvoice(
             children: [
               miniContainer(
                 context: context,
-                tittle: "Mã #$id",
+                tittle: "$id",
                 marginRight: 5,
                 marginBottom: 5,
                 marginLeft: 10,
@@ -440,17 +440,17 @@ Widget boxForInvoice(
                   ],
                 ),
               ),
-              miniContainer(
-                context: context,
-                tittle: "${getStatus(status: status)}",
-                colorText: Colors.white,
-                fontWeightText: FontWeight.w500,
-                height: 30,
-                width: 100,
-                colorContainer: getColorStatus(status: status),
-                borderRadius: 5,
-                marginRight: 10,
-              ),
+             // miniContainer(
+             //    context: context,
+             //    tittle: "${getStatus(status: status)}",
+             //    colorText: Colors.white,
+             //    fontWeightText: FontWeight.w500,
+             //    height: 30,
+             //    width: 100,
+             //    colorContainer: getColorStatus(status: status),
+             //    borderRadius: 5,
+             //    marginRight: 10,
+             //  ),
             ],
           ),
           SizedBox(

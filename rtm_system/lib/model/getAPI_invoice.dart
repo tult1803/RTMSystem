@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:intl/intl.dart';
 import 'package:rtm_system/model/model_invoice.dart';
 import 'package:rtm_system/ultils/src/url_api.dart';
 import 'package:http/http.dart' as http;
@@ -19,6 +18,7 @@ class GetInvoice{
 
     );
     statusInvoice = response.statusCode;
+    print('Status GetAPI Invoice: $statusInvoice');
     if (response.statusCode == 200) {
       return  Invoice.fromJson(jsonDecode(response.body));
     } else {

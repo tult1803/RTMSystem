@@ -24,7 +24,7 @@ class _DetailInvoiceState extends State<DetailInvoice> {
           context,
           componentContainerDetailInvoice(
               context,
-              id: this.widget.map["id"],
+              id: "${this.widget.map["id"]}",
               customerName: this.widget.map["customer_name"],
               managerName: this.widget.map["manager_name"],
               managerPhone: this.widget.map["manager_phone"],
@@ -32,7 +32,7 @@ class _DetailInvoiceState extends State<DetailInvoice> {
               createTime: this.widget.map["create_time"],
               productId: this.widget.map["product_id"],
               productName: this.widget.map["product_name"],
-              description: this.widget.map["description"],
+              storeName: this.widget.map["store_name"],
               price: "${this.widget.map["price"]}",
               degree: this.widget.map["degree"],
               quantity: this.widget.map["quantity"],

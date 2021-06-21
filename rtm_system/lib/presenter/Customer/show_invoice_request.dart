@@ -4,10 +4,9 @@ import 'package:rtm_system/model/getAPI_allInvoiceRequest.dart';
 import 'package:rtm_system/model/model_invoiceRequest.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/component.dart';
-import 'package:rtm_system/ultils/detailInvoiceRequest.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/ultils/src/messageList.dart';
-import 'package:rtm_system/view/detailInvoice.dart';
+import 'package:rtm_system/view/detailInvoiceRequest.dart';
 import 'package:rtm_system/view/manager/formForDetail_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -168,3 +167,4 @@ class showAllInvoiceRequestPageState extends State<showAllInvoiceRequestPage> {
   }
 
 }
+

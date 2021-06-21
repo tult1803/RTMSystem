@@ -22,7 +22,7 @@ class _AllNoticeState extends State<AllNotice> {
         backgroundColor: welcome_color,
         title: Center(
           child: AutoSizeText(
-            "Quản lý thông báo",
+            "Thông báo",
             style: TextStyle(
                 color: Colors.white, fontWeight: FontWeight.w500, fontSize: 25),
           ),

@@ -169,7 +169,7 @@ Future<void> putAPIUpdatePrice(BuildContext context, String productId,
         isSuccess: true,
         content: "Giá sản phẩm đã cập nhật",
         widgetToNavigator: HomeAdminPage(
-          index: 2,
+          index: 0,
         ));
   } else
     showCustomDialog(
