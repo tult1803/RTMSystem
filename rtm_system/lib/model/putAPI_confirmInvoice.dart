@@ -18,7 +18,6 @@ class PutConfirmInvoice{
         "invoice_id": id,
       }),
     );
-    print("Status putConfirmInvoice :${response.statusCode}");
     return response.statusCode;
   }
 

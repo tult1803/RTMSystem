@@ -1,8 +1,8 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
-import 'package:rtm_system/view/customer/HomeMenu.dart';
 import 'package:rtm_system/view/customer/Profile/profile.dart';
+import 'package:rtm_system/view/customer/invoice/allInvoiceTab.dart';
 import 'package:rtm_system/view/customer/invoice/all_invoice.dart';
 import 'package:rtm_system/view/customer/notice/all_notices.dart';
 
@@ -31,7 +31,7 @@ class _HomeCustomerPageState extends State<HomeCustomerPage> {
     super.initState();
     _index = widget.index;
     if (_index == 0) {
-      _widget = HomeMenu();
+      _widget = InvoiceTab();
     } else if (_index == 1) {
       _widget = InvoicePage();
     } else if (_index == 2) {
@@ -66,7 +66,7 @@ class _HomeCustomerPageState extends State<HomeCustomerPage> {
         onTap: (index) {
           setState(() {
             if (index == 0) {
-              _widget = HomeMenu();
+              _widget = InvoiceTab();
             } else if (index == 1) {
               _widget = InvoicePage();
             } else if (index == 2) {

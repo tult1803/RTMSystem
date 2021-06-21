@@ -55,7 +55,7 @@ class _InvoicePageState extends State<InvoicePage> {
                 width: size.width * 0.5,
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(15),
+                  borderRadius: BorderRadius.circular(10),
                   // border: Border.all(color: Colors.white, width: 0.5),
                 ),
                 child: _wrapToShowTittleBar(),

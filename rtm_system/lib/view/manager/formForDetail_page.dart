@@ -19,15 +19,12 @@ class _FormForDetailPageState extends State<FormForDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: welcome_color,
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(30.0),
-        child: AppBar(
-          leading: leadingAppbar(context),
-          backgroundColor: welcome_color,
-          elevation: 0,
-          centerTitle: true,
-          title: Text("${this.widget.tittle}", style: TextStyle(color:Colors.white),),
-        ),
+      appBar: AppBar(
+        leading: leadingAppbar(context),
+        backgroundColor: welcome_color,
+        elevation: 0,
+        centerTitle: true,
+        title: Text("${this.widget.tittle}", style: TextStyle(color:Colors.white),),
       ),
       body: this.widget.bodyPage,
     );

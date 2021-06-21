@@ -43,7 +43,6 @@ class _DetailInvoiceState extends State<DetailInvoice> {
               managerId: this.widget.map["manager_id"],
               activeDate: this.widget.map["active_date"],
               isCustomer: widget.isCustomer,
-
           ),
         ),
       ),
