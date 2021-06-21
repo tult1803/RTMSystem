@@ -435,7 +435,7 @@ Widget componentContainerDetailInvoice(BuildContext context,
     String productName,
     String price,
     String createTime,
-    String description,
+    String storeName,
     String customerConfirmDate,
     String managerConfirmDate,
     String activeDate,
@@ -453,6 +453,10 @@ Widget componentContainerDetailInvoice(BuildContext context,
         SizedBox(
           height: 10,
         ),
+        txtItemDetail(context, "Cửa hàng", "$storeName"),
+        SizedBox(
+          height: 10,
+        ),
         txtItemDetail(context, "Người tạo hóa đơn", "$managerName",
             subContent: managerPhone),
         SizedBox(
@@ -467,16 +471,15 @@ Widget componentContainerDetailInvoice(BuildContext context,
         SizedBox(
           height: 10,
         ),
-        txtItemDetail(context, "Mô tả", "$description"),
-        SizedBox(
-          height: 10,
-        ),
-        txtItemDetail(
-            context, "Giá sản phẩm (/1kg)", "${getFormatPrice(price)}đ"),
-        SizedBox(
-          height: 10,
-        ),
-        txtItemDetail(context, "Độ", "$degree"),
+        txtItemDetail(context, "Giá sản phẩm", "${getFormatPrice(price)}đ"),
+        degree == 0
+            ? Container()
+            : {
+                SizedBox(
+                  height: 10,
+                ),
+                txtItemDetail(context, "Độ", "$degree"),
+              },
         SizedBox(
           height: 10,
         ),
@@ -860,7 +863,7 @@ Widget containerTextInvoice({
 
 //Dùng cho trang chi tiết yêu cầu bán hàng
 Widget componentContainerInvoiceRequest(BuildContext context,
-    {int statusId,
+    {
     String id,
     String productId,
     String customerId,
@@ -870,6 +873,7 @@ Widget componentContainerInvoiceRequest(BuildContext context,
     String price,
     String createDate,
     String sellDate,
+    String storeName,
     bool isCustomer}) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
@@ -880,7 +884,11 @@ Widget componentContainerInvoiceRequest(BuildContext context,
           height: 10,
         ),
         txtItemDetail(
-            context, "Ngày tạo hóa đơn", "${getDateTime(createDate)}"),
+            context, "Ngày tạo hóa đơn", "${getDateTime(createDate, dateFormat: "dd/MM/yyyy")}"),
+        SizedBox(
+          height: 10,
+        ),
+        txtItemDetail(context, "Cửa hàng", "$storeName"),
         SizedBox(
           height: 10,
         ),
@@ -894,17 +902,15 @@ Widget componentContainerInvoiceRequest(BuildContext context,
           height: 10,
         ),
         txtItemDetail(
-            context, "Giá sản phẩm (/1kg)", "${getFormatPrice(price)}đ"),
+            context, "Giá sản phẩm", "${getFormatPrice(price)}đ"),
         SizedBox(
           height: 10,
         ),
-        txtItemDetail(context, "Ngày muốn đến bán", "${getDateTime(sellDate)}"),
-        txtItemDetail(context, "Trạng thái", "${getStatus(status: statusId)}",
-            colorContent: getColorStatus(status: statusId)),
+        txtItemDetail(context, "Ngày muốn đến bán", "${getDateTime(sellDate, dateFormat: "dd/MM/yyyy")}"),
         SizedBox(
           height: 5,
         ),
-        _showBtnProcessInvoice(context, statusId, id, isCustomer),
+        _showBtnProcessInvoice(context, 4, id, isCustomer),
       ],
     ),
   );
@@ -912,17 +918,14 @@ Widget componentContainerInvoiceRequest(BuildContext context,
 
 //Dùng cho trang chi tiết yêu cầu hoá đơn
 Widget componentContainerDetailInvoiceRequest(BuildContext context,
-    {int statusId,
-      int id,
-      String productId,
-      String customerId,
-      String customerName,
-      String customerPhone,
-      String productName,
-      String price,
-      String createDate,
-      String sellDate,
-      bool isCustomer}) {
+    {String id,
+    String customerName,
+    String customerPhone,
+    String productName,
+    String price,
+    String createDate,
+    String sellDate,
+    bool isCustomer}) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Column(
@@ -945,21 +948,16 @@ Widget componentContainerDetailInvoiceRequest(BuildContext context,
         SizedBox(
           height: 10,
         ),
-        txtItemDetail(
-            context, "Giá sản phẩm", "${getFormatPrice(price)}đ"),
+        txtItemDetail(context, "Giá sản phẩm", "${getFormatPrice(price)}đ"),
         SizedBox(
           height: 10,
         ),
-        txtItemDetail(
-            context, "Ngày đến bán", "${getDateTime(sellDate)}"),
+        txtItemDetail(context, "Ngày đến bán", "${getDateTime(sellDate)}"),
         SizedBox(
           height: 10,
         ),
-        txtItemDetail(context, "Trạng thái", "${getStatus(status: statusId)}",
-            colorContent: getColorStatus(status: statusId)),
-        SizedBox(
-          height: 5,
-        ),
+        _showBtnProcessInvoice(context, 0, id, isCustomer),
+
         // chỗ này show btn accpet or reject của customer
       ],
     ),

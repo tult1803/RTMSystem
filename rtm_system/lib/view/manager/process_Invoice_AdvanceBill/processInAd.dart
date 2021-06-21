@@ -2,19 +2,20 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:rtm_system/presenter/Manager/invoice/showInvoice.dart';
+import 'package:rtm_system/presenter/Manager/invoice/showRequestInvoice.dart';
 import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
 
-class processInvoiceAdvance extends StatefulWidget {
-  const processInvoiceAdvance({Key key}) : super(key: key);
+// ignore: camel_case_types
+class requestInvoiceAdvance extends StatefulWidget {
+  const requestInvoiceAdvance({Key key}) : super(key: key);
 
   @override
-  _processInvoiceAdvanceState createState() => _processInvoiceAdvanceState();
+  _requestInvoiceAdvanceState createState() => _requestInvoiceAdvanceState();
 }
 
-class _processInvoiceAdvanceState extends State<processInvoiceAdvance> {
+class _requestInvoiceAdvanceState extends State<requestInvoiceAdvance> {
   bool isInvoice = true;
   final PageController _pageController = PageController();
   int index;
@@ -40,10 +41,10 @@ class _processInvoiceAdvanceState extends State<processInvoiceAdvance> {
           leading: leadingAppbar(context,
               colorIcon: Colors.black,
               widget: HomeAdminPage(
-                index: 2,
+                index: 0,
               )),
           title: Text(
-            "Đơn chờ xử lý",
+            "Yêu cầu chờ xử lý",
             style: GoogleFonts.roboto(color: Colors.black, fontSize: 20),
           ),
           centerTitle: true,
@@ -81,7 +82,7 @@ class _processInvoiceAdvanceState extends State<processInvoiceAdvance> {
             });
           },
           children: [
-            new showInvoiceManager(4, fromDate: "", toDate: ""),
+            new showInvoiceRequestManager(),
             //Chờ API Advance Bill
             new Container(
               width: size.width,

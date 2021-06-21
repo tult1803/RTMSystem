@@ -19,7 +19,7 @@ class _AllInvoiceState extends State<AllInvoice> {
         elevation: 0,
         title: Center(
           child: Text(
-            "Quản lý hóa đơn",
+            "Hóa đơn",
             style: TextStyle(
                 color: Colors.white, fontWeight: FontWeight.w500, fontSize: 22),
           ),

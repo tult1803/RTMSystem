@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:rtm_system/model/model_invoice.dart';
 import 'package:rtm_system/presenter/Manager/invoice/showInvoice.dart';
+import 'package:rtm_system/presenter/Manager/invoice/showRequestInvoice.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/helpers.dart';
@@ -32,8 +33,8 @@ class _showAllInvoiceState extends State<showAllInvoice> {
     toDate = DateTime.now();
     fromDate = DateTime.now().subtract(Duration(days: 30));
     getFromDate =
-        "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd hh:mm:ss")}";
-    getToDate = "${getDateTime("$toDate", dateFormat: "yyyy-MM-dd hh:mm:ss")}";
+        "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
+    getToDate = "${getDateTime("$toDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
   }
 
   @override
@@ -65,11 +66,12 @@ class _showAllInvoiceState extends State<showAllInvoice> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          iconBottom(Icon(Icons.update), "Xử lý", isChoose: index == 0 ? true : null),
-          iconBottom(Icon(Icons.monetization_on_outlined), "Ký gửi", isChoose: index == 1 ? true : null),
+          iconBottom(Icon(Icons.assignment_outlined), "Yêu cầu", isChoose: index == 0 ? true : null),
+          iconBottom(Icon(Icons.update), "Xử lý", isChoose: index == 1 ? true : null),
           iconBottom(Icon(Icons.description), "Hiệu lực", isChoose: index == 2 ? true : null),
-          iconBottom(Icon(Icons.check), "Hoàn thành", isChoose: index == 3 ? true : null),
-          iconBottom(Icon(Icons.clear), "Từ chối", isChoose: index == 4 ? true : null),
+          iconBottom(Icon(Icons.attach_money), "Ký gửi", isChoose: index == 3 ? true : null),
+          iconBottom(Icon(Icons.check), "Hoàn thành", isChoose: index == 4 ? true : null),
+          // iconBottom(Icon(Icons.clear), "Từ chối", isChoose: index == 5 ? true : null),
         ],
       ),
     );
@@ -80,21 +82,24 @@ class _showAllInvoiceState extends State<showAllInvoice> {
       child: GestureDetector(
           onTap: () {
               switch (tittle) {
-                case "Xử lý":
+                case "Yêu cầu":
                   _pageController.jumpToPage(0);
                   break;
-                case "Ký gửi":
+                case "Xử lý":
                   _pageController.jumpToPage(1);
                   break;
                 case "Hiệu lực":
                   _pageController.jumpToPage(2);
                   break;
-                case "Hoàn thành":
+                case "Ký gửi":
                   _pageController.jumpToPage(3);
                   break;
-                case "Từ chối":
+                case "Hoàn thành":
                   _pageController.jumpToPage(4);
                   break;
+                // case "Từ chối":
+                //   _pageController.jumpToPage(5);
+                //   break;
               }
           },
           child: Container(
@@ -168,11 +173,12 @@ class _showAllInvoiceState extends State<showAllInvoice> {
         });
       },
       children: [
+        new showInvoiceRequestManager(),
         new showInvoiceManager(4, fromDate: getFromDate, toDate: getToDate),
-        new showInvoiceManager(5, fromDate: getFromDate, toDate: getToDate),
         new showInvoiceManager(1, fromDate: getFromDate, toDate: getToDate),
+        new showInvoiceManager(5, fromDate: getFromDate, toDate: getToDate),
         new showInvoiceManager(3, fromDate: getFromDate, toDate: getToDate),
-        new showInvoiceManager(2, fromDate: getFromDate, toDate: getToDate),
+        // new showInvoiceManager(2, fromDate: getFromDate, toDate: getToDate),
       ],
     ));
   }
@@ -235,9 +241,9 @@ class _showAllInvoiceState extends State<showAllInvoice> {
         fromDate = dateRange.start;
         toDate = dateRange.end;
         getFromDate =
-            "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd hh:mm:ss")}";
+            "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
         getToDate =
-            "${getDateTime("$toDate", dateFormat: "yyyy-MM-dd hh:mm:ss")}";
+            "${getDateTime("$toDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
       });
     }
   }

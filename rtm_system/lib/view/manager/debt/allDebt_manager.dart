@@ -19,7 +19,7 @@ class _AllDebtState extends State<AllDebt> {
         backgroundColor: welcome_color,
         title: Center(
           child: AutoSizeText(
-            "Quản lý ứng tiền",
+            "Ứng tiền",
             style: TextStyle(
                 color: Colors.white, fontWeight: FontWeight.w500, fontSize: 22),
           ),

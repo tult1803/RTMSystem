@@ -24,7 +24,7 @@ class HomeAdminPage extends StatefulWidget {
 class _HomeAdminPageState extends State<HomeAdminPage> {
   StreamSubscription<ConnectivityResult> subscription;
   GlobalKey _bottomNavigationKey = GlobalKey();
-  int _index = 2;
+  int _index = 0;
   Widget _widget;
   @override
   void initState() {
@@ -32,11 +32,11 @@ class _HomeAdminPageState extends State<HomeAdminPage> {
     super.initState();
     _index = widget.index;
     if (_index == 0) {
-      _widget = AllInvoice();
-    } else if (_index == 1) {
-      _widget = AllDebt();
-    } else if (_index == 2) {
       _widget = AllProduct();
+    } else if (_index == 1) {
+      _widget = AllInvoice();
+    } else if (_index == 2) {
+      _widget = AllDebt();
     } else if (_index == 3) {
       _widget = AllNotice();
     } else if (_index == 4) {
@@ -66,9 +66,9 @@ class _HomeAdminPageState extends State<HomeAdminPage> {
           index: _index,
           height: 40.0,
           items: <Widget>[
-            Icon(Icons.my_library_books_outlined, size: 30),
-            Icon(Icons.attach_money, size: 30),
             Icon(Icons.home_outlined, size: 30),
+            Icon(Icons.my_library_books_outlined, size: 30),
+            Icon(Icons.addchart, size: 30),
             Icon(Icons.notifications_none, size: 30),
             Icon(Icons.people_rounded, size: 30),
           ],
@@ -80,11 +80,11 @@ class _HomeAdminPageState extends State<HomeAdminPage> {
           onTap: (index) {
             setState(() {
               if (index == 0) {
-                _widget = AllInvoice();
-              } else if (index == 1) {
-                _widget = AllDebt();
-              } else if (index == 2) {
                 _widget = AllProduct();
+              } else if (index == 1) {
+                _widget = AllInvoice();
+              } else if (index == 2) {
+                _widget = AllDebt();
               } else if (index == 3) {
                 _widget = AllNotice();
               } else if (index == 4) {

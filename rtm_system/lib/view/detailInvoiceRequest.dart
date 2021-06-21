@@ -18,23 +18,21 @@ class _DetailInvoiceRequestState extends State<DetailInvoiceRequest> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 12),
+      margin: EdgeInsets.only(top: 15),
       child: SingleChildScrollView(
         child: containerDetail(
           context,
-          componentContainerDetailInvoiceRequest(
+          componentContainerInvoiceRequest(
             context,
-            id: this.widget.map["id"],
+            id: "${this.widget.map["id"]}",
+            storeName: this.widget.map["store_name"],
             customerName: this.widget.map["customer_name"],
             customerPhone: this.widget.map["customer_phone"],
             createDate: this.widget.map["create_date"],
-            productId: this.widget.map["product_id"],
+            sellDate: this.widget.map["sell_date"],
             productName: this.widget.map["product_name"],
             price: "${this.widget.map["price"]}",
-            statusId: this.widget.map["status_id"],
-            customerId: this.widget.map["customer_id"],
             isCustomer: widget.isCustomer,
-            sellDate: this.widget.map["sell_date"],
           ),
         ),
       ),

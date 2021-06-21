@@ -63,7 +63,24 @@ Widget bottomHomeBar(BuildContext context) {
         icon: Icon(Icons.monetization_on_outlined),
         iconColor: welcome_color,
         iconSize: 35,
-        widget: updatePriceProduct(widgetToNavigate: HomeAdminPage(index: 2,),),
+        widget: updatePriceProduct(widgetToNavigate: HomeAdminPage(index: 0,),),
+      ),
+      Flexible(
+          child: Container(
+            height: 10,
+          )),
+      miniIconTextContainer(
+        context,
+        height: 80,
+        width: 80,
+        borderRadius: 10,
+        colorContainer: Colors.white,
+        tittle: "Yêu cầu",
+        colorText: colorHexa("2B2D20"),
+        icon: Icon(Icons.assignment_outlined),
+        iconColor: welcome_color,
+        iconSize: 35,
+        widget: requestInvoiceAdvance(),
       ),
       Flexible(
           child: Container(
@@ -83,25 +100,8 @@ Widget bottomHomeBar(BuildContext context) {
         widget: AddProductPage(
           tittle: "Tạo hóa đơn",
           isCustomer: false,
-          widgetToNavigator: HomeAdminPage(index: 2,),
+          widgetToNavigator: HomeAdminPage(index: 0,),
         )
-      ),
-      Flexible(
-          child: Container(
-        height: 10,
-      )),
-      miniIconTextContainer(
-        context,
-        height: 80,
-        width: 80,
-        borderRadius: 10,
-        colorContainer: Colors.white,
-        tittle: "Xử lý",
-        colorText: colorHexa("2B2D20"),
-        icon: Icon(Icons.update),
-        iconColor: welcome_color,
-        iconSize: 35,
-        widget: processInvoiceAdvance(),
       ),
       Flexible(
           child: Container(
@@ -119,7 +119,7 @@ Widget bottomHomeBar(BuildContext context) {
         icon: Icon(Icons.people_outline_rounded),
         iconColor: welcome_color,
         iconSize: 35,
-        widget: AllCustomer(widgetToNavigator: HomeAdminPage(index: 2,))
+        widget: AllCustomer(widgetToNavigator: HomeAdminPage(index: 0,))
       ),
       Flexible(
           child: Container(

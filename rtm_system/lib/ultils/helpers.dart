@@ -70,7 +70,7 @@ getPriceTotal(double price, double degree, double quantity){
 //Parse dateTime ra chuỗi String
 //nếu ko truyền dateFormat thì mặc định sẽ là 'dd/MM/yyyy hh:mm'
 getDateTime(String date, {String dateFormat}){
-  final fBirthday = new DateFormat(dateFormat == null ? 'dd/MM/yyyy hh:mm' : dateFormat);
+  final fBirthday = new DateFormat(dateFormat == null ? 'dd/MM/yyyy HH:mm' : dateFormat);
   if (date != null) {
     return "${fBirthday.format(DateTime.parse(date))}";
   } else
