@@ -158,215 +158,6 @@ Widget txtItemDetail(context, String tittle, String content,
   );
 }
 
-//header của tất cả bill (customer đang dùng)
-Widget headerInvoice(String header1, String header2, String money) {
-  return Container(
-    color: Color(0xFF0BB791),
-    padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
-    child: Column(
-      children: [
-        Container(
-          child: Center(
-            child: Text(
-              header1,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 24,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ),
-        ),
-        Container(
-            child: Center(
-          child: Text(
-            header2,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 20,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        )),
-        Container(
-            child: Center(
-          child: Text(
-            money,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 34,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        )),
-      ],
-    ),
-  );
-}
-
-//nội dung của bill, đang dùng: invoice detail
-Widget widgetContentInvoice(context, String status, String header) {
-  return SingleChildScrollView(
-      child: Container(
-    margin: EdgeInsets.only(
-      bottom: 12,
-    ),
-    color: Color(0xFF0BB791),
-    child: Column(
-      children: [
-        headerInvoice(header, 'Số tiền', '50,000,000 VND'),
-        //show data detail invoice
-        Container(
-          margin: EdgeInsets.fromLTRB(12, 12, 12, 12),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.all(Radius.circular(5.0)),
-          ),
-          // height: 96,
-          child: Container(
-            margin: EdgeInsets.fromLTRB(24, 12, 24, 12),
-            child: Column(
-              children: [
-                //có api chuyền thông tin cần show vô
-                txtPersonInvoice(
-                    context, 'Người mua', 'Nguyen Van A', '0123456789'),
-                SizedBox(
-                  height: 10,
-                ),
-                txtPersonInvoice(
-                    context, 'Người bán', 'Nguyen Van A', '087654322'),
-                SizedBox(
-                  height: 10,
-                ),
-                txtItemDetail(context, 'Sản phẩm', 'Nguyen Van A'),
-                SizedBox(
-                  height: 10,
-                ),
-                txtItemDetail(context, 'Số ký', 'Nguyen Van A'),
-                SizedBox(
-                  height: 10,
-                ),
-                txtItemDetail(context, 'Số độ', 'Nguyen Van A'),
-                SizedBox(
-                  height: 10,
-                ),
-                txtItemDetail(context, 'Trạng thái', 'Nguyen Van A'),
-                SizedBox(
-                  height: 10,
-                ),
-                txtItemDetail(context, 'Ngày giao dịch', 'Nguyen Van A'),
-                if (status == 'Chờ xác nhận')
-                  Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        btnAcceptOrReject(context, 150, Colors.redAccent,
-                            'Từ chối', false, 1),
-                        SizedBox(width: 20),
-                        btnAcceptOrReject(context, 150, Color(0xFF0BB791),
-                            'Chấp nhận', true, 1),
-                      ],
-                    ),
-                  ),
-              ],
-            ),
-          ),
-        ),
-        //button "Nhận tiền" show if status is "chưa trả", để hoàn thành đơn giao dịch
-        if (status == 'Chưa trả')
-          Center(
-            child: SizedBox(
-              width: 150,
-              // ignore: deprecated_member_use
-              child: RaisedButton(
-                color: Color(0xffEEEEEE),
-                onPressed: () {
-                  //call api to update status hoan thanh don
-                  put_API_GetMoney(context, 0);
-                },
-                child: Text('Nhận tiền'),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                elevation: 10,
-              ),
-            ),
-          ),
-      ],
-    ),
-  ));
-}
-
-Widget widgetContentAdvance(context, String status, String header1, header2) {
-  return SingleChildScrollView(
-      child: Container(
-    margin: EdgeInsets.only(
-      bottom: 12,
-    ),
-    color: Color(0xFF0BB791),
-    child: Column(
-      children: [
-        headerInvoice(header1, header2, '50,000,000 VND'),
-        //show data detail invoice
-        Container(
-          margin: EdgeInsets.fromLTRB(12, 12, 12, 12),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.all(Radius.circular(5.0)),
-          ),
-          // height: 96,
-          child: Container(
-            margin: EdgeInsets.fromLTRB(24, 12, 24, 12),
-            child: Column(
-              children: [
-                //có api chuyền thông tin cần show vô
-                txtPersonInvoice(
-                    context, 'Người cho mượn', 'Nguyen Van A', '0123456789'),
-                SizedBox(
-                  height: 10,
-                ),
-                txtPersonInvoice(
-                    context, 'Người mượn', 'Nguyen Van A', '087654322'),
-                SizedBox(
-                  height: 10,
-                ),
-                txtItemDetail(context, 'Ngày mượn', '20-05-2021'),
-                _showContentInAdvance(context, status),
-              ],
-            ),
-          ),
-        ),
-        _showBtnInAdvanceDetail(context, status),
-        //button "Nhận tiền" show if status is "chưa trả", để hoàn thành đơn giao dịch
-        if (status == 'Dang cho')
-          Center(
-            child: SizedBox(
-              width: 150,
-              // ignore: deprecated_member_use
-              child: RaisedButton(
-                color: Color(0xffEEEEEE),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => HomeCustomerPage(
-                              index: 0,
-                            )),
-                  );
-                },
-                child: Text('Trang chu'),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                elevation: 10,
-              ),
-            ),
-          ),
-      ],
-    ),
-  ));
-}
-
 //nội dung của bill, đang dùng: create invoice/ request
 Widget widgetCreateInvoice(context, bool isNew, List product,
     String nameProduct, String name, String phone, bool isCustomer) {
@@ -718,7 +509,7 @@ Widget componentContainerDetailInvoice(BuildContext context,
         SizedBox(
           height: 5,
         ),
-        // chỗ này show btn accpet or reject của manager
+        // chỗ này show btn accpet or reject của customer
         _showBtnProcessInvoice(context, statusId, id, isCustomer),
       ],
     ),
@@ -727,68 +518,111 @@ Widget componentContainerDetailInvoice(BuildContext context,
 
 Widget _showBtnProcessInvoice(
     context, int statusId, String id, bool isCustomer) {
+  var size = MediaQuery.of(context).size;
   //show button để xử lý hoàn thành đơn
-  //status = 5 là cho customer gọi api để confirm ,
+  //status = 5 là cho customer sign invoice
   // status = 1 là manager confirm
-  // status = 4 là accept or reject cua customer
+  // status = 4 là accept or delete invoice. Customer: only accept NOT Reject.
   if (statusId == 5 || statusId == 1) {
-    return SizedBox(
-      width: 150,
-      child: RaisedButton(
-        color: Color(0xFF0BB791),
-        onPressed: () {
-          doConfirmOrAcceptOrRejectInvoice(context, id, 1, isCustomer);
-        },
-        child: Text(
-          'Xác nhận',
-          style: TextStyle(color: Colors.white, fontSize: 16),
+    if (statusId == 5 && isCustomer == true) {
+      return SizedBox(
+        width: size.width * 0.5,
+        child: RaisedButton(
+          color: Color(0xFF0BB791),
+          onPressed: () {
+            doConfirmOrAcceptOrRejectInvoice(context, id, 1, isCustomer);
+          },
+          child: Text(
+            'Xác nhận',
+            style: TextStyle(color: Colors.white, fontSize: 16),
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          elevation: 10,
         ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
+      );
+    } else if(statusId == 1 && isCustomer == false) {
+      return SizedBox(
+        width: size.width * 0.5,
+        child: RaisedButton(
+          color: Color(0xFF0BB791),
+          onPressed: () {
+            // doConfirmOrAcceptOrRejectInvoice(context, id, 1, isCustomer);
+          },
+          child: Text(
+            'Xác nhận',
+            style: TextStyle(color: Colors.white, fontSize: 16),
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          elevation: 10,
         ),
-        elevation: 10,
-      ),
-    );
+      );
+    }else {
+      return Container();
+    }
   } else if (statusId == 4) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        SizedBox(
-          width: 150,
-          child: RaisedButton(
-            color: Colors.redAccent,
-            onPressed: () {
-              doConfirmOrAcceptOrRejectInvoice(context, id, 3, isCustomer);
-            },
-            child: Text(
-              'Từ chối',
-              style: TextStyle(color: Colors.white, fontSize: 16),
-            ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            elevation: 10,
+    if (isCustomer) {
+      return SizedBox(
+        width: size.width * 0.5,
+        child: RaisedButton(
+          color: Color(0xFF0BB791),
+          onPressed: () {
+            doConfirmOrAcceptOrRejectInvoice(context, id, 2, isCustomer);
+          },
+          child: Text(
+            'Chấp nhận',
+            style: TextStyle(color: Colors.white, fontSize: 16),
           ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          elevation: 10,
         ),
-        SizedBox(
-          width: 150,
-          child: RaisedButton(
-            color: Color(0xFF0BB791),
-            onPressed: () {
-              doConfirmOrAcceptOrRejectInvoice(context, id, 2, isCustomer);
-            },
-            child: Text(
-              'Chấp nhận',
-              style: TextStyle(color: Colors.white, fontSize: 16),
+      );
+    } else {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          SizedBox(
+            width: size.width * 0.05,
+            child: RaisedButton(
+              color: Colors.redAccent,
+              onPressed: () {
+                doConfirmOrAcceptOrRejectInvoice(context, id, 3, isCustomer);
+              },
+              child: Text(
+                'Từ chối',
+                style: TextStyle(color: Colors.white, fontSize: 16),
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              elevation: 10,
             ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            elevation: 10,
           ),
-        )
-      ],
-    );
+          SizedBox(
+            width: size.width * 0.05,
+            child: RaisedButton(
+              color: Color(0xFF0BB791),
+              onPressed: () {
+                doConfirmOrAcceptOrRejectInvoice(context, id, 2, isCustomer);
+              },
+              child: Text(
+                'Chấp nhận',
+                style: TextStyle(color: Colors.white, fontSize: 16),
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              elevation: 10,
+            ),
+          )
+        ],
+      );
+    }
   } else {
     return Container();
   }

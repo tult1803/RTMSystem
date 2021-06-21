@@ -68,7 +68,7 @@ class _DetailAdvancePageState extends State<DetailAdvancePage> {
           leading: leadingAppbar(context),
         ),
       ),
-      body: widgetContentAdvance(context, widget.status, header1, header2),
+      body: Container(),
     );
   }
 }

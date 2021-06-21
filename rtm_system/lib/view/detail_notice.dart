@@ -8,9 +8,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 class DetailOfNotice extends StatefulWidget {
   final String titleNotice ,contentNotice;
   final String noticeId;
+  // true is Customer. Used to hide the button  in page of manager.
+  final bool isCustomer;
 
 
-  DetailOfNotice({this.titleNotice, this.contentNotice, this.noticeId});
+  DetailOfNotice({this.titleNotice, this.contentNotice, this.noticeId, this.isCustomer});
 
   @override
   _DetailOfNoticeState createState() => _DetailOfNoticeState();
@@ -89,6 +91,7 @@ class _DetailOfNoticeState extends State<DetailOfNotice> {
                 ),
               ],
             ),
+            if(!widget.isCustomer)
             Padding(
               padding: const EdgeInsets.only(bottom: 30.0),
               child: btnDeactivateCustomer(
