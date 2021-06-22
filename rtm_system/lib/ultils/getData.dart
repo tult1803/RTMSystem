@@ -184,6 +184,7 @@ Future<void> doCreateRequestInvoiceOrInvoice(
     String productId,
     String sell_date,
     int customerId,
+    String store_id,
     int quantity,
     int degree,
     int invoice_request_id,
@@ -194,7 +195,7 @@ Future<void> doCreateRequestInvoiceOrInvoice(
     PostCreateRequestInvoice postCreateRequestInvoice =
         PostCreateRequestInvoice();
     status = await postCreateRequestInvoice.createRequestInvoice(
-        prefs.get("access_token"), productId, sell_date);
+        prefs.get("access_token"), productId, sell_date, store_id);
   } else {
     //call api tao invoice cua manager
   }

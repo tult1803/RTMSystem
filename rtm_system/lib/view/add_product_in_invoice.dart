@@ -2,11 +2,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:rtm_system/model/getAPI_allStore.dart';
 import 'package:rtm_system/model/getAPI_product.dart';
 import 'package:rtm_system/model/model_product.dart';
+import 'package:rtm_system/model/model_store.dart';
 import 'package:rtm_system/ultils/alertDialog.dart';
 import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/helpers.dart';
+import 'package:rtm_system/ultils/src/color_ultils.dart';
+import 'package:rtm_system/ultils/src/messageList.dart';
 import 'package:rtm_system/view/create_invoice.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -33,9 +38,9 @@ class _AddProductPageState extends State<AddProductPage> {
 
   //field to sales
   double quantity = 0, degree = 0;
-  List listInforProduct;
+  List listInfor;
 
-  String _mySelection;
+  String _mySelection, _selectStore;
   bool checkProduct = true;
 
   DateTime dateNow = DateTime.now();
@@ -64,12 +69,61 @@ class _AddProductPageState extends State<AddProductPage> {
       return dataListProduct;
     }
   }
+  int _pageSize = 1;
+  final PagingController<int, StoreElement> _pagingController =
+  PagingController(firstPageKey: 10);
+  Store store;
+  List<StoreElement> storeList;
 
+
+  Future<void> _fetchPage(pageKey) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      GetAPIAllStore getAPIAllStore = GetAPIAllStore();
+      store = await getAPIAllStore.getStores(
+        prefs.get("access_token"),
+        pageKey,
+        _pageSize,
+      );
+      storeList =  store.stores;
+      final isLastPage = storeList.length < pageKey;
+      if (isLastPage) {
+        _pagingController.appendLastPage(storeList);
+      } else {
+        setState(() {
+          _pageSize += 1;
+        });
+        final nextPageKey = pageKey;
+        _pagingController.appendPage(storeList, nextPageKey);
+      }
+    } catch (error) {
+      _pagingController.error = error;
+    }
+  }
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _getProduct();
+    _pagingController.addPageRequestListener((pageKey) {
+      _fetchPage(pageKey);
+    });
+    _pagingController.addStatusListener((status) {
+      if (status == PagingStatus.subsequentPageError) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text(
+              'Something went wrong while fetching a new page.',
+            ),
+            action: SnackBarAction(
+              label: 'Thử lại',
+              onPressed: () => _pagingController.retryLastFailedRequest(),
+            ),
+          ),
+        );
+      }
+    });
+    super.initState();
   }
 
   @override
@@ -100,6 +154,40 @@ class _AddProductPageState extends State<AddProductPage> {
                     Container(
                       margin: EdgeInsets.fromLTRB(12, 0, 12, 12),
                       child: Column(children: [
+                        Container(
+                          height: size.height * 0.08,
+                          child: CustomScrollView(
+                            slivers: <Widget>[
+                              PagedSliverList<int, StoreElement>(
+                                pagingController: _pagingController,
+                                builderDelegate: PagedChildBuilderDelegate<StoreElement>(
+                                    firstPageErrorIndicatorBuilder: (context) {
+                                      return Column(
+                                        children: [
+                                          firstPageErrorIndicatorBuilder(context,
+                                              tittle: showMessage(null, MSG008)),
+                                          GestureDetector(
+                                            onTap: () => _pagingController.refresh(),
+                                            child: Text(
+                                              showMessage(null, MSG027),
+                                              style: TextStyle(color: welcome_color, fontSize: 18),
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                    firstPageProgressIndicatorBuilder: (context) =>
+                                        firstPageProgressIndicatorBuilder(),
+                                    newPageProgressIndicatorBuilder: (context) =>
+                                        newPageProgressIndicatorBuilder(),
+                                    itemBuilder: (context, item, index) {
+                                      return _dropdownListStore();
+                                    }
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                         // show product from API
                         _dropdownList(),
                         _checkShowQuantity(),
@@ -223,42 +311,59 @@ class _AddProductPageState extends State<AddProductPage> {
       child: TextButton(
           onPressed: () {
             setState(() {
-              if(widget.isCustomer){
-                _mySelection == null
-                    ? showCustomDialog(
-                  context,
-                  content: "Chưa chọn sản phẩm",
-                  isSuccess: false,
-                )
-                    : Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => CreateInvoicePage(
-                          isNew: true,
-                          listProduct: listInforProduct,
-                          isCustomer: widget.isCustomer)),
-                );
-              }else{
-                _mySelection == null
-                    ? showCustomDialog(
-                  context,
-                  content: "Chưa chọn sản phẩm",
-                  isSuccess: false,
-                )
-                    : quantity == 0
-                    ? showCustomDialog(
-                  context,
-                  content: "Số ký đang trống",
-                  isSuccess: false,
-                )
-                    : Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => CreateInvoicePage(
-                          isNew: true,
-                          listProduct: listInforProduct,
-                          isCustomer: widget.isCustomer)),
-                );
+              if (widget.isCustomer) {
+                if (_selectStore == null) {
+                  showCustomDialog(
+                    context,
+                    content: "Chưa chọn cửa hàng",
+                    isSuccess: false,
+                  );
+                } else if (_mySelection == null) {
+                  showCustomDialog(
+                    context,
+                    content: "Chưa chọn sản phẩm",
+                    isSuccess: false,
+                  );
+                } else {
+
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => CreateInvoicePage(
+                            isNew: true,
+                            listProduct: listInfor,
+                            isCustomer: widget.isCustomer)),
+                  );
+                }
+              } else{
+                if (_selectStore == null) {
+                  showCustomDialog(
+                    context,
+                    content: "Chưa chọn cửa hàng",
+                    isSuccess: false,
+                  );
+                } else if (_mySelection == null) {
+                  showCustomDialog(
+                    context,
+                    content: "Chưa chọn sản phẩm",
+                    isSuccess: false,
+                  );
+                }else if (quantity == 0) {
+                  showCustomDialog(
+                    context,
+                    content: "Số ký đang trống",
+                    isSuccess: false,
+                  );
+                } else {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => CreateInvoicePage(
+                            isNew: true,
+                            listProduct: listInfor,
+                            isCustomer: widget.isCustomer)),
+                  );
+                }
               }
 
               // }
@@ -303,16 +408,17 @@ class _AddProductPageState extends State<AddProductPage> {
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
                       ),
-                      hint: Text('Chon san pham'),
+                      hint: Text('Chọn sản phẩm'),
                       onChanged: (String newValue) async {
                         setState(() {
                           _mySelection = newValue;
                           _getCurrentPrice(newValue);
-                          this.listInforProduct = [
+                          this.listInfor = [
                             this._mySelection,
                             this.quantity,
                             this.degree,
-                            getDateTime("$dateSale", dateFormat: "yyyy-MM-dd HH:mm:ss")
+                            getDateTime("$dateSale", dateFormat: "yyyy-MM-dd HH:mm:ss"),
+                            this._selectStore,
                           ];
                         });
                         setState(() {
@@ -339,7 +445,65 @@ class _AddProductPageState extends State<AddProductPage> {
       ],
     );
   }
-
+  Widget _dropdownListStore() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: <Widget>[
+        Row(
+          children: [
+            Expanded(
+              child: Container(
+                height: 40,
+                margin: EdgeInsets.only(top: 5, bottom: 10),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10.0),
+                    )),
+                child: DropdownButtonHideUnderline(
+                  child: ButtonTheme(
+                    alignedDropdown: true,
+                    child: DropdownButton<String>(
+                      value: _selectStore,
+                      iconSize: 30,
+                      icon: (null),
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      hint: Text('Chọn cửa hàng'),
+                      onChanged: (String newValue) async {
+                        setState(() {
+                          _selectStore = newValue;
+                          this.listInfor = [
+                            this._mySelection,
+                            this.quantity,
+                            this.degree,
+                            getDateTime("$dateSale", dateFormat: "yyyy-MM-dd HH:mm:ss"),
+                            this._selectStore,
+                          ];
+                        });
+                      },
+                      items: storeList?.map((item) {
+                        return new DropdownMenuItem(
+                          child: new Text(item.name),
+                          //chuyen id de create
+                          value: item.id.toString(),
+                        );
+                      })?.toList() ??
+                          [],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        // _underRow()
+      ],
+    );
+  }
   TextEditingController getDataTextField(txt) {
     if (txt == null) {
       txt = "";
@@ -369,11 +533,12 @@ class _AddProductPageState extends State<AddProductPage> {
               txtController.clear();
             } else
               this.degree = double.parse(value);
-            this.listInforProduct = [
+            this.listInfor = [
               this._mySelection,
               this.quantity,
               this.degree,
-              getDateTime("$dateSale", dateFormat: "yyyy-MM-dd HH:mm:ss")
+              getDateTime("$dateSale", dateFormat: "yyyy-MM-dd HH:mm:ss"),
+              this._selectStore,
             ];
             setState(() {
               checkClick = true;
@@ -421,11 +586,12 @@ class _AddProductPageState extends State<AddProductPage> {
           listQuantity.forEach((element) {
             quantity += double.parse(element);
           });
-          this.listInforProduct = [
+          this.listInfor = [
             this._mySelection,
             this.quantity,
             this.degree,
-            getDateTime("$dateSale", dateFormat: "yyyy-MM-dd HH:mm:ss")
+            getDateTime("$dateSale", dateFormat: "yyyy-MM-dd HH:mm:ss"),
+            this._selectStore,
           ];
         });
       },
@@ -488,11 +654,12 @@ class _AddProductPageState extends State<AddProductPage> {
                 onConfirm: (date) {
                   setState(() {
                     dateSale = date;
-                    this.listInforProduct = [
+                    this.listInfor = [
                       this._mySelection,
                       this.quantity,
                       this.degree,
-                      getDateTime("$dateSale", dateFormat: "yyyy-MM-dd HH:mm:ss")
+                      getDateTime("$dateSale", dateFormat: "yyyy-MM-dd HH:mm:ss"),
+                      this._selectStore,
                     ];
                   });
                 },

@@ -160,7 +160,7 @@ Widget txtItemDetail(context, String tittle, String content,
 
 //nội dung của bill, đang dùng: create invoice/ request
 Widget widgetCreateInvoice(context, bool isNew, List product,
-    String nameProduct, String name, String phone, bool isCustomer) {
+    String nameProduct, String nameStore, String name, String phone, bool isCustomer) {
   var size = MediaQuery.of(context).size;
   return SingleChildScrollView(
       child: Container(
@@ -188,6 +188,10 @@ Widget widgetCreateInvoice(context, bool isNew, List product,
                   height: 10,
                 ),
                 txtItemDetail(context, 'Sản phẩm', '${nameProduct}'),
+                SizedBox(
+                  height: 10,
+                ),
+                txtItemDetail(context, 'Cửa hàng', '${nameStore}'),
                 SizedBox(
                   height: 10,
                 ),
@@ -230,7 +234,7 @@ Widget widgetCreateInvoice(context, bool isNew, List product,
               color: Color(0xffEEEEEE),
               onPressed: () {
                 doCreateRequestInvoiceOrInvoice(context, product[0],
-                    product[3], 0, 0, 0, 0, isCustomer);
+                    product[3], 0,product[4], 0, 0, 0, isCustomer);
               },
               child: Text('Xác nhận'),
               shape: RoundedRectangleBorder(
