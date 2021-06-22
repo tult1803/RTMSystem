@@ -160,6 +160,7 @@ class showInvoiceRequestManagerState extends State<showInvoiceRequestManager> {
                                         bodyPage: DetailInvoiceRequest(
                                           isCustomer: false,
                                           map: item,
+                                          isRequest: true,
                                         ),
                                       ),
                                       isRequest: true,

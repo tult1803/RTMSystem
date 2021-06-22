@@ -247,9 +247,15 @@ Future<void> doConfirmOrAcceptOrRejectInvoice(
   } else {
     //call api tao invoice cua manager
     switch (type) {
-      case 1: break;
-      case 2: break;
-      case 3: break;
+      case 1:
+        print('Xác nhận');
+        break;
+      case 2:
+        print('Tạo/Chấp nhận');
+        break;
+      case 3:
+        print('Từ chối');
+        break;
     }
   }
 }

@@ -518,7 +518,7 @@ Widget componentContainerDetailInvoice(BuildContext context,
 }
 
 Widget _showBtnProcessInvoice(
-    context, int statusId, String id, bool isCustomer) {
+    context, int statusId, String id, bool isCustomer, {bool isRequest}) {
   var size = MediaQuery.of(context).size;
   //show button để xử lý hoàn thành đơn
   //status = 5 là cho customer sign invoice
@@ -551,7 +551,7 @@ Widget _showBtnProcessInvoice(
         child: RaisedButton(
           color: Color(0xFF0BB791),
           onPressed: () {
-            // doConfirmOrAcceptOrRejectInvoice(context, id, 1, isCustomer);
+            doConfirmOrAcceptOrRejectInvoice(context, id, 1, isCustomer);
           },
           child: Text(
             'Xác nhận',
@@ -614,7 +614,7 @@ Widget _showBtnProcessInvoice(
                 doConfirmOrAcceptOrRejectInvoice(context, id, 2, isCustomer);
               },
               child: Text(
-                'Chấp nhận',
+                '${isRequest != null ? "Tạo":"Chấp nhận"}',
                 style: TextStyle(color: Colors.white, fontSize: 16),
               ),
               shape: RoundedRectangleBorder(
@@ -872,6 +872,7 @@ Widget componentContainerInvoiceRequest(BuildContext context,
     String createDate,
     String sellDate,
     String storeName,
+      bool isRequest,
     bool isCustomer}) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
@@ -908,7 +909,7 @@ Widget componentContainerInvoiceRequest(BuildContext context,
         SizedBox(
           height: 5,
         ),
-        _showBtnProcessInvoice(context, 0, id, isCustomer),
+        _showBtnProcessInvoice(context, 4, id, isCustomer, isRequest: isRequest),
       ],
     ),
   );
