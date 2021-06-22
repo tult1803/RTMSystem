@@ -9,7 +9,6 @@ import 'package:rtm_system/ultils/src/url_api.dart';
 class GetAPIAllStore {
   static int status;
   Future<Store> getStores(String token, int pageNum, int pageNo) async {
-    print(Uri.http('${url_main}', '${url_store}', { "pageNum" : "${pageNum}", "pageNo" : "${pageNo}"}, ));
     final response =  await http.get(
         Uri.http('${url_main}', '${url_store}', { "pageNum" : "${pageNum}", "pageNo" : "${pageNo}"}, ),
         headers: <String, String>{
@@ -17,7 +16,6 @@ class GetAPIAllStore {
           'Accept': 'application/json',
           'Authorization': 'Bearer $token',
         });
-    print("Status getStores:${response.statusCode}");
     if (response.statusCode == 200) {
       status = 200;
       return Store.fromJson(jsonDecode(response.body));
