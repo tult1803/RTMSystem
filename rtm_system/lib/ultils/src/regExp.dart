@@ -24,8 +24,8 @@ String patternNumber = r'[0-9]+[.,]?[0-9]*';
 RegExp checkFormatNumber = RegExp(patternNumber);
 //fomat money
 RegExp checkFormatMoney = RegExp(r'^(?:\d{1,3},)+(\d{1,3}),?$|^\d{1,3}$');
-RegExp checkLengthMoney =
-    RegExp(r'^(?:\d{2,3},)+(\d{2,3}),?$|^\d{2,3}$[0-9]{6,}$');
+// RegExp checkLengthMoney =
+//     RegExp(r'^(?:\d{2,3},)+(\d{2,3}),?$|^\d{2,3}$[0-9]{6,}$');
 
 //Add comma auto when input text money
 class ThousandsSeparatorInputFormatter extends TextInputFormatter {

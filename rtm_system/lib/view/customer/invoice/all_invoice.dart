@@ -64,6 +64,7 @@ class _InvoicePageState extends State<InvoicePage> {
                 height: 12,
               ),
               rowButtonDatetime(),
+              btnLogout(context),
               Expanded(child: pageViewInvocie()),
             ],
           ),

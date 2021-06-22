@@ -181,7 +181,7 @@ Future<void> putAPIUpdatePrice(BuildContext context, String productId,
 
 Future<void> doCreateRequestInvoiceOrInvoice(
     BuildContext context,
-    int productId,
+    String productId,
     String sell_date,
     int customerId,
     int quantity,
@@ -204,7 +204,7 @@ Future<void> doCreateRequestInvoiceOrInvoice(
           context,
           "Đã gửi yêu cầu bán hàng.",
           HomeCustomerPage(
-            index: 1,
+            index: 0,
           ),
           true);
     } else {
@@ -252,6 +252,37 @@ Future<void> doConfirmOrAcceptOrRejectInvoice(
       case 3: break;
     }
   }
-
-
+}
+//Tao advance request
+Future<void> doCreateRequestAdvance(
+    BuildContext context, String accountId, String money, date, image, int type, bool isCustomer) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  int status;
+  if (isCustomer) {
+    // 1 is create request advance, 2 is accept advance
+    if (type == 1) {
+     //call API
+    } else if (type == 2) {
+     //Call API
+    }
+    if (status == 200) {
+      showStatusAlertDialog(
+          context,
+          showMessage("", MSG012),
+          HomeCustomerPage(
+            index: 1,
+          ),
+          true);
+    } else{
+      showStatusAlertDialog(
+          context, showMessage(MSG025, MSG027), null, false);
+    }
+  } else {
+    //call api tao invoice cua manager
+    switch (type) {
+      case 1: break;
+      case 2: break;
+      case 3: break;
+    }
+  }
 }

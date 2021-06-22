@@ -4,6 +4,8 @@ import 'package:rtm_system/presenter/Customer/show_invoice_request.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/helpers.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
+import 'package:rtm_system/view/add_product_in_invoice.dart';
+import 'package:rtm_system/view/customer/getMoney_or_payDebt.dart';
 class InvoiceTab extends StatefulWidget {
   const InvoiceTab({Key key}) : super(key: key);
 
@@ -16,14 +18,18 @@ DateTime toDate;
 class _InvoiceTabState extends State<InvoiceTab>
     with TickerProviderStateMixin {
   TabController _tabController;
-  final PageController _pageController = PageController();
   String getFromDate, getToDate;
-  int index;
+  int index, _selectedIndex;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 5, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
+    _tabController.addListener(() {
+      setState(() {
+        _selectedIndex = _tabController.index;
+      });
+    });
     index = 0;
     toDate = DateTime.now();
     fromDate = DateTime.now().subtract(Duration(days: 30));
@@ -42,31 +48,31 @@ class _InvoiceTabState extends State<InvoiceTab>
         title: const Text('Hoá đơn', style: TextStyle( color: Colors.white),),
         bottom: TabBar(
           isScrollable: true,
-          indicatorColor: Colors.white,
           labelColor: Colors.white,
           unselectedLabelColor: Colors.white.withOpacity(0.5),
           controller: _tabController,
-          tabs: const <Widget>[
+          tabs: <Widget>[
             Tab(
+              text: 'Yêu cầu',
               icon: Icon(Icons.post_add_outlined,),
-              child: Text('Yêu cầu', style: TextStyle(),),
             ),
             Tab(
+              text: 'Chờ xử lý',
               icon: Icon(Icons.access_time_outlined),
-              child: Text('Xử lý'),
             ),
             Tab(
+              text: 'Ký gửi',
               icon: Icon(Icons.attach_money),
-              child: Text('Ký gửi'),
+
             ),
             Tab(
+              text: 'Bán hàng',
               icon: Icon(Icons.my_library_books_outlined),
-              child: Text('Bán hàng'),
             ),
-            Tab(
-              icon: Icon(Icons.my_library_books_outlined),
-              child: Text('Hoàn trả'),
-            ),
+            // Tab(
+            //   text: 'Hoàn trả',
+            //   icon: Icon(Icons.assignment_return_outlined),
+            // ),
           ],
         ),
       ),
@@ -107,7 +113,6 @@ class _InvoiceTabState extends State<InvoiceTab>
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   rowButtonDatetime(),
-                  _showProcessButton(),
                   new showAllInvoicePage(5, fromDate: getFromDate, toDate: getToDate),
                 ],
               ),
@@ -126,30 +131,47 @@ class _InvoiceTabState extends State<InvoiceTab>
                 ),
               )
           ),
-          //đây sẽ show các hoá đơn hoàn trả
-          Container(
-              height: size.height,
-              margin: EdgeInsets.only(left: 5, top: 12, right: 5),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    rowButtonDatetime(),
-                    new showAllInvoicePage(-1, fromDate: getFromDate, toDate: getToDate),
-                  ],
-                ),
-              )
-          ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: _showFloatBtn(_selectedIndex),
+    );
+  }
+  Widget _showFloatBtn(index){
+    if(index == 2 ){
+      return  FloatingActionButton.extended(
         onPressed: () {
           // Add your onPressed code here!
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => GetMoneyOrPayDebt(isPay: false,)),
+          );
         },
-        child :Icon(Icons.add, color: Colors.white, size: 20,),
+        label: Text('Nhận tiền', style: TextStyle(
+          color: Colors.white,
+        ),),
         backgroundColor: welcome_color,
-      ),
-    );
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(50.0),
+        ),
+        elevation: 10,
+      );
+    }else{
+      return FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => AddProductPage(
+                      isCustomer: true,
+                      tittle: "Tạo yêu cầu bán hàng",
+                    )),
+          );
+        },
+        child :Icon(Icons.post_add_outlined, color: Colors.white, size: 25,),
+        backgroundColor: welcome_color,
+      );
+    }
   }
   Widget rowButtonDatetime() {
     return Row(
@@ -227,42 +249,5 @@ class _InvoiceTabState extends State<InvoiceTab>
         "${getDateTime("${toDate.add(Duration(days: 1))}", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
       });
     }
-  }
-  Widget _showProcessButton() {
-    var size = MediaQuery.of(context).size;
-    return Container(
-      margin: EdgeInsets.fromLTRB(20, 5, 20, 0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          SizedBox(
-            width: size.width * 0.35,
-            child: RaisedButton(
-              color: Color(0xFF0BB791),
-              onPressed: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //       builder: (context) => GetMoneyOrPayDebt(
-                //             isPay: false,
-                //           )),
-                // );
-              },
-              child: Text(
-                'Lấy tiền',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                ),
-              ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              elevation: 10,
-            ),
-          )
-        ],
-      ),
-    );
   }
 }

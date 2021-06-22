@@ -5,9 +5,10 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:rtm_system/ultils/alertDialog.dart';
 import 'package:rtm_system/ultils/component.dart';
+import 'package:rtm_system/ultils/helpers.dart';
 import 'package:rtm_system/ultils/src/messageList.dart';
 import 'package:rtm_system/ultils/src/regExp.dart';
-import 'package:rtm_system/view/customer/advance/detail_advance.dart';
+import 'package:rtm_system/view/customer/advance/confirm_create_request_advance.dart';
 import 'package:rtm_system/view/customer/home_customer_page.dart';
 
 class CreateRequestAdvance extends StatefulWidget {
@@ -22,16 +23,19 @@ final _formKey = GlobalKey<FormState>();
 class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
   final f = new DateFormat('dd/MM/yyyy');
   String money;
-  DateTime dateNow = DateTime.now();
-  DateTime dateSale = DateTime.now();
-  String status = 'Dang cho';
+  DateTime createDate;
+  List listInfor;
   @override
   void initState() {
     // TODO: implement initState
+    setState(() {
+      createDate = DateTime.now();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Color(0xffEEEEEE),
       appBar: AppBar(
@@ -66,13 +70,10 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
                   height: 10,
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    btnCreateOrCancel(context, 120, 40, Colors.redAccent,
-                          "Hủy", "yeu cau ung tien", false, 0),
-                    SizedBox(width: 20),
-                    btnCreateOrCancel(context, 140, 40, Color(0xFF0BB791),
-                        "Tạo", "yeu cau ung tien", true, 0),
+                    btnCreate(context, size.width *0.7, size.height *0.045, Color(0xFF0BB791),
+                        "Tạo", "yêu cầu ứng tiền", 1),
                   ],
                 ),
                 SizedBox(
@@ -84,25 +85,23 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
     );
   }
 // use to create or cancel in create request advance/ invoice
-  Widget btnCreateOrCancel(
+  Widget btnCreate(
       BuildContext context,
       double width,
       double height,
       Color color,
       String tittleButtonAlertDialog,
       String contentFeature,
-      bool action,
       int indexOfBottomBar,) {
     return Container(
       height: height,
       width: width,
       decoration: BoxDecoration(
         color: color,
-        borderRadius: BorderRadius.circular(5),
+        borderRadius: BorderRadius.circular(10),
       ),
       child: FlatButton(
           onPressed: () async {
-              if (action) {
                 if (_formKey.currentState.validate()) {
                   //call api post
                   int status = 200;
@@ -111,26 +110,18 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => DetailAdvancePage(status: 'Dang cho')),
+                          builder: (context) => ConfirmRequestAdvance(listInfor: listInfor, isCustomer: true,)),
                     );
                   } else
                     showStatusAlertDialog(
-                        context, "Tạo ${contentFeature} thất bại.\n Vui long thử lại!", null, false);
+                        context, showMessage(MSG024, MSG027), null, false);
                 }
-              } else {
-                showAlertDialog(
-                    context,
-                    "Bạn muốn hủy tạo ${contentFeature} ?",
-                    HomeCustomerPage(
-                      index: indexOfBottomBar,
-                    ));
-              }
           },
           child: Center(
-              child: Text(
+              child: AutoSizeText(
                 tittleButtonAlertDialog,
                 style: TextStyle(
-                    color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
+                    color: Colors.white, fontWeight: FontWeight.w500),
               ))),
     );
   }
@@ -148,8 +139,8 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
               return showMessage(tittle, MSG001);
             } else if (!checkFormatMoney.hasMatch(value)) {
               return showMessage('', MSG026);
-            } else if (!checkLengthMoney.hasMatch(value)) {
-              print(value);
+            } else if (value.length <= 6) {
+              // số tiền phải là từ 100 trở lên
               return showMessage('', MSG006);
             }
             return null;
@@ -160,10 +151,13 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
           obscureText: obscureText,
           onChanged: (value) {
             this.money = value;
-            // print(value);
-            // print(errMoney);
+            this.listInfor=[
+                this.money,
+               getDateTime(this.createDate.toString(), dateFormat: 'yyyy-MM-dd'),
+                //image
+            ];
           },
-          style: TextStyle(fontSize: 16),
+          // style: TextStyle(fontSize: 16),
           cursorColor: Color(0xFF0BB791),
           decoration: InputDecoration(
             border: UnderlineInputBorder(),
@@ -208,10 +202,15 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
                 showTitleActions: true,
                 onConfirm: (date) {
                   setState(() {
-                    dateSale = date;
+                    createDate = date;
+                    this.listInfor = [
+                      this.money,
+                      getDateTime(this.createDate.toString(), dateFormat: 'yyyy-MM-dd'),
+                      //image
+                    ];
                   });
                 },
-                currentTime: dateNow,
+                currentTime: createDate,
                 maxTime: DateTime(DateTime.now().year + 100, 12, 31),
                 minTime: DateTime(DateTime.now().year, DateTime.now().month,
                     DateTime.now().day),
@@ -223,14 +222,15 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
                 Container(
                   width: 100,
                   margin: EdgeInsets.only(left: 15),
-                  child: Text(
-                    "Ngày bán",
-                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
+                  child: AutoSizeText(
+                    "Ngày ứng tiền",
+                    style: TextStyle(fontWeight: FontWeight.w500,),
                   ),
                 ),
+                SizedBox(width: 20,),
                 Expanded(
                   child: Text(
-                    '${f.format(dateSale)}',
+                    '${getDateTime(createDate.toString(), dateFormat: 'dd-MM-yyyy')}',
                     style: TextStyle(fontSize: 16),
                   ),
                 ),

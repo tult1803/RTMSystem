@@ -12,7 +12,7 @@ getStatus({int status}) {
   // 5,Undone
   switch (status) {
     case 1:
-      return "Hiệu lực";
+      return "Hoạt động";
       break;
     case 2:
       return "Từ chối";

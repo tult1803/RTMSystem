@@ -15,3 +15,4 @@ String url_createRequestInvoice = "api/rtm/v1/invoice/create-invoice-request";
 String url_signInvoice= "api/rtm/v1/invoice/sign-invoice";
 String url_confirmInvoice= "api/rtm/v1/invoice/confirm-invoice";
 String url_invoice_request = "api/rtm/v1/invoice/get-invoice_request";
+String url_store = "api/rtm/v1/store/get-stores";

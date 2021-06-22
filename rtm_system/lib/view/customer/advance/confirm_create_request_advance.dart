@@ -4,19 +4,16 @@ import 'package:rtm_system/model/model_product.dart';
 import 'package:rtm_system/ultils/component.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class CreateInvoicePage extends StatefulWidget {
-  const CreateInvoicePage({Key key, this.isNew, this.listProduct,
+class ConfirmRequestAdvance extends StatefulWidget {
+  const ConfirmRequestAdvance({Key key, this.listInfor,
     this.isCustomer}): super(key: key);
-
-  //false will show btn 'Sửa lại sản phẩm'
-  final bool isNew;
-  final List listProduct;
+  final List listInfor;
   final bool isCustomer;
   @override
-  _CreateInvoicePageState createState() => _CreateInvoicePageState();
+  _ConfirmRequestAdvanceState createState() => _ConfirmRequestAdvanceState();
 }
 
-class _CreateInvoicePageState extends State<CreateInvoicePage> {
+class _ConfirmRequestAdvanceState extends State<ConfirmRequestAdvance> {
   String token, personSale = '', phoneSale = '', nameProduct;
   DateTime date = DateTime.now();
   List<DataProduct> dataListProduct = [];
@@ -49,10 +46,10 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
     String name;
     if (dataListProduct != null) {
       dataListProduct?.map((item) {
-            if (item.id== widget.listProduct[0]) {
-              name = item.name;
-            }
-          })?.toList() ??
+        if (item.id== widget.listInfor[0]) {
+          name = item.name;
+        }
+      })?.toList() ??
           [];
     }
     return name;
@@ -79,8 +76,7 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
               color: Colors.white, fontWeight: FontWeight.w500, fontSize: 22),
         ),
       ),
-      body: widgetCreateInvoice(
-          context, widget.isNew, widget.listProduct, nameProduct,
+      body: widgetCreateAdvance( context, widget.listInfor, nameProduct,
           personSale, phoneSale, widget.isCustomer),
     );
   }

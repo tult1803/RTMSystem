@@ -74,6 +74,7 @@ class _AddProductPageState extends State<AddProductPage> {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Color(0xffEEEEEE),
       appBar: AppBar(
@@ -144,7 +145,7 @@ class _AddProductPageState extends State<AddProductPage> {
                 SizedBox(
                   height: 10,
                 ),
-                btnSave(context, 140, 40, Color(0xFF0BB791), "Tạo", 1),
+                btnSave(context, size.width * 0.7, size.height * 0.05, Color(0xFF0BB791), "Tạo", 1),
                 SizedBox(
                   height: 10,
                 ),
@@ -212,11 +213,9 @@ class _AddProductPageState extends State<AddProductPage> {
     String tittleButtonAlertDialog,
     int indexOfBottomBar,
   ) {
-    var size = MediaQuery.of(context).size;
-
     return Container(
       height: height,
-      width: size.width * 0.7,
+      width: width,
       decoration: BoxDecoration(
         color: color,
         borderRadius: BorderRadius.circular(10),
@@ -224,26 +223,44 @@ class _AddProductPageState extends State<AddProductPage> {
       child: TextButton(
           onPressed: () {
             setState(() {
-              _mySelection == null
-                  ? showCustomDialog(
-                      context,
-                      content: "Chưa chọn sản phẩm",
-                      isSuccess: false,
-                    )
-                  : quantity == 0
-                      ? showCustomDialog(
-                          context,
-                          content: "Số ký đang trống",
-                          isSuccess: false,
-                        )
-                      : Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => CreateInvoicePage(
-                                  isNew: true,
-                                  listProduct: listInforProduct,
-                                  isCustomer: widget.isCustomer)),
-                        );
+              if(widget.isCustomer){
+                _mySelection == null
+                    ? showCustomDialog(
+                  context,
+                  content: "Chưa chọn sản phẩm",
+                  isSuccess: false,
+                )
+                    : Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => CreateInvoicePage(
+                          isNew: true,
+                          listProduct: listInforProduct,
+                          isCustomer: widget.isCustomer)),
+                );
+              }else{
+                _mySelection == null
+                    ? showCustomDialog(
+                  context,
+                  content: "Chưa chọn sản phẩm",
+                  isSuccess: false,
+                )
+                    : quantity == 0
+                    ? showCustomDialog(
+                  context,
+                  content: "Số ký đang trống",
+                  isSuccess: false,
+                )
+                    : Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => CreateInvoicePage(
+                          isNew: true,
+                          listProduct: listInforProduct,
+                          isCustomer: widget.isCustomer)),
+                );
+              }
+
               // }
             });
           },
@@ -295,7 +312,7 @@ class _AddProductPageState extends State<AddProductPage> {
                             this._mySelection,
                             this.quantity,
                             this.degree,
-                            getDateTime("$dateSale", dateFormat: "dd/MM/yyyy")
+                            getDateTime("$dateSale", dateFormat: "yyyy-MM-dd HH:mm:ss")
                           ];
                         });
                         setState(() {
@@ -356,7 +373,7 @@ class _AddProductPageState extends State<AddProductPage> {
               this._mySelection,
               this.quantity,
               this.degree,
-              getDateTime("$dateSale", dateFormat: "dd/MM/yyyy")
+              getDateTime("$dateSale", dateFormat: "yyyy-MM-dd HH:mm:ss")
             ];
             setState(() {
               checkClick = true;
@@ -408,7 +425,7 @@ class _AddProductPageState extends State<AddProductPage> {
             this._mySelection,
             this.quantity,
             this.degree,
-            getDateTime("$dateSale", dateFormat: "dd/MM/yyyy")
+            getDateTime("$dateSale", dateFormat: "yyyy-MM-dd HH:mm:ss")
           ];
         });
       },
@@ -475,7 +492,7 @@ class _AddProductPageState extends State<AddProductPage> {
                       this._mySelection,
                       this.quantity,
                       this.degree,
-                      getDateTime("$dateSale", dateFormat: "dd/MM/yyyy")
+                      getDateTime("$dateSale", dateFormat: "yyyy-MM-dd HH:mm:ss")
                     ];
                   });
                 },
