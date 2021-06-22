@@ -181,6 +181,7 @@ showAlertDialogAPI(BuildContext context, String tittle, Widget widget, status) {
       return alert;
     },
   );
+
 }
 
 //Đang thử nghiệm
@@ -266,3 +267,4 @@ Future<Dialog> showCustomDialog(BuildContext context,
             ));
       });
 }
+

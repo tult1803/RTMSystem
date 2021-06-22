@@ -192,9 +192,9 @@ Widget btnDateTime(
       SizedBox(
         width: size.width * 0.35,
         child: RaisedButton(
-          color: Colors.white,
+          color: welcome_color,
           onPressed: () {},
-          child: Text('$tittle'),
+          child: Text('$tittle',style: TextStyle(color: Colors.white),),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
           ),
@@ -1017,4 +1017,91 @@ Widget btnDeactivateCustomer(
   } else {
     return Container();
   }
+}
+Widget containerStores(BuildContext context, String name, String address,
+    String phone, String email) {
+  var size = MediaQuery.of(context).size;
+  return Container(
+    margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(15.0),
+        topRight: Radius.circular(15.0),
+      ),
+    ),
+    child: TextButton(
+      style: TextButton.styleFrom(
+        primary: Colors.black, // foreground
+        textStyle: TextStyle(
+          fontSize: 16,
+        ),
+      ),
+      onPressed: () {
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: size.width * 0.93,
+                child: AutoSizeText(
+                  "$name",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.left,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          AutoSizeText(
+            "$address",
+            style: TextStyle(
+              fontSize: 14,
+            ),
+            textAlign: TextAlign.left,
+            overflow: TextOverflow.ellipsis,
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          AutoSizeText(
+            "$phone",
+            style: TextStyle(
+              fontSize: 14,
+            ),
+            textAlign: TextAlign.left,
+            overflow: TextOverflow.ellipsis,
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          AutoSizeText(
+            "$email",
+            style: TextStyle(
+              fontSize: 12,
+              color: welcome_color,
+            ),
+            textAlign: TextAlign.left,
+          ),
+          SizedBox(
+            height: 9,
+          ),
+
+          SizedBox(
+            height: 0.5,
+            child: Container(
+              color: Colors.black54,
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
 }

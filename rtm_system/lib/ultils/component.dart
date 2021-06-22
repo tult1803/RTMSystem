@@ -961,3 +961,102 @@ Widget componentContainerDetailInvoiceRequest(BuildContext context,
     ),
   );
 }
+
+//Dùng cho trang chi tiết yêu cầu advance
+Widget componentContainerDetailAdvanceRequest(BuildContext context,
+    {String id,
+      String storeName,
+      String customerName,
+      String customerPhone,
+      String money,
+      String image,
+      String createDate,
+      bool isCustomer}) {
+  return Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: Column(
+      children: [
+        txtItemDetail(context, "ID đơn", "$id"),
+        SizedBox(
+          height: 10,
+        ),
+        txtItemDetail(
+            context, "Ngày ứng tiền", "${getDateTime(createDate)}"),
+        SizedBox(
+          height: 10,
+        ),
+        txtItemDetail(context, "Người tạo", "$customerName",
+            subContent: customerPhone),
+        SizedBox(
+          height: 10,
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        // chỗ này show btn accpet or reject của manager cho request
+      ],
+    ),
+  );
+}
+
+//nội dung của bill, đang dùng: create advance
+Widget widgetCreateAdvance(context,List item,
+    String nameProduct, String name, String phone, bool isCustomer) {
+  var size = MediaQuery.of(context).size;
+  return SingleChildScrollView(
+      child: Container(
+        height: size.height,
+        color: Color(0xFF0BB791),
+        child: Column(
+          children: [
+            //show data detail invoice
+            Container(
+              margin: EdgeInsets.fromLTRB(12, 24, 12, 12),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+              ),
+              // height: 96,
+              child: Container(
+                margin: EdgeInsets.fromLTRB(24, 12, 24, 12),
+                child: Column(
+                  children: [
+                    txtPersonInvoice(context, 'Người tạo', '${name}', '${phone}'),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    txtItemDetail(context, 'Số tền', '${item[0]}'),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    txtItemDetail(context, 'Ngày ứng tiền', '${item[1]}'),
+                   // hình ảnh
+                    SizedBox(
+                      height: 10,
+                    ),
+                    SizedBox(
+                      width: size.width * 0.4,
+                      // ignore: deprecated_member_use
+                      child: RaisedButton(
+                        color: Color(0xFF0BB791),
+                        onPressed: () {
+                          doCreateRequestAdvance(context, 'TK-111', item[0], item[1], 'image', 1, true);
+                        },
+                        child: AutoSizeText(
+                          'Xác nhận',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        elevation: 10,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ));
+}

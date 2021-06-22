@@ -1,4 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:rtm_system/presenter/Customer/show_all_invoice.dart';
 import 'package:rtm_system/presenter/Customer/show_invoice_request.dart';
@@ -6,6 +5,7 @@ import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/helpers.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/add_product_in_invoice.dart';
+import 'package:rtm_system/view/customer/getMoney_or_payDebt.dart';
 class InvoiceTab extends StatefulWidget {
   const InvoiceTab({Key key}) : super(key: key);
 
@@ -18,7 +18,6 @@ DateTime toDate;
 class _InvoiceTabState extends State<InvoiceTab>
     with TickerProviderStateMixin {
   TabController _tabController;
-  final PageController _pageController = PageController();
   String getFromDate, getToDate;
   int index, _selectedIndex;
 
@@ -142,8 +141,13 @@ class _InvoiceTabState extends State<InvoiceTab>
       return  FloatingActionButton.extended(
         onPressed: () {
           // Add your onPressed code here!
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => GetMoneyOrPayDebt(isPay: false,)),
+          );
         },
-        label: Text('Lấy tiền', style: TextStyle(
+        label: Text('Nhận tiền', style: TextStyle(
           color: Colors.white,
         ),),
         backgroundColor: welcome_color,

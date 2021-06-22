@@ -4,6 +4,8 @@ import 'package:rtm_system/presenter/Customer/show_invoice_request.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/helpers.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
+import 'package:rtm_system/view/customer/advance/create_request_advance.dart';
+import 'package:rtm_system/view/customer/getMoney_or_payDebt.dart';
 class AdvancePage extends StatefulWidget {
   const AdvancePage({Key key}) : super(key: key);
 
@@ -82,7 +84,6 @@ class _AdvancePageState extends State<AdvancePage>
                 ),
               )
           ),
-          // các hoá đơn đã được accept đang chờ customer accept(processing), status will change to active
           Container(
               height: size.height,
               margin: EdgeInsets.only(left: 5, top: 12, right: 5),
@@ -96,7 +97,7 @@ class _AdvancePageState extends State<AdvancePage>
                 ),
               )
           ),
-          // các hoá đơn active and done
+          // các advance active and done
           Container(
               height: size.height,
               margin: EdgeInsets.only(left: 5, top: 12, right: 5),
@@ -119,7 +120,11 @@ class _AdvancePageState extends State<AdvancePage>
     if(index == 2 ){
       return  FloatingActionButton.extended(
         onPressed: () {
-          // Add your onPressed code here!
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => GetMoneyOrPayDebt(isPay: true,)),
+          );
+
         },
         label: Text('Trả nợ', style: TextStyle(
           color: Colors.white,
@@ -133,7 +138,10 @@ class _AdvancePageState extends State<AdvancePage>
     }else{
       return FloatingActionButton(
         onPressed: () {
-          // Add your onPressed code here!
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => CreateRequestAdvance()),
+          );
         },
         child :Icon(Icons.post_add_outlined, color: Colors.white, size: 25,),
         backgroundColor: welcome_color,

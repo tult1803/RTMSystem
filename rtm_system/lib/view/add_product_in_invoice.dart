@@ -74,6 +74,7 @@ class _AddProductPageState extends State<AddProductPage> {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Color(0xffEEEEEE),
       appBar: AppBar(
@@ -144,7 +145,7 @@ class _AddProductPageState extends State<AddProductPage> {
                 SizedBox(
                   height: 10,
                 ),
-                btnSave(context, 140, 40, Color(0xFF0BB791), "Tạo", 1),
+                btnSave(context, size.width * 0.7, size.height * 0.05, Color(0xFF0BB791), "Tạo", 1),
                 SizedBox(
                   height: 10,
                 ),
@@ -212,11 +213,9 @@ class _AddProductPageState extends State<AddProductPage> {
     String tittleButtonAlertDialog,
     int indexOfBottomBar,
   ) {
-    var size = MediaQuery.of(context).size;
-
     return Container(
       height: height,
-      width: size.width * 0.7,
+      width: width,
       decoration: BoxDecoration(
         color: color,
         borderRadius: BorderRadius.circular(10),

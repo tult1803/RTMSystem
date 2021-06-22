@@ -2,6 +2,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/customer/Profile/profile.dart';
+import 'package:rtm_system/view/customer/contact/ContactPage.dart';
 import 'package:rtm_system/view/customer/invoice/allInvoiceTab.dart';
 import 'package:rtm_system/view/customer/notice/all_notices.dart';
 
@@ -36,6 +37,8 @@ class _HomeCustomerPageState extends State<HomeCustomerPage> {
       _widget = NoticesPage();
     } else if (_index == 3) {
       _widget = ProfilePage();
+    }else if (_index == 4) {
+      _widget = ContactPage();
     }
   }
 
@@ -52,12 +55,13 @@ class _HomeCustomerPageState extends State<HomeCustomerPage> {
           Icon(Icons.monetization_on_outlined, size: 30),
           Icon(Icons.notifications_none, size: 30),
           Icon(Icons.people_rounded, size: 30),
+          Icon(Icons.contacts_outlined, size: 30),
         ],
         color: Colors.white,
         buttonBackgroundColor: welcome_color,
         backgroundColor: Colors.white,
         animationCurve: Curves.easeInOut,
-        animationDuration: Duration(milliseconds: 600),
+        animationDuration: Duration(milliseconds: 400),
         onTap: (index) {
           setState(() {
             if (index == 0) {
@@ -68,6 +72,8 @@ class _HomeCustomerPageState extends State<HomeCustomerPage> {
               _widget = NoticesPage();
             } else if (index == 3) {
               _widget = ProfilePage();
+            }else if (_index == 4) {
+              _widget = ContactPage();
             }
           });
         },
