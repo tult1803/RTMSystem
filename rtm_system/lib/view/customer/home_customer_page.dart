@@ -72,7 +72,7 @@ class _HomeCustomerPageState extends State<HomeCustomerPage> {
               _widget = NoticesPage();
             } else if (index == 3) {
               _widget = ProfilePage();
-            }else if (_index == 4) {
+            }else if (index == 4) {
               _widget = ContactPage();
             }
           });
