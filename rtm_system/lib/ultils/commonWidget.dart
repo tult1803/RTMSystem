@@ -184,7 +184,9 @@ Widget btnDateTime(
           child: widget),
     ],
   );
-}Widget btnDateTimeForCustomer(
+}
+
+Widget btnDateTimeForCustomer(
     BuildContext context, String tittle, Icon icon, Widget widget) {
   var size = MediaQuery.of(context).size;
   return Stack(
@@ -194,7 +196,10 @@ Widget btnDateTime(
         child: RaisedButton(
           color: welcome_color,
           onPressed: () {},
-          child: Text('$tittle',style: TextStyle(color: Colors.white),),
+          child: Text(
+            '$tittle',
+            style: TextStyle(color: Colors.white),
+          ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
           ),
@@ -213,6 +218,7 @@ Widget btnDateTime(
     ],
   );
 }
+
 //Dùng cho show All customer
 Widget boxForCustomer(
     {BuildContext context,
@@ -440,7 +446,7 @@ Widget boxForInvoice(
                   ],
                 ),
               ),
-             miniContainer(
+              miniContainer(
                 context: context,
                 tittle: "${getStatus(status: status)}",
                 colorText: Colors.white,
@@ -450,6 +456,125 @@ Widget boxForInvoice(
                 colorContainer: getColorStatus(status: status),
                 borderRadius: 5,
                 marginRight: 10,
+              )
+            ],
+          ),
+          SizedBox(
+            height: 10,
+          )
+        ],
+      ),
+    ),
+  );
+}
+
+Widget boxForInvoiceRequest(
+    {BuildContext context,
+    String id,
+    String name,
+    String product,
+    String total,
+    String date,
+    Widget widget,
+    bool isCustomer}) {
+  String totalAfterFormat;
+  // thay đổi title , và truyền totalAfterFormat sẽ là giá sản phẩm.
+  try {
+    totalAfterFormat = "${getFormatPrice(total)}đ";
+  } catch (_) {
+    totalAfterFormat = "$total";
+  }
+  return GestureDetector(
+    onTap: () => Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => widget)),
+    child: Container(
+      margin: EdgeInsets.only(top: 15, left: 10, right: 10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(5),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black54,
+            blurRadius: 4,
+            offset: Offset(1, 2), // Shadow position
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              miniContainer(
+                context: context,
+                tittle: "$id",
+                marginRight: 5,
+                marginBottom: 5,
+                marginLeft: 10,
+                marginTop: 10,
+                borderRadius: 5,
+                height: 30,
+                colorContainer: colorHexa("#f9ee75"),
+                paddingRightOfText: 10,
+                paddingLeftOfText: 10,
+              ),
+              Flexible(
+                child: containerTextInvoice(
+                  alignment: Alignment.centerRight,
+                  paddingLeftOfText: 10,
+                  paddingRightOfText: 10,
+                  tittle: "$date",
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (!isCustomer)
+                      containerTextInvoice(
+                        alignment: Alignment.topLeft,
+                        paddingLeftOfText: 10,
+                        paddingRightOfText: 10,
+                        tittle: name,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    isCustomer
+                        ? containerTextInvoice(
+                      marginTop: 2,
+                      alignment: Alignment.topLeft,
+                      paddingLeftOfText: 10,
+                      paddingRightOfText: 10,
+                      tittle: "$product",
+                      fontWeight: FontWeight.w700,
+                    )
+                        : containerTextInvoice(
+                      marginTop: 2,
+                      alignment: Alignment.topLeft,
+                      paddingLeftOfText: 10,
+                      paddingRightOfText: 10,
+                      tittle: "Sản phẩm: $product",
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ],
+                ),
+              ),
+              miniContainer(
+                context: context,
+                tittle: "$totalAfterFormat",
+                colorText: Colors.white,
+                fontWeightText: FontWeight.w500,
+                height: 30,
+                width: 100,
+                colorBoxShadow: Colors.white10,
+                colorContainer: welcome_color,
+                borderRadius: 5,
+                marginRight: 10,
+                fontSize: 17
               ),
             ],
           ),
@@ -551,7 +676,10 @@ Widget boxForProduct(
                 colorContainer: Colors.white,
                 borderRadius: 5,
                 marginRight: 10,
-                widget: updatePriceProduct(chosenValue: productName,widgetToNavigate: HomeAdminPage(index: 2),),
+                widget: updatePriceProduct(
+                  chosenValue: productName,
+                  widgetToNavigate: HomeAdminPage(index: 0),
+                ),
               ),
             ],
           ),
@@ -566,9 +694,8 @@ Widget boxForProduct(
 
 //Dùng cho trang notice để hiện thỉ các notice
 //isCustomer: true is Customer. Used to hide the button  in page of manager.
-Widget containerButton(
-    BuildContext context, String id, String tittle, String content, String date,
-    bool isCustomer) {
+Widget containerButton(BuildContext context, String id, String tittle,
+    String content, String date, bool isCustomer) {
   var size = MediaQuery.of(context).size;
   return Container(
     margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
@@ -579,78 +706,78 @@ Widget containerButton(
         topRight: Radius.circular(15.0),
       ),
     ),
-        child: TextButton(
-          style: TextButton.styleFrom(
-            primary: Colors.black, // foreground
-            textStyle: TextStyle(
-              fontSize: 16,
-            ),
-          ),
-          onPressed: () {
-             Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => DetailOfNotice(
+    child: TextButton(
+      style: TextButton.styleFrom(
+        primary: Colors.black, // foreground
+        textStyle: TextStyle(
+          fontSize: 16,
+        ),
+      ),
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => DetailOfNotice(
                     noticeId: id,
                     titleNotice: tittle,
                     contentNotice: content,
                     isCustomer: isCustomer,
                   )),
-            );
-          },
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+        );
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
             children: [
-              Row(
-                children: [
-                  Container(
-                    width: size.width * 0.93,
-                    child: AutoSizeText(
-                      "$tittle",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.left,
-                    ),
+              Container(
+                width: size.width * 0.93,
+                child: AutoSizeText(
+                  "$tittle",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
                   ),
-                ],
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              AutoSizeText(
-                "$content",
-                style: TextStyle(
-                  fontSize: 14,
-                ),
-                textAlign: TextAlign.left,
-                overflow: TextOverflow.ellipsis,
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              AutoSizeText(
-                "${getDateTime(date)}",
-                style: TextStyle(
-                  fontSize: 12,
-                  color: welcome_color,
-                ),
-                textAlign: TextAlign.left,
-              ),
-              SizedBox(
-                height: 9,
-              ),
-              SizedBox(
-                height: 0.5,
-                child: Container(
-                  color: Colors.black54,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.left,
                 ),
               ),
             ],
           ),
-        ),
-      );
+          SizedBox(
+            height: 10,
+          ),
+          AutoSizeText(
+            "$content",
+            style: TextStyle(
+              fontSize: 14,
+            ),
+            textAlign: TextAlign.left,
+            overflow: TextOverflow.ellipsis,
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          AutoSizeText(
+            "${getDateTime(date)}",
+            style: TextStyle(
+              fontSize: 12,
+              color: welcome_color,
+            ),
+            textAlign: TextAlign.left,
+          ),
+          SizedBox(
+            height: 9,
+          ),
+          SizedBox(
+            height: 0.5,
+            child: Container(
+              color: Colors.black54,
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
 }
 
 //Hiện tại đang dùng cho trang "Profile"
@@ -798,7 +925,8 @@ Widget btnUpdateInfo(
 }
 
 //dung khi thay doi pw
-Widget btnUpdatePw(context, String password, String accountId, bool isCustomer) {
+Widget btnUpdatePw(
+    context, String password, String accountId, bool isCustomer) {
   return Container(
     width: 320,
     // ignore: deprecated_member_use
@@ -863,9 +991,16 @@ Widget btnSubmitOrCancel(
             } else {
               int status = await postAPINotice(mainTittle, content);
               if (status == 200) {
-                showCustomDialog(context, isSuccess: true, content: "Tạo thành công",doPopNavigate: true, widgetToNavigator: widgetToNavigator);
+                showCustomDialog(context,
+                    isSuccess: true,
+                    content: "Tạo thành công",
+                    doPopNavigate: true,
+                    widgetToNavigator: widgetToNavigator);
               } else
-                showCustomDialog(context, isSuccess: false, content:  "Tạo thất bại. Xin thử lại",doPopNavigate: true);
+                showCustomDialog(context,
+                    isSuccess: false,
+                    content: "Tạo thất bại. Xin thử lại",
+                    doPopNavigate: true);
             }
           } else {
             if (isCustomer) {
@@ -979,7 +1114,7 @@ Widget containerDetail(BuildContext context, Widget widget) {
 //Đang dùng cho nút hủy kích hoạt tài khoản khách hàng
 Widget btnDeactivateCustomer(
     {String status,
-      String deactivateId,
+    String deactivateId,
     String token,
     BuildContext context,
     bool isDeactivateNotice}) {
@@ -1018,6 +1153,7 @@ Widget btnDeactivateCustomer(
     return Container();
   }
 }
+
 Widget containerStores(BuildContext context, String name, String address,
     String phone, String email) {
   var size = MediaQuery.of(context).size;
@@ -1037,8 +1173,7 @@ Widget containerStores(BuildContext context, String name, String address,
           fontSize: 16,
         ),
       ),
-      onPressed: () {
-      },
+      onPressed: () {},
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -1093,7 +1228,6 @@ Widget containerStores(BuildContext context, String name, String address,
           SizedBox(
             height: 9,
           ),
-
           SizedBox(
             height: 0.5,
             child: Container(
