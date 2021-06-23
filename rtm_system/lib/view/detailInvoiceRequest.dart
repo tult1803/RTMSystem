@@ -4,7 +4,7 @@ import 'package:rtm_system/ultils/component.dart';
 class DetailInvoiceRequest extends StatefulWidget {
   final Map<String, dynamic> map;
   final bool isCustomer;
-  final isRequest;
+  final bool isRequest;
   DetailInvoiceRequest({this.map, this.isCustomer, this.isRequest});
   @override
   _DetailInvoiceRequestState createState() => _DetailInvoiceRequestState();

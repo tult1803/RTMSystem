@@ -14,7 +14,7 @@ class GetAPIProfileCustomer{
       },
     );
     print(Uri.http('${url_main}', '${url_profileCustomer}/$phone'));
-    print('Status getAPI DataCustomerFromPhone: ${response.statusCode}');
+    print('Status getAPI ProfileCustomer: ${response.statusCode}');
     if (response.statusCode == 200) {
       return InfomationCustomer.fromJson(jsonDecode(response.body));
     } else {

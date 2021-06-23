@@ -1,7 +1,7 @@
 class InfomationCustomer {
   int id;
   String cmnd;
-  bool vip;
+  int level;
   int statusId;
   String accountId;
   int advance;
@@ -14,7 +14,7 @@ class InfomationCustomer {
   InfomationCustomer({
     this.id,
     this.cmnd,
-    this.vip,
+    this.level,
     this.statusId,
     this.accountId,
     this.advance,
@@ -29,7 +29,7 @@ class InfomationCustomer {
     return InfomationCustomer(
       id: json["id"],
       cmnd: json["cmnd"],
-      vip: json["vip"],
+      level: json["level"],
       statusId: json["status_id"],
       accountId: json["account_id"],
       advance: json["advance"],

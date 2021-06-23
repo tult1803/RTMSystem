@@ -93,7 +93,6 @@ class _AdvancePageState extends State<AdvancePage>
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     rowButtonDatetime(),
-                    btnLogout(context),
                     new showAllInvoiceRequestPage(fromDate: getFromDate, toDate: getToDate),
                   ],
                 ),

@@ -240,7 +240,7 @@ Future<void> doConfirmOrAcceptOrRejectInvoice(
             context,
             showMessage("", MSG012),
             HomeCustomerPage(
-              index: 1,
+              index: 0,
             ),
             true);
     } else{

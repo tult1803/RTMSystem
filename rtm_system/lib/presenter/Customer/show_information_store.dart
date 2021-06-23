@@ -15,6 +15,7 @@ class showStore extends StatefulWidget {
 }
 
 class _showStoreState extends State<showStore> {
+
   int _pageSize = 1;
   final PagingController<int, StoreElement> _pagingController =
   PagingController(firstPageKey: 10);

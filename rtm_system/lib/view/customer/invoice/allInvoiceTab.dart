@@ -37,6 +37,7 @@ class _InvoiceTabState extends State<InvoiceTab>
     "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
     getToDate = "${getDateTime("$toDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
   }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -70,16 +71,13 @@ class _InvoiceTabState extends State<InvoiceTab>
               text: 'Bán hàng',
               icon: Icon(Icons.my_library_books_outlined),
             ),
-            // Tab(
-            //   text: 'Hoàn trả',
-            //   icon: Icon(Icons.assignment_return_outlined),
-            // ),
           ],
         )
       ),
       body: TabBarView(
         controller: _tabController,
         children: <Widget>[
+          //Show invoice request
           Container(
               height: size.height,
               margin: EdgeInsets.only(left: 5, top: 12, right: 5),
@@ -93,6 +91,7 @@ class _InvoiceTabState extends State<InvoiceTab>
                 ),
               )
           ),
+          //Show invoice processing
           Container(
               height: size.height,
               margin: EdgeInsets.only(left: 5, top: 12, right: 5),
@@ -106,6 +105,7 @@ class _InvoiceTabState extends State<InvoiceTab>
                 ),
               )
           ),
+          //Show invoice deposit
           Container(
             height: size.height,
             margin: EdgeInsets.only(left: 5, top: 12, right: 5),
@@ -119,6 +119,7 @@ class _InvoiceTabState extends State<InvoiceTab>
               ),
             )
           ),
+          //Show sale's invoice: -1 ( done, undone, actice)
           Container(
               height: size.height,
               margin: EdgeInsets.only(left: 5, top: 12, right: 5),
@@ -137,11 +138,12 @@ class _InvoiceTabState extends State<InvoiceTab>
       floatingActionButton: _showFloatBtn(_selectedIndex),
     );
   }
+
   Widget _showFloatBtn(index){
+    //index = 2 là tab thứ 2 "Ký gửi"
     if(index == 2 ){
       return  FloatingActionButton.extended(
         onPressed: () {
-          // Add your onPressed code here!
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -151,15 +153,15 @@ class _InvoiceTabState extends State<InvoiceTab>
         label: Text('Nhận tiền', style: TextStyle(
           color: Colors.white,
         ),),
-        backgroundColor: primaryLightColor,
+        backgroundColor: primaryColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(50.0),
         ),
         elevation: 10,
       );
-    }else{
+    } else {
       return FloatingActionButton(
-        backgroundColor: primaryLightColor,
+        backgroundColor: primaryColor,
         onPressed: () {
           Navigator.push(
             context,
@@ -174,6 +176,7 @@ class _InvoiceTabState extends State<InvoiceTab>
       );
     }
   }
+  //show btn select date, it have setState should dont reuse
   Widget rowButtonDatetime() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -190,7 +193,7 @@ class _InvoiceTabState extends State<InvoiceTab>
                   height: 20,
                   child: Text(
                     "-",
-                    style: TextStyle(fontSize: 20, color: primaryLightColor),
+                    style: TextStyle(fontSize: 20),
                   ))),
         ),
         btnDateTimeForCustomer(

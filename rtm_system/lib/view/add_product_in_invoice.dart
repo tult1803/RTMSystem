@@ -79,11 +79,6 @@ class _AddProductPageState extends State<AddProductPage> {
       return dataListProduct;
     }
   }
-  int _pageSize = 1;
-  final PagingController<int, StoreElement> _pagingController =
-  PagingController(firstPageKey: 10);
-  Store store;
-  List<StoreElement> storeList;
 
   Future _getStore() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -156,6 +151,7 @@ class _AddProductPageState extends State<AddProductPage> {
               children: [
                 Column(
                   children: [
+                    if(!widget.isCustomer)
                     textField(
                       type: "phone",
                       tittle: "Điện thoại",
@@ -163,6 +159,7 @@ class _AddProductPageState extends State<AddProductPage> {
                           signed: true, decimal: true),
                       error: errorPhone,
                     ),
+                    if(!widget.isCustomer)
                     textField(
                       type: "name",
                       tittle: "Tên khách hàng",
@@ -313,7 +310,7 @@ class _AddProductPageState extends State<AddProductPage> {
                         MaterialPageRoute(
                             builder: (context) => CreateInvoicePage(
                                 isNew: true,
-                                listProduct: listInforProduct,
+                                listProduct: listInfor,
                                 isCustomer: widget.isCustomer)),
                       );
               } else {
@@ -368,7 +365,7 @@ class _AddProductPageState extends State<AddProductPage> {
             MaterialPageRoute(
                 builder: (context) => CreateInvoicePage(
                     isNew: true,
-                    listProduct: listInforProduct,
+                    listProduct: listInfor,
                     isCustomer: widget.isCustomer)));
       } else if (!checkProduct && errorDegree == null) {
         Navigator.push(
@@ -376,7 +373,7 @@ class _AddProductPageState extends State<AddProductPage> {
             MaterialPageRoute(
                 builder: (context) => CreateInvoicePage(
                     isNew: true,
-                    listProduct: listInforProduct,
+                    listProduct: listInfor,
                     isCustomer: widget.isCustomer)));
       }
     }
@@ -415,12 +412,12 @@ class _AddProductPageState extends State<AddProductPage> {
                         setState(() {
                           _myProduct = newValue;
                           _getCurrentPrice(newValue);
-                          this.listInforProduct = [
+                          this.listInfor = [
                             this._myProduct,
                             this.quantity,
                             this.degree,
                             getDateTime("$dateSale", dateFormat: "yyyy-MM-dd HH:mm:ss"),
-                            this._selectStore,
+                            this._myStore,
                           ];
                         });
                         setState(() {
@@ -482,6 +479,14 @@ class _AddProductPageState extends State<AddProductPage> {
                         setState(() {
                           _myStore = newValue;
                         });
+                        this.listInfor = [
+                          this._myProduct,
+                          this.quantity,
+                          this.degree,
+                          getDateTime("$dateSale",
+                              dateFormat: "yyyy-MM-dd HH:mm:ss"),
+                          this._myStore,
+                        ];
                       },
                       items: dataListStore?.map((item) {
                             return new DropdownMenuItem(
@@ -490,65 +495,6 @@ class _AddProductPageState extends State<AddProductPage> {
                               value: item.id.toString(),
                             );
                           })?.toList() ??
-                          [],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-        // _underRow()
-      ],
-    );
-  }
-  Widget _dropdownListStore() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: <Widget>[
-        Row(
-          children: [
-            Expanded(
-              child: Container(
-                height: 40,
-                margin: EdgeInsets.only(top: 5, bottom: 10),
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(10.0),
-                    )),
-                child: DropdownButtonHideUnderline(
-                  child: ButtonTheme(
-                    alignedDropdown: true,
-                    child: DropdownButton<String>(
-                      value: _selectStore,
-                      iconSize: 30,
-                      icon: (null),
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      hint: Text('Chọn cửa hàng'),
-                      onChanged: (String newValue) async {
-                        setState(() {
-                          _selectStore = newValue;
-                          this.listInfor = [
-                            this._mySelection,
-                            this.quantity,
-                            this.degree,
-                            getDateTime("$dateSale", dateFormat: "yyyy-MM-dd HH:mm:ss"),
-                            this._selectStore,
-                          ];
-                        });
-                      },
-                      items: storeList?.map((item) {
-                        return new DropdownMenuItem(
-                          child: new Text(item.name),
-                          //chuyen id de create
-                          value: item.id.toString(),
-                        );
-                      })?.toList() ??
                           [],
                     ),
                   ),
@@ -591,11 +537,11 @@ class _AddProductPageState extends State<AddProductPage> {
             } else
               this.degree = double.parse(value);
             this.listInfor = [
-              this._mySelection,
+              this._myProduct,
               this.quantity,
               this.degree,
               getDateTime("$dateSale", dateFormat: "yyyy-MM-dd HH:mm:ss"),
-              this._selectStore,
+              this._myStore,
             ];
             setState(() {
               checkClick = true;
@@ -654,7 +600,7 @@ class _AddProductPageState extends State<AddProductPage> {
             this.quantity,
             this.degree,
             getDateTime("$dateSale", dateFormat: "yyyy-MM-dd HH:mm:ss"),
-            this._selectStore,
+            this._myStore,
           ];
         });
       },
@@ -721,7 +667,7 @@ class _AddProductPageState extends State<AddProductPage> {
                       this.quantity,
                       this.degree,
                       getDateTime("$dateSale", dateFormat: "yyyy-MM-dd HH:mm:ss"),
-                      this._selectStore,
+                      this._myStore,
                     ];
                   });
                 },

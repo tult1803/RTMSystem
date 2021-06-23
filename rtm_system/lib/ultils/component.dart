@@ -880,8 +880,8 @@ Widget componentContainerInvoiceRequest(BuildContext context,
     String createDate,
     String sellDate,
     String storeName,
-    bool isRequest,
-    bool isCustomer}) {
+    bool isCustomer,
+    bool isRequest,}) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Column(
@@ -917,8 +917,9 @@ Widget componentContainerInvoiceRequest(BuildContext context,
         SizedBox(
           height: 5,
         ),
-        _showBtnProcessInvoice(context, 4, id, isCustomer,
-            isRequest: isRequest),
+
+        // chỗ này show sẽ show BUTTON tạo và xoá của manager
+        // Customer k cần show bất kỳ BUTTON gì ở đây.
       ],
     ),
   );

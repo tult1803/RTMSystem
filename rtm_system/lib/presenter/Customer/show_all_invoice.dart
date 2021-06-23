@@ -86,7 +86,9 @@ class showAllInvoicePageState extends State<showAllInvoicePage> {
     var size = MediaQuery.of(context).size;
     return SingleChildScrollView(
       child: Container(
-        height: size.height,
+        // nếu để size.height khi nó show từ 6 invoice trở lên, sẽ không thể chọn hoá đơn thứ 5 or 6.
+        // khi kéo xuống thả ra nó tự động trở lại hoá đơn đầu
+        height: size.height * 0.65,
         width: size.width,
         child: Center(
           child: Padding(
@@ -95,9 +97,6 @@ class showAllInvoicePageState extends State<showAllInvoicePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                //show button for hoá đơn ký gửi
-                // if(widget.statusId == 5)
-                //   _showProcessButton(),
                 SizedBox(
                   height: 0.5,
                   child: Container(),
@@ -105,7 +104,7 @@ class showAllInvoicePageState extends State<showAllInvoicePage> {
                 Expanded(
                   child: Container(
                     margin: EdgeInsets.only(top: 0, left: 5, right: 5),
-                    height: size.height,
+                    height: size.height ,
                     width: size.width,
                     child: new CustomScrollView(
                       slivers: <Widget>[
@@ -177,41 +176,4 @@ class showAllInvoicePageState extends State<showAllInvoicePage> {
   //   _pagingController.dispose();
   //   super.dispose();
   // }
-  Widget _showProcessButton() {
-      return Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              SizedBox(
-                width: 150,
-                child: RaisedButton(
-                  color: Color(0xFF0BB791),
-                  onPressed: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //       builder: (context) => GetMoneyOrPayDebt(
-                    //             isPay: false,
-                    //           )),
-                    // );
-                  },
-                  child: Text(
-                    'Lấy tiền',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                    ),
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  elevation: 10,
-                ),
-              ),
-            ],
-          ),
-        ],
-      );
-    }
 }

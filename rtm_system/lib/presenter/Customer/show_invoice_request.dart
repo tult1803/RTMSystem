@@ -83,7 +83,7 @@ class showAllInvoiceRequestPageState extends State<showAllInvoiceRequestPage> {
     var size = MediaQuery.of(context).size;
     return SingleChildScrollView(
       child: Container(
-        height: size.height,
+        height: size.height * 0.65,
         width: size.width,
         child: Center(
           child: Padding(
