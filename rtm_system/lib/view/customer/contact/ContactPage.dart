@@ -14,7 +14,7 @@ class _ContactPageState extends State<ContactPage> {
       backgroundColor: Color(0xffEEEEEE),
       appBar: AppBar(
         backgroundColor: Color(0xFF0BB791),
-        title: Text('Liên hệ', style: TextStyle(
+        title: Text('Thông tin cửa hàng', style: TextStyle(
           color: Colors.white,
         ),),
         centerTitle: true,
