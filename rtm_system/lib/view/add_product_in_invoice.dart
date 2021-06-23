@@ -9,20 +9,21 @@ import 'package:rtm_system/model/model_store.dart';
 import 'package:rtm_system/model/profile_customer/model_profile_customer.dart';
 import 'package:rtm_system/ultils/alertDialog.dart';
 import 'package:rtm_system/ultils/component.dart';
+import 'package:rtm_system/ultils/getData.dart';
 import 'package:rtm_system/ultils/helpers.dart';
 import 'package:rtm_system/ultils/src/regExp.dart';
-import 'package:rtm_system/ultils/textField.dart';
 import 'package:rtm_system/view/create_invoice.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+// ignore: must_be_immutable
 class AddProductPage extends StatefulWidget {
   final String tittle;
   final Widget widgetToNavigator;
-
+  bool isChangeData;
   //true is Customer role
   final bool isCustomer;
 
-  AddProductPage({this.tittle, this.isCustomer, this.widgetToNavigator});
+  AddProductPage({this.tittle, this.isCustomer, this.widgetToNavigator, this.isChangeData});
 
   @override
   _AddProductPageState createState() => _AddProductPageState();
@@ -42,7 +43,7 @@ class _AddProductPageState extends State<AddProductPage> {
   List<StoreElement> dataListStore;
   bool checkClick = false;
   var txtController = TextEditingController();
-
+  bool autoFocus = false;
   //field to sales
   double quantity = 0, degree = 0;
   List listInforProduct;
@@ -95,21 +96,7 @@ class _AddProductPageState extends State<AddProductPage> {
   }
 
   @override
-  void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
-    super.didChangeDependencies();
-    // ignore: unrelated_type_equality_checks
-    if (infomationCustomer != null) {
-      setState(() {
-        customerName = infomationCustomer.fullname;
-      });
-    }
-  }
-
-//0971856324
-  @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     infomationCustomer = null;
     phoneNewCustomer = null;
@@ -118,11 +105,11 @@ class _AddProductPageState extends State<AddProductPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _getProduct();
     _getStore();
   }
+
 
   TextEditingController getDataTextField(String txt) {
     final TextEditingController _controller = TextEditingController();
@@ -162,20 +149,19 @@ class _AddProductPageState extends State<AddProductPage> {
               children: [
                 Column(
                   children: [
-                    textField(
+                    txtAutoFillByPhone(
                       type: "phone",
                       tittle: "Điện thoại",
                       txtInputType: TextInputType.numberWithOptions(
                           signed: true, decimal: true),
                       error: errorPhone,
                     ),
-                    textField(
+                    txtAutoFillByPhone(
                       controller:infomationCustomer == null ? null: getDataTextField(infomationCustomer.fullname),
                       type: "name",
                       tittle: "Tên khách hàng",
                       txtInputType: TextInputType.name,
                       error: errorFullName,
-                      txt: "hello",
                     ),
                     SizedBox(
                       height: 10,
@@ -240,6 +226,75 @@ class _AddProductPageState extends State<AddProductPage> {
     );
   }
 
+  Widget txtAutoFillByPhone(
+      {TextEditingController controller,
+      String error,
+      String tittle,
+      String type,
+      TextInputType txtInputType}){
+    return Container(
+      color: Colors.white,
+      margin: EdgeInsets.only(top: 10, left: 10, right: 10),
+      child: TextField(
+        controller: controller,
+        // initialValue: this.widget.txt,
+        autocorrect: false,
+        obscureText: false,
+        onSubmitted: (value)  async{
+            switch (type) {
+              case "phone":
+                phoneNewCustomer = value.trim();
+                infomationCustomer = await getDataCustomerFromPhone(value);
+                setState(() {
+                  autoFocus = false;
+                });
+                break;
+              case "name":
+                nameNewCustomer = value.trim();
+                break;
+            }
+        },
+        maxLines: 1,
+        keyboardType:txtInputType,
+        // TextInputType.numberWithOptions(signed: true, decimal: true),
+        inputFormatters: [
+          txtInputType !=
+              TextInputType.numberWithOptions(signed: true, decimal: true)
+              ? FilteringTextInputFormatter.allow(RegExp(r'[ [a-zA-Z0-9]'))
+              : FilteringTextInputFormatter.allow(RegExp(r'[[0-9]')),
+        ],
+        style: TextStyle(fontSize: 15),
+        cursorColor: Colors.red,
+        decoration: InputDecoration(
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(5.0)),
+          ),
+          labelText: tittle,
+          labelStyle: TextStyle(color: Colors.black54),
+          contentPadding: EdgeInsets.only(top: 14, left: 10),
+          //Sau khi click vào "Nhập tiêu đề" thì màu viền sẽ đổi
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Color(0xFF0BB791),
+            ),
+          ),
+          //Hiển thị Icon góc phải
+          suffixIcon: Icon(
+            Icons.create,
+            color: Colors.black54,
+          ),
+
+          //Hiển thị lỗi
+          focusedErrorBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.redAccent),
+          ),
+          //Nhận thông báo lỗi
+          errorText: error,
+        ),
+      ),
+    );
+  }
+
   Widget _showMoneyOrQuantity(String title, value) {
     return Container(
       color: Colors.white,
@@ -249,7 +304,7 @@ class _AddProductPageState extends State<AddProductPage> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            '${title}:',
+            '$title:',
             style: TextStyle(
               color: Color(0xFF0BB791),
               fontSize: 14,
@@ -257,7 +312,7 @@ class _AddProductPageState extends State<AddProductPage> {
           ),
           // sẽ show số tổng các ký đã nhập
           Text(
-            '${value}',
+            '$value',
             style: TextStyle(
               color: Colors.black,
               fontSize: 16,
@@ -408,7 +463,6 @@ class _AddProductPageState extends State<AddProductPage> {
                   child: ButtonTheme(
                     alignedDropdown: true,
                     child: DropdownButton<String>(
-
                       value: _myProduct,
                       iconSize: 30,
                       icon: (null),
@@ -476,6 +530,7 @@ class _AddProductPageState extends State<AddProductPage> {
                   child: ButtonTheme(
                     alignedDropdown: true,
                     child: DropdownButton<String>(
+                      autofocus: autoFocus,
                       value: _myStore,
                       iconSize: 30,
                       icon: (null),
@@ -610,6 +665,7 @@ class _AddProductPageState extends State<AddProductPage> {
   }
 
   //Lấy giá tiền
+  // ignore: missing_return
   Future _getCurrentPrice(String value) {
     setState(() {
       dataListProduct.forEach((element) {
@@ -743,3 +799,24 @@ class _AddProductPageState extends State<AddProductPage> {
   }
 }
 
+class MyInheritedData extends InheritedWidget {
+  final String myField;
+  final ValueChanged<String> onMyFieldChange;
+
+  MyInheritedData({
+    Key key,
+    this.myField,
+    this.onMyFieldChange,
+    Widget child,
+  }) : super(key: key, child: child);
+
+  static MyInheritedData of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<MyInheritedData>();
+  }
+
+  @override
+  bool updateShouldNotify(MyInheritedData oldWidget) {
+    return oldWidget.myField != myField ||
+        oldWidget.onMyFieldChange != onMyFieldChange;
+  }
+}
