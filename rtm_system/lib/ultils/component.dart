@@ -867,8 +867,8 @@ Widget containerTextInvoice({
 //Dùng cho trang chi tiết yêu cầu bán hàng
 Widget componentContainerInvoiceRequest(BuildContext context,
     {String id,
-    String productId,
-    String customerId,
+    // String productId,
+    // String customerId,
     String customerName,
     String customerPhone,
     String productName,
@@ -913,7 +913,8 @@ Widget componentContainerInvoiceRequest(BuildContext context,
         SizedBox(
           height: 5,
         ),
-        _showBtnProcessInvoice(context, 4, id, isCustomer,
+
+        isCustomer ? Container():_showBtnProcessInvoice(context, 4, id, isCustomer,
             isRequest: isRequest),
       ],
     ),
