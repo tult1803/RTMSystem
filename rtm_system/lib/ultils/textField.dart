@@ -6,23 +6,26 @@ import 'package:rtm_system/view/add_product_in_invoice.dart';
 class textField extends StatefulWidget {
   String txt, tittle, error, type;
   TextInputType txtInputType;
-
-  textField({this.type, this.txt, this.txtInputType, this.tittle, this.error});
+  TextEditingController controller;
+  textField({this.type, this.txt, this.txtInputType, this.tittle, this.error, this.controller});
 
   @override
   _textFieldState createState() => _textFieldState();
 }
 
+
 class _textFieldState extends State<textField> {
+
   @override
   Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
       margin: EdgeInsets.only(top: 10, left: 10, right: 10),
-      child: TextFormField(
-        initialValue: this.widget.txt,
+      child: TextField(
+        controller: this.widget.controller,
+        // initialValue: this.widget.txt,
         obscureText: false,
-        onFieldSubmitted: (value) async {
+        onSubmitted: (value) async {
           switch (this.widget.type) {
             case "phone":
               phoneNewCustomer = value.trim();

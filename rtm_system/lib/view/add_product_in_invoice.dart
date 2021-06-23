@@ -35,7 +35,7 @@ class _AddProductPageState extends State<AddProductPage> {
   String errorPhone, errorFullName, errorQuantity, errorDegree;
   String price = '0';
   String token;
-  String personSale = '', phoneSale = '';
+  String customerName="",personSale = '', phoneSale = '';
   List listQuantity = [];
   List<DataProduct> dataListProduct = [];
   Store store;
@@ -100,9 +100,10 @@ class _AddProductPageState extends State<AddProductPage> {
     super.didChangeDependencies();
     // ignore: unrelated_type_equality_checks
     if (infomationCustomer != null) {
-      print('yes');
-    }else
-      print('no');
+      setState(() {
+        customerName = infomationCustomer.fullname;
+      });
+    }
   }
 
 //0971856324
@@ -121,6 +122,19 @@ class _AddProductPageState extends State<AddProductPage> {
     super.initState();
     _getProduct();
     _getStore();
+  }
+
+  TextEditingController getDataTextField(String txt) {
+    final TextEditingController _controller = TextEditingController();
+    if (txt != null) {
+      _controller.value = _controller.value.copyWith(
+        text: txt,
+        selection:
+        TextSelection(baseOffset: txt.length, extentOffset: txt.length),
+        composing: TextRange.empty,
+      );
+    }
+    return _controller;
   }
 
   @override
@@ -156,11 +170,12 @@ class _AddProductPageState extends State<AddProductPage> {
                       error: errorPhone,
                     ),
                     textField(
+                      controller:infomationCustomer == null ? null: getDataTextField(infomationCustomer.fullname),
                       type: "name",
                       tittle: "Tên khách hàng",
                       txtInputType: TextInputType.name,
                       error: errorFullName,
-                      txt: infomationCustomer == null? "" : infomationCustomer.fullname,
+                      txt: "hello",
                     ),
                     SizedBox(
                       height: 10,
@@ -727,3 +742,4 @@ class _AddProductPageState extends State<AddProductPage> {
     );
   }
 }
+
