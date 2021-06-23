@@ -13,8 +13,8 @@ class GetAPIProfileCustomer{
         'Authorization': 'Bearer $token',
       },
     );
-    print('status');
-    print(response.statusCode);
+    print(Uri.http('${url_main}', '${url_profileCustomer}/$phone'));
+    print('Status getAPI DataCustomerFromPhone: ${response.statusCode}');
     if (response.statusCode == 200) {
       return InfomationCustomer.fromJson(jsonDecode(response.body));
     } else {

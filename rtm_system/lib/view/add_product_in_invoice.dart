@@ -4,15 +4,19 @@ import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:rtm_system/model/getAPI_product.dart';
 import 'package:rtm_system/model/model_product.dart';
+import 'package:rtm_system/model/profile_customer/model_profile_customer.dart';
 import 'package:rtm_system/ultils/alertDialog.dart';
 import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/helpers.dart';
+import 'package:rtm_system/ultils/src/regExp.dart';
+import 'package:rtm_system/ultils/textField.dart';
 import 'package:rtm_system/view/create_invoice.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AddProductPage extends StatefulWidget {
   final String tittle;
   final Widget widgetToNavigator;
+
   //true is Customer role
   final bool isCustomer;
 
@@ -22,7 +26,11 @@ class AddProductPage extends StatefulWidget {
   _AddProductPageState createState() => _AddProductPageState();
 }
 
+InfomationCustomer infomationCustomer = InfomationCustomer();
+String phoneNewCustomer, nameNewCustomer;
+
 class _AddProductPageState extends State<AddProductPage> {
+  String errorPhone, errorFullName, errorQuantity, errorDegree;
   String price = '0';
   String token;
   String personSale = '', phoneSale = '';
@@ -66,6 +74,26 @@ class _AddProductPageState extends State<AddProductPage> {
   }
 
   @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    // ignore: unrelated_type_equality_checks
+    if (infomationCustomer != null) {
+      print(infomationCustomer.phone);
+    }
+  }
+
+//0971856324
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    infomationCustomer = null;
+    phoneNewCustomer = null;
+    nameNewCustomer = null;
+  }
+
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();
@@ -97,6 +125,22 @@ class _AddProductPageState extends State<AddProductPage> {
               children: [
                 Column(
                   children: [
+                    textField(
+                      type: "phone",
+                      tittle: "Điện thoại",
+                      txtInputType: TextInputType.numberWithOptions(
+                          signed: true, decimal: true),
+                      error: errorPhone,
+                    ),
+                    textField(
+                      type: "name",
+                      tittle: "Tên khách hàng",
+                      txtInputType: TextInputType.name,
+                      error: errorFullName,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
                     Container(
                       margin: EdgeInsets.fromLTRB(12, 0, 12, 12),
                       child: Column(children: [
@@ -145,7 +189,8 @@ class _AddProductPageState extends State<AddProductPage> {
                 SizedBox(
                   height: 10,
                 ),
-                btnSave(context, size.width * 0.7, size.height * 0.05, Color(0xFF0BB791), "Tạo", 1),
+                btnSave(context, size.width * 0.7, size.height * 0.05,
+                    Color(0xFF0BB791), "Tạo", 1),
                 SizedBox(
                   height: 10,
                 ),
@@ -223,45 +268,24 @@ class _AddProductPageState extends State<AddProductPage> {
       child: TextButton(
           onPressed: () {
             setState(() {
-              if(widget.isCustomer){
+              if (widget.isCustomer) {
                 _mySelection == null
                     ? showCustomDialog(
-                  context,
-                  content: "Chưa chọn sản phẩm",
-                  isSuccess: false,
-                )
+                        context,
+                        content: "Chưa chọn sản phẩm",
+                        isSuccess: false,
+                      )
                     : Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => CreateInvoicePage(
-                          isNew: true,
-                          listProduct: listInforProduct,
-                          isCustomer: widget.isCustomer)),
-                );
-              }else{
-                _mySelection == null
-                    ? showCustomDialog(
-                  context,
-                  content: "Chưa chọn sản phẩm",
-                  isSuccess: false,
-                )
-                    : quantity == 0
-                    ? showCustomDialog(
-                  context,
-                  content: "Số ký đang trống",
-                  isSuccess: false,
-                )
-                    : Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => CreateInvoicePage(
-                          isNew: true,
-                          listProduct: listInforProduct,
-                          isCustomer: widget.isCustomer)),
-                );
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CreateInvoicePage(
+                                isNew: true,
+                                listProduct: listInforProduct,
+                                isCustomer: widget.isCustomer)),
+                      );
+              } else {
+                _validate();
               }
-
-              // }
             });
           },
           child: Center(
@@ -274,6 +298,55 @@ class _AddProductPageState extends State<AddProductPage> {
             ),
           )),
     );
+  }
+
+  void _validate() {
+    if (phoneNewCustomer == null || phoneNewCustomer == "") {
+      errorPhone = "Số điện thoại trống";
+    } else {
+      if (!checkFormatPhone.hasMatch(phoneNewCustomer) ||
+          phoneNewCustomer.length > 11) {
+        errorPhone = "Số điện thoại sai (10-11 só)";
+      } else {
+        errorPhone = null;
+      }
+    }
+    if (nameNewCustomer == null || nameNewCustomer == " ") {
+      errorFullName = "Tên khách hàng trống";
+    } else {
+      errorFullName = null;
+      if (_mySelection == null) {
+        showCustomDialog(context, content: "Chưa chọn sản phẩm", isSuccess: false);}
+    }
+    if (quantity == 0) {
+      errorQuantity = "Số ký đang trống";
+    } else
+      errorQuantity = null;
+    if (!checkProduct) {
+      if (degree == 0) {
+        errorDegree = "Số độ trống";
+      } else
+        errorDegree = null;
+    }
+    if (errorPhone == null && errorQuantity == null && errorFullName == null && _mySelection != null) {
+      if (checkProduct) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => CreateInvoicePage(
+                    isNew: true,
+                    listProduct: listInforProduct,
+                    isCustomer: widget.isCustomer)));
+      } else if (!checkProduct && errorDegree == null) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => CreateInvoicePage(
+                    isNew: true,
+                    listProduct: listInforProduct,
+                    isCustomer: widget.isCustomer)));
+      }
+    }
   }
 
   Widget _dropdownList() {
@@ -312,11 +385,14 @@ class _AddProductPageState extends State<AddProductPage> {
                             this._mySelection,
                             this.quantity,
                             this.degree,
-                            getDateTime("$dateSale", dateFormat: "yyyy-MM-dd HH:mm:ss")
+                            getDateTime("$dateSale",
+                                dateFormat: "yyyy-MM-dd HH:mm:ss")
                           ];
                         });
                         setState(() {
-                          _mySelection == "SP-1000003" ? checkProduct = false : checkProduct = true;
+                          _mySelection == "SP-1000003"
+                              ? checkProduct = false
+                              : checkProduct = true;
                           checkClick = true;
                         });
                       },
@@ -338,18 +414,6 @@ class _AddProductPageState extends State<AddProductPage> {
         // _underRow()
       ],
     );
-  }
-
-  TextEditingController getDataTextField(txt) {
-    if (txt == null) {
-      txt = "";
-    }
-    final TextEditingController _controller = TextEditingController();
-    _controller.value = _controller.value.copyWith(
-      text: txt,
-      selection: TextSelection.collapsed(offset: txt.length),
-    );
-    return _controller;
   }
 
   Widget _txtItemProduct(
@@ -406,6 +470,12 @@ class _AddProductPageState extends State<AddProductPage> {
             Icons.create_outlined,
             color: Colors.black54,
           ),
+          //Hiển thị lỗi
+          focusedErrorBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.redAccent),
+          ),
+          //Nhận thông báo lỗi
+          errorText: isQuantity ? errorQuantity : errorDegree,
         ),
       ),
     );
@@ -446,10 +516,10 @@ class _AddProductPageState extends State<AddProductPage> {
   }
 
   //Lấy giá tiền
-  Future _getCurrentPrice(String value)  {
+  Future _getCurrentPrice(String value) {
     setState(() {
       dataListProduct.forEach((element) {
-        if(element.id == value){
+        if (element.id == value) {
           price = element.price;
         }
       });
@@ -468,7 +538,6 @@ class _AddProductPageState extends State<AddProductPage> {
 
   //Show date để chọn ngày đến bán( customer đang dùng)
   Widget btnDateSale(context) {
-    var size = MediaQuery.of(context).size;
     return Container(
       decoration: BoxDecoration(
           color: Colors.white,
@@ -492,7 +561,8 @@ class _AddProductPageState extends State<AddProductPage> {
                       this._mySelection,
                       this.quantity,
                       this.degree,
-                      getDateTime("$dateSale", dateFormat: "yyyy-MM-dd HH:mm:ss")
+                      getDateTime("$dateSale",
+                          dateFormat: "yyyy-MM-dd HH:mm:ss")
                     ];
                   });
                 },
@@ -504,6 +574,7 @@ class _AddProductPageState extends State<AddProductPage> {
               );
             },
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
                   width: 130,
@@ -514,9 +585,12 @@ class _AddProductPageState extends State<AddProductPage> {
                   ),
                 ),
                 Expanded(
-                  child: Text(
-                    '${getDateTime("$dateSale", dateFormat: "dd/MM/yyyy")}',
-                    style: TextStyle(fontSize: 16),
+                  child: Container(
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      '${getDateTime("$dateSale", dateFormat: "dd/MM/yyyy")}',
+                      style: TextStyle(fontSize: 16),
+                    ),
                   ),
                 ),
                 Container(
@@ -567,7 +641,7 @@ class _AddProductPageState extends State<AddProductPage> {
           Container(
               alignment: Alignment.centerRight,
               margin: EdgeInsets.only(right: 20),
-              width: 70,
+              width: 50,
               child: Text("VNĐ")),
         ],
       ),
