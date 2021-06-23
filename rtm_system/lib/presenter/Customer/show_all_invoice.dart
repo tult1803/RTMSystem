@@ -122,7 +122,7 @@ class showAllInvoicePageState extends State<showAllInvoicePage> {
                                       child: Text(
                                         showMessage('', MSG027),
                                         style: TextStyle(
-                                            color: welcome_color, fontSize: 18),
+                                            color: primaryLight3Color, fontSize: 18),
                                       ),
                                     ),
                                   ],

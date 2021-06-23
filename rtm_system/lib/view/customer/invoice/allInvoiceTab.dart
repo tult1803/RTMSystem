@@ -37,16 +37,17 @@ class _InvoiceTabState extends State<InvoiceTab>
     "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
     getToDate = "${getDateTime("$toDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
   }
-
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: Color(0xffEEEEEE),
+      backgroundColor: backgroundColor,
       appBar: AppBar(
+        backgroundColor: primaryColor,
         centerTitle: true,
         title: const Text('Hoá đơn', style: TextStyle( color: Colors.white),),
         bottom: TabBar(
+          indicatorColor: primaryColor,
           isScrollable: true,
           labelColor: Colors.white,
           unselectedLabelColor: Colors.white.withOpacity(0.5),
@@ -74,7 +75,7 @@ class _InvoiceTabState extends State<InvoiceTab>
             //   icon: Icon(Icons.assignment_return_outlined),
             // ),
           ],
-        ),
+        )
       ),
       body: TabBarView(
         controller: _tabController,
@@ -150,7 +151,7 @@ class _InvoiceTabState extends State<InvoiceTab>
         label: Text('Nhận tiền', style: TextStyle(
           color: Colors.white,
         ),),
-        backgroundColor: welcome_color,
+        backgroundColor: primaryLightColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(50.0),
         ),
@@ -158,6 +159,7 @@ class _InvoiceTabState extends State<InvoiceTab>
       );
     }else{
       return FloatingActionButton(
+        backgroundColor: primaryLightColor,
         onPressed: () {
           Navigator.push(
             context,
@@ -169,7 +171,6 @@ class _InvoiceTabState extends State<InvoiceTab>
           );
         },
         child :Icon(Icons.post_add_outlined, color: Colors.white, size: 25,),
-        backgroundColor: welcome_color,
       );
     }
   }
@@ -189,7 +190,7 @@ class _InvoiceTabState extends State<InvoiceTab>
                   height: 20,
                   child: Text(
                     "-",
-                    style: TextStyle(fontSize: 20),
+                    style: TextStyle(fontSize: 20, color: primaryLightColor),
                   ))),
         ),
         btnDateTimeForCustomer(

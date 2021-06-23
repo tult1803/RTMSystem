@@ -1,9 +1,11 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:rtm_system/presenter/Customer/show_all_invoice.dart';
 import 'package:rtm_system/presenter/Customer/show_invoice_request.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/helpers.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
+import 'package:rtm_system/view/customer/UploadImage.dart';
 import 'package:rtm_system/view/customer/advance/create_request_advance.dart';
 import 'package:rtm_system/view/customer/getMoney_or_payDebt.dart';
 class AdvancePage extends StatefulWidget {
@@ -25,6 +27,7 @@ class _AdvancePageState extends State<AdvancePage>
   @override
   void initState() {
     super.initState();
+    cameraD();
     _tabController = TabController(length: 3, vsync: this);
     _tabController.addListener(() {
       setState(() {
@@ -38,13 +41,25 @@ class _AdvancePageState extends State<AdvancePage>
     "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
     getToDate = "${getDateTime("$toDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
   }
+  CameraDescription camera;
+  Future<void> cameraD() async {
+    // Ensure that plugin services are initialized so that `availableCameras()`
+    WidgetsFlutterBinding.ensureInitialized();
 
+    // Obtain a list of the available cameras on the device.
+    final cameras = await availableCameras();
+
+    // Get a specific camera from the list of available cameras.
+    final firstCamera = cameras.first;
+    camera = firstCamera;
+  }
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: Color(0xffEEEEEE),
+      backgroundColor: backgroundColor,
       appBar: AppBar(
+        backgroundColor: primaryColor,
         centerTitle: true,
         title: const Text('Ứng tiền', style: TextStyle( color: Colors.white),),
         bottom: TabBar(
@@ -92,12 +107,17 @@ class _AdvancePageState extends State<AdvancePage>
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     rowButtonDatetime(),
+                    RaisedButton(onPressed: (){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => TakePictureScreen(camera: camera,)),
+                      );
+                    }),
                     new showAllInvoicePage(4, fromDate: getFromDate, toDate: getToDate),
                   ],
                 ),
               )
           ),
-          // các advance active and done
           Container(
               height: size.height,
               margin: EdgeInsets.only(left: 5, top: 12, right: 5),
@@ -129,7 +149,7 @@ class _AdvancePageState extends State<AdvancePage>
         label: Text('Trả nợ', style: TextStyle(
           color: Colors.white,
         ),),
-        backgroundColor: welcome_color,
+        backgroundColor: primaryColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(50.0),
         ),
@@ -144,7 +164,7 @@ class _AdvancePageState extends State<AdvancePage>
           );
         },
         child :Icon(Icons.post_add_outlined, color: Colors.white, size: 25,),
-        backgroundColor: welcome_color,
+        backgroundColor: primaryColor,
       );
     }
   }
@@ -207,7 +227,7 @@ class _AdvancePageState extends State<AdvancePage>
                 ),
                 //Dùng cho nút chọn ngày và background
                 colorScheme: ColorScheme.light(
-                  primary: welcome_color,
+                  primary: primaryColor,
                 )),
             child: child,
           );

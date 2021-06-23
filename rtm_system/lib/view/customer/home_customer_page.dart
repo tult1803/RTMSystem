@@ -58,7 +58,7 @@ class _HomeCustomerPageState extends State<HomeCustomerPage> {
           Icon(Icons.contacts_outlined, size: 30),
         ],
         color: Colors.white,
-        buttonBackgroundColor: welcome_color,
+        buttonBackgroundColor: primaryColor,
         backgroundColor: Colors.white,
         animationCurve: Curves.easeInOut,
         animationDuration: Duration(milliseconds: 400),

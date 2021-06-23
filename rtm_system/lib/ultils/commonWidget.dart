@@ -194,7 +194,7 @@ Widget btnDateTimeForCustomer(
       SizedBox(
         width: size.width * 0.35,
         child: RaisedButton(
-          color: welcome_color,
+          color: Colors.white,
           onPressed: () {},
           child: Text(
             '$tittle',
@@ -203,7 +203,6 @@ Widget btnDateTimeForCustomer(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
           ),
-          elevation: 10,
         ),
       ),
       Container(
@@ -388,7 +387,7 @@ Widget boxForInvoice(
                 marginTop: 10,
                 borderRadius: 5,
                 height: 30,
-                colorContainer: colorHexa("#f9ee75"),
+                colorContainer: idColor,
                 paddingRightOfText: 10,
                 paddingLeftOfText: 10,
               ),
@@ -636,7 +635,7 @@ Widget boxForInvoiceRequest(
                 marginTop: 10,
                 borderRadius: 5,
                 height: 30,
-                colorContainer: colorHexa("#f9ee75"),
+                colorContainer: idColor,
                 paddingRightOfText: 10,
                 paddingLeftOfText: 10,
               ),

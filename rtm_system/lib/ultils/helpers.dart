@@ -32,7 +32,7 @@ getStatus({int status}) {
 //Tạo màu cho trạng thái tương ứng với số
 getColorStatus({int status}) {
   Color color = Colors.black54;
-  if (status == 1 || status == 3) {
+  if (status == 1) {
     color = Colors.green;
   } else if (status == 2) {
     color = Colors.redAccent;
@@ -40,6 +40,8 @@ getColorStatus({int status}) {
     color = Colors.orangeAccent;
   }else if (status == 5) {
     color = colorHexa("#FF6F3D");
+  } else if(status == 3){
+    color = primaryColor;
   }
   return color;
 }

@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:rtm_system/ultils/alertDialog.dart';
 import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/helpers.dart';
+import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/ultils/src/messageList.dart';
 import 'package:rtm_system/ultils/src/regExp.dart';
 import 'package:rtm_system/view/customer/advance/confirm_create_request_advance.dart';
@@ -37,11 +38,11 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: Color(0xffEEEEEE),
+      backgroundColor: backgroundColor,
       appBar: AppBar(
         leading: leadingAppbar(context),
         centerTitle: true,
-        backgroundColor: Color(0xFF0BB791),
+        backgroundColor: primaryColor,
         title: Text(
           "Tạo yêu cầu ứng tiền",
           style: TextStyle(
@@ -72,7 +73,7 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    btnCreate(context, size.width *0.7, size.height *0.045, Color(0xFF0BB791),
+                    btnCreate(context, size.width *0.7, size.height *0.045, primaryColor,
                         "Tạo", "yêu cầu ứng tiền", 1),
                   ],
                 ),

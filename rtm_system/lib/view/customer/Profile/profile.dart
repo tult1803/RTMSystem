@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:rtm_system/presenter/Customer/show_profile_customer.dart';
+import 'package:rtm_system/ultils/src/color_ultils.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key key}) : super(key: key);
@@ -13,11 +14,11 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFEEEEEE),
+      backgroundColor: backgroundColor,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(0.0),
         child: AppBar(
-          backgroundColor: Color(0xFF0BB791),
+          backgroundColor: primaryColor,
           elevation: 0,
         ),
       ),
