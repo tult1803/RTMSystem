@@ -147,9 +147,8 @@ class showInvoiceRequestManagerState extends State<showInvoiceRequestManager> {
                                 newPageProgressIndicatorBuilder: (context) =>
                                     newPageProgressIndicatorBuilder(),
                                 itemBuilder: (context, item, index) {
-                                  return boxForInvoice(
+                                  return boxForInvoiceRequest(
                                       context: context,
-                                      status: item['status_id'],
                                       date: "${getDateTime(item['create_date'], dateFormat: "dd/MM/yyyy")}",
                                       total: "${item['price']}",
                                       id: "${item['id']}",
@@ -160,9 +159,9 @@ class showInvoiceRequestManagerState extends State<showInvoiceRequestManager> {
                                         bodyPage: DetailInvoiceRequest(
                                           isCustomer: false,
                                           map: item,
+                                          isRequest: true,
                                         ),
                                       ),
-                                      isRequest: true,
                                       isCustomer: false);
                                 }),
                           ),

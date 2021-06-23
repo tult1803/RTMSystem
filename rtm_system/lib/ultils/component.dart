@@ -521,8 +521,8 @@ Widget componentContainerDetailInvoice(BuildContext context,
   );
 }
 
-Widget _showBtnProcessInvoice(
-    context, int statusId, String id, bool isCustomer) {
+Widget _showBtnProcessInvoice(context, int statusId, String id, bool isCustomer,
+    {bool isRequest}) {
   var size = MediaQuery.of(context).size;
   //show button để xử lý hoàn thành đơn
   //status = 5 là cho customer sign invoice
@@ -555,7 +555,7 @@ Widget _showBtnProcessInvoice(
         child: RaisedButton(
           color: Color(0xFF0BB791),
           onPressed: () {
-            // doConfirmOrAcceptOrRejectInvoice(context, id, 1, isCustomer);
+            doConfirmOrAcceptOrRejectInvoice(context, id, 1, isCustomer);
           },
           child: Text(
             'Xác nhận',
@@ -618,7 +618,7 @@ Widget _showBtnProcessInvoice(
                 doConfirmOrAcceptOrRejectInvoice(context, id, 2, isCustomer);
               },
               child: Text(
-                'Chấp nhận',
+                '${isRequest != null ? "Tạo" : "Chấp nhận"}',
                 style: TextStyle(color: Colors.white, fontSize: 16),
               ),
               shape: RoundedRectangleBorder(
@@ -761,6 +761,7 @@ Widget miniContainer(
     double width,
     Color colorContainer,
     Color colorText,
+    Color colorBoxShadow,
     double marginLeft,
     double marginRight,
     double marginTop,
@@ -797,12 +798,15 @@ Widget miniContainer(
           color: colorContainer,
           boxShadow: [
             BoxShadow(
-              color: Colors.black54,
+              color: colorBoxShadow == null ? Colors.black54 : colorBoxShadow,
               blurRadius: 3,
               offset: Offset(1, 1), // Shadow position
             ),
           ],
         ),
+        child: Container(
+          height: height,
+          width: width,
         child: Center(
           child: Padding(
             padding: EdgeInsets.only(
@@ -810,12 +814,13 @@ Widget miniContainer(
                 right: paddingRightOfText == null ? 0 : paddingRightOfText,
                 bottom: paddingBottomOfText == null ? 0 : paddingBottomOfText,
                 top: paddingTopOfText == null ? 0 : paddingTopOfText),
-            child: Text(
-              tittle,
-              style: GoogleFonts.roboto(
-                  color: colorText,
-                  fontWeight: fontWeightText,
-                  fontSize: fontSize == null ? null : fontSize),
+              child: AutoSizeText(
+                tittle,
+                style: GoogleFonts.roboto(
+                    color: colorText,
+                    fontWeight: fontWeightText,
+                    fontSize: fontSize == null ? null : fontSize),
+              ),
             ),
           ),
         ),
@@ -865,8 +870,7 @@ Widget containerTextInvoice({
 
 //Dùng cho trang chi tiết yêu cầu bán hàng
 Widget componentContainerInvoiceRequest(BuildContext context,
-    {
-    String id,
+    {String id,
     String productId,
     String customerId,
     String customerName,
@@ -876,6 +880,7 @@ Widget componentContainerInvoiceRequest(BuildContext context,
     String createDate,
     String sellDate,
     String storeName,
+    bool isRequest,
     bool isCustomer}) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
@@ -885,8 +890,8 @@ Widget componentContainerInvoiceRequest(BuildContext context,
         SizedBox(
           height: 10,
         ),
-        txtItemDetail(
-            context, "Ngày tạo hóa đơn", "${getDateTime(createDate, dateFormat: "dd/MM/yyyy")}"),
+        txtItemDetail(context, "Ngày tạo hóa đơn",
+            "${getDateTime(createDate, dateFormat: "dd/MM/yyyy")}"),
         SizedBox(
           height: 10,
         ),
@@ -903,16 +908,17 @@ Widget componentContainerInvoiceRequest(BuildContext context,
         SizedBox(
           height: 10,
         ),
-        txtItemDetail(
-            context, "Giá sản phẩm", "${getFormatPrice(price)}đ"),
+        txtItemDetail(context, "Giá sản phẩm", "${getFormatPrice(price)}đ"),
         SizedBox(
           height: 10,
         ),
-        txtItemDetail(context, "Ngày muốn đến bán", "${getDateTime(sellDate, dateFormat: "dd/MM/yyyy")}"),
+        txtItemDetail(context, "Ngày muốn đến bán",
+            "${getDateTime(sellDate, dateFormat: "dd/MM/yyyy")}"),
         SizedBox(
           height: 5,
         ),
-        _showBtnProcessInvoice(context, 0, id, isCustomer),
+        _showBtnProcessInvoice(context, 4, id, isCustomer,
+            isRequest: isRequest),
       ],
     ),
   );
@@ -969,13 +975,13 @@ Widget componentContainerDetailInvoiceRequest(BuildContext context,
 //Dùng cho trang chi tiết yêu cầu advance
 Widget componentContainerDetailAdvanceRequest(BuildContext context,
     {String id,
-      String storeName,
-      String customerName,
-      String customerPhone,
-      String money,
-      String image,
-      String createDate,
-      bool isCustomer}) {
+    String storeName,
+    String customerName,
+    String customerPhone,
+    String money,
+    String image,
+    String createDate,
+    bool isCustomer}) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Column(
@@ -984,8 +990,7 @@ Widget componentContainerDetailAdvanceRequest(BuildContext context,
         SizedBox(
           height: 10,
         ),
-        txtItemDetail(
-            context, "Ngày ứng tiền", "${getDateTime(createDate)}"),
+        txtItemDetail(context, "Ngày ứng tiền", "${getDateTime(createDate)}"),
         SizedBox(
           height: 10,
         ),
@@ -1004,63 +1009,64 @@ Widget componentContainerDetailAdvanceRequest(BuildContext context,
 }
 
 //nội dung của bill, đang dùng: create advance
-Widget widgetCreateAdvance(context,List item,
-    String nameProduct, String name, String phone, bool isCustomer) {
+Widget widgetCreateAdvance(context, List item, String nameProduct, String name,
+    String phone, bool isCustomer) {
   var size = MediaQuery.of(context).size;
   return SingleChildScrollView(
       child: Container(
-        height: size.height,
-        color: Color(0xFF0BB791),
-        child: Column(
-          children: [
-            //show data detail invoice
-            Container(
-              margin: EdgeInsets.fromLTRB(12, 24, 12, 12),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(10.0)),
-              ),
-              // height: 96,
-              child: Container(
-                margin: EdgeInsets.fromLTRB(24, 12, 24, 12),
-                child: Column(
-                  children: [
-                    txtPersonInvoice(context, 'Người tạo', '${name}', '${phone}'),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    txtItemDetail(context, 'Số tền', '${item[0]}'),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    txtItemDetail(context, 'Ngày ứng tiền', '${item[1]}'),
-                   // hình ảnh
-                    SizedBox(
-                      height: 10,
-                    ),
-                    SizedBox(
-                      width: size.width * 0.4,
-                      // ignore: deprecated_member_use
-                      child: RaisedButton(
-                        color: Color(0xFF0BB791),
-                        onPressed: () {
-                          doCreateRequestAdvance(context, 'TK-111', item[0], item[1], 'image', 1, true);
-                        },
-                        child: AutoSizeText(
-                          'Xác nhận',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        elevation: 10,
-                      ),
-                    )
-                  ],
+    height: size.height,
+    color: Color(0xFF0BB791),
+    child: Column(
+      children: [
+        //show data detail invoice
+        Container(
+          margin: EdgeInsets.fromLTRB(12, 24, 12, 12),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+          ),
+          // height: 96,
+          child: Container(
+            margin: EdgeInsets.fromLTRB(24, 12, 24, 12),
+            child: Column(
+              children: [
+                txtPersonInvoice(context, 'Người tạo', '${name}', '${phone}'),
+                SizedBox(
+                  height: 10,
                 ),
-              ),
+                txtItemDetail(context, 'Số tền', '${item[0]}'),
+                SizedBox(
+                  height: 10,
+                ),
+                txtItemDetail(context, 'Ngày ứng tiền', '${item[1]}'),
+                // hình ảnh
+                SizedBox(
+                  height: 10,
+                ),
+                SizedBox(
+                  width: size.width * 0.4,
+                  // ignore: deprecated_member_use
+                  child: RaisedButton(
+                    color: Color(0xFF0BB791),
+                    onPressed: () {
+                      doCreateRequestAdvance(context, 'TK-111', item[0],
+                          item[1], 'image', 1, true);
+                    },
+                    child: AutoSizeText(
+                      'Xác nhận',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    elevation: 10,
+                  ),
+                )
+              ],
             ),
-          ],
+          ),
         ),
-      ));
+      ],
+    ),
+  ));
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/component.dart';
+import 'package:rtm_system/view/customer/contact/ContactPage.dart';
 import 'package:rtm_system/view/manager/profile/allCustomer_manager.dart';
 import 'package:rtm_system/view/manager/profile/updateProfile.dart';
 import 'package:rtm_system/view/update_password.dart';
@@ -45,6 +46,7 @@ class _profilePageState extends State<profilePage> {
       child: Column(
         children: [
           headerProfile(),
+          buttonProfile(context, 15, 15, 20, 0, "Thông tin các cửa hàng", ContactPage()),
           buttonProfile(context,15, 15, 20, 0, "Quản lý khách hàng", AllCustomer()),
           buttonProfile(context,15, 15, 20, 0, "Thay đổi mật khẩu", UpdatePasswordPage(account_id: accountId, password: password, isCustomer: false,)),
           btnLogout(context),

@@ -7,9 +7,12 @@ import 'package:rtm_system/model/getAPI_allStore.dart';
 import 'package:rtm_system/model/getAPI_product.dart';
 import 'package:rtm_system/model/model_product.dart';
 import 'package:rtm_system/model/model_store.dart';
+import 'package:rtm_system/model/profile_customer/model_profile_customer.dart';
 import 'package:rtm_system/ultils/alertDialog.dart';
 import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/helpers.dart';
+import 'package:rtm_system/ultils/src/regExp.dart';
+import 'package:rtm_system/ultils/textField.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/ultils/src/messageList.dart';
 import 'package:rtm_system/view/create_invoice.dart';
@@ -18,6 +21,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class AddProductPage extends StatefulWidget {
   final String tittle;
   final Widget widgetToNavigator;
+
   //true is Customer role
   final bool isCustomer;
 
@@ -27,12 +31,18 @@ class AddProductPage extends StatefulWidget {
   _AddProductPageState createState() => _AddProductPageState();
 }
 
+InfomationCustomer infomationCustomer = InfomationCustomer();
+String phoneNewCustomer, nameNewCustomer;
+
 class _AddProductPageState extends State<AddProductPage> {
+  String errorPhone, errorFullName, errorQuantity, errorDegree;
   String price = '0';
   String token;
   String personSale = '', phoneSale = '';
   List listQuantity = [];
   List<DataProduct> dataListProduct = [];
+  Store store;
+  List<StoreElement> dataListStore;
   bool checkClick = false;
   var txtController = TextEditingController();
 
@@ -40,7 +50,7 @@ class _AddProductPageState extends State<AddProductPage> {
   double quantity = 0, degree = 0;
   List listInfor;
 
-  String _mySelection, _selectStore;
+  String _myProduct, _myStore;
   bool checkProduct = true;
 
   DateTime dateNow = DateTime.now();
@@ -75,55 +85,50 @@ class _AddProductPageState extends State<AddProductPage> {
   Store store;
   List<StoreElement> storeList;
 
-
-  Future<void> _fetchPage(pageKey) async {
-    try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      GetAPIAllStore getAPIAllStore = GetAPIAllStore();
-      store = await getAPIAllStore.getStores(
-        prefs.get("access_token"),
-        pageKey,
-        _pageSize,
-      );
-      storeList =  store.stores;
-      final isLastPage = storeList.length < pageKey;
-      if (isLastPage) {
-        _pagingController.appendLastPage(storeList);
-      } else {
-        setState(() {
-          _pageSize += 1;
-        });
-        final nextPageKey = pageKey;
-        _pagingController.appendPage(storeList, nextPageKey);
+  Future _getStore() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    GetAPIAllStore getAPIAllStore = GetAPIAllStore();
+    store = await getAPIAllStore.getStores(
+      prefs.get("access_token"),
+      1000,
+      1,
+    );
+    dataListStore = store.stores;
+    setState(() {
+      if(dataListStore.length == 1){
+        _myStore = dataListStore[0].id;
       }
-    } catch (error) {
-      _pagingController.error = error;
-    }
+    });
+    return dataListStore;
   }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    // ignore: unrelated_type_equality_checks
+    if (infomationCustomer != null) {
+      print('yes');
+    }else
+      print('no');
+  }
+
+//0971856324
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    infomationCustomer = null;
+    phoneNewCustomer = null;
+    nameNewCustomer = null;
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _getProduct();
-    _pagingController.addPageRequestListener((pageKey) {
-      _fetchPage(pageKey);
-    });
-    _pagingController.addStatusListener((status) {
-      if (status == PagingStatus.subsequentPageError) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text(
-              'Something went wrong while fetching a new page.',
-            ),
-            action: SnackBarAction(
-              label: 'Thử lại',
-              onPressed: () => _pagingController.retryLastFailedRequest(),
-            ),
-          ),
-        );
-      }
-    });
-    super.initState();
+    _getStore();
   }
 
   @override
@@ -151,45 +156,29 @@ class _AddProductPageState extends State<AddProductPage> {
               children: [
                 Column(
                   children: [
+                    textField(
+                      type: "phone",
+                      tittle: "Điện thoại",
+                      txtInputType: TextInputType.numberWithOptions(
+                          signed: true, decimal: true),
+                      error: errorPhone,
+                    ),
+                    textField(
+                      type: "name",
+                      tittle: "Tên khách hàng",
+                      txtInputType: TextInputType.name,
+                      error: errorFullName,
+                      txt: infomationCustomer == null? "" : infomationCustomer.fullname,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
                     Container(
                       margin: EdgeInsets.fromLTRB(12, 0, 12, 12),
                       child: Column(children: [
-                        Container(
-                          height: size.height * 0.08,
-                          child: CustomScrollView(
-                            slivers: <Widget>[
-                              PagedSliverList<int, StoreElement>(
-                                pagingController: _pagingController,
-                                builderDelegate: PagedChildBuilderDelegate<StoreElement>(
-                                    firstPageErrorIndicatorBuilder: (context) {
-                                      return Column(
-                                        children: [
-                                          firstPageErrorIndicatorBuilder(context,
-                                              tittle: showMessage(null, MSG008)),
-                                          GestureDetector(
-                                            onTap: () => _pagingController.refresh(),
-                                            child: Text(
-                                              showMessage(null, MSG027),
-                                              style: TextStyle(color: welcome_color, fontSize: 18),
-                                            ),
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                    firstPageProgressIndicatorBuilder: (context) =>
-                                        firstPageProgressIndicatorBuilder(),
-                                    newPageProgressIndicatorBuilder: (context) =>
-                                        newPageProgressIndicatorBuilder(),
-                                    itemBuilder: (context, item, index) {
-                                      return _dropdownListStore();
-                                    }
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                        _dropdownListStore(),
                         // show product from API
-                        _dropdownList(),
+                        _dropdownListProduct(),
                         _checkShowQuantity(),
                         Container(
                           width: MediaQuery.of(context).size.width,
@@ -233,7 +222,8 @@ class _AddProductPageState extends State<AddProductPage> {
                 SizedBox(
                   height: 10,
                 ),
-                btnSave(context, size.width * 0.7, size.height * 0.05, Color(0xFF0BB791), "Tạo", 1),
+                btnSave(context, size.width * 0.7, size.height * 0.05,
+                    Color(0xFF0BB791), "Tạo", 1),
                 SizedBox(
                   height: 10,
                 ),
@@ -312,61 +302,23 @@ class _AddProductPageState extends State<AddProductPage> {
           onPressed: () {
             setState(() {
               if (widget.isCustomer) {
-                if (_selectStore == null) {
-                  showCustomDialog(
-                    context,
-                    content: "Chưa chọn cửa hàng",
-                    isSuccess: false,
-                  );
-                } else if (_mySelection == null) {
-                  showCustomDialog(
-                    context,
-                    content: "Chưa chọn sản phẩm",
-                    isSuccess: false,
-                  );
-                } else {
-
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => CreateInvoicePage(
-                            isNew: true,
-                            listProduct: listInfor,
-                            isCustomer: widget.isCustomer)),
-                  );
-                }
-              } else{
-                if (_selectStore == null) {
-                  showCustomDialog(
-                    context,
-                    content: "Chưa chọn cửa hàng",
-                    isSuccess: false,
-                  );
-                } else if (_mySelection == null) {
-                  showCustomDialog(
-                    context,
-                    content: "Chưa chọn sản phẩm",
-                    isSuccess: false,
-                  );
-                }else if (quantity == 0) {
-                  showCustomDialog(
-                    context,
-                    content: "Số ký đang trống",
-                    isSuccess: false,
-                  );
-                } else {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => CreateInvoicePage(
-                            isNew: true,
-                            listProduct: listInfor,
-                            isCustomer: widget.isCustomer)),
-                  );
-                }
+                _myProduct == null
+                    ? showCustomDialog(
+                        context,
+                        content: "Chưa chọn sản phẩm",
+                        isSuccess: false,
+                      )
+                    : Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CreateInvoicePage(
+                                isNew: true,
+                                listProduct: listInforProduct,
+                                isCustomer: widget.isCustomer)),
+                      );
+              } else {
+                _validate();
               }
-
-              // }
             });
           },
           child: Center(
@@ -381,7 +333,56 @@ class _AddProductPageState extends State<AddProductPage> {
     );
   }
 
-  Widget _dropdownList() {
+  void _validate() {
+    if (phoneNewCustomer == null || phoneNewCustomer == "") {
+      errorPhone = "Số điện thoại trống";
+    } else {
+      if (!checkFormatPhone.hasMatch(phoneNewCustomer) ||
+          phoneNewCustomer.length > 11) {
+        errorPhone = "Số điện thoại sai (10-11 só)";
+      } else {
+        errorPhone = null;
+      }
+    }
+    if (nameNewCustomer == null || nameNewCustomer == " ") {
+      errorFullName = "Tên khách hàng trống";
+    } else {
+      errorFullName = null;
+      if (_myProduct == null) {
+        showCustomDialog(context, content: "Chưa chọn sản phẩm", isSuccess: false);}
+    }
+    if (quantity == 0) {
+      errorQuantity = "Số ký đang trống";
+    } else
+      errorQuantity = null;
+    if (!checkProduct) {
+      if (degree == 0) {
+        errorDegree = "Số độ trống";
+      } else
+        errorDegree = null;
+    }
+    if (errorPhone == null && errorQuantity == null && errorFullName == null && _myProduct != null) {
+      if (checkProduct) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => CreateInvoicePage(
+                    isNew: true,
+                    listProduct: listInforProduct,
+                    isCustomer: widget.isCustomer)));
+      } else if (!checkProduct && errorDegree == null) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => CreateInvoicePage(
+                    isNew: true,
+                    listProduct: listInforProduct,
+                    isCustomer: widget.isCustomer)));
+      }
+    }
+  }
+
+  Widget _dropdownListProduct() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
@@ -400,7 +401,8 @@ class _AddProductPageState extends State<AddProductPage> {
                   child: ButtonTheme(
                     alignedDropdown: true,
                     child: DropdownButton<String>(
-                      value: _mySelection,
+
+                      value: _myProduct,
                       iconSize: 30,
                       icon: (null),
                       style: TextStyle(
@@ -411,10 +413,10 @@ class _AddProductPageState extends State<AddProductPage> {
                       hint: Text('Chọn sản phẩm'),
                       onChanged: (String newValue) async {
                         setState(() {
-                          _mySelection = newValue;
+                          _myProduct = newValue;
                           _getCurrentPrice(newValue);
-                          this.listInfor = [
-                            this._mySelection,
+                          this.listInforProduct = [
+                            this._myProduct,
                             this.quantity,
                             this.degree,
                             getDateTime("$dateSale", dateFormat: "yyyy-MM-dd HH:mm:ss"),
@@ -422,11 +424,66 @@ class _AddProductPageState extends State<AddProductPage> {
                           ];
                         });
                         setState(() {
-                          _mySelection == "SP-1000003" ? checkProduct = false : checkProduct = true;
+                          _myProduct == "SP-1000003"
+                              ? checkProduct = false
+                              : checkProduct = true;
                           checkClick = true;
                         });
                       },
                       items: dataListProduct?.map((item) {
+                        return new DropdownMenuItem(
+                          child: new Text(item.name),
+                          //chuyen id de create
+                          value: item.id.toString(),
+                        );
+                      })?.toList() ??
+                          [],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        // _underRow()
+      ],
+    );
+  }
+
+  Widget _dropdownListStore() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: <Widget>[
+        Row(
+          children: [
+            Expanded(
+              child: Container(
+                height: 40,
+                margin: EdgeInsets.only(top: 5, bottom: 10),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10.0),
+                    )),
+                child: DropdownButtonHideUnderline(
+                  child: ButtonTheme(
+                    alignedDropdown: true,
+                    child: DropdownButton<String>(
+                      value: _myStore,
+                      iconSize: 30,
+                      icon: (null),
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      hint: Text('Chon cửa hàng'),
+                      onChanged: (String newValue) async {
+                        setState(() {
+                          _myStore = newValue;
+                        });
+                      },
+                      items: dataListStore?.map((item) {
                             return new DropdownMenuItem(
                               child: new Text(item.name),
                               //chuyen id de create
@@ -571,6 +628,12 @@ class _AddProductPageState extends State<AddProductPage> {
             Icons.create_outlined,
             color: Colors.black54,
           ),
+          //Hiển thị lỗi
+          focusedErrorBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.redAccent),
+          ),
+          //Nhận thông báo lỗi
+          errorText: isQuantity ? errorQuantity : errorDegree,
         ),
       ),
     );
@@ -587,7 +650,7 @@ class _AddProductPageState extends State<AddProductPage> {
             quantity += double.parse(element);
           });
           this.listInfor = [
-            this._mySelection,
+            this._myProduct,
             this.quantity,
             this.degree,
             getDateTime("$dateSale", dateFormat: "yyyy-MM-dd HH:mm:ss"),
@@ -612,10 +675,10 @@ class _AddProductPageState extends State<AddProductPage> {
   }
 
   //Lấy giá tiền
-  Future _getCurrentPrice(String value)  {
+  Future _getCurrentPrice(String value) {
     setState(() {
       dataListProduct.forEach((element) {
-        if(element.id == value){
+        if (element.id == value) {
           price = element.price;
         }
       });
@@ -634,7 +697,6 @@ class _AddProductPageState extends State<AddProductPage> {
 
   //Show date để chọn ngày đến bán( customer đang dùng)
   Widget btnDateSale(context) {
-    var size = MediaQuery.of(context).size;
     return Container(
       decoration: BoxDecoration(
           color: Colors.white,
@@ -655,7 +717,7 @@ class _AddProductPageState extends State<AddProductPage> {
                   setState(() {
                     dateSale = date;
                     this.listInfor = [
-                      this._mySelection,
+                      this._myProduct,
                       this.quantity,
                       this.degree,
                       getDateTime("$dateSale", dateFormat: "yyyy-MM-dd HH:mm:ss"),
@@ -671,6 +733,7 @@ class _AddProductPageState extends State<AddProductPage> {
               );
             },
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
                   width: 130,
@@ -681,9 +744,12 @@ class _AddProductPageState extends State<AddProductPage> {
                   ),
                 ),
                 Expanded(
-                  child: Text(
-                    '${getDateTime("$dateSale", dateFormat: "dd/MM/yyyy")}',
-                    style: TextStyle(fontSize: 16),
+                  child: Container(
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      '${getDateTime("$dateSale", dateFormat: "dd/MM/yyyy")}',
+                      style: TextStyle(fontSize: 16),
+                    ),
                   ),
                 ),
                 Container(
@@ -734,7 +800,7 @@ class _AddProductPageState extends State<AddProductPage> {
           Container(
               alignment: Alignment.centerRight,
               margin: EdgeInsets.only(right: 20),
-              width: 70,
+              width: 50,
               child: Text("VNĐ")),
         ],
       ),

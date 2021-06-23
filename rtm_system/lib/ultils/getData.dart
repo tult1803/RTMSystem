@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:rtm_system/model/PostCreateRequestInvoice.dart';
 import 'package:rtm_system/model/postAPI_createCustomer.dart';
 import 'package:rtm_system/model/postAPI_createNotice.dart';
+import 'package:rtm_system/model/profile_customer/getAPI_customer_phone.dart';
+import 'package:rtm_system/model/profile_customer/model_profile_customer.dart';
 import 'package:rtm_system/model/putAPI_confirmInvoice.dart';
 import 'package:rtm_system/model/putAPI_signInvoice.dart';
 import 'package:rtm_system/model/putAPI_updatePrice.dart';
@@ -248,9 +250,15 @@ Future<void> doConfirmOrAcceptOrRejectInvoice(
   } else {
     //call api tao invoice cua manager
     switch (type) {
-      case 1: break;
-      case 2: break;
-      case 3: break;
+      case 1:
+        print('Xác nhận');
+        break;
+      case 2:
+        print('Tạo/Chấp nhận');
+        break;
+      case 3:
+        print('Từ chối');
+        break;
     }
   }
 }
@@ -285,5 +293,18 @@ Future<void> doCreateRequestAdvance(
       case 2: break;
       case 3: break;
     }
+  }
+}
+
+Future getDataCustomerFromPhone(String phone) async{
+  try {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    GetAPIProfileCustomer getAPIProfileCustomer = GetAPIProfileCustomer();
+    // InfomationCustomer infomationCustomer = InfomationCustomer();
+    // infomationCustomer = await getAPIProfileCustomer.getProfileCustomer(prefs.get('access_token'), phone);
+    return await getAPIProfileCustomer.getProfileCustomer(
+        prefs.get('access_token'), phone);
+  }catch(_){
+    print('Customer infomation is empty !!!');
   }
 }
