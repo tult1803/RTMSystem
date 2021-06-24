@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/component.dart';
+
 class DetailInvoiceRequest extends StatefulWidget {
   final Map<String, dynamic> map;
   final bool isCustomer;
   final isRequest;
-  DetailInvoiceRequest({this.map, this.isCustomer, this.isRequest});
+  final Widget widgetToNavigator;
+
+  DetailInvoiceRequest(
+      {this.map, this.isCustomer, this.isRequest, this.widgetToNavigator});
+
   @override
   _DetailInvoiceRequestState createState() => _DetailInvoiceRequestState();
 }
@@ -16,6 +21,7 @@ class _DetailInvoiceRequestState extends State<DetailInvoiceRequest> {
     // TODO: implement initState
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -35,6 +41,7 @@ class _DetailInvoiceRequestState extends State<DetailInvoiceRequest> {
             price: "${this.widget.map["price"]}",
             isCustomer: widget.isCustomer,
             isRequest: widget.isRequest,
+            widgetToNavigator: this.widget.widgetToNavigator,
           ),
         ),
       ),

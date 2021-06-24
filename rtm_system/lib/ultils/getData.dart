@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rtm_system/model/PostCreateRequestInvoice.dart';
+import 'package:rtm_system/model/deleteAPI_invoice.dart';
 import 'package:rtm_system/model/postAPI_createCustomer.dart';
 import 'package:rtm_system/model/postAPI_createNotice.dart';
 import 'package:rtm_system/model/profile_customer/getAPI_customer_phone.dart';
@@ -220,7 +221,7 @@ Future<void> doCreateRequestInvoiceOrInvoice(
 // Xac nhan hoa don, cho ca manager va customer
 // Customer : truyền invoice_id để xác nhận
 Future<void> doConfirmOrAcceptOrRejectInvoice(
-    BuildContext context, String invoiceId, int type, bool isCustomer) async {
+    BuildContext context, String invoiceId, int type, bool isCustomer, {Widget widgetToNavigator}) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   int status;
   if (isCustomer) {
@@ -256,7 +257,7 @@ Future<void> doConfirmOrAcceptOrRejectInvoice(
         print('Tạo/Chấp nhận');
         break;
       case 3:
-        print('Từ chối');
+        doDeleteInvoice(context,invoiceId, widgetToNavigator: widgetToNavigator);
         break;
     }
   }
@@ -299,11 +300,19 @@ Future getDataCustomerFromPhone(String phone) async{
   try {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     GetAPIProfileCustomer getAPIProfileCustomer = GetAPIProfileCustomer();
-    // InfomationCustomer infomationCustomer = InfomationCustomer();
-    // infomationCustomer = await getAPIProfileCustomer.getProfileCustomer(prefs.get('access_token'), phone);
     return await getAPIProfileCustomer.getProfileCustomer(
         prefs.get('access_token'), phone);
   }catch(_){
     print('Customer infomation is empty !!!');
   }
+}
+
+Future doDeleteInvoice(BuildContext context,String invoiceId,
+    {Widget widgetToNavigator}) async{
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  DeleteInvoice deleteInvoice = DeleteInvoice();
+  int status = await deleteInvoice.deleteInvoice(prefs.get('access_token'), invoiceId);
+  status == 200 ? showCustomDialog(context, isSuccess: true, content: "Đã từ chối hoá đơn",widgetToNavigator: widgetToNavigator)
+  :showCustomDialog(context, isSuccess: false, content: "Từ chối hoá đơn thất bại", doPopNavigate: true);
+  return true;
 }

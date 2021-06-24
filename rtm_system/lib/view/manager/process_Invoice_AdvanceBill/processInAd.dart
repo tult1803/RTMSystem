@@ -82,7 +82,7 @@ class _requestInvoiceAdvanceState extends State<requestInvoiceAdvance> {
             });
           },
           children: [
-            new showInvoiceRequestManager(),
+            new showInvoiceRequestManager(widgetToNavigator: requestInvoiceAdvance(),),
             //Chờ API Advance Bill
             new Container(
               width: size.width,

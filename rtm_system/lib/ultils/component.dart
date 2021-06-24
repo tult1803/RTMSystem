@@ -437,7 +437,8 @@ Widget componentContainerDetailInvoice(BuildContext context,
     String customerConfirmDate,
     String managerConfirmDate,
     String activeDate,
-    bool isCustomer}) {
+    bool isCustomer,
+    Widget widgetToNavigator}) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Column(
@@ -470,14 +471,9 @@ Widget componentContainerDetailInvoice(BuildContext context,
           height: 10,
         ),
         txtItemDetail(context, "Giá sản phẩm", "${getFormatPrice(price)}đ"),
-        degree == 0
-            ? Container()
-            : {
-                SizedBox(
-                  height: 10,
-                ),
-                txtItemDetail(context, "Độ", "$degree"),
-              },
+        Container(
+          child: degree == 0 ? SizedBox(height: 1) : txtItemDetail(context, "Độ", "$degree"),
+        ),
         SizedBox(
           height: 10,
         ),
@@ -511,14 +507,14 @@ Widget componentContainerDetailInvoice(BuildContext context,
           height: 5,
         ),
         // chỗ này show btn accpet or reject của customer
-        _showBtnProcessInvoice(context, statusId, id, isCustomer),
+        _showBtnProcessInvoice(context, statusId, id, isCustomer,widgetToNavigator: widgetToNavigator),
       ],
     ),
   );
 }
 
 Widget _showBtnProcessInvoice(context, int statusId, String id, bool isCustomer,
-    {bool isRequest}) {
+    {bool isRequest, Widget widgetToNavigator}) {
   var size = MediaQuery.of(context).size;
   //show button để xử lý hoàn thành đơn
   //status = 5 là cho customer sign invoice
@@ -594,7 +590,7 @@ Widget _showBtnProcessInvoice(context, int statusId, String id, bool isCustomer,
             child: RaisedButton(
               color: Colors.redAccent,
               onPressed: () {
-                doConfirmOrAcceptOrRejectInvoice(context, id, 3, isCustomer);
+                doConfirmOrAcceptOrRejectInvoice(context, id, 3, isCustomer, widgetToNavigator: widgetToNavigator);
               },
               child: Text(
                 'Từ chối',
@@ -877,7 +873,8 @@ Widget componentContainerInvoiceRequest(BuildContext context,
     String sellDate,
     String storeName,
     bool isRequest,
-    bool isCustomer}) {
+    bool isCustomer,
+    Widget widgetToNavigator}) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Column(
@@ -915,59 +912,59 @@ Widget componentContainerInvoiceRequest(BuildContext context,
         ),
 
         isCustomer ? Container():_showBtnProcessInvoice(context, 4, id, isCustomer,
-            isRequest: isRequest),
+            isRequest: isRequest, widgetToNavigator: widgetToNavigator),
       ],
     ),
   );
 }
-
-//Dùng cho trang chi tiết yêu cầu hoá đơn
-Widget componentContainerDetailInvoiceRequest(BuildContext context,
-    {String id,
-    String customerName,
-    String customerPhone,
-    String productName,
-    String price,
-    String createDate,
-    String sellDate,
-    bool isCustomer}) {
-  return Padding(
-    padding: const EdgeInsets.all(8.0),
-    child: Column(
-      children: [
-        txtItemDetail(context, "ID đơn", "$id"),
-        SizedBox(
-          height: 10,
-        ),
-        txtItemDetail(
-            context, "Ngày tạo yêu cầu", "${getDateTime(createDate)}"),
-        SizedBox(
-          height: 10,
-        ),
-        txtItemDetail(context, "Người tạo", "$customerName",
-            subContent: customerPhone),
-        SizedBox(
-          height: 10,
-        ),
-        txtItemDetail(context, "Tên sản phẩm", "$productName"),
-        SizedBox(
-          height: 10,
-        ),
-        txtItemDetail(context, "Giá sản phẩm", "${getFormatPrice(price)}đ"),
-        SizedBox(
-          height: 10,
-        ),
-        txtItemDetail(context, "Ngày đến bán", "${getDateTime(sellDate)}"),
-        SizedBox(
-          height: 10,
-        ),
-        _showBtnProcessInvoice(context, 0, id, isCustomer),
-
-        // chỗ này show btn accpet or reject của customer
-      ],
-    ),
-  );
-}
+//
+// //Dùng cho trang chi tiết yêu cầu hoá đơn
+// Widget componentContainerDetailInvoiceRequest(BuildContext context,
+//     {String id,
+//     String customerName,
+//     String customerPhone,
+//     String productName,
+//     String price,
+//     String createDate,
+//     String sellDate,
+//     bool isCustomer}) {
+//   return Padding(
+//     padding: const EdgeInsets.all(8.0),
+//     child: Column(
+//       children: [
+//         txtItemDetail(context, "ID đơn", "$id"),
+//         SizedBox(
+//           height: 10,
+//         ),
+//         txtItemDetail(
+//             context, "Ngày tạo yêu cầu", "${getDateTime(createDate)}"),
+//         SizedBox(
+//           height: 10,
+//         ),
+//         txtItemDetail(context, "Người tạo", "$customerName",
+//             subContent: customerPhone),
+//         SizedBox(
+//           height: 10,
+//         ),
+//         txtItemDetail(context, "Tên sản phẩm", "$productName"),
+//         SizedBox(
+//           height: 10,
+//         ),
+//         txtItemDetail(context, "Giá sản phẩm", "${getFormatPrice(price)}đ"),
+//         SizedBox(
+//           height: 10,
+//         ),
+//         txtItemDetail(context, "Ngày đến bán", "${getDateTime(sellDate)}"),
+//         SizedBox(
+//           height: 10,
+//         ),
+//         _showBtnProcessInvoice(context, 0, id, isCustomer),
+//
+//         // chỗ này show btn accpet or reject của customer
+//       ],
+//     ),
+//   );
+// }
 
 //Dùng cho trang chi tiết yêu cầu advance
 Widget componentContainerDetailAdvanceRequest(BuildContext context,

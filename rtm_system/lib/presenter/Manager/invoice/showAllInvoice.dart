@@ -6,6 +6,7 @@ import 'package:rtm_system/presenter/Manager/invoice/showRequestInvoice.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/helpers.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
+import 'package:rtm_system/view/manager/home_manager_page.dart';
 
 class showAllInvoice extends StatefulWidget {
   const showAllInvoice({Key key}) : super(key: key);
@@ -172,8 +173,8 @@ class _showAllInvoiceState extends State<showAllInvoice> {
         });
       },
       children: [
-        new showInvoiceRequestManager(),
-        new showInvoiceManager(4, fromDate: getFromDate, toDate: getToDate),
+        new showInvoiceRequestManager(widgetToNavigator: HomeAdminPage(index: 1,),),
+        new showInvoiceManager(4, fromDate: getFromDate, toDate: getToDate, widgetToNavigator: HomeAdminPage(index: 1,),),
         new showInvoiceManager(1, fromDate: getFromDate, toDate: getToDate),
         new showInvoiceManager(5, fromDate: getFromDate, toDate: getToDate),
         new showInvoiceManager(3, fromDate: getFromDate, toDate: getToDate),
