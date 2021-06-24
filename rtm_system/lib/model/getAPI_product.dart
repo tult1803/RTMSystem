@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 class GetProduct{
   getProduct(String token, String idProduct) async {
     final response = await http.get(
-      Uri.http('${url_main}', '${url_product}', {"id":"$idProduct"}),
+      Uri.http('$urlMain', '$urlProduct', {"id":"$idProduct"}),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Accept': 'application/json',

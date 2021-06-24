@@ -8,7 +8,7 @@ class PostCreateCustomer{
 
   createCustomer(String token, String phone, String password, String fullname, int gender, String cmnd, String address, String birthday) async {
     final response = await http.post(
-      Uri.http('${url_main}', '${url_createCustomer}'),
+      Uri.http('$urlMain', '$urlCreateCustomer'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $token',

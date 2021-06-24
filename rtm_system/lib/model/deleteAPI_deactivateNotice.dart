@@ -7,7 +7,7 @@ class DeleteDeactivateNotice{
 
   deactivateNotice(String token, String noticeId ) async {
     final response = await http.delete(
-      Uri.http('${url_main}', '${url_deactivateNotice}/$noticeId'),
+      Uri.http('${urlMain}', '${urlDeactivateNotice}/$noticeId'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $token',

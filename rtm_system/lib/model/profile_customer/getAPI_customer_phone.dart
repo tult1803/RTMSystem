@@ -6,14 +6,13 @@ import 'package:http/http.dart' as http;
 class GetAPIProfileCustomer{
   getProfileCustomer(String token, String phone) async {
     final response = await http.get(
-      Uri.http('${url_main}', '${url_profileCustomer}/$phone'),
+      Uri.http('$urlMain', '$urlProfileCustomer/$phone'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Accept': 'application/json',
         'Authorization': 'Bearer $token',
       },
     );
-    print(Uri.http('${url_main}', '${url_profileCustomer}/$phone'));
     print('Status getAPI DataCustomerFromPhone: ${response.statusCode}');
     if (response.statusCode == 200) {
       return InfomationCustomer.fromJson(jsonDecode(response.body));

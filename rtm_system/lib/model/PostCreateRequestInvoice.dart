@@ -9,7 +9,7 @@ class PostCreateRequestInvoice{
 
   createRequestInvoice(String token, String id, String sellDate) async {
     final response = await http.post(
-      Uri.http('${url_main}', '${url_createRequestInvoice}'),
+      Uri.http('$urlMain', '$urlCreateRequestInvoice'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $token',

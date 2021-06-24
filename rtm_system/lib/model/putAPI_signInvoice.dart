@@ -8,7 +8,7 @@ class PutSignInvoice{
 
   putSignInvoice(String token, String id) async {
     final response = await http.put(
-      Uri.http('${url_main}', '${url_signInvoice}/$id'),
+      Uri.http('$urlMain', '$urlSignInvoice/$id'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $token',

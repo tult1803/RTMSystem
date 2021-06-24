@@ -9,7 +9,7 @@ class PutUpdatePrice{
 
   updatePrice(String token, String account_id, String product_id, double price) async {
     final response = await http.put(
-      Uri.http('${url_main}', '${url_updatePrice}'),
+      Uri.http('$urlMain', '$urlUpdatePrice'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $token',

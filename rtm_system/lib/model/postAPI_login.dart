@@ -10,7 +10,7 @@ class PostLogin{
   static int status;
   createLogin(String username, String password) async {
   final response = await http.post(
-    Uri.http('${url_main}', '${url_login}'),
+    Uri.http('$urlMain', '$urlLogin'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
