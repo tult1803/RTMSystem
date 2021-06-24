@@ -172,9 +172,9 @@ class showAllInvoicePageState extends State<showAllInvoicePage> {
     _pagingController.refresh();
   }
 //Khi có hàm này sẽ có lỗi
-  // @override
-  // void dispose() {
-  //   _pagingController.dispose();
-  //   super.dispose();
-  // }
+  @override
+  void dispose() {
+    _pagingController.dispose();
+    super.dispose();
+  }
 }
