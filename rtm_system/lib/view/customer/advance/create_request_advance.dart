@@ -163,7 +163,7 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
             }
           }
         },
-        label: Text('Nhận tiền', style: TextStyle(
+        label: Text('Tạo mới', style: TextStyle(
           color: Colors.white,
         ),),
         backgroundColor: primaryColor,
