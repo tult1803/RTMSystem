@@ -20,10 +20,15 @@ class AddProductPage extends StatefulWidget {
   final String tittle;
   final Widget widgetToNavigator;
   bool isChangeData;
+
   //true is Customer role
   final bool isCustomer;
 
-  AddProductPage({this.tittle, this.isCustomer, this.widgetToNavigator, this.isChangeData});
+  AddProductPage(
+      {this.tittle,
+      this.isCustomer,
+      this.widgetToNavigator,
+      this.isChangeData});
 
   @override
   _AddProductPageState createState() => _AddProductPageState();
@@ -36,14 +41,15 @@ class _AddProductPageState extends State<AddProductPage> {
   String errorPhone, errorFullName, errorQuantity, errorDegree;
   String price = '0';
   String token;
-  String customerName="",personSale = '', phoneSale = '';
+  String personSale = '', phoneSale = '', oldCusName;
   List listQuantity = [];
   List<DataProduct> dataListProduct = [];
   Store store;
   List<StoreElement> dataListStore;
   bool checkClick = false;
   var txtController = TextEditingController();
-  bool autoFocus = false;
+  bool autoFocus = false, enabledFillName = true;
+
   //field to sales
   double quantity = 0, degree = 0;
   List listInforProduct;
@@ -78,7 +84,7 @@ class _AddProductPageState extends State<AddProductPage> {
     }
   }
 
-  Future _getStore() async{
+  Future _getStore() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     GetAPIAllStore getAPIAllStore = GetAPIAllStore();
     store = await getAPIAllStore.getStores(
@@ -88,7 +94,7 @@ class _AddProductPageState extends State<AddProductPage> {
     );
     dataListStore = store.stores;
     setState(() {
-      if(dataListStore.length == 1){
+      if (dataListStore.length == 1) {
         _myStore = dataListStore[0].id;
       }
     });
@@ -110,14 +116,13 @@ class _AddProductPageState extends State<AddProductPage> {
     _getStore();
   }
 
-
   TextEditingController getDataTextField(String txt) {
     final TextEditingController _controller = TextEditingController();
     if (txt != null) {
       _controller.value = _controller.value.copyWith(
         text: txt,
         selection:
-        TextSelection(baseOffset: txt.length, extentOffset: txt.length),
+            TextSelection(baseOffset: txt.length, extentOffset: txt.length),
         composing: TextRange.empty,
       );
     }
@@ -150,6 +155,7 @@ class _AddProductPageState extends State<AddProductPage> {
                 Column(
                   children: [
                     txtAutoFillByPhone(
+                      isCustomer: this.widget.isCustomer,
                       type: "phone",
                       tittle: "Điện thoại",
                       txtInputType: TextInputType.numberWithOptions(
@@ -157,7 +163,11 @@ class _AddProductPageState extends State<AddProductPage> {
                       error: errorPhone,
                     ),
                     txtAutoFillByPhone(
-                      controller:infomationCustomer == null ? null: getDataTextField(infomationCustomer.fullname),
+                      enabled: enabledFillName,
+                      isCustomer: this.widget.isCustomer,
+                      controller: infomationCustomer == null
+                          ? getDataTextField(nameNewCustomer)
+                          : getDataTextField(infomationCustomer.fullname),
                       type: "name",
                       tittle: "Tên khách hàng",
                       txtInputType: TextInputType.name,
@@ -226,73 +236,94 @@ class _AddProductPageState extends State<AddProductPage> {
     );
   }
 
-  Widget txtAutoFillByPhone(
-      {TextEditingController controller,
-      String error,
-      String tittle,
-      String type,
-      TextInputType txtInputType}){
-    return Container(
-      color: Colors.white,
-      margin: EdgeInsets.only(top: 10, left: 10, right: 10),
-      child: TextField(
-        controller: controller,
-        // initialValue: this.widget.txt,
-        autocorrect: false,
-        obscureText: false,
-        onSubmitted: (value)  async{
-            switch (type) {
-              case "phone":
-                phoneNewCustomer = value.trim();
-                infomationCustomer = await getDataCustomerFromPhone(value);
-                setState(() {
-                  autoFocus = false;
-                });
-                break;
-              case "name":
-                nameNewCustomer = value.trim();
-                break;
-            }
-        },
-        maxLines: 1,
-        keyboardType:txtInputType,
-        // TextInputType.numberWithOptions(signed: true, decimal: true),
-        inputFormatters: [
-          txtInputType !=
-              TextInputType.numberWithOptions(signed: true, decimal: true)
-              ? FilteringTextInputFormatter.allow(RegExp(r'[ [a-zA-Z0-9]'))
-              : FilteringTextInputFormatter.allow(RegExp(r'[[0-9]')),
-        ],
-        style: TextStyle(fontSize: 15),
-        cursorColor: Colors.red,
-        decoration: InputDecoration(
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(5.0)),
-          ),
-          labelText: tittle,
-          labelStyle: TextStyle(color: Colors.black54),
-          contentPadding: EdgeInsets.only(top: 14, left: 10),
-          //Sau khi click vào "Nhập tiêu đề" thì màu viền sẽ đổi
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: Color(0xFF0BB791),
-            ),
-          ),
-          //Hiển thị Icon góc phải
-          suffixIcon: Icon(
-            Icons.create,
-            color: Colors.black54,
-          ),
+  Widget txtAutoFillByPhone({
+    TextEditingController controller,
+    String error,
+    String tittle,
+    String type,
+    TextInputType txtInputType,
+    bool isCustomer,
+    bool enabled,
+  }) {
+    return isCustomer
+        ? Container()
+        : Container(
+            color: Colors.white,
+            margin: EdgeInsets.only(top: 10, left: 10, right: 10),
+            child: TextField(
+              controller: controller,
+              // initialValue: this.widget.txt,
+              autocorrect: false,
+              obscureText: false,
+              enabled: enabled,
+              onSubmitted: (value) {
+                doOnSubmittedTextField(type, value);
+              },
+              maxLines: 1,
+              keyboardType: txtInputType,
+              // TextInputType.numberWithOptions(signed: true, decimal: true),
+              inputFormatters: [
+                txtInputType !=
+                        TextInputType.numberWithOptions(
+                            signed: true, decimal: true)
+                    ? FilteringTextInputFormatter.allow(
+                        RegExp(r'[ [a-zA-Z0-9]'))
+                    : FilteringTextInputFormatter.allow(RegExp(r'[[0-9]')),
+              ],
+              style: TextStyle(fontSize: 15),
+              cursorColor: Colors.red,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                ),
+                labelText: tittle,
+                labelStyle: TextStyle(color: Colors.black54),
+                contentPadding: EdgeInsets.only(top: 14, left: 10),
+                //Sau khi click vào "Nhập tiêu đề" thì màu viền sẽ đổi
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Color(0xFF0BB791),
+                  ),
+                ),
+                //Hiển thị Icon góc phải
+                suffixIcon: Icon(
+                  Icons.create,
+                  color: Colors.black54,
+                ),
 
-          //Hiển thị lỗi
-          focusedErrorBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.redAccent),
-          ),
-          //Nhận thông báo lỗi
-          errorText: error,
-        ),
-      ),
-    );
+                //Hiển thị lỗi
+                focusedErrorBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.redAccent),
+                ),
+                //Nhận thông báo lỗi
+                errorText: error,
+              ),
+            ),
+          );
+  }
+
+  Future<void> doOnSubmittedTextField(String type, String value) async {
+    switch (type) {
+      case "phone":
+        phoneNewCustomer = value.trim();
+        infomationCustomer = await getDataCustomerFromPhone(value);
+        setState(() {
+          if (infomationCustomer == null) {
+            enabledFillName = true;
+            // ignore: unnecessary_statements
+            nameNewCustomer == oldCusName ? nameNewCustomer = "" : null;
+          } else {
+            oldCusName = infomationCustomer.fullname;
+            nameNewCustomer = infomationCustomer.fullname;
+            enabledFillName = false;
+          }
+          autoFocus = false;
+        });
+        break;
+      case "name":
+        nameNewCustomer = value.trim();
+        break;
+    }
   }
 
   Widget _showMoneyOrQuantity(String title, value) {
@@ -411,7 +442,9 @@ class _AddProductPageState extends State<AddProductPage> {
     } else {
       errorFullName = null;
       if (_myProduct == null) {
-        showCustomDialog(context, content: "Chưa chọn sản phẩm", isSuccess: false);}
+        showCustomDialog(context,
+            content: "Chưa chọn sản phẩm", isSuccess: false);
+      }
     }
     if (quantity == 0) {
       errorQuantity = "Số ký đang trống";
@@ -423,7 +456,10 @@ class _AddProductPageState extends State<AddProductPage> {
       } else
         errorDegree = null;
     }
-    if (errorPhone == null && errorQuantity == null && errorFullName == null && _myProduct != null) {
+    if (errorPhone == null &&
+        errorQuantity == null &&
+        errorFullName == null &&
+        _myProduct != null) {
       if (checkProduct) {
         Navigator.push(
             context,
@@ -492,12 +528,12 @@ class _AddProductPageState extends State<AddProductPage> {
                         });
                       },
                       items: dataListProduct?.map((item) {
-                        return new DropdownMenuItem(
-                          child: new Text(item.name),
-                          //chuyen id de create
-                          value: item.id.toString(),
-                        );
-                      })?.toList() ??
+                            return new DropdownMenuItem(
+                              child: new Text(item.name),
+                              //chuyen id de create
+                              value: item.id.toString(),
+                            );
+                          })?.toList() ??
                           [],
                     ),
                   ),
@@ -796,27 +832,5 @@ class _AddProductPageState extends State<AddProductPage> {
         ],
       ),
     );
-  }
-}
-
-class MyInheritedData extends InheritedWidget {
-  final String myField;
-  final ValueChanged<String> onMyFieldChange;
-
-  MyInheritedData({
-    Key key,
-    this.myField,
-    this.onMyFieldChange,
-    Widget child,
-  }) : super(key: key, child: child);
-
-  static MyInheritedData of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<MyInheritedData>();
-  }
-
-  @override
-  bool updateShouldNotify(MyInheritedData oldWidget) {
-    return oldWidget.myField != myField ||
-        oldWidget.onMyFieldChange != onMyFieldChange;
   }
 }
