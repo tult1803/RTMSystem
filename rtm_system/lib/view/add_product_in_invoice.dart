@@ -20,15 +20,21 @@ class AddProductPage extends StatefulWidget {
   final String tittle;
   final Widget widgetToNavigator;
   bool isChangeData;
+  final String phone, fullName, storeId, productId, dateToPay, savePrice;
 
   //true is Customer role
   final bool isCustomer;
 
-  AddProductPage(
-      {this.tittle,
-      this.isCustomer,
-      this.widgetToNavigator,
-      this.isChangeData});
+  AddProductPage({this.tittle,
+    this.phone,
+    this.fullName,
+    this.storeId,
+    this.productId,
+    this.dateToPay,
+    this.savePrice,
+    this.isCustomer,
+    this.widgetToNavigator,
+    this.isChangeData});
 
   @override
   _AddProductPageState createState() => _AddProductPageState();
@@ -39,26 +45,32 @@ String phoneNewCustomer, nameNewCustomer;
 
 class _AddProductPageState extends State<AddProductPage> {
   String errorPhone, errorFullName, errorQuantity, errorDegree;
-  String price = '0';
+  String price;
   String token;
-  String personSale = '', phoneSale = '', oldCusName;
+  String personSale = '',
+      phoneSale = '',
+      oldCusName;
   List listQuantity = [];
   List<DataProduct> dataListProduct = [];
   Store store;
   List<StoreElement> dataListStore;
   bool checkClick = false;
   var txtController = TextEditingController();
-  bool autoFocus = false, enabledFillName = true;
+  bool autoFocus = false,
+      enabledFillName = true;
 
   //field to sales
-  double quantity = 0, degree = 0;
+  double quantity = 0,
+      degree = 0;
   List listInforProduct;
 
   String _myProduct, _myStore;
   bool checkProduct = true;
 
-  DateTime dateNow = DateTime.now();
-  DateTime dateSale = DateTime.now();
+  /// Cái này có ý nghĩa là gì ///
+  DateTime dateNow;
+  /// ====================== ///
+  DateTime dateSale;
 
   Future _getProduct() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -112,8 +124,21 @@ class _AddProductPageState extends State<AddProductPage> {
   @override
   void initState() {
     super.initState();
+    _checkDataFromRequest();
     _getProduct();
     _getStore();
+  }
+
+  Future<void> _checkDataFromRequest() {
+    setState(() {
+      print(this.widget.dateToPay);
+      this.widget.phone == null ? phoneNewCustomer = "" : phoneNewCustomer = widget.phone;
+      this.widget.fullName == null ? nameNewCustomer = "" : nameNewCustomer = widget.fullName;
+      this.widget.storeId == null ? _myStore = null : _myStore = widget.storeId;
+      this.widget.productId == null ? _myProduct = null : _myProduct = widget.productId;
+      this.widget.savePrice == null ? price = "0" : price = widget.savePrice;
+      this.widget.dateToPay == null ? dateSale = DateTime.now() : dateSale = DateTime.parse(widget.dateToPay);
+    });
   }
 
   TextEditingController getDataTextField(String txt) {
@@ -122,7 +147,7 @@ class _AddProductPageState extends State<AddProductPage> {
       _controller.value = _controller.value.copyWith(
         text: txt,
         selection:
-            TextSelection(baseOffset: txt.length, extentOffset: txt.length),
+        TextSelection(baseOffset: txt.length, extentOffset: txt.length),
         composing: TextRange.empty,
       );
     }
@@ -131,7 +156,9 @@ class _AddProductPageState extends State<AddProductPage> {
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
+    var size = MediaQuery
+        .of(context)
+        .size;
     return Scaffold(
       backgroundColor: Color(0xffEEEEEE),
       appBar: AppBar(
@@ -146,7 +173,7 @@ class _AddProductPageState extends State<AddProductPage> {
       ),
       body: SingleChildScrollView(
         child: Container(
-            // color: Colors.white,
+          // color: Colors.white,
             margin: EdgeInsets.only(
               top: 24,
             ),
@@ -155,6 +182,8 @@ class _AddProductPageState extends State<AddProductPage> {
                 Column(
                   children: [
                     txtAutoFillByPhone(
+                      enabled: widget.isChangeData == null ? true : false,
+                      controller: getDataTextField(phoneNewCustomer),
                       isCustomer: this.widget.isCustomer,
                       type: "phone",
                       tittle: "Điện thoại",
@@ -163,7 +192,7 @@ class _AddProductPageState extends State<AddProductPage> {
                       error: errorPhone,
                     ),
                     txtAutoFillByPhone(
-                      enabled: enabledFillName,
+                      enabled: widget.isChangeData == null ? enabledFillName : false,
                       isCustomer: this.widget.isCustomer,
                       controller: infomationCustomer == null
                           ? getDataTextField(nameNewCustomer)
@@ -184,7 +213,10 @@ class _AddProductPageState extends State<AddProductPage> {
                         _dropdownListProduct(),
                         _checkShowQuantity(),
                         Container(
-                          width: MediaQuery.of(context).size.width,
+                          width: MediaQuery
+                              .of(context)
+                              .size
+                              .width,
                           child: Wrap(
                             spacing: 5,
                             children: listQuantity
@@ -217,7 +249,9 @@ class _AddProductPageState extends State<AddProductPage> {
                         //Khi manager tạo hoá đơn thì mới có giá lúc bán để show
                         if (!widget.isCustomer)
                           _showMoneyOrQuantity("Thành tiền",
-                              "${getFormatPrice('${getPriceTotal(double.tryParse(price), degree, quantity)}')}đ"),
+                              "${getFormatPrice('${getPriceTotal(
+                                  double.tryParse(price), degree,
+                                  quantity)}')}đ"),
                       ]),
                     ),
                   ],
@@ -248,58 +282,58 @@ class _AddProductPageState extends State<AddProductPage> {
     return isCustomer
         ? Container()
         : Container(
-            color: Colors.white,
-            margin: EdgeInsets.only(top: 10, left: 10, right: 10),
-            child: TextField(
-              controller: controller,
-              // initialValue: this.widget.txt,
-              autocorrect: false,
-              obscureText: false,
-              enabled: enabled,
-              onSubmitted: (value) {
-                doOnSubmittedTextField(type, value);
-              },
-              maxLines: 1,
-              keyboardType: txtInputType,
-              // TextInputType.numberWithOptions(signed: true, decimal: true),
-              inputFormatters: [
-                txtInputType !=
-                        TextInputType.numberWithOptions(
-                            signed: true, decimal: true)
-                    ? FilteringTextInputFormatter.allow(
-                        RegExp(r'[ [a-zA-Z0-9]'))
-                    : FilteringTextInputFormatter.allow(RegExp(r'[[0-9]')),
-              ],
-              style: TextStyle(fontSize: 15),
-              cursorColor: Colors.red,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                ),
-                labelText: tittle,
-                labelStyle: TextStyle(color: Colors.black54),
-                contentPadding: EdgeInsets.only(top: 14, left: 10),
-                //Sau khi click vào "Nhập tiêu đề" thì màu viền sẽ đổi
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Color(0xFF0BB791),
-                  ),
-                ),
-                //Hiển thị Icon góc phải
-                suffixIcon: Icon(
-                  Icons.create,
-                  color: Colors.black54,
-                ),
-
-                //Hiển thị lỗi
-                focusedErrorBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.redAccent),
-                ),
-                //Nhận thông báo lỗi
-                errorText: error,
-              ),
+      color: Colors.white,
+      margin: EdgeInsets.only(top: 10, left: 10, right: 10),
+      child: TextField(
+        controller: controller,
+        // initialValue: this.widget.txt,
+        autocorrect: false,
+        obscureText: false,
+        enabled: enabled,
+        onSubmitted: (value) {
+          doOnSubmittedTextField(type, value);
+        },
+        maxLines: 1,
+        keyboardType: txtInputType,
+        // TextInputType.numberWithOptions(signed: true, decimal: true),
+        inputFormatters: [
+          txtInputType !=
+              TextInputType.numberWithOptions(
+                  signed: true, decimal: true)
+              ? FilteringTextInputFormatter.allow(
+              RegExp(r'[ [a-zA-Z0-9]'))
+              : FilteringTextInputFormatter.allow(RegExp(r'[[0-9]')),
+        ],
+        style: TextStyle(fontSize: 15),
+        cursorColor: Colors.red,
+        decoration: InputDecoration(
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(5.0)),
+          ),
+          labelText: tittle,
+          labelStyle: TextStyle(color: Colors.black54),
+          contentPadding: EdgeInsets.only(top: 14, left: 10),
+          //Sau khi click vào "Nhập tiêu đề" thì màu viền sẽ đổi
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Color(0xFF0BB791),
             ),
-          );
+          ),
+          //Hiển thị Icon góc phải
+          suffixIcon: Icon(
+            Icons.create,
+            color: Colors.black54,
+          ),
+
+          //Hiển thị lỗi
+          focusedErrorBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.redAccent),
+          ),
+          //Nhận thông báo lỗi
+          errorText: error,
+        ),
+      ),
+    );
   }
 
   Future<void> doOnSubmittedTextField(String type, String value) async {
@@ -358,32 +392,30 @@ class _AddProductPageState extends State<AddProductPage> {
     return checkProduct || widget.isCustomer
         ? Container()
         : _txtItemProduct(
-            context: context,
-            isQuantity: false,
-            hintText: 'Nhập số độ',
-            maxLines: 1,
-          );
+      context: context,
+      isQuantity: false,
+      hintText: 'Nhập số độ',
+      maxLines: 1,
+    );
   }
 
   Widget _checkShowQuantity() {
     return widget.isCustomer
         ? Container()
         : _txtItemProduct(
-            context: context,
-            hintText: 'Nhập số ký',
-            maxLines: 1,
-            isQuantity: true,
-          );
+      context: context,
+      hintText: 'Nhập số ký',
+      maxLines: 1,
+      isQuantity: true,
+    );
   }
 
-  Widget btnSave(
-    BuildContext context,
-    double width,
-    double height,
-    Color color,
-    String tittleButtonAlertDialog,
-    int indexOfBottomBar,
-  ) {
+  Widget btnSave(BuildContext context,
+      double width,
+      double height,
+      Color color,
+      String tittleButtonAlertDialog,
+      int indexOfBottomBar,) {
     return Container(
       height: height,
       width: width,
@@ -397,18 +429,19 @@ class _AddProductPageState extends State<AddProductPage> {
               if (widget.isCustomer) {
                 _myProduct == null
                     ? showCustomDialog(
-                        context,
-                        content: "Chưa chọn sản phẩm",
-                        isSuccess: false,
-                      )
+                  context,
+                  content: "Chưa chọn sản phẩm",
+                  isSuccess: false,
+                )
                     : Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => CreateInvoicePage(
-                                isNew: true,
-                                listProduct: listInforProduct,
-                                isCustomer: widget.isCustomer)),
-                      );
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          CreateInvoicePage(
+                              isNew: true,
+                              listProduct: listInforProduct,
+                              isCustomer: widget.isCustomer)),
+                );
               } else {
                 _validate();
               }
@@ -464,18 +497,20 @@ class _AddProductPageState extends State<AddProductPage> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => CreateInvoicePage(
-                    isNew: true,
-                    listProduct: listInforProduct,
-                    isCustomer: widget.isCustomer)));
+                builder: (context) =>
+                    CreateInvoicePage(
+                        isNew: true,
+                        listProduct: listInforProduct,
+                        isCustomer: widget.isCustomer)));
       } else if (!checkProduct && errorDegree == null) {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => CreateInvoicePage(
-                    isNew: true,
-                    listProduct: listInforProduct,
-                    isCustomer: widget.isCustomer)));
+                builder: (context) =>
+                    CreateInvoicePage(
+                        isNew: true,
+                        listProduct: listInforProduct,
+                        isCustomer: widget.isCustomer)));
       }
     }
   }
@@ -528,12 +563,12 @@ class _AddProductPageState extends State<AddProductPage> {
                         });
                       },
                       items: dataListProduct?.map((item) {
-                            return new DropdownMenuItem(
-                              child: new Text(item.name),
-                              //chuyen id de create
-                              value: item.id.toString(),
-                            );
-                          })?.toList() ??
+                        return new DropdownMenuItem(
+                          child: new Text(item.name),
+                          //chuyen id de create
+                          value: item.id.toString(),
+                        );
+                      })?.toList() ??
                           [],
                     ),
                   ),
@@ -582,12 +617,12 @@ class _AddProductPageState extends State<AddProductPage> {
                         });
                       },
                       items: dataListStore?.map((item) {
-                            return new DropdownMenuItem(
-                              child: new Text(item.name),
-                              //chuyen id de create
-                              value: item.id.toString(),
-                            );
-                          })?.toList() ??
+                        return new DropdownMenuItem(
+                          child: new Text(item.name),
+                          //chuyen id de create
+                          value: item.id.toString(),
+                        );
+                      })?.toList() ??
                           [],
                     ),
                   ),
@@ -631,7 +666,7 @@ class _AddProductPageState extends State<AddProductPage> {
         },
         maxLines: maxLines,
         keyboardType:
-            TextInputType.numberWithOptions(signed: true, decimal: true),
+        TextInputType.numberWithOptions(signed: true, decimal: true),
         inputFormatters: [
           FilteringTextInputFormatter.allow(RegExp(r'[.[0-9]')),
         ],
@@ -694,9 +729,9 @@ class _AddProductPageState extends State<AddProductPage> {
           ),
           child: Center(
               child: Text(
-            "$value",
-            style: TextStyle(color: Colors.white),
-          ))),
+                "$value",
+                style: TextStyle(color: Colors.white),
+              ))),
     );
   }
 
@@ -752,10 +787,20 @@ class _AddProductPageState extends State<AddProductPage> {
                     ];
                   });
                 },
+                ///Cái này là cái gì ???? ///
                 currentTime: dateNow,
-                maxTime: DateTime(DateTime.now().year + 100, 12, 31),
-                minTime: DateTime(DateTime.now().year, DateTime.now().month,
-                    DateTime.now().day),
+                /// ===================== ///
+                maxTime: DateTime(DateTime
+                    .now()
+                    .year + 100, 12, 31),
+                minTime: DateTime(DateTime
+                    .now()
+                    .year, DateTime
+                    .now()
+                    .month,
+                    DateTime
+                        .now()
+                        .day),
                 locale: LocaleType.vi,
               );
             },
@@ -819,7 +864,9 @@ class _AddProductPageState extends State<AddProductPage> {
             child: Container(
               alignment: Alignment.centerRight,
               child: Text(
-                '${"${getFormatPrice(price)}" == "0" ? "000.000" : getFormatPrice(price)}',
+                '${"${getFormatPrice(price)}" == "0"
+                    ? "000.000"
+                    : getFormatPrice(price)}',
                 style: TextStyle(fontSize: 16),
               ),
             ),

@@ -1,11 +1,9 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/getData.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
-import 'package:rtm_system/view/customer/home_customer_page.dart';
 import 'helpers.dart';
 
 // Hiện tại dùng cho trang "Profile"
@@ -247,12 +245,13 @@ Widget widgetCreateInvoice(context, bool isNew, List product,
 
 Widget _showComponetCreateInvoice(context, title, value, isCustomer) {
   if (!isCustomer) {
-    return txtItemDetail(context, '${title}́', '${value}');
+    return txtItemDetail(context, '$titlé', '$value');
   } else {
     return Container();
   }
 }
 
+///Hàm này đang bị dư không dùng thi xoá đi
 // ignore: missing_return
 Widget _showBtnInAdvanceDetail(context, String status) {
   if (status == 'active') {
@@ -289,6 +288,7 @@ Widget _showBtnInAdvanceDetail(context, String status) {
   }
 }
 
+///Hàm này đang bị dư không dùng thi xoá đi
 Widget _showContentInAdvance(context, String status) {
   if (status == 'active') {
     return Column(
@@ -472,7 +472,9 @@ Widget componentContainerDetailInvoice(BuildContext context,
         ),
         txtItemDetail(context, "Giá sản phẩm", "${getFormatPrice(price)}đ"),
         Container(
-          child: degree == 0 ? SizedBox(height: 1) : txtItemDetail(context, "Độ", "$degree"),
+          child: degree == 0
+              ? SizedBox(height: 1)
+              : txtItemDetail(context, "Độ", "$degree"),
         ),
         SizedBox(
           height: 10,
@@ -507,14 +509,15 @@ Widget componentContainerDetailInvoice(BuildContext context,
           height: 5,
         ),
         // chỗ này show btn accpet or reject của customer
-        _showBtnProcessInvoice(context, statusId, id, isCustomer,widgetToNavigator: widgetToNavigator),
+        _showBtnProcessInvoice(context, statusId, id, isCustomer,
+            widgetToNavigator: widgetToNavigator),
       ],
     ),
   );
 }
 
 Widget _showBtnProcessInvoice(context, int statusId, String id, bool isCustomer,
-    {bool isRequest, Widget widgetToNavigator}) {
+    {bool isRequest, Widget widgetToNavigator, Map<String, dynamic> map}) {
   var size = MediaQuery.of(context).size;
   //show button để xử lý hoàn thành đơn
   //status = 5 là cho customer sign invoice
@@ -566,6 +569,7 @@ Widget _showBtnProcessInvoice(context, int statusId, String id, bool isCustomer,
     if (isCustomer) {
       return SizedBox(
         width: size.width * 0.5,
+        // ignore: deprecated_member_use
         child: RaisedButton(
           color: Color(0xFF0BB791),
           onPressed: () {
@@ -590,7 +594,8 @@ Widget _showBtnProcessInvoice(context, int statusId, String id, bool isCustomer,
             child: RaisedButton(
               color: Colors.redAccent,
               onPressed: () {
-                doConfirmOrAcceptOrRejectInvoice(context, id, 3, isCustomer, widgetToNavigator: widgetToNavigator);
+                doConfirmOrAcceptOrRejectInvoice(context, id, 3, isCustomer,
+                    widgetToNavigator: widgetToNavigator);
               },
               child: Text(
                 'Từ chối',
@@ -607,7 +612,8 @@ Widget _showBtnProcessInvoice(context, int statusId, String id, bool isCustomer,
             child: RaisedButton(
               color: Color(0xFF0BB791),
               onPressed: () {
-                doConfirmOrAcceptOrRejectInvoice(context, id, 2, isCustomer);
+                doConfirmOrAcceptOrRejectInvoice(context, id, 2, isCustomer,
+                    isRequest: isRequest, map: map);
               },
               child: Text(
                 '${isRequest != null ? "Tạo" : "Chấp nhận"}',
@@ -799,13 +805,13 @@ Widget miniContainer(
         child: Container(
           height: height,
           width: width,
-        child: Center(
-          child: Padding(
-            padding: EdgeInsets.only(
-                left: paddingLeftOfText == null ? 0 : paddingLeftOfText,
-                right: paddingRightOfText == null ? 0 : paddingRightOfText,
-                bottom: paddingBottomOfText == null ? 0 : paddingBottomOfText,
-                top: paddingTopOfText == null ? 0 : paddingTopOfText),
+          child: Center(
+            child: Padding(
+              padding: EdgeInsets.only(
+                  left: paddingLeftOfText == null ? 0 : paddingLeftOfText,
+                  right: paddingRightOfText == null ? 0 : paddingRightOfText,
+                  bottom: paddingBottomOfText == null ? 0 : paddingBottomOfText,
+                  top: paddingTopOfText == null ? 0 : paddingTopOfText),
               child: AutoSizeText(
                 tittle,
                 style: GoogleFonts.roboto(
@@ -863,8 +869,6 @@ Widget containerTextInvoice({
 //Dùng cho trang chi tiết yêu cầu bán hàng
 Widget componentContainerInvoiceRequest(BuildContext context,
     {String id,
-    // String productId,
-    // String customerId,
     String customerName,
     String customerPhone,
     String productName,
@@ -874,6 +878,7 @@ Widget componentContainerInvoiceRequest(BuildContext context,
     String storeName,
     bool isRequest,
     bool isCustomer,
+    Map<String, dynamic> map,
     Widget widgetToNavigator}) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
@@ -910,9 +915,10 @@ Widget componentContainerInvoiceRequest(BuildContext context,
         SizedBox(
           height: 5,
         ),
-
-        isCustomer ? Container():_showBtnProcessInvoice(context, 4, id, isCustomer,
-            isRequest: isRequest, widgetToNavigator: widgetToNavigator),
+        isCustomer
+            ? Container()
+            : _showBtnProcessInvoice(context, 4, id, isCustomer,
+                isRequest: isRequest, widgetToNavigator: widgetToNavigator, map: map),
       ],
     ),
   );

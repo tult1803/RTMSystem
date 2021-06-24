@@ -14,8 +14,8 @@ import 'invoice/allInvoice_manager.dart';
 
 
 class HomeAdminPage extends StatefulWidget {
-  final int index;
-  HomeAdminPage({this.index});
+  final int index, indexInsidePage;
+  HomeAdminPage({this.index, this.indexInsidePage});
 
   @override
   _HomeAdminPageState createState() => _HomeAdminPageState();
@@ -34,7 +34,7 @@ class _HomeAdminPageState extends State<HomeAdminPage> {
     if (_index == 0) {
       _widget = AllProduct();
     } else if (_index == 1) {
-      _widget = AllInvoice();
+      _widget = AllInvoice(index: widget.indexInsidePage,);
     } else if (_index == 2) {
       _widget = AllDebt();
     } else if (_index == 3) {

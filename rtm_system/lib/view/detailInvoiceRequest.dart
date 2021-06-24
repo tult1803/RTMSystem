@@ -39,6 +39,7 @@ class _DetailInvoiceRequestState extends State<DetailInvoiceRequest> {
             sellDate: this.widget.map["sell_date"],
             productName: this.widget.map["product_name"],
             price: "${this.widget.map["price"]}",
+            map: this.widget.map,
             isCustomer: widget.isCustomer,
             isRequest: widget.isRequest,
             widgetToNavigator: this.widget.widgetToNavigator,
