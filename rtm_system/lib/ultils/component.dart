@@ -965,9 +965,7 @@ Widget componentContainerDetailInvoiceRequest(BuildContext context,
         SizedBox(
           height: 10,
         ),
-        _showBtnProcessInvoice(context, 0, id, isCustomer),
-
-        // chỗ này show btn accpet or reject của customer
+        // chỗ này show btn  của manager
       ],
     ),
   );

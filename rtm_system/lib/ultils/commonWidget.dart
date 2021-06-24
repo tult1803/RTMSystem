@@ -482,7 +482,6 @@ Widget boxForInvoiceRequest(
     Widget widget,
     bool isCustomer}) {
   String dateAfterFormat, dateSellAfterFormat, totalAfterFormat;
-
   try {
     totalAfterFormat = "${getFormatPrice(price)} đ";
     dateAfterFormat = "${getDateTime(date)}";
