@@ -15,12 +15,10 @@ class InvoiceTab extends StatefulWidget {
 DateTime fromDate;
 DateTime toDate;
 
-class _InvoiceTabState extends State<InvoiceTab>
-    with TickerProviderStateMixin {
+class _InvoiceTabState extends State<InvoiceTab> with TickerProviderStateMixin {
   TabController _tabController;
   String getFromDate, getToDate;
   int index, _selectedIndex;
-
   @override
   void initState() {
     super.initState();
@@ -92,53 +90,32 @@ class _InvoiceTabState extends State<InvoiceTab>
               )
           ),
           //Show invoice processing
-          Container(
-              height: size.height,
-              margin: EdgeInsets.only(left: 5, top: 12, right: 5),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    rowButtonDatetime(),
-                    new showAllInvoicePage(4, fromDate: getFromDate, toDate: getToDate),
-                  ],
-                ),
-              )
-          ),
+          containerInvoice(size.height, 4),
           //Show invoice deposit
-          Container(
-            height: size.height,
-            margin: EdgeInsets.only(left: 5, top: 12, right: 5),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  rowButtonDatetime(),
-                  new showAllInvoicePage(5, fromDate: getFromDate, toDate: getToDate),
-                ],
-              ),
-            )
-          ),
+          containerInvoice(size.height, 5),
           //Show sale's invoice: -1 ( done, undone, actice)
-          Container(
-              height: size.height,
-              margin: EdgeInsets.only(left: 5, top: 12, right: 5),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    rowButtonDatetime(),
-                    new showAllInvoicePage(-1, fromDate: getFromDate, toDate: getToDate),
-                  ],
-                ),
-              )
-          ),
+          containerInvoice(size.height, -1),
         ],
       ),
       floatingActionButton: _showFloatBtn(_selectedIndex),
     );
   }
-
+  //show invoice
+  Widget containerInvoice(height, status){
+    return  Container(
+        height: height,
+        margin: EdgeInsets.only(left: 5, top: 12, right: 5),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              rowButtonDatetime(),
+              new showAllInvoicePage(status, fromDate: getFromDate, toDate: getToDate),
+            ],
+          ),
+        )
+    );
+  }
   Widget _showFloatBtn(index){
     //index = 2 là tab thứ 2 "Ký gửi"
     if(index == 2 ){

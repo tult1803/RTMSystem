@@ -1,8 +1,9 @@
+import 'dart:io';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:intl/intl.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:rtm_system/ultils/alertDialog.dart';
 import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/helpers.dart';
@@ -10,11 +11,8 @@ import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/ultils/src/messageList.dart';
 import 'package:rtm_system/ultils/src/regExp.dart';
 import 'package:rtm_system/view/customer/advance/confirm_create_request_advance.dart';
-import 'package:rtm_system/view/customer/home_customer_page.dart';
 
 class CreateRequestAdvance extends StatefulWidget {
-  const CreateRequestAdvance({Key key}) : super(key: key);
-
   @override
   _CreateRequestAdvanceState createState() => _CreateRequestAdvanceState();
 }
@@ -22,10 +20,11 @@ class CreateRequestAdvance extends StatefulWidget {
 final _formKey = GlobalKey<FormState>();
 
 class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
-  final f = new DateFormat('dd/MM/yyyy');
   String money;
   DateTime createDate;
   List listInfor;
+  var resultImage;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -34,6 +33,61 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
     });
   }
 
+  File _image;
+
+  //get image from camera
+  _imageFromCamera() async {
+    PickedFile image = await ImagePicker()
+        .getImage(source: ImageSource.camera, imageQuality: 50);
+    if (image != null) {
+      setState(() {
+        _image = File(image.path);
+      });
+    }
+  }
+
+  //get image from gallery
+  _imageFromGallery() async {
+    PickedFile image = await ImagePicker()
+        .getImage(source: ImageSource.gallery, imageQuality: 50);
+    if (image != null) {
+      setState(() {
+        _image = File(image.path);
+      });
+    }
+  }
+
+  // show option choice camera or gallery
+  void showPicker(context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc) {
+          return SafeArea(
+              child: Wrap(
+            children: [
+              ListTile(
+                leading: Icon(Icons.photo_library),
+                title: Text('Gallery'),
+                onTap: () {
+                  _imageFromGallery();
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.camera_alt),
+                title: Text('Camera'),
+                onTap: () {
+                  _imageFromCamera();
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          ));
+        });
+  }
+
+  //Hiện tại khi nhập giá tiền mà k outFocus mà chọn camera thì keyboard vẫn show,
+  //và k tắt được, có lẽ nên đổi keyboard. Tuy nhiên keyboard_actions k gọi dk KeyboardActions.
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -52,9 +106,7 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
       body: SingleChildScrollView(
         child: Container(
             color: Colors.white,
-            margin: EdgeInsets.only(
-              top: 50,
-            ),
+            margin: EdgeInsets.only(top: 50, bottom: 24),
             child: Column(
               children: [
                 Column(
@@ -70,12 +122,13 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
                 SizedBox(
                   height: 10,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    btnCreate(context, size.width *0.7, size.height *0.045, primaryColor,
-                        "Tạo", "yêu cầu ứng tiền", 1),
-                  ],
+                Container(
+                  child: Column(
+                    children: [
+                      btnImage(context, size.width * 0.9, size.height * 0.1),
+                      showImage(size.width, size.height, _image),
+                    ],
+                  ),
                 ),
                 SizedBox(
                   height: 10,
@@ -83,49 +136,108 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
               ],
             )),
       ),
-    );
-  }
-// use to create or cancel in create request advance/ invoice
-  Widget btnCreate(
-      BuildContext context,
-      double width,
-      double height,
-      Color color,
-      String tittleButtonAlertDialog,
-      String contentFeature,
-      int indexOfBottomBar,) {
-    return Container(
-      height: height,
-      width: width,
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(10),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          if (_formKey.currentState.validate()) {
+            if (_image != null) {
+              //call api post
+              int status = 200;
+              // await postAPIAdvance(money, dateSale);
+              if (status == 200) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ConfirmCreateRequestAdvance(
+                        listInfor: listInfor,
+                        isCustomer: true,
+                        type: 1,
+                      )),
+                );
+              } else {
+                showStatusAlertDialog(
+                    context, showMessage(MSG024, MSG027), null, false);
+              }
+            } else {
+              showStatusAlertDialog(
+                  context, showMessage("CMND", MSG001), null, false);
+            }
+          }
+        },
+        label: Text('Nhận tiền', style: TextStyle(
+          color: Colors.white,
+        ),),
+        backgroundColor: primaryColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(50.0),
+        ),
+        elevation: 10,
       ),
-      child: FlatButton(
-          onPressed: () async {
-                if (_formKey.currentState.validate()) {
-                  //call api post
-                  int status = 200;
-                  // await postAPIAdvance(money, dateSale);
-                  if (status == 200) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ConfirmRequestAdvance(listInfor: listInfor, isCustomer: true,)),
-                    );
-                  } else
-                    showStatusAlertDialog(
-                        context, showMessage(MSG024, MSG027), null, false);
-                }
-          },
-          child: Center(
-              child: AutoSizeText(
-                tittleButtonAlertDialog,
-                style: TextStyle(
-                    color: Colors.white, fontWeight: FontWeight.w500),
-              ))),
     );
   }
+
+//show hinh anh da chon , có setState nên k tách dk
+  Widget showImage(width, height, image) {
+    if (image != null) {
+      setState(() {
+        this.listInfor = [
+          this.money,
+          getDateTime(this.createDate.toString(),
+              dateFormat: 'yyyy-MM-dd'),
+          _image.path
+        ];
+      });
+      return Container(
+        margin: EdgeInsets.only(top: 12),
+        width: width,
+        height: height * 0.3,
+        child: Image.file(image, fit: BoxFit.scaleDown),
+      );
+    } else {
+      return Container();
+    }
+  }
+  // //btn load image
+  Widget btnImage(context, width, height) {
+    return SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              AutoSizeText("Thêm hình CMND", style: TextStyle(
+                fontWeight: FontWeight.w500,
+              )),
+              SizedBox(
+                height: 12,
+              ),
+              Container(
+                width: width,
+                height: height,
+                child: ElevatedButton(
+                  onPressed: () {
+                    showPicker(context);
+
+                  },
+                  child: Center(
+                    child: Icon(
+                      Icons.camera_alt,
+                      color: Colors.black,
+                    ),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                      side: BorderSide(color: Color(0xFFcccccc), width: 1),
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ));
+  }
+  // form để nhập số tiền
   Widget _formMoney(
       bool obscureText, String hintText, String tittle, TextInputType txtType) {
     return Form(
@@ -152,10 +264,9 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
           obscureText: obscureText,
           onChanged: (value) {
             this.money = value;
-            this.listInfor=[
-                this.money,
-               getDateTime(this.createDate.toString(), dateFormat: 'yyyy-MM-dd'),
-                //image
+            this.listInfor = [
+              this.money,
+              getDateTime(this.createDate.toString(), dateFormat: 'yyyy-MM-dd'),
             ];
           },
           // style: TextStyle(fontSize: 16),
@@ -189,7 +300,7 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
       ),
     );
   }
-
+  //Chọn ngày
   Widget btnDateSale(context) {
     var size = MediaQuery.of(context).size;
     return Container(
@@ -206,13 +317,14 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
                     createDate = date;
                     this.listInfor = [
                       this.money,
-                      getDateTime(this.createDate.toString(), dateFormat: 'yyyy-MM-dd'),
-                      //image
+                      getDateTime(this.createDate.toString(),
+                          dateFormat: 'yyyy-MM-dd'),
                     ];
                   });
                 },
                 currentTime: createDate,
                 maxTime: DateTime(DateTime.now().year + 100, 12, 31),
+                // yêu cầu ứng tiền chỉ từ ngày hiện tại tới tương lai chứ trong quá khứ k có
                 minTime: DateTime(DateTime.now().year, DateTime.now().month,
                     DateTime.now().day),
                 locale: LocaleType.vi,
@@ -225,10 +337,14 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
                   margin: EdgeInsets.only(left: 15),
                   child: AutoSizeText(
                     "Ngày ứng tiền",
-                    style: TextStyle(fontWeight: FontWeight.w500,),
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
-                SizedBox(width: 20,),
+                SizedBox(
+                  width: 20,
+                ),
                 Expanded(
                   child: Text(
                     '${getDateTime(createDate.toString(), dateFormat: 'dd-MM-yyyy')}',

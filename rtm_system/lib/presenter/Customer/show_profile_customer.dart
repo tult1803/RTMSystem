@@ -47,17 +47,13 @@ class _showProfileState extends State<showProfile> {
         if (snapshot.hasData) {
           DateTime date = infomationCustomer.birthday;
           final f = new DateFormat('dd-MM-yyyy');
-          //show gender
+          //show gender vì trong đây mới có data để set
           infomationCustomer.gender == 0
               ? genderShow = 'Nữ'
               : genderShow = 'Nam';
           return SingleChildScrollView(
-
             child: Column(
               children: [
-                SizedBox(
-                  height: 10,
-                ),
                 Container(
                   width: size.width * 0.5,
                   height: size.height * 0.16,
@@ -118,7 +114,10 @@ class _showProfileState extends State<showProfile> {
                           context, this.password, infomationCustomer.accountId, true),
                     ],
                   ),
-                )
+                ),
+                SizedBox(
+                  height: 12,
+                ),
               ],
             ),
           );

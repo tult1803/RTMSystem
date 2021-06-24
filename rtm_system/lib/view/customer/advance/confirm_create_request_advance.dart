@@ -3,20 +3,22 @@ import 'package:rtm_system/model/getAPI_product.dart';
 import 'package:rtm_system/model/model_product.dart';
 import 'package:rtm_system/ultils/component.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-class ConfirmRequestAdvance extends StatefulWidget {
-  const ConfirmRequestAdvance({Key key, this.listInfor,
-    this.isCustomer}): super(key: key);
+class ConfirmCreateRequestAdvance extends StatefulWidget {
+  const ConfirmCreateRequestAdvance({Key key, this.listInfor,
+    this.isCustomer, this.type}): super(key: key);
   final List listInfor;
   final bool isCustomer;
+  //1 is create, 2 is confirm : customer
+  final int type;
   @override
-  _ConfirmRequestAdvanceState createState() => _ConfirmRequestAdvanceState();
+  _ConfirmCreateRequestAdvanceState createState() => _ConfirmCreateRequestAdvanceState();
 }
 
-class _ConfirmRequestAdvanceState extends State<ConfirmRequestAdvance> {
+class _ConfirmCreateRequestAdvanceState extends State<ConfirmCreateRequestAdvance> {
   String token, personSale = '', phoneSale = '', nameProduct;
   DateTime date = DateTime.now();
   List<DataProduct> dataListProduct = [];
+
   Future _getProduct() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -60,6 +62,7 @@ class _ConfirmRequestAdvanceState extends State<ConfirmRequestAdvance> {
     // TODO: implement initState
     super.initState();
     _getProduct();
+    print(widget.listInfor[2]);
   }
 
   @override
@@ -77,7 +80,7 @@ class _ConfirmRequestAdvanceState extends State<ConfirmRequestAdvance> {
         ),
       ),
       body: widgetCreateAdvance( context, widget.listInfor, nameProduct,
-          personSale, phoneSale, widget.isCustomer),
+          personSale, phoneSale, widget.type, widget.isCustomer),
     );
   }
 }

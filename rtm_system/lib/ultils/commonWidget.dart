@@ -201,7 +201,8 @@ Widget btnDateTimeForCustomer(
             style: TextStyle(color: Colors.black),
           ),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
+            borderRadius: BorderRadius.circular(15.0),
+            side: BorderSide(color: Color(0xFFcccccc), width: 1),
           ),
           elevation: 5,
         ),
@@ -471,16 +472,16 @@ Widget boxForInvoice(
 //show các yêu cầu bán hàng
 Widget boxForInvoiceRequest(
     {BuildContext context,
-      String id,
-      String name,
-      String product,
-      String price,
-      String date,
-      String sell_date,
-      int status,
-      Widget widget,
-      bool isCustomer}) {
-  String dateAfterFormat, dateSellAfterFormat,totalAfterFormat;
+    String id,
+    String name,
+    String product,
+    String price,
+    String date,
+    String sell_date,
+    int status,
+    Widget widget,
+    bool isCustomer}) {
+  String dateAfterFormat, dateSellAfterFormat, totalAfterFormat;
 
   try {
     totalAfterFormat = "${getFormatPrice(price)} đ";
@@ -542,7 +543,7 @@ Widget boxForInvoiceRequest(
               tittle: name,
               fontWeight: FontWeight.w700,
             ),
-          if(isCustomer)
+          if (isCustomer)
             containerTextInvoice(
               alignment: Alignment.topLeft,
               paddingLeftOfText: 10,
@@ -557,23 +558,23 @@ Widget boxForInvoiceRequest(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    !isCustomer?
-                   containerTextInvoice(
-                      marginTop: 2,
-                      alignment: Alignment.topLeft,
-                      paddingLeftOfText: 10,
-                      paddingRightOfText: 10,
-                      tittle: "Sản phẩm: $product",
-                      fontWeight: FontWeight.w400,
-                    )
+                    !isCustomer
+                        ? containerTextInvoice(
+                            marginTop: 2,
+                            alignment: Alignment.topLeft,
+                            paddingLeftOfText: 10,
+                            paddingRightOfText: 10,
+                            tittle: "Sản phẩm: $product",
+                            fontWeight: FontWeight.w400,
+                          )
                         : containerTextInvoice(
-                      marginTop: 2,
-                      alignment: Alignment.topLeft,
-                      paddingLeftOfText: 10,
-                      paddingRightOfText: 10,
-                      tittle: "Ngày sẽ tới bán: $dateSellAfterFormat",
-                      fontWeight: FontWeight.w400,
-                    )
+                            marginTop: 2,
+                            alignment: Alignment.topLeft,
+                            paddingLeftOfText: 10,
+                            paddingRightOfText: 10,
+                            tittle: "Ngày sẽ tới bán: $dateSellAfterFormat",
+                            fontWeight: FontWeight.w400,
+                          )
                   ],
                 ),
               ),
@@ -598,6 +599,7 @@ Widget boxForInvoiceRequest(
     ),
   );
 }
+
 //Dùng cho trang Quản lý hóa đơn và để show các hóa đơn
 Widget boxForProduct(
     {BuildContext context,
@@ -882,6 +884,7 @@ Widget btnLogout(context) {
     ),
   );
 }
+
 //show btn dùng để cập nhật thông tin
 Widget btnUpdateInfo(
     context,
@@ -1242,3 +1245,5 @@ Widget containerStores(BuildContext context, String name, String address,
     ),
   );
 }
+
+

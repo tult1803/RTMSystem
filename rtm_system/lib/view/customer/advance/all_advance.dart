@@ -5,7 +5,6 @@ import 'package:rtm_system/presenter/Customer/show_invoice_request.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/helpers.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
-import 'package:rtm_system/view/customer/UploadImage.dart';
 import 'package:rtm_system/view/customer/advance/create_request_advance.dart';
 import 'package:rtm_system/view/customer/getMoney_or_payDebt.dart';
 class AdvancePage extends StatefulWidget {
@@ -22,36 +21,25 @@ class _AdvancePageState extends State<AdvancePage>
   TabController _tabController;
   final PageController _pageController = PageController();
   String getFromDate, getToDate;
+  //index on Tab
   int index, _selectedIndex;
 
   @override
   void initState() {
     super.initState();
-    cameraD();
     _tabController = TabController(length: 3, vsync: this);
     _tabController.addListener(() {
       setState(() {
         _selectedIndex = _tabController.index;
       });
     });
+    //tab 1: yeu cau
     index = 0;
     toDate = DateTime.now();
     fromDate = DateTime.now().subtract(Duration(days: 30));
     getFromDate =
     "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
     getToDate = "${getDateTime("$toDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
-  }
-  CameraDescription camera;
-  Future<void> cameraD() async {
-    // Ensure that plugin services are initialized so that `availableCameras()`
-    WidgetsFlutterBinding.ensureInitialized();
-
-    // Obtain a list of the available cameras on the device.
-    final cameras = await availableCameras();
-
-    // Get a specific camera from the list of available cameras.
-    final firstCamera = cameras.first;
-    camera = firstCamera;
   }
   @override
   Widget build(BuildContext context) {
@@ -98,41 +86,29 @@ class _AdvancePageState extends State<AdvancePage>
                 ),
               )
           ),
-          Container(
-              height: size.height,
-              margin: EdgeInsets.only(left: 5, top: 12, right: 5),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    rowButtonDatetime(),
-                    RaisedButton(onPressed: (){
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => TakePictureScreen(camera: camera,)),
-                      );
-                    }),
-                    new showAllInvoicePage(4, fromDate: getFromDate, toDate: getToDate),
-                  ],
-                ),
-              )
-          ),
-          Container(
-              height: size.height,
-              margin: EdgeInsets.only(left: 5, top: 12, right: 5),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    rowButtonDatetime(),
-                    new showAllInvoicePage(4, fromDate: getFromDate, toDate: getToDate),
-                  ],
-                ),
-              )
-          ),
+          //Show advance processing
+          containerInvoice(size.height, 4),
+          //Show advance done and active
+          containerInvoice(size.height, 5),
         ],
       ),
       floatingActionButton: _showFloatBtn(_selectedIndex),
+    );
+  }
+  //show invoice advance
+  Widget containerInvoice(height, status){
+    return  Container(
+        height: height,
+        margin: EdgeInsets.only(left: 5, top: 12, right: 5),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              rowButtonDatetime(),
+              new showAllInvoicePage(status, fromDate: getFromDate, toDate: getToDate),
+            ],
+          ),
+        )
     );
   }
   Widget _showFloatBtn(index){
@@ -143,7 +119,6 @@ class _AdvancePageState extends State<AdvancePage>
             context,
             MaterialPageRoute(builder: (context) => GetMoneyOrPayDebt(isPay: true,)),
           );
-
         },
         label: Text('Trả nợ', style: TextStyle(
           color: Colors.white,

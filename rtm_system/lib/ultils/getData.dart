@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rtm_system/model/PostCreateRequestInvoice.dart';
+import 'package:rtm_system/model/postAPI_Image.dart';
 import 'package:rtm_system/model/postAPI_createCustomer.dart';
 import 'package:rtm_system/model/postAPI_createNotice.dart';
 import 'package:rtm_system/model/profile_customer/getAPI_customer_phone.dart';
@@ -266,11 +267,15 @@ Future<void> doConfirmOrAcceptOrRejectInvoice(
 Future<void> doCreateRequestAdvance(
     BuildContext context, String accountId, String money, date, image, int type, bool isCustomer) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  int status;
+  int status = 200;
   if (isCustomer) {
     // 1 is create request advance, 2 is accept advance
     if (type == 1) {
-     //call API
+      //gọi hàm tạo trước, sau đó gọi api insert image sau, không chờ API của imageService mà vẫn làm tiếp
+      //tránh trường hợp firebase lỗi mà không gửi được.
+      ImageService imageService = ImageService();
+      int result = await imageService.uploadFile(
+          prefs.get("access_token"), prefs.get("accountId"), image);
     } else if (type == 2) {
      //Call API
     }

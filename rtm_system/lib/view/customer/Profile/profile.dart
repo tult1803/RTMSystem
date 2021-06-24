@@ -15,13 +15,10 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: backgroundColor,
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(1.0),
-        child: AppBar(
-          backgroundColor: primaryColor,
-          elevation: 0,
-        ),
-      ),
+      appBar: AppBar(
+        backgroundColor: primaryColor,
+        centerTitle: true,
+        title: const Text('Thông tin cá nhân', style: TextStyle( color: Colors.white),),),
       body: showProfile(),
     );
   }

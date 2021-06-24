@@ -1009,9 +1009,9 @@ Widget componentContainerDetailAdvanceRequest(BuildContext context,
   );
 }
 
-//nội dung của bill, đang dùng: create advance
+//nội dung của bill, đang dùng: create advance and confirm advance
 Widget widgetCreateAdvance(context, List item, String nameProduct, String name,
-    String phone, bool isCustomer) {
+    String phone, int type, bool isCustomer) {
   var size = MediaQuery.of(context).size;
   return SingleChildScrollView(
       child: Container(
@@ -1044,6 +1044,9 @@ Widget widgetCreateAdvance(context, List item, String nameProduct, String name,
                 SizedBox(
                   height: 10,
                 ),
+                //có thể sẽ thêm data ở đây
+
+                //khi nào có api sẽ tách chỗ này ra thành 1 hàm để gọi các btn khác nhau
                 SizedBox(
                   width: size.width * 0.4,
                   // ignore: deprecated_member_use
@@ -1051,7 +1054,7 @@ Widget widgetCreateAdvance(context, List item, String nameProduct, String name,
                     color: Color(0xFF0BB791),
                     onPressed: () {
                       doCreateRequestAdvance(context, 'TK-111', item[0],
-                          item[1], 'image', 1, true);
+                          item[1], item[2], type, true);
                     },
                     child: AutoSizeText(
                       'Xác nhận',
