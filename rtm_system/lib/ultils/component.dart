@@ -524,6 +524,7 @@ Widget _showBtnProcessInvoice(context, int statusId, String id, bool isCustomer,
     {bool isRequest, Widget widgetToNavigator, Map<String, dynamic> map}) {
   var size = MediaQuery.of(context).size;
   //show button để xử lý hoàn thành đơn
+  //status = 0 là cho customer xoá hoá đơn gửi yêu cầu.
   //status = 5 là cho customer sign invoice
   // status = 1 là manager confirm
   // status = 4 là accept or delete invoice. Customer: only accept NOT Reject.
@@ -533,7 +534,7 @@ Widget _showBtnProcessInvoice(context, int statusId, String id, bool isCustomer,
         width: size.width * 0.5,
         // ignore: deprecated_member_use
         child: RaisedButton(
-          color: Color(0xFF0BB791),
+          color: primaryColor,
           onPressed: () {
             doConfirmOrAcceptOrRejectInvoice(context, id, 1, isCustomer);
           },
@@ -552,7 +553,7 @@ Widget _showBtnProcessInvoice(context, int statusId, String id, bool isCustomer,
         width: size.width * 0.5,
         // ignore: deprecated_member_use
         child: RaisedButton(
-          color: Color(0xFF0BB791),
+          color: primaryColor,
           onPressed: () {
             doConfirmOrAcceptOrRejectInvoice(context, id, 1, isCustomer);
           },
@@ -575,7 +576,7 @@ Widget _showBtnProcessInvoice(context, int statusId, String id, bool isCustomer,
         width: size.width * 0.5,
         // ignore: deprecated_member_use
         child: RaisedButton(
-          color: Color(0xFF0BB791),
+          color: primaryColor,
           onPressed: () {
             doConfirmOrAcceptOrRejectInvoice(context, id, 2, isCustomer);
           },
@@ -632,7 +633,26 @@ Widget _showBtnProcessInvoice(context, int statusId, String id, bool isCustomer,
         ],
       );
     }
-  } else {
+  } else if(statusId == 0){
+    return SizedBox(
+      width: size.width * 0.5,
+      // ignore: deprecated_member_use
+      child: RaisedButton(
+        color: Colors.redAccent,
+        onPressed: () {
+          //call api xoa yeu cau
+        },
+        child: Text(
+          'Xoá yêu cầu',
+          style: TextStyle(color: Colors.white, fontSize: 16),
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        elevation: 10,
+      ),
+    );
+  }else  {
     return Container();
   }
 }
@@ -920,7 +940,8 @@ Widget componentContainerInvoiceRequest(BuildContext context,
           height: 5,
         ),
         isCustomer
-            ? Container()
+            ? _showBtnProcessInvoice(context, 0, id, isCustomer,
+            isRequest: isRequest, widgetToNavigator: widgetToNavigator, map: map)
             : _showBtnProcessInvoice(context, 4, id, isCustomer,
                 isRequest: isRequest, widgetToNavigator: widgetToNavigator, map: map),
       ],

@@ -46,6 +46,7 @@ class _InvoiceTabState extends State<InvoiceTab> with TickerProviderStateMixin {
         centerTitle: true,
         title: const Text('Hoá đơn', style: TextStyle( color: Colors.white),),
         bottom: TabBar(
+          labelPadding: EdgeInsets.symmetric(horizontal: 8.0),
           indicatorColor: primaryColor,
           isScrollable: true,
           labelColor: Colors.white,
@@ -53,7 +54,7 @@ class _InvoiceTabState extends State<InvoiceTab> with TickerProviderStateMixin {
           controller: _tabController,
           tabs: <Widget>[
             Tab(
-              text: 'Yêu cầu',
+              text: 'Gửi yêu cầu',
               icon: Icon(Icons.post_add_outlined,),
             ),
             Tab(
