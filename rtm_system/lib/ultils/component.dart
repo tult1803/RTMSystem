@@ -925,54 +925,6 @@ Widget componentContainerInvoiceRequest(BuildContext context,
     ),
   );
 }
-//
-// //Dùng cho trang chi tiết yêu cầu hoá đơn
-// Widget componentContainerDetailInvoiceRequest(BuildContext context,
-//     {String id,
-//     String customerName,
-//     String customerPhone,
-//     String productName,
-//     String price,
-//     String createDate,
-//     String sellDate,
-//     bool isCustomer}) {
-//   return Padding(
-//     padding: const EdgeInsets.all(8.0),
-//     child: Column(
-//       children: [
-//         txtItemDetail(context, "ID đơn", "$id"),
-//         SizedBox(
-//           height: 10,
-//         ),
-//         txtItemDetail(
-//             context, "Ngày tạo yêu cầu", "${getDateTime(createDate)}"),
-//         SizedBox(
-//           height: 10,
-//         ),
-//         txtItemDetail(context, "Người tạo", "$customerName",
-//             subContent: customerPhone),
-//         SizedBox(
-//           height: 10,
-//         ),
-//         txtItemDetail(context, "Tên sản phẩm", "$productName"),
-//         SizedBox(
-//           height: 10,
-//         ),
-//         txtItemDetail(context, "Giá sản phẩm", "${getFormatPrice(price)}đ"),
-//         SizedBox(
-//           height: 10,
-//         ),
-//         txtItemDetail(context, "Ngày đến bán", "${getDateTime(sellDate)}"),
-//         SizedBox(
-//           height: 10,
-//         ),
-//         _showBtnProcessInvoice(context, 0, id, isCustomer),
-//
-//         // chỗ này show btn accpet or reject của customer
-//       ],
-//     ),
-//   );
-// }
 
 //Dùng cho trang chi tiết yêu cầu advance
 Widget componentContainerDetailAdvanceRequest(BuildContext context,
