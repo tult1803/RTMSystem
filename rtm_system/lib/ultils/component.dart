@@ -539,7 +539,7 @@ Widget _showBtnProcessInvoice(context, int statusId, String id, bool isCustomer,
             doConfirmOrAcceptOrRejectInvoice(context, id, 1, isCustomer);
           },
           child: Text(
-            'Xác nhận',
+            'Nhận tiền',
             style: TextStyle(color: Colors.white, fontSize: 16),
           ),
           shape: RoundedRectangleBorder(

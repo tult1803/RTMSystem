@@ -23,7 +23,6 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
   String money;
   DateTime createDate;
   List listInfor;
-  var resultImage;
 
   @override
   void initState() {
@@ -183,7 +182,7 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
           this.money,
           getDateTime(this.createDate.toString(),
               dateFormat: 'yyyy-MM-dd'),
-          _image.path
+          _image
         ];
       });
       return Container(

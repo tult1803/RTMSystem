@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:rtm_system/model/PostCreateRequestInvoice.dart';
 import 'package:rtm_system/model/postAPI_Image.dart';
@@ -274,8 +275,9 @@ Future<void> doCreateRequestAdvance(
       //gọi hàm tạo trước, sau đó gọi api insert image sau, không chờ API của imageService mà vẫn làm tiếp
       //tránh trường hợp firebase lỗi mà không gửi được.
       ImageService imageService = ImageService();
-      int result = await imageService.uploadFile(
+      Response result = await imageService.uploadFile(
           prefs.get("access_token"), prefs.get("accountId"), image);
+      print(result.statusCode);
     } else if (type == 2) {
      //Call API
     }
