@@ -129,7 +129,6 @@ class _AddProductPageState extends State<AddProductPage> {
 
   Future<void> _checkDataFromRequest() {
     setState(() {
-      print(this.widget.dateToPay);
       this.widget.phone == null
           ? phoneNewCustomer = ""
           : phoneNewCustomer = widget.phone;
@@ -139,7 +138,10 @@ class _AddProductPageState extends State<AddProductPage> {
       this.widget.storeId == null ? _myStore = null : _myStore = widget.storeId;
       this.widget.productId == null
           ? _myProduct = null
-          : _myProduct = widget.productId;
+          : widget.productId == "SP-1000003"
+              // ignore: unnecessary_statements
+              ? {_myProduct = widget.productId, checkProduct = false}
+              : _myProduct = widget.productId;
       this.widget.savePrice == null ? price = "0" : price = widget.savePrice;
       this.widget.dateToPay == null
           ? dateSale = DateTime.now()
@@ -226,7 +228,7 @@ class _AddProductPageState extends State<AddProductPage> {
                           ),
                         ),
                         SizedBox(
-                          height: 10,
+                          height: 20,
                         ),
                         _checkShowDegree(),
                         SizedBox(
@@ -257,7 +259,7 @@ class _AddProductPageState extends State<AddProductPage> {
                 SizedBox(
                   height: 10,
                 ),
-                btnSave(context, size.width * 0.7, size.height * 0.05,
+                btnSave(context, 200, 40,
                     Color(0xFF0BB791), "Tạo", 1),
                 SizedBox(
                   height: 10,
@@ -722,13 +724,20 @@ class _AddProductPageState extends State<AddProductPage> {
           width: 60,
           height: 30,
           decoration: BoxDecoration(
-            color: Colors.black26,
+            color: Colors.white,
             borderRadius: BorderRadius.circular(5),
+            boxShadow: [
+              BoxShadow(
+                color:Colors.black54,
+                blurRadius: 1,
+                offset: Offset(1, 1), // Shadow position
+              ),
+            ],
           ),
           child: Center(
               child: Text(
             "$value",
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(color: Colors.black),
           ))),
     );
   }
@@ -770,7 +779,7 @@ class _AddProductPageState extends State<AddProductPage> {
           ),
           GestureDetector(
             onTap: () {
-              if(widget.dateToPay == null){
+              if (widget.dateToPay == null) {
                 DatePicker.showDatePicker(
                   context,
                   showTitleActions: true,
