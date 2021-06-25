@@ -4,7 +4,8 @@ import 'package:rtm_system/ultils/component.dart';
 class DetailInvoice extends StatefulWidget {
   final Map<String, dynamic> map;
   final bool isCustomer;
-  DetailInvoice({this.map, this.isCustomer});
+  final Widget widgetToNavigator;
+  DetailInvoice({this.map, this.isCustomer, this.widgetToNavigator});
   @override
   _DetailInvoiceState createState() => _DetailInvoiceState();
 }
@@ -43,6 +44,7 @@ class _DetailInvoiceState extends State<DetailInvoice> {
               managerId: this.widget.map["manager_id"],
               activeDate: this.widget.map["active_date"],
               isCustomer: widget.isCustomer,
+              widgetToNavigator: this.widget.widgetToNavigator,
           ),
         ),
       ),

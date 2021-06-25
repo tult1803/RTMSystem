@@ -9,7 +9,8 @@ import 'package:rtm_system/view/manager/home_manager_page.dart';
 
 // ignore: camel_case_types
 class requestInvoiceAdvance extends StatefulWidget {
-  const requestInvoiceAdvance({Key key}) : super(key: key);
+  final int index;
+  requestInvoiceAdvance({this.index});
 
   @override
   _requestInvoiceAdvanceState createState() => _requestInvoiceAdvanceState();
@@ -24,7 +25,7 @@ class _requestInvoiceAdvanceState extends State<requestInvoiceAdvance> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    index = 0;
+    this.widget.index == null ? index = 0 : index = this.widget.index;
   }
 
   @override
@@ -82,7 +83,7 @@ class _requestInvoiceAdvanceState extends State<requestInvoiceAdvance> {
             });
           },
           children: [
-            new showInvoiceRequestManager(),
+            new showInvoiceRequestManager(widgetToNavigator: requestInvoiceAdvance(index: 0,),),
             //Chờ API Advance Bill
             new Container(
               width: size.width,

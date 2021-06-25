@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:rtm_system/model/getAPI_allStore.dart';
 import 'package:rtm_system/model/getAPI_product.dart';
 import 'package:rtm_system/model/model_product.dart';
@@ -10,22 +9,33 @@ import 'package:rtm_system/model/model_store.dart';
 import 'package:rtm_system/model/profile_customer/model_profile_customer.dart';
 import 'package:rtm_system/ultils/alertDialog.dart';
 import 'package:rtm_system/ultils/component.dart';
+import 'package:rtm_system/ultils/getData.dart';
 import 'package:rtm_system/ultils/helpers.dart';
 import 'package:rtm_system/ultils/src/regExp.dart';
-import 'package:rtm_system/ultils/textField.dart';
-import 'package:rtm_system/ultils/src/color_ultils.dart';
-import 'package:rtm_system/ultils/src/messageList.dart';
 import 'package:rtm_system/view/create_invoice.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+// ignore: must_be_immutable
 class AddProductPage extends StatefulWidget {
   final String tittle;
   final Widget widgetToNavigator;
+  bool isChangeData;
+  final String phone, fullName, storeId, productId, dateToPay, savePrice;
 
   //true is Customer role
   final bool isCustomer;
 
-  AddProductPage({this.tittle, this.isCustomer, this.widgetToNavigator});
+  AddProductPage(
+      {this.tittle,
+      this.phone,
+      this.fullName,
+      this.storeId,
+      this.productId,
+      this.dateToPay,
+      this.savePrice,
+      this.isCustomer,
+      this.widgetToNavigator,
+      this.isChangeData});
 
   @override
   _AddProductPageState createState() => _AddProductPageState();
@@ -36,25 +46,29 @@ String phoneNewCustomer, nameNewCustomer;
 
 class _AddProductPageState extends State<AddProductPage> {
   String errorPhone, errorFullName, errorQuantity, errorDegree;
-  String price = '0';
+  String price;
   String token;
-  String personSale = '', phoneSale = '';
+  String personSale = '', phoneSale = '', oldCusName;
   List listQuantity = [];
   List<DataProduct> dataListProduct = [];
   Store store;
   List<StoreElement> dataListStore;
   bool checkClick = false;
   var txtController = TextEditingController();
+  bool autoFocus = false, enabledFillName = true;
 
   //field to sales
   double quantity = 0, degree = 0;
-  List listInfor;
+  List listInforProduct;
 
   String _myProduct, _myStore;
   bool checkProduct = true;
 
-  DateTime dateNow = DateTime.now();
-  DateTime dateSale = DateTime.now();
+  /// Cái này có ý nghĩa là gì ///
+  DateTime dateNow;
+
+  /// ====================== ///
+  DateTime dateSale;
 
   Future _getProduct() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -80,7 +94,7 @@ class _AddProductPageState extends State<AddProductPage> {
     }
   }
 
-  Future _getStore() async{
+  Future _getStore() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     GetAPIAllStore getAPIAllStore = GetAPIAllStore();
     store = await getAPIAllStore.getStores(
@@ -90,7 +104,7 @@ class _AddProductPageState extends State<AddProductPage> {
     );
     dataListStore = store.stores;
     setState(() {
-      if(dataListStore.length == 1){
+      if (dataListStore.length == 1) {
         _myStore = dataListStore[0].id;
       }
     });
@@ -98,20 +112,7 @@ class _AddProductPageState extends State<AddProductPage> {
   }
 
   @override
-  void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
-    super.didChangeDependencies();
-    // ignore: unrelated_type_equality_checks
-    if (infomationCustomer != null) {
-      print('yes');
-    }else
-      print('no');
-  }
-
-//0971856324
-  @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     infomationCustomer = null;
     phoneNewCustomer = null;
@@ -120,10 +121,43 @@ class _AddProductPageState extends State<AddProductPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    _checkDataFromRequest();
     _getProduct();
     _getStore();
+  }
+
+  Future<void> _checkDataFromRequest() {
+    setState(() {
+      print(this.widget.dateToPay);
+      this.widget.phone == null
+          ? phoneNewCustomer = ""
+          : phoneNewCustomer = widget.phone;
+      this.widget.fullName == null
+          ? nameNewCustomer = ""
+          : nameNewCustomer = widget.fullName;
+      this.widget.storeId == null ? _myStore = null : _myStore = widget.storeId;
+      this.widget.productId == null
+          ? _myProduct = null
+          : _myProduct = widget.productId;
+      this.widget.savePrice == null ? price = "0" : price = widget.savePrice;
+      this.widget.dateToPay == null
+          ? dateSale = DateTime.now()
+          : dateSale = DateTime.parse(widget.dateToPay);
+    });
+  }
+
+  TextEditingController getDataTextField(String txt) {
+    final TextEditingController _controller = TextEditingController();
+    if (txt != null) {
+      _controller.value = _controller.value.copyWith(
+        text: txt,
+        selection:
+            TextSelection(baseOffset: txt.length, extentOffset: txt.length),
+        composing: TextRange.empty,
+      );
+    }
+    return _controller;
   }
 
   @override
@@ -151,21 +185,27 @@ class _AddProductPageState extends State<AddProductPage> {
               children: [
                 Column(
                   children: [
-                    if(!widget.isCustomer)
-                    textField(
+                    txtAutoFillByPhone(
+                      enabled: widget.isChangeData == null ? true : false,
+                      controller: getDataTextField(phoneNewCustomer),
+                      isCustomer: this.widget.isCustomer,
                       type: "phone",
                       tittle: "Điện thoại",
                       txtInputType: TextInputType.numberWithOptions(
                           signed: true, decimal: true),
                       error: errorPhone,
                     ),
-                    if(!widget.isCustomer)
-                    textField(
+                    txtAutoFillByPhone(
+                      enabled:
+                          widget.isChangeData == null ? enabledFillName : false,
+                      isCustomer: this.widget.isCustomer,
+                      controller: infomationCustomer == null
+                          ? getDataTextField(nameNewCustomer)
+                          : getDataTextField(infomationCustomer.fullname),
                       type: "name",
                       tittle: "Tên khách hàng",
                       txtInputType: TextInputType.name,
                       error: errorFullName,
-                      txt: infomationCustomer == null? "" : infomationCustomer.fullname,
                     ),
                     SizedBox(
                       height: 10,
@@ -230,6 +270,96 @@ class _AddProductPageState extends State<AddProductPage> {
     );
   }
 
+  Widget txtAutoFillByPhone({
+    TextEditingController controller,
+    String error,
+    String tittle,
+    String type,
+    TextInputType txtInputType,
+    bool isCustomer,
+    bool enabled,
+  }) {
+    return isCustomer
+        ? Container()
+        : Container(
+            color: Colors.white,
+            margin: EdgeInsets.only(top: 10, left: 10, right: 10),
+            child: TextField(
+              controller: controller,
+              // initialValue: this.widget.txt,
+              autocorrect: false,
+              obscureText: false,
+              enabled: enabled,
+              onSubmitted: (value) {
+                doOnSubmittedTextField(type, value);
+              },
+              maxLines: 1,
+              keyboardType: txtInputType,
+              // TextInputType.numberWithOptions(signed: true, decimal: true),
+              inputFormatters: [
+                txtInputType !=
+                        TextInputType.numberWithOptions(
+                            signed: true, decimal: true)
+                    ? FilteringTextInputFormatter.allow(
+                        RegExp(r'[ [a-zA-Z0-9]'))
+                    : FilteringTextInputFormatter.allow(RegExp(r'[[0-9]')),
+              ],
+              style: TextStyle(fontSize: 15),
+              cursorColor: Colors.red,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                ),
+                labelText: tittle,
+                labelStyle: TextStyle(color: Colors.black54),
+                contentPadding: EdgeInsets.only(top: 14, left: 10),
+                //Sau khi click vào "Nhập tiêu đề" thì màu viền sẽ đổi
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Color(0xFF0BB791),
+                  ),
+                ),
+                //Hiển thị Icon góc phải
+                suffixIcon: Icon(
+                  Icons.create,
+                  color: Colors.black54,
+                ),
+
+                //Hiển thị lỗi
+                focusedErrorBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.redAccent),
+                ),
+                //Nhận thông báo lỗi
+                errorText: error,
+              ),
+            ),
+          );
+  }
+
+  Future<void> doOnSubmittedTextField(String type, String value) async {
+    switch (type) {
+      case "phone":
+        phoneNewCustomer = value.trim();
+        infomationCustomer = await getDataCustomerFromPhone(value);
+        setState(() {
+          if (infomationCustomer == null) {
+            enabledFillName = true;
+            // ignore: unnecessary_statements
+            nameNewCustomer == oldCusName ? nameNewCustomer = "" : null;
+          } else {
+            oldCusName = infomationCustomer.fullname;
+            nameNewCustomer = infomationCustomer.fullname;
+            enabledFillName = false;
+          }
+          autoFocus = false;
+        });
+        break;
+      case "name":
+        nameNewCustomer = value.trim();
+        break;
+    }
+  }
+
   Widget _showMoneyOrQuantity(String title, value) {
     return Container(
       color: Colors.white,
@@ -239,7 +369,7 @@ class _AddProductPageState extends State<AddProductPage> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            '${title}:',
+            '$title:',
             style: TextStyle(
               color: Color(0xFF0BB791),
               fontSize: 14,
@@ -247,7 +377,7 @@ class _AddProductPageState extends State<AddProductPage> {
           ),
           // sẽ show số tổng các ký đã nhập
           Text(
-            '${value}',
+            '$value',
             style: TextStyle(
               color: Colors.black,
               fontSize: 16,
@@ -310,7 +440,7 @@ class _AddProductPageState extends State<AddProductPage> {
                         MaterialPageRoute(
                             builder: (context) => CreateInvoicePage(
                                 isNew: true,
-                                listProduct: listInfor,
+                                listProduct: listInforProduct,
                                 isCustomer: widget.isCustomer)),
                       );
               } else {
@@ -346,7 +476,9 @@ class _AddProductPageState extends State<AddProductPage> {
     } else {
       errorFullName = null;
       if (_myProduct == null) {
-        showCustomDialog(context, content: "Chưa chọn sản phẩm", isSuccess: false);}
+        showCustomDialog(context,
+            content: "Chưa chọn sản phẩm", isSuccess: false);
+      }
     }
     if (quantity == 0) {
       errorQuantity = "Số ký đang trống";
@@ -358,14 +490,17 @@ class _AddProductPageState extends State<AddProductPage> {
       } else
         errorDegree = null;
     }
-    if (errorPhone == null && errorQuantity == null && errorFullName == null && _myProduct != null) {
+    if (errorPhone == null &&
+        errorQuantity == null &&
+        errorFullName == null &&
+        _myProduct != null) {
       if (checkProduct) {
         Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => CreateInvoicePage(
                     isNew: true,
-                    listProduct: listInfor,
+                    listProduct: listInforProduct,
                     isCustomer: widget.isCustomer)));
       } else if (!checkProduct && errorDegree == null) {
         Navigator.push(
@@ -373,17 +508,14 @@ class _AddProductPageState extends State<AddProductPage> {
             MaterialPageRoute(
                 builder: (context) => CreateInvoicePage(
                     isNew: true,
-                    listProduct: listInfor,
+                    listProduct: listInforProduct,
                     isCustomer: widget.isCustomer)));
       }
     }
   }
 
   Widget _dropdownListProduct() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: <Widget>[
-        Row(
+    return Row(
           children: [
             Expanded(
               child: Container(
@@ -398,7 +530,6 @@ class _AddProductPageState extends State<AddProductPage> {
                   child: ButtonTheme(
                     alignedDropdown: true,
                     child: DropdownButton<String>(
-
                       value: _myProduct,
                       iconSize: 30,
                       icon: (null),
@@ -412,7 +543,7 @@ class _AddProductPageState extends State<AddProductPage> {
                         setState(() {
                           _myProduct = newValue;
                           _getCurrentPrice(newValue);
-                          this.listInfor = [
+                          this.listInforProduct = [
                             this._myProduct,
                             this.quantity,
                             this.degree,
@@ -434,24 +565,18 @@ class _AddProductPageState extends State<AddProductPage> {
                           value: item.id.toString(),
                         );
                       })?.toList() ??
-                          [],
-                    ),
-                  ),
+                      [],
                 ),
               ),
             ),
-          ],
+          ),
         ),
-        // _underRow()
       ],
     );
   }
 
   Widget _dropdownListStore() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: <Widget>[
-        Row(
+    return Row(
           children: [
             Expanded(
               child: Container(
@@ -466,6 +591,7 @@ class _AddProductPageState extends State<AddProductPage> {
                   child: ButtonTheme(
                     alignedDropdown: true,
                     child: DropdownButton<String>(
+                      autofocus: autoFocus,
                       value: _myStore,
                       iconSize: 30,
                       icon: (null),
@@ -479,7 +605,7 @@ class _AddProductPageState extends State<AddProductPage> {
                         setState(() {
                           _myStore = newValue;
                         });
-                        this.listInfor = [
+                        this.listInforProduct = [
                           this._myProduct,
                           this.quantity,
                           this.degree,
@@ -502,21 +628,7 @@ class _AddProductPageState extends State<AddProductPage> {
               ),
             ),
           ],
-        ),
-        // _underRow()
-      ],
-    );
-  }
-  TextEditingController getDataTextField(txt) {
-    if (txt == null) {
-      txt = "";
-    }
-    final TextEditingController _controller = TextEditingController();
-    _controller.value = _controller.value.copyWith(
-      text: txt,
-      selection: TextSelection.collapsed(offset: txt.length),
-    );
-    return _controller;
+        );
   }
 
   Widget _txtItemProduct(
@@ -536,7 +648,7 @@ class _AddProductPageState extends State<AddProductPage> {
               txtController.clear();
             } else
               this.degree = double.parse(value);
-            this.listInfor = [
+            this.listInforProduct = [
               this._myProduct,
               this.quantity,
               this.degree,
@@ -595,7 +707,7 @@ class _AddProductPageState extends State<AddProductPage> {
           listQuantity.forEach((element) {
             quantity += double.parse(element);
           });
-          this.listInfor = [
+          this.listInforProduct = [
             this._myProduct,
             this.quantity,
             this.degree,
@@ -621,6 +733,7 @@ class _AddProductPageState extends State<AddProductPage> {
   }
 
   //Lấy giá tiền
+  // ignore: missing_return
   Future _getCurrentPrice(String value) {
     setState(() {
       dataListProduct.forEach((element) {
@@ -662,7 +775,7 @@ class _AddProductPageState extends State<AddProductPage> {
                 onConfirm: (date) {
                   setState(() {
                     dateSale = date;
-                    this.listInfor = [
+                    this.listInforProduct = [
                       this._myProduct,
                       this.quantity,
                       this.degree,
@@ -671,10 +784,20 @@ class _AddProductPageState extends State<AddProductPage> {
                     ];
                   });
                 },
+                ///Cái này là cái gì ???? ///
                 currentTime: dateNow,
-                maxTime: DateTime(DateTime.now().year + 100, 12, 31),
-                minTime: DateTime(DateTime.now().year, DateTime.now().month,
-                    DateTime.now().day),
+                /// ===================== ///
+                maxTime: DateTime(DateTime
+                    .now()
+                    .year + 100, 12, 31),
+                minTime: DateTime(DateTime
+                    .now()
+                    .year, DateTime
+                    .now()
+                    .month,
+                    DateTime
+                        .now()
+                        .day),
                 locale: LocaleType.vi,
               );
             },

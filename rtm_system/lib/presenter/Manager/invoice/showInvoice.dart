@@ -15,8 +15,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 class showInvoiceManager extends StatefulWidget {
   int statusId;
   String fromDate, toDate;
-
-  showInvoiceManager(this.statusId, {this.fromDate, this.toDate});
+  final Widget widgetToNavigator;
+  showInvoiceManager(this.statusId, {this.fromDate, this.toDate, this.widgetToNavigator});
 
   @override
   showInvoiceManagerState createState() => showInvoiceManagerState();
@@ -159,7 +159,8 @@ class showInvoiceManagerState extends State<showInvoiceManager> {
                                   product: item["product_name"],
                                   widget: FormForDetailPage(
                                     tittle: "Chi tiết hóa đơn",
-                                    bodyPage: DetailInvoice(
+                                    bodyPage: new DetailInvoice(
+                                      widgetToNavigator: this.widget.widgetToNavigator,
                                       isCustomer: false,
                                       map: item,
                                     ),

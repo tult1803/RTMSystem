@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 class PutConfirmInvoice{
   putConfirmInvoice(String token, String id) async {
     final response = await http.put(
-      Uri.http('${url_main}', '${url_confirmInvoice}/$id'),
+      Uri.http('$urlMain', '$urlConfirmInvoice/$id'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $token',

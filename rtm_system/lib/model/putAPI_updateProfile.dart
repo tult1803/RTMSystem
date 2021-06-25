@@ -9,7 +9,7 @@ class PutUpdateProfile{
 
   updateProfile(String token, String phone, int type, String account_id, String password, String fullname, int gender, String cmnd, String address, String birthday) async {
     final response = await http.put(
-      Uri.http('${url_main}', '${url_updateProfile}'),
+      Uri.http('$urlMain', '$urlUpdateProfile'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $token',

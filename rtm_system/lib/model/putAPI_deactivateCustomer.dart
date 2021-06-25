@@ -7,7 +7,7 @@ class PutDeactivateCustomer{
 
   deactivateCustomer(String token, String accountId) async {
     final response = await http.put(
-      Uri.http('${url_main}', '${url_deactivateCustomer}/$accountId'),
+      Uri.http('$urlMain', '$urlDeactivateCustomer/$accountId'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $token',

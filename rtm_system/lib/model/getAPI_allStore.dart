@@ -9,7 +9,7 @@ import 'package:rtm_system/ultils/src/url_api.dart';
 class GetAPIAllStore {
   Future<Store> getStores(String token, int pageNum, int pageNo) async {
     final response =  await http.get(
-        Uri.http('${url_main}', '${url_store}', { "pageNum" : "${pageNum}", "pageNo" : "${pageNo}"}, ),
+        Uri.http('$urlMain', '$urlStore', { "pageNum" : "${pageNum}", "pageNo" : "${pageNo}"}, ),
         headers: <String, String>{
           'Content-Type': 'application/json',
           'Accept': 'application/json',
