@@ -11,6 +11,7 @@ import 'package:rtm_system/model/putAPI_confirmInvoice.dart';
 import 'package:rtm_system/model/putAPI_signInvoice.dart';
 import 'package:rtm_system/model/putAPI_updatePrice.dart';
 import 'package:rtm_system/model/putAPI_updateProfile.dart';
+import 'package:rtm_system/ultils/helpers.dart';
 import 'package:rtm_system/ultils/src/messageList.dart';
 import 'package:rtm_system/view/add_product_in_invoice.dart';
 import 'package:rtm_system/view/customer/home_customer_page.dart';
@@ -293,18 +294,15 @@ Future<void> doConfirmOrAcceptOrRejectInvoice(
 
 //Tao advance request
 Future<void> doCreateRequestAdvance(BuildContext context, String accountId,
-    String money, date, image, int type, bool isCustomer) async {
+    String money, date, image, storeId, int type, bool isCustomer) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  int status = 200;
+  int status ;
   if (isCustomer) {
     // 1 is create request advance, 2 is accept advance
     if (type == 1) {
-      //gọi hàm tạo trước, sau đó gọi api insert image sau, không chờ API của imageService mà vẫn làm tiếp
-      //tránh trường hợp firebase lỗi mà không gửi được.
       ImageService imageService = ImageService();
-      Response result = await imageService.uploadFile(
-          prefs.get("access_token"), prefs.get("accountId"), image);
-      print(result.statusCode);
+       status = await imageService.postCreateAdvance(
+          prefs.get("access_token"), prefs.get("accountId"), storeId ,money, getDateTime(date, dateFormat: 'yyyy-MM-dd HH:mm:ss'), image);
     } else if (type == 2) {
       //Call API
     }

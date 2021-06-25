@@ -1,40 +1,36 @@
+import 'dart:convert';
 import 'dart:io';
-import 'package:dio/dio.dart';
+import 'dart:typed_data';
+import 'package:http/http.dart' as http;
+import 'package:rtm_system/ultils/src/url_api.dart';
 
 class ImageService{
-  uploadFile(token, userId, File file) async {
-    String filePath = file.path;
+  postCreateAdvance(token, userId, storeId, money, receiveDate, File file) async {
     String fileName = file.path.split('/').last;
-    try {
-      FormData formData =
-      new FormData.fromMap({
-        "image": await MultipartFile.fromFile(filePath, filename: fileName,)});
-      Response response =
-      await Dio().post(
-          "https://appointella-api.herokuapp.com/customer/$userId",
-          data: formData,
-          options: Options(
-            headers: <String, String>{
-              'Content-Type': 'multipart/form-data; charset=UTF-8',
-              'Authorization': 'Bearer $token',
-            },
-          ),
-      );
-      return response;
-      // var url = '${API_URL}ocr';
-      // var bytes = image.readAsBytesSync();
-      //
-      // var response = await http.post(
-      //     url,
-      //     headers:{ "Content-Type":"multipart/form-data" } ,
-      //     body: { "lang":"fas" , "image":bytes},
-      //     encoding: Encoding.getByName("utf-8")
-      // );
-      //
-      // return response.body;
-    }on DioError catch (e) {
-      return e.response;
-    } catch(e){
-    }
+    String typeImage = file.path.split('.').last;
+    String contentType = 'image/$typeImage';
+    String fomatMoney = money.replaceAll(',','');
+    int parseMoney = int.parse(fomatMoney);
+    String image_url = '';
+    Uint8List imageByte = file.readAsBytesSync();
+    final response = await http.post(
+        Uri.http('$urlMain', '$urlCreateRequestAdvance'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode(<String, dynamic>{
+          "customer_id": userId,
+          "store_id": storeId,
+          "amount": parseMoney,
+          "receive_date": receiveDate,
+          "image_url": image_url,
+          "content": imageByte,
+          "filename": fileName,
+          "contentType": "$contentType"
+        }),
+    );
+    print('Status ' + response.statusCode.toString());
+    return response.statusCode;
   }
 }

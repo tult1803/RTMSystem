@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:rtm_system/model/getAPI_allStore.dart';
+import 'package:rtm_system/model/model_store.dart';
 import 'package:rtm_system/ultils/alertDialog.dart';
 import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/helpers.dart';
@@ -11,6 +13,7 @@ import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/ultils/src/messageList.dart';
 import 'package:rtm_system/ultils/src/regExp.dart';
 import 'package:rtm_system/view/customer/advance/confirm_create_request_advance.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CreateRequestAdvance extends StatefulWidget {
   @override
@@ -23,6 +26,10 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
   String money;
   DateTime createDate;
   List listInfor;
+  Store store;
+  List<StoreElement> dataListStore;
+  String _myStore;
+  File _image;
 
   @override
   void initState() {
@@ -30,9 +37,25 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
     setState(() {
       createDate = DateTime.now();
     });
+    _getStore();
   }
 
-  File _image;
+  Future _getStore() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    GetAPIAllStore getAPIAllStore = GetAPIAllStore();
+    store = await getAPIAllStore.getStores(
+      prefs.get("access_token"),
+      1000,
+      1,
+    );
+    dataListStore = store.stores;
+    setState(() {
+      if (dataListStore.length == 1) {
+        _myStore = dataListStore[0].id;
+      }
+    });
+    return dataListStore;
+  }
 
   //get image from camera
   _imageFromCamera() async {
@@ -108,6 +131,15 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
             margin: EdgeInsets.only(top: 50, bottom: 24),
             child: Column(
               children: [
+                _dropdownListStore(),
+                SizedBox(
+                  height: 1,
+                  child: Container(
+                    margin: EdgeInsets.only(left: 10, right: 10),
+                    width: size.width,
+                    color: Colors.black45,
+                  ),
+                ),
                 Column(
                   children: [
                     _formMoney(false, "Nhập số tiền VND", "Số tiền",
@@ -148,6 +180,7 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
                   MaterialPageRoute(
                       builder: (context) => ConfirmCreateRequestAdvance(
                         listInfor: listInfor,
+                        storeId: _myStore,
                         isCustomer: true,
                         type: 1,
                       )),
@@ -171,6 +204,52 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
         ),
         elevation: 10,
       ),
+    );
+  }
+  Widget _dropdownListStore() {
+    return Row(
+      children: [
+        Expanded(
+          child: Container(
+            height: 40,
+            margin: EdgeInsets.only(top: 5, bottom: 10),
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(10.0),
+                )),
+            child: DropdownButtonHideUnderline(
+              child: ButtonTheme(
+                alignedDropdown: true,
+                child: DropdownButton<String>(
+                  value: _myStore,
+                  iconSize: 30,
+                  icon: (null),
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  hint: Text('Chon cửa hàng'),
+                  onChanged: (String newValue) async {
+                    setState(() {
+                      _myStore = newValue;
+                    });
+                  },
+                  items: dataListStore?.map((item) {
+                    return new DropdownMenuItem(
+                      child: new Text(item.name),
+                      //chuyen id de create
+                      value: item.id.toString(),
+                    );
+                  })?.toList() ??
+                      [],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 

@@ -5,9 +5,10 @@ import 'package:rtm_system/ultils/component.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 class ConfirmCreateRequestAdvance extends StatefulWidget {
   const ConfirmCreateRequestAdvance({Key key, this.listInfor,
-    this.isCustomer, this.type}): super(key: key);
+    this.isCustomer, this.type, this.storeId}): super(key: key);
   final List listInfor;
   final bool isCustomer;
+  final String storeId;
   //1 is create, 2 is confirm : customer
   final int type;
   @override
@@ -79,7 +80,7 @@ class _ConfirmCreateRequestAdvanceState extends State<ConfirmCreateRequestAdvanc
               color: Colors.white, fontWeight: FontWeight.w500, fontSize: 22),
         ),
       ),
-      body: widgetCreateAdvance( context, widget.listInfor, nameProduct,
+      body: widgetCreateAdvance( context, widget.listInfor,widget.storeId, nameProduct,
           personSale, phoneSale, widget.type, widget.isCustomer),
     );
   }

@@ -205,7 +205,6 @@ Widget widgetCreateInvoice(context, bool isNew, List product,
             ),
           ),
         ),
-        //button "Nhận tiền" show if status is "chưa trả", để hoàn thành đơn giao dịch
         if (!isNew)
           Center(
             child: SizedBox(
@@ -979,6 +978,7 @@ Widget componentContainerDetailAdvanceRequest(BuildContext context,
         SizedBox(
           height: 10,
         ),
+        // _showContentInAdvance(context, status)
         // chỗ này show btn accpet or reject của manager cho request
       ],
     ),
@@ -986,7 +986,7 @@ Widget componentContainerDetailAdvanceRequest(BuildContext context,
 }
 
 //nội dung của bill, đang dùng: create advance and confirm advance
-Widget widgetCreateAdvance(context, List item, String nameProduct, String name,
+Widget widgetCreateAdvance(context, List item,String storeId, String nameProduct, String name,
     String phone, int type, bool isCustomer) {
   var size = MediaQuery.of(context).size;
   return SingleChildScrollView(
@@ -1020,8 +1020,10 @@ Widget widgetCreateAdvance(context, List item, String nameProduct, String name,
                 SizedBox(
                   height: 10,
                 ),
-                //có thể sẽ thêm data ở đây
-
+                showImage(size.width, size.height,item[2]),
+                SizedBox(
+                  height: 10,
+                ),
                 //khi nào có api sẽ tách chỗ này ra thành 1 hàm để gọi các btn khác nhau
                 SizedBox(
                   width: size.width * 0.4,
@@ -1030,7 +1032,7 @@ Widget widgetCreateAdvance(context, List item, String nameProduct, String name,
                     color: Color(0xFF0BB791),
                     onPressed: () {
                       doCreateRequestAdvance(context, 'TK-111', item[0],
-                          item[1], item[2], type, true);
+                          item[1], item[2],storeId, type, true);
                     },
                     child: AutoSizeText(
                       'Xác nhận',
@@ -1049,4 +1051,17 @@ Widget widgetCreateAdvance(context, List item, String nameProduct, String name,
       ],
     ),
   ));
+}
+//show hinh anh da chon
+Widget showImage(width, height, image) {
+  if (image != null) {
+    return Container(
+      margin: EdgeInsets.only(top: 12),
+      width: width,
+      height: height * 0.3,
+      child: Image.file(image, fit: BoxFit.scaleDown),
+    );
+  } else {
+    return Container();
+  }
 }
