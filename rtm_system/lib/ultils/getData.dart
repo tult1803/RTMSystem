@@ -273,6 +273,8 @@ Future<void> doConfirmOrAcceptOrRejectInvoice(
                       tittle: "Tạo hoá đơn yêu cầu",
                       phone: map["customer_phone"],
                       fullName: map["customer_name"],
+                      storeName: map["store_name"],
+                      productName: map["product_name"],
                       dateToPay: map["sell_date"],
                       productId: map["product_id"],
                       savePrice: "${map["price"]}",

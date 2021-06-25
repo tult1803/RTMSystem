@@ -12,15 +12,23 @@ import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/getData.dart';
 import 'package:rtm_system/ultils/helpers.dart';
 import 'package:rtm_system/ultils/src/regExp.dart';
-import 'package:rtm_system/view/create_invoice.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'manager/formForDetail_page.dart';
 
 // ignore: must_be_immutable
 class AddProductPage extends StatefulWidget {
   final String tittle;
   final Widget widgetToNavigator;
   bool isChangeData;
-  final String phone, fullName, storeId, productId, dateToPay, savePrice;
+  final String phone,
+      fullName,
+      storeId,
+      productId,
+      dateToPay,
+      savePrice,
+      productName,
+      storeName;
 
   //true is Customer role
   final bool isCustomer;
@@ -35,6 +43,8 @@ class AddProductPage extends StatefulWidget {
       this.savePrice,
       this.isCustomer,
       this.widgetToNavigator,
+      this.productName,
+      this.storeName,
       this.isChangeData});
 
   @override
@@ -46,8 +56,8 @@ String phoneNewCustomer, nameNewCustomer;
 
 class _AddProductPageState extends State<AddProductPage> {
   String errorPhone, errorFullName, errorQuantity, errorDegree;
-  String price;
-  String token;
+  String price, productName;
+  String token, storeName;
   String personSale = '', phoneSale = '', oldCusName;
   List listQuantity = [];
   List<DataProduct> dataListProduct = [];
@@ -63,11 +73,6 @@ class _AddProductPageState extends State<AddProductPage> {
 
   String _myProduct, _myStore;
   bool checkProduct = true;
-
-  /// Cái này có ý nghĩa là gì ///
-  DateTime dateNow;
-
-  /// ====================== ///
   DateTime dateSale;
 
   Future _getProduct() async {
@@ -146,6 +151,12 @@ class _AddProductPageState extends State<AddProductPage> {
       this.widget.dateToPay == null
           ? dateSale = DateTime.now()
           : dateSale = DateTime.parse(widget.dateToPay);
+      this.widget.productName == null
+          ? productName = ""
+          : productName = widget.productName;
+      this.widget.storeName == null
+          ? storeName = ""
+          : storeName = widget.storeName;
     });
   }
 
@@ -259,8 +270,7 @@ class _AddProductPageState extends State<AddProductPage> {
                 SizedBox(
                   height: 10,
                 ),
-                btnSave(context, 200, 40,
-                    Color(0xFF0BB791), "Tạo", 1),
+                btnSave(context, 200, 40, Color(0xFF0BB791), "Tạo", 1),
                 SizedBox(
                   height: 10,
                 ),
@@ -438,13 +448,22 @@ class _AddProductPageState extends State<AddProductPage> {
                     : Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => CreateInvoicePage(
-                                isNew: true,
-                                listProduct: listInforProduct,
-                                isCustomer: widget.isCustomer)),
-                      );
+                            builder: (context) => FormForDetailPage(
+                                  tittle: "Xác nhận hóa đơn",
+
+                                  ///Chưa code chờ code ========================================== *****************************************
+                                )));
               } else {
-                _validate();
+                // _validate();
+                ///Chưa code chờ code ========================================== *****************************************
+                print('$nameNewCustomer '
+                    '- $phoneNewCustomer '
+                    '- $storeName ($_myStore) '
+                    '- $productName ($_myProduct) '
+                    '- $quantity '
+                    '- $degree '
+                    '- $dateSale'
+                    '- ${getFormatPrice('${getPriceTotal(double.tryParse(price), degree, quantity)}')}đ');
               }
             });
           },
@@ -498,18 +517,20 @@ class _AddProductPageState extends State<AddProductPage> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => CreateInvoicePage(
-                    isNew: true,
-                    listProduct: listInforProduct,
-                    isCustomer: widget.isCustomer)));
+                builder: (context) => FormForDetailPage(
+                      tittle: "Xác nhận hóa đơn",
+
+                      ///Chưa code chờ code ========================================== *****************************************
+                    )));
       } else if (!checkProduct && errorDegree == null) {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => CreateInvoicePage(
-                    isNew: true,
-                    listProduct: listInforProduct,
-                    isCustomer: widget.isCustomer)));
+                builder: (context) => FormForDetailPage(
+                      tittle: "Xác nhận hóa đơn",
+
+                      ///Chưa code chờ code ========================================== *****************************************
+                    )));
       }
     }
   }
@@ -564,6 +585,13 @@ class _AddProductPageState extends State<AddProductPage> {
                           child: new Text(item.name),
                           //chuyen id de create
                           value: item.id.toString(),
+                          onTap: () {
+                            if (widget.productName == null) {
+                              setState(() {
+                                productName = item.name;
+                              });
+                            }
+                          },
                         );
                       })?.toList() ??
                       [],
@@ -622,6 +650,13 @@ class _AddProductPageState extends State<AddProductPage> {
                           child: new Text(item.name),
                           //chuyen id de create
                           value: item.id.toString(),
+                          onTap: () {
+                            if (widget.storeName == null) {
+                              setState(() {
+                                storeName = item.name;
+                              });
+                            }
+                          },
                         );
                       })?.toList() ??
                       [],
@@ -728,7 +763,7 @@ class _AddProductPageState extends State<AddProductPage> {
             borderRadius: BorderRadius.circular(5),
             boxShadow: [
               BoxShadow(
-                color:Colors.black54,
+                color: Colors.black54,
                 blurRadius: 1,
                 offset: Offset(1, 1), // Shadow position
               ),
@@ -796,11 +831,6 @@ class _AddProductPageState extends State<AddProductPage> {
                       ];
                     });
                   },
-
-                  ///Cái này là cái gì ???? ///
-                  currentTime: dateNow,
-
-                  /// ===================== ///
                   maxTime: DateTime(DateTime.now().year + 100, 12, 31),
                   minTime: DateTime(DateTime.now().year, DateTime.now().month,
                       DateTime.now().day),
