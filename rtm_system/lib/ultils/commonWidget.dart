@@ -144,16 +144,23 @@ Widget btnMain(BuildContext context, double width, String tittle, Icon icon,
 }
 
 Widget btnDateTime(
-    BuildContext context, String tittle, Icon icon, Widget widget) {
+    BuildContext context, String tittle, Icon icon, Widget widget,
+    {Color colorBoxShadow}) {
   var size = MediaQuery.of(context).size;
   return Stack(
     children: <Widget>[
       Container(
         margin: EdgeInsets.only(bottom: 20),
         decoration: BoxDecoration(
-          color: buttonDate_color,
+          color: Colors.white,
           borderRadius: BorderRadius.circular(5),
-          border: Border.all(color: Colors.black, width: 0.5),
+          boxShadow: [
+            BoxShadow(
+              color: colorBoxShadow == null ? Colors.black54 : colorBoxShadow,
+              blurRadius: 2,
+              offset: Offset(1, 1), // Shadow position
+            ),
+          ],
         ),
         height: 35.0,
         width: 120,

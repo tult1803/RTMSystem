@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rtm_system/model/PostCreateRequestInvoice.dart';
+import 'package:rtm_system/model/deleteAPI_invoice.dart';
 import 'package:rtm_system/model/postAPI_Image.dart';
 import 'package:rtm_system/model/postAPI_createCustomer.dart';
 import 'package:rtm_system/model/postAPI_createNotice.dart';
@@ -254,9 +255,11 @@ Future<void> doConfirmOrAcceptOrRejectInvoice(
             index: 1,
           ),
           true);
-    } else {
-      showStatusAlertDialog(context, showMessage(MSG025, MSG027), null, false);
     }
+    ///Bị lỗi thiếu hàm
+    // else {
+    //   showStatusAlertDialog(context, showMessage(MSG025, MSG027), null, false);
+    // }
   } else {
     //call api tao invoice cua manager
     switch (type) {

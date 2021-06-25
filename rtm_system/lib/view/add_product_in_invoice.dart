@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:rtm_system/model/getAPI_allStore.dart';
 import 'package:rtm_system/model/getAPI_product.dart';
 import 'package:rtm_system/model/model_product.dart';
@@ -516,10 +515,7 @@ class _AddProductPageState extends State<AddProductPage> {
   }
 
   Widget _dropdownListProduct() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: <Widget>[
-        Row(
+    return Row(
           children: [
             Expanded(
               child: Container(
@@ -547,7 +543,7 @@ class _AddProductPageState extends State<AddProductPage> {
                         setState(() {
                           _myProduct = newValue;
                           _getCurrentPrice(newValue);
-                          this.listInfor = [
+                          this.listInforProduct = [
                             this._myProduct,
                             this.quantity,
                             this.degree,
@@ -580,10 +576,7 @@ class _AddProductPageState extends State<AddProductPage> {
   }
 
   Widget _dropdownListStore() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: <Widget>[
-        Row(
+    return Row(
           children: [
             Expanded(
               child: Container(
@@ -612,7 +605,7 @@ class _AddProductPageState extends State<AddProductPage> {
                         setState(() {
                           _myStore = newValue;
                         });
-                        this.listInfor = [
+                        this.listInforProduct = [
                           this._myProduct,
                           this.quantity,
                           this.degree,
@@ -635,21 +628,7 @@ class _AddProductPageState extends State<AddProductPage> {
               ),
             ),
           ],
-        ),
-        // _underRow()
-      ],
-    );
-  }
-  TextEditingController getDataTextField(txt) {
-    if (txt == null) {
-      txt = "";
-    }
-    final TextEditingController _controller = TextEditingController();
-    _controller.value = _controller.value.copyWith(
-      text: txt,
-      selection: TextSelection.collapsed(offset: txt.length),
-    );
-    return _controller;
+        );
   }
 
   Widget _txtItemProduct(
@@ -669,7 +648,7 @@ class _AddProductPageState extends State<AddProductPage> {
               txtController.clear();
             } else
               this.degree = double.parse(value);
-            this.listInfor = [
+            this.listInforProduct = [
               this._myProduct,
               this.quantity,
               this.degree,
@@ -728,7 +707,7 @@ class _AddProductPageState extends State<AddProductPage> {
           listQuantity.forEach((element) {
             quantity += double.parse(element);
           });
-          this.listInfor = [
+          this.listInforProduct = [
             this._myProduct,
             this.quantity,
             this.degree,
@@ -796,7 +775,7 @@ class _AddProductPageState extends State<AddProductPage> {
                 onConfirm: (date) {
                   setState(() {
                     dateSale = date;
-                    this.listInfor = [
+                    this.listInforProduct = [
                       this._myProduct,
                       this.quantity,
                       this.degree,

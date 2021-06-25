@@ -881,7 +881,9 @@ Widget componentContainerInvoiceRequest(BuildContext context,
     String sellDate,
     String storeName,
     bool isRequest,
-    bool isCustomer}) {
+    bool isCustomer,
+    Widget widgetToNavigator,
+    Map<String, dynamic> map}) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Column(
