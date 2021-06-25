@@ -83,7 +83,7 @@ class showAllInvoiceRequestPageState extends State<showAllInvoiceRequestPage> {
     var size = MediaQuery.of(context).size;
     return SingleChildScrollView(
       child: Container(
-        height: size.height,
+        height: size.height * 0.65,
         width: size.width,
         child: Center(
           child: Padding(
@@ -116,7 +116,7 @@ class showAllInvoiceRequestPageState extends State<showAllInvoiceRequestPage> {
                                       child: Text(
                                         showMessage('', MSG027),
                                         style: TextStyle(
-                                            color: welcome_color, fontSize: 18),
+                                            color: primaryLight3Color, fontSize: 18),
                                       ),
                                     ),
                                   ],
@@ -130,14 +130,15 @@ class showAllInvoiceRequestPageState extends State<showAllInvoiceRequestPage> {
                               newPageProgressIndicatorBuilder: (context) =>
                                   newPageProgressIndicatorBuilder(),
                               itemBuilder: (context, item, index) {
-                                return boxForInvoice(
+                                return boxForInvoiceRequest(
                                     context: context,
                                     status: item['status_id'],
                                     date: "${item['create_date']}",
-                                    total: "${item['price']}",
+                                    price: "${item['price']}",
                                     id: item['id'].toString(),
                                     name: item["customer_name"],
                                     product: item["product_name"],
+                                    sell_date: item["sell_date"] ,
                                     widget: FormForDetailPage(
                                       tittle: "Chi tiết yêu cầu",
                                       bodyPage: DetailInvoiceRequest(
@@ -145,7 +146,6 @@ class showAllInvoiceRequestPageState extends State<showAllInvoiceRequestPage> {
                                         map: item,
                                       ),
                                     ),
-                                    isRequest: true,
                                     isCustomer: true);
                               }),
                         ),

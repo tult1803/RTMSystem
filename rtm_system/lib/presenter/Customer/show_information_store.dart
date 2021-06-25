@@ -3,8 +3,6 @@ import 'package:flutter/widgets.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:rtm_system/model/getAPI_allStore.dart';
 import 'package:rtm_system/model/model_store.dart';
-import 'package:rtm_system/model/notice/getAPI_all_notice.dart';
-import 'package:rtm_system/model/notice/model_all_notice.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
@@ -17,6 +15,7 @@ class showStore extends StatefulWidget {
 }
 
 class _showStoreState extends State<showStore> {
+
   int _pageSize = 1;
   final PagingController<int, StoreElement> _pagingController =
   PagingController(firstPageKey: 10);

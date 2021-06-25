@@ -15,12 +15,10 @@ class InvoiceTab extends StatefulWidget {
 DateTime fromDate;
 DateTime toDate;
 
-class _InvoiceTabState extends State<InvoiceTab>
-    with TickerProviderStateMixin {
+class _InvoiceTabState extends State<InvoiceTab> with TickerProviderStateMixin {
   TabController _tabController;
   String getFromDate, getToDate;
   int index, _selectedIndex;
-
   @override
   void initState() {
     super.initState();
@@ -42,11 +40,13 @@ class _InvoiceTabState extends State<InvoiceTab>
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: Color(0xffEEEEEE),
+      backgroundColor: backgroundColor,
       appBar: AppBar(
+        backgroundColor: primaryColor,
         centerTitle: true,
         title: const Text('Hoá đơn', style: TextStyle( color: Colors.white),),
         bottom: TabBar(
+          indicatorColor: primaryColor,
           isScrollable: true,
           labelColor: Colors.white,
           unselectedLabelColor: Colors.white.withOpacity(0.5),
@@ -69,16 +69,13 @@ class _InvoiceTabState extends State<InvoiceTab>
               text: 'Bán hàng',
               icon: Icon(Icons.my_library_books_outlined),
             ),
-            // Tab(
-            //   text: 'Hoàn trả',
-            //   icon: Icon(Icons.assignment_return_outlined),
-            // ),
           ],
-        ),
+        )
       ),
       body: TabBarView(
         controller: _tabController,
         children: <Widget>[
+          //Show invoice request
           Container(
               height: size.height,
               margin: EdgeInsets.only(left: 5, top: 12, right: 5),
@@ -92,55 +89,38 @@ class _InvoiceTabState extends State<InvoiceTab>
                 ),
               )
           ),
-          Container(
-              height: size.height,
-              margin: EdgeInsets.only(left: 5, top: 12, right: 5),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    rowButtonDatetime(),
-                    new showAllInvoicePage(4, fromDate: getFromDate, toDate: getToDate),
-                  ],
-                ),
-              )
-          ),
-          Container(
-            height: size.height,
-            margin: EdgeInsets.only(left: 5, top: 12, right: 5),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  rowButtonDatetime(),
-                  new showAllInvoicePage(5, fromDate: getFromDate, toDate: getToDate),
-                ],
-              ),
-            )
-          ),
-          Container(
-              height: size.height,
-              margin: EdgeInsets.only(left: 5, top: 12, right: 5),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    rowButtonDatetime(),
-                    new showAllInvoicePage(-1, fromDate: getFromDate, toDate: getToDate),
-                  ],
-                ),
-              )
-          ),
+          //Show invoice processing
+          containerInvoice(size.height, 4),
+          //Show invoice deposit
+          containerInvoice(size.height, 5),
+          //Show sale's invoice: -1 ( done, undone, actice)
+          containerInvoice(size.height, 3),
         ],
       ),
       floatingActionButton: _showFloatBtn(_selectedIndex),
     );
   }
+  //show invoice
+  Widget containerInvoice(height, status){
+    return  Container(
+        height: height,
+        margin: EdgeInsets.only(left: 5, top: 12, right: 5),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              rowButtonDatetime(),
+              new showAllInvoicePage(status, fromDate: getFromDate, toDate: getToDate),
+            ],
+          ),
+        )
+    );
+  }
   Widget _showFloatBtn(index){
+    //index = 2 là tab thứ 2 "Ký gửi"
     if(index == 2 ){
       return  FloatingActionButton.extended(
         onPressed: () {
-          // Add your onPressed code here!
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -150,14 +130,15 @@ class _InvoiceTabState extends State<InvoiceTab>
         label: Text('Nhận tiền', style: TextStyle(
           color: Colors.white,
         ),),
-        backgroundColor: welcome_color,
+        backgroundColor: primaryColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(50.0),
         ),
         elevation: 10,
       );
-    }else{
+    } else {
       return FloatingActionButton(
+        backgroundColor: primaryColor,
         onPressed: () {
           Navigator.push(
             context,
@@ -169,10 +150,10 @@ class _InvoiceTabState extends State<InvoiceTab>
           );
         },
         child :Icon(Icons.post_add_outlined, color: Colors.white, size: 25,),
-        backgroundColor: welcome_color,
       );
     }
   }
+  //show btn select date, it have setState should dont reuse
   Widget rowButtonDatetime() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,

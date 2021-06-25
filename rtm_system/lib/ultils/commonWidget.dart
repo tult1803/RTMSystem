@@ -194,16 +194,17 @@ Widget btnDateTimeForCustomer(
       SizedBox(
         width: size.width * 0.35,
         child: RaisedButton(
-          color: welcome_color,
+          color: Colors.white,
           onPressed: () {},
           child: Text(
             '$tittle',
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(color: Colors.black),
           ),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
+            borderRadius: BorderRadius.circular(15.0),
+            side: BorderSide(color: Color(0xFFcccccc), width: 1),
           ),
-          elevation: 10,
+          elevation: 5,
         ),
       ),
       Container(
@@ -388,7 +389,7 @@ Widget boxForInvoice(
                 marginTop: 10,
                 borderRadius: 5,
                 height: 30,
-                colorContainer: colorHexa("#f9ee75"),
+                colorContainer: idColor,
                 paddingRightOfText: 10,
                 paddingLeftOfText: 10,
               ),
@@ -468,21 +469,26 @@ Widget boxForInvoice(
   );
 }
 
+//show các yêu cầu bán hàng
 Widget boxForInvoiceRequest(
     {BuildContext context,
     String id,
     String name,
     String product,
-    String total,
+    String price,
     String date,
+    String sell_date,
+    int status,
     Widget widget,
     bool isCustomer}) {
-  String totalAfterFormat;
-  // thay đổi title , và truyền totalAfterFormat sẽ là giá sản phẩm.
+  String dateAfterFormat, dateSellAfterFormat, totalAfterFormat;
   try {
-    totalAfterFormat = "${getFormatPrice(total)}đ";
+    totalAfterFormat = "${getFormatPrice(price)} đ";
+    dateAfterFormat = "${getDateTime(date)}";
+    dateSellAfterFormat = "${getDateTime(sell_date, dateFormat: 'dd-MM-yyyy')}";
   } catch (_) {
-    totalAfterFormat = "$total";
+    totalAfterFormat = "$price";
+    dateAfterFormat = "$date";
   }
   return GestureDetector(
     onTap: () => Navigator.of(context)
@@ -513,7 +519,7 @@ Widget boxForInvoiceRequest(
                 marginTop: 10,
                 borderRadius: 5,
                 height: 30,
-                colorContainer: colorHexa("#f9ee75"),
+                colorContainer: idColor,
                 paddingRightOfText: 10,
                 paddingLeftOfText: 10,
               ),
@@ -522,12 +528,28 @@ Widget boxForInvoiceRequest(
                   alignment: Alignment.centerRight,
                   paddingLeftOfText: 10,
                   paddingRightOfText: 10,
-                  tittle: "$date",
+                  tittle: "$dateAfterFormat",
                   fontWeight: FontWeight.w600,
                 ),
               ),
             ],
           ),
+          if (!isCustomer)
+            containerTextInvoice(
+              alignment: Alignment.topLeft,
+              paddingLeftOfText: 10,
+              paddingRightOfText: 10,
+              tittle: name,
+              fontWeight: FontWeight.w700,
+            ),
+          if (isCustomer)
+            containerTextInvoice(
+              alignment: Alignment.topLeft,
+              paddingLeftOfText: 10,
+              paddingRightOfText: 10,
+              tittle: "$product",
+              fontWeight: FontWeight.w700,
+            ),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -535,31 +557,23 @@ Widget boxForInvoiceRequest(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (!isCustomer)
-                      containerTextInvoice(
-                        alignment: Alignment.topLeft,
-                        paddingLeftOfText: 10,
-                        paddingRightOfText: 10,
-                        tittle: name,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    isCustomer
+                    !isCustomer
                         ? containerTextInvoice(
-                      marginTop: 2,
-                      alignment: Alignment.topLeft,
-                      paddingLeftOfText: 10,
-                      paddingRightOfText: 10,
-                      tittle: "$product",
-                      fontWeight: FontWeight.w700,
-                    )
+                            marginTop: 2,
+                            alignment: Alignment.topLeft,
+                            paddingLeftOfText: 10,
+                            paddingRightOfText: 10,
+                            tittle: "Sản phẩm: $product",
+                            fontWeight: FontWeight.w400,
+                          )
                         : containerTextInvoice(
-                      marginTop: 2,
-                      alignment: Alignment.topLeft,
-                      paddingLeftOfText: 10,
-                      paddingRightOfText: 10,
-                      tittle: "Sản phẩm: $product",
-                      fontWeight: FontWeight.w400,
-                    ),
+                            marginTop: 2,
+                            alignment: Alignment.topLeft,
+                            paddingLeftOfText: 10,
+                            paddingRightOfText: 10,
+                            tittle: "Ngày sẽ tới bán: $dateSellAfterFormat",
+                            fontWeight: FontWeight.w400,
+                          )
                   ],
                 ),
               ),
@@ -570,11 +584,9 @@ Widget boxForInvoiceRequest(
                 fontWeightText: FontWeight.w500,
                 height: 30,
                 width: 100,
-                colorBoxShadow: Colors.white10,
-                colorContainer: welcome_color,
+                colorContainer: getColorStatus(status: status),
                 borderRadius: 5,
                 marginRight: 10,
-                fontSize: 17
               ),
             ],
           ),
@@ -822,15 +834,14 @@ Widget buttonProfile(BuildContext context, double left, double right,
 
 // Dùng cho đăng xuất, xóa thông tin.
 Widget btnLogout(context) {
+  var size = MediaQuery.of(context).size;
   return Container(
-    margin: EdgeInsets.only(top: 10),
-    width: 140,
+    width: size.width * 0.4,
     child: Center(
       child: TextButton(
         onPressed: () async {
           SharedPreferences prefs = await SharedPreferences.getInstance();
           prefs.clear();
-          print('Data Login đã xóa');
           Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(builder: (context) => LoginPage()),
@@ -839,32 +850,29 @@ Widget btnLogout(context) {
         style: ButtonStyle(
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(18.0),
+              borderRadius: BorderRadius.circular(20.0),
               side: BorderSide(color: Colors.red),
             ),
           ),
         ),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Column(
               children: [
                 Image(
                   image: AssetImage("images/exit.png"),
-                  width: 20,
-                  height: 20,
+                  width: size.width * 0.06,
+                  height: size.height * 0.03,
                 ),
               ],
             ),
             Column(
-              children: [Text('     ')],
-            ),
-            Column(
               children: [
-                Text(
+                AutoSizeText(
                   'Đăng xuất',
                   style: TextStyle(
                     color: Colors.black,
-                    fontSize: 16,
                   ),
                 ),
               ],
@@ -876,6 +884,7 @@ Widget btnLogout(context) {
   );
 }
 
+//show btn dùng để cập nhật thông tin
 Widget btnUpdateInfo(
     context,
     String cmnd,
@@ -888,7 +897,6 @@ Widget btnUpdateInfo(
     bool check,
     String accountId) {
   return Container(
-    width: 320,
     // ignore: deprecated_member_use
     child: RaisedButton(
       color: Color(0xFF0BB791),
@@ -909,26 +917,24 @@ Widget btnUpdateInfo(
                   )),
         );
       },
-      child: Text(
+      child: AutoSizeText(
         'Cập nhật thông tin',
         style: TextStyle(
           color: Colors.white,
-          fontSize: 16,
         ),
       ),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
+        borderRadius: BorderRadius.circular(15.0),
       ),
       elevation: 10,
     ),
   );
 }
 
-//dung khi thay doi pw
+//show btn để thay đổi mật khẩu
 Widget btnUpdatePw(
     context, String password, String accountId, bool isCustomer) {
   return Container(
-    width: 320,
     // ignore: deprecated_member_use
     child: RaisedButton(
       color: Color(0xFF0BB791),
@@ -943,15 +949,14 @@ Widget btnUpdatePw(
                   )),
         );
       },
-      child: Text(
+      child: AutoSizeText(
         'Thay đổi mật khẩu',
         style: TextStyle(
           color: Colors.white,
-          fontSize: 16,
         ),
       ),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
+        borderRadius: BorderRadius.circular(15.0),
       ),
       elevation: 10,
     ),
@@ -1239,3 +1244,5 @@ Widget containerStores(BuildContext context, String name, String address,
     ),
   );
 }
+
+

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rtm_system/presenter/Customer/show_Notice.dart';
+import 'package:rtm_system/ultils/src/color_ultils.dart';
 class NoticesPage extends StatefulWidget {
   const NoticesPage({Key key}) : super(key: key);
 
@@ -13,9 +14,9 @@ class _NoticesPageState extends State<NoticesPage> {
   @override
   Widget build(BuildContext context) {
       return Scaffold(
-        backgroundColor: Color(0xffEEEEEE),
+        backgroundColor: backgroundColor,
         appBar: AppBar(
-          backgroundColor: Color(0xFF0BB791),
+          backgroundColor: primaryColor,
           title: Text(widget.title, style: TextStyle(
             color: Colors.white,
           ),),

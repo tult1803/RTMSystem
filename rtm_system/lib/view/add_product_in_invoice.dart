@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:rtm_system/model/getAPI_allStore.dart';
 import 'package:rtm_system/model/getAPI_product.dart';
 import 'package:rtm_system/model/model_product.dart';
@@ -542,17 +543,17 @@ class _AddProductPageState extends State<AddProductPage> {
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
                       ),
-                      hint: Text('Chon sản phẩm'),
+                      hint: Text('Chọn sản phẩm'),
                       onChanged: (String newValue) async {
                         setState(() {
                           _myProduct = newValue;
                           _getCurrentPrice(newValue);
-                          this.listInforProduct = [
+                          this.listInfor = [
                             this._myProduct,
                             this.quantity,
                             this.degree,
-                            getDateTime("$dateSale",
-                                dateFormat: "yyyy-MM-dd HH:mm:ss")
+                            getDateTime("$dateSale", dateFormat: "yyyy-MM-dd HH:mm:ss"),
+                            this._myStore,
                           ];
                         });
                         setState(() {
@@ -615,6 +616,14 @@ class _AddProductPageState extends State<AddProductPage> {
                         setState(() {
                           _myStore = newValue;
                         });
+                        this.listInfor = [
+                          this._myProduct,
+                          this.quantity,
+                          this.degree,
+                          getDateTime("$dateSale",
+                              dateFormat: "yyyy-MM-dd HH:mm:ss"),
+                          this._myStore,
+                        ];
                       },
                       items: dataListStore?.map((item) {
                         return new DropdownMenuItem(
@@ -635,6 +644,17 @@ class _AddProductPageState extends State<AddProductPage> {
       ],
     );
   }
+  TextEditingController getDataTextField(txt) {
+    if (txt == null) {
+      txt = "";
+    }
+    final TextEditingController _controller = TextEditingController();
+    _controller.value = _controller.value.copyWith(
+      text: txt,
+      selection: TextSelection.collapsed(offset: txt.length),
+    );
+    return _controller;
+  }
 
   Widget _txtItemProduct(
       {BuildContext context, String hintText, int maxLines, bool isQuantity}) {
@@ -653,11 +673,12 @@ class _AddProductPageState extends State<AddProductPage> {
               txtController.clear();
             } else
               this.degree = double.parse(value);
-            this.listInforProduct = [
+            this.listInfor = [
               this._myProduct,
               this.quantity,
               this.degree,
-              getDateTime("$dateSale", dateFormat: "yyyy-MM-dd HH:mm:ss")
+              getDateTime("$dateSale", dateFormat: "yyyy-MM-dd HH:mm:ss"),
+              this._myStore,
             ];
             setState(() {
               checkClick = true;
@@ -711,11 +732,12 @@ class _AddProductPageState extends State<AddProductPage> {
           listQuantity.forEach((element) {
             quantity += double.parse(element);
           });
-          this.listInforProduct = [
+          this.listInfor = [
             this._myProduct,
             this.quantity,
             this.degree,
-            getDateTime("$dateSale", dateFormat: "yyyy-MM-dd HH:mm:ss")
+            getDateTime("$dateSale", dateFormat: "yyyy-MM-dd HH:mm:ss"),
+            this._myStore,
           ];
         });
       },
@@ -778,12 +800,12 @@ class _AddProductPageState extends State<AddProductPage> {
                 onConfirm: (date) {
                   setState(() {
                     dateSale = date;
-                    this.listInforProduct = [
+                    this.listInfor = [
                       this._myProduct,
                       this.quantity,
                       this.degree,
-                      getDateTime("$dateSale",
-                          dateFormat: "yyyy-MM-dd HH:mm:ss")
+                      getDateTime("$dateSale", dateFormat: "yyyy-MM-dd HH:mm:ss"),
+                      this._myStore,
                     ];
                   });
                 },

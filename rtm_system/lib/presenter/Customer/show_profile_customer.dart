@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:rtm_system/model/profile_customer/getAPI_customer_phone.dart';
 import 'package:rtm_system/model/profile_customer/model_profile_customer.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
+import 'package:rtm_system/ultils/helpers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class showProfile extends StatefulWidget {
@@ -31,7 +32,6 @@ class _showProfileState extends State<showProfile> {
     password = sharedPreferences.getString('password');
     print(token);
     // Đỗ dữ liệu lấy từ api
-    print('OKla');
     infomationCustomer =
         await getAPIProfileCustomer.getProfileCustomer(token, phone);
     return infomationCustomer;
@@ -40,7 +40,6 @@ class _showProfileState extends State<showProfile> {
   @override
   Widget build(BuildContext context) {
     String genderShow = '';
-
     var size = MediaQuery.of(context).size;
     return new FutureBuilder(
       future: getAPIProfile(),
@@ -48,19 +47,16 @@ class _showProfileState extends State<showProfile> {
         if (snapshot.hasData) {
           DateTime date = infomationCustomer.birthday;
           final f = new DateFormat('dd-MM-yyyy');
-          //show gender
+          //show gender vì trong đây mới có data để set
           infomationCustomer.gender == 0
               ? genderShow = 'Nữ'
               : genderShow = 'Nam';
           return SingleChildScrollView(
             child: Column(
               children: [
-                SizedBox(
-                  height: 10,
-                ),
                 Container(
-                  width: 110,
-                  height: 110,
+                  width: size.width * 0.5,
+                  height: size.height * 0.16,
                   child: Center(
                     child: Image(
                       image: AssetImage("images/avt.png"),
@@ -80,12 +76,12 @@ class _showProfileState extends State<showProfile> {
                       children: [
                         _item(context, 'Họ và tên',
                             infomationCustomer.fullname),
-                        _item(context, 'Ngày sinh', f.format(date)),
+                        _item(context, 'Ngày sinh', getDateTime(infomationCustomer.birthday.toString(), dateFormat: 'dd-MM-yyyy')),
                         _item(context, 'Số điện thoại',
                             infomationCustomer.phone),
                         _item(context, 'Giới tính', genderShow),
                         _item(context, 'CMND', infomationCustomer.cmnd),
-                        _item(context, 'Địa chỉ', infomationCustomer.address),
+                        _item(context, 'Địa chỉ', infomationCustomer.address.toString()),
                         SizedBox(
                           height: 12,
                         ),
@@ -93,20 +89,35 @@ class _showProfileState extends State<showProfile> {
                     ),
                   ),
                 ),
-                btnUpdateInfo(
-                  context,
-                  infomationCustomer.cmnd,
-                  this.password,
-                  infomationCustomer.fullname,
-                  infomationCustomer.gender,
-                  infomationCustomer.phone,
-                  infomationCustomer.birthday,
-                  infomationCustomer.address,
-                  false,
-                  infomationCustomer.accountId,
+                //màn hình nhỏ hơn sẽ không bị tràn
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      btnUpdateInfo(
+                        context,
+                        infomationCustomer.cmnd,
+                        this.password,
+                        infomationCustomer.fullname,
+                        infomationCustomer.gender,
+                        infomationCustomer.phone,
+                        infomationCustomer.birthday,
+                        infomationCustomer.address,
+                        false,
+                        infomationCustomer.accountId,
+                      ),
+                      SizedBox(
+                        width: size.width* 0.03,
+                      ),
+                      btnUpdatePw(
+                          context, this.password, infomationCustomer.accountId, true),
+                    ],
+                  ),
                 ),
-                btnUpdatePw(
-                    context, this.password, infomationCustomer.accountId, true),
+                SizedBox(
+                  height: 12,
+                ),
               ],
             ),
           );
@@ -117,11 +128,15 @@ class _showProfileState extends State<showProfile> {
       },
     );
   }
-
+  //Show thông tin của người dùng
   Widget _item(context, header, value) {
+    // Khi giá trị get lên là rỗng thì set '' để load tránh lỗi trang
+    if(value == null){
+      value = '';
+    }
     var size = MediaQuery.of(context).size;
     return Container(
-      margin: EdgeInsets.fromLTRB(12, 0, 12, 0),
+      margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
       child: Column(
         children: [
           ListTile(

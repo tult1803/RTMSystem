@@ -158,7 +158,7 @@ Widget txtItemDetail(context, String tittle, String content,
 
 //nội dung của bill, đang dùng: create invoice/ request
 Widget widgetCreateInvoice(context, bool isNew, List product,
-    String nameProduct, String name, String phone, bool isCustomer) {
+    String nameProduct, String nameStore, String name, String phone, bool isCustomer) {
   var size = MediaQuery.of(context).size;
   return SingleChildScrollView(
       child: Container(
@@ -186,6 +186,10 @@ Widget widgetCreateInvoice(context, bool isNew, List product,
                   height: 10,
                 ),
                 txtItemDetail(context, 'Sản phẩm', '${nameProduct}'),
+                SizedBox(
+                  height: 10,
+                ),
+                txtItemDetail(context, 'Cửa hàng', '${nameStore}'),
                 SizedBox(
                   height: 10,
                 ),
@@ -227,8 +231,8 @@ Widget widgetCreateInvoice(context, bool isNew, List product,
             child: RaisedButton(
               color: Color(0xffEEEEEE),
               onPressed: () {
-                doCreateRequestInvoiceOrInvoice(
-                    context, product[0], product[3], 0, 0, 0, 0, isCustomer);
+                doCreateRequestInvoiceOrInvoice(context, product[0],
+                    product[3], 0,product[4], 0, 0, 0, isCustomer);
               },
               child: Text('Xác nhận'),
               shape: RoundedRectangleBorder(
@@ -877,9 +881,7 @@ Widget componentContainerInvoiceRequest(BuildContext context,
     String sellDate,
     String storeName,
     bool isRequest,
-    bool isCustomer,
-    Map<String, dynamic> map,
-    Widget widgetToNavigator}) {
+    bool isCustomer}) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Column(
@@ -1008,9 +1010,9 @@ Widget componentContainerDetailAdvanceRequest(BuildContext context,
   );
 }
 
-//nội dung của bill, đang dùng: create advance
+//nội dung của bill, đang dùng: create advance and confirm advance
 Widget widgetCreateAdvance(context, List item, String nameProduct, String name,
-    String phone, bool isCustomer) {
+    String phone, int type, bool isCustomer) {
   var size = MediaQuery.of(context).size;
   return SingleChildScrollView(
       child: Container(
@@ -1043,6 +1045,9 @@ Widget widgetCreateAdvance(context, List item, String nameProduct, String name,
                 SizedBox(
                   height: 10,
                 ),
+                //có thể sẽ thêm data ở đây
+
+                //khi nào có api sẽ tách chỗ này ra thành 1 hàm để gọi các btn khác nhau
                 SizedBox(
                   width: size.width * 0.4,
                   // ignore: deprecated_member_use
@@ -1050,7 +1055,7 @@ Widget widgetCreateAdvance(context, List item, String nameProduct, String name,
                     color: Color(0xFF0BB791),
                     onPressed: () {
                       doCreateRequestAdvance(context, 'TK-111', item[0],
-                          item[1], 'image', 1, true);
+                          item[1], item[2], type, true);
                     },
                     child: AutoSizeText(
                       'Xác nhận',

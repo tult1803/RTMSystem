@@ -1,3 +1,4 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:rtm_system/presenter/Customer/show_all_invoice.dart';
 import 'package:rtm_system/presenter/Customer/show_invoice_request.dart';
@@ -20,6 +21,7 @@ class _AdvancePageState extends State<AdvancePage>
   TabController _tabController;
   final PageController _pageController = PageController();
   String getFromDate, getToDate;
+  //index on Tab
   int index, _selectedIndex;
 
   @override
@@ -31,6 +33,7 @@ class _AdvancePageState extends State<AdvancePage>
         _selectedIndex = _tabController.index;
       });
     });
+    //tab 1: yeu cau
     index = 0;
     toDate = DateTime.now();
     fromDate = DateTime.now().subtract(Duration(days: 30));
@@ -38,13 +41,13 @@ class _AdvancePageState extends State<AdvancePage>
     "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
     getToDate = "${getDateTime("$toDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
   }
-
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: Color(0xffEEEEEE),
+      backgroundColor: backgroundColor,
       appBar: AppBar(
+        backgroundColor: primaryColor,
         centerTitle: true,
         title: const Text('Ứng tiền', style: TextStyle( color: Colors.white),),
         bottom: TabBar(
@@ -78,42 +81,34 @@ class _AdvancePageState extends State<AdvancePage>
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     rowButtonDatetime(),
-                    btnLogout(context),
                     new showAllInvoiceRequestPage(fromDate: getFromDate, toDate: getToDate),
                   ],
                 ),
               )
           ),
-          Container(
-              height: size.height,
-              margin: EdgeInsets.only(left: 5, top: 12, right: 5),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    rowButtonDatetime(),
-                    new showAllInvoicePage(4, fromDate: getFromDate, toDate: getToDate),
-                  ],
-                ),
-              )
-          ),
-          // các advance active and done
-          Container(
-              height: size.height,
-              margin: EdgeInsets.only(left: 5, top: 12, right: 5),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    rowButtonDatetime(),
-                    new showAllInvoicePage(4, fromDate: getFromDate, toDate: getToDate),
-                  ],
-                ),
-              )
-          ),
+          //Show advance processing
+          containerInvoice(size.height, 4),
+          //Show advance done and active
+          containerInvoice(size.height, 3),
         ],
       ),
       floatingActionButton: _showFloatBtn(_selectedIndex),
+    );
+  }
+  //show invoice advance
+  Widget containerInvoice(height, status){
+    return  Container(
+        height: height,
+        margin: EdgeInsets.only(left: 5, top: 12, right: 5),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              rowButtonDatetime(),
+              new showAllInvoicePage(status, fromDate: getFromDate, toDate: getToDate),
+            ],
+          ),
+        )
     );
   }
   Widget _showFloatBtn(index){
@@ -124,12 +119,11 @@ class _AdvancePageState extends State<AdvancePage>
             context,
             MaterialPageRoute(builder: (context) => GetMoneyOrPayDebt(isPay: true,)),
           );
-
         },
         label: Text('Trả nợ', style: TextStyle(
           color: Colors.white,
         ),),
-        backgroundColor: welcome_color,
+        backgroundColor: primaryColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(50.0),
         ),
@@ -144,7 +138,7 @@ class _AdvancePageState extends State<AdvancePage>
           );
         },
         child :Icon(Icons.post_add_outlined, color: Colors.white, size: 25,),
-        backgroundColor: welcome_color,
+        backgroundColor: primaryColor,
       );
     }
   }
@@ -207,7 +201,7 @@ class _AdvancePageState extends State<AdvancePage>
                 ),
                 //Dùng cho nút chọn ngày và background
                 colorScheme: ColorScheme.light(
-                  primary: welcome_color,
+                  primary: primaryColor,
                 )),
             child: child,
           );

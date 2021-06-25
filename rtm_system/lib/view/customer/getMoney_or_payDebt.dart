@@ -1,20 +1,21 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:rtm_system/model/getAPI_product.dart';
 import 'package:rtm_system/model/model_product.dart';
 import 'package:rtm_system/presenter/Customer/show_all_invoice.dart';
+import 'package:rtm_system/ultils/alertDialog.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/component.dart';
-import 'package:rtm_system/ultils/getData.dart';
 import 'package:rtm_system/ultils/helpers.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/ultils/src/messageList.dart';
-import 'package:rtm_system/view/customer/advance/detail_advance.dart';
+import 'package:rtm_system/view/customer/home_customer_page.dart';
+import 'package:rtm_system/view/customer/invoice/allInvoiceTab.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class GetMoneyOrPayDebt extends StatefulWidget {
   const GetMoneyOrPayDebt({Key key, this.isPay}) : super(key: key);
+  // isPay = true là hoá đơn để trả nợ
   final bool isPay;
 
   @override
@@ -25,7 +26,6 @@ DateTime fromDate;
 DateTime toDate;
 
 class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
-  var formatter = new DateFormat('dd-MM-yyyy');
   List<DataProduct> dataListProduct = [];
   bool checkClick = false;
   String errNameProduct, token;
@@ -68,7 +68,6 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
     widget.isPay? title ='Trả nợ': title = 'Nhận tiền';
   }
 
-  String msg = '';
 
   @override
   Widget build(BuildContext context) {
@@ -128,7 +127,13 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
                   ),
                 ),
               ),
+              SizedBox(
+                height: 5,
+              ),
               rowButtonDatetime(),
+              SizedBox(
+                height: 5,
+              ),
               Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -155,7 +160,7 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
                   ],
                 ),
               ),
-              //show invoice ky gui here
+              //show invoice ky gui here sau khi click xác nhận btn "có" sẽ update các đơn này
               new showAllInvoicePage(5,
                   fromDate: getFromDate, toDate: getToDate),
               SizedBox(
@@ -184,7 +189,7 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
       ),
     );
   }
-
+  // chưa thấy cần dùng cho chỗ khác nên để đây.
   Future<void> _showConfirmDialog() async {
     return showDialog<void>(
       context: context,
@@ -220,7 +225,19 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
               ),
               onPressed: () {
                 // call api and return toast message
-                widget.isPay? '': '';
+                widget.isPay? showStatusAlertDialog(
+                    context,
+                    showMessage("", MSG012),
+                HomeCustomerPage(
+                index: 1,
+                ),
+                true): showStatusAlertDialog(
+                    context,
+                    showMessage("", MSG012),
+                    HomeCustomerPage(
+                      index: 0,
+                    ),
+                    true);;
               },
             ),
 
@@ -229,6 +246,8 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
       },
     );
   }
+
+  // các btn date không thể tách ra class riêng vì setState, nên phải code trong class.
   Widget rowButtonDatetime() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -306,6 +325,7 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
       });
     }
   }
+
   //show bang call API khi nao co API thi chuyen no qua trang khac
   Widget _txtItemDetail(context, String title, String content) {
     return Column(
