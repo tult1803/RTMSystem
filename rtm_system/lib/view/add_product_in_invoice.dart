@@ -199,9 +199,7 @@ class _AddProductPageState extends State<AddProductPage> {
                       enabled:
                           widget.isChangeData == null ? enabledFillName : false,
                       isCustomer: this.widget.isCustomer,
-                      controller: infomationCustomer == null
-                          ? getDataTextField(nameNewCustomer)
-                          : getDataTextField(infomationCustomer.fullname),
+                      controller: getDataTextField(nameNewCustomer),
                       type: "name",
                       tittle: "Tên khách hàng",
                       txtInputType: TextInputType.name,
@@ -516,49 +514,50 @@ class _AddProductPageState extends State<AddProductPage> {
 
   Widget _dropdownListProduct() {
     return Row(
-          children: [
-            Expanded(
-              child: Container(
-                height: 40,
-                margin: EdgeInsets.only(top: 5, bottom: 10),
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(10.0),
-                    )),
-                child: DropdownButtonHideUnderline(
-                  child: ButtonTheme(
-                    alignedDropdown: true,
-                    child: DropdownButton<String>(
-                      value: _myProduct,
-                      iconSize: 30,
-                      icon: (null),
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      hint: Text('Chọn sản phẩm'),
-                      onChanged: (String newValue) async {
-                        setState(() {
-                          _myProduct = newValue;
-                          _getCurrentPrice(newValue);
-                          this.listInforProduct = [
-                            this._myProduct,
-                            this.quantity,
-                            this.degree,
-                            getDateTime("$dateSale", dateFormat: "yyyy-MM-dd HH:mm:ss"),
-                            this._myStore,
-                          ];
-                        });
-                        setState(() {
-                          _myProduct == "SP-1000003"
-                              ? checkProduct = false
-                              : checkProduct = true;
-                          checkClick = true;
-                        });
-                      },
-                      items: dataListProduct?.map((item) {
+      children: [
+        Expanded(
+          child: Container(
+            height: 40,
+            margin: EdgeInsets.only(top: 5, bottom: 10),
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(10.0),
+                )),
+            child: DropdownButtonHideUnderline(
+              child: ButtonTheme(
+                alignedDropdown: true,
+                child: DropdownButton<String>(
+                  value: _myProduct,
+                  iconSize: 30,
+                  icon: (null),
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  hint: Text('Chọn sản phẩm'),
+                  onChanged: (String newValue) async {
+                    if (widget.productId == null) {
+                      setState(() {
+                        _myProduct = newValue;
+                        _getCurrentPrice(newValue);
+                        this.listInforProduct = [
+                          this._myProduct,
+                          this.quantity,
+                          this.degree,
+                          getDateTime("$dateSale",
+                              dateFormat: "yyyy-MM-dd HH:mm:ss"),
+                          this._myStore,
+                        ];
+                        _myProduct == "SP-1000003"
+                            ? checkProduct = false
+                            : checkProduct = true;
+                        checkClick = true;
+                      });
+                    }
+                  },
+                  items: dataListProduct?.map((item) {
                         return new DropdownMenuItem(
                           child: new Text(item.name),
                           //chuyen id de create
@@ -577,58 +576,60 @@ class _AddProductPageState extends State<AddProductPage> {
 
   Widget _dropdownListStore() {
     return Row(
-          children: [
-            Expanded(
-              child: Container(
-                height: 40,
-                margin: EdgeInsets.only(top: 5, bottom: 10),
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(10.0),
-                    )),
-                child: DropdownButtonHideUnderline(
-                  child: ButtonTheme(
-                    alignedDropdown: true,
-                    child: DropdownButton<String>(
-                      autofocus: autoFocus,
-                      value: _myStore,
-                      iconSize: 30,
-                      icon: (null),
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      hint: Text('Chon cửa hàng'),
-                      onChanged: (String newValue) async {
-                        setState(() {
-                          _myStore = newValue;
-                        });
-                        this.listInforProduct = [
-                          this._myProduct,
-                          this.quantity,
-                          this.degree,
-                          getDateTime("$dateSale",
-                              dateFormat: "yyyy-MM-dd HH:mm:ss"),
-                          this._myStore,
-                        ];
-                      },
-                      items: dataListStore?.map((item) {
-                            return new DropdownMenuItem(
-                              child: new Text(item.name),
-                              //chuyen id de create
-                              value: item.id.toString(),
-                            );
-                          })?.toList() ??
-                          [],
-                    ),
+      children: [
+        Expanded(
+          child: Container(
+            height: 40,
+            margin: EdgeInsets.only(top: 5, bottom: 10),
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(10.0),
+                )),
+            child: DropdownButtonHideUnderline(
+              child: ButtonTheme(
+                alignedDropdown: true,
+                child: DropdownButton<String>(
+                  autofocus: autoFocus,
+                  value: _myStore,
+                  iconSize: 30,
+                  icon: (null),
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
                   ),
+                  hint: Text('Chon cửa hàng'),
+                  onChanged: (String newValue) async {
+                    if (widget.storeId == null) {
+                      setState(() {
+                        _myStore = newValue;
+                      });
+                    }
+                    this.listInforProduct = [
+                      this._myProduct,
+                      this.quantity,
+                      this.degree,
+                      getDateTime("$dateSale",
+                          dateFormat: "yyyy-MM-dd HH:mm:ss"),
+                      this._myStore,
+                    ];
+                  },
+                  items: dataListStore?.map((item) {
+                        return new DropdownMenuItem(
+                          child: new Text(item.name),
+                          //chuyen id de create
+                          value: item.id.toString(),
+                        );
+                      })?.toList() ??
+                      [],
                 ),
               ),
             ),
-          ],
-        );
+          ),
+        ),
+      ],
+    );
   }
 
   Widget _txtItemProduct(
@@ -769,37 +770,34 @@ class _AddProductPageState extends State<AddProductPage> {
           ),
           GestureDetector(
             onTap: () {
-              DatePicker.showDatePicker(
-                context,
-                showTitleActions: true,
-                onConfirm: (date) {
-                  setState(() {
-                    dateSale = date;
-                    this.listInforProduct = [
-                      this._myProduct,
-                      this.quantity,
-                      this.degree,
-                      getDateTime("$dateSale", dateFormat: "yyyy-MM-dd HH:mm:ss"),
-                      this._myStore,
-                    ];
-                  });
-                },
-                ///Cái này là cái gì ???? ///
-                currentTime: dateNow,
-                /// ===================== ///
-                maxTime: DateTime(DateTime
-                    .now()
-                    .year + 100, 12, 31),
-                minTime: DateTime(DateTime
-                    .now()
-                    .year, DateTime
-                    .now()
-                    .month,
-                    DateTime
-                        .now()
-                        .day),
-                locale: LocaleType.vi,
-              );
+              if(widget.dateToPay == null){
+                DatePicker.showDatePicker(
+                  context,
+                  showTitleActions: true,
+                  onConfirm: (date) {
+                    setState(() {
+                      dateSale = date;
+                      this.listInforProduct = [
+                        this._myProduct,
+                        this.quantity,
+                        this.degree,
+                        getDateTime("$dateSale",
+                            dateFormat: "yyyy-MM-dd HH:mm:ss"),
+                        this._myStore,
+                      ];
+                    });
+                  },
+
+                  ///Cái này là cái gì ???? ///
+                  currentTime: dateNow,
+
+                  /// ===================== ///
+                  maxTime: DateTime(DateTime.now().year + 100, 12, 31),
+                  minTime: DateTime(DateTime.now().year, DateTime.now().month,
+                      DateTime.now().day),
+                  locale: LocaleType.vi,
+                );
+              }
             },
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
