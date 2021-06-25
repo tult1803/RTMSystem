@@ -94,7 +94,7 @@ class _InvoiceTabState extends State<InvoiceTab> with TickerProviderStateMixin {
           //Show invoice deposit
           containerInvoice(size.height, 5),
           //Show sale's invoice: -1 ( done, undone, actice)
-          containerInvoice(size.height, -1),
+          containerInvoice(size.height, 3),
         ],
       ),
       floatingActionButton: _showFloatBtn(_selectedIndex),

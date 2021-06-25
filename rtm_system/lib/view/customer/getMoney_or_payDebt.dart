@@ -3,11 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:rtm_system/model/getAPI_product.dart';
 import 'package:rtm_system/model/model_product.dart';
 import 'package:rtm_system/presenter/Customer/show_all_invoice.dart';
+import 'package:rtm_system/ultils/alertDialog.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/helpers.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/ultils/src/messageList.dart';
+import 'package:rtm_system/view/customer/home_customer_page.dart';
+import 'package:rtm_system/view/customer/invoice/allInvoiceTab.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class GetMoneyOrPayDebt extends StatefulWidget {
@@ -222,7 +225,19 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
               ),
               onPressed: () {
                 // call api and return toast message
-                widget.isPay? '': '';
+                widget.isPay? showStatusAlertDialog(
+                    context,
+                    showMessage("", MSG012),
+                HomeCustomerPage(
+                index: 1,
+                ),
+                true): showStatusAlertDialog(
+                    context,
+                    showMessage("", MSG012),
+                    HomeCustomerPage(
+                      index: 0,
+                    ),
+                    true);;
               },
             ),
 

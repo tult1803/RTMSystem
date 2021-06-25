@@ -89,7 +89,7 @@ class _AdvancePageState extends State<AdvancePage>
           //Show advance processing
           containerInvoice(size.height, 4),
           //Show advance done and active
-          containerInvoice(size.height, 5),
+          containerInvoice(size.height, 3),
         ],
       ),
       floatingActionButton: _showFloatBtn(_selectedIndex),
