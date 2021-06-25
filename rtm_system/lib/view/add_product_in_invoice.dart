@@ -456,14 +456,15 @@ class _AddProductPageState extends State<AddProductPage> {
               } else {
                 // _validate();
                 ///Chưa code chờ code ========================================== *****************************************
-                print('$nameNewCustomer '
-                    '- $phoneNewCustomer '
-                    '- $storeName ($_myStore) '
-                    '- $productName ($_myProduct) '
-                    '- $quantity '
-                    '- $degree '
-                    '- $dateSale'
-                    '- ${getFormatPrice('${getPriceTotal(double.tryParse(price), degree, quantity)}')}đ');
+                print('Tên: $nameNewCustomer '
+                    '\nSđt: $phoneNewCustomer '
+                    '\nCửa hàng: $storeName ($_myStore) '
+                    '\nSản phẩm: $productName ($_myProduct) '
+                    '\nCân nặng: $quantity '
+                    '\nĐộ: $degree '
+                    '\nGiá: $price'
+                    '\nTổng giá: ${getFormatPrice('${getPriceTotal(double.tryParse(price), degree, quantity)}')}đ'
+                    '\nNgày bán: $dateSale ');
               }
             });
           },

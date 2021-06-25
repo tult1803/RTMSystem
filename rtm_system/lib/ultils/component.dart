@@ -253,10 +253,9 @@ Widget _showContentInAdvance(context, String status) {
   }
 }
 
-
-///Chưa hiểu rõ nên note lại
+///===================================================== Note dùng sau ===================================================
 //nội dung của bill, đang dùng: create invoice/ request
-Widget widgetCreateInvoice(context, bool isNew, List product,
+Widget widgetCreateInvoice(context, List product,
     String nameProduct, String nameStore, String name, String phone, bool isCustomer) {
   var size = MediaQuery.of(context).size;
   return SingleChildScrollView(
@@ -304,25 +303,6 @@ Widget widgetCreateInvoice(context, bool isNew, List product,
                 ),
               ),
             ),
-            //button "Nhận tiền" show if status is "chưa trả", để hoàn thành đơn giao dịch
-            if (!isNew)
-              Center(
-                child: SizedBox(
-                  width: 150,
-                  // ignore: deprecated_member_use
-                  child: RaisedButton(
-                    color: Color(0xffEEEEEE),
-                    onPressed: () {
-                      //den page to update sp
-                    },
-                    child: Text('Sửa lại sản phẩm'),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    elevation: 10,
-                  ),
-                ),
-              ),
             Center(
               child: SizedBox(
                 width: 150,
