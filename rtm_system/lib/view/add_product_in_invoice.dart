@@ -64,9 +64,6 @@ class _AddProductPageState extends State<AddProductPage> {
   String _myProduct, _myStore;
   bool checkProduct = true;
 
-  /// Cái này có ý nghĩa là gì ///
-  DateTime dateNow;
-
   /// ====================== ///
   DateTime dateSale;
 
@@ -782,14 +779,14 @@ class _AddProductPageState extends State<AddProductPage> {
                         this.quantity,
                         this.degree,
                         getDateTime("$dateSale",
-                            dateFormat: "yyyy-MM-dd HH:mm:ss"),
+                            dateFormat: "yyyy-MM-dd"),
                         this._myStore,
                       ];
                     });
                   },
 
                   ///Cái này là cái gì ???? ///
-                  currentTime: dateNow,
+                  currentTime: dateSale,
 
                   /// ===================== ///
                   maxTime: DateTime(DateTime.now().year + 100, 12, 31),
