@@ -256,90 +256,62 @@ Widget _showComponetCreateInvoice(context, title, value, isCustomer) {
 
 ///Hàm này đang bị dư không dùng thi xoá đi
 // ignore: missing_return
-Widget _showBtnInAdvanceDetail(context, String status) {
-  if (status == 'active') {
+Widget _showBtnInAdvanceDetail(context, id, int status) {
+  var size = MediaQuery.of(context).size;
+  if (status == 8) {
     return Center(
       child: SizedBox(
-        width: 150,
+        width: size.width * 0.5,
         // ignore: deprecated_member_use
         child: RaisedButton(
-          color: Color(0xffEEEEEE),
+          color: primaryColor,
           onPressed: () {
-            put_API_PayAdvance(context);
+            put_API_ConfirmAdvance(context, id);
           },
-          child: Text('Xac nhan'),
+          child: AutoSizeText('Xác nhận', style: TextStyle(color: Colors.white),),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
+            borderRadius: BorderRadius.circular(20.0),
           ),
-          elevation: 10,
+          elevation: 5,
         ),
       ),
     );
   } else {
-    return Column(
-      children: [
-        SizedBox(
-          height: 10,
-        ),
-        txtItemDetail(context, 'Ngày tra', '20-05-2021 now()'),
-        SizedBox(
-          height: 10,
-        ),
-        txtItemDetail(context, 'Tiền nợ còn lại', '1,000,000 VND'),
-      ],
-    );
+    return Container();
   }
 }
 
 ///Hàm này đang bị dư không dùng thi xoá đi
-Widget _showContentInAdvance(context, String status) {
-  if (status == 'active') {
+Widget _showContentInAdvance(context, int status, managerName, managerPhone,
+    customerName, customerPhone, reason) {
+  if (status == 8 || status == 6) {
     return Column(
       children: [
+          txtItemDetail(context, "Người tạo", "$managerName",
+              subContent: managerPhone),
         SizedBox(
           height: 10,
         ),
-        txtItemDetail(context, 'Ngày tra', '20-05-2021 now()'),
+          txtItemDetail(context, "Tên khách hàng", "$customerName",
+              subContent: customerPhone),
         SizedBox(
           height: 10,
         ),
-        txtItemDetail(context, 'Tiền nợ còn lại', '1,000,000 VND'),
+        reason == null || reason == ''? Container(): txtItemDetail(context, "Lý do", "$reason"),
+        SizedBox(
+          height: 10,
+        ),
       ],
     );
-  } else {
+  } else if (status == 4){
     return Column(
       children: [
-        SizedBox(
-          height: 10,
-        ),
-        txtItemDetail(context, 'Trạng thái', 'Nguyen Van A'),
-        SizedBox(
-          height: 10,
-        ),
-        txtItemDetail(context, 'Mã giao dịch', 'Nguyen Van A'),
-        SizedBox(
-          height: 10,
-        ),
-        if (status == 'Đã huy') txtItemDetail(context, 'Ly do', 'abc'),
-        if (status == 'Đã huy')
-          SizedBox(
-            height: 10,
-          ),
-        if (status == 'Chờ xác nhận')
-          Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                btnAcceptOrReject(
-                    context, 130, Colors.redAccent, 'Từ chối', false, 0),
-                SizedBox(width: 20),
-                btnAcceptOrReject(
-                    context, 130, Color(0xFF0BB791), 'Chấp nhận', true, 0),
-              ],
-            ),
-          ),
+        txtItemDetail(context, "Người tạo", "$customerName",
+            subContent: customerPhone),
       ],
     );
+  } else{
+    return Container();
   }
 }
 
@@ -1022,15 +994,21 @@ Widget componentContainerInvoiceRequest(BuildContext context,
 }
 
 //Dùng cho trang chi tiết or yêu cầu của advance
+// hiện tại lấy detail, status = 4 k có
+// isCustomer để đó để manager có khác biệt thì dùng
 Widget componentContainerDetailAdvanceRequest(BuildContext context,
     {String id,
-    String storeName,
+    String managerName,
+    String managerPhone,
     String customerName,
     String customerPhone,
-    String money,
-    String image,
+    int amount,
+    int statusId,
     String createDate,
-    bool isCustomer}) {
+    String activeDate,
+    String reason,
+    bool isCustomer,
+    Widget widgetToNavigator}) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Column(
@@ -1039,20 +1017,19 @@ Widget componentContainerDetailAdvanceRequest(BuildContext context,
         SizedBox(
           height: 10,
         ),
-        txtItemDetail(context, "Ngày ứng tiền", "${getDateTime(createDate)}"),
+        txtItemDetail(context, "Ngày tạo đơn", "${getDateTime(createDate)}"),
         SizedBox(
           height: 10,
         ),
-        txtItemDetail(context, "Người tạo", "$customerName",
-            subContent: customerPhone),
+        txtItemDetail(context, "Ngày nhận tiền", "${getDateTime(activeDate)}"),
         SizedBox(
           height: 10,
         ),
-        SizedBox(
-          height: 10,
-        ),
-        // _showContentInAdvance(context, status)
+        _showContentInAdvance(context, statusId, managerName, managerPhone, customerName, customerPhone, reason),
+        txtItemDetail(context, "Trạng thái", "${getStatus(status: statusId)}",
+            colorContent: getColorStatus(status: statusId)),
         // chỗ này show btn accpet or reject của manager cho request
+        _showBtnInAdvanceDetail(context, id, statusId),
       ],
     ),
   );
@@ -1062,6 +1039,12 @@ Widget componentContainerDetailAdvanceRequest(BuildContext context,
 Widget widgetCreateAdvance(context, List item,String storeId, String nameProduct, String name,
     String phone, int type, bool isCustomer) {
   var size = MediaQuery.of(context).size;
+  String reason;
+  if( item[3] == null || item[3] == ''){
+    reason = 'Ứng tiền';
+  }else{
+    reason = item[3];
+  }
   return SingleChildScrollView(
       child: Container(
     height: size.height,
@@ -1093,6 +1076,11 @@ Widget widgetCreateAdvance(context, List item,String storeId, String nameProduct
                 SizedBox(
                   height: 10,
                 ),
+                txtItemDetail(context, 'Lý do', '${reason}'),
+                // hình ảnh
+                SizedBox(
+                  height: 10,
+                ),
                 showImage(size.width, size.height,item[2]),
                 SizedBox(
                   height: 10,
@@ -1104,7 +1092,7 @@ Widget widgetCreateAdvance(context, List item,String storeId, String nameProduct
                   child: RaisedButton(
                     color: Color(0xFF0BB791),
                     onPressed: () {
-                      doCreateRequestAdvance(context, 'TK-111', item[0],
+                      doCreateRequestAdvance(context, 'TK-111', item[0], reason,
                           item[1], item[2],storeId, type, true);
                     },
                     child: AutoSizeText(

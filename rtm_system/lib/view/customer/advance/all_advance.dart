@@ -1,7 +1,6 @@
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:rtm_system/presenter/Customer/show_advance_request.dart';
 import 'package:rtm_system/presenter/Customer/show_all_invoice.dart';
-import 'package:rtm_system/presenter/Customer/show_invoice_request.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/helpers.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
@@ -19,7 +18,6 @@ DateTime toDate;
 class _AdvancePageState extends State<AdvancePage>
     with TickerProviderStateMixin {
   TabController _tabController;
-  final PageController _pageController = PageController();
   String getFromDate, getToDate;
   //index on Tab
   int index, _selectedIndex;
@@ -27,7 +25,7 @@ class _AdvancePageState extends State<AdvancePage>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 5, vsync: this);
     _tabController.addListener(() {
       setState(() {
         _selectedIndex = _tabController.index;
@@ -37,9 +35,12 @@ class _AdvancePageState extends State<AdvancePage>
     index = 0;
     toDate = DateTime.now();
     fromDate = DateTime.now().subtract(Duration(days: 30));
-    getFromDate =
-    "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
-    getToDate = "${getDateTime("$toDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
+    setState(() {
+      getFromDate =
+      "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
+      getToDate = "${getDateTime("$toDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
+      print(getToDate);
+    });
   }
   @override
   Widget build(BuildContext context) {
@@ -47,25 +48,36 @@ class _AdvancePageState extends State<AdvancePage>
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
-        backgroundColor: primaryColor,
+        backgroundColor:  primaryColor,
         centerTitle: true,
         title: const Text('Ứng tiền', style: TextStyle( color: Colors.white),),
         bottom: TabBar(
+          labelPadding: EdgeInsets.symmetric(horizontal: 7.0),
+          indicatorColor: primaryColor,
+          isScrollable: true,
           labelColor: Colors.white,
           unselectedLabelColor: Colors.white.withOpacity(0.5),
           controller: _tabController,
           tabs: <Widget>[
             Tab(
-              text: 'Yêu cầu',
-              icon: Icon(Icons.post_add_outlined,),
+              text: 'Chờ duyệt',
+              // icon: Icon(Icons.post_add_outlined,),
             ),
             Tab(
-              text: 'Chờ xử lý',
-              icon: Icon(Icons.access_time_outlined),
+              text: 'Chờ xác nhận',
+              // icon: Icon(Icons.access_time_outlined),
             ),
             Tab(
-              text: 'Hoàn thành',
-              icon: Icon(Icons.access_time_outlined),
+              text: 'Đã mượn',
+              // icon: Icon(Icons.access_time_outlined),
+            ),
+            Tab(
+              text: 'Đã trả',
+              // icon: Icon(Icons.access_time_outlined),
+            ),
+            Tab(
+              text: 'Huỷ bỏ',
+              // icon: Icon(Icons.access_time_outlined),
             ),
           ],
         ),
@@ -73,26 +85,35 @@ class _AdvancePageState extends State<AdvancePage>
       body: TabBarView(
         controller: _tabController,
         children: <Widget>[
-          Container(
-              height: size.height,
-              margin: EdgeInsets.only(left: 5, top: 12, right: 5),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    rowButtonDatetime(),
-                    new showAllInvoiceRequestPage(fromDate: getFromDate, toDate: getToDate),
-                  ],
-                ),
-              )
-          ),
-          //Show advance processing
-          containerInvoice(size.height, 4),
-          //Show advance done and active
+          //show advance chờ xử lý
+          containerInvoiceRequest(size.height, 4),
+          //Show advance được chấp nhận
+          containerInvoiceRequest(size.height, 8),
+          //show advance đã mượn
           containerInvoice(size.height, 3),
+          //show advance đã trả
+          containerInvoice(size.height, 3),
+          //Show advance bị từ chối
+          containerInvoiceRequest(size.height, 6),
         ],
       ),
       floatingActionButton: _showFloatBtn(_selectedIndex),
+    );
+  }
+  //show invoice advance request
+  Widget containerInvoiceRequest(height, status){
+    return  Container(
+        height: height,
+        margin: EdgeInsets.only(left: 5, top: 12, right: 5),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              rowButtonDatetime(),
+              new showAdvanceRequestPage(status, fromDate: getFromDate, toDate: getToDate),
+            ],
+          ),
+        )
     );
   }
   //show invoice advance

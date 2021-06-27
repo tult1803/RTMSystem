@@ -10,7 +10,6 @@ import 'package:rtm_system/ultils/helpers.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/ultils/src/messageList.dart';
 import 'package:rtm_system/view/customer/home_customer_page.dart';
-import 'package:rtm_system/view/customer/invoice/allInvoiceTab.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class GetMoneyOrPayDebt extends StatefulWidget {

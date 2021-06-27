@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:rtm_system/ultils/src/url_api.dart';
 
 class ImageService{
-  postCreateAdvance(token, userId, storeId, money, receiveDate, File file) async {
+  postCreateAdvance(token, userId, storeId, money, reason, receiveDate, File file) async {
     String fileName = file.path.split('/').last;
     String typeImage = file.path.split('.').last;
     String contentType = 'image/$typeImage';
@@ -23,6 +23,7 @@ class ImageService{
           "customer_id": userId,
           "store_id": storeId,
           "amount": parseMoney,
+          "description": reason,
           "receive_date": receiveDate,
           "image_url": image_url,
           "content": imageByte,

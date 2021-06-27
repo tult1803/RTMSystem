@@ -22,7 +22,7 @@ class _InvoiceTabState extends State<InvoiceTab> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 4, vsync: this);
+    _tabController = TabController(length: 5, vsync: this);
     _tabController.addListener(() {
       setState(() {
         _selectedIndex = _tabController.index;
@@ -46,7 +46,7 @@ class _InvoiceTabState extends State<InvoiceTab> with TickerProviderStateMixin {
         centerTitle: true,
         title: const Text('Hoá đơn', style: TextStyle( color: Colors.white),),
         bottom: TabBar(
-          labelPadding: EdgeInsets.symmetric(horizontal: 8.0),
+          labelPadding: EdgeInsets.symmetric(horizontal: 7.0),
           indicatorColor: primaryColor,
           isScrollable: true,
           labelColor: Colors.white,
@@ -54,21 +54,25 @@ class _InvoiceTabState extends State<InvoiceTab> with TickerProviderStateMixin {
           controller: _tabController,
           tabs: <Widget>[
             Tab(
-              text: 'Gửi yêu cầu',
-              icon: Icon(Icons.post_add_outlined,),
+              text: 'Chờ duyệt',
+              // icon: Icon(Icons.post_add_outlined,),
             ),
             Tab(
-              text: 'Chờ xử lý',
-              icon: Icon(Icons.access_time_outlined),
+              text: 'Chờ xác nhận',
+              // icon: Icon(Icons.access_time_outlined),
             ),
             Tab(
               text: 'Ký gửi',
-              icon: Icon(Icons.attach_money),
+              // icon: Icon(Icons.attach_money),
 
             ),
             Tab(
               text: 'Bán hàng',
-              icon: Icon(Icons.my_library_books_outlined),
+              // icon: Icon(Icons.my_library_books_outlined),
+            ),
+            Tab(
+              text: 'Huỷ bỏ',
+              // icon: Icon(Icons.my_library_books_outlined),
             ),
           ],
         )
@@ -96,6 +100,7 @@ class _InvoiceTabState extends State<InvoiceTab> with TickerProviderStateMixin {
           containerInvoice(size.height, 5),
           //Show sale's invoice: -1 ( done, undone, actice)
           containerInvoice(size.height, 3),
+          containerInvoice(size.height, 2),
         ],
       ),
       floatingActionButton: _showFloatBtn(_selectedIndex),

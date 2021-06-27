@@ -28,7 +28,7 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
   List listInfor;
   Store store;
   List<StoreElement> dataListStore;
-  String _myStore;
+  String _myStore, reason;
   File _image;
 
   @override
@@ -144,8 +144,10 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
                   children: [
                     _formMoney(false, "Nhập số tiền VND", "Số tiền",
                         TextInputType.number),
+                    _txtFormField('', false, "Nhập lý do ứng tiền ",
+                        "Lý do", 1, TextInputType.text),
                     SizedBox(
-                      height: 20,
+                      height: 10,
                     ),
                     btnDateSale(context),
                   ],
@@ -261,7 +263,8 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
           this.money,
           getDateTime(this.createDate.toString(),
               dateFormat: 'yyyy-MM-dd'),
-          _image
+          _image,
+          reason
         ];
       });
       return Container(
@@ -318,6 +321,7 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
   // form để nhập số tiền
   Widget _formMoney(
       bool obscureText, String hintText, String tittle, TextInputType txtType) {
+    var size = MediaQuery.of(context).size;
     return Form(
       key: _formKey,
       child: Container(
@@ -362,7 +366,7 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
             //Hiển thị text góc phải
             prefixIcon: Container(
                 margin: EdgeInsets.only(top: 15, left: 5),
-                width: 100,
+                width: size.width * 0.2,
                 child: AutoSizeText(
                   "${tittle}",
                   style: TextStyle(fontWeight: FontWeight.w500),
@@ -454,4 +458,58 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
       ),
     );
   }
+  //form reason is can NULL
+  Widget _txtFormField(String value, bool obscureText, String hintText,
+      String tittle, int maxLines, TextInputType txtType) {
+    var size = MediaQuery.of(context).size;
+    return Container(
+      margin: EdgeInsets.only(top: 10, left: 10, right: 10),
+      child: TextFormField(
+        initialValue: value,
+        obscureText: obscureText,
+        onChanged: (value) {
+          setState(() {
+            reason = value;
+            this.listInfor = [
+              this.money,
+              getDateTime(this.createDate.toString(),
+                  dateFormat: 'yyyy-MM-dd'),
+              _image,
+              reason
+            ];
+          });
+        },
+        maxLines: maxLines,
+        keyboardType: txtType,
+        style: TextStyle(fontSize: 15),
+        cursorColor: welcome_color,
+        decoration: InputDecoration(
+          border: UnderlineInputBorder(),
+          hintText: '$hintText',
+
+          //Sau khi click vào "Nhập tiêu đề" thì màu viền sẽ đổi
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: welcome_color),
+          ),
+
+          //Hiển thị text góc phải
+          prefixIcon: Container(
+              margin: EdgeInsets.only(top: 15, left: 5),
+              width: size.width * 0.2,
+              child: AutoSizeText(
+                "${tittle}",
+                style: TextStyle(fontWeight: FontWeight.w500),
+              )),
+
+          //Hiển thị Icon góc phải
+          suffixIcon: Icon(
+            Icons.create,
+            color: Colors.black54,
+          ),
+          contentPadding: EdgeInsets.all(15),
+        ),
+      ),
+    );
+  }
+
 }

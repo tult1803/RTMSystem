@@ -605,7 +605,127 @@ Widget boxForInvoiceRequest(
     ),
   );
 }
-
+//show các yêu cầu ứng tiền
+Widget boxForAdvanceRequest(
+    {BuildContext context,
+      String id,
+      String name,
+      String storeId,
+      String amount,
+      String createDate,
+      String receiveDate,
+      String imageUrl,
+      int status,
+      Widget widget,
+      bool isCustomer}) {
+  String dateAfterFormat, dateReceiveAfterFormat, totalAfterFormat;
+  try {
+    totalAfterFormat = "${getFormatPrice(amount)} đ";
+    dateAfterFormat = "${getDateTime(createDate)}";
+    dateReceiveAfterFormat = "${getDateTime(receiveDate, dateFormat: 'dd-MM-yyyy')}";
+  } catch (_) {
+    totalAfterFormat = "$amount";
+    dateAfterFormat = "$amount";
+  }
+  return GestureDetector(
+    onTap: () => Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => widget)),
+    child: Container(
+      margin: EdgeInsets.only(top: 15, left: 10, right: 10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(5),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black54,
+            blurRadius: 4,
+            offset: Offset(1, 2), // Shadow position
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              miniContainer(
+                context: context,
+                tittle: "Mã #$id",
+                marginRight: 5,
+                marginBottom: 5,
+                marginLeft: 10,
+                marginTop: 10,
+                borderRadius: 5,
+                height: 30,
+                colorContainer: idColor,
+                paddingRightOfText: 10,
+                paddingLeftOfText: 10,
+              ),
+              Flexible(
+                child: containerTextInvoice(
+                  alignment: Alignment.centerRight,
+                  paddingLeftOfText: 10,
+                  paddingRightOfText: 10,
+                  tittle: "$dateAfterFormat",
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+          if (!isCustomer)
+            containerTextInvoice(
+              alignment: Alignment.topLeft,
+              paddingLeftOfText: 10,
+              paddingRightOfText: 10,
+              tittle: name,
+              fontWeight: FontWeight.w700,
+            ),
+          if (isCustomer)
+            containerTextInvoice(
+              alignment: Alignment.topLeft,
+              paddingLeftOfText: 10,
+              paddingRightOfText: 10,
+              tittle: "$totalAfterFormat",
+              fontWeight: FontWeight.w700,
+            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                   containerTextInvoice(
+                      marginTop: 2,
+                      alignment: Alignment.topLeft,
+                      paddingLeftOfText: 10,
+                      paddingRightOfText: 10,
+                      tittle: "Ngày tới: $dateReceiveAfterFormat",
+                      fontWeight: FontWeight.w400,
+                    )
+                  ],
+                ),
+              ),
+              miniContainer(
+                context: context,
+                tittle: "${getStatus(status: status)}",
+                colorText: Colors.white,
+                fontWeightText: FontWeight.w500,
+                height: 30,
+                width: 100,
+                colorContainer: getColorStatus(status: status),
+                borderRadius: 5,
+                marginRight: 10,
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 10,
+          )
+        ],
+      ),
+    ),
+  );
+}
 //Dùng cho trang Quản lý hóa đơn và để show các hóa đơn
 Widget boxForProduct(
     {BuildContext context,
