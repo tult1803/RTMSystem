@@ -1021,7 +1021,7 @@ Widget componentContainerInvoiceRequest(BuildContext context,
   );
 }
 
-//Dùng cho trang chi tiết yêu cầu advance
+//Dùng cho trang chi tiết or yêu cầu của advance
 Widget componentContainerDetailAdvanceRequest(BuildContext context,
     {String id,
     String storeName,
