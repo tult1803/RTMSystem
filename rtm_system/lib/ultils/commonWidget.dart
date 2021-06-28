@@ -622,7 +622,7 @@ Widget boxForAdvanceRequest(
   String dateAfterFormat, dateReceiveAfterFormat, totalAfterFormat;
   try {
     totalAfterFormat = "${getFormatPrice(amount)} đ";
-    dateAfterFormat = "${getDateTime(createDate)}";
+    dateAfterFormat = "${getDateTime(createDate,dateFormat: 'dd-MM-yyyy')}";
     dateReceiveAfterFormat = "${getDateTime(receiveDate, dateFormat: 'dd-MM-yyyy')}";
   } catch (_) {
     totalAfterFormat = "$amount";
@@ -666,7 +666,7 @@ Widget boxForAdvanceRequest(
                   alignment: Alignment.centerRight,
                   paddingLeftOfText: 10,
                   paddingRightOfText: 10,
-                  tittle: "$dateAfterFormat",
+                  tittle: "Ngày tạo: $dateAfterFormat",
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -695,7 +695,7 @@ Widget boxForAdvanceRequest(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    //Hoá đơn bị từ chối thì show lý do ra thay vì ngày tới 
+                    //Hoá đơn bị từ chối thì show lý do ra thay vì ngày tới
                     status == 6? containerTextInvoice(
                       marginTop: 2,
                       alignment: Alignment.topLeft,

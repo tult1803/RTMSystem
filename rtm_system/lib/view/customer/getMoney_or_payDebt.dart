@@ -1,7 +1,11 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:rtm_system/model/getAPI_invoice.dart';
 import 'package:rtm_system/model/getAPI_product.dart';
+import 'package:rtm_system/model/model_invoice.dart';
 import 'package:rtm_system/model/model_product.dart';
+import 'package:rtm_system/model/profile_customer/getAPI_customer_phone.dart';
+import 'package:rtm_system/model/profile_customer/model_profile_customer.dart';
 import 'package:rtm_system/presenter/Customer/show_all_invoice.dart';
 import 'package:rtm_system/ultils/alertDialog.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
@@ -33,6 +37,11 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
   String getFromDate, getToDate;
   String title;
 
+  GetAPIProfileCustomer getAPIProfileCustomer = GetAPIProfileCustomer();
+  InfomationCustomer infomationCustomer = InfomationCustomer();
+  Invoice invoice;
+  List invoiceList;
+
   Future _getProduct() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -53,6 +62,37 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
       return dataListProduct;
     }
   }
+  //get total advance
+  Future getAPIProfile() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    String token = sharedPreferences.getString('access_token');
+    String phone = sharedPreferences.getString('phone');
+    // Đỗ dữ liệu lấy từ api
+    infomationCustomer =
+    await getAPIProfileCustomer.getProfileCustomer(token, phone);
+    return infomationCustomer;
+  }
+//sẽ dùng hàm này để tạo số tiền hiện có_ chưa dùng
+  Future<void> getTotalInvoiceDeposit() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    GetInvoice getAPIAllInvoice = GetInvoice();
+    invoice = await getAPIAllInvoice.getInvoice(
+      prefs.get("access_token"),
+      prefs.get("accountId"),
+      "",
+      5,
+      10000,
+      1,
+      "",
+      "",
+    );
+    setState(() {
+      invoiceList = invoice.invoices;
+    });
+    invoiceList?.map((item) {
+      print(item["manager_name"]);
+    });
+  }
 
   @override
   void initState() {
@@ -65,11 +105,14 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
     getToDate = "${getDateTime("$toDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
     _getProduct();
     widget.isPay? title ='Trả nợ': title = 'Nhận tiền';
+    getAPIProfile();
+    getTotalInvoiceDeposit();
   }
 
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Color(0xffEEEEEE),
       appBar: AppBar(
@@ -93,19 +136,59 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
                   decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.all(Radius.circular(10))),
-                  child: Column(
+                  child:
+                  Column(
                     children: [
                       if (widget.isPay)
-                        _txtItemDetail(
-                            context, 'Tổng tiền nợ:', '10,000,000 VND'),
+                         FutureBuilder(
+                          future: getAPIProfile(),
+                          builder: (BuildContext context, AsyncSnapshot snapshot) {
+                            if (snapshot.hasData) {
+                              return _txtItemDetail(
+                                  context, 'Tổng tiền nợ: ', '${getFormatPrice(infomationCustomer.advance.toString())} đ');
+                            }
+                            return Container(
+                                height: size.height,
+                                child: Center(child: CircularProgressIndicator()));
+                          },
+                        ),
                       if (widget.isPay)
                         SizedBox(
                           height: 10,
                         ),
                       _txtItemDetail(
-                          context, 'Số tiền hiện có:', '12,000,000 VND'),
+                          context, 'Số tiền hiện có:', '12,000,000 data gia'),
                     ],
-                  )),
+                  ),
+              ),
+              // dùng show số tiền hiện có
+              // Container(
+              //   padding: EdgeInsets.all(12),
+              //   decoration: BoxDecoration(
+              //       color: Colors.white,
+              //       borderRadius: BorderRadius.all(Radius.circular(10))),
+              //   child:
+              //   Column(
+              //     children: [
+              //         FutureBuilder(
+              //           future: getTotalInvoiceDeposit(),
+              //           builder: (BuildContext context, AsyncSnapshot snapshot) {
+              //             if (snapshot.hasData) {
+              //               var result = snapshot.data;
+              //               print(result);
+              //               return
+              //               // getPriceTotal(invoiceList['price'], invoiceList['quantity'], invoiceList['degree']);
+              //               _txtItemDetail(
+              //                 context, 'Số tiền hiện có:', '${result}');
+              //             }
+              //             return Container(
+              //                 height: size.height,
+              //                 child: Center(child: CircularProgressIndicator()));
+              //           },
+              //         ),
+              //     ],
+              //   ),
+              // ),
               SizedBox(
                 height: 12,
               ),
@@ -133,30 +216,34 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
               SizedBox(
                 height: 5,
               ),
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(10.0),
+              //dữ liệu có dài hơn vẫn scroll ngang được, nếu k bị lỗi
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10.0),
+                    ),
                   ),
-                ),
-                padding: EdgeInsets.all(12),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    AutoSizeText(
-                      'Tống tiền các hóa đơn:',
-                      style: TextStyle(
-                        color: Color(0xFF0BB791),
+                  padding: EdgeInsets.all(12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      AutoSizeText(
+                        'Tống tiền các hóa đơn:',
+                        style: TextStyle(
+                          color: Color(0xFF0BB791),
+                        ),
                       ),
-                    ),
-                    AutoSizeText(
-                      '10,000,000,000 VND',
-                      style: TextStyle(
-                        color: Colors.black,
+                      AutoSizeText(
+                        '10,000,000,000 đ data gia',
+                        style: TextStyle(
+                          color: Colors.black,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
               //show invoice ky gui here sau khi click xác nhận btn "có" sẽ update các đơn này

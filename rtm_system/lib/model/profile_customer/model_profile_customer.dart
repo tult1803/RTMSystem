@@ -40,18 +40,5 @@ class InfomationCustomer {
       address: json["address"],
     );
 
-    // Map<String, dynamic> toJson() => {
-    //   "id": id,
-    //   "cmnd": cmnd,
-    //   "vip": vip,
-    //   "status_id": statusId,
-    //   "account_id": accountId,
-    //   "advance": advance,
-    //   "fullname": fullname,
-    //   "gender": gender,
-    //   "phone": phone,
-    //   "birthday": "${birthday.year.toString().padLeft(4, '0')}-${birthday.month.toString().padLeft(2, '0')}-${birthday.day.toString().padLeft(2, '0')}",
-    //   "address": address,
-    // };
   }
 }
