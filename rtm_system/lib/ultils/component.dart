@@ -961,11 +961,13 @@ Widget componentContainerDetailAdvanceRequest(BuildContext context,
         SizedBox(
           height: 10,
         ),
-        _showContentInAdvance(context, statusId, managerName, managerPhone, customerName, customerPhone, reason),
+
+        ///Không có hàm _showContentInAdvance vs _showBtnInAdvanceDetail ///
+        // _showContentInAdvance(context, statusId, managerName, managerPhone, customerName, customerPhone, reason),
         txtItemDetail(context, "Trạng thái", "${getStatus(status: statusId)}",
             colorContent: getColorStatus(status: statusId)),
         // chỗ này show btn accpet or reject của manager cho request
-        _showBtnInAdvanceDetail(context, id, statusId),
+        // _showBtnInAdvanceDetail(context, id, statusId),
       ],
     ),
   );
