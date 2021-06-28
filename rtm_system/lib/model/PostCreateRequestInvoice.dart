@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 
 class PostCreateRequestInvoice{
 
-  createRequestInvoice(String token, String id, String sellDate, String store_id) async {
+  createRequestInvoice(String token, String id, String sellDate, String storeId) async {
     final response = await http.post(
       Uri.http('$urlMain', '$urlCreateRequestInvoice'),
       headers: <String, String>{
@@ -17,10 +17,11 @@ class PostCreateRequestInvoice{
       body: jsonEncode(<String, dynamic>{
         "product_id": id,
         "sell_date": sellDate,
-        "store_id" : store_id,
+        "store_id" : storeId,
       }),
     );
-    print("Status postApi CreateInvoice:${response.statusCode}");
+    print("$id - $storeId - $sellDate");
+    print("Status postApi CreateIRequestnvoice:${response.statusCode}");
     return response.statusCode;
   }
 

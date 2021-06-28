@@ -12,6 +12,7 @@ import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/getData.dart';
 import 'package:rtm_system/ultils/helpers.dart';
 import 'package:rtm_system/ultils/src/regExp.dart';
+import 'package:rtm_system/view/confirmDetailInvoice.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'manager/formForDetail_page.dart';
@@ -22,6 +23,8 @@ class AddProductPage extends StatefulWidget {
   final Widget widgetToNavigator;
   bool isChangeData;
   final String phone,
+      invoiceRequestId,
+      customerId,
       fullName,
       storeId,
       productId,
@@ -35,6 +38,8 @@ class AddProductPage extends StatefulWidget {
 
   AddProductPage(
       {this.tittle,
+      this.invoiceRequestId,
+      this.customerId,
       this.phone,
       this.fullName,
       this.storeId,
@@ -69,7 +74,6 @@ class _AddProductPageState extends State<AddProductPage> {
 
   //field to sales
   double quantity = 0, degree = 0;
-  List listInforProduct;
 
   String _myProduct, _myStore;
   bool checkProduct = true;
@@ -111,6 +115,7 @@ class _AddProductPageState extends State<AddProductPage> {
     setState(() {
       if (dataListStore.length == 1) {
         _myStore = dataListStore[0].id;
+        storeName = dataListStore[0].name;
       }
     });
     return dataListStore;
@@ -155,7 +160,7 @@ class _AddProductPageState extends State<AddProductPage> {
           ? productName = ""
           : productName = widget.productName;
       this.widget.storeName == null
-          ? storeName = ""
+          ? storeName = "${_myStore == null ? "" : storeName}"
           : storeName = widget.storeName;
     });
   }
@@ -175,7 +180,6 @@ class _AddProductPageState extends State<AddProductPage> {
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Color(0xffEEEEEE),
       appBar: AppBar(
@@ -445,26 +449,9 @@ class _AddProductPageState extends State<AddProductPage> {
                         content: "Chưa chọn sản phẩm",
                         isSuccess: false,
                       )
-                    : Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => FormForDetailPage(
-                                  tittle: "Xác nhận hóa đơn",
-
-                                  ///Chưa code chờ code ========================================== *****************************************
-                                )));
+                    : _navigator("Xác nhận giữ giá");
               } else {
-                // _validate();
-                ///Chưa code chờ code ========================================== *****************************************
-                print('Tên: $nameNewCustomer '
-                    '\nSđt: $phoneNewCustomer '
-                    '\nCửa hàng: $storeName ($_myStore) '
-                    '\nSản phẩm: $productName ($_myProduct) '
-                    '\nCân nặng: $quantity '
-                    '\nĐộ: $degree '
-                    '\nGiá: $price'
-                    '\nTổng giá: ${getFormatPrice('${getPriceTotal(double.tryParse(price), degree, quantity)}')}đ'
-                    '\nNgày bán: $dateSale ');
+                _validate();
               }
             });
           },
@@ -515,23 +502,9 @@ class _AddProductPageState extends State<AddProductPage> {
         errorFullName == null &&
         _myProduct != null) {
       if (checkProduct) {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => FormForDetailPage(
-                      tittle: "Xác nhận hóa đơn",
-
-                      ///Chưa code chờ code ========================================== *****************************************
-                    )));
+        _navigator("Xác nhận hóa đơn");
       } else if (!checkProduct && errorDegree == null) {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => FormForDetailPage(
-                      tittle: "Xác nhận hóa đơn",
-
-                      ///Chưa code chờ code ========================================== *****************************************
-                    )));
+        _navigator("Xác nhận hóa đơn");
       }
     }
   }
@@ -566,14 +539,6 @@ class _AddProductPageState extends State<AddProductPage> {
                       setState(() {
                         _myProduct = newValue;
                         _getCurrentPrice(newValue);
-                        this.listInforProduct = [
-                          this._myProduct,
-                          this.quantity,
-                          this.degree,
-                          getDateTime("$dateSale",
-                              dateFormat: "yyyy-MM-dd HH:mm:ss"),
-                          this._myStore,
-                        ];
                         _myProduct == "SP-1000003"
                             ? checkProduct = false
                             : checkProduct = true;
@@ -637,14 +602,6 @@ class _AddProductPageState extends State<AddProductPage> {
                         _myStore = newValue;
                       });
                     }
-                    this.listInforProduct = [
-                      this._myProduct,
-                      this.quantity,
-                      this.degree,
-                      getDateTime("$dateSale",
-                          dateFormat: "yyyy-MM-dd HH:mm:ss"),
-                      this._myStore,
-                    ];
                   },
                   items: dataListStore?.map((item) {
                         return new DropdownMenuItem(
@@ -687,13 +644,6 @@ class _AddProductPageState extends State<AddProductPage> {
               txtController.clear();
             } else
               this.degree = double.parse(value);
-            this.listInforProduct = [
-              this._myProduct,
-              this.quantity,
-              this.degree,
-              getDateTime("$dateSale", dateFormat: "yyyy-MM-dd HH:mm:ss"),
-              this._myStore,
-            ];
             setState(() {
               checkClick = true;
             });
@@ -746,13 +696,6 @@ class _AddProductPageState extends State<AddProductPage> {
           listQuantity.forEach((element) {
             quantity += double.parse(element);
           });
-          this.listInforProduct = [
-            this._myProduct,
-            this.quantity,
-            this.degree,
-            getDateTime("$dateSale", dateFormat: "yyyy-MM-dd HH:mm:ss"),
-            this._myStore,
-          ];
         });
       },
       child: Container(
@@ -822,14 +765,6 @@ class _AddProductPageState extends State<AddProductPage> {
                   onConfirm: (date) {
                     setState(() {
                       dateSale = date;
-                      this.listInforProduct = [
-                        this._myProduct,
-                        this.quantity,
-                        this.degree,
-                        getDateTime("$dateSale",
-                            dateFormat: "yyyy-MM-dd HH:mm:ss"),
-                        this._myStore,
-                      ];
                     });
                   },
                   maxTime: DateTime(DateTime.now().year + 100, 12, 31),
@@ -891,7 +826,7 @@ class _AddProductPageState extends State<AddProductPage> {
             width: 130,
             margin: EdgeInsets.only(left: 15),
             child: Text(
-              "Giá hiên tại",
+              "${widget.dateToPay != null ? "Giá đã giữ" : "Giá hiên tại"}",
               style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
             ),
           ),
@@ -912,5 +847,30 @@ class _AddProductPageState extends State<AddProductPage> {
         ],
       ),
     );
+  }
+
+  Future<void> _navigator(String tittle) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => FormForDetailPage(
+                  tittle: tittle,
+                  bodyPage: confirmDetailInvoice(
+                    storeId: "$_myStore",
+                    productId: "$_myProduct",
+                    customerId: "${widget.customerId}",
+                    invoiceRequestId: widget.invoiceRequestId,
+                    customerName: "$nameNewCustomer",
+                    phoneNumber: "$phoneNewCustomer",
+                    dateToPay: "$dateSale",
+                    degree: "$degree",
+                    quantity: "$quantity",
+                    price: "$price",
+                    productName: "$productName",
+                    storeName: "$storeName",
+                    widgetToNavigator: widget.widgetToNavigator,
+                    isCustomer: widget.isCustomer,
+                  ),
+                )));
   }
 }

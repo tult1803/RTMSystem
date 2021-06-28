@@ -26,6 +26,9 @@ getStatus({int status}) {
     case 5:
       return "Ký gửi";
       break;
+    case 6:
+      return "Chấp nhận";
+      break;
   }
 }
 
