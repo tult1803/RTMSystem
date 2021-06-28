@@ -8,14 +8,17 @@ getStatus({int status}) {
   // 2,Inactive
   // 3,Done
   // 4,Processing
-  // 6,Accept
   // 5,Undone
+  // 6,Cancel
+  // 7,Expired
+  // 8,Accept
+
   switch (status) {
     case 1:
       return "Hoạt động";
       break;
     case 2:
-      return "Từ chối";
+      return "Huỷ bỏ";
       break;
     case 3:
       return  "Hoàn thành";
@@ -27,6 +30,12 @@ getStatus({int status}) {
       return "Ký gửi";
       break;
     case 6:
+      return  "Từ chối";
+      break;
+    case 7:
+      return "Hết hạn";
+      break;
+    case 8:
       return "Chấp nhận";
       break;
   }
@@ -41,11 +50,18 @@ getColorStatus({int status}) {
     color = Colors.redAccent;
   } else if (status == 4) {
     color = Colors.orangeAccent;
-  }else if (status == 5) {
+  } else if (status == 5) {
     color = colorHexa("#FF6F3D");
   } else if(status == 3){
     color = primaryColor;
+  } else if (status == 6) {
+    color = Colors.redAccent;
+  } else if(status == 8){
+    color = primaryColor;
+  } else if (status == 7) {
+    color = Colors.blueGrey;
   }
+
   return color;
 }
 

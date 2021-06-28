@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:rtm_system/model/getAPI_allStore.dart';
+import 'package:rtm_system/model/model_store.dart';
 import 'package:rtm_system/ultils/alertDialog.dart';
 import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/helpers.dart';
@@ -11,6 +13,7 @@ import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/ultils/src/messageList.dart';
 import 'package:rtm_system/ultils/src/regExp.dart';
 import 'package:rtm_system/view/customer/advance/confirm_create_request_advance.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CreateRequestAdvance extends StatefulWidget {
   @override
@@ -23,7 +26,10 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
   String money;
   DateTime createDate;
   List listInfor;
-  var resultImage;
+  Store store;
+  List<StoreElement> dataListStore;
+  String _myStore, reason;
+  File _image;
 
   @override
   void initState() {
@@ -31,9 +37,25 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
     setState(() {
       createDate = DateTime.now();
     });
+    _getStore();
   }
 
-  File _image;
+  Future _getStore() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    GetAPIAllStore getAPIAllStore = GetAPIAllStore();
+    store = await getAPIAllStore.getStores(
+      prefs.get("access_token"),
+      1000,
+      1,
+    );
+    dataListStore = store.stores;
+    setState(() {
+      if (dataListStore.length == 1) {
+        _myStore = dataListStore[0].id;
+      }
+    });
+    return dataListStore;
+  }
 
   //get image from camera
   _imageFromCamera() async {
@@ -109,12 +131,23 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
             margin: EdgeInsets.only(top: 50, bottom: 24),
             child: Column(
               children: [
+                _dropdownListStore(),
+                SizedBox(
+                  height: 1,
+                  child: Container(
+                    margin: EdgeInsets.only(left: 10, right: 10),
+                    width: size.width,
+                    color: Colors.black45,
+                  ),
+                ),
                 Column(
                   children: [
                     _formMoney(false, "Nhập số tiền VND", "Số tiền",
                         TextInputType.number),
+                    _txtFormField('', false, "Nhập lý do ứng tiền ",
+                        "Lý do", 1, TextInputType.text),
                     SizedBox(
-                      height: 20,
+                      height: 10,
                     ),
                     btnDateSale(context),
                   ],
@@ -149,6 +182,7 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
                   MaterialPageRoute(
                       builder: (context) => ConfirmCreateRequestAdvance(
                         listInfor: listInfor,
+                        storeId: _myStore,
                         isCustomer: true,
                         type: 1,
                       )),
@@ -174,6 +208,52 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
       ),
     );
   }
+  Widget _dropdownListStore() {
+    return Row(
+      children: [
+        Expanded(
+          child: Container(
+            height: 40,
+            margin: EdgeInsets.only(top: 5, bottom: 10),
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(10.0),
+                )),
+            child: DropdownButtonHideUnderline(
+              child: ButtonTheme(
+                alignedDropdown: true,
+                child: DropdownButton<String>(
+                  value: _myStore,
+                  iconSize: 30,
+                  icon: (null),
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  hint: Text('Chon cửa hàng'),
+                  onChanged: (String newValue) async {
+                    setState(() {
+                      _myStore = newValue;
+                    });
+                  },
+                  items: dataListStore?.map((item) {
+                    return new DropdownMenuItem(
+                      child: new Text(item.name),
+                      //chuyen id de create
+                      value: item.id.toString(),
+                    );
+                  })?.toList() ??
+                      [],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 
 //show hinh anh da chon , có setState nên k tách dk
   Widget showImage(width, height, image) {
@@ -183,7 +263,8 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
           this.money,
           getDateTime(this.createDate.toString(),
               dateFormat: 'yyyy-MM-dd'),
-          _image.path
+          _image,
+          reason
         ];
       });
       return Container(
@@ -240,6 +321,7 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
   // form để nhập số tiền
   Widget _formMoney(
       bool obscureText, String hintText, String tittle, TextInputType txtType) {
+    var size = MediaQuery.of(context).size;
     return Form(
       key: _formKey,
       child: Container(
@@ -284,7 +366,7 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
             //Hiển thị text góc phải
             prefixIcon: Container(
                 margin: EdgeInsets.only(top: 15, left: 5),
-                width: 100,
+                width: size.width * 0.2,
                 child: AutoSizeText(
                   "${tittle}",
                   style: TextStyle(fontWeight: FontWeight.w500),
@@ -376,4 +458,58 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
       ),
     );
   }
+  //form reason is can NULL
+  Widget _txtFormField(String value, bool obscureText, String hintText,
+      String tittle, int maxLines, TextInputType txtType) {
+    var size = MediaQuery.of(context).size;
+    return Container(
+      margin: EdgeInsets.only(top: 10, left: 10, right: 10),
+      child: TextFormField(
+        initialValue: value,
+        obscureText: obscureText,
+        onChanged: (value) {
+          setState(() {
+            reason = value;
+            this.listInfor = [
+              this.money,
+              getDateTime(this.createDate.toString(),
+                  dateFormat: 'yyyy-MM-dd'),
+              _image,
+              reason
+            ];
+          });
+        },
+        maxLines: maxLines,
+        keyboardType: txtType,
+        style: TextStyle(fontSize: 15),
+        cursorColor: welcome_color,
+        decoration: InputDecoration(
+          border: UnderlineInputBorder(),
+          hintText: '$hintText',
+
+          //Sau khi click vào "Nhập tiêu đề" thì màu viền sẽ đổi
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: welcome_color),
+          ),
+
+          //Hiển thị text góc phải
+          prefixIcon: Container(
+              margin: EdgeInsets.only(top: 15, left: 5),
+              width: size.width * 0.2,
+              child: AutoSizeText(
+                "${tittle}",
+                style: TextStyle(fontWeight: FontWeight.w500),
+              )),
+
+          //Hiển thị Icon góc phải
+          suffixIcon: Icon(
+            Icons.create,
+            color: Colors.black54,
+          ),
+          contentPadding: EdgeInsets.all(15),
+        ),
+      ),
+    );
+  }
+
 }

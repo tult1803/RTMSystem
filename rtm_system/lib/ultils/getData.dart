@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:rtm_system/model/PostCreateRequestInvoice.dart';
 import 'package:rtm_system/model/deleteAPI_invoice.dart';
@@ -7,6 +8,7 @@ import 'package:rtm_system/model/postAPI_createInvoice.dart';
 import 'package:rtm_system/model/postAPI_createNotice.dart';
 import 'package:rtm_system/model/profile_customer/getAPI_customer_phone.dart';
 import 'package:rtm_system/model/profile_customer/model_profile_customer.dart';
+import 'package:rtm_system/model/putAPI_ConfirmAdvanceRequest.dart';
 import 'package:rtm_system/model/putAPI_confirmInvoice.dart';
 import 'package:rtm_system/model/putAPI_signInvoice.dart';
 import 'package:rtm_system/model/putAPI_updatePrice.dart';
@@ -149,6 +151,26 @@ Future<void> put_API_PayAdvance(
         context, "Trả tiền thất bại. Xin thử lại !!!", null, false);
 }
 
+Future<void> put_API_ConfirmAdvance(
+    BuildContext context, id
+    ) async {
+  int status;
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  PutConfirmAdvanceRequest putConfirmAdvanceRequest = PutConfirmAdvanceRequest();
+  status = await putConfirmAdvanceRequest.putConfirmAdvanceRequest(
+      prefs.get("access_token"), id);
+  if (status == 200) {
+    showStatusAlertDialog(
+        context,
+        showMessage('', MSG012),
+        HomeCustomerPage(
+          index: 1,
+        ),
+        true);
+  } else
+    showStatusAlertDialog(
+        context, showMessage(MSG025, MSG027), null, false);
+}
 // ignore: non_constant_identifier_names
 Future<void> put_API_GetMoney(BuildContext context, indexPage) async {
   int status = 200;
@@ -265,17 +287,15 @@ Future<void> doConfirmOrAcceptOrRejectInvoice(
 
 //Tao advance request
 Future<void> doCreateRequestAdvance(BuildContext context, String accountId,
-    String money, date, image, int type, bool isCustomer) async {
+    String money,String reason, date, image, storeId, int type, bool isCustomer) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  int status = 200;
+  int status ;
   if (isCustomer) {
     // 1 is create request advance, 2 is accept advance
     if (type == 1) {
-      //gọi hàm tạo trước, sau đó gọi api insert image sau, không chờ API của imageService mà vẫn làm tiếp
-      //tránh trường hợp firebase lỗi mà không gửi được.
       ImageService imageService = ImageService();
-      int result = await imageService.uploadFile(
-          prefs.get("access_token"), prefs.get("accountId"), image);
+       status = await imageService.postCreateAdvance(
+          prefs.get("access_token"), prefs.get("accountId"), storeId ,money, reason, getDateTime(date, dateFormat: 'yyyy-MM-dd HH:mm:ss'), image);
     } else if (type == 2) {
       //Call API
     }

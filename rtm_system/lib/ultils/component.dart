@@ -156,6 +156,96 @@ Widget txtItemDetail(context, String tittle, String content,
     ],
   );
 }
+//*******Không biết là double hay có sửa gì cái trùng k nên cmt lại
+//nội dung của bill, đang dùng: create invoice/ request
+// Widget widgetCreateInvoice(context, bool isNew, List product,
+//     String nameProduct, String nameStore, String name, String phone, bool isCustomer) {
+//   var size = MediaQuery.of(context).size;
+//   return SingleChildScrollView(
+//       child: Container(
+//     height: size.height,
+//     margin: EdgeInsets.only(
+//       bottom: 12,
+//     ),
+//     color: Color(0xFF0BB791),
+//     child: Column(
+//       children: [
+//         //show data detail invoice
+//         Container(
+//           margin: EdgeInsets.fromLTRB(12, 24, 12, 12),
+//           decoration: BoxDecoration(
+//             color: Colors.white,
+//             borderRadius: BorderRadius.all(Radius.circular(5.0)),
+//           ),
+//           // height: 96,
+//           child: Container(
+//             margin: EdgeInsets.fromLTRB(24, 12, 24, 12),
+//             child: Column(
+//               children: [
+//                 txtPersonInvoice(context, 'Người tạo', '${name}', '${phone}'),
+//                 SizedBox(
+//                   height: 10,
+//                 ),
+//                 txtItemDetail(context, 'Sản phẩm', '${nameProduct}'),
+//                 SizedBox(
+//                   height: 10,
+//                 ),
+//                 txtItemDetail(context, 'Cửa hàng', '${nameStore}'),
+//                 SizedBox(
+//                   height: 10,
+//                 ),
+//                 txtItemDetail(context, 'Ngày đến bán', '${product[3]}'),
+//                 _showComponetCreateInvoice(
+//                     context, 'Số ký', product[1], isCustomer),
+//                 if (product[0] == '3')
+//                   _showComponetCreateInvoice(
+//                       context, 'Số độ', product[2], isCustomer),
+//                 _showComponetCreateInvoice(
+//                     context, 'Thành tiền', '100', isCustomer),
+//               ],
+//             ),
+//           ),
+//         ),
+//         if (!isNew)
+//           Center(
+//             child: SizedBox(
+//               width: 150,
+//               // ignore: deprecated_member_use
+//               child: RaisedButton(
+//                 color: Color(0xffEEEEEE),
+//                 onPressed: () {
+//                   //den page to update sp
+//                 },
+//                 child: Text('Sửa lại sản phẩm'),
+//                 shape: RoundedRectangleBorder(
+//                   borderRadius: BorderRadius.circular(10.0),
+//                 ),
+//                 elevation: 10,
+//               ),
+//             ),
+//           ),
+//         Center(
+//           child: SizedBox(
+//             width: 150,
+//             // ignore: deprecated_member_use
+//             child: RaisedButton(
+//               color: Color(0xffEEEEEE),
+//               onPressed: () {
+//                 doCreateRequestInvoiceOrInvoice(context, product[0],
+//                     product[3], 0,product[4], 0, 0, 0, isCustomer);
+//               },
+//               child: Text('Xác nhận'),
+//               shape: RoundedRectangleBorder(
+//                 borderRadius: BorderRadius.circular(10.0),
+//               ),
+//               elevation: 10,
+//             ),
+//           ),
+//         ),
+//       ],
+//     ),
+//   ));
+// }
 
 ///===================================================== Note dùng sau ===================================================
 // //nội dung của bill, đang dùng: create invoice/ request
@@ -410,6 +500,7 @@ Widget _showBtnProcessInvoice(context, int statusId, String id, bool isCustomer,
     {bool isRequest, Widget widgetToNavigator, Map<String, dynamic> map}) {
   var size = MediaQuery.of(context).size;
   //show button để xử lý hoàn thành đơn
+  //status = 0 là cho customer xoá hoá đơn gửi yêu cầu.
   //status = 5 là cho customer sign invoice
   // status = 1 là manager confirm
   // status = 4 là accept or delete invoice. Customer: only accept NOT Reject.
@@ -419,12 +510,12 @@ Widget _showBtnProcessInvoice(context, int statusId, String id, bool isCustomer,
         width: size.width * 0.5,
         // ignore: deprecated_member_use
         child: RaisedButton(
-          color: Color(0xFF0BB791),
+          color: primaryColor,
           onPressed: () {
             doConfirmOrAcceptOrRejectInvoice(context, id, 1, isCustomer);
           },
           child: Text(
-            'Xác nhận',
+            'Nhận tiền',
             style: TextStyle(color: Colors.white, fontSize: 16),
           ),
           shape: RoundedRectangleBorder(
@@ -438,7 +529,7 @@ Widget _showBtnProcessInvoice(context, int statusId, String id, bool isCustomer,
         width: size.width * 0.5,
         // ignore: deprecated_member_use
         child: RaisedButton(
-          color: Color(0xFF0BB791),
+          color: primaryColor,
           onPressed: () {
             doConfirmOrAcceptOrRejectInvoice(context, id, 1, isCustomer);
           },
@@ -461,7 +552,7 @@ Widget _showBtnProcessInvoice(context, int statusId, String id, bool isCustomer,
         width: size.width * 0.5,
         // ignore: deprecated_member_use
         child: RaisedButton(
-          color: Color(0xFF0BB791),
+          color: primaryColor,
           onPressed: () {
             doConfirmOrAcceptOrRejectInvoice(context, id, 2, isCustomer);
           },
@@ -520,7 +611,26 @@ Widget _showBtnProcessInvoice(context, int statusId, String id, bool isCustomer,
         ],
       );
     }
-  } else {
+  } else if(statusId == 0){
+    return SizedBox(
+      width: size.width * 0.5,
+      // ignore: deprecated_member_use
+      child: RaisedButton(
+        color: Colors.redAccent,
+        onPressed: () {
+          //call api xoa yeu cau
+        },
+        child: Text(
+          'Xoá yêu cầu',
+          style: TextStyle(color: Colors.white, fontSize: 16),
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        elevation: 10,
+      ),
+    );
+  }else  {
     return Container();
   }
 }
@@ -808,7 +918,8 @@ Widget componentContainerInvoiceRequest(BuildContext context,
           height: 5,
         ),
         isCustomer
-            ? Container()
+            ? _showBtnProcessInvoice(context, 0, id, isCustomer,
+            isRequest: isRequest, widgetToNavigator: widgetToNavigator, map: map)
             : _showBtnProcessInvoice(context, 4, id, isCustomer,
                 isRequest: isRequest,
                 widgetToNavigator: widgetToNavigator,
@@ -818,16 +929,22 @@ Widget componentContainerInvoiceRequest(BuildContext context,
   );
 }
 
-//Dùng cho trang chi tiết yêu cầu advance
+//Dùng cho trang chi tiết or yêu cầu của advance
+// hiện tại lấy detail, status = 4 k có
+// isCustomer để đó để manager có khác biệt thì dùng
 Widget componentContainerDetailAdvanceRequest(BuildContext context,
     {String id,
-    String storeName,
+    String managerName,
+    String managerPhone,
     String customerName,
     String customerPhone,
-    String money,
-    String image,
+    int amount,
+    int statusId,
     String createDate,
-    bool isCustomer}) {
+    String activeDate,
+    String reason,
+    bool isCustomer,
+    Widget widgetToNavigator}) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Column(
@@ -836,28 +953,34 @@ Widget componentContainerDetailAdvanceRequest(BuildContext context,
         SizedBox(
           height: 10,
         ),
-        txtItemDetail(context, "Ngày ứng tiền", "${getDateTime(createDate)}"),
+        txtItemDetail(context, "Ngày tạo đơn", "${getDateTime(createDate)}"),
         SizedBox(
           height: 10,
         ),
-        txtItemDetail(context, "Người tạo", "$customerName",
-            subContent: customerPhone),
+        txtItemDetail(context, "Ngày nhận tiền", "${getDateTime(activeDate)}"),
         SizedBox(
           height: 10,
         ),
-        SizedBox(
-          height: 10,
-        ),
+        _showContentInAdvance(context, statusId, managerName, managerPhone, customerName, customerPhone, reason),
+        txtItemDetail(context, "Trạng thái", "${getStatus(status: statusId)}",
+            colorContent: getColorStatus(status: statusId)),
         // chỗ này show btn accpet or reject của manager cho request
+        _showBtnInAdvanceDetail(context, id, statusId),
       ],
     ),
   );
 }
 
 //nội dung của bill, đang dùng: create advance and confirm advance
-Widget widgetCreateAdvance(context, List item, String nameProduct, String name,
+Widget widgetCreateAdvance(context, List item,String storeId, String nameProduct, String name,
     String phone, int type, bool isCustomer) {
   var size = MediaQuery.of(context).size;
+  String reason;
+  if( item[3] == null || item[3] == ''){
+    reason = 'Ứng tiền';
+  }else{
+    reason = item[3];
+  }
   return SingleChildScrollView(
       child: Container(
     height: size.height,
@@ -889,8 +1012,15 @@ Widget widgetCreateAdvance(context, List item, String nameProduct, String name,
                 SizedBox(
                   height: 10,
                 ),
-                //có thể sẽ thêm data ở đây
-
+                txtItemDetail(context, 'Lý do', '${reason}'),
+                // hình ảnh
+                SizedBox(
+                  height: 10,
+                ),
+                showImage(size.width, size.height,item[2]),
+                SizedBox(
+                  height: 10,
+                ),
                 //khi nào có api sẽ tách chỗ này ra thành 1 hàm để gọi các btn khác nhau
                 SizedBox(
                   width: size.width * 0.4,
@@ -898,8 +1028,8 @@ Widget widgetCreateAdvance(context, List item, String nameProduct, String name,
                   child: RaisedButton(
                     color: Color(0xFF0BB791),
                     onPressed: () {
-                      doCreateRequestAdvance(context, 'TK-111', item[0],
-                          item[1], item[2], type, true);
+                      doCreateRequestAdvance(context, 'TK-111', item[0], reason,
+                          item[1], item[2],storeId, type, true);
                     },
                     child: AutoSizeText(
                       'Xác nhận',
@@ -1012,4 +1142,18 @@ Widget componentDetailCreateInvoice(
       ],
     ),
   );
+}
+
+//show hinh anh da chon
+Widget showImage(width, height, image) {
+  if (image != null) {
+    return Container(
+      margin: EdgeInsets.only(top: 12),
+      width: width,
+      height: height * 0.3,
+      child: Image.file(image, fit: BoxFit.scaleDown),
+    );
+  } else {
+    return Container();
+  }
 }
