@@ -10,6 +10,7 @@ import 'package:rtm_system/view/manager/home_manager_page.dart';
 
 class showAllInvoice extends StatefulWidget {
   final int index;
+
   showAllInvoice({this.index});
 
   @override
@@ -19,7 +20,9 @@ class showAllInvoice extends StatefulWidget {
 DateTime fromDate;
 DateTime toDate;
 
-class _showAllInvoiceState extends State<showAllInvoice> {
+class _showAllInvoiceState extends State<showAllInvoice>
+    with TickerProviderStateMixin {
+  TabController _tabController;
   final PageController _pageController = PageController();
   int index;
   Invoice invoice;
@@ -30,163 +33,133 @@ class _showAllInvoiceState extends State<showAllInvoice> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    this.widget.index == null ? index = 0 : index = this.widget.index;
+    _tabController = TabController(
+        length: 6,
+        vsync: this,
+        initialIndex:
+            widget.index == null ? index = 0 : index = this.widget.index);
+
     toDate = DateTime.now();
     fromDate = DateTime.now().subtract(Duration(days: 30));
     getFromDate =
-        "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
-    getToDate = "${getDateTime("$toDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
+        "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd 00:00:00")}";
+    getToDate = "${getDateTime("$toDate", dateFormat: "yyyy-MM-dd 23:59:59")}";
   }
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
-    return Container(
-      height: size.height,
-      width: size.width,
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            bottomBar(),
-            rowButtonDatetime(),
-            Expanded(child: pageViewInvocie()),
-          ],
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        title: titleAppBar(),
+        bottom: bottomAppBar(),
       ),
-    );
-  }
-
-  Widget bottomBar() {
-    return Container(
-      padding: EdgeInsets.only(top: 10),
-      margin: EdgeInsets.only(bottom: 20),
-      color: welcome_color,
-      height: 80,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+      body: Stack(
         children: [
-          iconBottom(Icon(Icons.assignment_outlined), "Yêu cầu", isChoose: index == 0 ? true : null),
-          iconBottom(Icon(Icons.update), "Xử lý", isChoose: index == 1 ? true : null),
-          iconBottom(Icon(Icons.description), "Hiệu lực", isChoose: index == 2 ? true : null),
-          iconBottom(Icon(Icons.attach_money), "Ký gửi", isChoose: index == 3 ? true : null),
-          iconBottom(Icon(Icons.check), "Hoàn thành", isChoose: index == 4 ? true : null),
-          // iconBottom(Icon(Icons.clear), "Từ chối", isChoose: index == 5 ? true : null),
+          rowButtonDatetime(),
+          tabBarView(),
         ],
       ),
     );
   }
 
-  Widget iconBottom(Icon icon, String tittle, {bool isChoose}) {
-    return Expanded(
-      child: GestureDetector(
-          onTap: () {
-              switch (tittle) {
-                case "Yêu cầu":
-                  _pageController.jumpToPage(0);
-                  break;
-                case "Xử lý":
-                  _pageController.jumpToPage(1);
-                  break;
-                case "Hiệu lực":
-                  _pageController.jumpToPage(2);
-                  break;
-                case "Ký gửi":
-                  _pageController.jumpToPage(3);
-                  break;
-                case "Hoàn thành":
-                  _pageController.jumpToPage(4);
-                  break;
-                // case "Từ chối":
-                //   _pageController.jumpToPage(5);
-                //   break;
-              }
-          },
-          child: Container(
-            color: welcome_color,
-            child: Column(
-              children: [
-                Icon(icon.icon,
-                    color: isChoose == null ? Colors.white54 : Colors.white),
-                SizedBox(height: 10,),
-                tittleOfIconBottom(tittle, isChoose: isChoose),
-                SizedBox(height: 13,),
-                Container(height: 3, color: isChoose == null ? welcome_color : Colors.white)
-              ],
-            ),
-          )),
+  Widget titleAppBar() {
+    return Center(
+      child: Text(
+        "Hóa đơn",
+        style: TextStyle(
+            color: Colors.white, fontWeight: FontWeight.w500, fontSize: 22),
+      ),
     );
   }
 
-  Widget tittleOfIconBottom(String tittle, {bool isChoose}) {
-    return Container(
-      height: 20,
-      child: AutoSizeText(
-        tittle,
-        style: TextStyle(
-            fontSize: 15,
-            decoration: TextDecoration.none,
-            color: isChoose == null ? Colors.white54 : Colors.white),
+  Widget bottomAppBar() {
+    return TabBar(
+      // labelPadding: EdgeInsets.symmetric(horizontal: 7.0),
+      indicatorColor: primaryColor,
+      isScrollable: true,
+      labelColor: Colors.white,
+      unselectedLabelColor: Colors.white.withOpacity(0.5),
+      controller: _tabController,
+      tabs: <Widget>[
+        Tab(text: "Yêu cầu"),
+        Tab(text: "Xử lý"),
+        Tab(text: "Hiệu lực"),
+        Tab(text: "Ký gửi"),
+        Tab(text: "Hoàn thành"),
+        Tab(text: "Từ chối"),
+      ],
+    );
+  }
+
+  Widget tabBarView() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 50.0),
+      child: TabBarView(
+        controller: _tabController,
+        children: <Widget>[
+          new showInvoiceRequestManager(
+            fromDate: getFromDate,
+            toDate: getToDate,
+            widgetToNavigator: HomeAdminPage(
+              index: 1,
+            ),
+          ),
+          new showInvoiceManager(
+            4,
+            fromDate: getFromDate,
+            toDate: getToDate,
+            widgetToNavigator: HomeAdminPage(
+              index: 1,
+              indexInsidePage: 1,
+            ),
+          ),
+          new showInvoiceManager(1, fromDate: getFromDate, toDate: getToDate),
+          new showInvoiceManager(5, fromDate: getFromDate, toDate: getToDate),
+          new showInvoiceManager(3, fromDate: getFromDate, toDate: getToDate),
+          new showInvoiceManager(2, fromDate: getFromDate, toDate: getToDate),
+        ],
       ),
     );
   }
 
   //Dùng để show 2 cái nút để chọn ngày
   Widget rowButtonDatetime() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        btnDateTime(
-            context,
-            "${getDateTime("$fromDate", dateFormat: "dd/MM/yyyy")}",
-            Icon(Icons.date_range),
-            datePick()),
-        SizedBox(
-          width: 20,
-          child: Center(
-              child: Container(
-                  alignment: Alignment.topCenter,
-                  height: 45,
-                  child: Text(
-                    "-",
-                    style: TextStyle(fontSize: 20),
-                  ))),
-        ),
-        btnDateTime(
-            context,
-            "${getDateTime("$toDate", dateFormat: "dd/MM/yyyy")}",
-            Icon(Icons.date_range),
-            datePick()),
-      ],
-    );
-  }
-
-  //Để show các hóa đơn dựa trên _wrapToShowTittleBar tương ứng
-  Widget pageViewInvocie() {
     return Container(
-        child: PageView(
-      controller: _pageController,
-      scrollDirection: Axis.horizontal,
-      onPageChanged: (value) {
-        setState(() {
-          index = value;
-        });
-      },
-      children: [
-        new showInvoiceRequestManager(widgetToNavigator: HomeAdminPage(index: 1,),),
-        new showInvoiceManager(4, fromDate: getFromDate, toDate: getToDate, widgetToNavigator: HomeAdminPage(index: 1, indexInsidePage: 1,),),
-        new showInvoiceManager(1, fromDate: getFromDate, toDate: getToDate),
-        new showInvoiceManager(5, fromDate: getFromDate, toDate: getToDate),
-        new showInvoiceManager(3, fromDate: getFromDate, toDate: getToDate),
-        // new showInvoiceManager(2, fromDate: getFromDate, toDate: getToDate),
-      ],
-    ));
+      height: 80,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          btnDateTime(
+              context,
+              "${getDateTime("$fromDate", dateFormat: "dd/MM/yyyy")}",
+              Icon(Icons.date_range),
+              datePick()),
+          SizedBox(
+            width: 20,
+            child: Center(
+                child: Container(
+                    alignment: Alignment.topCenter,
+                    height: 45,
+                    child: Text(
+                      "-",
+                      style: TextStyle(fontSize: 20),
+                    ))),
+          ),
+          btnDateTime(
+              context,
+              "${getDateTime("$toDate", dateFormat: "dd/MM/yyyy")}",
+              Icon(Icons.date_range),
+              datePick()),
+        ],
+      ),
+    );
   }
 
   @override
   void dispose() {
     _pageController.dispose();
+    _tabController.dispose();
     super.dispose();
   }
 
@@ -242,11 +215,11 @@ class _showAllInvoiceState extends State<showAllInvoice> {
         fromDate = dateRange.start;
         toDate = dateRange.end;
         getFromDate =
-            "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
+            "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd 00:00:00")}";
         getToDate =
-            "${getDateTime("$toDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
+            "${getDateTime("$toDate", dateFormat: "yyyy-MM-dd 23:59:59")}";
+        print(getToDate);
       });
     }
   }
-
 }
