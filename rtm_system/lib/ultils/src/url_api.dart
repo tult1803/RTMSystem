@@ -12,6 +12,7 @@ String urlUpdatePrice = "api/rtm/v1/product/update-price";
 String urlDeactivateCustomer = "api/rtm/v1/user/deactivate-account";
 String urlDeactivateNotice ="api/rtm/v1/notice/deactivate-notice";
 String urlCreateRequestInvoice = "api/rtm/v1/invoice/create-invoice-request";
+String urlCreateInvoice = "api/rtm/v1/invoice/create-invoice";
 String urlSignInvoice= "api/rtm/v1/invoice/sign-invoice";
 String urlConfirmInvoice= "api/rtm/v1/invoice/confirm-invoice";
 String urlInvoiceRequest = "api/rtm/v1/invoice/get-invoice-request";
