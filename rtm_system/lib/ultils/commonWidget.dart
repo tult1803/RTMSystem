@@ -615,6 +615,7 @@ Widget boxForAdvanceRequest(
       String createDate,
       String receiveDate,
       String imageUrl,
+      String reason,
       int status,
       Widget widget,
       bool isCustomer}) {
@@ -684,7 +685,7 @@ Widget boxForAdvanceRequest(
               alignment: Alignment.topLeft,
               paddingLeftOfText: 10,
               paddingRightOfText: 10,
-              tittle: "$totalAfterFormat",
+              tittle: "Số tiền: $totalAfterFormat",
               fontWeight: FontWeight.w700,
             ),
           Row(
@@ -694,7 +695,15 @@ Widget boxForAdvanceRequest(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                   containerTextInvoice(
+                    //Hoá đơn bị từ chối thì show lý do ra thay vì ngày tới 
+                    status == 6? containerTextInvoice(
+                      marginTop: 2,
+                      alignment: Alignment.topLeft,
+                      paddingLeftOfText: 10,
+                      paddingRightOfText: 10,
+                      tittle: "Lý do: $reason",
+                      fontWeight: FontWeight.w400,
+                    ): containerTextInvoice(
                       marginTop: 2,
                       alignment: Alignment.topLeft,
                       paddingLeftOfText: 10,
