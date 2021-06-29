@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rtm_system/presenter/Customer/show_advance_request.dart';
 import 'package:rtm_system/presenter/Customer/show_all_invoice.dart';
+import 'package:rtm_system/presenter/Customer/show_history_advance.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/helpers.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
@@ -25,7 +26,7 @@ class _AdvancePageState extends State<AdvancePage>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 5, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
     _tabController.addListener(() {
       setState(() {
         _selectedIndex = _tabController.index;
@@ -64,15 +65,11 @@ class _AdvancePageState extends State<AdvancePage>
               // icon: Icon(Icons.post_add_outlined,),
             ),
             Tab(
-              text: 'Chờ xác nhận',
-              // icon: Icon(Icons.access_time_outlined),
-            ),
-            Tab(
               text: 'Đã mượn',
               // icon: Icon(Icons.access_time_outlined),
             ),
             Tab(
-              text: 'Đã trả',
+              text: 'Lịch sử giao dịch',
               // icon: Icon(Icons.access_time_outlined),
             ),
             Tab(
@@ -86,22 +83,20 @@ class _AdvancePageState extends State<AdvancePage>
         controller: _tabController,
         children: <Widget>[
           //show advance chờ xử lý
-          containerInvoiceRequest(size.height, 4),
-          //Show advance được chấp nhận
-          containerInvoiceRequest(size.height, 8),
-          //show advance đã mượn
-          containerInvoice(size.height, 3),
+          containerAdvance(size.height, 4),
+          //Show advance được chấp nhận, đã mượn
+          containerAdvance(size.height, 8),
           //show advance đã trả
-          containerInvoice(size.height, 3),
+          containerAdvanceHistory(size.height, 8),
           //Show advance bị từ chối
-          containerInvoiceRequest(size.height, 6),
+          containerAdvance(size.height, 6),
         ],
       ),
       floatingActionButton: _showFloatBtn(_selectedIndex),
     );
   }
   //show invoice advance request
-  Widget containerInvoiceRequest(height, status){
+  Widget containerAdvance(height, status){
     return  Container(
         height: height,
         margin: EdgeInsets.only(left: 5, top: 12, right: 5),
@@ -116,8 +111,8 @@ class _AdvancePageState extends State<AdvancePage>
         )
     );
   }
-  //show invoice advance
-  Widget containerInvoice(height, status){
+  //show invoice advance history
+  Widget containerAdvanceHistory(height, status){
     return  Container(
         height: height,
         margin: EdgeInsets.only(left: 5, top: 12, right: 5),
@@ -125,8 +120,8 @@ class _AdvancePageState extends State<AdvancePage>
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              rowButtonDatetime(),
-              new showAllInvoicePage(status, fromDate: getFromDate, toDate: getToDate),
+              // rowButtonDatetime(),
+              new showHistoryAdvancePage(),
             ],
           ),
         )
