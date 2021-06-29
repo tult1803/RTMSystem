@@ -1,39 +1,37 @@
-import 'package:auto_size_text/auto_size_text.dart';
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
-import 'package:rtm_system/model/model_invoice.dart';
-import 'package:rtm_system/presenter/Manager/invoice/showInvoice.dart';
-import 'package:rtm_system/presenter/Manager/invoice/showRequestInvoice.dart';
+import 'package:intl/intl.dart';
+import 'package:rtm_system/presenter/Manager/debt/showAdvanceBill.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/helpers.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
-import 'package:rtm_system/view/manager/home_manager_page.dart';
+import 'package:rtm_system/view/manager/debt/processBill.dart';
 
-class showAllInvoice extends StatefulWidget {
+class showAllBill extends StatefulWidget {
   final int index;
 
-  showAllInvoice({this.index});
+  showAllBill({this.index});
 
   @override
-  _showAllInvoiceState createState() => _showAllInvoiceState();
+  _showAllBillState createState() => _showAllBillState();
 }
 
 DateTime fromDate;
 DateTime toDate;
 
-class _showAllInvoiceState extends State<showAllInvoice>
+class _showAllBillState extends State<showAllBill>
     with TickerProviderStateMixin {
   TabController _tabController;
-  int index;
-  Invoice invoice;
-  List invoiceList;
   String getFromDate, getToDate;
+  int index;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _tabController = TabController(
-        length: 6,
+        length: 3,
         vsync: this,
         initialIndex:
             widget.index == null ? index = 0 : index = this.widget.index);
@@ -46,7 +44,14 @@ class _showAllInvoiceState extends State<showAllInvoice>
   }
 
   @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         title: titleAppBar(),
@@ -64,7 +69,7 @@ class _showAllInvoiceState extends State<showAllInvoice>
   Widget titleAppBar() {
     return Center(
       child: Text(
-        "Hóa đơn",
+        "Ứng tiền",
         style: TextStyle(
             color: Colors.white, fontWeight: FontWeight.w500, fontSize: 22),
       ),
@@ -73,51 +78,16 @@ class _showAllInvoiceState extends State<showAllInvoice>
 
   Widget bottomAppBar() {
     return TabBar(
-      // labelPadding: EdgeInsets.symmetric(horizontal: 7.0),
       indicatorColor: primaryColor,
       isScrollable: true,
       labelColor: Colors.white,
       unselectedLabelColor: Colors.white.withOpacity(0.5),
       controller: _tabController,
       tabs: <Widget>[
-        Tab(text: "Yêu cầu"),
-        Tab(text: "Xử lý"),
-        Tab(text: "Hiệu lực"),
-        Tab(text: "Ký gửi"),
-        Tab(text: "Hoàn thành"),
+        Tab(text: "Đang xử lý"),
+        Tab(text: "Chấp nhận"),
         Tab(text: "Từ chối"),
       ],
-    );
-  }
-
-  Widget tabBarView() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 50.0),
-      child: TabBarView(
-        controller: _tabController,
-        children: <Widget>[
-          new showInvoiceRequestManager(
-            fromDate: getFromDate,
-            toDate: getToDate,
-            widgetToNavigator: HomeAdminPage(
-              index: 1,
-            ),
-          ),
-          new showInvoiceManager(
-            4,
-            fromDate: getFromDate,
-            toDate: getToDate,
-            widgetToNavigator: HomeAdminPage(
-              index: 1,
-              indexInsidePage: 1,
-            ),
-          ),
-          new showInvoiceManager(1, fromDate: getFromDate, toDate: getToDate),
-          new showInvoiceManager(5, fromDate: getFromDate, toDate: getToDate),
-          new showInvoiceManager(3, fromDate: getFromDate, toDate: getToDate),
-          new showInvoiceManager(2, fromDate: getFromDate, toDate: getToDate),
-        ],
-      ),
     );
   }
 
@@ -155,13 +125,22 @@ class _showAllInvoiceState extends State<showAllInvoice>
     );
   }
 
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
+  Widget tabBarView() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 50.0),
+      child: TabBarView(
+        controller: _tabController,
+        children: <Widget>[
+          new showAdvancceBillManager(4, fromDate: getFromDate, toDate: getToDate),
+          new showAdvancceBillManager(8, fromDate: getFromDate, toDate: getToDate),
+          new showAdvancceBillManager(6, fromDate: getFromDate, toDate: getToDate),
+        ],
+      ),
+    );
   }
-//Copy nó để tái sử dụng cho các trang khác nếu cần
-// Không thể tách vì nó có hàm setState
+
+  //Copy nó để tái sử dụng cho các trang khác nếu cần
+  // Không thể tách vì nó có hàm setState
   Widget datePick() {
     return TextButton(
       onPressed: () {
@@ -174,8 +153,8 @@ class _showAllInvoiceState extends State<showAllInvoice>
   }
 
   Future pickedDate() async {
-    final initialDateRange = DateTimeRange(start: fromDate, end: toDate);
     final ThemeData theme = Theme.of(context);
+    final initialDateRange = DateTimeRange(start: fromDate, end: toDate);
     DateTimeRange dateRange = await showDateRangePicker(
         context: context,
         firstDate: DateTime(2000),
@@ -190,7 +169,6 @@ class _showAllInvoiceState extends State<showAllInvoice>
                   iconTheme:
                       theme.primaryIconTheme.copyWith(color: Colors.white),
                 ),
-                //Dùng cho nút chọn ngày và background
                 colorScheme: ColorScheme.light(
                   primary: welcome_color,
                 )),
@@ -201,11 +179,6 @@ class _showAllInvoiceState extends State<showAllInvoice>
       setState(() {
         fromDate = dateRange.start;
         toDate = dateRange.end;
-        getFromDate =
-            "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd 00:00:00")}";
-        getToDate =
-            "${getDateTime("$toDate", dateFormat: "yyyy-MM-dd 23:59:59")}";
-        print(getToDate);
       });
     }
   }
