@@ -15,6 +15,7 @@ class AdvanceDetail {
     this.acceptStatusId,
     this.storeId,
     this.storeName,
+    this.reason,
   });
 
   String id;
@@ -31,7 +32,6 @@ class AdvanceDetail {
   String managerName;
   String processDate;
   int acceptStatusId;
-  //nen can co cho status 6
   String reason;
 
   factory AdvanceDetail.fromJson(Map<String, dynamic> json) => AdvanceDetail(
@@ -49,6 +49,7 @@ class AdvanceDetail {
     acceptStatusId: json["accept_status_id"],
     storeId: json["store_id"],
     storeName: json["store_name"],
+    reason: json["reason"],
   );
 
 }
