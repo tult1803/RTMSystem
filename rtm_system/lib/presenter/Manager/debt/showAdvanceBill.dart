@@ -93,18 +93,18 @@ class showAdvancceBillManagerState extends State<showAdvancceBillManager> {
               children: [
                 Container(
                     width: size.width,
-                    height: 70,
+                    height: 20,
                     child: new CustomScrollView(
                       physics: NeverScrollableScrollPhysics(),
                       slivers: [
-                        CharacterSearchInputSliver(
-                          onChanged: (searchTerm) {
-                            _updateSearchTerm(searchTerm);
-                            setState(() {
-                              _pageSize = 1;
-                            });
-                          },
-                        ),
+                        // CharacterSearchInputSliver(
+                        //   onChanged: (searchTerm) {
+                        //     _updateSearchTerm(searchTerm);
+                        //     setState(() {
+                        //       _pageSize = 1;
+                        //     });
+                        //   },
+                        // ),
                       ],
                     )
                 ),

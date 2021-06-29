@@ -21,18 +21,16 @@ class DetailAdvancePage extends StatefulWidget {
 }
 
 class _DetailAdvancePageState extends State<DetailAdvancePage> {
-  GetAdvanceDetail getAdvanceDetail = GetAdvanceDetail();
   AdvanceDetail advanceDetail = AdvanceDetail();
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getDetail();
   }
   Future getDetail() async {
+    GetAdvanceDetail getAdvanceDetail = GetAdvanceDetail();
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     String token = sharedPreferences.getString('access_token');
-    print(token);
     // Đỗ dữ liệu lấy từ api
     advanceDetail = await getAdvanceDetail.getAdvanceDetail(token, widget.id, widget.status);
     return advanceDetail;
@@ -51,6 +49,8 @@ class _DetailAdvancePageState extends State<DetailAdvancePage> {
               componentContainerDetailAdvanceRequest(
                 context,
                 id: advanceDetail.id,
+                storeName: advanceDetail.storeName,
+                storeId: advanceDetail.storeId,
                 customerName: advanceDetail.customerName,
                 customerPhone: '0912222-phone',
                 createDate: advanceDetail.createDate,
@@ -60,6 +60,7 @@ class _DetailAdvancePageState extends State<DetailAdvancePage> {
                 managerPhone: '0912222-phone',
                 statusId: advanceDetail.statusId,
                 isCustomer: widget.isCustomer,
+                description: advanceDetail.description,
                 reason: '',
                 widgetToNavigator: this.widget.widgetToNavigator,
               ),
@@ -68,7 +69,7 @@ class _DetailAdvancePageState extends State<DetailAdvancePage> {
         }
         return Container(
             height: size.height,
-            child: Center(child: CircularProgressIndicator()));
+            child: Center(child: CircularProgressIndicator(color: Colors.white,)));
       },
     );
   }
