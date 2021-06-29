@@ -69,13 +69,14 @@ class _AdvancePageState extends State<AdvancePage>
               // icon: Icon(Icons.access_time_outlined),
             ),
             Tab(
-              text: 'Lịch sử giao dịch',
-              // icon: Icon(Icons.access_time_outlined),
-            ),
-            Tab(
               text: 'Huỷ bỏ',
               // icon: Icon(Icons.access_time_outlined),
             ),
+            Tab(
+              text: 'Lịch sử giao dịch',
+              // icon: Icon(Icons.access_time_outlined),
+            ),
+
           ],
         ),
       ),
@@ -86,10 +87,10 @@ class _AdvancePageState extends State<AdvancePage>
           containerAdvance(size.height, 4),
           //Show advance được chấp nhận, đã mượn
           containerAdvance(size.height, 8),
-          //show advance đã trả
-          containerAdvanceHistory(size.height, 8),
           //Show advance bị từ chối
           containerAdvance(size.height, 6),
+          //show advance đã trả
+          containerAdvanceHistory(size.height, 8),
         ],
       ),
       floatingActionButton: _showFloatBtn(_selectedIndex),
@@ -128,7 +129,7 @@ class _AdvancePageState extends State<AdvancePage>
     );
   }
   Widget _showFloatBtn(index){
-    if(index == 2 ){
+    if(index == 1 ){
       return  FloatingActionButton.extended(
         onPressed: () {
           Navigator.push(

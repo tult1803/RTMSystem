@@ -97,7 +97,7 @@ class _InvoiceTabState extends State<InvoiceTab> with TickerProviderStateMixin {
           //Show invoice processing
           containerInvoice(size.height, 4),
           //Show invoice deposit
-          containerInvoice(size.height, 1),
+          containerInvoice(size.height, 5),
           //Show sale's invoice: -1 ( done, undone, actice)
           containerInvoice(size.height, 3),
           containerInvoice(size.height, 2),
@@ -201,7 +201,6 @@ class _InvoiceTabState extends State<InvoiceTab> with TickerProviderStateMixin {
 
   Future pickedDate() async {
     final initialDateRange = DateTimeRange(start: fromDate, end: toDate);
-    print(initialDateRange);
     final ThemeData theme = Theme.of(context);
     DateTimeRange dateRange = await showDateRangePicker(
         context: context,
@@ -225,15 +224,13 @@ class _InvoiceTabState extends State<InvoiceTab> with TickerProviderStateMixin {
           );
         });
     if (dateRange != null) {
-      print(dateRange.end);
       setState(() {
         fromDate = dateRange.start;
         toDate = dateRange.end;
         getFromDate =
         "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
-        // vì dateRange.end lấy ngày và giờ là 00:00:00 nên + thêm 1 ngày để lấy đúng 1 ngày
         getToDate =
-        "${getDateTime("${toDate.add(Duration(days: 1))}", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
+        "${getDateTime("${toDate}", dateFormat: "yyyy-MM-dd 23:59:59")}";
       });
     }
   }

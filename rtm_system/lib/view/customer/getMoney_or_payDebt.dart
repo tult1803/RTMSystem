@@ -1,32 +1,36 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:rtm_system/model/getAPI_invoice.dart';
 import 'package:rtm_system/model/getAPI_product.dart';
 import 'package:rtm_system/model/model_invoice.dart';
 import 'package:rtm_system/model/model_product.dart';
 import 'package:rtm_system/model/profile_customer/getAPI_customer_phone.dart';
 import 'package:rtm_system/model/profile_customer/model_profile_customer.dart';
-import 'package:rtm_system/presenter/Customer/show_all_invoice.dart';
-import 'package:rtm_system/ultils/alertDialog.dart';
+import 'package:rtm_system/presenter/Customer/show_deposit_to_process.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/component.dart';
+import 'package:rtm_system/ultils/getData.dart';
 import 'package:rtm_system/ultils/helpers.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/ultils/src/messageList.dart';
-import 'package:rtm_system/view/customer/home_customer_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class GetMoneyOrPayDebt extends StatefulWidget {
   const GetMoneyOrPayDebt({Key key, this.isPay}) : super(key: key);
+
   // isPay = true là hoá đơn để trả nợ
   final bool isPay;
 
   @override
   _GetMoneyOrPayDebtState createState() => _GetMoneyOrPayDebtState();
 }
-
+//
 DateTime fromDate;
 DateTime toDate;
+// bên show nhận data nhưng bên này widget show ra k đúng.
+int totalAmount = 0 ;
+int totalAmountDeposit = 0 ;
+
+List<String> idInvoice = [];
 
 class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
   List<DataProduct> dataListProduct = [];
@@ -36,6 +40,7 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
   int idProduct;
   String getFromDate, getToDate;
   String title;
+  int totalAdvance;
 
   GetAPIProfileCustomer getAPIProfileCustomer = GetAPIProfileCustomer();
   InfomationCustomer infomationCustomer = InfomationCustomer();
@@ -62,6 +67,7 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
       return dataListProduct;
     }
   }
+
   //get total advance
   Future getAPIProfile() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
@@ -69,29 +75,15 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
     String phone = sharedPreferences.getString('phone');
     // Đỗ dữ liệu lấy từ api
     infomationCustomer =
-    await getAPIProfileCustomer.getProfileCustomer(token, phone);
+        await getAPIProfileCustomer.getProfileCustomer(token, phone);
+    totalAdvance = infomationCustomer.advance;
     return infomationCustomer;
   }
-//sẽ dùng hàm này để tạo số tiền hiện có_ chưa dùng
-  Future<void> getTotalInvoiceDeposit() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    GetInvoice getAPIAllInvoice = GetInvoice();
-    invoice = await getAPIAllInvoice.getInvoice(
-      prefs.get("access_token"),
-      prefs.get("accountId"),
-      "",
-      5,
-      10000,
-      1,
-      "",
-      "",
-    );
-    setState(() {
-      invoiceList = invoice.invoices;
-    });
-    invoiceList?.map((item) {
-      print(item["manager_name"]);
-    });
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
   }
 
   @override
@@ -104,15 +96,12 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
         "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
     getToDate = "${getDateTime("$toDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
     _getProduct();
-    widget.isPay? title ='Trả nợ': title = 'Nhận tiền';
+    widget.isPay ? title = 'Trả nợ' : title = 'Nhận tiền';
     getAPIProfile();
-    getTotalInvoiceDeposit();
   }
-
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Color(0xffEEEEEE),
       appBar: AppBar(
@@ -132,63 +121,32 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
           child: Column(
             children: [
               Container(
-                  padding: EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(10))),
-                  child:
-                  Column(
-                    children: [
-                      if (widget.isPay)
-                         FutureBuilder(
-                          future: getAPIProfile(),
-                          builder: (BuildContext context, AsyncSnapshot snapshot) {
-                            if (snapshot.hasData) {
-                              return _txtItemDetail(
-                                  context, 'Tổng tiền nợ: ', '${getFormatPrice(infomationCustomer.advance.toString())} đ');
-                            }
-                            return Container(
-                                height: size.height,
-                                child: Center(child: CircularProgressIndicator()));
-                          },
-                        ),
-                      if (widget.isPay)
-                        SizedBox(
-                          height: 10,
-                        ),
+                padding: EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(10))),
+                child: Column(
+                  children: [
+                    if (widget.isPay)
                       _txtItemDetail(
-                          context, 'Số tiền hiện có:', '12,000,000 data gia'),
-                    ],
-                  ),
+                          context,
+                          'Tổng tiền nợ: ',
+                          totalAdvance != null
+                              ? '${getFormatPrice(totalAdvance.toString())} đ'
+                              : " "),
+                    if (widget.isPay)
+                      SizedBox(
+                        height: 10,
+                      ),
+                    _txtItemDetail(
+                        context,
+                        'Số tiền hiện có:',
+                        totalAmount != 0
+                            ? '${getFormatPrice(totalAmount.toString())} đ'
+                            : " "),
+                  ],
+                ),
               ),
-              // dùng show số tiền hiện có
-              // Container(
-              //   padding: EdgeInsets.all(12),
-              //   decoration: BoxDecoration(
-              //       color: Colors.white,
-              //       borderRadius: BorderRadius.all(Radius.circular(10))),
-              //   child:
-              //   Column(
-              //     children: [
-              //         FutureBuilder(
-              //           future: getTotalInvoiceDeposit(),
-              //           builder: (BuildContext context, AsyncSnapshot snapshot) {
-              //             if (snapshot.hasData) {
-              //               var result = snapshot.data;
-              //               print(result);
-              //               return
-              //               // getPriceTotal(invoiceList['price'], invoiceList['quantity'], invoiceList['degree']);
-              //               _txtItemDetail(
-              //                 context, 'Số tiền hiện có:', '${result}');
-              //             }
-              //             return Container(
-              //                 height: size.height,
-              //                 child: Center(child: CircularProgressIndicator()));
-              //           },
-              //         ),
-              //     ],
-              //   ),
-              // ),
               SizedBox(
                 height: 12,
               ),
@@ -237,7 +195,9 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
                         ),
                       ),
                       AutoSizeText(
-                        '10,000,000,000 đ data gia',
+                        totalAmountDeposit != 0
+                            ? "${getFormatPrice(totalAmountDeposit.toString())} đ"
+                            : " ",
                         style: TextStyle(
                           color: Colors.black,
                         ),
@@ -247,7 +207,7 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
                 ),
               ),
               //show invoice ky gui here sau khi click xác nhận btn "có" sẽ update các đơn này
-              new showAllInvoicePage(5,
+              new showDepositToProcess(
                   fromDate: getFromDate, toDate: getToDate),
               SizedBox(
                 height: 12,
@@ -275,6 +235,7 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
       ),
     );
   }
+
   // chưa thấy cần dùng cho chỗ khác nên để đây.
   Future<void> _showConfirmDialog() async {
     return showDialog<void>(
@@ -286,54 +247,41 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
           content: SingleChildScrollView(
             child: Column(
               children: <Widget>[
-                Text(showMessage('', MSG028)),
+                widget.isPay? Text(showMessage('', MSG028))
+                :Text(showMessage('', MSG029)),
               ],
             ),
           ),
           actions: <Widget>[
             TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
               child: Text(
                 'Không',
                 style: TextStyle(
                   color: Colors.redAccent,
                 ),
               ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
             ),
             TextButton(
+              onPressed: () {
+                widget.isPay? putReturnAdvance(context, idInvoice): "";
+              },
               child: Text(
                 'Có',
                 style: TextStyle(
                   color: welcome_color,
                 ),
               ),
-              onPressed: () {
-                // call api and return toast message
-                widget.isPay? showStatusAlertDialog(
-                    context,
-                    showMessage("", MSG012),
-                HomeCustomerPage(
-                index: 1,
-                ),
-                true): showStatusAlertDialog(
-                    context,
-                    showMessage("", MSG012),
-                    HomeCustomerPage(
-                      index: 0,
-                    ),
-                    true);;
-              },
             ),
-
           ],
         );
       },
     );
   }
 
-  // các btn date không thể tách ra class riêng vì setState, nên phải code trong class.
+//show btn select date, it have setState should dont reuse
   Widget rowButtonDatetime() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -405,9 +353,8 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
         toDate = dateRange.end;
         getFromDate =
             "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
-        // vì dateRange.end lấy ngày và giờ là 00:00:00 nên + thêm 1 ngày để lấy đúng 1 ngày
         getToDate =
-            "${getDateTime("${toDate.add(Duration(days: 1))}", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
+            "${getDateTime("${toDate}", dateFormat: "yyyy-MM-dd 23:59:59")}";
       });
     }
   }
