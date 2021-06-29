@@ -4,18 +4,16 @@ import 'package:rtm_system/ultils/src/url_api.dart';
 import 'package:http/http.dart' as http;
 
 class GetAdvanceRequest{
-  static int statusInvoice;
-  getAdvanceRequest(String token, String account_id, int status_id, int pageNum, int pageNo, String from, String to, {String searchTerm}) async {
+  getAdvanceRequest(String token, String accountId, int statusId, int pageNum, int pageNo, String from, String to) async {
     final response = await http.get(
-      Uri.http('$urlMain', '$urlAdvanceRequest', { "customer_id" : "$account_id", "status_id" : "$status_id", "from" : "$from", "to" : "$to", "pageNum" : "${pageNum}" ,"pageNo" : "${pageNo}" }),
+      Uri.http('$urlMain', '$urlAdvanceRequest', { "customer_id" : "$accountId", "status_id" : "$statusId", "from" : "$from", "to" : "$to", "pageNum" : "$pageNum" ,"pageNo" : "$pageNo" }),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Accept': 'application/json',
         'Authorization': 'Bearer $token',
       },
     );
-    print("Status getAdvanceRequest:${response.statusCode}");
-    statusInvoice = response.statusCode;
+    print("Status getAPI AdvanceRequest:${response.statusCode}");
     if (response.statusCode == 200) {
       return  AdvanceRequest.fromJson(jsonDecode(response.body));
     } else {

@@ -651,7 +651,7 @@ Widget boxForAdvanceRequest(
             children: [
               miniContainer(
                 context: context,
-                tittle: "Mã #$id",
+                tittle: id,
                 marginRight: 5,
                 marginBottom: 5,
                 marginLeft: 10,
@@ -710,7 +710,8 @@ Widget boxForAdvanceRequest(
               ),
               miniContainer(
                 context: context,
-                tittle: "${getStatus(status: status)}",
+                // tittle: "${getStatus(status: status)}",
+                tittle: "${getFormatPrice(amount)}đ",
                 colorText: Colors.white,
                 fontWeightText: FontWeight.w500,
                 height: 30,

@@ -22,7 +22,6 @@ class showAdvanceRequestPage extends StatefulWidget {
 class _showAdvanceRequestPageState extends State<showAdvanceRequestPage> {
   int _pageSize = 1;
   final PagingController _pagingController = PagingController(firstPageKey: 10);
-  String _searchTerm;
   AdvanceRequest advanceRequest;
   List advances;
 
@@ -38,7 +37,6 @@ class _showAdvanceRequestPageState extends State<showAdvanceRequestPage> {
         _pageSize,
         this.widget.fromDate == null ? "" : "${this.widget.fromDate}",
         this.widget.toDate == null ? "" : "${this.widget.toDate}",
-        searchTerm: _searchTerm,
       );
       advances = advanceRequest.advances;
       final isLastPage = advances.length < pageKey;
@@ -161,11 +159,6 @@ class _showAdvanceRequestPageState extends State<showAdvanceRequestPage> {
     );
   }
 
-  //Dùng để search
-  void _updateSearchTerm(String searchTerm) {
-    _searchTerm = searchTerm;
-    _pagingController.refresh();
-  }
 
 }
 

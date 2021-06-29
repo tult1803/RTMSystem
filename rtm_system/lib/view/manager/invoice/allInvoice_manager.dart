@@ -15,17 +15,6 @@ class _AllInvoiceState extends State<AllInvoice> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: welcome_color,
-        elevation: 0,
-        title: Center(
-          child: Text(
-            "Hóa đơn",
-            style: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.w500, fontSize: 22),
-          ),
-        ),
-      ),
       body: new showAllInvoice(index: this.widget.index,),
       floatingActionButton: new FloatingActionButton(
         onPressed: () => Navigator.of(context).push(MaterialPageRoute(

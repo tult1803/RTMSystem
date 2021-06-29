@@ -611,7 +611,7 @@ Widget _showBtnProcessInvoice(context, int statusId, String id, bool isCustomer,
         ],
       );
     }
-  } else if(statusId == 0){
+  } else if (statusId == 0) {
     return SizedBox(
       width: size.width * 0.5,
       // ignore: deprecated_member_use
@@ -630,7 +630,7 @@ Widget _showBtnProcessInvoice(context, int statusId, String id, bool isCustomer,
         elevation: 10,
       ),
     );
-  }else  {
+  } else {
     return Container();
   }
 }
@@ -919,7 +919,9 @@ Widget componentContainerInvoiceRequest(BuildContext context,
         ),
         isCustomer
             ? _showBtnProcessInvoice(context, 0, id, isCustomer,
-            isRequest: isRequest, widgetToNavigator: widgetToNavigator, map: map)
+                isRequest: isRequest,
+                widgetToNavigator: widgetToNavigator,
+                map: map)
             : _showBtnProcessInvoice(context, 4, id, isCustomer,
                 isRequest: isRequest,
                 widgetToNavigator: widgetToNavigator,
@@ -936,8 +938,11 @@ Widget componentContainerDetailAdvanceRequest(BuildContext context,
     {String id,
     String managerName,
     String managerPhone,
+    String storeName,
+    String storeId,
     String customerName,
     String customerPhone,
+    String description,
     int amount,
     int statusId,
     String createDate,
@@ -953,11 +958,39 @@ Widget componentContainerDetailAdvanceRequest(BuildContext context,
         SizedBox(
           height: 10,
         ),
-        txtItemDetail(context, "Ngày tạo đơn", "${getDateTime(createDate)}"),
+        txtItemDetail(context, "Cửa hàng", "$storeName"),
         SizedBox(
           height: 10,
         ),
-        txtItemDetail(context, "Ngày nhận tiền", "${getDateTime(activeDate)}"),
+        txtItemDetail(context, "Ngày tạo đơn",
+            "${getDateTime(createDate, dateFormat: "dd/MM/yyyy")}"),
+        SizedBox(
+          height: 10,
+        ),
+        Container(
+          child: isCustomer
+              ? null
+              : Column(
+                  children: [
+                    txtItemDetail(context, "Khách hàng", "$customerName",
+                        subContent: customerPhone),
+                    SizedBox(
+                      height: 10,
+                    ),
+                  ],
+                ),
+        ),
+        txtItemDetail(context, "Số tiền", "${getFormatPrice("$amount")}đ"),
+        SizedBox(
+          height: 10,
+        ),
+        txtItemDetail(context, "Ngày nhận tiền",
+            "${getDateTime(activeDate, dateFormat: "dd/MM/yyyy")}"),
+        SizedBox(
+          height: 10,
+        ),
+        txtItemDetail(
+            context, "Lý do", "${statusId == 6 ? reason : description}"),
         SizedBox(
           height: 10,
         ),
@@ -974,13 +1007,13 @@ Widget componentContainerDetailAdvanceRequest(BuildContext context,
 }
 
 //nội dung của bill, đang dùng: create advance and confirm advance
-Widget widgetCreateAdvance(context, List item,String storeId, String nameProduct, String name,
-    String phone, int type, bool isCustomer) {
+Widget widgetCreateAdvance(context, List item, String storeId,
+    String nameProduct, String name, String phone, int type, bool isCustomer) {
   var size = MediaQuery.of(context).size;
   String reason;
-  if( item[3] == null || item[3] == ''){
+  if (item[3] == null || item[3] == '') {
     reason = 'Ứng tiền';
-  }else{
+  } else {
     reason = item[3];
   }
   return SingleChildScrollView(
@@ -1019,7 +1052,7 @@ Widget widgetCreateAdvance(context, List item,String storeId, String nameProduct
                 SizedBox(
                   height: 10,
                 ),
-                showImage(size.width, size.height,item[2]),
+                showImage(size.width, size.height, item[2]),
                 SizedBox(
                   height: 10,
                 ),
@@ -1031,7 +1064,7 @@ Widget widgetCreateAdvance(context, List item,String storeId, String nameProduct
                     color: Color(0xFF0BB791),
                     onPressed: () {
                       doCreateRequestAdvance(context, 'TK-111', item[0], reason,
-                          item[1], item[2],storeId, type, true);
+                          item[1], item[2], storeId, type, true);
                     },
                     child: AutoSizeText(
                       'Xác nhận',
