@@ -61,7 +61,7 @@ class _DetailAdvancePageState extends State<DetailAdvancePage> {
                 statusId: advanceDetail.statusId,
                 isCustomer: widget.isCustomer,
                 description: advanceDetail.description,
-                reason: '',
+                reason: advanceDetail.reason,
                 widgetToNavigator: this.widget.widgetToNavigator,
               ),
             ),
