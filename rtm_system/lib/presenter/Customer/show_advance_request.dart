@@ -137,7 +137,7 @@ class _showAdvanceRequestPageState extends State<showAdvanceRequestPage> {
                                     name: item["customer_name"],
                                     receiveDate: item["receive_date"] ,
                                     imageUrl: item["image_url"],
-                                    reason: 'lý do nè',
+                                    reason: item["reason"],
                                     widget: FormForDetailPage(
                                       tittle: "Chi tiết yêu cầu",
                                       bodyPage: DetailAdvancePage(
