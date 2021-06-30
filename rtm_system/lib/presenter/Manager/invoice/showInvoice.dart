@@ -1,4 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:rtm_system/model/getAPI_invoice.dart';
@@ -68,7 +67,6 @@ class showInvoiceManagerState extends State<showInvoiceManager> {
   //Hàm này nhận biết sự thay đổi của Widget để thực hiện hành động
   @override
   void didUpdateWidget(covariant showInvoiceManager oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
     if(oldWidget.toDate != this.widget.toDate){
       _pagingController.refresh();
@@ -77,7 +75,6 @@ class showInvoiceManagerState extends State<showInvoiceManager> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _pagingController.addPageRequestListener((pageKey) {
       _fetchPage(pageKey);

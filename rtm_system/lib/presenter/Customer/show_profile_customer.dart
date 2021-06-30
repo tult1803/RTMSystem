@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:rtm_system/model/profile_customer/getAPI_customer_phone.dart';
 import 'package:rtm_system/model/profile_customer/model_profile_customer.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
@@ -20,7 +19,6 @@ class _showProfileState extends State<showProfile> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     this.getAPIProfile();
   }
@@ -45,8 +43,6 @@ class _showProfileState extends State<showProfile> {
       future: getAPIProfile(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
-          DateTime date = infomationCustomer.birthday;
-          final f = new DateFormat('dd-MM-yyyy');
           //show gender vì trong đây mới có data để set
           infomationCustomer.gender == 0
               ? genderShow = 'Nữ'

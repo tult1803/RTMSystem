@@ -58,7 +58,6 @@ class _showAllCustomerState extends State<showAllCustomer> {
 
   @override
   void initState() {
-    // TODO: implement initState
     _pagingController.addPageRequestListener((pageKey) {
       _fetchPage(pageKey);
     });

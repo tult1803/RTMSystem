@@ -54,13 +54,11 @@ class _showHistoryAdvancePageState extends State<showHistoryAdvancePage> {
   //Hàm này nhận biết sự thay đổi của Widget để thực hiện hành động
   @override
   void didUpdateWidget(covariant showHistoryAdvancePage oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _pagingController.addPageRequestListener((pageKey) {
       _fetchPage(pageKey);

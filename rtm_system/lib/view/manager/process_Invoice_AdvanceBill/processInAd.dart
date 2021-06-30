@@ -23,14 +23,12 @@ class _requestInvoiceAdvanceState extends State<requestInvoiceAdvance> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     this.widget.index == null ? index = 0 : index = this.widget.index;
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     _pageController.dispose();
   }

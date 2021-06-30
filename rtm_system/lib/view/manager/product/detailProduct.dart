@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/component.dart';
 
@@ -15,7 +14,6 @@ class DetailProduct extends StatefulWidget {
 class _DetailProductState extends State<DetailProduct> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 

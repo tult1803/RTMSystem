@@ -31,7 +31,6 @@ class _profilePageState extends State<profilePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _getFullName();
   }

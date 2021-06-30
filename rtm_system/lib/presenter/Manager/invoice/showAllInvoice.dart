@@ -1,4 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:rtm_system/model/model_invoice.dart';
 import 'package:rtm_system/presenter/Manager/invoice/showInvoice.dart';
@@ -30,7 +29,6 @@ class _showAllInvoiceState extends State<showAllInvoice>
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _tabController = TabController(
         length: 6,

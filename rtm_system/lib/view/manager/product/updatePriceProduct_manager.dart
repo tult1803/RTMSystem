@@ -9,7 +9,6 @@ import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/getData.dart';
 import 'package:rtm_system/ultils/helpers.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
-import 'package:rtm_system/view/manager/home_manager_page.dart';
 
 class updatePriceProduct extends StatefulWidget {
   String chosenValue;
@@ -29,14 +28,12 @@ class _updatePriceProductState extends State<updatePriceProduct> {
   String _value;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     isNotEmptyChoose();
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 

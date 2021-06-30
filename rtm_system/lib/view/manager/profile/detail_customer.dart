@@ -34,7 +34,6 @@ class _DetailCustomerState extends State<DetailCustomer> {
 
   @override
   void initState() {
-    // TODO: implement initState
     _getData();
     super.initState();
   }

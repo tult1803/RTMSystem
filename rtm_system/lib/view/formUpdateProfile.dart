@@ -1,7 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:intl/intl.dart';
 import 'package:rtm_system/ultils/alertDialog.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/helpers.dart';
@@ -53,7 +52,6 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     if (this.widget.gender == 0) {
@@ -513,7 +511,6 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
       errPhone = "Số điện thoại trống";
     } else {
       try {
-        int parseInt = int.parse(this.widget.phone);
         if (!checkFormatPhone.hasMatch(this.widget.phone) ||
             this.widget.phone.length > 11) {
           errPhone = "Số điện thoại sai (10-11 só)";
@@ -530,7 +527,6 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
       } else {
         //Lỗi RegExp nên không dùng nó mà dùng try-catch
         try {
-          int parseInt = int.parse(this.widget.cmnd);
           if (this.widget.cmnd.length < 9 || this.widget.cmnd.length > 12) {
             errCMND = "CMND/CCCD sai";
           } else {

@@ -7,8 +7,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:rtm_system/main.dart';
 import 'package:rtm_system/view/welcome_page.dart';
 
 void main() {

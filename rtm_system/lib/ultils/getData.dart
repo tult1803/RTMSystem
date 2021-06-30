@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:rtm_system/model/PostCreateRequestInvoice.dart';
 import 'package:rtm_system/model/deleteAPI_invoice.dart';
@@ -7,7 +6,6 @@ import 'package:rtm_system/model/postAPI_createCustomer.dart';
 import 'package:rtm_system/model/postAPI_createInvoice.dart';
 import 'package:rtm_system/model/postAPI_createNotice.dart';
 import 'package:rtm_system/model/profile_customer/getAPI_customer_phone.dart';
-import 'package:rtm_system/model/profile_customer/model_profile_customer.dart';
 import 'package:rtm_system/model/putAPI_ConfirmAdvanceRequest.dart';
 import 'package:rtm_system/model/putAPI_ReturnAdvance.dart';
 import 'package:rtm_system/model/putAPI_confirmInvoice.dart';

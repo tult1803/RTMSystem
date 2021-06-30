@@ -1,7 +1,5 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:rtm_system/presenter/Manager/debt/showAllAdvanceBill.dart';
-import 'package:rtm_system/ultils/src/color_ultils.dart';
 
 class AllDebt extends StatefulWidget {
   const AllDebt({Key key}) : super(key: key);

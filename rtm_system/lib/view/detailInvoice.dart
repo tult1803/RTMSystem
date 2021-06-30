@@ -13,7 +13,6 @@ class DetailInvoice extends StatefulWidget {
 class _DetailInvoiceState extends State<DetailInvoice> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
   @override

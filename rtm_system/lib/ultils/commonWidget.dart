@@ -1461,7 +1461,7 @@ Widget boxForAdvanceHistory(
                       alignment: Alignment.topLeft,
                       paddingLeftOfText: 10,
                       paddingRightOfText: 10,
-                      tittle: isAdvance? "Hoá đơn ứng tiền": "Hoá đơn hoàn tiền",
+                      tittle: isAdvance? "Hoá đơn ứng tiền": "Hoá đơn trả nợ",
                       fontWeight: FontWeight.w400,
                   )
                   ],

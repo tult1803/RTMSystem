@@ -30,7 +30,6 @@ class _DetailOfNoticeState extends State<DetailOfNotice> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _getToken();
   }
