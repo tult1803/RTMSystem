@@ -4,17 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
 class CharacterSearchInputSliver extends StatefulWidget {
-  const CharacterSearchInputSliver({
-    Key key,
-    this.onChanged,
-    this.debounceTime,
-  }) : super(key: key);
+
   final ValueChanged<String> onChanged;
   final Duration debounceTime;
-
+  final String hintText;
   @override
   _CharacterSearchInputSliverState createState() =>
       _CharacterSearchInputSliverState();
+
+  CharacterSearchInputSliver(
+      {this.onChanged, this.debounceTime, this.hintText});
 }
 
 class _CharacterSearchInputSliverState
@@ -35,18 +34,18 @@ class _CharacterSearchInputSliverState
         onChanged(text);
       }
     });
-
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
-      child: Padding(
+      child:
+      Padding(
         padding: const EdgeInsets.all(16),
         child: TextField(
           cursorColor: Color.fromARGB(255, 11, 183, 145),
-          decoration: const InputDecoration(
+          decoration: InputDecoration(
             border: UnderlineInputBorder(),
             focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(color: Color.fromARGB(255, 11, 183, 145)),
@@ -55,7 +54,7 @@ class _CharacterSearchInputSliverState
               Icons.search,
               color: Colors.black54,
             ),
-            hintText: 'Tìm kiếm',
+            hintText: widget.hintText == null ? "Tìm kiếm" : widget.hintText,
           ),
           onChanged: _textChangeStreamController.add,
         ),

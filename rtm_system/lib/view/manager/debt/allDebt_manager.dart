@@ -18,7 +18,7 @@ class _AllDebtState extends State<AllDebt> {
 
         },
         child: new Icon(
-          Icons.post_add,
+          Icons.error,
           color: Colors.white,
           size: 30,
         ),

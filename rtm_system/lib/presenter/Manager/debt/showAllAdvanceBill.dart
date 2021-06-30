@@ -27,10 +27,10 @@ class _showAllBillState extends State<showAllBill>
   void initState() {
     super.initState();
     _tabController = TabController(
-        length: 3,
+        length: 4,
         vsync: this,
         initialIndex:
-            widget.index == null ? index = 0 : index = this.widget.index);
+            widget.index == null ? index = 1 : index = this.widget.index);
 
     toDate = DateTime.now();
     fromDate = DateTime.now().subtract(Duration(days: 30));
@@ -79,6 +79,7 @@ class _showAllBillState extends State<showAllBill>
       unselectedLabelColor: Colors.white.withOpacity(0.5),
       controller: _tabController,
       tabs: <Widget>[
+        Tab(text: "Tất cả"),
         Tab(text: "Đang xử lý"),
         Tab(text: "Chấp nhận"),
         Tab(text: "Từ chối"),
@@ -126,6 +127,7 @@ class _showAllBillState extends State<showAllBill>
       child: TabBarView(
         controller: _tabController,
         children: <Widget>[
+          new showAdvancceBillManager(0),
           new showAdvancceBillManager(4, fromDate: getFromDate, toDate: getToDate),
           new showAdvancceBillManager(8, fromDate: getFromDate, toDate: getToDate),
           new showAdvancceBillManager(6, fromDate: getFromDate, toDate: getToDate),

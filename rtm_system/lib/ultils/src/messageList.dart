@@ -5,7 +5,7 @@ import 'dart:core';
 //’name field’ + không được để trống.
 String MSG001 = "không được để trống.";
 String MSG002 = "Tạo mới thành công.";
-String MSG003 = "Cập nhật thông tin thành công.";
+String MSG003 = "Cập nhật thông tin thành công";
 String MSG004 = "Tên đăng nhập sai.";
 String MSG005 = "Tài khoản đã bị khóa.";
 String MSG006 = "Số tiền phải lớn hơn hoặc bằng 100,000 VND";
@@ -28,7 +28,7 @@ String MSG021 = "Vui lòng nhập đúng mật khẩu mới.";
 String MSG022 = "Đã nhận tiền thành công.";
 String MSG023 = "Vui lòng chọn sản phẩm.";
 String MSG024 = "Tạo thất bại.";
-String MSG025 = "Cập nhật thất bại.";
+String MSG025 = "Cập nhật thất bại";
 String MSG026 = "Vui lòng chỉ nhập số.";
 String MSG027 = "Vui lòng thử lại!";
 String MSG028 = "Xác nhận quý khách sẽ trả nợ bằng các hóa đơn này?";

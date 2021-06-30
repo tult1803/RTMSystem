@@ -67,6 +67,12 @@ class showAdvancceBillManagerState extends State<showAdvancceBillManager> {
   }
 
   @override
+  void dispose() {
+    _pagingController.dispose();
+    super.dispose();
+  }
+
+  @override
   void initState() {
     super.initState();
     _pagingController.addPageRequestListener((pageKey) {
@@ -90,18 +96,18 @@ class showAdvancceBillManagerState extends State<showAdvancceBillManager> {
               children: [
                 Container(
                     width: size.width,
-                    height: 20,
+                    height: 80,
                     child: new CustomScrollView(
                       physics: NeverScrollableScrollPhysics(),
                       slivers: [
-                        // CharacterSearchInputSliver(
-                        //   onChanged: (searchTerm) {
-                        //     _updateSearchTerm(searchTerm);
-                        //     setState(() {
-                        //       _pageSize = 1;
-                        //     });
-                        //   },
-                        // ),
+                        CharacterSearchInputSliver(
+                          onChanged: (searchTerm) {
+                            _updateSearchTerm(searchTerm);
+                            setState(() {
+                              _pageSize = 1;
+                            });
+                          },
+                        ),
                       ],
                     )
                 ),
@@ -177,11 +183,5 @@ class showAdvancceBillManagerState extends State<showAdvancceBillManager> {
   void _updateSearchTerm(String searchTerm) {
     _searchTerm = searchTerm;
     _pagingController.refresh();
-  }
-
-  @override
-  void dispose() {
-    _pagingController.dispose();
-    super.dispose();
   }
 }

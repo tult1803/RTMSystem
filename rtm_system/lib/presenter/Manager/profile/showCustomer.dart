@@ -90,6 +90,7 @@ class _showAllCustomerState extends State<showAllCustomer> {
       child: new CustomScrollView(
         slivers: <Widget>[
           CharacterSearchInputSliver(
+            hintText: "Tìm kiếm theo tên",
             onChanged: (searchTerm) {
               _updateSearchTerm(searchTerm);
               setState(() {

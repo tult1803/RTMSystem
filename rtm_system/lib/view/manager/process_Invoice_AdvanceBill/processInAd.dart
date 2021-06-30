@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:rtm_system/presenter/Manager/debt/showAdvanceBill.dart';
 import 'package:rtm_system/presenter/Manager/invoice/showRequestInvoice.dart';
 import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
@@ -83,13 +84,7 @@ class _requestInvoiceAdvanceState extends State<requestInvoiceAdvance> {
           children: [
             new showInvoiceRequestManager(widgetToNavigator: requestInvoiceAdvance(index: 0,),),
             //Chờ API Advance Bill
-            new Container(
-              width: size.width,
-              height: size.height,
-              child: Center(
-                child: Text("Chờ API"),
-              ),
-            ),
+            new showAdvancceBillManager(4,widgetToNavigator: requestInvoiceAdvance(index: 1,),)
           ],
         ));
   }
