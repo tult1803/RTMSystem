@@ -194,7 +194,7 @@ class _formUpdatePasswordPageState extends State<formUpdatePasswordPage> {
               if (check) {
                 //chỉ cần pw và account_id để change pw, những field khác truyền để đủ field theo function
                 doCreateCustomer(context, '', newPassword, '', 0, '', '', '',
-                    this.widget.isCustomer, true, 0, "${this.widget.account_id}");
+                    this.widget.isCustomer, 0, "${this.widget.account_id}", isUpdate: true);
               }
             });
           },

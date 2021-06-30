@@ -12,11 +12,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: camel_case_types, must_be_immutable
 class showInvoiceRequestManager extends StatefulWidget {
-  String fromDate, toDate;
+  String fromDate, toDate, searchItem;
   final Widget widgetToNavigator;
 
   showInvoiceRequestManager(
-      {this.fromDate, this.toDate, this.widgetToNavigator});
+      {this.fromDate, this.toDate, this.widgetToNavigator, this.searchItem});
 
   @override
   showInvoiceRequestManagerState createState() =>
@@ -73,6 +73,13 @@ class showInvoiceRequestManagerState extends State<showInvoiceRequestManager> {
     if (oldWidget.toDate != this.widget.toDate) {
       _pagingController.refresh();
     }
+
+    if (oldWidget.searchItem != widget.searchItem) {
+      _updateSearchTerm(widget.searchItem);
+      setState(() {
+        _pageSize = 1;
+      });
+    }
   }
 
   @override
@@ -88,97 +95,62 @@ class showInvoiceRequestManagerState extends State<showInvoiceRequestManager> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
-      body: Container(
-        height: size.height,
-        width: size.width,
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(0.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                    width: size.width,
-                    height: 80,
-                    child: new CustomScrollView(
-                      physics: NeverScrollableScrollPhysics(),
-                      slivers: [
-                        CharacterSearchInputSliver(
-                          onChanged: (searchTerm) {
-                            _updateSearchTerm(searchTerm);
-                            setState(() {
-                              _pageSize = 1;
-                            });
-                          },
+        body: Container(
+      margin: EdgeInsets.only(top: 0, left: 5, right: 5),
+      height: size.height,
+      width: size.width,
+      child: new CustomScrollView(
+        slivers: <Widget>[
+          PagedSliverList(
+            pagingController: _pagingController,
+            builderDelegate: PagedChildBuilderDelegate(
+                firstPageErrorIndicatorBuilder: (context) {
+                  return Column(
+                    children: [
+                      firstPageErrorIndicatorBuilder(context,
+                          tittle: "Không có dữ liệu"),
+                      GestureDetector(
+                        onTap: () => _pagingController.refresh(),
+                        child: Text(
+                          "Nhấn để tải lại",
+                          style: TextStyle(color: welcome_color, fontSize: 18),
                         ),
-                      ],
-                    )),
-                Expanded(
-                    child: Container(
-                  margin: EdgeInsets.only(top: 0, left: 5, right: 5),
-                  height: size.height,
-                  width: size.width,
-                  child: new CustomScrollView(
-                    slivers: <Widget>[
-                      PagedSliverList(
-                        pagingController: _pagingController,
-                        builderDelegate: PagedChildBuilderDelegate(
-                            firstPageErrorIndicatorBuilder: (context) {
-                              return Column(
-                                children: [
-                                  firstPageErrorIndicatorBuilder(context,
-                                      tittle: "Không có dữ liệu"),
-                                  GestureDetector(
-                                    onTap: () => _pagingController.refresh(),
-                                    child: Text(
-                                      "Nhấn để tải lại",
-                                      style: TextStyle(
-                                          color: welcome_color, fontSize: 18),
-                                    ),
-                                  ),
-                                ],
-                              );
-                            },
-                            newPageErrorIndicatorBuilder: (context) =>
-                                firstPageErrorIndicatorBuilder(context,
-                                    tittle: "Không có dữ liệu"),
-                            firstPageProgressIndicatorBuilder: (context) =>
-                                firstPageProgressIndicatorBuilder(),
-                            newPageProgressIndicatorBuilder: (context) =>
-                                newPageProgressIndicatorBuilder(),
-                            itemBuilder: (context, item, index) {
-                              return boxForInvoiceRequest(
-                                  context: context,
-                                  status: item['status_id'],
-                                  date: "${item['create_date']}",
-                                  price: "${item['price']}",
-                                  id: item['id'].toString(),
-                                  name: item["customer_name"],
-                                  product: item["product_name"],
-                                  sell_date: item["sell_date"],
-                                  widget: FormForDetailPage(
-                                    tittle: "Chi tiết yêu cầu",
-                                    bodyPage: DetailInvoiceRequest(
-                                      isCustomer: false,
-                                      map: item,
-                                      isRequest: true,
-                                      widgetToNavigator:
-                                          this.widget.widgetToNavigator,
-                                    ),
-                                  ),
-                                  isCustomer: false);
-                            }),
                       ),
                     ],
-                  ),
-                ))
-              ],
-            ),
+                  );
+                },
+                newPageErrorIndicatorBuilder: (context) =>
+                    firstPageErrorIndicatorBuilder(context,
+                        tittle: "Không có dữ liệu"),
+                firstPageProgressIndicatorBuilder: (context) =>
+                    firstPageProgressIndicatorBuilder(),
+                newPageProgressIndicatorBuilder: (context) =>
+                    newPageProgressIndicatorBuilder(),
+                itemBuilder: (context, item, index) {
+                  return boxForInvoiceRequest(
+                      context: context,
+                      status: item['status_id'],
+                      date: "${item['create_date']}",
+                      price: "${item['price']}",
+                      id: item['id'].toString(),
+                      name: item["customer_name"],
+                      product: item["product_name"],
+                      sell_date: item["sell_date"],
+                      widget: FormForDetailPage(
+                        tittle: "Chi tiết yêu cầu",
+                        bodyPage: DetailInvoiceRequest(
+                          isCustomer: false,
+                          map: item,
+                          isRequest: true,
+                          widgetToNavigator: this.widget.widgetToNavigator,
+                        ),
+                      ),
+                      isCustomer: false);
+                }),
           ),
-        ),
+        ],
       ),
-    );
+    ));
   }
 
   //Dùng để search

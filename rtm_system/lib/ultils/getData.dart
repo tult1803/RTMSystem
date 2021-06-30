@@ -94,10 +94,10 @@ Future<void> doCreateCustomer(
     String address,
     String birthday,
     bool isCustomer,
-    bool isUpdate,
     int typeOfUpdate,
     String accountId,
-    {bool isCreate}) async {
+    {bool isCreate,
+    bool isUpdate}) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   int status = await post_put_ApiProfile(phone, password, fullname, gender,
       cmnd, address, birthday, isUpdate, typeOfUpdate, accountId);
@@ -111,26 +111,30 @@ Future<void> doCreateCustomer(
           ),
           true);
     } else {
-      if (isUpdate) {
+      if (fullname.trim().isNotEmpty) {
         prefs.setString("fullname", fullname);
         prefs.setString("phone", phone);
         prefs.setInt("gender", gender);
         prefs.setString("birthday", birthday);
-      } else
+      } else {
         prefs.setString("password", password);
-      showStatusAlertDialog(
-          context,
-          "Đã cập nhật",
-          isCreate == null
-              ? HomeAdminPage(
-                  index: 4,
-                )
-              : AllCustomer(),
-          true);
+      }
+      showCustomDialog(
+        context,
+        content: MSG003, ///MSG003
+        isSuccess: true,
+        widgetToNavigator: isCreate == null
+            ? HomeAdminPage(
+                index: 4,
+              )
+            : AllCustomer(),
+      );
     }
   } else
-    showStatusAlertDialog(
-        context, "Cập nhật thất bại. Xin thử lại !!!", null, false);
+    showCustomDialog(context,
+        content: MSG025, ///MSG025
+        isSuccess: false,
+        doPopNavigate: true);
 }
 
 // ignore: non_constant_identifier_names
@@ -151,12 +155,11 @@ Future<void> put_API_PayAdvance(
         context, "Trả tiền thất bại. Xin thử lại !!!", null, false);
 }
 
-Future<void> put_API_ConfirmAdvance(
-    BuildContext context, id
-    ) async {
+Future<void> put_API_ConfirmAdvance(BuildContext context, id) async {
   int status;
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  PutConfirmAdvanceRequest putConfirmAdvanceRequest = PutConfirmAdvanceRequest();
+  PutConfirmAdvanceRequest putConfirmAdvanceRequest =
+      PutConfirmAdvanceRequest();
   status = await putConfirmAdvanceRequest.putConfirmAdvanceRequest(
       prefs.get("access_token"), id);
   if (status == 200) {
@@ -168,9 +171,9 @@ Future<void> put_API_ConfirmAdvance(
         ),
         true);
   } else
-    showStatusAlertDialog(
-        context, showMessage(MSG025, MSG027), null, false);
+    showStatusAlertDialog(context, showMessage(MSG025, MSG027), null, false);
 }
+
 // ignore: non_constant_identifier_names
 Future<void> put_API_GetMoney(BuildContext context, indexPage) async {
   int status = 200;
@@ -286,16 +289,30 @@ Future<void> doConfirmOrAcceptOrRejectInvoice(
 }
 
 //Tao advance request
-Future<void> doCreateRequestAdvance(BuildContext context, String accountId,
-    String money,String reason, date, image, storeId, int type, bool isCustomer) async {
+Future<void> doCreateRequestAdvance(
+    BuildContext context,
+    String accountId,
+    String money,
+    String reason,
+    date,
+    image,
+    storeId,
+    int type,
+    bool isCustomer) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  int status ;
+  int status;
   if (isCustomer) {
     // 1 is create request advance, 2 is accept advance
     if (type == 1) {
       ImageService imageService = ImageService();
-       status = await imageService.postCreateAdvance(
-          prefs.get("access_token"), prefs.get("accountId"), storeId ,money, reason, getDateTime(date, dateFormat: 'yyyy-MM-dd HH:mm:ss'), image);
+      status = await imageService.postCreateAdvance(
+          prefs.get("access_token"),
+          prefs.get("accountId"),
+          storeId,
+          money,
+          reason,
+          getDateTime(date, dateFormat: 'yyyy-MM-dd HH:mm:ss'),
+          image);
     } else if (type == 2) {
       //Call API
     }
@@ -367,7 +384,10 @@ Future doCreateInvoice(BuildContext context,
   if (isCustomer) {
     PostCreateRequestInvoice createRequestInvoice = PostCreateRequestInvoice();
     status = await createRequestInvoice.createRequestInvoice(
-        prefs.get("access_token"), productId, getDateTime(sellDate, dateFormat: "yyyy-MM-dd HH:mm:ss"), storeId);
+        prefs.get("access_token"),
+        productId,
+        getDateTime(sellDate, dateFormat: "yyyy-MM-dd HH:mm:ss"),
+        storeId);
   } else {
     PostCreateInvoice createInvoice = PostCreateInvoice();
     status = await createInvoice.createInvoice(prefs.get('access_token'),
