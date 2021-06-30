@@ -3,6 +3,7 @@ import 'package:rtm_system/model/getAPI_product.dart';
 import 'package:rtm_system/model/model_product.dart';
 import 'package:rtm_system/ultils/component.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 class ConfirmCreateRequestAdvance extends StatefulWidget {
   const ConfirmCreateRequestAdvance({Key key, this.listInfor,
     this.isCustomer, this.type, this.storeId}): super(key: key);

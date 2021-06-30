@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:rtm_system/presenter/Customer/show_advance_request.dart';
-import 'package:rtm_system/presenter/Customer/show_all_invoice.dart';
 import 'package:rtm_system/presenter/Customer/show_history_advance.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/helpers.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/customer/advance/create_request_advance.dart';
 import 'package:rtm_system/view/customer/getMoney_or_payDebt.dart';
+
 class AdvancePage extends StatefulWidget {
   const AdvancePage({Key key}) : super(key: key);
 
@@ -20,7 +20,6 @@ class _AdvancePageState extends State<AdvancePage>
     with TickerProviderStateMixin {
   TabController _tabController;
   String getFromDate, getToDate;
-  //index on Tab
   int index, _selectedIndex;
 
   @override
@@ -40,7 +39,6 @@ class _AdvancePageState extends State<AdvancePage>
       getFromDate =
       "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
       getToDate = "${getDateTime("$toDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
-      print(getToDate);
     });
   }
   @override
@@ -230,9 +228,8 @@ class _AdvancePageState extends State<AdvancePage>
         toDate = dateRange.end;
         getFromDate =
         "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
-        // vì dateRange.end lấy ngày và giờ là 00:00:00 nên + thêm 1 ngày để lấy đúng 1 ngày
         getToDate =
-        "${getDateTime("${toDate.add(Duration(days: 1))}", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
+        "${getDateTime("${toDate}", dateFormat: "yyyy-MM-dd 23:59:59")}";
       });
     }
   }

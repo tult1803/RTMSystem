@@ -3,9 +3,6 @@ import 'package:rtm_system/presenter/Customer/show_Notice.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 class NoticesPage extends StatefulWidget {
   const NoticesPage({Key key}) : super(key: key);
-
-  final String title = "Thông báo";
-
   @override
   _NoticesPageState createState() => _NoticesPageState();
 }
@@ -17,7 +14,7 @@ class _NoticesPageState extends State<NoticesPage> {
         backgroundColor: backgroundColor,
         appBar: AppBar(
           backgroundColor: primaryColor,
-          title: Text(widget.title, style: TextStyle(
+          title: Text("Thông báo", style: TextStyle(
             color: Colors.white,
           ),),
           centerTitle: true,

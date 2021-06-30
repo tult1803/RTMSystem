@@ -11,7 +11,6 @@ import 'package:rtm_system/view/manager/formForDetail_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: camel_case_types
-
 class showAllInvoicePage extends StatefulWidget {
   int statusId;
   String fromDate, toDate;

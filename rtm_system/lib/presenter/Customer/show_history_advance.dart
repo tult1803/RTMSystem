@@ -72,7 +72,7 @@ class _showHistoryAdvancePageState extends State<showHistoryAdvancePage> {
     var size = MediaQuery.of(context).size;
     return SingleChildScrollView(
       child: Container(
-        height: size.height * 0.65,
+        height: size.height * 0.71,
         width: size.width,
         child: Center(
           child: Padding(
@@ -119,7 +119,6 @@ class _showHistoryAdvancePageState extends State<showHistoryAdvancePage> {
                               newPageProgressIndicatorBuilder: (context) =>
                                   newPageProgressIndicatorBuilder(),
                               itemBuilder: (context, item, index) {
-                                print('zo');
                                 return boxForAdvanceHistory(
                                     context: context,
                                     id: item.id,
