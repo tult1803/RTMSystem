@@ -1,8 +1,8 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:rtm_system/model/model_invoice.dart';
 import 'package:rtm_system/presenter/Manager/invoice/showInvoice.dart';
 import 'package:rtm_system/presenter/Manager/invoice/showRequestInvoice.dart';
+import 'package:rtm_system/presenter/infinite_scroll_pagination/common/character_search_input_sliver.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/helpers.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
@@ -19,7 +19,6 @@ class showAllInvoice extends StatefulWidget {
 
 DateTime fromDate;
 DateTime toDate;
-
 class _showAllInvoiceState extends State<showAllInvoice>
     with TickerProviderStateMixin {
   TabController _tabController;
@@ -27,7 +26,7 @@ class _showAllInvoiceState extends State<showAllInvoice>
   Invoice invoice;
   List invoiceList;
   String getFromDate, getToDate;
-
+  String itemToSearch;
   @override
   void initState() {
     // TODO: implement initState
@@ -55,9 +54,32 @@ class _showAllInvoiceState extends State<showAllInvoice>
       body: Stack(
         children: [
           rowButtonDatetime(),
+          searchItem(context),
           tabBarView(),
         ],
       ),
+    );
+  }
+
+  Widget searchItem(context){
+    var size = MediaQuery.of(context).size;
+    return Container(
+            key: Key('Search'),
+            padding: EdgeInsets.only(top: 40),
+              width: size.width,
+              child: new CustomScrollView(
+                physics: NeverScrollableScrollPhysics(),
+                slivers: [
+                  CharacterSearchInputSliver(
+                    hintText: "Tìm kiếm theo số điện thoại",
+                    onChanged: (searchTerm) {
+                      setState(() {
+                        itemToSearch = searchTerm;
+                      });
+                    },
+                  ),
+                ],
+              )
     );
   }
 
@@ -92,7 +114,7 @@ class _showAllInvoiceState extends State<showAllInvoice>
 
   Widget tabBarView() {
     return Padding(
-      padding: const EdgeInsets.only(top: 50.0),
+      padding: const EdgeInsets.only(top: 115.0),
       child: TabBarView(
         controller: _tabController,
         children: <Widget>[
@@ -102,6 +124,7 @@ class _showAllInvoiceState extends State<showAllInvoice>
             widgetToNavigator: HomeAdminPage(
               index: 1,
             ),
+            searchItem: itemToSearch,
           ),
           new showInvoiceManager(
             4,
@@ -111,11 +134,12 @@ class _showAllInvoiceState extends State<showAllInvoice>
               index: 1,
               indexInsidePage: 1,
             ),
+            searchItem: itemToSearch,
           ),
-          new showInvoiceManager(1, fromDate: getFromDate, toDate: getToDate),
-          new showInvoiceManager(5, fromDate: getFromDate, toDate: getToDate),
-          new showInvoiceManager(3, fromDate: getFromDate, toDate: getToDate),
-          new showInvoiceManager(2, fromDate: getFromDate, toDate: getToDate),
+          new showInvoiceManager(1, fromDate: getFromDate, toDate: getToDate, searchItem: itemToSearch,),
+          new showInvoiceManager(5, fromDate: getFromDate, toDate: getToDate, searchItem: itemToSearch,),
+          new showInvoiceManager(3, fromDate: getFromDate, toDate: getToDate, searchItem: itemToSearch,),
+          new showInvoiceManager(2, fromDate: getFromDate, toDate: getToDate, searchItem: itemToSearch,),
         ],
       ),
     );
