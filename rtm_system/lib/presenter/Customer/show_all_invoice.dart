@@ -11,8 +11,6 @@ import 'package:rtm_system/view/manager/formForDetail_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: camel_case_types
-
-// khi thêm data nó k load lại dk mà cần qua trang khác rồi ấn lại thì mới load lên
 class showAllInvoicePage extends StatefulWidget {
   int statusId;
   String fromDate, toDate;
@@ -65,7 +63,6 @@ class showAllInvoicePageState extends State<showAllInvoicePage> {
   //Hàm này nhận biết sự thay đổi của Widget để thực hiện hành động
   @override
   void didUpdateWidget(covariant showAllInvoicePage oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
     if(oldWidget.toDate != this.widget.toDate){
       _pagingController.refresh();
@@ -75,7 +72,6 @@ class showAllInvoicePageState extends State<showAllInvoicePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _pagingController.addPageRequestListener((pageKey) {
       _fetchPage(pageKey);
@@ -167,11 +163,10 @@ class showAllInvoicePageState extends State<showAllInvoicePage> {
   }
 
   //Dùng để search
-  void _updateSearchTerm(String searchTerm) {
-    _searchTerm = searchTerm;
-    _pagingController.refresh();
-  }
-//Khi có hàm này sẽ có lỗi
+  // void _updateSearchTerm(String searchTerm) {
+  //   _searchTerm = searchTerm;
+  //   _pagingController.refresh();
+  // }
   @override
   void dispose() {
     _pagingController.dispose();

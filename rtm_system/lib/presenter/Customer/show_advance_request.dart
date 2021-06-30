@@ -57,7 +57,6 @@ class _showAdvanceRequestPageState extends State<showAdvanceRequestPage> {
   //Hàm này nhận biết sự thay đổi của Widget để thực hiện hành động
   @override
   void didUpdateWidget(covariant showAdvanceRequestPage oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
     if(oldWidget.toDate != this.widget.toDate){
       _pagingController.refresh();
@@ -66,7 +65,6 @@ class _showAdvanceRequestPageState extends State<showAdvanceRequestPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _pagingController.addPageRequestListener((pageKey) {
       _fetchPage(pageKey);
@@ -125,7 +123,7 @@ class _showAdvanceRequestPageState extends State<showAdvanceRequestPage> {
                               newPageProgressIndicatorBuilder: (context) =>
                                   newPageProgressIndicatorBuilder(),
                               itemBuilder: (context, item, index) {
-                                return boxForAdvanceRequest(
+                                return boxForAdvanceOfCustomer(
                                     context: context,
                                     id: item['id'],
                                     status: item['status_id'],
@@ -144,8 +142,7 @@ class _showAdvanceRequestPageState extends State<showAdvanceRequestPage> {
                                         status: item['status_id'],
                                         isRequest: false,
                                       ),
-                                    ),
-                                    isCustomer: true);
+                                    ),);
                               }),
                         ),
                       ],

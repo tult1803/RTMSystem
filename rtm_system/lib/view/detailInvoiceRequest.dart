@@ -18,7 +18,6 @@ class DetailInvoiceRequest extends StatefulWidget {
 class _DetailInvoiceRequestState extends State<DetailInvoiceRequest> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 

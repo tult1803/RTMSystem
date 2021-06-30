@@ -1,74 +1,76 @@
-// import 'package:flutter/cupertino.dart';
 // import 'package:flutter/material.dart';
+// import 'package:rtm_system/model/getAPI_AdvanceRequest.dart';
+// import 'package:rtm_system/model/getAdvanceDetail.dart';
+// import 'package:rtm_system/model/model_AdvanceDetail.dart';
+// import 'package:rtm_system/ultils/commonWidget.dart';
 // import 'package:rtm_system/ultils/component.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
 //
-// class DetailAdvancePage extends StatefulWidget {
-//   const DetailAdvancePage({Key key, this.status}) : super(key: key);
-//   final String status;
+// class DetailAdvance extends StatefulWidget {
+//   final String id;
+//   int status;
+//   final bool isCustomer;
+//   final bool isRequest;
+//   final Widget widgetToNavigator;
+//
+//   DetailAdvance(
+//       {this.id, this.status, this.isCustomer, this.isRequest, this.widgetToNavigator});
+//
 //   @override
-//   _DetailAdvancePageState createState() => _DetailAdvancePageState();
+//   _DetailAdvanceState createState() => _DetailAdvanceState();
 // }
 //
-// class _DetailAdvancePageState extends State<DetailAdvancePage> {
-//   // String status = 'Da tra';
-//   String header1, header2;
-//
-//   void _showHeader() {
-//     if (widget.status == 'Đã huy') {
-//       setState(() {
-//         header1 = 'Giao dịch that bai';
-//         header2 = 'Don da bi huy';
-//       });
-//     } else if (widget.status == 'Dang cho') {
-//       setState(() {
-//         header1 = 'Quý khách đã tạo yêu cầu ứng tiền thành công';
-//         header2 = 'So tien';
-//       });
-//     } else if (widget.status == 'Chờ xác nhận') {
-//       setState(() {
-//         header1 = 'Xác nhận thông tin giao dịch';
-//         header2 = 'Số tiền';
-//       });
-//     } else if (widget.status == 'Da tra') {
-//       setState(() {
-//         header1 = 'Quy khach da tra tien thanh cong';
-//         header2 = 'Số tiền';
-//       });
-//     } else if (widget.status == 'active') {
-//       setState(() {
-//         header1 = 'Số tiền quý khách cần trả là';
-//         header2 = '';
-//       });
-//     } else {
-//       setState(() {
-//         header1 = 'Giao dịch thành công';
-//         header2 = 'Quý khách đã mượn tiền thành công';
-//       });
-//     }
-//   }
-//
+// class _DetailAdvanceState extends State<DetailAdvance> {
+//   AdvanceDetail advanceDetail = AdvanceDetail();
 //   @override
 //   void initState() {
 //     // TODO: implement initState
 //     super.initState();
-//     this._showHeader();
-//     print(widget.status);
+//   }
+//   Future getDetail() async {
+//     GetAdvanceDetail getAdvanceDetail = GetAdvanceDetail();
+//     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+//     String token = sharedPreferences.getString('access_token');
+//     // Đỗ dữ liệu lấy từ api
+//     advanceDetail = await getAdvanceDetail.getAdvanceDetail(token, widget.id, widget.status);
+//     return advanceDetail;
 //   }
 //
-//   // Chờ xác nhận
 //   @override
 //   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: Color(0xFF0BB791),
-//       appBar: PreferredSize(
-//         preferredSize: Size.fromHeight(30.0),
-//         child: AppBar(
-//           backgroundColor: Color(0xFF0BB791),
-//           elevation: 0,
-//           leading: leadingAppbar(context),
-//         ),
-//       ),
-//       body: widgetContentAdvance(context, widget.status, header1, header2),
+//     var size = MediaQuery.of(context).size;
+//     return new FutureBuilder(
+//       future: getDetail(),
+//       builder: (BuildContext context, AsyncSnapshot snapshot) {
+//         if (snapshot.hasData) {
+//           return SingleChildScrollView(
+//             child: containerDetail(
+//               context,
+//               componentContainerDetailAdvanceRequest(
+//                 context,
+//                 id: advanceDetail.id,
+//                 storeName: advanceDetail.storeName,
+//                 storeId: advanceDetail.storeId,
+//                 customerName: advanceDetail.customerName,
+//                 customerPhone: '0912222-phone',
+//                 createDate: advanceDetail.createDate,
+//                 activeDate: advanceDetail.processDate,
+//                 amount: advanceDetail.amount,
+//                 managerName: advanceDetail.managerName,
+//                 managerPhone: '0912222-phone',
+//                 statusId: advanceDetail.statusId,
+//                 isCustomer: widget.isCustomer,
+//                 description: advanceDetail.description,
+//                 reason: advanceDetail.reason,
+//                 widgetToNavigator: this.widget.widgetToNavigator,
+//               ),
+//             ),
+//           );
+//         }
+//         return Container(
+//             height: size.height,
+//             child: Center(child: CircularProgressIndicator(color: Colors.white,)));
+//       },
 //     );
 //   }
 // }

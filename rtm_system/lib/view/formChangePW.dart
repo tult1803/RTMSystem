@@ -22,7 +22,6 @@ class _formUpdatePasswordPageState extends State<formUpdatePasswordPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     if(widget.isCustomer){
       indexOfBottomBar = 3;

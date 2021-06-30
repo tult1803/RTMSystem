@@ -33,7 +33,6 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
 
   @override
   void initState() {
-    // TODO: implement initState
     setState(() {
       createDate = DateTime.now();
     });

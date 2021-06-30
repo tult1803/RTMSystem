@@ -28,7 +28,6 @@ class _HomeAdminPageState extends State<HomeAdminPage> {
   Widget _widget;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _index = widget.index;
     if (_index == 0) {
@@ -51,7 +50,6 @@ class _HomeAdminPageState extends State<HomeAdminPage> {
 
     @override
     void dispose() {
-      // TODO: implement dispose
       super.dispose();
       subscription.cancel();
     }

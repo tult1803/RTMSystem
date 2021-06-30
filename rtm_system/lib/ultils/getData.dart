@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:rtm_system/model/PostCreateRequestInvoice.dart';
 import 'package:rtm_system/model/deleteAPI_invoice.dart';
@@ -7,8 +6,8 @@ import 'package:rtm_system/model/postAPI_createCustomer.dart';
 import 'package:rtm_system/model/postAPI_createInvoice.dart';
 import 'package:rtm_system/model/postAPI_createNotice.dart';
 import 'package:rtm_system/model/profile_customer/getAPI_customer_phone.dart';
-import 'package:rtm_system/model/profile_customer/model_profile_customer.dart';
 import 'package:rtm_system/model/putAPI_ConfirmAdvanceRequest.dart';
+import 'package:rtm_system/model/putAPI_ReturnAdvance.dart';
 import 'package:rtm_system/model/putAPI_confirmInvoice.dart';
 import 'package:rtm_system/model/putAPI_signInvoice.dart';
 import 'package:rtm_system/model/putAPI_updatePrice.dart';
@@ -410,4 +409,25 @@ Future doCreateInvoice(BuildContext context,
           isSuccess: false,
           content: "Tạo hoá đơn thất bại",
           doPopNavigate: true);
+}
+Future<void> putReturnAdvance(BuildContext context, List<String> invoiceId) async {
+  int status;
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  PutReturnAdvance putReturnAdvance = PutReturnAdvance();
+  status = await putReturnAdvance.putReturnAdvance(
+      prefs.get("access_token"), invoiceId);
+  if (status == 200) {
+    showStatusAlertDialog(
+        context,
+        showMessage("", MSG019),
+        HomeCustomerPage(
+          index: 1,
+        ),
+        true);
+  } else
+    showCustomDialog(
+      context,
+      isSuccess: false,
+      content: showMessage("", MSG025),
+    );
 }

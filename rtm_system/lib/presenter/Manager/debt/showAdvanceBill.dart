@@ -61,7 +61,6 @@ class showAdvancceBillManagerState extends State<showAdvancceBillManager> {
   //Hàm này nhận biết sự thay đổi của Widget để thực hiện hành động
   @override
   void didUpdateWidget(covariant showAdvancceBillManager oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
     if(oldWidget.toDate != this.widget.toDate){
       _pagingController.refresh();
@@ -76,7 +75,6 @@ class showAdvancceBillManagerState extends State<showAdvancceBillManager> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _pagingController.addPageRequestListener((pageKey) {
       _fetchPage(pageKey);

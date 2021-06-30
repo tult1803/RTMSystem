@@ -17,7 +17,8 @@ class showHistoryAdvancePage extends StatefulWidget {
 
 class _showHistoryAdvancePageState extends State<showHistoryAdvancePage> {
   int _pageSize = 1;
-  final PagingController<int, AdvanceHistory> _pagingController = PagingController(firstPageKey: 10);
+  final PagingController<int, AdvanceHistory> _pagingController =
+      PagingController(firstPageKey: 10);
   List<AdvanceHistory> advanceHistory = [];
 
   Future<void> _fetchPage(pageKey) async {
@@ -54,13 +55,11 @@ class _showHistoryAdvancePageState extends State<showHistoryAdvancePage> {
   //Hàm này nhận biết sự thay đổi của Widget để thực hiện hành động
   @override
   void didUpdateWidget(covariant showHistoryAdvancePage oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _pagingController.addPageRequestListener((pageKey) {
       _fetchPage(pageKey);
@@ -72,7 +71,7 @@ class _showHistoryAdvancePageState extends State<showHistoryAdvancePage> {
     var size = MediaQuery.of(context).size;
     return SingleChildScrollView(
       child: Container(
-        height: size.height * 0.65,
+        height: size.height * 0.71,
         width: size.width,
         child: Center(
           child: Padding(
@@ -94,55 +93,78 @@ class _showHistoryAdvancePageState extends State<showHistoryAdvancePage> {
                       slivers: <Widget>[
                         PagedSliverList<int, AdvanceHistory>(
                           pagingController: _pagingController,
-                          builderDelegate: PagedChildBuilderDelegate<AdvanceHistory>(
-                              firstPageErrorIndicatorBuilder: (context) {
-                                return Column(
-                                  children: [
-                                    firstPageErrorIndicatorBuilder(context,
-                                        tittle: showMessage("",MSG008)),
-                                    GestureDetector(
-                                      onTap: () => _pagingController.refresh(),
-                                      child: Text(
-                                        showMessage('', MSG027),
-                                        style: TextStyle(
-                                            color: primaryLight3Color, fontSize: 18),
+                          builderDelegate:
+                              PagedChildBuilderDelegate<AdvanceHistory>(
+                                  firstPageErrorIndicatorBuilder: (context) {
+                                    return Column(
+                                      children: [
+                                        firstPageErrorIndicatorBuilder(context,
+                                            tittle: showMessage("", MSG008)),
+                                        GestureDetector(
+                                          onTap: () =>
+                                              _pagingController.refresh(),
+                                          child: Text(
+                                            showMessage('', MSG027),
+                                            style: TextStyle(
+                                                color: primaryLight3Color,
+                                                fontSize: 18),
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                  newPageErrorIndicatorBuilder: (context) =>
+                                      firstPageErrorIndicatorBuilder(context,
+                                          tittle: showMessage("", MSG008)),
+                                  firstPageProgressIndicatorBuilder:
+                                      (context) =>
+                                          firstPageProgressIndicatorBuilder(),
+                                  newPageProgressIndicatorBuilder: (context) =>
+                                      newPageProgressIndicatorBuilder(),
+                                  itemBuilder: (context, item, index) {
+                                    // if(item.datetime != null)
+                                      return boxForAdvanceHistory(
+                                      context: context,
+                                      id: item.id,
+                                      amount: item.amount,
+                                      customerId: item.customerId,
+                                      returnCash: item.returnCash,
+                                      isAdvance: item.advance,
+                                      // dateTime:  item.dateTime,
+                                      widget: FormForDetailPage(
+                                        tittle: "Chi tiết yêu cầu",
+                                        bodyPage: DetailAdvancePage(
+                                          isCustomer: true,
+                                          id: item.id,
+                                          status: 0,
+                                          isRequest: false,
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                );
-                              },
-                              newPageErrorIndicatorBuilder: (context) =>
-                                  firstPageErrorIndicatorBuilder(context,
-                                      tittle: showMessage("",MSG008)),
-                              firstPageProgressIndicatorBuilder: (context) =>
-                                  firstPageProgressIndicatorBuilder(),
-                              newPageProgressIndicatorBuilder: (context) =>
-                                  newPageProgressIndicatorBuilder(),
-                              itemBuilder: (context, item, index) {
-                                print('zo');
-                                return boxForAdvanceHistory(
-                                    context: context,
-                                    id: item.id,
-                                    amount: item.amount,
-                                    customerId: item.customerId,
-                                    dateTime: item.datetime,
-                                    returnCash: item.returnCash,
-                                    isAdvance: item.advance,
-                                    widget: FormForDetailPage(
-                                      tittle: "Chi tiết yêu cầu",
-                                      bodyPage: DetailAdvancePage(
-                                        isCustomer: true,
-                                        id: item.id,
-                                        status: 0,
-                                        isRequest: false,
-                                      ),
-                                    ),
-                                    isCustomer: true);
-                              }),
+                                    );
+                                    //  else
+                                    // return boxForAdvanceHistory(
+                                    //   context: context,
+                                    //   id: item.id,
+                                    //   amount: item.amount,
+                                    //   customerId: item.customerId,
+                                    //   returnCash: item.returnCash,
+                                    //   isAdvance: item.advance,
+                                    //   widget: FormForDetailPage(
+                                    //     tittle: "Chi tiết yêu cầu",
+                                    //     bodyPage: DetailAdvancePage(
+                                    //       isCustomer: true,
+                                    //       id: item.id,
+                                    //       status: 0,
+                                    //       isRequest: false,
+                                    //     ),
+                                    //   ),
+                                    // );
+                                  }),
                         ),
                       ],
                     ),
-                  ),)
+                  ),
+                )
               ],
             ),
           ),
@@ -150,6 +172,4 @@ class _showHistoryAdvancePageState extends State<showHistoryAdvancePage> {
       ),
     );
   }
-
 }
-

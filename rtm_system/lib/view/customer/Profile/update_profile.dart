@@ -37,7 +37,6 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     //set value nam or nu
     selectedRadio = widget.gender;

@@ -61,17 +61,14 @@ class showAllInvoiceRequestPageState extends State<showAllInvoiceRequestPage> {
   //Hàm này nhận biết sự thay đổi của Widget để thực hiện hành động
   @override
   void didUpdateWidget(covariant showAllInvoiceRequestPage oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
     if(oldWidget.toDate != this.widget.toDate){
       _pagingController.refresh();
     }
-    print(widget.toDate);
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _pagingController.addPageRequestListener((pageKey) {
       _fetchPage(pageKey);
@@ -161,10 +158,10 @@ class showAllInvoiceRequestPageState extends State<showAllInvoiceRequestPage> {
   }
 
   //Dùng để search
-  void _updateSearchTerm(String searchTerm) {
-    _searchTerm = searchTerm;
-    _pagingController.refresh();
-  }
+  // void _updateSearchTerm(String searchTerm) {
+  //   _searchTerm = searchTerm;
+  //   _pagingController.refresh();
+  // }
 
 }
 

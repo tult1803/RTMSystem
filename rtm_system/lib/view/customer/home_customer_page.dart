@@ -26,7 +26,6 @@ class _HomeCustomerPageState extends State<HomeCustomerPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _index = widget.index;
     if (_index == 0) {

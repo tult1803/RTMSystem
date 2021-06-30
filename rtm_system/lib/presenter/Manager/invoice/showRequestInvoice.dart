@@ -68,7 +68,6 @@ class showInvoiceRequestManagerState extends State<showInvoiceRequestManager> {
   //Hàm này nhận biết sự thay đổi của Widget để thực hiện hành động
   @override
   void didUpdateWidget(covariant showInvoiceRequestManager oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
     if (oldWidget.toDate != this.widget.toDate) {
       _pagingController.refresh();
@@ -84,7 +83,6 @@ class showInvoiceRequestManagerState extends State<showInvoiceRequestManager> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _pagingController.addPageRequestListener((pageKey) {
       _fetchPage(pageKey);
