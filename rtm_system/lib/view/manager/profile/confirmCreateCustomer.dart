@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:rtm_system/presenter/Manager/profile/processCreateCustomer.dart';
 import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/helpers.dart';
@@ -24,7 +23,6 @@ class _ConfirmCreateCustomerState extends State<ConfirmCreateCustomer> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _getData();
   }

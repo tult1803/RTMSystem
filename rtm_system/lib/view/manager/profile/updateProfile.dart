@@ -25,7 +25,6 @@ class _updateProfileState extends State<updateProfile> {
   GenderCharacter character;
 @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getDataProfile();
   }

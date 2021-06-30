@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:rtm_system/presenter/Customer/show_advance_request.dart';
-import 'package:rtm_system/presenter/Customer/show_all_invoice.dart';
+import 'package:rtm_system/presenter/Customer/show_history_advance.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/helpers.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/customer/advance/create_request_advance.dart';
 import 'package:rtm_system/view/customer/getMoney_or_payDebt.dart';
+
 class AdvancePage extends StatefulWidget {
   const AdvancePage({Key key}) : super(key: key);
 
@@ -19,13 +20,12 @@ class _AdvancePageState extends State<AdvancePage>
     with TickerProviderStateMixin {
   TabController _tabController;
   String getFromDate, getToDate;
-  //index on Tab
   int index, _selectedIndex;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 5, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
     _tabController.addListener(() {
       setState(() {
         _selectedIndex = _tabController.index;
@@ -39,7 +39,6 @@ class _AdvancePageState extends State<AdvancePage>
       getFromDate =
       "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
       getToDate = "${getDateTime("$toDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
-      print(getToDate);
     });
   }
   @override
@@ -64,21 +63,18 @@ class _AdvancePageState extends State<AdvancePage>
               // icon: Icon(Icons.post_add_outlined,),
             ),
             Tab(
-              text: 'Chờ xác nhận',
-              // icon: Icon(Icons.access_time_outlined),
-            ),
-            Tab(
               text: 'Đã mượn',
-              // icon: Icon(Icons.access_time_outlined),
-            ),
-            Tab(
-              text: 'Đã trả',
               // icon: Icon(Icons.access_time_outlined),
             ),
             Tab(
               text: 'Huỷ bỏ',
               // icon: Icon(Icons.access_time_outlined),
             ),
+            Tab(
+              text: 'Lịch sử giao dịch',
+              // icon: Icon(Icons.access_time_outlined),
+            ),
+
           ],
         ),
       ),
@@ -86,22 +82,20 @@ class _AdvancePageState extends State<AdvancePage>
         controller: _tabController,
         children: <Widget>[
           //show advance chờ xử lý
-          containerInvoiceRequest(size.height, 4),
-          //Show advance được chấp nhận
-          containerInvoiceRequest(size.height, 8),
-          //show advance đã mượn
-          containerInvoice(size.height, 3),
-          //show advance đã trả
-          containerInvoice(size.height, 3),
+          containerAdvance(size.height, 4),
+          //Show advance được chấp nhận, đã mượn
+          containerAdvance(size.height, 8),
           //Show advance bị từ chối
-          containerInvoiceRequest(size.height, 6),
+          containerAdvance(size.height, 6),
+          //show advance đã trả
+          containerAdvanceHistory(size.height, 8),
         ],
       ),
       floatingActionButton: _showFloatBtn(_selectedIndex),
     );
   }
   //show invoice advance request
-  Widget containerInvoiceRequest(height, status){
+  Widget containerAdvance(height, status){
     return  Container(
         height: height,
         margin: EdgeInsets.only(left: 5, top: 12, right: 5),
@@ -116,8 +110,8 @@ class _AdvancePageState extends State<AdvancePage>
         )
     );
   }
-  //show invoice advance
-  Widget containerInvoice(height, status){
+  //show invoice advance history
+  Widget containerAdvanceHistory(height, status){
     return  Container(
         height: height,
         margin: EdgeInsets.only(left: 5, top: 12, right: 5),
@@ -125,15 +119,15 @@ class _AdvancePageState extends State<AdvancePage>
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              rowButtonDatetime(),
-              new showAllInvoicePage(status, fromDate: getFromDate, toDate: getToDate),
+              // rowButtonDatetime(),
+              new showHistoryAdvancePage(),
             ],
           ),
         )
     );
   }
   Widget _showFloatBtn(index){
-    if(index == 2 ){
+    if(index == 1 ){
       return  FloatingActionButton.extended(
         onPressed: () {
           Navigator.push(
@@ -234,9 +228,8 @@ class _AdvancePageState extends State<AdvancePage>
         toDate = dateRange.end;
         getFromDate =
         "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
-        // vì dateRange.end lấy ngày và giờ là 00:00:00 nên + thêm 1 ngày để lấy đúng 1 ngày
         getToDate =
-        "${getDateTime("${toDate.add(Duration(days: 1))}", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
+        "${getDateTime("${toDate}", dateFormat: "yyyy-MM-dd 23:59:59")}";
       });
     }
   }

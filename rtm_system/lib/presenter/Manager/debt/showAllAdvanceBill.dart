@@ -1,12 +1,9 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:rtm_system/presenter/Manager/debt/showAdvanceBill.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/helpers.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
-import 'package:rtm_system/view/manager/debt/processBill.dart';
 
 class showAllBill extends StatefulWidget {
   final int index;
@@ -28,7 +25,6 @@ class _showAllBillState extends State<showAllBill>
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _tabController = TabController(
         length: 4,

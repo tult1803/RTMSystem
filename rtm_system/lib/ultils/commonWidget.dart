@@ -626,7 +626,8 @@ Widget boxForAdvanceRequest(
     dateReceiveAfterFormat = "${getDateTime(receiveDate, dateFormat: 'dd-MM-yyyy')}";
   } catch (_) {
     totalAfterFormat = "$amount";
-    dateAfterFormat = "$amount";
+    dateAfterFormat = "$createDate";
+    dateReceiveAfterFormat = "$receiveDate";
   }
   return GestureDetector(
     onTap: () => Navigator.of(context)
@@ -696,14 +697,7 @@ Widget boxForAdvanceRequest(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     //Hoá đơn bị từ chối thì show lý do ra thay vì ngày tới
-                    status == 6? containerTextInvoice(
-                      marginTop: 2,
-                      alignment: Alignment.topLeft,
-                      paddingLeftOfText: 10,
-                      paddingRightOfText: 10,
-                      tittle: "Lý do: $reason",
-                      fontWeight: FontWeight.w400,
-                    ): containerTextInvoice(
+                     containerTextInvoice(
                       marginTop: 2,
                       alignment: Alignment.topLeft,
                       paddingLeftOfText: 10,
@@ -1383,3 +1377,114 @@ Widget containerStores(BuildContext context, String name, String address,
 }
 
 
+//show lịch sử giao dịch của ứng tiền, hiện tại show như này trước
+Widget boxForAdvanceHistory(
+    {BuildContext context,
+      String id,
+      String customerId,
+      int amount,
+      String dateTime,
+      int returnCash,
+      bool isAdvance,
+      Widget widget,
+      bool isCustomer}) {
+  String dateAfterFormat, amountAfterFormat, returnCashAfterFormat;
+  try {
+    amountAfterFormat = "${getFormatPrice(amount.toString())} đ";
+    returnCashAfterFormat = "${getFormatPrice(returnCash.toString())} đ";
+    dateAfterFormat = "${getDateTime(dateTime,dateFormat: 'dd-MM-yyyy')}";
+  } catch (_) {
+    amountAfterFormat = "$amount";
+    returnCashAfterFormat = "$returnCash";
+    dateAfterFormat = "$dateTime";
+  }
+  return GestureDetector(
+    onTap: () => Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => widget)),
+    child: Container(
+      margin: EdgeInsets.only(top: 15, left: 10, right: 10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(5),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black54,
+            blurRadius: 4,
+            offset: Offset(1, 2), // Shadow position
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              miniContainer(
+                context: context,
+                tittle: "Mã #$id",
+                marginRight: 5,
+                marginBottom: 5,
+                marginLeft: 10,
+                marginTop: 10,
+                borderRadius: 5,
+                height: 30,
+                colorContainer: idColor,
+                paddingRightOfText: 10,
+                paddingLeftOfText: 10,
+              ),
+              Flexible(
+                child: containerTextInvoice(
+                  alignment: Alignment.centerRight,
+                  paddingLeftOfText: 10,
+                  paddingRightOfText: 10,
+                  tittle: "Ngày : $dateAfterFormat",
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+            containerTextInvoice(
+              alignment: Alignment.topLeft,
+              paddingLeftOfText: 10,
+              paddingRightOfText: 10,
+              tittle: "Tiền mượn: $amountAfterFormat",
+              fontWeight: FontWeight.w700,
+            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    containerTextInvoice(
+                      marginTop: 2,
+                      alignment: Alignment.topLeft,
+                      paddingLeftOfText: 10,
+                      paddingRightOfText: 10,
+                      tittle: isAdvance? "Hoá đơn ứng tiền": "Hoá đơn trả nợ",
+                      fontWeight: FontWeight.w400,
+                  )
+                  ],
+                ),
+              ),
+              miniContainer(
+                context: context,
+                tittle: "Đã nhận tiền",
+                colorText: Colors.white,
+                fontWeightText: FontWeight.w500,
+                height: 30,
+                width: 100,
+                colorContainer: getColorStatus(status: 1),
+                borderRadius: 5,
+                marginRight: 10,
+              )
+            ],
+          ),
+          SizedBox(
+            height: 10,
+          )
+        ],
+      ),
+    ),
+  );
+}

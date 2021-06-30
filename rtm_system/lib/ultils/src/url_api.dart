@@ -22,3 +22,5 @@ String urlCreateRequestAdvance = "api/rtm/v1/advance/create-advance-request";
 String urlAdvanceRequest = "api/rtm/v1/advance/get-advance-request";
 String urlConfirmAdvanceRequest = "api/rtm/v1/advance/confirm-advance-request";
 String urlAdvanceDetail = "api/rtm/v1/advance/get-advance-detail";
+String urlAdvanceHistory = "api/rtm/v1/advance/get-advance-history";
+String urlReturnAdvance = "api/rtm/v1/advance/return-advance";

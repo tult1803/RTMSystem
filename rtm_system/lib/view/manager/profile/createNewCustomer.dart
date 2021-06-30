@@ -13,7 +13,6 @@ class CreateCustomer extends StatefulWidget {
 class _CreateCustomerState extends State<CreateCustomer> {
   @override
   void initState() {
-    // TODO: implement initState
   }
 
   @override

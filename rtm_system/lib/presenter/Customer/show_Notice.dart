@@ -31,11 +31,11 @@ class _showNoticeState extends State<showNotice> {
       if (status == PagingStatus.subsequentPageError) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text(
-              'Something went wrong while fetching a new page.',
+            content: Text(
+              showMessage(MSG030, MSG027),
             ),
             action: SnackBarAction(
-              label: 'Thử lại',
+              label: showMessage("", MSG027),
               onPressed: () => _pagingController.retryLastFailedRequest(),
             ),
           ),

@@ -33,7 +33,6 @@ class _processCreateCustomerState extends State<processCreateCustomer> {
   }
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _getData();
   }

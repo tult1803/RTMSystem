@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:rtm_system/model/getAPI_AdvanceRequest.dart';
 import 'package:rtm_system/model/getAdvanceDetail.dart';
 import 'package:rtm_system/model/model_AdvanceDetail.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
@@ -24,7 +23,6 @@ class _DetailAdvancePageState extends State<DetailAdvancePage> {
   AdvanceDetail advanceDetail = AdvanceDetail();
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
   Future getDetail() async {
@@ -61,7 +59,7 @@ class _DetailAdvancePageState extends State<DetailAdvancePage> {
                 statusId: advanceDetail.statusId,
                 isCustomer: widget.isCustomer,
                 description: advanceDetail.description,
-                reason: '',
+                reason: advanceDetail.reason,
                 widgetToNavigator: this.widget.widgetToNavigator,
               ),
             ),

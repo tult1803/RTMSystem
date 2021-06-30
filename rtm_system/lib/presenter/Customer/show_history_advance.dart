@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:rtm_system/model/getAPI_AdvanceRequest.dart';
-import 'package:rtm_system/model/model_AdvanceRequest.dart';
+import 'package:rtm_system/model/getAPI_AdvanceHistory.dart';
+import 'package:rtm_system/model/model_AdvanceHistory.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
@@ -10,44 +10,41 @@ import 'package:rtm_system/view/detailAdvanceRequest.dart';
 import 'package:rtm_system/view/manager/formForDetail_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class showAdvanceRequestPage extends StatefulWidget {
-  String fromDate, toDate;
-  int status;
-  showAdvanceRequestPage(this.status, {this.fromDate, this.toDate});
-
+class showHistoryAdvancePage extends StatefulWidget {
   @override
-  _showAdvanceRequestPageState createState() => _showAdvanceRequestPageState();
+  _showHistoryAdvancePageState createState() => _showHistoryAdvancePageState();
 }
 
-class _showAdvanceRequestPageState extends State<showAdvanceRequestPage> {
+class _showHistoryAdvancePageState extends State<showHistoryAdvancePage> {
   int _pageSize = 1;
-  final PagingController _pagingController = PagingController(firstPageKey: 10);
-  AdvanceRequest advanceRequest;
-  List advances;
+  final PagingController<int, AdvanceHistory> _pagingController = PagingController(firstPageKey: 10);
+  List<AdvanceHistory> advanceHistory = [];
 
   Future<void> _fetchPage(pageKey) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      GetAdvanceRequest getAdvanceRequest = GetAdvanceRequest();
-      advanceRequest = await getAdvanceRequest.getAdvanceRequest(
+      GetAdvanceHistory getAdvanceHistory = GetAdvanceHistory();
+      List<dynamic> listAdvance = [];
+      listAdvance = await getAdvanceHistory.getAdvanceHistory(
         prefs.get("access_token"),
         prefs.get("accountId"),
-        widget.status == null? 0 : widget.status,//get all status
         pageKey,
         _pageSize,
-        this.widget.fromDate == null ? "" : "${this.widget.fromDate}",
-        this.widget.toDate == null ? "" : "${this.widget.toDate}",
       );
-      advances = advanceRequest.advances;
-      final isLastPage = advances.length < pageKey;
+      advanceHistory.clear();
+      listAdvance.forEach((element) {
+        Map<dynamic, dynamic> data = element;
+        advanceHistory.add(AdvanceHistory.fromJson(data));
+      });
+      final isLastPage = advanceHistory.length < pageKey;
       if (isLastPage) {
-        _pagingController.appendLastPage(advances);
+        _pagingController.appendLastPage(advanceHistory);
       } else {
         setState(() {
           _pageSize += 1;
         });
         final nextPageKey = pageKey;
-        _pagingController.appendPage(advances, nextPageKey);
+        _pagingController.appendPage(advanceHistory, nextPageKey);
       }
     } catch (error) {
       _pagingController.error = error;
@@ -56,11 +53,8 @@ class _showAdvanceRequestPageState extends State<showAdvanceRequestPage> {
 
   //Hàm này nhận biết sự thay đổi của Widget để thực hiện hành động
   @override
-  void didUpdateWidget(covariant showAdvanceRequestPage oldWidget) {
+  void didUpdateWidget(covariant showHistoryAdvancePage oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if(oldWidget.toDate != this.widget.toDate){
-      _pagingController.refresh();
-    }
   }
 
   @override
@@ -76,7 +70,7 @@ class _showAdvanceRequestPageState extends State<showAdvanceRequestPage> {
     var size = MediaQuery.of(context).size;
     return SingleChildScrollView(
       child: Container(
-        height: size.height * 0.65,
+        height: size.height * 0.71,
         width: size.width,
         child: Center(
           child: Padding(
@@ -96,9 +90,9 @@ class _showAdvanceRequestPageState extends State<showAdvanceRequestPage> {
                     width: size.width,
                     child: new CustomScrollView(
                       slivers: <Widget>[
-                        PagedSliverList(
+                        PagedSliverList<int, AdvanceHistory>(
                           pagingController: _pagingController,
-                          builderDelegate: PagedChildBuilderDelegate(
+                          builderDelegate: PagedChildBuilderDelegate<AdvanceHistory>(
                               firstPageErrorIndicatorBuilder: (context) {
                                 return Column(
                                   children: [
@@ -123,23 +117,20 @@ class _showAdvanceRequestPageState extends State<showAdvanceRequestPage> {
                               newPageProgressIndicatorBuilder: (context) =>
                                   newPageProgressIndicatorBuilder(),
                               itemBuilder: (context, item, index) {
-                                return boxForAdvanceRequest(
+                                return boxForAdvanceHistory(
                                     context: context,
-                                    id: item['id'],
-                                    status: item['status_id'],
-                                    createDate: "${item['create_date']}",
-                                    amount: "${item['amount']}",
-                                    storeId: item['store_id'],
-                                    name: item["customer_name"],
-                                    receiveDate: item["receive_date"] ,
-                                    imageUrl: item["image_url"],
-                                    reason: item["reason"],
+                                    id: item.id,
+                                    amount: item.amount,
+                                    customerId: item.customerId,
+                                    dateTime: item.datetime,
+                                    returnCash: item.returnCash,
+                                    isAdvance: item.advance,
                                     widget: FormForDetailPage(
                                       tittle: "Chi tiết yêu cầu",
                                       bodyPage: DetailAdvancePage(
                                         isCustomer: true,
-                                        id: item['id'],
-                                        status: item['status_id'],
+                                        id: item.id,
+                                        status: 0,
                                         isRequest: false,
                                       ),
                                     ),
@@ -156,7 +147,6 @@ class _showAdvanceRequestPageState extends State<showAdvanceRequestPage> {
       ),
     );
   }
-
 
 }
 
