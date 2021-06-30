@@ -843,6 +843,7 @@ Widget containerTextInvoice({
   double paddingBottomOfText,
   double height,
   double width,
+  Color color,
 }) {
   return Container(
     height: height,
@@ -862,8 +863,8 @@ Widget containerTextInvoice({
           top: paddingTopOfText == null ? 0 : paddingTopOfText),
       child: Text(
         tittle,
-        style: GoogleFonts.roboto(fontWeight: fontWeight),
-      ),
+        style: GoogleFonts.roboto(fontWeight: fontWeight, color: color != null? color : Colors.black,),
+    ),
     ),
   );
 }

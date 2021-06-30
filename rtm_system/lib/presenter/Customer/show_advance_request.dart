@@ -123,7 +123,7 @@ class _showAdvanceRequestPageState extends State<showAdvanceRequestPage> {
                               newPageProgressIndicatorBuilder: (context) =>
                                   newPageProgressIndicatorBuilder(),
                               itemBuilder: (context, item, index) {
-                                return boxForAdvanceRequest(
+                                return boxForAdvanceOfCustomer(
                                     context: context,
                                     id: item['id'],
                                     status: item['status_id'],
@@ -142,8 +142,7 @@ class _showAdvanceRequestPageState extends State<showAdvanceRequestPage> {
                                         status: item['status_id'],
                                         isRequest: false,
                                       ),
-                                    ),
-                                    isCustomer: true);
+                                    ),);
                               }),
                         ),
                       ],

@@ -63,7 +63,6 @@ class _ConfirmCreateRequestAdvanceState extends State<ConfirmCreateRequestAdvanc
   void initState() {
     super.initState();
     _getProduct();
-    print(widget.listInfor[2]);
   }
 
   @override

@@ -37,16 +37,11 @@ class _showProfileState extends State<showProfile> {
 
   @override
   Widget build(BuildContext context) {
-    String genderShow = '';
     var size = MediaQuery.of(context).size;
     return new FutureBuilder(
       future: getAPIProfile(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
-          //show gender vì trong đây mới có data để set
-          infomationCustomer.gender == 0
-              ? genderShow = 'Nữ'
-              : genderShow = 'Nam';
           return SingleChildScrollView(
             child: Column(
               children: [
@@ -75,7 +70,7 @@ class _showProfileState extends State<showProfile> {
                         _item(context, 'Ngày sinh', getDateTime(infomationCustomer.birthday.toString(), dateFormat: 'dd-MM-yyyy')),
                         _item(context, 'Số điện thoại',
                             infomationCustomer.phone),
-                        _item(context, 'Giới tính', genderShow),
+                        _item(context, 'Giới tính', getGender(infomationCustomer.gender)),
                         _item(context, 'CMND', infomationCustomer.cmnd),
                         _item(context, 'Địa chỉ', infomationCustomer.address.toString()),
                         SizedBox(
