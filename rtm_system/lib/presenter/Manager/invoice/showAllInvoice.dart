@@ -19,6 +19,7 @@ class showAllInvoice extends StatefulWidget {
 
 DateTime fromDate;
 DateTime toDate;
+String itemToSearch;
 class _showAllInvoiceState extends State<showAllInvoice>
     with TickerProviderStateMixin {
   TabController _tabController;
@@ -26,7 +27,6 @@ class _showAllInvoiceState extends State<showAllInvoice>
   Invoice invoice;
   List invoiceList;
   String getFromDate, getToDate;
-  String itemToSearch;
   @override
   void initState() {
     super.initState();
@@ -75,7 +75,7 @@ class _showAllInvoiceState extends State<showAllInvoice>
                       setState(() {
                         itemToSearch = searchTerm;
                       });
-                    },
+              },
                   ),
                 ],
               )
@@ -181,6 +181,7 @@ class _showAllInvoiceState extends State<showAllInvoice>
   @override
   void dispose() {
     _tabController.dispose();
+    itemToSearch = null;
     super.dispose();
   }
 //Copy nó để tái sử dụng cho các trang khác nếu cần
