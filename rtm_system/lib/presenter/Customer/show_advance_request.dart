@@ -29,7 +29,6 @@ class _showAdvanceRequestPageState extends State<showAdvanceRequestPage> {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       GetAdvanceRequest getAdvanceRequest = GetAdvanceRequest();
-      print(prefs.get("phone"),);
       advanceRequest = await getAdvanceRequest.getAdvanceRequest(
         prefs.get("access_token"),
         prefs.get("accountId"),
