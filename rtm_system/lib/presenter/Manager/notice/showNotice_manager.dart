@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:rtm_system/model/notice/getAPI_all_notice.dart';
 import 'package:rtm_system/model/notice/model_all_notice.dart';
-import 'package:rtm_system/ultils/commonWidget.dart';
+import 'package:rtm_system/ultils/button.dart';
 import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
