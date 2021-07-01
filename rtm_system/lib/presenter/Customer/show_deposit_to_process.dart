@@ -95,8 +95,8 @@ class showAllInvoicePageState extends State<showDepositToProcess> {
                     children.add(boxForInvoice(
                         context: context,
                         status: element['status_id'],
-                        date: "${element['create_time']}",
-                        total: "${element['price']}",
+                        createDate: "${element['create_time']}",
+                        price: element['price'],
                         id: element['id'],
                         name: element["customer_name"],
                         product: element["product_name"],

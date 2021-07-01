@@ -52,7 +52,6 @@ class showInvoiceManagerState extends State<showInvoiceManager> {
         searchTerm: itemToSearch,
       );
 
-
       invoiceList = invoice.invoices;
       // print("${_pagingController}");
       final isLastPage = invoiceList.length < pageKey;
@@ -133,8 +132,10 @@ class showInvoiceManagerState extends State<showInvoiceManager> {
                   return boxForInvoice(
                       context: context,
                       status: item['status_id'],
-                      date: "${item['create_time']}",
-                      total: "${getPriceTotal(double.parse("${item['price']}"), item['degree'], item['quantity'])}",
+                      createDate: "${item['create_time']}",
+                      price: item['price'],
+                      degree: item['degree'],
+                      quantity: item['quantity'],
                       id: item['id'],
                       name: item["customer_name"],
                       product: item["product_name"],
