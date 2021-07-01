@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:rtm_system/model/getAPI_AdvanceRequest.dart';
 import 'package:rtm_system/model/model_AdvanceRequest.dart';
+import 'package:rtm_system/presenter/Manager/debt/showAllAdvanceBill.dart';
+import 'package:rtm_system/presenter/infinite_scroll_pagination/common/character_search_input_sliver.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
@@ -42,7 +44,7 @@ class showAdvancceBillManagerState extends State<showAdvancceBillManager> {
         _pageSize,
         this.widget.fromDate == null ? "" : "${this.widget.fromDate}",
         this.widget.toDate == null ? "" : "${this.widget.toDate}",
-        searchTerm: _searchTerm,
+        searchTerm: itemToSearch,
       );
       advanceList = advanceBill.advances;
       final isLastPage = advanceList.length < pageKey;
@@ -64,6 +66,7 @@ class showAdvancceBillManagerState extends State<showAdvancceBillManager> {
   //Hàm này nhận biết sự thay đổi của Widget để thực hiện hành động
   @override
   void didUpdateWidget(covariant showAdvancceBillManager oldWidget) {
+
     super.didUpdateWidget(oldWidget);
     if (oldWidget.toDate != this.widget.toDate) {
       _pagingController.refresh();
@@ -120,6 +123,9 @@ class showAdvancceBillManagerState extends State<showAdvancceBillManager> {
                   );
                 },
                 newPageErrorIndicatorBuilder: (context) =>
+                    firstPageErrorIndicatorBuilder(context,
+                        tittle: "Không có dữ liệu"),
+                noItemsFoundIndicatorBuilder: (context) =>
                     firstPageErrorIndicatorBuilder(context,
                         tittle: "Không có dữ liệu"),
                 firstPageProgressIndicatorBuilder: (context) =>

@@ -132,7 +132,7 @@ class showAllInvoicePageState extends State<showAllInvoicePage> {
                               newPageProgressIndicatorBuilder: (context) =>
                                   newPageProgressIndicatorBuilder(),
                               itemBuilder: (context, item, index) {
-                                return boxForInvoicNew(
+                                return boxForInvoice(
                                     context: context,
                                     status: item['status_id'],
                                     createDate: "${item['create_time']}",

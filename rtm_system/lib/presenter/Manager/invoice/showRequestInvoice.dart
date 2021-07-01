@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:rtm_system/model/getAPI_allInvoiceRequest.dart';
 import 'package:rtm_system/model/model_invoiceRequest.dart';
+import 'package:rtm_system/presenter/Manager/invoice/showAllInvoice.dart';
 import 'package:rtm_system/presenter/infinite_scroll_pagination/common/character_search_input_sliver.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/component.dart';
@@ -45,7 +46,7 @@ class showInvoiceRequestManagerState extends State<showInvoiceRequestManager> {
         _pageSize,
         this.widget.fromDate == null ? "" : "${this.widget.fromDate}",
         this.widget.toDate == null ? "" : "${this.widget.toDate}",
-        searchTerm: _searchTerm,
+        searchTerm: itemToSearch,
       );
       invoiceList = invoice.invoiceRequests;
       // print("${_pagingController}");
@@ -126,24 +127,25 @@ class showInvoiceRequestManagerState extends State<showInvoiceRequestManager> {
                     newPageProgressIndicatorBuilder(),
                 itemBuilder: (context, item, index) {
                   return boxForInvoiceRequest(
-                      context: context,
-                      status: item['status_id'],
-                      date: "${item['create_date']}",
-                      price: "${item['price']}",
-                      id: item['id'].toString(),
-                      name: item["customer_name"],
-                      product: item["product_name"],
-                      sell_date: item["sell_date"],
-                      widget: FormForDetailPage(
-                        tittle: "Chi tiết yêu cầu",
-                        bodyPage: DetailInvoiceRequest(
-                          isCustomer: false,
-                          map: item,
-                          isRequest: true,
-                          widgetToNavigator: this.widget.widgetToNavigator,
+                        context: context,
+                        status: item['status_id'],
+                        createDate: "${item['create_date']}",
+                        price: "${item['price']}",
+                        id: item['id'].toString(),
+                        name: item["customer_name"],
+                        product: item["product_name"],
+                        sellDate: item["sell_date"],
+                        widget: FormForDetailPage(
+                          tittle: "Chi tiết yêu cầu",
+                          bodyPage: DetailInvoiceRequest(
+                            isCustomer: false,
+                            map: item,
+                            isRequest: true,
+                            widgetToNavigator: this.widget.widgetToNavigator,
+                          ),
                         ),
-                      ),
-                      isCustomer: false);
+                        isCustomer: false,
+                  );
                 }),
           ),
         ],

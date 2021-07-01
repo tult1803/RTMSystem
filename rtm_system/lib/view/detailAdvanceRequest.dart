@@ -50,7 +50,7 @@ class _DetailAdvancePageState extends State<DetailAdvancePage> {
                 storeName: advanceDetail.storeName,
                 storeId: advanceDetail.storeId,
                 customerName: advanceDetail.customerName,
-                customerPhone: '0912222-phone',
+                customerPhone: advanceDetail.customerPhone,
                 createDate: advanceDetail.createDate,
                 activeDate: advanceDetail.processDate,
                 amount: advanceDetail.amount,

@@ -345,139 +345,139 @@ Widget boxForCustomer(
 //Dùng cho trang Quản lý hóa đơn và để show các hóa đơn. Dùng cho cả show yêu cầu bán hàng.
 // isRequest: true là yêu cầu bán hàng. Thay đổi chữ Tổng cộng thành Giá ( giá này là giá sản phẩm )
 //isCustomer : true is customer. Used to show infor need
-Widget boxForInvoice(
-    {BuildContext context,
-    String id,
-    String name,
-    String product,
-    String total,
-    String date,
-    int status,
-    Widget widget,
-    bool isCustomer,
-    bool isRequest}) {
-  String totalAfterFormat;
-  String dateAfterFormat;
-  String titlePrice;
-  // thay đổi title , và truyền totalAfterFormat sẽ là giá sản phẩm.
-  isRequest ? titlePrice = 'Giá' : titlePrice = 'Tổng cộng';
-  try {
-    totalAfterFormat = "${getFormatPrice(total)}đ";
-    dateAfterFormat = "${getDateTime(date)}";
-  } catch (_) {
-    totalAfterFormat = "$total";
-    dateAfterFormat = "$date";
-  }
-  return GestureDetector(
-    onTap: () => Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => widget)),
-    child: Container(
-      margin: EdgeInsets.only(top: 15, left: 10, right: 10),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(5),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black54,
-            blurRadius: 4,
-            offset: Offset(1, 2), // Shadow position
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              miniContainer(
-                context: context,
-                tittle: "$id",
-                marginRight: 5,
-                marginBottom: 5,
-                marginLeft: 10,
-                marginTop: 10,
-                borderRadius: 5,
-                height: 30,
-                colorContainer: idColor,
-                paddingRightOfText: 10,
-                paddingLeftOfText: 10,
-              ),
-              Flexible(
-                child: containerTextInvoice(
-                  alignment: Alignment.centerRight,
-                  paddingLeftOfText: 10,
-                  paddingRightOfText: 10,
-                  tittle: "$dateAfterFormat",
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-          if (!isCustomer)
-            containerTextInvoice(
-              alignment: Alignment.topLeft,
-              paddingLeftOfText: 10,
-              paddingRightOfText: 10,
-              tittle: name,
-              fontWeight: FontWeight.w700,
-            ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    isCustomer
-                        ? containerTextInvoice(
-                            marginTop: 2,
-                            alignment: Alignment.topLeft,
-                            paddingLeftOfText: 10,
-                            paddingRightOfText: 10,
-                            tittle: "$product",
-                            fontWeight: FontWeight.w700,
-                          )
-                        : containerTextInvoice(
-                            marginTop: 2,
-                            alignment: Alignment.topLeft,
-                            paddingLeftOfText: 10,
-                            paddingRightOfText: 10,
-                            tittle: "Sản phẩm: $product",
-                            fontWeight: FontWeight.w400,
-                          ),
-                    containerTextInvoice(
-                      marginTop: 2,
-                      alignment: Alignment.topLeft,
-                      paddingLeftOfText: 10,
-                      paddingRightOfText: 10,
-                      tittle: "$titlePrice: $totalAfterFormat",
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ],
-                ),
-              ),
-              miniContainer(
-                context: context,
-                tittle: "${getStatus(status: status)}",
-                colorText: Colors.white,
-                fontWeightText: FontWeight.w500,
-                height: 30,
-                width: 100,
-                colorContainer: getColorStatus(status: status),
-                borderRadius: 5,
-                marginRight: 10,
-              )
-            ],
-          ),
-          SizedBox(
-            height: 10,
-          )
-        ],
-      ),
-    ),
-  );
-}
+// Widget boxForInvoice(
+//     {BuildContext context,
+//     String id,
+//     String name,
+//     String product,
+//     String total,
+//     String date,
+//     int status,
+//     Widget widget,
+//     bool isCustomer,
+//     bool isRequest}) {
+//   String totalAfterFormat;
+//   String dateAfterFormat;
+//   String titlePrice;
+//   // thay đổi title , và truyền totalAfterFormat sẽ là giá sản phẩm.
+//   isRequest ? titlePrice = 'Giá' : titlePrice = 'Tổng cộng';
+//   try {
+//     totalAfterFormat = "${getFormatPrice(total)}đ";
+//     dateAfterFormat = "${getDateTime(date)}";
+//   } catch (_) {
+//     totalAfterFormat = "$total";
+//     dateAfterFormat = "$date";
+//   }
+//   return GestureDetector(
+//     onTap: () => Navigator.of(context)
+//         .push(MaterialPageRoute(builder: (context) => widget)),
+//     child: Container(
+//       margin: EdgeInsets.only(top: 15, left: 10, right: 10),
+//       decoration: BoxDecoration(
+//         color: Colors.white,
+//         borderRadius: BorderRadius.circular(5),
+//         boxShadow: [
+//           BoxShadow(
+//             color: Colors.black54,
+//             blurRadius: 4,
+//             offset: Offset(1, 2), // Shadow position
+//           ),
+//         ],
+//       ),
+//       child: Column(
+//         children: [
+//           Row(
+//             children: [
+//               miniContainer(
+//                 context: context,
+//                 tittle: "$id",
+//                 marginRight: 5,
+//                 marginBottom: 5,
+//                 marginLeft: 10,
+//                 marginTop: 10,
+//                 borderRadius: 5,
+//                 height: 30,
+//                 colorContainer: idColor,
+//                 paddingRightOfText: 10,
+//                 paddingLeftOfText: 10,
+//               ),
+//               Flexible(
+//                 child: containerTextInvoice(
+//                   alignment: Alignment.centerRight,
+//                   paddingLeftOfText: 10,
+//                   paddingRightOfText: 10,
+//                   tittle: "$dateAfterFormat",
+//                   fontWeight: FontWeight.w600,
+//                 ),
+//               ),
+//             ],
+//           ),
+//           if (!isCustomer)
+//             containerTextInvoice(
+//               alignment: Alignment.topLeft,
+//               paddingLeftOfText: 10,
+//               paddingRightOfText: 10,
+//               tittle: name,
+//               fontWeight: FontWeight.w700,
+//             ),
+//           Row(
+//             mainAxisAlignment: MainAxisAlignment.start,
+//             children: [
+//               Expanded(
+//                 child: Column(
+//                   crossAxisAlignment: CrossAxisAlignment.start,
+//                   children: [
+//                     isCustomer
+//                         ? containerTextInvoice(
+//                             marginTop: 2,
+//                             alignment: Alignment.topLeft,
+//                             paddingLeftOfText: 10,
+//                             paddingRightOfText: 10,
+//                             tittle: "$product",
+//                             fontWeight: FontWeight.w700,
+//                           )
+//                         : containerTextInvoice(
+//                             marginTop: 2,
+//                             alignment: Alignment.topLeft,
+//                             paddingLeftOfText: 10,
+//                             paddingRightOfText: 10,
+//                             tittle: "Sản phẩm: $product",
+//                             fontWeight: FontWeight.w400,
+//                           ),
+//                     containerTextInvoice(
+//                       marginTop: 2,
+//                       alignment: Alignment.topLeft,
+//                       paddingLeftOfText: 10,
+//                       paddingRightOfText: 10,
+//                       tittle: "$titlePrice: $totalAfterFormat",
+//                       fontWeight: FontWeight.w400,
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//               miniContainer(
+//                 context: context,
+//                 tittle: "${getStatus(status: status)}",
+//                 colorText: Colors.white,
+//                 fontWeightText: FontWeight.w500,
+//                 height: 30,
+//                 width: 100,
+//                 colorContainer: getColorStatus(status: status),
+//                 borderRadius: 5,
+//                 marginRight: 10,
+//               )
+//             ],
+//           ),
+//           SizedBox(
+//             height: 10,
+//           )
+//         ],
+//       ),
+//     ),
+//   );
+// }
 
-Widget boxForInvoicNew(
+Widget boxForInvoice(
     {BuildContext context,
     String id,
     String name,
@@ -491,17 +491,16 @@ Widget boxForInvoicNew(
     Widget widget,
     bool isCustomer,
     bool isRequest}) {
-  String dateAfterFormat, dateSellAfterFormat,  totalAfterFormat,
-      priceAfterFormat;
+  String dateAfterFormat, dateSellAfterFormat,
+      priceAfterFormat, totalAfterFormat;
   double totalAmount = getPriceTotal(double.parse(price.toString()), degree, quantity);
   try {
-    priceAfterFormat = "${getFormatPrice(price.toString())} đ";
-    totalAfterFormat = "${getFormatPrice(totalAmount.toString())} đ";
+    priceAfterFormat = "${getFormatPrice("$price")} đ";
+    totalAfterFormat = "${getFormatPrice("$totalAmount")} đ";
     dateAfterFormat = "${getDateTime(createDate, dateFormat: 'dd-MM-yyyy')}";
     dateSellAfterFormat = "${getDateTime(activeDate, dateFormat: 'dd-MM-yyyy')}";
   } catch (_) {
     priceAfterFormat = "$price";
-    totalAfterFormat = "$totalAmount";
     dateAfterFormat = "$createDate";
     dateSellAfterFormat = "$activeDate";
   }
@@ -540,9 +539,11 @@ Widget boxForInvoicNew(
                   alignment: Alignment.centerRight,
                   paddingLeftOfText: 10,
                   paddingRightOfText: 10,
-                  tittle: status == 2 ? "Đã huỷ" : "Đã gửi",
+                  // tittle: status == 2 ? "Đã huỷ" : "Đã gửi",
+                  tittle: getStatus(status: status),
                   fontWeight: FontWeight.w600,
-                  color: status == 2 ? Colors.redAccent : primaryColor,
+                  color: getColorStatus(status: status),
+                  // color: status == 2 ? Colors.redAccent : primaryColor,
                 ),
               ),
             ],
@@ -586,7 +587,8 @@ Widget boxForInvoicNew(
                   paddingLeftOfText: 10,
                   paddingRightOfText: 10,
                   tittle: "$product",
-                  color: primaryColor),
+                  fontWeight: FontWeight.w400,
+                  color: Colors.black),
             ],
           ),
           SizedBox(
@@ -632,7 +634,7 @@ Widget boxForInvoicNew(
                         alignment: Alignment.centerRight,
                         paddingLeftOfText: 10,
                         paddingRightOfText: 10,
-                        tittle: "${totalAmount.toString()} đ",
+                        tittle: "$totalAfterFormat",
                         fontWeight: FontWeight.w600,
                         color: primaryColor),
                   ],
@@ -691,136 +693,6 @@ Widget boxForInvoicNew(
           SizedBox(
             height: 10,
           ),
-        ],
-      ),
-    ),
-  );
-}
-
-//show các yêu cầu bán hàng
-Widget boxForInvoiceRequest(
-    {BuildContext context,
-    String id,
-    String name,
-    String product,
-    String price,
-    String date,
-    String sell_date,
-    int status,
-    Widget widget,
-    bool isCustomer}) {
-  String dateAfterFormat, dateSellAfterFormat, totalAfterFormat;
-  try {
-    totalAfterFormat = "${getFormatPrice(price)} đ";
-    dateAfterFormat = "${getDateTime(date)}";
-    dateSellAfterFormat = "${getDateTime(sell_date, dateFormat: 'dd-MM-yyyy')}";
-  } catch (_) {
-    totalAfterFormat = "$price";
-    dateAfterFormat = "$date";
-  }
-  return GestureDetector(
-    onTap: () => Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => widget)),
-    child: Container(
-      margin: EdgeInsets.only(top: 15, left: 10, right: 10),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(5),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black54,
-            blurRadius: 4,
-            offset: Offset(1, 2), // Shadow position
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              miniContainer(
-                context: context,
-                tittle: "$id",
-                marginRight: 5,
-                marginBottom: 5,
-                marginLeft: 10,
-                marginTop: 10,
-                borderRadius: 5,
-                height: 30,
-                colorContainer: idColor,
-                paddingRightOfText: 10,
-                paddingLeftOfText: 10,
-              ),
-              Flexible(
-                child: containerTextInvoice(
-                  alignment: Alignment.centerRight,
-                  paddingLeftOfText: 10,
-                  paddingRightOfText: 10,
-                  tittle: "$dateAfterFormat",
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-          if (!isCustomer)
-            containerTextInvoice(
-              alignment: Alignment.topLeft,
-              paddingLeftOfText: 10,
-              paddingRightOfText: 10,
-              tittle: name,
-              fontWeight: FontWeight.w700,
-            ),
-          if (isCustomer)
-            containerTextInvoice(
-              alignment: Alignment.topLeft,
-              paddingLeftOfText: 10,
-              paddingRightOfText: 10,
-              tittle: "$product",
-              fontWeight: FontWeight.w700,
-            ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    !isCustomer
-                        ? containerTextInvoice(
-                            marginTop: 2,
-                            alignment: Alignment.topLeft,
-                            paddingLeftOfText: 10,
-                            paddingRightOfText: 10,
-                            tittle: "Sản phẩm: $product",
-                            fontWeight: FontWeight.w400,
-                          )
-                        : containerTextInvoice(
-                            marginTop: 2,
-                            alignment: Alignment.topLeft,
-                            paddingLeftOfText: 10,
-                            paddingRightOfText: 10,
-                            tittle: "Ngày sẽ tới bán: $dateSellAfterFormat",
-                            fontWeight: FontWeight.w400,
-                          )
-                  ],
-                ),
-              ),
-              miniContainer(
-                context: context,
-                tittle: "$totalAfterFormat",
-                colorText: Colors.white,
-                fontWeightText: FontWeight.w500,
-                height: 30,
-                width: 100,
-                colorContainer: getColorStatus(status: status),
-                borderRadius: 5,
-                marginRight: 10,
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 10,
-          )
         ],
       ),
     ),
@@ -1949,7 +1821,7 @@ Widget boxForAdvanceHistory({
 }
 
 //show các yêu cầu bán hàng
-Widget boxForInvoiceRequestNew(
+Widget boxForInvoiceRequest(
     {BuildContext context,
     String id,
     String name,
@@ -2005,9 +1877,9 @@ Widget boxForInvoiceRequestNew(
                   alignment: Alignment.centerRight,
                   paddingLeftOfText: 10,
                   paddingRightOfText: 10,
-                  tittle: "Đã gửi",
+                  tittle: !isCustomer ? "Yêu cầu" : "Đã gửi",
                   fontWeight: FontWeight.w600,
-                  color: primaryColor,
+                  color: !isCustomer ? Colors.deepOrangeAccent : primaryColor,
                 ),
               ),
             ],
@@ -2051,7 +1923,8 @@ Widget boxForInvoiceRequestNew(
                   paddingLeftOfText: 10,
                   paddingRightOfText: 10,
                   tittle: "$product",
-                  color: primaryColor),
+                  fontWeight: FontWeight.w400,
+                  color: Colors.black),
             ],
           ),
           SizedBox(

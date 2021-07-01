@@ -7,7 +7,7 @@ class GetInvoiceRequest{
   static int statusInvoice;
   getInvoiceRequest(String token, String account_id, String product_id, int pageNum, int pageNo,String from, String to, {String searchTerm}) async {
     final response = await http.get(
-      Uri.http('$urlMain', '$urlInvoiceRequest', { "account_id" : "$account_id", "product_id": "$product_id","pageNum" : "${pageNum}" ,"pageNo" : "${pageNo}", "from" : "$from", "to" : "$to", "customer_phone": "$searchTerm" }),
+      Uri.http('$urlMain', '$urlInvoiceRequest', { "account_id" : "$account_id", "product_id": "$product_id","pageNum" : "${pageNum}" ,"pageNo" : "${pageNo}", "from" : "$from", "to" : "$to", "phone": "$searchTerm" }),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Accept': 'application/json',
