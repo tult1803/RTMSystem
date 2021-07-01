@@ -18,6 +18,7 @@ class CharacterSearchInputSliver extends StatefulWidget {
 
 class _CharacterSearchInputSliverState
     extends State<CharacterSearchInputSliver> {
+
   final StreamController<String> _textChangeStreamController =
       StreamController();
   StreamSubscription _textChangesSubscription;
