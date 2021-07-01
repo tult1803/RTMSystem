@@ -5,6 +5,7 @@ import 'package:rtm_system/model/model_invoice.dart';
 import 'package:rtm_system/presenter/infinite_scroll_pagination/common/character_search_input_sliver.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/component.dart';
+import 'package:rtm_system/ultils/helpers.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/detailInvoice.dart';
 import 'package:rtm_system/view/manager/formForDetail_page.dart';
@@ -130,7 +131,7 @@ class showInvoiceManagerState extends State<showInvoiceManager> {
                       context: context,
                       status: item['status_id'],
                       date: "${item['create_time']}",
-                      total: "${item['price']}",
+                      total: "${getPriceTotal(double.parse("${item['price']}"), item['degree'], item['quantity'])}",
                       id: item['id'],
                       name: item["customer_name"],
                       product: item["product_name"],

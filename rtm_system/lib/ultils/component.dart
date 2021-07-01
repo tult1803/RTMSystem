@@ -524,28 +524,8 @@ Widget _showBtnProcessInvoice(context, int statusId, String id, bool isCustomer,
           elevation: 10,
         ),
       );
-    } else if (statusId == 1 && isCustomer == false) {
-      return SizedBox(
-        width: size.width * 0.5,
-        // ignore: deprecated_member_use
-        child: RaisedButton(
-          color: primaryColor,
-          onPressed: () {
-            doConfirmOrAcceptOrRejectInvoice(context, id, 1, isCustomer);
-          },
-          child: Text(
-            'Xác nhận',
-            style: TextStyle(color: Colors.white, fontSize: 16),
-          ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          elevation: 10,
-        ),
-      );
-    } else {
+    } else
       return Container();
-    }
   } else if (statusId == 4) {
     if (isCustomer) {
       return SizedBox(
@@ -579,7 +559,7 @@ Widget _showBtnProcessInvoice(context, int statusId, String id, bool isCustomer,
                     widgetToNavigator: widgetToNavigator);
               },
               child: Text(
-                'Từ chối',
+                '${isRequest != null ? "Từ chối" : "Xoá"}',
                 style: TextStyle(color: Colors.white, fontSize: 16),
               ),
               shape: RoundedRectangleBorder(
@@ -599,7 +579,7 @@ Widget _showBtnProcessInvoice(context, int statusId, String id, bool isCustomer,
                     widgetToNavigator: widgetToNavigator);
               },
               child: Text(
-                '${isRequest != null ? "Tạo" : "Chấp nhận"}',
+                '${isRequest != null ? "Tạo" : "Cập nhật"}',
                 style: TextStyle(color: Colors.white, fontSize: 16),
               ),
               shape: RoundedRectangleBorder(
@@ -863,8 +843,11 @@ Widget containerTextInvoice({
           top: paddingTopOfText == null ? 0 : paddingTopOfText),
       child: Text(
         tittle,
-        style: GoogleFonts.roboto(fontWeight: fontWeight, color: color != null? color : Colors.black,),
-    ),
+        style: GoogleFonts.roboto(
+          fontWeight: fontWeight,
+          color: color != null ? color : Colors.black,
+        ),
+      ),
     ),
   );
 }
