@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:rtm_system/presenter/Manager/debt/showAdvanceBill.dart';
+import 'package:rtm_system/presenter/infinite_scroll_pagination/common/character_search_input_sliver.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/helpers.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
@@ -22,7 +23,7 @@ class _showAllBillState extends State<showAllBill>
   TabController _tabController;
   String getFromDate, getToDate;
   int index;
-
+  String itemToSearch;
   @override
   void initState() {
     super.initState();
@@ -55,9 +56,32 @@ class _showAllBillState extends State<showAllBill>
       body: Stack(
         children: [
           rowButtonDatetime(),
+          searchItem(context),
           tabBarView(),
         ],
       ),
+    );
+  }
+
+  Widget searchItem(context){
+    var size = MediaQuery.of(context).size;
+    return Container(
+        key: Key('Search'),
+        padding: EdgeInsets.only(top: 40),
+        width: size.width,
+        child: new CustomScrollView(
+          physics: NeverScrollableScrollPhysics(),
+          slivers: [
+            CharacterSearchInputSliver(
+              hintText: "Tìm kiếm theo số điện thoại",
+              onChanged: (searchTerm) {
+                setState(() {
+                  itemToSearch = searchTerm;
+                });
+              },
+            ),
+          ],
+        )
     );
   }
 
@@ -123,14 +147,14 @@ class _showAllBillState extends State<showAllBill>
 
   Widget tabBarView() {
     return Padding(
-      padding: const EdgeInsets.only(top: 50.0),
+      padding: const EdgeInsets.only(top: 120.0),
       child: TabBarView(
         controller: _tabController,
         children: <Widget>[
-          new showAdvancceBillManager(0),
-          new showAdvancceBillManager(4, fromDate: getFromDate, toDate: getToDate),
-          new showAdvancceBillManager(8, fromDate: getFromDate, toDate: getToDate),
-          new showAdvancceBillManager(6, fromDate: getFromDate, toDate: getToDate),
+          new showAdvancceBillManager(0, searchItem: itemToSearch),
+          new showAdvancceBillManager(4, fromDate: getFromDate, toDate: getToDate, searchItem: itemToSearch),
+          new showAdvancceBillManager(8, fromDate: getFromDate, toDate: getToDate, searchItem: itemToSearch),
+          new showAdvancceBillManager(6, fromDate: getFromDate, toDate: getToDate, searchItem: itemToSearch),
         ],
       ),
     );

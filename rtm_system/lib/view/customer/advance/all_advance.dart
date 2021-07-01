@@ -198,7 +198,6 @@ class _AdvancePageState extends State<AdvancePage>
 
   Future pickedDate() async {
     final initialDateRange = DateTimeRange(start: fromDate, end: toDate);
-    print(initialDateRange);
     final ThemeData theme = Theme.of(context);
     DateTimeRange dateRange = await showDateRangePicker(
         context: context,
@@ -222,7 +221,6 @@ class _AdvancePageState extends State<AdvancePage>
           );
         });
     if (dateRange != null) {
-      print(dateRange.end);
       setState(() {
         fromDate = dateRange.start;
         toDate = dateRange.end;

@@ -6,12 +6,14 @@ import 'package:rtm_system/ultils/helpers.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/add_product_in_invoice.dart';
 import 'package:rtm_system/view/customer/getMoney_or_payDebt.dart';
+
 class InvoiceTab extends StatefulWidget {
   const InvoiceTab({Key key}) : super(key: key);
 
   @override
   State<InvoiceTab> createState() => _InvoiceTabState();
 }
+
 DateTime fromDate;
 DateTime toDate;
 
@@ -32,7 +34,7 @@ class _InvoiceTabState extends State<InvoiceTab> with TickerProviderStateMixin {
     toDate = DateTime.now();
     fromDate = DateTime.now().subtract(Duration(days: 30));
     getFromDate =
-    "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
+        "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
     getToDate = "${getDateTime("$toDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
   }
 
@@ -44,9 +46,12 @@ class _InvoiceTabState extends State<InvoiceTab> with TickerProviderStateMixin {
       appBar: AppBar(
         backgroundColor: primaryColor,
         centerTitle: true,
-        title: const Text('Hoá đơn', style: TextStyle( color: Colors.white),),
+        title: const Text(
+          'Hoá đơn',
+          style: TextStyle(color: Colors.white),
+        ),
         bottom: TabBar(
-          labelPadding: EdgeInsets.symmetric(horizontal: 7.0),
+          labelPadding: EdgeInsets.symmetric(horizontal: 12.0),
           indicatorColor: primaryColor,
           isScrollable: true,
           labelColor: Colors.white,
@@ -64,7 +69,6 @@ class _InvoiceTabState extends State<InvoiceTab> with TickerProviderStateMixin {
             Tab(
               text: 'Ký gửi',
               // icon: Icon(Icons.attach_money),
-
             ),
             Tab(
               text: 'Bán hàng',
@@ -75,7 +79,7 @@ class _InvoiceTabState extends State<InvoiceTab> with TickerProviderStateMixin {
               // icon: Icon(Icons.my_library_books_outlined),
             ),
           ],
-        )
+        ),
       ),
       body: TabBarView(
         controller: _tabController,
@@ -89,11 +93,11 @@ class _InvoiceTabState extends State<InvoiceTab> with TickerProviderStateMixin {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     rowButtonDatetime(),
-                    new showAllInvoiceRequestPage(fromDate: getFromDate, toDate: getToDate),
+                    new showAllInvoiceRequestPage(
+                        fromDate: getFromDate, toDate: getToDate),
                   ],
                 ),
-              )
-          ),
+              )),
           //Show invoice processing
           containerInvoice(size.height, 4),
           //Show invoice deposit
@@ -106,9 +110,10 @@ class _InvoiceTabState extends State<InvoiceTab> with TickerProviderStateMixin {
       floatingActionButton: _showFloatBtn(_selectedIndex),
     );
   }
+
   //show invoice
-  Widget containerInvoice(height, status){
-    return  Container(
+  Widget containerInvoice(height, status) {
+    return Container(
         height: height,
         margin: EdgeInsets.only(left: 5, top: 12, right: 5),
         child: SingleChildScrollView(
@@ -116,26 +121,32 @@ class _InvoiceTabState extends State<InvoiceTab> with TickerProviderStateMixin {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               rowButtonDatetime(),
-              new showAllInvoicePage(status, fromDate: getFromDate, toDate: getToDate),
+              new showAllInvoicePage(status,
+                  fromDate: getFromDate, toDate: getToDate),
             ],
           ),
-        )
-    );
+        ));
   }
-  Widget _showFloatBtn(index){
+
+  Widget _showFloatBtn(index) {
     //index = 2 là tab thứ 2 "Ký gửi"
-    if(index == 2 ){
-      return  FloatingActionButton.extended(
+    if (index == 2) {
+      return FloatingActionButton.extended(
         onPressed: () {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => GetMoneyOrPayDebt(isPay: false,)),
+                builder: (context) => GetMoneyOrPayDebt(
+                      isPay: false,
+                    )),
           );
         },
-        label: Text('Nhận tiền', style: TextStyle(
-          color: Colors.white,
-        ),),
+        label: Text(
+          'Nhận tiền',
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
         backgroundColor: primaryColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(50.0),
@@ -155,10 +166,15 @@ class _InvoiceTabState extends State<InvoiceTab> with TickerProviderStateMixin {
                     )),
           );
         },
-        child :Icon(Icons.post_add_outlined, color: Colors.white, size: 25,),
+        child: Icon(
+          Icons.post_add_outlined,
+          color: Colors.white,
+          size: 25,
+        ),
       );
     }
   }
+
   //show btn select date, it have setState should dont reuse
   Widget rowButtonDatetime() {
     return Row(
@@ -211,10 +227,10 @@ class _InvoiceTabState extends State<InvoiceTab> with TickerProviderStateMixin {
         builder: (context, child) {
           return Theme(
             data: Theme.of(context).copyWith(
-              //Dùng cho nút "X" của lịch
+                //Dùng cho nút "X" của lịch
                 appBarTheme: AppBarTheme(
                   iconTheme:
-                  theme.primaryIconTheme.copyWith(color: Colors.white),
+                      theme.primaryIconTheme.copyWith(color: Colors.white),
                 ),
                 //Dùng cho nút chọn ngày và background
                 colorScheme: ColorScheme.light(
@@ -228,9 +244,9 @@ class _InvoiceTabState extends State<InvoiceTab> with TickerProviderStateMixin {
         fromDate = dateRange.start;
         toDate = dateRange.end;
         getFromDate =
-        "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
+            "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
         getToDate =
-        "${getDateTime("${toDate}", dateFormat: "yyyy-MM-dd 23:59:59")}";
+            "${getDateTime("${toDate}", dateFormat: "yyyy-MM-dd 23:59:59")}";
       });
     }
   }

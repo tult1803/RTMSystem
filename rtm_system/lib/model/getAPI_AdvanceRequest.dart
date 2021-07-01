@@ -4,9 +4,9 @@ import 'package:rtm_system/ultils/src/url_api.dart';
 import 'package:http/http.dart' as http;
 
 class GetAdvanceRequest{
-  getAdvanceRequest(String token, String accountId, int statusId, int pageNum, int pageNo, String from, String to) async {
+  getAdvanceRequest(String token, String accountId, int statusId, int pageNum, int pageNo, String from, String to, {String searchTerm}) async {
     final response = await http.get(
-      Uri.http('$urlMain', '$urlAdvanceRequest', { "customer_id" : "$accountId", "status_id" : "$statusId", "from" : "$from", "to" : "$to", "pageNum" : "$pageNum" ,"pageNo" : "$pageNo" }),
+      Uri.http('$urlMain', '$urlAdvanceRequest', { "customer_id" : "$accountId", "status_id" : "$statusId", "from" : "$from", "to" : "$to", "pageNum" : "$pageNum" ,"pageNo" : "$pageNo", "phone": "$searchTerm" }),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Accept': 'application/json',

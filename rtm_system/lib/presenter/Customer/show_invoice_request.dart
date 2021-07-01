@@ -65,7 +65,6 @@ class showAllInvoiceRequestPageState extends State<showAllInvoiceRequestPage> {
     if(oldWidget.toDate != this.widget.toDate){
       _pagingController.refresh();
     }
-    print(widget.toDate);
   }
 
   @override
