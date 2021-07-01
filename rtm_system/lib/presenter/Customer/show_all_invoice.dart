@@ -132,12 +132,15 @@ class showAllInvoicePageState extends State<showAllInvoicePage> {
                               newPageProgressIndicatorBuilder: (context) =>
                                   newPageProgressIndicatorBuilder(),
                               itemBuilder: (context, item, index) {
-                                return boxForInvoice(
+                                return boxForInvoicNew(
                                     context: context,
                                     status: item['status_id'],
-                                    date: "${item['create_time']}",
-                                    total: "${item['price']}",
+                                    createDate: "${item['create_time']}",
+                                    price: item['price'],
+                                    quantity: item['quantity'],
+                                    degree: item['degree'],
                                     id: item['id'],
+                                    activeDate: item["active_date"],
                                     name: item["customer_name"],
                                     product: item["product_name"],
                                     widget: FormForDetailPage(

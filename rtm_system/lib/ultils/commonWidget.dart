@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rtm_system/ultils/alertDialog.dart';
@@ -476,6 +477,226 @@ Widget boxForInvoice(
   );
 }
 
+Widget boxForInvoicNew(
+    {BuildContext context,
+    String id,
+    String name,
+    String product,
+    int price,
+    double quantity,
+    double degree,
+    String createDate,
+    String activeDate,
+    int status,
+    Widget widget,
+    bool isCustomer,
+    bool isRequest}) {
+  String dateAfterFormat, dateSellAfterFormat,  totalAfterFormat,
+      priceAfterFormat;
+  double totalAmount = getPriceTotal(double.parse(price.toString()), degree, quantity);
+  try {
+    priceAfterFormat = "${getFormatPrice(price.toString())} đ";
+    totalAfterFormat = "${getFormatPrice(totalAmount.toString())} đ";
+    dateAfterFormat = "${getDateTime(createDate, dateFormat: 'dd-MM-yyyy')}";
+    dateSellAfterFormat = "${getDateTime(activeDate, dateFormat: 'dd-MM-yyyy')}";
+  } catch (_) {
+    priceAfterFormat = "$price";
+    totalAfterFormat = "$totalAmount";
+    dateAfterFormat = "$createDate";
+    dateSellAfterFormat = "$activeDate";
+  }
+  return GestureDetector(
+    onTap: () => Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => widget)),
+    child: Container(
+      margin: EdgeInsets.only(top: 15, left: 10, right: 10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black54,
+            blurRadius: 4,
+            offset: Offset(1, 2), // Shadow position
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            children: [
+              containerTextInvoice(
+                  alignment: Alignment.centerRight,
+                  paddingLeftOfText: 10,
+                  paddingRightOfText: 10,
+                  tittle: "Mã: $id",
+                  fontWeight: FontWeight.w700,
+                  color: Colors.deepOrangeAccent),
+              Flexible(
+                child: containerTextInvoice(
+                  alignment: Alignment.centerRight,
+                  paddingLeftOfText: 10,
+                  paddingRightOfText: 10,
+                  tittle: status == 2 ? "Đã huỷ" : "Đã gửi",
+                  fontWeight: FontWeight.w600,
+                  color: status == 2 ? Colors.redAccent : primaryColor,
+                ),
+              ),
+            ],
+          ),
+          if (!isCustomer)
+            SizedBox(
+              height: 10,
+            ),
+          if (!isCustomer)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                containerTextInvoice(
+                  alignment: Alignment.topLeft,
+                  paddingLeftOfText: 10,
+                  paddingRightOfText: 10,
+                  tittle: "Khách hàng: ",
+                ),
+                containerTextInvoice(
+                    alignment: Alignment.topRight,
+                    paddingLeftOfText: 10,
+                    paddingRightOfText: 10,
+                    tittle: "$name",
+                    fontWeight: FontWeight.w700),
+              ],
+            ),
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              containerTextInvoice(
+                alignment: Alignment.topLeft,
+                paddingLeftOfText: 10,
+                paddingRightOfText: 10,
+                tittle: "Sản phẩm: ",
+              ),
+              containerTextInvoice(
+                  alignment: Alignment.topRight,
+                  paddingLeftOfText: 10,
+                  paddingRightOfText: 10,
+                  tittle: "$product",
+                  color: primaryColor),
+            ],
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Column(
+                  children: [
+                    containerTextInvoice(
+                      alignment: Alignment.topLeft,
+                      paddingLeftOfText: 10,
+                      paddingRightOfText: 10,
+                      tittle: "Giá sản phẩm ",
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    containerTextInvoice(
+                        alignment: Alignment.topLeft,
+                        paddingLeftOfText: 10,
+                        paddingRightOfText: 10,
+                        tittle: "$priceAfterFormat",
+                        color: primaryColor),
+                  ],
+                ),
+              ),
+              Flexible(
+                child: Column(
+                  children: [
+                    containerTextInvoice(
+                      alignment: Alignment.centerRight,
+                      paddingLeftOfText: 10,
+                      paddingRightOfText: 10,
+                      tittle: "Thành tiền",
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    containerTextInvoice(
+                        alignment: Alignment.centerRight,
+                        paddingLeftOfText: 10,
+                        paddingRightOfText: 10,
+                        tittle: "${totalAmount.toString()} đ",
+                        fontWeight: FontWeight.w600,
+                        color: primaryColor),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        containerTextInvoice(
+                          alignment: Alignment.centerRight,
+                          paddingLeftOfText: 10,
+                          paddingRightOfText: 10,
+                          tittle: "Ngày tạo:",
+                        ),
+                        activeDate != null
+                            ? containerTextInvoice(
+                                alignment: Alignment.topLeft,
+                                paddingLeftOfText: 10,
+                                paddingRightOfText: 10,
+                                tittle: "$dateSellAfterFormat",
+                                fontWeight: FontWeight.w600,
+                              )
+                            : containerTextInvoice(
+                                alignment: Alignment.centerRight,
+                                paddingLeftOfText: 10,
+                                paddingRightOfText: 10,
+                                tittle: "$dateAfterFormat",
+                                fontWeight: FontWeight.w600,
+                              ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              containerTextInvoice(
+                  marginTop: 2,
+                  alignment: Alignment.topLeft,
+                  paddingLeftOfText: 10,
+                  paddingRightOfText: 10,
+                  tittle: "Xem chi tiết >>",
+                  fontWeight: FontWeight.w400,
+                  color: Colors.grey)
+            ],
+          ),
+          SizedBox(
+            height: 10,
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
 //show các yêu cầu bán hàng
 Widget boxForInvoiceRequest(
     {BuildContext context,
@@ -605,25 +826,27 @@ Widget boxForInvoiceRequest(
     ),
   );
 }
+
 //show các yêu cầu ứng tiền
 Widget boxForAdvanceRequest(
     {BuildContext context,
-      String id,
-      String name,
-      String storeId,
-      String amount,
-      String createDate,
-      String receiveDate,
-      String imageUrl,
-      String reason,
-      int status,
-      Widget widget,
-      bool isCustomer}) {
+    String id,
+    String name,
+    String storeId,
+    String amount,
+    String createDate,
+    String receiveDate,
+    String imageUrl,
+    String reason,
+    int status,
+    Widget widget,
+    bool isCustomer}) {
   String dateAfterFormat, dateReceiveAfterFormat, totalAfterFormat;
   try {
     totalAfterFormat = "${getFormatPrice(amount)} đ";
-    dateAfterFormat = "${getDateTime(createDate,dateFormat: 'dd-MM-yyyy')}";
-    dateReceiveAfterFormat = "${getDateTime(receiveDate, dateFormat: 'dd-MM-yyyy')}";
+    dateAfterFormat = "${getDateTime(createDate, dateFormat: 'dd-MM-yyyy')}";
+    dateReceiveAfterFormat =
+        "${getDateTime(receiveDate, dateFormat: 'dd-MM-yyyy')}";
   } catch (_) {
     totalAfterFormat = "$amount";
     dateAfterFormat = "$createDate";
@@ -697,7 +920,7 @@ Widget boxForAdvanceRequest(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     //Hoá đơn bị từ chối thì show lý do ra thay vì ngày tới
-                     containerTextInvoice(
+                    containerTextInvoice(
                       marginTop: 2,
                       alignment: Alignment.topLeft,
                       paddingLeftOfText: 10,
@@ -1643,45 +1866,45 @@ Widget boxForAdvanceHistory({
                   ],
                 ),
               ),
-              returnCash != 0?
-              Column(
-                children: [
-                  containerTextInvoice(
-                    alignment: Alignment.topLeft,
-                    paddingLeftOfText: 10,
-                    paddingRightOfText: 10,
-                    tittle: "Số tiền trả lại",
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  containerTextInvoice(
-                      alignment: Alignment.topLeft,
-                      paddingLeftOfText: 10,
-                      paddingRightOfText: 10,
-                      tittle: "$cashAfterFormat",
-                      color: primaryColor),
-                ],
-              ) :
-              Column(
-                children: [
-                  containerTextInvoice(
-                    alignment: Alignment.topLeft,
-                    paddingLeftOfText: 10,
-                    paddingRightOfText: 10,
-                    tittle: "Ngày trả nợ",
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  containerTextInvoice(
-                      alignment: Alignment.topLeft,
-                      paddingLeftOfText: 10,
-                      paddingRightOfText: 10,
-                      tittle: "$date",
-                      color: primaryColor),
-                ],
-              ),
+              returnCash != 0
+                  ? Column(
+                      children: [
+                        containerTextInvoice(
+                          alignment: Alignment.topLeft,
+                          paddingLeftOfText: 10,
+                          paddingRightOfText: 10,
+                          tittle: "Số tiền trả lại",
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        containerTextInvoice(
+                            alignment: Alignment.topLeft,
+                            paddingLeftOfText: 10,
+                            paddingRightOfText: 10,
+                            tittle: "$cashAfterFormat",
+                            color: primaryColor),
+                      ],
+                    )
+                  : Column(
+                      children: [
+                        containerTextInvoice(
+                          alignment: Alignment.topLeft,
+                          paddingLeftOfText: 10,
+                          paddingRightOfText: 10,
+                          tittle: "Ngày nhận tiền",
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        containerTextInvoice(
+                            alignment: Alignment.topLeft,
+                            paddingLeftOfText: 10,
+                            paddingRightOfText: 10,
+                            tittle: "$date",
+                            color: primaryColor),
+                      ],
+                    ),
             ],
           ),
           SizedBox(
@@ -1719,6 +1942,223 @@ Widget boxForAdvanceHistory({
           SizedBox(
             height: 12,
           )
+        ],
+      ),
+    ),
+  );
+}
+
+//show các yêu cầu bán hàng
+Widget boxForInvoiceRequestNew(
+    {BuildContext context,
+    String id,
+    String name,
+    String product,
+    String price,
+    String createDate,
+    String sellDate,
+    int status,
+    Widget widget,
+    bool isCustomer}) {
+  String dateAfterFormat, dateSellAfterFormat, totalAfterFormat;
+  try {
+    totalAfterFormat = "${getFormatPrice(price)} đ";
+    dateAfterFormat = "${getDateTime(createDate, dateFormat: 'dd-MM-yyyy')}";
+    dateSellAfterFormat = "${getDateTime(sellDate, dateFormat: 'dd-MM-yyyy')}";
+  } catch (_) {
+    totalAfterFormat = "$price";
+    dateAfterFormat = "$createDate";
+    dateSellAfterFormat = "$sellDate";
+  }
+  return GestureDetector(
+    onTap: () => Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => widget)),
+    child: Container(
+      margin: EdgeInsets.only(top: 15, left: 10, right: 10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black54,
+            blurRadius: 4,
+            offset: Offset(1, 2), // Shadow position
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            children: [
+              containerTextInvoice(
+                  alignment: Alignment.centerRight,
+                  paddingLeftOfText: 10,
+                  paddingRightOfText: 10,
+                  tittle: "Mã: $id",
+                  fontWeight: FontWeight.w700,
+                  color: Colors.deepOrangeAccent),
+              Flexible(
+                child: containerTextInvoice(
+                  alignment: Alignment.centerRight,
+                  paddingLeftOfText: 10,
+                  paddingRightOfText: 10,
+                  tittle: "Đã gửi",
+                  fontWeight: FontWeight.w600,
+                  color: primaryColor,
+                ),
+              ),
+            ],
+          ),
+          if (!isCustomer)
+            SizedBox(
+              height: 10,
+            ),
+          if (!isCustomer)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                containerTextInvoice(
+                  alignment: Alignment.topLeft,
+                  paddingLeftOfText: 10,
+                  paddingRightOfText: 10,
+                  tittle: "Khách hàng: ",
+                ),
+                containerTextInvoice(
+                    alignment: Alignment.topRight,
+                    paddingLeftOfText: 10,
+                    paddingRightOfText: 10,
+                    tittle: "$name",
+                    fontWeight: FontWeight.w700),
+              ],
+            ),
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              containerTextInvoice(
+                alignment: Alignment.topLeft,
+                paddingLeftOfText: 10,
+                paddingRightOfText: 10,
+                tittle: "Sản phẩm: ",
+              ),
+              containerTextInvoice(
+                  alignment: Alignment.topRight,
+                  paddingLeftOfText: 10,
+                  paddingRightOfText: 10,
+                  tittle: "$product",
+                  color: primaryColor),
+            ],
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Column(
+                  children: [
+                    containerTextInvoice(
+                      alignment: Alignment.topLeft,
+                      paddingLeftOfText: 10,
+                      paddingRightOfText: 10,
+                      tittle: "Giá sản phẩm",
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    containerTextInvoice(
+                        alignment: Alignment.topLeft,
+                        paddingLeftOfText: 10,
+                        paddingRightOfText: 10,
+                        tittle: "$totalAfterFormat",
+                        color: primaryColor),
+                  ],
+                ),
+              ),
+              Column(
+                children: [
+                  containerTextInvoice(
+                    alignment: Alignment.topLeft,
+                    paddingLeftOfText: 10,
+                    paddingRightOfText: 10,
+                    tittle: "Ngày tới",
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  containerTextInvoice(
+                      alignment: Alignment.topLeft,
+                      paddingLeftOfText: 10,
+                      paddingRightOfText: 10,
+                      tittle: "$dateSellAfterFormat",
+                      color: primaryColor),
+                ],
+              ),
+              Flexible(
+                child: Column(
+                  children: [
+                    containerTextInvoice(
+                      alignment: Alignment.centerRight,
+                      paddingLeftOfText: 10,
+                      paddingRightOfText: 10,
+                      tittle: "Ngày tạo",
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    containerTextInvoice(
+                      alignment: Alignment.centerRight,
+                      paddingLeftOfText: 10,
+                      paddingRightOfText: 10,
+                      tittle: "$dateAfterFormat",
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    //Hoá đơn bị từ chối thì show lý do ra thay vì ngày tới
+                    containerTextInvoice(
+                      marginTop: 2,
+                      alignment: Alignment.topLeft,
+                      paddingLeftOfText: 10,
+                      paddingRightOfText: 10,
+                      tittle: "Hiển thị hoá đơn",
+                      fontWeight: FontWeight.w400,
+                    )
+                  ],
+                ),
+              ),
+              containerTextInvoice(
+                  marginTop: 2,
+                  alignment: Alignment.topLeft,
+                  paddingLeftOfText: 10,
+                  paddingRightOfText: 10,
+                  tittle: "Xem chi tiết >>",
+                  fontWeight: FontWeight.w400,
+                  color: Colors.grey)
+            ],
+          ),
+          SizedBox(
+            height: 12,
+          ),
         ],
       ),
     ),
