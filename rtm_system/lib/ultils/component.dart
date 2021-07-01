@@ -995,7 +995,7 @@ Widget widgetCreateAdvance(context, List item, String storeId,
     String nameProduct, String name, String phone, int type, bool isCustomer) {
   var size = MediaQuery.of(context).size;
   String reason;
-  if (item[3] == null || item[3] == '') {
+  if (item[2] == null || item[2] == '') {
     reason = 'Ứng tiền';
   } else {
     reason = item[3];
@@ -1032,11 +1032,6 @@ Widget widgetCreateAdvance(context, List item, String storeId,
                   height: 10,
                 ),
                 txtItemDetail(context, 'Lý do', '${reason}'),
-                // hình ảnh
-                SizedBox(
-                  height: 10,
-                ),
-                showImage(size.width, size.height, item[2]),
                 SizedBox(
                   height: 10,
                 ),
@@ -1048,7 +1043,7 @@ Widget widgetCreateAdvance(context, List item, String storeId,
                     color: Color(0xFF0BB791),
                     onPressed: () {
                       doCreateRequestAdvance(context, 'TK-111', item[0], reason,
-                          item[1], item[2], storeId, type, true);
+                          item[1], storeId, type, true);
                     },
                     child: AutoSizeText(
                       'Xác nhận',

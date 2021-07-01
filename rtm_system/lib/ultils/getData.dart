@@ -120,7 +120,9 @@ Future<void> doCreateCustomer(
       }
       showCustomDialog(
         context,
-        content: MSG003, ///MSG003
+        content: MSG003,
+
+        ///MSG003
         isSuccess: true,
         widgetToNavigator: isCreate == null
             ? HomeAdminPage(
@@ -131,7 +133,9 @@ Future<void> doCreateCustomer(
     }
   } else
     showCustomDialog(context,
-        content: MSG025, ///MSG025
+        content: MSG025,
+
+        ///MSG025
         isSuccess: false,
         doPopNavigate: true);
 }
@@ -294,7 +298,6 @@ Future<void> doCreateRequestAdvance(
     String money,
     String reason,
     date,
-    image,
     storeId,
     int type,
     bool isCustomer) async {
@@ -310,8 +313,7 @@ Future<void> doCreateRequestAdvance(
           storeId,
           money,
           reason,
-          getDateTime(date, dateFormat: 'yyyy-MM-dd HH:mm:ss'),
-          image);
+          getDateTime(date, dateFormat: 'yyyy-MM-dd HH:mm:ss'), );
     } else if (type == 2) {
       //Call API
     }
@@ -410,24 +412,34 @@ Future doCreateInvoice(BuildContext context,
           content: "Tạo hoá đơn thất bại",
           doPopNavigate: true);
 }
-Future<void> putReturnAdvance(BuildContext context, List<String> invoiceId) async {
+
+Future<void> putReturnAdvance(
+    BuildContext context, List<String> invoiceId, int totalAdvance) async {
   int status;
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  PutReturnAdvance putReturnAdvance = PutReturnAdvance();
-  status = await putReturnAdvance.putReturnAdvance(
-      prefs.get("access_token"), invoiceId);
-  if (status == 200) {
-    showStatusAlertDialog(
+  if (totalAdvance != 0) {
+    PutReturnAdvance putReturnAdvance = PutReturnAdvance();
+    status = await putReturnAdvance.putReturnAdvance(
+        prefs.get("access_token"), invoiceId);
+    if (status == 200) {
+      showStatusAlertDialog(
+          context,
+          showMessage("", MSG019),
+          HomeCustomerPage(
+            index: 1,
+          ),
+          true);
+    } else
+      showCustomDialog(
         context,
-        showMessage("", MSG019),
-        HomeCustomerPage(
-          index: 1,
-        ),
-        true);
-  } else
+        isSuccess: false,
+        content: showMessage("", MSG025),
+      );
+  } else {
     showCustomDialog(
       context,
       isSuccess: false,
-      content: showMessage("", MSG025),
+      content: showMessage(MSG031, MSG027),
     );
+  }
 }
