@@ -24,7 +24,6 @@ class showAllInvoiceRequestPage extends StatefulWidget {
 class showAllInvoiceRequestPageState extends State<showAllInvoiceRequestPage> {
   int _pageSize = 1;
   final PagingController _pagingController = PagingController(firstPageKey: 10);
-  String _searchTerm;
   InvoiceRequest invoiceRequest;
   List invoiceList;
 
@@ -40,7 +39,7 @@ class showAllInvoiceRequestPageState extends State<showAllInvoiceRequestPage> {
         _pageSize,
         this.widget.fromDate == null ? "" : "${this.widget.fromDate}",
         this.widget.toDate == null ? "" : "${this.widget.toDate}",
-        searchTerm: _searchTerm,
+        searchTerm: "",
       );
       invoiceList = invoiceRequest.invoiceRequests;
       final isLastPage = invoiceList.length < pageKey;
@@ -156,12 +155,5 @@ class showAllInvoiceRequestPageState extends State<showAllInvoiceRequestPage> {
       ),
     );
   }
-
-  //Dùng để search
-  // void _updateSearchTerm(String searchTerm) {
-  //   _searchTerm = searchTerm;
-  //   _pagingController.refresh();
-  // }
-
 }
 

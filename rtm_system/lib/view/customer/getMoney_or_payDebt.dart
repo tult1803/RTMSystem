@@ -206,7 +206,7 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
           ),
         ),
         // có nợ thì mới show ra, hiện tại api nợ = 0 vẫn trả được
-        floatingActionButton: totalAdvance != 0 ?BlocBuilder<ListInvoiceIdBloc, List<String>>(
+        floatingActionButton: BlocBuilder<ListInvoiceIdBloc, List<String>>(
           builder: (context, state) {
             return FloatingActionButton.extended(
               onPressed: () {
@@ -239,7 +239,9 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
                         ),
                         TextButton(
                           onPressed: () {
-                            widget.isPay ? putReturnAdvance(context, state) : "";
+                            widget.isPay ? putReturnAdvance(context, state, totalAdvance) 
+                            //call api receive cash
+                            : "";
                           },
                           child: Text(
                             'Có',
@@ -266,7 +268,7 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
               elevation: 10,
             );
           },
-        ): Container()
+        ),
       ),
     );
   }

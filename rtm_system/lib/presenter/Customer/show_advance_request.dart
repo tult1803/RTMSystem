@@ -32,11 +32,13 @@ class _showAdvanceRequestPageState extends State<showAdvanceRequestPage> {
       advanceRequest = await getAdvanceRequest.getAdvanceRequest(
         prefs.get("access_token"),
         prefs.get("accountId"),
-        widget.status == null? 0 : widget.status,//get all status
+        prefs.get("phone"),
+        widget.status == null ? 0 : widget.status, //get all status
         pageKey,
         _pageSize,
         this.widget.fromDate == null ? "" : "${this.widget.fromDate}",
         this.widget.toDate == null ? "" : "${this.widget.toDate}",
+        searchTerm: "",
       );
       advances = advanceRequest.advances;
       final isLastPage = advances.length < pageKey;
@@ -58,7 +60,7 @@ class _showAdvanceRequestPageState extends State<showAdvanceRequestPage> {
   @override
   void didUpdateWidget(covariant showAdvanceRequestPage oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if(oldWidget.toDate != this.widget.toDate){
+    if (oldWidget.toDate != this.widget.toDate) {
       _pagingController.refresh();
     }
   }
@@ -103,13 +105,14 @@ class _showAdvanceRequestPageState extends State<showAdvanceRequestPage> {
                                 return Column(
                                   children: [
                                     firstPageErrorIndicatorBuilder(context,
-                                        tittle: showMessage("",MSG008)),
+                                        tittle: showMessage("", MSG008)),
                                     GestureDetector(
                                       onTap: () => _pagingController.refresh(),
                                       child: Text(
                                         showMessage('', MSG027),
                                         style: TextStyle(
-                                            color: primaryLight3Color, fontSize: 18),
+                                            color: primaryLight3Color,
+                                            fontSize: 18),
                                       ),
                                     ),
                                   ],
@@ -117,37 +120,38 @@ class _showAdvanceRequestPageState extends State<showAdvanceRequestPage> {
                               },
                               newPageErrorIndicatorBuilder: (context) =>
                                   firstPageErrorIndicatorBuilder(context,
-                                      tittle: showMessage("",MSG008)),
+                                      tittle: showMessage("", MSG008)),
                               firstPageProgressIndicatorBuilder: (context) =>
                                   firstPageProgressIndicatorBuilder(),
                               newPageProgressIndicatorBuilder: (context) =>
                                   newPageProgressIndicatorBuilder(),
                               itemBuilder: (context, item, index) {
                                 return boxForAdvanceOfCustomer(
-                                    context: context,
-                                    id: item['id'],
-                                    status: item['status_id'],
-                                    createDate: "${item['create_date']}",
-                                    amount: "${item['amount']}",
-                                    storeId: item['store_id'],
-                                    name: item["customer_name"],
-                                    receiveDate: item["receive_date"] ,
-                                    imageUrl: item["image_url"],
-                                    reason: item["reason"],
-                                    widget: FormForDetailPage(
-                                      tittle: "Chi tiết yêu cầu",
-                                      bodyPage: DetailAdvancePage(
-                                        isCustomer: true,
-                                        id: item['id'],
-                                        status: item['status_id'],
-                                        isRequest: false,
-                                      ),
-                                    ),);
+                                  context: context,
+                                  id: item['id'],
+                                  status: item['status_id'],
+                                  createDate: "${item['create_date']}",
+                                  amount: "${item['amount']}",
+                                  storeId: item['store_id'],
+                                  name: item["customer_name"],
+                                  receiveDate: item["receive_date"],
+                                  reason: item["description"],
+                                  widget: FormForDetailPage(
+                                    tittle: "Chi tiết yêu cầu",
+                                    bodyPage: DetailAdvancePage(
+                                      isCustomer: true,
+                                      id: item['id'],
+                                      status: item['status_id'],
+                                      isRequest: false,
+                                    ),
+                                  ),
+                                );
                               }),
                         ),
                       ],
                     ),
-                  ),)
+                  ),
+                )
               ],
             ),
           ),
@@ -155,7 +159,4 @@ class _showAdvanceRequestPageState extends State<showAdvanceRequestPage> {
       ),
     );
   }
-
-
 }
-
