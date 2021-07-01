@@ -181,7 +181,7 @@ class _showAllInvoiceState extends State<showAllInvoice>
   @override
   void dispose() {
     _tabController.dispose();
-    itemToSearch = null;
+    itemToSearch = "";
     super.dispose();
   }
 //Copy nó để tái sử dụng cho các trang khác nếu cần
@@ -229,7 +229,6 @@ class _showAllInvoiceState extends State<showAllInvoice>
             "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd 00:00:00")}";
         getToDate =
             "${getDateTime("$toDate", dateFormat: "yyyy-MM-dd 23:59:59")}";
-        print(getToDate);
       });
     }
   }

@@ -17,13 +17,12 @@ class showAllBill extends StatefulWidget {
 
 DateTime fromDate;
 DateTime toDate;
-
+String itemToSearch;
 class _showAllBillState extends State<showAllBill>
     with TickerProviderStateMixin {
   TabController _tabController;
   String getFromDate, getToDate;
   int index;
-  String itemToSearch;
   @override
   void initState() {
     super.initState();
@@ -35,16 +34,18 @@ class _showAllBillState extends State<showAllBill>
 
     toDate = DateTime.now();
     fromDate = DateTime.now().subtract(Duration(days: 30));
-    getFromDate =
-        "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd 00:00:00")}";
+    getFromDate = "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd 00:00:00")}";
     getToDate = "${getDateTime("$toDate", dateFormat: "yyyy-MM-dd 23:59:59")}";
   }
 
   @override
   void dispose() {
     _tabController.dispose();
+    itemToSearch = "";
     super.dispose();
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -115,7 +116,7 @@ class _showAllBillState extends State<showAllBill>
   Widget rowButtonDatetime() {
     return Container(
       height: 80,
-      child: Row(
+      child:Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -200,6 +201,10 @@ class _showAllBillState extends State<showAllBill>
       setState(() {
         fromDate = dateRange.start;
         toDate = dateRange.end;
+        getFromDate =
+        "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd 00:00:00")}";
+        getToDate =
+        "${getDateTime("$toDate", dateFormat: "yyyy-MM-dd 23:59:59")}";
       });
     }
   }

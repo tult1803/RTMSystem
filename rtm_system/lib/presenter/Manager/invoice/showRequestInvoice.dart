@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:rtm_system/model/getAPI_allInvoiceRequest.dart';
 import 'package:rtm_system/model/model_invoiceRequest.dart';
+import 'package:rtm_system/presenter/Manager/invoice/showAllInvoice.dart';
 import 'package:rtm_system/presenter/infinite_scroll_pagination/common/character_search_input_sliver.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/component.dart';
@@ -45,7 +46,7 @@ class showInvoiceRequestManagerState extends State<showInvoiceRequestManager> {
         _pageSize,
         this.widget.fromDate == null ? "" : "${this.widget.fromDate}",
         this.widget.toDate == null ? "" : "${this.widget.toDate}",
-        searchTerm: _searchTerm,
+        searchTerm: itemToSearch,
       );
       invoiceList = invoice.invoiceRequests;
       // print("${_pagingController}");

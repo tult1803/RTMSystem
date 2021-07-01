@@ -16,10 +16,12 @@ class AdvanceDetail {
     this.storeId,
     this.storeName,
     this.reason,
+    this.customerPhone,
   });
 
   String id;
   String storeName;
+  String customerPhone;
   String storeId;
   String customerId;
   String customerName;
@@ -41,6 +43,7 @@ class AdvanceDetail {
     amount: json["amount"],
     createDate: json["create_date"],
     receiveDate: json["receive_date"],
+    customerPhone: json['customer_phone'],
     description: json["description"],
     statusId: json["status_id"],
     managerId: json["manager_id"],
