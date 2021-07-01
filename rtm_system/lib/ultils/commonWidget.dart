@@ -932,6 +932,150 @@ Widget boxForProduct(
   );
 }
 
+//show các yêu cầu ứng tiền
+Widget boxForProductNew(
+    {BuildContext context,
+      String id,
+      String productName,
+      String typeOfProduct,
+      String price,
+      String date,
+      Widget widget}) {
+  return GestureDetector(
+    onTap: () => Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => widget)),
+    child: Container(
+      margin: EdgeInsets.only(top: 15, left: 10, right: 10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black54,
+            blurRadius: 4,
+            offset: Offset(1, 2), // Shadow position
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            children: [
+              containerTextInvoice(
+                  alignment: Alignment.centerRight,
+                  paddingLeftOfText: 10,
+                  paddingRightOfText: 10,
+                  tittle: "Mã: $id",
+                  fontWeight: FontWeight.w700,
+                  color: Colors.deepOrangeAccent),
+              Flexible(
+                child: containerTextInvoice(
+                  alignment: Alignment.centerRight,
+                  paddingLeftOfText: 10,
+                  paddingRightOfText: 10,
+                  tittle: getStatusUpdatePrice(date: date),
+                  fontWeight: FontWeight.w600,
+                  color: getColorStatusUpdatePrice(date: date),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              containerTextInvoice(
+                alignment: Alignment.topLeft,
+                paddingLeftOfText: 10,
+                paddingRightOfText: 10,
+                tittle: "Sản phẩm: ",
+              ),
+              containerTextInvoice(
+                  alignment: Alignment.topRight,
+                  paddingLeftOfText: 10,
+                  paddingRightOfText: 10,
+                  tittle: productName,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black),
+            ],
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+                    containerTextInvoice(
+                      alignment: Alignment.topLeft,
+                      paddingLeftOfText: 10,
+                      paddingRightOfText: 10,
+                      tittle: "Giá sản phẩm ",
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    containerTextInvoice(
+                        alignment: Alignment.topLeft,
+                        paddingLeftOfText: 10,
+                        paddingRightOfText: 10,
+                        tittle: "${getFormatPrice(price)} đ",
+                        color: Colors.black),
+            ],
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        containerTextInvoice(
+                          alignment: Alignment.centerRight,
+                          paddingLeftOfText: 10,
+                          paddingRightOfText: 10,
+                          tittle: "Ngày cập nhật:",
+                        ),
+                       containerTextInvoice(
+                          alignment: Alignment.centerRight,
+                          paddingLeftOfText: 10,
+                          paddingRightOfText: 10,
+                          tittle: "${getDateTime(date, dateFormat:  "dd-MM-yyyy")}",
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              containerTextInvoice(
+                  marginTop: 2,
+                  alignment: Alignment.topLeft,
+                  paddingLeftOfText: 10,
+                  paddingRightOfText: 10,
+                  tittle: "Xem chi tiết >>",
+                  fontWeight: FontWeight.w400,
+                  color: Colors.grey)
+            ],
+          ),
+          SizedBox(
+            height: 10,
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
 // Đang dùng cho các trang detail "Sản phẩm", "Hóa đơn", "Ứng tiền", "Khách hàng"
 Widget containerDetail(BuildContext context, Widget widget) {
   var size = MediaQuery.of(context).size;
