@@ -835,7 +835,6 @@ Widget boxForAdvanceOfCustomer({
   String amount,
   String createDate,
   String receiveDate,
-  String imageUrl,
   String reason,
   int status,
   Widget widget,
