@@ -19,8 +19,6 @@ class AllProduct extends StatefulWidget {
 }
 
 class _AllProductState extends State<AllProduct> {
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,8 +26,9 @@ class _AllProductState extends State<AllProduct> {
           backgroundColor: welcome_color,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
-                bottomLeft: Radius.elliptical(30, 20),
-                bottomRight: Radius.elliptical(30, 20),),
+              bottomLeft: Radius.elliptical(30, 20),
+              bottomRight: Radius.elliptical(30, 20),
+            ),
           ),
           bottom: PreferredSize(
               // child: btnMain(context, 150, "Cập nhật giá", Icon(Icons.update),
@@ -63,12 +62,16 @@ Widget bottomHomeBar(BuildContext context) {
         icon: Icon(Icons.monetization_on_outlined),
         iconColor: welcome_color,
         iconSize: 35,
-        widget: updatePriceProduct(widgetToNavigate: HomeAdminPage(index: 0,),),
+        widget: updatePriceProduct(
+          widgetToNavigate: HomeAdminPage(
+            index: 0,
+          ),
+        ),
       ),
       Flexible(
           child: Container(
-            height: 10,
-          )),
+        height: 10,
+      )),
       miniIconTextContainer(
         context,
         height: 80,
@@ -86,41 +89,42 @@ Widget bottomHomeBar(BuildContext context) {
           child: Container(
         height: 10,
       )),
-      miniIconTextContainer(
-        context,
-        height: 80,
-        width: 80,
-        borderRadius: 10,
-        colorContainer: Colors.white,
-        tittle: "Tạo",
-        colorText: colorHexa("2B2D20"),
-        icon: Icon(Icons.post_add),
-        iconColor: welcome_color,
-        iconSize: 35,
-        widget: AddProductPage(
-          tittle: "Tạo hóa đơn",
-          isCustomer: false,
-          widgetToNavigator: HomeAdminPage(index: 0,),
-        )
-      ),
+      miniIconTextContainer(context,
+          height: 80,
+          width: 80,
+          borderRadius: 10,
+          colorContainer: Colors.white,
+          tittle: "Tạo",
+          colorText: colorHexa("2B2D20"),
+          icon: Icon(Icons.post_add),
+          iconColor: welcome_color,
+          iconSize: 35,
+          widget: AddProductPage(
+            tittle: "Tạo hóa đơn",
+            isCustomer: false,
+            widgetToNavigator: HomeAdminPage(
+              index: 0,
+            ),
+          )),
       Flexible(
           child: Container(
         height: 10,
       )),
-      miniIconTextContainer(
-        context,
-        height: 80,
-        width: 80,
-        borderRadius: 10,
-        colorContainer: Colors.white,
-        tittle: "Khách hàng",
-        colorText: colorHexa("2B2D20"),
-        fontSize: 12,
-        icon: Icon(Icons.people_outline_rounded),
-        iconColor: welcome_color,
-        iconSize: 35,
-        widget: AllCustomer(widgetToNavigator: HomeAdminPage(index: 0,))
-      ),
+      miniIconTextContainer(context,
+          height: 80,
+          width: 80,
+          borderRadius: 10,
+          colorContainer: Colors.white,
+          tittle: "Khách hàng",
+          colorText: colorHexa("2B2D20"),
+          fontSize: 12,
+          icon: Icon(Icons.people_outline_rounded),
+          iconColor: welcome_color,
+          iconSize: 35,
+          widget: AllCustomer(
+              widgetToNavigator: HomeAdminPage(
+            index: 0,
+          ))),
       Flexible(
           child: Container(
         height: 10,

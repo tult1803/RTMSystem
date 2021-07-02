@@ -156,6 +156,7 @@ class showInvoiceManagerState extends State<showInvoiceManager> {
 
   //Dùng để search
   void _updateSearchTerm(String searchTerm) {
+    print('Search: $_searchTerm');
     _searchTerm = searchTerm;
     _pagingController.refresh();
   }

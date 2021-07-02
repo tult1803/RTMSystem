@@ -4,6 +4,7 @@ import 'package:rtm_system/model/getAPI_product.dart';
 import 'package:rtm_system/model/model_product.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/component.dart';
+import 'package:rtm_system/ultils/helpers.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/manager/formForDetail_page.dart';
 import 'package:rtm_system/view/manager/product/detailProduct.dart';
@@ -110,7 +111,7 @@ class _showAllProductState extends State<showAllProduct> {
                     itemPriceUpdatePrice.add("${item["update_price"]}");
                     itemIdUpdatePrice.add(item["id"]);}
                   _savedProductPrice(item["name"], "${item["update_price"]}");
-                  return boxForProduct(
+                  return boxForProductNew(
                       context: context,
                       id: item["id"],
                       productName: item["name"],

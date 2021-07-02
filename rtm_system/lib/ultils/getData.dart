@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rtm_system/model/PostCreateRequestInvoice.dart';
 import 'package:rtm_system/model/deleteAPI_invoice.dart';
+import 'package:rtm_system/model/deleteAPI_invoiceRequest.dart';
 import 'package:rtm_system/model/postAPI_Image.dart';
 import 'package:rtm_system/model/postAPI_createCustomer.dart';
 import 'package:rtm_system/model/postAPI_createInvoice.dart';
@@ -20,7 +21,7 @@ import 'package:rtm_system/view/manager/home_manager_page.dart';
 import 'package:rtm_system/view/manager/profile/allCustomer_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'alertDialog.dart';
+import 'showDialog.dart';
 
 //dùng cho tạo thông báo
 Future postAPINotice(String tittle, String content) async {
@@ -219,6 +220,7 @@ Future<void> putAPIUpdatePrice(BuildContext context, String productId,
 Future<void> doConfirmOrAcceptOrRejectInvoice(
     BuildContext context, String invoiceId, int type, bool isCustomer,
     {Widget widgetToNavigator,
+    String reason,
     bool isRequest,
     Map<String, dynamic> map}) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -284,8 +286,11 @@ Future<void> doConfirmOrAcceptOrRejectInvoice(
             : print('Chấp nhận');
         break;
       case 3:
-        doDeleteInvoice(context, invoiceId,
-            widgetToNavigator: widgetToNavigator);
+        isRequest == true
+            ? doDeleteInvoiceRequest(context, invoiceId,
+                reason: reason, widgetToNavigator: widgetToNavigator)
+            : doDeleteInvoice(context, invoiceId,
+                widgetToNavigator: widgetToNavigator);
         break;
     }
   }
@@ -308,12 +313,13 @@ Future<void> doCreateRequestAdvance(
     if (type == 1) {
       ImageService imageService = ImageService();
       status = await imageService.postCreateAdvance(
-          prefs.get("access_token"),
-          prefs.get("accountId"),
-          storeId,
-          money,
-          reason,
-          getDateTime(date, dateFormat: 'yyyy-MM-dd HH:mm:ss'), );
+        prefs.get("access_token"),
+        prefs.get("accountId"),
+        storeId,
+        money,
+        reason,
+        getDateTime(date, dateFormat: 'yyyy-MM-dd HH:mm:ss'),
+      );
     } else if (type == 2) {
       //Call API
     }
@@ -358,6 +364,24 @@ Future doDeleteInvoice(BuildContext context, String invoiceId,
   DeleteInvoice deleteInvoice = DeleteInvoice();
   int status =
       await deleteInvoice.deleteInvoice(prefs.get('access_token'), invoiceId);
+  status == 200
+      ? showCustomDialog(context,
+          isSuccess: true,
+          content: "Đã xoá hoá đơn",
+          widgetToNavigator: widgetToNavigator)
+      : showCustomDialog(context,
+          isSuccess: false,
+          content: "Xoá hoá đơn thất bại",
+          doPopNavigate: true);
+}
+
+Future doDeleteInvoiceRequest(BuildContext context, String invoiceId,
+    {Widget widgetToNavigator, String reason}) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  DeleteInvoiceReqeust deleteInvoiceRequest = DeleteInvoiceReqeust();
+  int status = await deleteInvoiceRequest.deleteInvoiceRequest(
+      prefs.get('access_token'), invoiceId,
+      reason: reason);
   status == 200
       ? showCustomDialog(context,
           isSuccess: true,

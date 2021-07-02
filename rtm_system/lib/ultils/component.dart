@@ -4,7 +4,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:rtm_system/ultils/button.dart';
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/getData.dart';
+import 'package:rtm_system/ultils/showDialog.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
+import 'package:rtm_system/view/formReason.dart';
 import 'helpers.dart';
 
 // Hiện tại dùng cho trang "Profile"
@@ -555,8 +557,7 @@ Widget _showBtnProcessInvoice(context, int statusId, String id, bool isCustomer,
             child: RaisedButton(
               color: Colors.redAccent,
               onPressed: () {
-                doConfirmOrAcceptOrRejectInvoice(context, id, 3, isCustomer,
-                    widgetToNavigator: widgetToNavigator);
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => ReasonToDelete(invoiceId: id,isRequest: isRequest != null ? true: false,isCustomer: isCustomer,widgetToNavigator: widgetToNavigator,)));
               },
               child: Text(
                 '${isRequest != null ? "Từ chối" : "Xoá"}',

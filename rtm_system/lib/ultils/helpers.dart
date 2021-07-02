@@ -21,7 +21,7 @@ getStatus({int status}) {
       return "Huỷ bỏ";
       break;
     case 3:
-      return  "Hoàn thành";
+      return "Hoàn thành";
       break;
     case 4:
       return "Đang xử lý";
@@ -30,7 +30,7 @@ getStatus({int status}) {
       return "Ký gửi";
       break;
     case 6:
-      return  "Từ chối";
+      return "Từ chối";
       break;
     case 7:
       return "Hết hạn";
@@ -39,6 +39,30 @@ getStatus({int status}) {
       return "Chấp nhận";
       break;
   }
+}
+
+getStatusUpdatePrice({String date}) {
+  DateTime toDay = DateTime.now();
+  return toDay
+              .difference(
+                  DateTime.parse(getDateTime(date, dateFormat: "yyyy-MM-dd")))
+              .inDays ==
+          0
+      ? "Giá mới"
+      : "Giá cũ";
+}
+
+getColorStatusUpdatePrice({String date}) {
+  Color color = Colors.black54;
+  DateTime toDay = DateTime.now();
+   toDay
+      .difference(
+      DateTime.parse(getDateTime(date, dateFormat: "yyyy-MM-dd")))
+      .inDays ==
+      0
+      ? color = Colors.green
+      : color = Colors.redAccent;
+  return color;
 }
 
 //Tạo màu cho trạng thái tương ứng với số
@@ -52,11 +76,11 @@ getColorStatus({int status}) {
     color = Colors.orangeAccent;
   } else if (status == 5) {
     color = colorHexa("#FF6F3D");
-  } else if(status == 3){
+  } else if (status == 3) {
     color = primaryColor;
   } else if (status == 6) {
     color = Colors.redAccent;
-  } else if(status == 8){
+  } else if (status == 8) {
     color = primaryColor;
   } else if (status == 7) {
     color = Colors.blueGrey;
@@ -66,41 +90,50 @@ getColorStatus({int status}) {
 }
 
 //Chuyển giới tính từ số thành chữ
-getGender(int gender){
-  switch(gender){
-    case 0: return "Nữ"; break;
-    case 1: return "Nam"; break;
+getGender(int gender) {
+  switch (gender) {
+    case 0:
+      return "Nữ";
+      break;
+    case 1:
+      return "Nam";
+      break;
   }
 }
 
 //Kiểm tra trạng thái Vip
-getVip(bool vip){
-  switch(vip){
-    case true: return "VIP"; break;
-    case false: return "Thường"; break;
+getVip(bool vip) {
+  switch (vip) {
+    case true:
+      return "VIP";
+      break;
+    case false:
+      return "Thường";
+      break;
   }
 }
 
 //Tính tổng giá tiền
-getPriceTotal(double price, double degree, double quantity){
-  if(degree != 0){
+getPriceTotal(double price, double degree, double quantity) {
+  if (degree != 0) {
     return price * degree * quantity;
-  }else  return price * quantity;
+  } else
+    return price * quantity;
 }
 
 //Parse dateTime ra chuỗi String
 //nếu ko truyền dateFormat thì mặc định sẽ là 'dd/MM/yyyy hh:mm'
-getDateTime(String date, {String dateFormat}){
-  final fBirthday = new DateFormat(dateFormat == null ? 'dd/MM/yyyy HH:mm' : dateFormat);
+getDateTime(String date, {String dateFormat}) {
+  final fDay =
+      new DateFormat(dateFormat == null ? 'dd/MM/yyyy HH:mm' : dateFormat);
   if (date != null) {
-    return "${fBirthday.format(DateTime.parse(date))}";
+    return "${fDay.format(DateTime.parse(date))}";
   } else
-     return "-----";
+    return "-----";
 }
 
 //Format giá 100.000.000
-getFormatPrice(String price){
+getFormatPrice(String price) {
   final oCcy = new NumberFormat("#,##0", "en_US");
   return oCcy.format(double.parse("${price}"));
 }
-

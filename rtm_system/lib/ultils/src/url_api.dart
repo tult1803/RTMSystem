@@ -18,6 +18,7 @@ String urlConfirmInvoice= "api/rtm/v1/invoice/confirm-invoice";
 String urlInvoiceRequest = "api/rtm/v1/invoice/get-invoice-request";
 String urlStore = "api/rtm/v1/store/get-stores";
 String urlDeleteInvoice = "api/rtm/v1/invoice/delete-invoice";
+String urlDeleteInvoiceRequest = "api/rtm/v1/invoice/delete-invoice-request";
 String urlCreateRequestAdvance = "api/rtm/v1/advance/create-advance-request";
 String urlAdvanceRequest = "api/rtm/v1/advance/get-advance-request";
 String urlConfirmAdvanceRequest = "api/rtm/v1/advance/confirm-advance-request";
