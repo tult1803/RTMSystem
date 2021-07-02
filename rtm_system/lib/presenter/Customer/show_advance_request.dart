@@ -126,7 +126,7 @@ class _showAdvanceRequestPageState extends State<showAdvanceRequestPage> {
                               newPageProgressIndicatorBuilder: (context) =>
                                   newPageProgressIndicatorBuilder(),
                               itemBuilder: (context, item, index) {
-                                return boxForAdvanceOfCustomer(
+                                return boxForAdvance(
                                   context: context,
                                   id: item['id'],
                                   status: item['status_id'],
@@ -135,7 +135,6 @@ class _showAdvanceRequestPageState extends State<showAdvanceRequestPage> {
                                   storeId: item['store_id'],
                                   name: item["customer_name"],
                                   receiveDate: item["receive_date"],
-                                  reason: item["description"],
                                   widget: FormForDetailPage(
                                     tittle: "Chi tiết yêu cầu",
                                     bodyPage: DetailAdvancePage(
@@ -145,6 +144,7 @@ class _showAdvanceRequestPageState extends State<showAdvanceRequestPage> {
                                       isRequest: false,
                                     ),
                                   ),
+                                  isCustomer: true
                                 );
                               }),
                         ),
