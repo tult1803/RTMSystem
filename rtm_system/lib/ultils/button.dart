@@ -10,7 +10,7 @@ import 'package:rtm_system/view/manager/home_manager_page.dart';
 import 'package:rtm_system/view/update_password.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'alertDialog.dart';
+import 'showDialog.dart';
 import 'helpers.dart';
 
 Widget btnConfirmDetailInvoice(BuildContext context,
@@ -52,7 +52,6 @@ Widget btnConfirmDetailInvoice(BuildContext context,
   );
 }
 
-
 Widget btnDateTimeForCustomer(
     BuildContext context, String tittle, Icon icon, Widget widget) {
   var size = MediaQuery.of(context).size;
@@ -87,7 +86,6 @@ Widget btnDateTimeForCustomer(
   );
 }
 
-
 //Dùng cho trang notice để hiện thỉ các notice
 //isCustomer: true is Customer. Used to hide the button  in page of manager.
 Widget containerButton(BuildContext context, String id, String tittle,
@@ -114,11 +112,11 @@ Widget containerButton(BuildContext context, String id, String tittle,
           context,
           MaterialPageRoute(
               builder: (context) => DetailOfNotice(
-                noticeId: id,
-                titleNotice: tittle,
-                contentNotice: content,
-                isCustomer: isCustomer,
-              )),
+                    noticeId: id,
+                    titleNotice: tittle,
+                    contentNotice: content,
+                    isCustomer: isCustomer,
+                  )),
         );
       },
       child: Column(
@@ -193,9 +191,9 @@ Widget buttonProfile(BuildContext context, double left, double right,
               children: [
                 Expanded(
                     child: Text(
-                      tittle,
-                      style: TextStyle(color: Colors.black54),
-                    )),
+                  tittle,
+                  style: TextStyle(color: Colors.black54),
+                )),
                 Icon(
                   Icons.arrow_forward_ios_outlined,
                   color: Colors.black54,
@@ -229,7 +227,7 @@ Widget btnLogout(context) {
           Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(builder: (context) => LoginPage()),
-                  (route) => false);
+              (route) => false);
         },
         style: ButtonStyle(
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -289,16 +287,16 @@ Widget btnUpdateInfo(
           context,
           MaterialPageRoute(
               builder: (context) => UpdateProfilePage(
-                cmnd: cmnd,
-                password: password,
-                fullname: fullname,
-                gender: gender,
-                phone: phone,
-                birthday: birthday,
-                address: address,
-                check: check,
-                account_id: accountId,
-              )),
+                    cmnd: cmnd,
+                    password: password,
+                    fullname: fullname,
+                    gender: gender,
+                    phone: phone,
+                    birthday: birthday,
+                    address: address,
+                    check: check,
+                    account_id: accountId,
+                  )),
         );
       },
       child: AutoSizeText(
@@ -327,10 +325,10 @@ Widget btnUpdatePw(
           context,
           MaterialPageRoute(
               builder: (context) => UpdatePasswordPage(
-                password: password,
-                account_id: accountId,
-                isCustomer: isCustomer,
-              )),
+                    password: password,
+                    account_id: accountId,
+                    isCustomer: isCustomer,
+                  )),
         );
       },
       child: AutoSizeText(
@@ -411,10 +409,52 @@ Widget btnSubmitOrCancel(
         },
         child: Center(
             child: Text(
-              tittleButtonAlertDialog,
-              style: TextStyle(
-                  color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
-            ))),
+          tittleButtonAlertDialog,
+          style: TextStyle(
+              color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
+        ))),
+  );
+}
+
+Widget btnDeleteInvoiceRequestPage(BuildContext context, double width,
+    double height, Color color, String tittleButtonAlertDialog, bool isCustomer,
+    {Widget widgetToNavigator, bool isInvoice, String reason, String id}) {
+  return Container(
+    height: height,
+    width: width,
+    decoration: BoxDecoration(
+      color: color,
+      borderRadius: BorderRadius.circular(5),
+    ),
+    // ignore: deprecated_member_use
+    child: FlatButton(
+        onPressed: () async {
+          print(isInvoice);
+          tittleButtonAlertDialog == "Hủy"
+              ? showAlertDialog(
+                  context,
+                  "Bạn muốn hủy xoá ${isInvoice == true ? "yêu cầu" : "hoá đơn"}",
+                  HomeAdminPage(
+                    index: 1,
+                  ))
+              : showAlertDialog(
+                  context,
+                  "Bạn muốn xoá ${isInvoice == true ? "yêu cầu" : "hoá đơn"}",
+                  HomeAdminPage(
+                    index: 1,
+                  ),
+                  isInvoice: isInvoice,
+                  reason: reason,
+                  isCustomer: isCustomer,
+                  id: id,
+                );
+        },
+        child: Center(
+            child: Text(
+          tittleButtonAlertDialog,
+          style: TextStyle(
+              color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
+        ))),
   );
 }
 
@@ -423,58 +463,58 @@ Widget btnAcceptOrReject(BuildContext context, double width, Color color,
     String tittleButtonAlertDialog, bool action, int indexOfBottomBar) {
   return Container(
       child: SizedBox(
-        width: width,
-        // ignore: deprecated_member_use
-        child: RaisedButton(
-          color: color,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          onPressed: () async {
-            if (action) {
-              int status = 200;
-              // await postAPINotice(mainTittle, content);
-              // gọi api trả lại gì đó khi chấp nhận hoặc từ chối
-              if (status == 200) {
-                //chở lại trang all invoice
-                if (tittleButtonAlertDialog == 'Từ chối') {
-                  showStatusAlertDialog(
-                      context,
-                      "Đã từ chối thông tin.",
-                      HomeCustomerPage(
-                        index: indexOfBottomBar,
-                      ),
-                      true);
-                } else {
-                  showStatusAlertDialog(
-                      context,
-                      "Đã xác nhận thông tin.",
-                      HomeCustomerPage(
-                        index: indexOfBottomBar,
-                      ),
-                      true);
-                }
-              } else
-                showStatusAlertDialog(context, "Xác nhận thất bại", null, false);
-            } else {
-              //chở lại trang all invoice
-              showAlertDialog(
+    width: width,
+    // ignore: deprecated_member_use
+    child: RaisedButton(
+      color: color,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      onPressed: () async {
+        if (action) {
+          int status = 200;
+          // await postAPINotice(mainTittle, content);
+          // gọi api trả lại gì đó khi chấp nhận hoặc từ chối
+          if (status == 200) {
+            //chở lại trang all invoice
+            if (tittleButtonAlertDialog == 'Từ chối') {
+              showStatusAlertDialog(
                   context,
-                  "Từ chối xác nhận thông tin?",
+                  "Đã từ chối thông tin.",
                   HomeCustomerPage(
                     index: indexOfBottomBar,
-                  ));
+                  ),
+                  true);
+            } else {
+              showStatusAlertDialog(
+                  context,
+                  "Đã xác nhận thông tin.",
+                  HomeCustomerPage(
+                    index: indexOfBottomBar,
+                  ),
+                  true);
             }
-          },
-          child: Center(
-            child: Text(
-              tittleButtonAlertDialog,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-              ),
-            ),
+          } else
+            showStatusAlertDialog(context, "Xác nhận thất bại", null, false);
+        } else {
+          //chở lại trang all invoice
+          showAlertDialog(
+              context,
+              "Từ chối xác nhận thông tin?",
+              HomeCustomerPage(
+                index: indexOfBottomBar,
+              ));
+        }
+      },
+      child: Center(
+        child: Text(
+          tittleButtonAlertDialog,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 16,
           ),
         ),
-      ));
+      ),
+    ),
+  ));
 }

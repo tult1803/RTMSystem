@@ -2,7 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:rtm_system/ultils/alertDialog.dart';
+import 'package:rtm_system/ultils/showDialog.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
 import 'package:rtm_system/view/manager/product/updatePriceProduct_manager.dart';
 import 'package:rtm_system/view/manager/profile/allCustomer_manager.dart';

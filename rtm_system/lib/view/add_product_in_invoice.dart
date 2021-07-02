@@ -7,7 +7,7 @@ import 'package:rtm_system/model/getAPI_product.dart';
 import 'package:rtm_system/model/model_product.dart';
 import 'package:rtm_system/model/model_store.dart';
 import 'package:rtm_system/model/profile_customer/model_profile_customer.dart';
-import 'package:rtm_system/ultils/alertDialog.dart';
+import 'package:rtm_system/ultils/showDialog.dart';
 import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/getData.dart';
 import 'package:rtm_system/ultils/helpers.dart';

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:rtm_system/presenter/Manager/product/showProduct_manager.dart';
-import 'package:rtm_system/ultils/alertDialog.dart';
+import 'package:rtm_system/ultils/showDialog.dart';
 import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/getData.dart';
 import 'package:rtm_system/ultils/helpers.dart';

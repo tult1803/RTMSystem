@@ -6,14 +6,20 @@ import 'package:rtm_system/model/deleteAPI_deactivateNotice.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 
 import 'component.dart';
+import 'getData.dart';
 
 //show khi nhấn các nút "Hủy" hoặc "Tạo"
 //Nếu muốn xóa thông báo thì truyền trạng thái vào isDeactivateNotice
 showAlertDialog(BuildContext context, String tittle, Widget widget,
     {bool isDeactivate,
+    bool isInvoice,
+    bool isCustomer,
     String token,
+    String reason,
     String deactivateId,
-    bool isDeactivateNotice}) {
+    bool isDeactivateNotice,
+    String id,
+    }) {
   // Tạo button trong AlertDialog
   Widget btnAlert(String tittleA, Color color, bool checkCreate) {
     return FlatButton(
@@ -44,6 +50,11 @@ showAlertDialog(BuildContext context, String tittle, Widget widget,
               showStatusAlertDialog(
                   context, "Có lỗi xảy ra. Xin thử lại", widget, false);
             }
+          } else if (isInvoice != null) {
+           doConfirmOrAcceptOrRejectInvoice(context, id, 3, isCustomer,
+                    widgetToNavigator: widget,
+                    isRequest: isInvoice,
+                    reason: reason);
           } else {
             Navigator.pushAndRemoveUntil(
                 context,
@@ -181,7 +192,6 @@ showAlertDialogAPI(BuildContext context, String tittle, Widget widget, status) {
       return alert;
     },
   );
-
 }
 
 //Đang thử nghiệm
@@ -267,4 +277,3 @@ Future<Dialog> showCustomDialog(BuildContext context,
             ));
       });
 }
-
