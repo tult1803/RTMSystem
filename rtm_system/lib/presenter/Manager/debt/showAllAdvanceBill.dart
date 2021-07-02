@@ -5,6 +5,7 @@ import 'package:rtm_system/presenter/infinite_scroll_pagination/common/character
 import 'package:rtm_system/ultils/commonWidget.dart';
 import 'package:rtm_system/ultils/helpers.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
+import 'package:rtm_system/view/manager/home_manager_page.dart';
 
 class showAllBill extends StatefulWidget {
   final int index;
@@ -153,7 +154,7 @@ class _showAllBillState extends State<showAllBill>
         controller: _tabController,
         children: <Widget>[
           new showAdvancceBillManager(0, searchItem: itemToSearch),
-          new showAdvancceBillManager(4, fromDate: getFromDate, toDate: getToDate, searchItem: itemToSearch),
+          new showAdvancceBillManager(4, fromDate: getFromDate, toDate: getToDate, searchItem: itemToSearch, widgetToNavigator: HomeAdminPage(index: 2),),
           new showAdvancceBillManager(8, fromDate: getFromDate, toDate: getToDate, searchItem: itemToSearch),
           new showAdvancceBillManager(6, fromDate: getFromDate, toDate: getToDate, searchItem: itemToSearch),
         ],

@@ -25,3 +25,4 @@ String urlConfirmAdvanceRequest = "api/rtm/v1/advance/confirm-advance-request";
 String urlAdvanceDetail = "api/rtm/v1/advance/get-advance-detail";
 String urlAdvanceHistory = "api/rtm/v1/advance/get-advance-history";
 String urlReturnAdvance = "api/rtm/v1/advance/return-advance";
+String urlProcessAdvanceBill = "api/rtm/v1/advance/process-advance-request";

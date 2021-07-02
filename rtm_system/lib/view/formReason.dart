@@ -8,9 +8,10 @@ class ReasonToDelete extends StatefulWidget {
   String invoiceId;
   bool isCustomer, isRequest;
   Widget widgetToNavigator;
-
+  bool isAdvanceBill;
   ReasonToDelete(
       {this.invoiceId,
+        this.isAdvanceBill,
       this.isCustomer,
       this.isRequest,
       this.widgetToNavigator});
@@ -29,53 +30,59 @@ class _ReasonToDeleteState extends State<ReasonToDelete> {
           leading: leadingAppbar(context, colorIcon: Colors.white),
           centerTitle: true,
           title: Text(
-            "Hủy ${widget.isRequest == true ? "yêu cầu" : "hoá đơn"}",
+            widget.isAdvanceBill != null
+                ? "Từ chối ứng tiền"
+            :"Hủy ${widget.isRequest == true ? "yêu cầu" : "hoá đơn"}",
             style: GoogleFonts.roboto(color: Colors.white),
           ),
         ),
-        body: Container(
-            height: 350,
-            margin: EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(0),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black54,
-                  blurRadius: 3,
-                  offset: Offset(1, 1), // Shadow position
-                ),
-              ],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 10,
-                ),
-                _txt("Lý do hủy:"),
-                SizedBox(
-                  height: 10,
-                ),
-                _txtfield("Nhập lý do (Không bắt buộc)", 10, 1),
-                SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    btnDeleteInvoiceRequestPage(
-                        context, 140, 40, Colors.redAccent, "Hủy", false, isInvoice: widget.isRequest),
-                    btnDeleteInvoiceRequestPage(
-                        context, 140, 40, welcome_color, "Xác nhận", false,
-                        isInvoice: widget.isRequest,
-                      reason: reason,
-                      id: widget.invoiceId,
-                    )
-                  ],
-                ),
-              ],
-            )));
+        body: SingleChildScrollView(
+          physics: NeverScrollableScrollPhysics(),
+          child: Container(
+              height: 350,
+              margin: EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(0),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black54,
+                    blurRadius: 3,
+                    offset: Offset(1, 1), // Shadow position
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 10,
+                  ),
+                  _txt("Lý do hủy:"),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  _txtfield("Nhập lý do (Không bắt buộc)", 10, 1),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      btnDeleteRequestPage(
+                          context, 140, 40, Colors.redAccent, "Hủy", false, isInvoice: widget.isRequest, isAdvanceBill: widget.isAdvanceBill,),
+                      btnDeleteRequestPage(
+                          context, 140, 40, welcome_color, "Xác nhận", false,
+                          isInvoice: widget.isRequest,
+                        isAdvanceBill: widget.isAdvanceBill,
+                        reason: reason,
+                        id: widget.invoiceId,
+                      )
+                    ],
+                  ),
+                ],
+              )),
+        ));
   }
 
   Widget _txt(String tittle) {

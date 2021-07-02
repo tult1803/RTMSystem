@@ -18,6 +18,7 @@ showAlertDialog(BuildContext context, String tittle, Widget widget,
     String reason,
     String deactivateId,
     bool isDeactivateNotice,
+      bool isAdvanceBill,
     String id,
     }) {
   // Tạo button trong AlertDialog
@@ -55,7 +56,9 @@ showAlertDialog(BuildContext context, String tittle, Widget widget,
                     widgetToNavigator: widget,
                     isRequest: isInvoice,
                     reason: reason);
-          } else {
+          } else if (isAdvanceBill != null) {
+            doProcessAdvanceBill(context, id, 6,widgetToNavigator: widget, reason: reason);
+          }else {
             Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(builder: (context) => widget),
