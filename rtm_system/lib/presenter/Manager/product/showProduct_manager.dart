@@ -111,7 +111,7 @@ class _showAllProductState extends State<showAllProduct> {
                     itemPriceUpdatePrice.add("${item["update_price"]}");
                     itemIdUpdatePrice.add(item["id"]);}
                   _savedProductPrice(item["name"], "${item["update_price"]}");
-                  return boxForProductNew(
+                  return boxForProduct(
                       context: context,
                       id: item["id"],
                       productName: item["name"],
