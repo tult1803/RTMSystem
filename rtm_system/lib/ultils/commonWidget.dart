@@ -837,13 +837,13 @@ Widget boxForProduct(
                         containerTextInvoice(
                           alignment: Alignment.centerRight,
                           paddingLeftOfText: 10,
-                          paddingRightOfText: 10,
+                          paddingRightOfText: 5,
                           tittle: "Ngày cập nhật:",
                         ),
                         containerTextInvoice(
                           alignment: Alignment.centerRight,
                           paddingLeftOfText: 10,
-                          paddingRightOfText: 10,
+                          paddingRightOfText: 5,
                           tittle:
                               "${getDateTime(date, dateFormat: "dd-MM-yyyy")}",
                           fontWeight: FontWeight.w600,
@@ -1071,6 +1071,7 @@ Widget boxForAdvanceHistory({
                 paddingRightOfText: 10,
                 tittle: "Mã: $id",
                 fontWeight: FontWeight.w700,
+                color: Colors.deepOrangeAccent,
               ),
               Flexible(
                 child: containerTextInvoice(
@@ -1410,3 +1411,4 @@ Widget boxForInvoiceRequest(
     ),
   );
 }
+
