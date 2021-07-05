@@ -201,8 +201,7 @@ class _showProfileState extends State<showProfile> {
             style: ElevatedButton.styleFrom(
               primary: primaryColor,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(15)),
-                side: BorderSide(color: Color(0xFFcccccc), width: 1),
+                borderRadius: BorderRadius.all(Radius.circular(10)),
               ),
             ),
           ),

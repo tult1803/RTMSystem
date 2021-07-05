@@ -31,6 +31,7 @@ class _formUpdatePasswordPageState extends State<formUpdatePasswordPage> {
   }
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Container(
       margin: EdgeInsets.only(top: 12),
       child: Column(
@@ -103,10 +104,10 @@ class _formUpdatePasswordPageState extends State<formUpdatePasswordPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              btnSubmitOrCancel(context, 120, 40, Colors.redAccent, "Hủy", "",
+              btnSubmitOrCancel(context, size.width * 0.3, size.height * 0.05, Colors.redAccent, "Hủy", "",
                   "", null, false, indexOfBottomBar, widget.isCustomer, 'Bạn muốn huỷ thay đổi mật khẩu?'),
               SizedBox(width: 20),
-              btnSubmitValidate(context, 120, 40, Color(0xFF0BB791), "Lưu"),
+              btnSubmitValidate(context, size.width * 0.3, size.height * 0.05, Color(0xFF0BB791), "Lưu"),
             ],
           ),
         ],
@@ -184,7 +185,7 @@ class _formUpdatePasswordPageState extends State<formUpdatePasswordPage> {
         width: width,
         decoration: BoxDecoration(
           color: color,
-          borderRadius: BorderRadius.circular(5),
+          borderRadius: BorderRadius.circular(10),
         ),
         child: TextButton(
           onPressed: () {
@@ -202,7 +203,7 @@ class _formUpdatePasswordPageState extends State<formUpdatePasswordPage> {
               tittleButtonAlertDialog,
               style: TextStyle(
                   color: Colors.white,
-                  fontSize: 20,
+                  fontSize: 16,
                   fontWeight: FontWeight.w500),
             ),
           ),

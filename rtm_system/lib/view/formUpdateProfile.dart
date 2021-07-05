@@ -463,7 +463,7 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
         width: width,
         decoration: BoxDecoration(
           color: color,
-          borderRadius: BorderRadius.circular(5),
+          borderRadius: BorderRadius.circular(10),
         ),
         child: TextButton(
           onPressed: () {

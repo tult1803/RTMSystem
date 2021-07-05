@@ -221,7 +221,7 @@ class _updatePriceProductState extends State<updatePriceProduct> {
         width: width,
         decoration: BoxDecoration(
           color: color,
-          borderRadius: BorderRadius.circular(5),
+          borderRadius: BorderRadius.circular(10),
         ),
         child: TextButton(
           onPressed: () {

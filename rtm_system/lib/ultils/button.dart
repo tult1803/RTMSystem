@@ -312,7 +312,7 @@ Widget btnSubmitOrCancel(
     width: width,
     decoration: BoxDecoration(
       color: color,
-      borderRadius: BorderRadius.circular(5),
+      borderRadius: BorderRadius.circular(10),
     ),
     // ignore: deprecated_member_use
     child: FlatButton(
@@ -356,7 +356,7 @@ Widget btnSubmitOrCancel(
             child: Text(
           tittleButtonAlertDialog,
           style: TextStyle(
-              color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
+              color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),
         ))),
   );
 }

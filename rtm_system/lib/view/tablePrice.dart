@@ -86,7 +86,7 @@ class _showTablePriceState extends State<showTablePrice> {
 
   Widget headerTable() {
     return Container(
-      margin: EdgeInsets.only(left: 20, right: 20, top: 10),
+      margin: EdgeInsets.only(left: 10, right: 10, top: 10),
       width: MediaQuery.of(context).size.width,
       child: Table(
         // border: TableBorder.all(color: Colors.black54),
@@ -111,7 +111,7 @@ class _showTablePriceState extends State<showTablePrice> {
 
   Widget dataTable() {
     return Container(
-      margin: EdgeInsets.only(left: 20, right: 20),
+      margin: EdgeInsets.only(left: 10, right: 10),
       width: MediaQuery.of(context).size.width,
       height: 400,
       child: CustomScrollView(
