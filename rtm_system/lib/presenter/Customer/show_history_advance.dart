@@ -116,20 +116,21 @@ class _showHistoryAdvancePageState extends State<showHistoryAdvancePage> {
                                   newPageErrorIndicatorBuilder: (context) =>
                                       firstPageErrorIndicatorBuilder(context,
                                           tittle: showMessage("", MSG008)),
-                                  firstPageProgressIndicatorBuilder:
-                                      (context) =>
+                                  firstPageProgressIndicatorBuilder: (context) =>
                                           firstPageProgressIndicatorBuilder(),
+                                  noItemsFoundIndicatorBuilder: (context) =>
+                                      noItemsFoundIndicatorBuilder(),
                                   newPageProgressIndicatorBuilder: (context) =>
                                       newPageProgressIndicatorBuilder(),
                                   itemBuilder: (context, item, index) {
-                                      return boxForAdvanceHistory(
+                                    return boxForAdvanceHistory(
                                       context: context,
                                       id: item.id,
                                       amount: item.amount,
                                       customerId: item.customerId,
                                       returnCash: item.returnCash,
                                       isAdvance: item.advance,
-                                      dateTime:  item.datetime,
+                                      dateTime: item.datetime,
                                       receiveDate: item.receiveDate,
                                       widget: FormForDetailPage(
                                         tittle: "Chi tiết yêu cầu",
@@ -152,6 +153,22 @@ class _showHistoryAdvancePageState extends State<showHistoryAdvancePage> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget noItemsFoundIndicatorBuilder() {
+    return Column(
+      children: [
+        firstPageErrorIndicatorBuilder(context,
+            tittle: showMessage("", MSG032)),
+        GestureDetector(
+          onTap: () => _pagingController.refresh(),
+          child: Text(
+            showMessage('', MSG027),
+            style: TextStyle(color: welcome_color, fontSize: 18),
+          ),
+        ),
+      ],
     );
   }
 }

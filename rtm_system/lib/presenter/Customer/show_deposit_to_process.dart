@@ -44,7 +44,6 @@ class showAllInvoicePageState extends State<showDepositToProcess> {
         "",
       );
       invoiceList = invoice.invoices;
-
       invoiceList.forEach((element) {
         double amount = getPriceTotal(
                 double.parse(element['price'].toString()),
@@ -69,7 +68,7 @@ class showAllInvoicePageState extends State<showDepositToProcess> {
     return FutureBuilder(
         future: loadInvoiceDeposit(),
         builder: (context, snapshot) {
-          if (snapshot.hasData){
+          if (snapshot.hasData) {
             return BlocBuilder<SelectDatesBloc, DateTimeRange>(
               builder: (context, state) {
                 List<Widget> children = [];
@@ -92,37 +91,42 @@ class showAllInvoicePageState extends State<showDepositToProcess> {
                     invoiceIdList.add(element['id']);
                     BlocProvider.of<ListInvoiceIdBloc>(context)
                         .emit(invoiceIdList);
-                    children.add(boxForInvoice(
-                        context: context,
-                        status: element['status_id'],
-                        createDate: "${element['create_time']}",
-                        price: element['price'],
-                        id: element['id'],
-                        name: element["customer_name"],
-                        product: element["product_name"],
-                        widget: FormForDetailPage(
-                          tittle: "Chi tiết hóa đơn",
-                          bodyPage: DetailInvoice(
-                            isCustomer: true,
-                            map: element,
+                    children.add(
+                      boxForInvoice(
+                          context: context,
+                          status: element['status_id'],
+                          createDate: "${element['create_time']}",
+                          price: element['price'],
+                          quantity: element['quantity'],
+                          degree: element['degree'],
+                          id: element['id'],
+                          activeDate: element["active_date"],
+                          name: element["customer_name"],
+                          product: element["product_name"],
+                          widget: FormForDetailPage(
+                            tittle: "Chi tiết hóa đơn",
+                            bodyPage: DetailInvoice(
+                              isCustomer: true,
+                              map: element,
+                            ),
                           ),
-                        ),
-                        isRequest: false,
-                        isCustomer: true));
+                          isRequest: false,
+                          isCustomer: true),
+                    );
                   }
                 });
                 return Column(
                   children: children,
                 );
               },
-            );}
-            else if(snapshot.hasError){
-              return Center(
-                child: AutoSizeText(showMessage(MSG030, MSG027)),
-              );
-            }
-          else{
-            return CircularProgressIndicator();}
+            );
+          } else if (snapshot.hasError) {
+            return Center(
+              child: AutoSizeText(showMessage(MSG030, MSG027)),
+            );
+          } else {
+            return CircularProgressIndicator();
+          }
         });
   }
 }

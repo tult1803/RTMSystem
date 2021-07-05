@@ -18,7 +18,8 @@ class showAllInvoiceRequestPage extends StatefulWidget {
   showAllInvoiceRequestPage({this.fromDate, this.toDate});
 
   @override
-  showAllInvoiceRequestPageState createState() => showAllInvoiceRequestPageState();
+  showAllInvoiceRequestPageState createState() =>
+      showAllInvoiceRequestPageState();
 }
 
 class showAllInvoiceRequestPageState extends State<showAllInvoiceRequestPage> {
@@ -61,7 +62,7 @@ class showAllInvoiceRequestPageState extends State<showAllInvoiceRequestPage> {
   @override
   void didUpdateWidget(covariant showAllInvoiceRequestPage oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if(oldWidget.toDate != this.widget.toDate){
+    if (oldWidget.toDate != this.widget.toDate) {
       _pagingController.refresh();
     }
   }
@@ -106,13 +107,14 @@ class showAllInvoiceRequestPageState extends State<showAllInvoiceRequestPage> {
                                 return Column(
                                   children: [
                                     firstPageErrorIndicatorBuilder(context,
-                                        tittle: showMessage("",MSG008)),
+                                        tittle: showMessage("", MSG008)),
                                     GestureDetector(
                                       onTap: () => _pagingController.refresh(),
                                       child: Text(
                                         showMessage('', MSG027),
                                         style: TextStyle(
-                                            color: primaryLight3Color, fontSize: 18),
+                                            color: primaryLight3Color,
+                                            fontSize: 18),
                                       ),
                                     ),
                                   ],
@@ -120,9 +122,11 @@ class showAllInvoiceRequestPageState extends State<showAllInvoiceRequestPage> {
                               },
                               newPageErrorIndicatorBuilder: (context) =>
                                   firstPageErrorIndicatorBuilder(context,
-                                      tittle: showMessage("",MSG008)),
+                                      tittle: showMessage("", MSG008)),
                               firstPageProgressIndicatorBuilder: (context) =>
                                   firstPageProgressIndicatorBuilder(),
+                              noItemsFoundIndicatorBuilder: (context) =>
+                                  noItemsFoundIndicatorBuilder(),
                               newPageProgressIndicatorBuilder: (context) =>
                                   newPageProgressIndicatorBuilder(),
                               itemBuilder: (context, item, index) {
@@ -134,7 +138,7 @@ class showAllInvoiceRequestPageState extends State<showAllInvoiceRequestPage> {
                                     id: item['id'].toString(),
                                     name: item["customer_name"],
                                     product: item["product_name"],
-                                    sellDate: item["sell_date"] ,
+                                    sellDate: item["sell_date"],
                                     widget: FormForDetailPage(
                                       tittle: "Chi tiết yêu cầu",
                                       bodyPage: DetailInvoiceRequest(
@@ -147,7 +151,8 @@ class showAllInvoiceRequestPageState extends State<showAllInvoiceRequestPage> {
                         ),
                       ],
                     ),
-                  ),)
+                  ),
+                )
               ],
             ),
           ),
@@ -155,5 +160,20 @@ class showAllInvoiceRequestPageState extends State<showAllInvoiceRequestPage> {
       ),
     );
   }
-}
 
+  Widget noItemsFoundIndicatorBuilder() {
+    return Column(
+      children: [
+        firstPageErrorIndicatorBuilder(context,
+            tittle: showMessage("", MSG032)),
+        GestureDetector(
+          onTap: () => _pagingController.refresh(),
+          child: Text(
+            showMessage('', MSG027),
+            style: TextStyle(color: welcome_color, fontSize: 18),
+          ),
+        ),
+      ],
+    );
+  }
+}
