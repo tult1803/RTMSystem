@@ -2,6 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 
+
+//Chuyển trạng thái từ số thành chữ
+getLevel({int level}) {
+  switch (level) {
+    case 0:
+      return "Vãng lai";
+      break;
+    case 1:
+      return "Thường";
+      break;
+    case 2:
+      return "Vip";
+      break;
+  }
+}
+
 //Chuyển trạng thái từ số thành chữ
 getStatus({int status}) {
   // 1,Active
@@ -97,18 +113,6 @@ getGender(int gender) {
       break;
     case 1:
       return "Nam";
-      break;
-  }
-}
-
-//Kiểm tra trạng thái Vip
-getVip(bool vip) {
-  switch (vip) {
-    case true:
-      return "VIP";
-      break;
-    case false:
-      return "Thường";
       break;
   }
 }

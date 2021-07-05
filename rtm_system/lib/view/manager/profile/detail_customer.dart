@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rtm_system/ultils/commonWidget.dart';
+import 'package:rtm_system/ultils/common_widget.dart';
 import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/helpers.dart';
 
@@ -15,7 +15,6 @@ class DetailCustomer extends StatefulWidget {
 class _DetailCustomerState extends State<DetailCustomer> {
   int id, advance, statusId;
   String cmnd, fullName, phone, birthday, address, gender, status, accountId;
-  String vip;
 
   Future _getData(){
     setState(() {
@@ -55,7 +54,7 @@ class _DetailCustomerState extends State<DetailCustomer> {
               gender: getGender(this.widget.map["gender"]),
               phone: phone,
               status: status,
-              vip: getVip(this.widget.map["vip"]),
+              level: "${getLevel(level: widget.map["level"])}",
               statusId: statusId,
             ),
           )),

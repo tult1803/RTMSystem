@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rtm_system/ultils/commonWidget.dart';
+import 'package:rtm_system/ultils/common_widget.dart';
 import 'package:rtm_system/ultils/component.dart';
 class DetailInvoice extends StatefulWidget {
   final Map<String, dynamic> map;

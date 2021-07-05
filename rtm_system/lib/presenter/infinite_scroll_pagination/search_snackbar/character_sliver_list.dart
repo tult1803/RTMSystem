@@ -6,7 +6,7 @@
 // import 'package:rtm_system/model/model_invoice.dart';
 // import 'package:rtm_system/model/notice/model_all_notice.dart';
 // import 'package:rtm_system/presenter/infinite_scroll_pagination/common/character_search_input_sliver.dart';
-// import 'package:rtm_system/ultils/commonWidget.dart';
+// import 'package:rtm_system/ultils/common_widget.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 //
 // class CharacterSliverList extends StatefulWidget {

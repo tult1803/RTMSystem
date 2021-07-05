@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:rtm_system/ultils/component.dart';
-import 'package:rtm_system/view/formUpdateProfile.dart';
+import 'package:rtm_system/view/form_update_profile.dart';
 
 class UpdateProfilePage extends StatefulWidget {
   const UpdateProfilePage({

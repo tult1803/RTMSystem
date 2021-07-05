@@ -1,7 +1,7 @@
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 
-import '../showDialog.dart';
+import '../dialog.dart';
 
 Future checkConnectivity(BuildContext context, result) {
   switch

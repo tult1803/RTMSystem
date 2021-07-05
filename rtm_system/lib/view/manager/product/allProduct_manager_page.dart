@@ -2,11 +2,11 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:rtm_system/presenter/Manager/product/showProduct_manager.dart';
+import 'package:rtm_system/presenter/Manager/product/show_product_manager.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
-import 'package:rtm_system/view/manager/process_Invoice_AdvanceBill/processInAd.dart';
-import 'package:rtm_system/view/manager/product/updatePriceProduct_manager.dart';
+import 'package:rtm_system/view/manager/process_Invoice_AdvanceBill/process_invoice_advance.dart';
+import 'package:rtm_system/view/manager/product/update_price_product_manager.dart';
 import 'package:rtm_system/view/manager/profile/allCustomer_manager.dart';
 
 import '../../add_product_in_invoice.dart';
