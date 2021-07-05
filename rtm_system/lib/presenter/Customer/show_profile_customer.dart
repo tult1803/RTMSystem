@@ -96,7 +96,8 @@ class _showProfileState extends State<showProfile> {
               ListTile(
                 leading: Icon(Icons.perm_media_outlined),
                 title: Text('Xác thực ảnh CMND'),
-                onTap: () {},
+                onTap: () {
+                },
               )
             ],
           );

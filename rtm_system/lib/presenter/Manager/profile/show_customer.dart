@@ -3,10 +3,10 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:rtm_system/model/getAPI_customer.dart';
 import 'package:rtm_system/model/model_AllCustomer.dart';
 import 'package:rtm_system/presenter/infinite_scroll_pagination/common/character_search_input_sliver.dart';
-import 'package:rtm_system/ultils/commonWidget.dart';
+import 'package:rtm_system/ultils/common_widget.dart';
 import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
-import 'package:rtm_system/view/manager/formForDetail_page.dart';
+import 'package:rtm_system/view/manager/form_detail_page.dart';
 import 'package:rtm_system/view/manager/profile/detail_customer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

@@ -3,7 +3,7 @@ import 'package:rtm_system/ultils/button.dart';
 import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/view/customer/contact/ContactPage.dart';
 import 'package:rtm_system/view/manager/profile/allCustomer_manager.dart';
-import 'package:rtm_system/view/manager/profile/updateProfile.dart';
+import 'package:rtm_system/view/manager/profile/update_profile.dart';
 import 'package:rtm_system/view/update_password.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

@@ -4,7 +4,7 @@ import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../formUpdateProfile.dart';
+import '../../form_update_profile.dart';
 
 class updateProfile extends StatefulWidget {
 

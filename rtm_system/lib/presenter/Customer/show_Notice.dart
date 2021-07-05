@@ -6,7 +6,7 @@ import 'package:rtm_system/model/notice/model_all_notice.dart';
 import 'package:rtm_system/ultils/button.dart';
 import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
-import 'package:rtm_system/ultils/src/messageList.dart';
+import 'package:rtm_system/ultils/src/message_list.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class showNotice extends StatefulWidget {

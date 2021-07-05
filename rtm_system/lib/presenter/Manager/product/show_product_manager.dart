@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:rtm_system/model/getAPI_product.dart';
 import 'package:rtm_system/model/model_product.dart';
-import 'package:rtm_system/ultils/commonWidget.dart';
+import 'package:rtm_system/ultils/common_widget.dart';
 import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
-import 'package:rtm_system/view/manager/formForDetail_page.dart';
-import 'package:rtm_system/view/manager/product/detailProduct.dart';
+import 'package:rtm_system/view/manager/form_detail_page.dart';
+import 'package:rtm_system/view/manager/product/detail_product.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class showAllProduct extends StatefulWidget {

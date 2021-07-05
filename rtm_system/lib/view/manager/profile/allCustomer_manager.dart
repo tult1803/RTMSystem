@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:rtm_system/presenter/Manager/profile/showCustomer.dart';
-import 'package:rtm_system/ultils/commonWidget.dart';
+import 'package:rtm_system/presenter/Manager/profile/show_customer.dart';
+import 'package:rtm_system/ultils/common_widget.dart';
 import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 
 import '../home_manager_page.dart';
-import 'createNewCustomer.dart';
+import 'create_new_customer.dart';
 
 class AllCustomer extends StatefulWidget {
 final Widget widgetToNavigator;

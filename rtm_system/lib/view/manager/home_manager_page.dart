@@ -5,12 +5,12 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:rtm_system/ultils/src/checkConnectivity.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
-import 'package:rtm_system/view/manager/debt/allDebt_manager.dart';
-import 'package:rtm_system/view/manager/notice/allNotice_manager.dart';
+import 'package:rtm_system/view/manager/debt/all_debt_manager.dart';
+import 'package:rtm_system/view/manager/notice/all_notice_manager.dart';
 import 'package:rtm_system/view/manager/product/allProduct_manager_page.dart';
 import 'package:rtm_system/view/manager/profile/profile_manager.dart';
 
-import 'invoice/allInvoice_manager.dart';
+import 'invoice/all_invoice_manager.dart';
 
 
 class HomeAdminPage extends StatefulWidget {

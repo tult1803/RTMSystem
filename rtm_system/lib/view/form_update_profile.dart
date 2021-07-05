@@ -1,12 +1,12 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:rtm_system/ultils/showDialog.dart';
+import 'package:rtm_system/ultils/dialog.dart';
 import 'package:rtm_system/ultils/button.dart';
 import 'package:rtm_system/ultils/helpers.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/ultils/src/regExp.dart';
-import 'manager/profile/confirmCreateCustomer.dart';
+import 'manager/profile/confirm_create_customer.dart';
 
 //check: true là cho customer còn false là cho manager
 

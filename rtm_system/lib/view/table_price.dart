@@ -55,8 +55,10 @@ class _showTablePriceState extends State<showTablePrice> {
   void didUpdateWidget(covariant showTablePrice oldWidget) {
     // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
-    _pagingController.refresh();
-    dataListProduct.clear();
+    if(oldWidget.idProduct != widget.idProduct){
+      _pagingController.refresh();
+      dataListProduct.clear();
+    }
   }
 
   @override
@@ -93,13 +95,15 @@ class _showTablePriceState extends State<showTablePrice> {
         defaultVerticalAlignment: TableCellVerticalAlignment.middle,
         columnWidths: {
           0: FractionColumnWidth(0.25),
-          1: FractionColumnWidth(0.2),
+          1: FractionColumnWidth(0.15),
           2: FractionColumnWidth(0.2),
+          3: FractionColumnWidth(0.2),
           3: FractionColumnWidth(0.2)
         },
         children: [
           TableRow(decoration: BoxDecoration(color: welcome_color), children: [
             tableRow("Ngày", colorText: Colors.white, isAlignmentRight: false),
+            tableRow("Giờ", colorText: Colors.white),
             tableRow("Thay đổi", colorText: Colors.white),
             tableRow("%", colorText: Colors.white),
             tableRow("Giá", colorText: Colors.white),
@@ -113,17 +117,20 @@ class _showTablePriceState extends State<showTablePrice> {
     return Container(
       margin: EdgeInsets.only(left: 10, right: 10),
       width: MediaQuery.of(context).size.width,
-      height: 400,
+      // height: 365,
+      height: MediaQuery.of(context).size.height * 0.4,
       child: CustomScrollView(
-        physics: NeverScrollableScrollPhysics(),
+        // physics: NeverScrollableScrollPhysics(),
         slivers: <Widget>[
           PagedSliverList(
               pagingController: _pagingController,
               builderDelegate: PagedChildBuilderDelegate(
+                noItemsFoundIndicatorBuilder: (context) {
+                  return Container();
+                },
                   itemBuilder: (context, item, index) {
                 return tableCell(
-                    day:
-                        "${getDateTime("${item["updateDateTime"]}", dateFormat: "dd-MM-yyyy")}",
+                    day: "${item["updateDateTime"]}",
                     newPrice: item["update_price"],
                     oldPrice: _pagingController.value.itemList.elementAt(
                         dataListProduct.length - 1 == index
@@ -142,7 +149,7 @@ class _showTablePriceState extends State<showTablePrice> {
   }
 }
 
-Widget tableCell({String day, int oldPrice, int newPrice}) {
+Widget tableCell({String day,int oldPrice, int newPrice}) {
   int changePrice = newPrice - oldPrice;
   var percentPrice =
       (double.tryParse("$changePrice") / double.tryParse("$oldPrice")) * 100;
@@ -152,13 +159,15 @@ Widget tableCell({String day, int oldPrice, int newPrice}) {
     ),
     columnWidths: {
       0: FractionColumnWidth(0.25),
-      1: FractionColumnWidth(0.2),
+      1: FractionColumnWidth(0.15),
       2: FractionColumnWidth(0.2),
-      3: FractionColumnWidth(0.2)
+      3: FractionColumnWidth(0.2),
+      4: FractionColumnWidth(0.2),
     },
     children: [
       TableRow(children: [
-        tableRow("$day"),
+        tableRow("${getDateTime("$day", dateFormat: "dd-MM-yyyy")}"),
+        tableRow("${getDateTime("$day", dateFormat: "HH:mm")}"),
         tableRow("${getFormatPrice("$changePrice")}",
             colorText: changePrice < 0
                 ? Colors.redAccent

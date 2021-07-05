@@ -3,13 +3,13 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:rtm_system/presenter/Manager/product/showProduct_manager.dart';
-import 'package:rtm_system/ultils/showDialog.dart';
+import 'package:rtm_system/presenter/Manager/product/show_product_manager.dart';
+import 'package:rtm_system/ultils/dialog.dart';
 import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/getData.dart';
 import 'package:rtm_system/ultils/helpers.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
-import 'package:rtm_system/view/tablePrice.dart';
+import 'package:rtm_system/view/table_price.dart';
 
 class updatePriceProduct extends StatefulWidget {
   String chosenValue;
@@ -65,24 +65,25 @@ class _updatePriceProductState extends State<updatePriceProduct> {
               color: Colors.white, fontWeight: FontWeight.w500, fontSize: 22),
         ),
       ),
-      body: new Container(
-        margin: EdgeInsets.only(top: 20),
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            _dropDownList(),
-            _txt(this.widget.chosenValue),
-            Padding(
-              padding: const EdgeInsets.only(top: 20.0),
-              child: btnSubmitValidate(
-                  context, 200, 40, welcome_color, "Cập nhật"),
-            ),
-            Container(
-              child: _value == null ? null : showTablePrice(idProduct: productId,),
-            ),
-          ],
+      body: SingleChildScrollView(
+        physics: NeverScrollableScrollPhysics(),
+        child: new Container(
+          margin: EdgeInsets.only(top: 10),
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              _dropDownList(),
+              _txt(this.widget.chosenValue),
+              Padding(
+                padding: const EdgeInsets.only(top: 20.0),
+                child: btnSubmitValidate(
+                    context, 200, 40, welcome_color, "Cập nhật"),
+              ),
+             showTablePrice(idProduct: productId,),
+            ],
+          ),
         ),
       ),
     );

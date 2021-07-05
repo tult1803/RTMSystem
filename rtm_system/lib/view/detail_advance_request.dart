@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rtm_system/model/getAdvanceDetail.dart';
 import 'package:rtm_system/model/model_AdvanceDetail.dart';
-import 'package:rtm_system/ultils/commonWidget.dart';
+import 'package:rtm_system/ultils/common_widget.dart';
 import 'package:rtm_system/ultils/component.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
