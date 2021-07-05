@@ -1,26 +1,29 @@
 class AdvanceHistory {
   AdvanceHistory({
-    this.id,
-    this.customerId,
-    this.amount,
-    this.returnCash,
-    this.advance,
-    // this.datetime,
-  });
+        this.id,
+        this.customerId,
+        this.amount,
+        this.datetime,
+        this.returnCash,
+        this.advance,
+        this.receiveDate,
+    });
 
-  String id;
-  String customerId;
-  int amount;
-  int returnCash;
-  bool advance;
-  // String datetime;
+    String id;
+    String customerId;
+    int amount;
+    String datetime;
+    int returnCash;
+    bool advance;
+    String receiveDate;
 
-  factory AdvanceHistory.fromJson(Map<String, dynamic> json) => AdvanceHistory(
-    id: json["id"],
-    customerId: json["customer_id"],
-    amount: json["amount"],
-    // datetime: json["datetime"], cái có cái k nên cái này lỗi
-    returnCash: json["return_cash"],
-    advance: json["_advance"],
-  );
+    factory AdvanceHistory.fromJson(Map<String, dynamic> json) => AdvanceHistory(
+        id: json["id"],
+        customerId: json["customer_id"],
+        amount: json["amount"],
+        datetime: json["datetime"],
+        returnCash: json["return_cash"],
+        advance: json["_advance"],
+        receiveDate: json["receive_date"] == null ? null : json["receive_date"],
+    );
 }

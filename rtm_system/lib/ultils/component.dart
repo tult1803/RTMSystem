@@ -592,25 +592,6 @@ Widget _showBtnProcessInvoice(context, int statusId, String id, bool isCustomer,
         ],
       );
     }
-  } else if (statusId == 0) {
-    return SizedBox(
-      width: size.width * 0.5,
-      // ignore: deprecated_member_use
-      child: RaisedButton(
-        color: Colors.redAccent,
-        onPressed: () {
-          //call api xoa yeu cau
-        },
-        child: Text(
-          'Xoá yêu cầu',
-          style: TextStyle(color: Colors.white, fontSize: 16),
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        elevation: 10,
-      ),
-    );
   } else {
     return Container();
   }
@@ -903,10 +884,7 @@ Widget componentContainerInvoiceRequest(BuildContext context,
           height: 5,
         ),
         isCustomer
-            ? _showBtnProcessInvoice(context, 0, id, isCustomer,
-                isRequest: isRequest,
-                widgetToNavigator: widgetToNavigator,
-                map: map)
+            ? Container()
             : _showBtnProcessInvoice(context, 4, id, isCustomer,
                 isRequest: isRequest,
                 widgetToNavigator: widgetToNavigator,

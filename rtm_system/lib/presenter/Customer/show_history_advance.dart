@@ -122,7 +122,6 @@ class _showHistoryAdvancePageState extends State<showHistoryAdvancePage> {
                                   newPageProgressIndicatorBuilder: (context) =>
                                       newPageProgressIndicatorBuilder(),
                                   itemBuilder: (context, item, index) {
-                                    // if(item.datetime != null)
                                       return boxForAdvanceHistory(
                                       context: context,
                                       id: item.id,
@@ -130,7 +129,8 @@ class _showHistoryAdvancePageState extends State<showHistoryAdvancePage> {
                                       customerId: item.customerId,
                                       returnCash: item.returnCash,
                                       isAdvance: item.advance,
-                                      // dateTime:  item.dateTime,
+                                      dateTime:  item.datetime,
+                                      receiveDate: item.receiveDate,
                                       widget: FormForDetailPage(
                                         tittle: "Chi tiết yêu cầu",
                                         bodyPage: DetailAdvancePage(
@@ -141,24 +141,6 @@ class _showHistoryAdvancePageState extends State<showHistoryAdvancePage> {
                                         ),
                                       ),
                                     );
-                                    //  else
-                                    // return boxForAdvanceHistory(
-                                    //   context: context,
-                                    //   id: item.id,
-                                    //   amount: item.amount,
-                                    //   customerId: item.customerId,
-                                    //   returnCash: item.returnCash,
-                                    //   isAdvance: item.advance,
-                                    //   widget: FormForDetailPage(
-                                    //     tittle: "Chi tiết yêu cầu",
-                                    //     bodyPage: DetailAdvancePage(
-                                    //       isCustomer: true,
-                                    //       id: item.id,
-                                    //       status: 0,
-                                    //       isRequest: false,
-                                    //     ),
-                                    //   ),
-                                    // );
                                   }),
                         ),
                       ],

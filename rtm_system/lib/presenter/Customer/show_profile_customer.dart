@@ -28,7 +28,6 @@ class _showProfileState extends State<showProfile> {
     String token = sharedPreferences.getString('access_token');
     String phone = sharedPreferences.getString('phone');
     password = sharedPreferences.getString('password');
-    print(token);
     // Đỗ dữ liệu lấy từ api
     infomationCustomer =
         await getAPIProfileCustomer.getProfileCustomer(token, phone);

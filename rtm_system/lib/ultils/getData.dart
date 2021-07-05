@@ -226,7 +226,7 @@ Future<void> doConfirmOrAcceptOrRejectInvoice(
   SharedPreferences prefs = await SharedPreferences.getInstance();
   int status;
   if (isCustomer) {
-    // 1 is sign invoice, 2 is accept invoice
+    // 1 is sign invoice, 2 is accept invoice, 3 is delete request
     if (type == 1) {
       PutSignInvoice putSignInvoiceInvoice = PutSignInvoice();
       status = await putSignInvoiceInvoice.putSignInvoice(
@@ -235,6 +235,11 @@ Future<void> doConfirmOrAcceptOrRejectInvoice(
       PutConfirmInvoice putConfirmInvoice = PutConfirmInvoice();
       status = await putConfirmInvoice.putConfirmInvoice(
           prefs.get("access_token"), invoiceId);
+    } else if (type == 3) {
+      DeleteInvoiceRequest deleteInvoiceRequest = DeleteInvoiceRequest();
+      status = await deleteInvoiceRequest.deleteInvoiceRequest(
+          prefs.get('access_token'), invoiceId,
+          reason: reason);
     }
     if (status == 200) {
       showStatusAlertDialog(
@@ -247,17 +252,12 @@ Future<void> doConfirmOrAcceptOrRejectInvoice(
     } else {
       showStatusAlertDialog(
           context,
-          showMessage("", MSG012),
+          showMessage(MSG025, MSG027),
           HomeCustomerPage(
-            index: 1,
+            index: 0,
           ),
           true);
     }
-
-    ///Bị lỗi thiếu hàm
-    // else {
-    //   showStatusAlertDialog(context, showMessage(MSG025, MSG027), null, false);
-    // }
   } else {
     //call api tao invoice cua manager
     switch (type) {
@@ -286,10 +286,9 @@ Future<void> doConfirmOrAcceptOrRejectInvoice(
             : print('Chấp nhận');
         break;
       case 3:
-        isRequest == true
-            ? doDeleteInvoiceRequest(context, invoiceId,
-                reason: reason, widgetToNavigator: widgetToNavigator)
-            : doDeleteInvoice(context, invoiceId,
+        //manager k được xoá yêu cầu bán hàng chỉ xóa invoice
+        isRequest == false ??
+            doDeleteInvoice(context, invoiceId,
                 widgetToNavigator: widgetToNavigator);
         break;
     }
@@ -372,24 +371,6 @@ Future doDeleteInvoice(BuildContext context, String invoiceId,
       : showCustomDialog(context,
           isSuccess: false,
           content: "Xoá hoá đơn thất bại",
-          doPopNavigate: true);
-}
-
-Future doDeleteInvoiceRequest(BuildContext context, String invoiceId,
-    {Widget widgetToNavigator, String reason}) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  DeleteInvoiceReqeust deleteInvoiceRequest = DeleteInvoiceReqeust();
-  int status = await deleteInvoiceRequest.deleteInvoiceRequest(
-      prefs.get('access_token'), invoiceId,
-      reason: reason);
-  status == 200
-      ? showCustomDialog(context,
-          isSuccess: true,
-          content: "Đã từ chối hoá đơn",
-          widgetToNavigator: widgetToNavigator)
-      : showCustomDialog(context,
-          isSuccess: false,
-          content: "Từ chối hoá đơn thất bại",
           doPopNavigate: true);
 }
 
