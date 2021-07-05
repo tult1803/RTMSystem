@@ -378,7 +378,7 @@ Future doDeleteInvoice(BuildContext context, String invoiceId,
 Future doDeleteInvoiceRequest(BuildContext context, String invoiceId,
     {Widget widgetToNavigator, String reason}) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  DeleteInvoiceReqeust deleteInvoiceRequest = DeleteInvoiceReqeust();
+  DeleteInvoiceRequest deleteInvoiceRequest = DeleteInvoiceRequest();
   int status = await deleteInvoiceRequest.deleteInvoiceRequest(
       prefs.get('access_token'), invoiceId,
       reason: reason);
