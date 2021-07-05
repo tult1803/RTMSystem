@@ -13,6 +13,7 @@ import 'package:rtm_system/ultils/getData.dart';
 import 'package:rtm_system/ultils/helpers.dart';
 import 'package:rtm_system/ultils/src/regExp.dart';
 import 'package:rtm_system/view/confirmDetailInvoice.dart';
+import 'package:rtm_system/view/tablePrice.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'manager/formForDetail_page.dart';
@@ -278,12 +279,23 @@ class _AddProductPageState extends State<AddProductPage> {
                 SizedBox(
                   height: 10,
                 ),
+                showPriceTable(),
               ],
             )),
       ),
     );
   }
-
+  Widget showPriceTable(){
+    if(widget.isCustomer){
+      if(_myProduct != null){
+        return showTablePrice(idProduct: _myProduct,);
+      }else{
+        return Container();
+      }
+    }else{
+       return Container();
+    }
+  }
   Widget txtAutoFillByPhone({
     TextEditingController controller,
     String error,
