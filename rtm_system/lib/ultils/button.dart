@@ -5,6 +5,7 @@ import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/customer/Profile/update_profile.dart';
 import 'package:rtm_system/view/customer/home_customer_page.dart';
 import 'package:rtm_system/view/detail_notice.dart';
+import 'package:rtm_system/view/formReason.dart';
 import 'package:rtm_system/view/login_page.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
 import 'package:rtm_system/view/update_password.dart';
@@ -360,9 +361,9 @@ Widget btnSubmitOrCancel(
   );
 }
 
-Widget btnDeleteInvoiceRequestPage(BuildContext context, double width,
+Widget btnDeleteRequestPage(BuildContext context, double width,
     double height, Color color, String tittleButtonAlertDialog, bool isCustomer,
-    {Widget widgetToNavigator, bool isInvoice, String reason, String id}) {
+    {Widget widgetToNavigator, bool isInvoice, String reason, String id, bool isAdvanceBill}) {
   return Container(
     height: height,
     width: width,
@@ -377,19 +378,20 @@ Widget btnDeleteInvoiceRequestPage(BuildContext context, double width,
           tittleButtonAlertDialog == "Hủy"
               ? showAlertDialog(
                   context,
-                  "Bạn muốn hủy xoá ${isInvoice == true ? "yêu cầu" : "hoá đơn"}",
+              isAdvanceBill ==null ?"Bạn muốn hủy xoá ${isInvoice == true ? "yêu cầu" : "hoá đơn"}":"Bạn muốn hủy từ chối ứng tiền",
                   HomeAdminPage(
-                    index: 1,
+                    index: isAdvanceBill ==null ? 1 : 2,
                   ))
               : showAlertDialog(
                   context,
-                  "Bạn muốn xoá ${isInvoice == true ? "yêu cầu" : "hoá đơn"}",
+            isAdvanceBill ==null ?"Bạn muốn xoá ${isInvoice == true ? "yêu cầu" : "hoá đơn"}":"Bạn muốn từ chối ứng tiền",
                   HomeAdminPage(
-                    index: 1,
+                    index: isAdvanceBill ==null ? 1 : 2,
                   ),
                   isInvoice: isInvoice,
                   reason: reason,
                   isCustomer: isCustomer,
+                  isAdvanceBill: isAdvanceBill,
                   id: id,
                 );
         },
@@ -461,4 +463,52 @@ Widget btnAcceptOrReject(BuildContext context, double width, Color color,
       ),
     ),
   ));
+}
+
+Widget btnProcessAdvanceBill(BuildContext context, {String idAdvanceBill,bool isCustomer, Widget widgetToNavigator}) {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.spaceAround,
+    children: [
+      Flexible(
+        // ignore: deprecated_member_use
+        child: RaisedButton(
+          color: Colors.redAccent,
+          onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => ReasonToDelete(
+                      invoiceId: idAdvanceBill,
+                      isCustomer: isCustomer,
+                      widgetToNavigator: widgetToNavigator,
+                  isAdvanceBill: true,
+                    )));
+          },
+          child: Text(
+            "Từ chối",
+            style: TextStyle(color: Colors.white, fontSize: 16),
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          elevation: 10,
+        ),
+      ),
+      Flexible(
+        // ignore: deprecated_member_use
+        child: RaisedButton(
+          color: Color(0xFF0BB791),
+          onPressed: () {
+            doProcessAdvanceBill(context, idAdvanceBill, 8,widgetToNavigator: HomeAdminPage(index: 2,));
+          },
+          child: Text(
+            "Xác nhận",
+            style: TextStyle(color: Colors.white, fontSize: 16),
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          elevation: 10,
+        ),
+      ),
+    ],
+  );
 }

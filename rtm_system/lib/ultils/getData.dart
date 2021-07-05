@@ -10,6 +10,7 @@ import 'package:rtm_system/model/profile_customer/getAPI_customer_phone.dart';
 import 'package:rtm_system/model/putAPI_ConfirmAdvanceRequest.dart';
 import 'package:rtm_system/model/putAPI_ReturnAdvance.dart';
 import 'package:rtm_system/model/putAPI_confirmInvoice.dart';
+import 'package:rtm_system/model/putAPI_processAdvanceBill.dart';
 import 'package:rtm_system/model/putAPI_signInvoice.dart';
 import 'package:rtm_system/model/putAPI_updatePrice.dart';
 import 'package:rtm_system/model/putAPI_updateProfile.dart';
@@ -371,6 +372,49 @@ Future doDeleteInvoice(BuildContext context, String invoiceId,
       : showCustomDialog(context,
           isSuccess: false,
           content: "Xoá hoá đơn thất bại",
+          doPopNavigate: true);
+}
+
+Future doDeleteInvoiceRequest(BuildContext context, String invoiceId,
+    {Widget widgetToNavigator, String reason}) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  DeleteInvoiceRequest deleteInvoiceRequest = DeleteInvoiceRequest();
+  int status = await deleteInvoiceRequest.deleteInvoiceRequest(
+      prefs.get('access_token'), invoiceId,
+      reason: reason);
+  status == 200
+      ? showCustomDialog(context,
+          isSuccess: true,
+          content: "Đã từ chối hoá đơn",
+          widgetToNavigator: widgetToNavigator)
+      : showCustomDialog(context,
+          isSuccess: false,
+          content: "Từ chối hoá đơn thất bại",
+          doPopNavigate: true);
+}
+
+Future doProcessAdvanceBill(
+    BuildContext context, String invoiceId, int statusProcess,
+    {Widget widgetToNavigator, String reason}) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  PutProcessAdvanceBill processAdvanceBill = PutProcessAdvanceBill();
+  int status = await processAdvanceBill.putProcessAdvanceBill(
+      prefs.get('access_token'),
+      id: invoiceId,
+      status: statusProcess,
+      reason: reason);
+  status == 200
+      ? showCustomDialog(context,
+          isSuccess: true,
+          content: statusProcess == 6
+              ? "Đã từ chối ứng tiền"
+              : "Xác nhận đơn thành công",
+          widgetToNavigator: widgetToNavigator)
+      : showCustomDialog(context,
+          isSuccess: false,
+          content: statusProcess == 6
+              ? "Từ chối ứng tiền thất bại"
+              : "Xác nhận đơn thất bại",
           doPopNavigate: true);
 }
 

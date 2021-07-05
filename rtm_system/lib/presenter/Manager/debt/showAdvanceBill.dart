@@ -143,12 +143,13 @@ class showAdvancceBillManagerState extends State<showAdvancceBillManager> {
                          receiveDate: item["receive_date"],
                          imageUrl: item["image_url"],
                          widget: FormForDetailPage(
-                           tittle: "Chi tiết yêu cầu",
+                           tittle: "Chi tiết ứng tiền",
                            bodyPage: DetailAdvancePage(
                              isCustomer: false,
                              id: item['id'],
                              status: item['status_id'],
                              isRequest: false,
+                             widgetToNavigator: widget.widgetToNavigator,
                            ),
                          ),
                          isCustomer: false

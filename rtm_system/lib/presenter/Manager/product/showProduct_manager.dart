@@ -31,7 +31,7 @@ class _showAllProductState extends State<showAllProduct> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       GetProduct getProduct = GetProduct();
       dataList =
-          await getProduct.getProduct(prefs.getString("access_token"), "");
+          await getProduct.getProduct(prefs.getString("access_token"), "",type: 0,limit: 0);
       final isLastPage = dataList.length < pageKey;
       if (isLastPage) {
         _pagingController.appendLastPage(dataList);
