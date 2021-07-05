@@ -9,6 +9,7 @@ import 'package:rtm_system/ultils/component.dart';
 import 'package:rtm_system/ultils/getData.dart';
 import 'package:rtm_system/ultils/helpers.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
+import 'package:rtm_system/view/manager/product/tablePrice.dart';
 
 class updatePriceProduct extends StatefulWidget {
   String chosenValue;
@@ -78,7 +79,9 @@ class _updatePriceProductState extends State<updatePriceProduct> {
               child: btnSubmitValidate(
                   context, 200, 40, welcome_color, "Cập nhật"),
             ),
-
+            Container(
+              child: _value == null ? null : showTablePrice(idProduct: productId,),
+            ),
           ],
         ),
       ),
