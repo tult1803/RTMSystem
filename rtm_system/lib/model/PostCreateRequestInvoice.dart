@@ -19,7 +19,6 @@ class PostCreateRequestInvoice{
         "store_id" : storeId,
       }),
     );
-    print("$id - $storeId - $sellDate");
     print("Status postApi CreateIRequestnvoice:${response.statusCode}");
     return response.statusCode;
   }

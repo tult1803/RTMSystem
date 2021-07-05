@@ -266,86 +266,30 @@ Widget btnLogout(context) {
     ),
   );
 }
-
-//show btn dùng để cập nhật thông tin
-Widget btnUpdateInfo(
-    context,
-    String cmnd,
-    String password,
-    String fullname,
-    int gender,
-    String phone,
-    DateTime birthday,
-    String address,
-    bool check,
-    String accountId) {
-  return Container(
-    // ignore: deprecated_member_use
-    child: RaisedButton(
-      color: Color(0xFF0BB791),
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => UpdateProfilePage(
-                    cmnd: cmnd,
-                    password: password,
-                    fullname: fullname,
-                    gender: gender,
-                    phone: phone,
-                    birthday: birthday,
-                    address: address,
-                    check: check,
-                    account_id: accountId,
-                  )),
-        );
-      },
-      child: AutoSizeText(
-        'Cập nhật thông tin',
-        style: TextStyle(
-          color: Colors.white,
+Widget btnConfirmAdvanceOfCustomer(context, id, int status) {
+  var size = MediaQuery.of(context).size;
+  if (status == 8) {
+    return Center(
+      child: SizedBox(
+        width: size.width * 0.5,
+        // ignore: deprecated_member_use
+        child: RaisedButton(
+          color: primaryColor,
+          onPressed: () {
+            put_API_ConfirmAdvance(context, id);
+          },
+          child: AutoSizeText('Xác nhận', style: TextStyle(color: Colors.white),),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          elevation: 5,
         ),
       ),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15.0),
-      ),
-      elevation: 10,
-    ),
-  );
+    );
+  } else {
+    return Container();
+  }
 }
-
-//show btn để thay đổi mật khẩu
-Widget btnUpdatePw(
-    context, String password, String accountId, bool isCustomer) {
-  return Container(
-    // ignore: deprecated_member_use
-    child: RaisedButton(
-      color: Color(0xFF0BB791),
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => UpdatePasswordPage(
-                    password: password,
-                    account_id: accountId,
-                    isCustomer: isCustomer,
-                  )),
-        );
-      },
-      child: AutoSizeText(
-        'Thay đổi mật khẩu',
-        style: TextStyle(
-          color: Colors.white,
-        ),
-      ),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15.0),
-      ),
-      elevation: 10,
-    ),
-  );
-}
-
 //Widget này dùng cho các button "Tạo" hoặc "Hủy" vd: ở Trang Tạo thông báo
 //bool action = flase khi nhấn nút "Hủy" và bằng true khi nhấn "Tạo"
 

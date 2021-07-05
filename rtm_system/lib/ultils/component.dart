@@ -592,25 +592,6 @@ Widget _showBtnProcessInvoice(context, int statusId, String id, bool isCustomer,
         ],
       );
     }
-  } else if (statusId == 0) {
-    return SizedBox(
-      width: size.width * 0.5,
-      // ignore: deprecated_member_use
-      child: RaisedButton(
-        color: Colors.redAccent,
-        onPressed: () {
-          //call api xoa yeu cau
-        },
-        child: Text(
-          'Xoá yêu cầu',
-          style: TextStyle(color: Colors.white, fontSize: 16),
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        elevation: 10,
-      ),
-    );
   } else {
     return Container();
   }
@@ -903,10 +884,7 @@ Widget componentContainerInvoiceRequest(BuildContext context,
           height: 5,
         ),
         isCustomer
-            ? _showBtnProcessInvoice(context, 0, id, isCustomer,
-                isRequest: isRequest,
-                widgetToNavigator: widgetToNavigator,
-                map: map)
+            ? Container()
             : _showBtnProcessInvoice(context, 4, id, isCustomer,
                 isRequest: isRequest,
                 widgetToNavigator: widgetToNavigator,
@@ -936,56 +914,62 @@ Widget componentContainerDetailAdvanceRequest(BuildContext context,
     bool isCustomer,
     Widget widgetToNavigator}) {
   return Padding(
-    padding: const EdgeInsets.all(8.0),
-    child: Column(
-      children: [
-        txtItemDetail(context, "ID đơn", "$id"),
-        SizedBox(
-          height: 10,
-        ),
-        txtItemDetail(context, "Cửa hàng", "$storeName"),
-        SizedBox(
-          height: 10,
-        ),
-        txtItemDetail(context, "Ngày tạo đơn",
-            "${getDateTime(createDate, dateFormat: "dd/MM/yyyy")}"),
-        SizedBox(
-          height: 10,
-        ),
-        Container(
-          child: isCustomer
-              ? null
-              : Column(
-                  children: [
-                    txtItemDetail(context, "Khách hàng", "$customerName",
-                        subContent: customerPhone),
-                    SizedBox(
-                      height: 10,
-                    ),
-                  ],
-                ),
-        ),
-        txtItemDetail(context, "Số tiền", "${getFormatPrice("$amount")}đ"),
-        SizedBox(
-          height: 10,
-        ),
-        txtItemDetail(context, "Ngày nhận tiền",
-            "${getDateTime(activeDate, dateFormat: "dd/MM/yyyy")}"),
-        SizedBox(
-          height: 10,
-        ),
-        txtItemDetail(
-            context, "Lý do", "${statusId == 6 ? reason : description}"),
-        SizedBox(
-          height: 10,
-        ),
-        txtItemDetail(context, "Trạng thái", "${getStatus(status: statusId)}",
-            colorContent: getColorStatus(status: statusId)),
-      if(!isCustomer)
-        btnProcessAdvanceBill(context, isCustomer: isCustomer, idAdvanceBill: id, widgetToNavigator: widgetToNavigator, ),
-      ],
-    ),
-  );
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          txtItemDetail(context, "ID đơn", "$id"),
+          SizedBox(
+            height: 10,
+          ),
+          txtItemDetail(context, "Cửa hàng", "$storeName"),
+          SizedBox(
+            height: 10,
+          ),
+          txtItemDetail(context, "Ngày tạo đơn",
+              "${getDateTime(createDate, dateFormat: "dd/MM/yyyy")}"),
+          SizedBox(
+            height: 10,
+          ),
+          Container(
+            child: isCustomer
+                ? null
+                : Column(
+                    children: [
+                      txtItemDetail(context, "Khách hàng", "$customerName",
+                          subContent: customerPhone),
+                      SizedBox(
+                        height: 10,
+                      ),
+                    ],
+                  ),
+          ),
+          txtItemDetail(context, "Số tiền", "${getFormatPrice("$amount")}đ"),
+          SizedBox(
+            height: 10,
+          ),
+          txtItemDetail(context, "Ngày nhận tiền",
+              "${getDateTime(activeDate, dateFormat: "dd/MM/yyyy")}"),
+          SizedBox(
+            height: 10,
+          ),
+          txtItemDetail(
+              context, "Lý do", "${statusId == 6 ? reason : description}"),
+          SizedBox(
+            height: 10,
+          ),
+          txtItemDetail(context, "Trạng thái", "${getStatus(status: statusId)}",
+              colorContent: getColorStatus(status: statusId)),
+          SizedBox(
+            height: 10,
+          ),
+          //show btn confirm nhan tien cua customer
+          isCustomer
+              ? btnConfirmAdvanceOfCustomer(context, id, statusId)
+              : Container(),
+        ],
+      ),
+    );
+  
 }
 
 //nội dung của bill, đang dùng: create advance and confirm advance

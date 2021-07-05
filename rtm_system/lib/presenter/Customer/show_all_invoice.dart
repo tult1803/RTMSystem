@@ -10,7 +10,6 @@ import 'package:rtm_system/view/detailInvoice.dart';
 import 'package:rtm_system/view/manager/formForDetail_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-// ignore: camel_case_types
 class showAllInvoicePage extends StatefulWidget {
   int statusId;
   String fromDate, toDate;
@@ -37,7 +36,6 @@ class showAllInvoicePageState extends State<showAllInvoicePage> {
         prefs.get("accountId"),
         "",
         this.widget.statusId,
-        //Status Id: truyền 4 là get all process invoice
         pageKey,
         _pageSize,
         this.widget.fromDate == null ? "" : "${this.widget.fromDate}",
@@ -165,11 +163,6 @@ class showAllInvoicePageState extends State<showAllInvoicePage> {
     );
   }
 
-  //Dùng để search
-  // void _updateSearchTerm(String searchTerm) {
-  //   _searchTerm = searchTerm;
-  //   _pagingController.refresh();
-  // }
   @override
   void dispose() {
     _pagingController.dispose();

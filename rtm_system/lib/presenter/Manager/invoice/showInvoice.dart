@@ -51,7 +51,6 @@ class showInvoiceManagerState extends State<showInvoiceManager> {
       );
 
       invoiceList = invoice.invoices;
-      // print("${_pagingController}");
       final isLastPage = invoiceList.length < pageKey;
       if (isLastPage) {
         _pagingController.appendLastPage(invoiceList);
@@ -63,7 +62,6 @@ class showInvoiceManagerState extends State<showInvoiceManager> {
         _pagingController.appendPage(invoiceList, nextPageKey);
       }
     } catch (error) {
-      // print(error);
       _pagingController.error = error;
     }
   }

@@ -364,7 +364,7 @@ Widget boxForInvoice(
                   paddingRightOfText: 10,
                   tittle: "Mã: $id",
                   fontWeight: FontWeight.w700,
-                  color: Colors.deepOrangeAccent),
+                  color: Colors.deepOrange),
               Flexible(
                 child: containerTextInvoice(
                   alignment: Alignment.centerRight,
@@ -582,7 +582,7 @@ Widget boxForAdvance({
                   paddingRightOfText: 10,
                   tittle: "Mã: $id",
                   fontWeight: FontWeight.w700,
-                  color: Colors.deepOrangeAccent),
+                  color: Colors.deepOrange),
               Flexible(
                 child: containerTextInvoice(
                     alignment: Alignment.centerRight,
@@ -765,7 +765,7 @@ Widget boxForProduct(
                   paddingRightOfText: 10,
                   tittle: "Mã: $id",
                   fontWeight: FontWeight.w700,
-                  color: Colors.deepOrangeAccent),
+                  color: Colors.deepOrange),
               Flexible(
                 child: containerTextInvoice(
                   alignment: Alignment.centerRight,
@@ -1030,17 +1030,26 @@ Widget boxForAdvanceHistory({
   String customerId,
   int returnCash,
   bool isAdvance,
-  String date,
+  String dateTime,
+  String receiveDate,
   Widget widget,
 }) {
-  String amountAfterFormat, cashAfterFormat;
-  date = "20-06-2021";
+  String amountAfterFormat,
+      cashAfterFormat,
+      dateTimeAfterFormat,
+      receiveDateAfterFormat;
   try {
     amountAfterFormat = "${getFormatPrice(amount.toString())} đ";
     cashAfterFormat = "${getFormatPrice(returnCash.toString())} đ";
+    dateTimeAfterFormat = "${getDateTime(dateTime, dateFormat: 'dd-MM-yyyy')}";
+    ;
+    receiveDateAfterFormat =
+        "${getDateTime(receiveDate, dateFormat: 'dd-MM-yyyy')}";
   } catch (_) {
     amountAfterFormat = "$amount";
     cashAfterFormat = "$returnCash";
+    dateTimeAfterFormat = "$dateTime";
+    receiveDateAfterFormat = "$receiveDate";
   }
   return GestureDetector(
     onTap: () => Navigator.of(context)
@@ -1071,7 +1080,7 @@ Widget boxForAdvanceHistory({
                 paddingRightOfText: 10,
                 tittle: "Mã: $id",
                 fontWeight: FontWeight.w700,
-                color: Colors.deepOrangeAccent,
+                color: Colors.deepOrange,
               ),
               Flexible(
                 child: containerTextInvoice(
@@ -1135,7 +1144,7 @@ Widget boxForAdvanceHistory({
                   : Column(
                       children: [
                         containerTextInvoice(
-                          alignment: Alignment.topLeft,
+                          alignment: Alignment.topRight,
                           paddingLeftOfText: 10,
                           paddingRightOfText: 10,
                           tittle: "Ngày nhận tiền",
@@ -1144,13 +1153,35 @@ Widget boxForAdvanceHistory({
                           height: 10,
                         ),
                         containerTextInvoice(
-                            alignment: Alignment.topLeft,
+                            alignment: Alignment.topRight,
                             paddingLeftOfText: 10,
                             paddingRightOfText: 10,
-                            tittle: "$date",
+                            tittle: "$dateTimeAfterFormat",
                             color: primaryColor),
                       ],
                     ),
+              if (returnCash != 0)
+                Flexible(
+                  child: Column(
+                    children: [
+                      containerTextInvoice(
+                        alignment: Alignment.topRight,
+                        paddingLeftOfText: 10,
+                        paddingRightOfText: 10,
+                        tittle: "Ngày trả",
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      containerTextInvoice(
+                          alignment: Alignment.topRight,
+                          paddingLeftOfText: 10,
+                          paddingRightOfText: 10,
+                          tittle: "$dateTimeAfterFormat",
+                          color: primaryColor),
+                    ],
+                  ),
+                ),
             ],
           ),
           SizedBox(
@@ -1245,7 +1276,7 @@ Widget boxForInvoiceRequest(
                   paddingRightOfText: 10,
                   tittle: "Mã: $id",
                   fontWeight: FontWeight.w700,
-                  color: Colors.deepOrangeAccent),
+                  color: Colors.deepOrange),
               Flexible(
                 child: containerTextInvoice(
                   alignment: Alignment.centerRight,
