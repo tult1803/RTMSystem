@@ -648,7 +648,7 @@ Widget componentContainerDetailCustomer(BuildContext context,
     String address,
     String birthday,
     String gender,
-    String vip}) {
+    String level}) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Column(
@@ -686,7 +686,7 @@ Widget componentContainerDetailCustomer(BuildContext context,
         SizedBox(
           height: 10,
         ),
-        txtItemDetail(context, "Loại tài khoản", "$vip"),
+        txtItemDetail(context, "Loại tài khoản", "$level"),
         SizedBox(
           height: 10,
         ),

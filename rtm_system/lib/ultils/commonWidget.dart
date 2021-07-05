@@ -192,7 +192,7 @@ Widget boxForCustomer(
     {BuildContext context,
     String name,
     String phone,
-    bool vip,
+    int level,
     int status,
     int advance,
     Widget widget}) {
@@ -260,7 +260,7 @@ Widget boxForCustomer(
                 colorText: Colors.black,
                 fontWeightText: FontWeight.w500,
                 marginRight: 10,
-                tittle: "${getVip(vip)}",
+                tittle: "${getLevel(level: level)}",
               ),
             ],
           ),

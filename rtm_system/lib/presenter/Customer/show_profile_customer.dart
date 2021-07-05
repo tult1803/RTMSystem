@@ -147,6 +147,8 @@ class _showProfileState extends State<showProfile> {
                         _item(context, 'CMND', infomationCustomer.cmnd),
                         _item(context, 'Địa chỉ',
                             infomationCustomer.address.toString()),
+                        _item(context, 'Loại tài khoản',
+                            getLevel(level: infomationCustomer.level)),
                         SizedBox(
                           height: 12,
                         ),

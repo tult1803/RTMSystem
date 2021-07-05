@@ -126,7 +126,7 @@ class _showAllCustomerState extends State<showAllCustomer> {
                   return boxForCustomer(
                       context: context,
                       status: item['status_id'],
-                      vip: item['vip'],
+                      level: item['level'],
                       phone: item['phone'],
                       name: item["fullname"],
                       advance: item['advance'],
