@@ -1,8 +1,12 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:rtm_system/model/profile_customer/getAPI_customer_phone.dart';
 import 'package:rtm_system/model/profile_customer/model_profile_customer.dart';
 import 'package:rtm_system/ultils/button.dart';
 import 'package:rtm_system/ultils/helpers.dart';
+import 'package:rtm_system/ultils/src/color_ultils.dart';
+import 'package:rtm_system/view/customer/Profile/update_profile.dart';
+import 'package:rtm_system/view/update_password.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class showProfile extends StatefulWidget {
@@ -32,6 +36,71 @@ class _showProfileState extends State<showProfile> {
     infomationCustomer =
         await getAPIProfileCustomer.getProfileCustomer(token, phone);
     return infomationCustomer;
+  }
+
+// // show option choice update profile
+  void showPicker(
+      context,
+      String cmnd,
+      String password,
+      String fullname,
+      int gender,
+      String phone,
+      DateTime birthday,
+      String address,
+      bool check,
+      String accountId,
+      bool isCustomer) {
+    showDialog(
+        context: context,
+        builder: (BuildContext bc) {
+          return AlertDialog(
+            // title: Text('Chỉnh sửa thông tin'),
+            actions: <Widget>[
+              ListTile(
+                leading: Icon(Icons.person),
+                title: Text('Cập nhật thông tin'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => UpdateProfilePage(
+                              cmnd: cmnd,
+                              password: password,
+                              fullname: fullname,
+                              gender: gender,
+                              phone: phone,
+                              birthday: birthday,
+                              address: address,
+                              check: check,
+                              account_id: accountId,
+                            )),
+                  );
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.password),
+                title: Text('Thay đổi mật khẩu'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => UpdatePasswordPage(
+                              password: password,
+                              account_id: accountId,
+                              isCustomer: isCustomer,
+                            )),
+                  );
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.perm_media_outlined),
+                title: Text('Xác thực ảnh CMND'),
+                onTap: () {},
+              )
+            ],
+          );
+        });
   }
 
   @override
@@ -66,12 +135,18 @@ class _showProfileState extends State<showProfile> {
                       children: [
                         _item(context, 'Họ và tên',
                             infomationCustomer.fullname),
-                        _item(context, 'Ngày sinh', getDateTime(infomationCustomer.birthday.toString(), dateFormat: 'dd-MM-yyyy')),
-                        _item(context, 'Số điện thoại',
-                            infomationCustomer.phone),
-                        _item(context, 'Giới tính', getGender(infomationCustomer.gender)),
+                        _item(
+                            context,
+                            'Ngày sinh',
+                            getDateTime(infomationCustomer.birthday.toString(),
+                                dateFormat: 'dd-MM-yyyy')),
+                        _item(
+                            context, 'Số điện thoại', infomationCustomer.phone),
+                        _item(context, 'Giới tính',
+                            getGender(infomationCustomer.gender)),
                         _item(context, 'CMND', infomationCustomer.cmnd),
-                        _item(context, 'Địa chỉ', infomationCustomer.address.toString()),
+                        _item(context, 'Địa chỉ',
+                            infomationCustomer.address.toString()),
                         SizedBox(
                           height: 12,
                         ),
@@ -79,32 +154,7 @@ class _showProfileState extends State<showProfile> {
                     ),
                   ),
                 ),
-                //màn hình nhỏ hơn sẽ không bị tràn
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      btnUpdateInfo(
-                        context,
-                        infomationCustomer.cmnd,
-                        this.password,
-                        infomationCustomer.fullname,
-                        infomationCustomer.gender,
-                        infomationCustomer.phone,
-                        infomationCustomer.birthday,
-                        infomationCustomer.address,
-                        false,
-                        infomationCustomer.accountId,
-                      ),
-                      SizedBox(
-                        width: size.width* 0.03,
-                      ),
-                      btnUpdatePw(
-                          context, this.password, infomationCustomer.accountId, true),
-                    ],
-                  ),
-                ),
+                btnChooseOption(context, size.width * 0.9, size.height * 0.1),
                 SizedBox(
                   height: 12,
                 ),
@@ -118,10 +168,49 @@ class _showProfileState extends State<showProfile> {
       },
     );
   }
+
+  Widget btnChooseOption(context, width, height) {
+    return SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Container(
+          child: ElevatedButton(
+            onPressed: () {
+              showPicker(
+                  context,
+                  infomationCustomer.cmnd,
+                  this.password,
+                  infomationCustomer.fullname,
+                  infomationCustomer.gender,
+                  infomationCustomer.phone,
+                  infomationCustomer.birthday,
+                  infomationCustomer.address,
+                  false,
+                  infomationCustomer.accountId,
+                  true);
+            },
+            child: Center(
+              child: AutoSizeText(
+                "Chỉnh sửa thông tin",
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+            style: ElevatedButton.styleFrom(
+              primary: primaryColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(15)),
+                side: BorderSide(color: Color(0xFFcccccc), width: 1),
+              ),
+            ),
+          ),
+        ));
+  }
+
   //Show thông tin của người dùng
   Widget _item(context, header, value) {
     // Khi giá trị get lên là rỗng thì set '' để load tránh lỗi trang
-    if(value == null){
+    if (value == null) {
       value = '';
     }
     var size = MediaQuery.of(context).size;
@@ -144,5 +233,4 @@ class _showProfileState extends State<showProfile> {
       ),
     );
   }
-
 }

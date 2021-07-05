@@ -914,59 +914,62 @@ Widget componentContainerDetailAdvanceRequest(BuildContext context,
     bool isCustomer,
     Widget widgetToNavigator}) {
   return Padding(
-    padding: const EdgeInsets.all(8.0),
-    child: Column(
-      children: [
-        txtItemDetail(context, "ID đơn", "$id"),
-        SizedBox(
-          height: 10,
-        ),
-        txtItemDetail(context, "Cửa hàng", "$storeName"),
-        SizedBox(
-          height: 10,
-        ),
-        txtItemDetail(context, "Ngày tạo đơn",
-            "${getDateTime(createDate, dateFormat: "dd/MM/yyyy")}"),
-        SizedBox(
-          height: 10,
-        ),
-        Container(
-          child: isCustomer
-              ? null
-              : Column(
-                  children: [
-                    txtItemDetail(context, "Khách hàng", "$customerName",
-                        subContent: customerPhone),
-                    SizedBox(
-                      height: 10,
-                    ),
-                  ],
-                ),
-        ),
-        txtItemDetail(context, "Số tiền", "${getFormatPrice("$amount")}đ"),
-        SizedBox(
-          height: 10,
-        ),
-        txtItemDetail(context, "Ngày nhận tiền",
-            "${getDateTime(activeDate, dateFormat: "dd/MM/yyyy")}"),
-        SizedBox(
-          height: 10,
-        ),
-        txtItemDetail(
-            context, "Lý do", "${statusId == 6 ? reason : description}"),
-        SizedBox(
-          height: 10,
-        ),
-
-        ///Không có hàm _showContentInAdvance vs _showBtnInAdvanceDetail ///
-        // _showContentInAdvance(context, statusId, managerName, managerPhone, customerName, customerPhone, reason),
-        txtItemDetail(context, "Trạng thái", "${getStatus(status: statusId)}",
-            colorContent: getColorStatus(status: statusId)),
-        // chỗ này show btn accpet or reject của manager cho request
-        // _showBtnInAdvanceDetail(context, id, statusId),
-      ],
-    ),
-  );
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          txtItemDetail(context, "ID đơn", "$id"),
+          SizedBox(
+            height: 10,
+          ),
+          txtItemDetail(context, "Cửa hàng", "$storeName"),
+          SizedBox(
+            height: 10,
+          ),
+          txtItemDetail(context, "Ngày tạo đơn",
+              "${getDateTime(createDate, dateFormat: "dd/MM/yyyy")}"),
+          SizedBox(
+            height: 10,
+          ),
+          Container(
+            child: isCustomer
+                ? null
+                : Column(
+                    children: [
+                      txtItemDetail(context, "Khách hàng", "$customerName",
+                          subContent: customerPhone),
+                      SizedBox(
+                        height: 10,
+                      ),
+                    ],
+                  ),
+          ),
+          txtItemDetail(context, "Số tiền", "${getFormatPrice("$amount")}đ"),
+          SizedBox(
+            height: 10,
+          ),
+          txtItemDetail(context, "Ngày nhận tiền",
+              "${getDateTime(activeDate, dateFormat: "dd/MM/yyyy")}"),
+          SizedBox(
+            height: 10,
+          ),
+          txtItemDetail(
+              context, "Lý do", "${statusId == 6 ? reason : description}"),
+          SizedBox(
+            height: 10,
+          ),
+          txtItemDetail(context, "Trạng thái", "${getStatus(status: statusId)}",
+              colorContent: getColorStatus(status: statusId)),
+          SizedBox(
+            height: 10,
+          ),
+          //show btn confirm nhan tien cua customer
+          isCustomer
+              ? btnConfirmAdvanceOfCustomer(context, id, statusId)
+              : Container(),
+        ],
+      ),
+    );
+  
 }
 
 //nội dung của bill, đang dùng: create advance and confirm advance
