@@ -81,7 +81,7 @@ class _updatePriceProductState extends State<updatePriceProduct> {
                 child: btnSubmitValidate(
                     context, 200, 40, welcome_color, "Cập nhật"),
               ),
-             showTablePrice(idProduct: productId,),
+             showTablePrice(idProduct: productId),
             ],
           ),
         ),
@@ -89,6 +89,7 @@ class _updatePriceProductState extends State<updatePriceProduct> {
     );
   }
 
+  // ignore: missing_return
   Future getDataTextField(String txt) {
     if (txt != null) {
       setState(() {

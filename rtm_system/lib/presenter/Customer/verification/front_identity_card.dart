@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -13,6 +15,7 @@ class FrontIdentifyCard extends StatefulWidget {
 
 File imageBack;
 File imageFront;
+File imageFace;
 class _FrontIdentifyCardState extends State<FrontIdentifyCard> {
 
   @override
@@ -56,7 +59,7 @@ class _FrontIdentifyCardState extends State<FrontIdentifyCard> {
         height: 300,
         color: Colors.white,
         child: Image.asset(
-          "images/cmnd.png",
+          "images/cmnd_front.png",
           fit: BoxFit.scaleDown,
         ),
       );
@@ -88,7 +91,6 @@ class _FrontIdentifyCardState extends State<FrontIdentifyCard> {
       ),
     );
   }
-
   Widget nextPage(image) {
     return Container(
       child: image == null

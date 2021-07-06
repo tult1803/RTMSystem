@@ -6,6 +6,7 @@ import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+// ignore: must_be_immutable, camel_case_types
 class showTablePrice extends StatefulWidget {
   String idProduct;
 
@@ -15,10 +16,10 @@ class showTablePrice extends StatefulWidget {
   _showTablePriceState createState() => _showTablePriceState();
 }
 
+// ignore: camel_case_types
 class _showTablePriceState extends State<showTablePrice> {
   final PagingController _pagingController = PagingController(firstPageKey: 10);
   List dataListProduct;
-
   Future<void> _fetchPage(pageKey) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -49,6 +50,23 @@ class _showTablePriceState extends State<showTablePrice> {
     _pagingController.addPageRequestListener((pageKey) {
       _fetchPage(pageKey);
     });
+
+    _pagingController.addStatusListener((status) {
+      if (status == PagingStatus.subsequentPageError) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text(
+              'Có lỗi xảy ra',
+            ),
+            action: SnackBarAction(
+              label: 'Thử lại',
+              onPressed: () => _pagingController.retryLastFailedRequest(),
+            ),
+          ),
+        );
+      }
+    });
+
   }
 
   @override
@@ -69,20 +87,22 @@ class _showTablePriceState extends State<showTablePrice> {
     if(dataListProduct != null)dataListProduct.clear();
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     return new Container(
-      width: MediaQuery.of(context).size.width,
-      margin: EdgeInsets.only(top: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          tittleTable(),
-          headerTable(),
-          dataTable(),
-        ],
-      ),
+        width: MediaQuery.of(context).size.width,
+        margin: EdgeInsets.only(top: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            tittleTable(),
+            headerTable(),
+            dataTable(),
+          ],
+        ),
     );
   }
 
@@ -127,7 +147,7 @@ class _showTablePriceState extends State<showTablePrice> {
               builderDelegate: PagedChildBuilderDelegate(
                 firstPageErrorIndicatorBuilder: (context) => Container(),
                 noItemsFoundIndicatorBuilder: (context) {
-                  return Container();
+                  return Container(child: Center(child: Text("Chưa chọn sản phẩm", style: TextStyle(color: Colors.black54),)),);
                 },
                   itemBuilder: (context, item, index) {
                 return tableCell(

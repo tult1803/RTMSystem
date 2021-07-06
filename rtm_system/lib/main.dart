@@ -37,6 +37,7 @@ class MyApp extends StatelessWidget {
           accentColor: welcome_color,
           splashColor: Colors.white10,
           highlightColor: Colors.black12,
+
         ),
         debugShowCheckedModeBanner: false,
         home: WelcomePage(),
