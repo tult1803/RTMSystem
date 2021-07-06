@@ -2,9 +2,10 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:rtm_system/model/profile_customer/getAPI_customer_phone.dart';
 import 'package:rtm_system/model/profile_customer/model_profile_customer.dart';
-import 'package:rtm_system/ultils/button.dart';
-import 'package:rtm_system/ultils/helpers.dart';
+import 'package:rtm_system/helpers/button.dart';
+import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
+import 'package:rtm_system/view/customer/Profile/account_verification.dart';
 import 'package:rtm_system/view/customer/Profile/update_profile.dart';
 import 'package:rtm_system/view/update_password.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -97,6 +98,7 @@ class _showProfileState extends State<showProfile> {
                 leading: Icon(Icons.perm_media_outlined),
                 title: Text('Xác thực ảnh CMND'),
                 onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AccountVerification()));
                 },
               )
             ],

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rtm_system/ultils/component.dart';
+import 'package:rtm_system/helpers/component.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 
 //Đang dùng cho tran chi tiết sản phẩm, và sẽ dùng cho trang chi tiết ứng tiền, hóa đơn, khách hàng

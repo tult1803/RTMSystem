@@ -14,7 +14,7 @@ import 'package:rtm_system/model/putAPI_processAdvanceBill.dart';
 import 'package:rtm_system/model/putAPI_signInvoice.dart';
 import 'package:rtm_system/model/putAPI_updatePrice.dart';
 import 'package:rtm_system/model/putAPI_updateProfile.dart';
-import 'package:rtm_system/ultils/helpers.dart';
+import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/message_list.dart';
 import 'package:rtm_system/view/add_product_in_invoice.dart';
 import 'package:rtm_system/view/customer/home_customer_page.dart';
@@ -22,7 +22,7 @@ import 'package:rtm_system/view/manager/home_manager_page.dart';
 import 'package:rtm_system/view/manager/profile/allCustomer_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'dialog.dart';
+import '../helpers/dialog.dart';
 
 //dùng cho tạo thông báo
 Future postAPINotice(String tittle, String content) async {

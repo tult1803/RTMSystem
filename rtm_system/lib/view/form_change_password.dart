@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:rtm_system/ultils/button.dart';
-import 'package:rtm_system/ultils/getData.dart';
+import 'package:rtm_system/helpers/button.dart';
+import 'package:rtm_system/ultils/get_api_data.dart';
 import 'package:rtm_system/ultils/src/regExp.dart';
 
 class formUpdatePasswordPage extends StatefulWidget {

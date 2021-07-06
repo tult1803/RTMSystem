@@ -1,13 +1,13 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:rtm_system/ultils/button.dart';
-import 'package:rtm_system/ultils/common_widget.dart';
-import 'package:rtm_system/ultils/getData.dart';
-import 'package:rtm_system/ultils/dialog.dart';
+import 'package:rtm_system/helpers/button.dart';
+import 'package:rtm_system/helpers/common_widget.dart';
+import 'package:rtm_system/ultils/get_api_data.dart';
+import 'package:rtm_system/helpers/dialog.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/form_reason.dart';
-import 'helpers.dart';
+import '../ultils/get_data.dart';
 
 // Hiện tại dùng cho trang "Profile"
 Widget txtFullNameProfile(String tittle) {

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:connectivity/connectivity.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:rtm_system/ultils/src/checkConnectivity.dart';
+import 'package:rtm_system/ultils/check_connectivity.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/manager/debt/all_debt_manager.dart';
 import 'package:rtm_system/view/manager/notice/all_notice_manager.dart';

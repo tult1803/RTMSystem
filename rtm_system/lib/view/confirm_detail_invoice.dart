@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rtm_system/ultils/component.dart';
+import 'package:rtm_system/helpers/component.dart';
 
 class confirmDetailInvoice extends StatelessWidget {
   bool isCustomer;

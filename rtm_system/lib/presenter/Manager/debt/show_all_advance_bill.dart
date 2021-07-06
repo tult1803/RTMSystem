@@ -2,8 +2,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:rtm_system/presenter/Manager/debt/showAdvanceBill.dart';
 import 'package:rtm_system/presenter/infinite_scroll_pagination/common/character_search_input_sliver.dart';
-import 'package:rtm_system/ultils/common_widget.dart';
-import 'package:rtm_system/ultils/helpers.dart';
+import 'package:rtm_system/helpers/common_widget.dart';
+import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
 

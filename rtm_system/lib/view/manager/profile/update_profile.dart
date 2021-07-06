@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:rtm_system/ultils/component.dart';
+import 'package:rtm_system/helpers/component.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

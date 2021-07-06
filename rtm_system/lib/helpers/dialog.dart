@@ -6,7 +6,7 @@ import 'package:rtm_system/model/deleteAPI_deactivateNotice.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 
 import 'component.dart';
-import 'getData.dart';
+import '../ultils/get_api_data.dart';
 
 //show khi nhấn các nút "Hủy" hoặc "Tạo"
 //Nếu muốn xóa thông báo thì truyền trạng thái vào isDeactivateNotice
