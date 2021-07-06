@@ -114,7 +114,7 @@ class _showStoreState extends State<showStore> {
     return Column(
       children: [
         firstPageErrorIndicatorBuilder(context,
-            tittle: showMessage("", MSG032)),
+            tittle: showMessage("", MSG008)),
         GestureDetector(
           onTap: () => _pagingController.refresh(),
           child: Text(

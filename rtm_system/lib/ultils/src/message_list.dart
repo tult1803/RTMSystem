@@ -35,7 +35,6 @@ String MSG028 = "Xác nhận quý khách sẽ trả nợ bằng các hóa 
 String MSG029 = "Xác nhận quý khách sẽ nhận tiền bằng các hóa đơn này?";
 String MSG030 = "Đã có lỗi xảy ra.";
 String MSG031 = "Quý khách không có nợ.";
-String MSG032 = "Không có dữ liệu.";
 
 
 //use to show message
