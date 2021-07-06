@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rtm_system/presenter/Manager/debt/showAdvanceBill.dart';
 import 'package:rtm_system/presenter/Manager/invoice/show_request_invoice.dart';
-import 'package:rtm_system/ultils/component.dart';
+import 'package:rtm_system/helpers/component.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
 

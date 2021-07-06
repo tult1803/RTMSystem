@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:rtm_system/presenter/Manager/product/show_product_manager.dart';
-import 'package:rtm_system/ultils/dialog.dart';
-import 'package:rtm_system/ultils/component.dart';
-import 'package:rtm_system/ultils/getData.dart';
-import 'package:rtm_system/ultils/helpers.dart';
+import 'package:rtm_system/helpers/dialog.dart';
+import 'package:rtm_system/helpers/component.dart';
+import 'package:rtm_system/ultils/get_api_data.dart';
+import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/table_price.dart';
 

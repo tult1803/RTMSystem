@@ -2,13 +2,13 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:rtm_system/ultils/dialog.dart';
+import 'package:rtm_system/helpers/dialog.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
 import 'package:rtm_system/view/manager/product/update_price_product_manager.dart';
 import 'package:rtm_system/view/manager/profile/allCustomer_manager.dart';
 import 'component.dart';
-import 'helpers.dart';
-import 'src/color_ultils.dart';
+import '../ultils/get_data.dart';
+import '../ultils/src/color_ultils.dart';
 
 const double defaultBorderRadius = 3.0;
 
