@@ -66,7 +66,7 @@ class _showTablePriceState extends State<showTablePrice> {
     // TODO: implement dispose
     super.dispose();
     _pagingController.dispose();
-    dataListProduct.clear();
+    if(dataListProduct != null)dataListProduct.clear();
   }
 
   @override
@@ -125,6 +125,7 @@ class _showTablePriceState extends State<showTablePrice> {
           PagedSliverList(
               pagingController: _pagingController,
               builderDelegate: PagedChildBuilderDelegate(
+                firstPageErrorIndicatorBuilder: (context) => Container(),
                 noItemsFoundIndicatorBuilder: (context) {
                   return Container();
                 },
