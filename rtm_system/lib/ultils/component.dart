@@ -417,7 +417,7 @@ Widget componentContainerDetailInvoice(BuildContext context,
     String createTime,
     String storeName,
     String customerConfirmDate,
-    String managerConfirmDate,
+    // String managerConfirmDate,
     String activeDate,
     bool isCustomer,
     Widget widgetToNavigator}) {
@@ -475,11 +475,11 @@ Widget componentContainerDetailInvoice(BuildContext context,
         SizedBox(
           height: 10,
         ),
-        txtItemDetail(context, "Ngày xác nhận của quản lý",
-            "${getDateTime(managerConfirmDate)}"),
-        SizedBox(
-          height: 10,
-        ),
+        // txtItemDetail(context, "Ngày xác nhận của quản lý",
+        //     "${getDateTime(managerConfirmDate)}"),
+        // SizedBox(
+        //   height: 10,
+        // ),
         SizedBox(
           height: 10,
         ),
