@@ -15,10 +15,9 @@ class showStore extends StatefulWidget {
 }
 
 class _showStoreState extends State<showStore> {
-
   int _pageSize = 1;
   final PagingController<int, StoreElement> _pagingController =
-  PagingController(firstPageKey: 10);
+      PagingController(firstPageKey: 10);
   Store store;
   List<StoreElement> storeList;
 
@@ -54,7 +53,7 @@ class _showStoreState extends State<showStore> {
         pageKey,
         _pageSize,
       );
-      storeList =  store.stores;
+      storeList = store.stores;
       final isLastPage = storeList.length < pageKey;
       if (isLastPage) {
         _pagingController.appendLastPage(storeList);
@@ -72,41 +71,58 @@ class _showStoreState extends State<showStore> {
 
   @override
   Widget build(BuildContext context) => CustomScrollView(
-    slivers: <Widget>[
-      PagedSliverList<int, StoreElement>(
-        pagingController: _pagingController,
-        builderDelegate: PagedChildBuilderDelegate<StoreElement>(
-            firstPageErrorIndicatorBuilder: (context) {
-              return Column(
-                children: [
-                  firstPageErrorIndicatorBuilder(context,
-                      tittle: showMessage(null, MSG008)),
-                  GestureDetector(
-                    onTap: () => _pagingController.refresh(),
-                    child: Text(
-                      showMessage(null, MSG027),
-                      style: TextStyle(color: welcome_color, fontSize: 18),
-                    ),
-                  ),
-                ],
-              );
-            },
-            firstPageProgressIndicatorBuilder: (context) =>
-                firstPageProgressIndicatorBuilder(),
-            newPageProgressIndicatorBuilder: (context) =>
-                newPageProgressIndicatorBuilder(),
-            itemBuilder: (context, item, index) {
-              return containerStores(context, item.name, item.address, item.phone, "${item.email}");
-            }
-        ),
-      ),
-    ],
-  );
+        slivers: <Widget>[
+          PagedSliverList<int, StoreElement>(
+            pagingController: _pagingController,
+            builderDelegate: PagedChildBuilderDelegate<StoreElement>(
+                firstPageErrorIndicatorBuilder: (context) {
+                  return Column(
+                    children: [
+                      firstPageErrorIndicatorBuilder(context,
+                          tittle: showMessage(null, MSG008)),
+                      GestureDetector(
+                        onTap: () => _pagingController.refresh(),
+                        child: Text(
+                          showMessage(null, MSG027),
+                          style: TextStyle(color: welcome_color, fontSize: 18),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+                firstPageProgressIndicatorBuilder: (context) =>
+                    firstPageProgressIndicatorBuilder(),
+                noItemsFoundIndicatorBuilder: (context) =>
+                    noItemsFoundIndicatorBuilder(),
+                newPageProgressIndicatorBuilder: (context) =>
+                    newPageProgressIndicatorBuilder(),
+                itemBuilder: (context, item, index) {
+                  return containerStores(context, item.name, item.address,
+                      item.phone, "${item.email}");
+                }),
+          ),
+        ],
+      );
 
   @override
   void dispose() {
     _pagingController.dispose();
     super.dispose();
   }
-}
 
+  Widget noItemsFoundIndicatorBuilder() {
+    return Column(
+      children: [
+        firstPageErrorIndicatorBuilder(context,
+            tittle: showMessage("", MSG008)),
+        GestureDetector(
+          onTap: () => _pagingController.refresh(),
+          child: Text(
+            showMessage('', MSG027),
+            style: TextStyle(color: welcome_color, fontSize: 18),
+          ),
+        ),
+      ],
+    );
+  }
+}

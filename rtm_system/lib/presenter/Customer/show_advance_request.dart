@@ -123,6 +123,8 @@ class _showAdvanceRequestPageState extends State<showAdvanceRequestPage> {
                                       tittle: showMessage("", MSG008)),
                               firstPageProgressIndicatorBuilder: (context) =>
                                   firstPageProgressIndicatorBuilder(),
+                              noItemsFoundIndicatorBuilder: (context) =>
+                                  noItemsFoundIndicatorBuilder(),
                               newPageProgressIndicatorBuilder: (context) =>
                                   newPageProgressIndicatorBuilder(),
                               itemBuilder: (context, item, index) {
@@ -157,6 +159,21 @@ class _showAdvanceRequestPageState extends State<showAdvanceRequestPage> {
           ),
         ),
       ),
+    );
+  }
+   Widget noItemsFoundIndicatorBuilder() {
+    return Column(
+      children: [
+        firstPageErrorIndicatorBuilder(context,
+            tittle:  showMessage("", MSG008)),
+        GestureDetector(
+          onTap: () => _pagingController.refresh(),
+          child: Text(
+             showMessage('', MSG027),
+            style: TextStyle(color: welcome_color, fontSize: 18),
+          ),
+        ),
+      ],
     );
   }
 }

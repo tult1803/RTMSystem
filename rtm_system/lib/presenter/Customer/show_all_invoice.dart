@@ -62,10 +62,9 @@ class showAllInvoicePageState extends State<showAllInvoicePage> {
   @override
   void didUpdateWidget(covariant showAllInvoicePage oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if(oldWidget.toDate != this.widget.toDate){
+    if (oldWidget.toDate != this.widget.toDate) {
       _pagingController.refresh();
     }
-
   }
 
   @override
@@ -99,7 +98,7 @@ class showAllInvoicePageState extends State<showAllInvoicePage> {
                 Expanded(
                   child: Container(
                     margin: EdgeInsets.only(top: 0, left: 5, right: 5),
-                    height: size.height ,
+                    height: size.height,
                     width: size.width,
                     child: new CustomScrollView(
                       slivers: <Widget>[
@@ -110,13 +109,14 @@ class showAllInvoicePageState extends State<showAllInvoicePage> {
                                 return Column(
                                   children: [
                                     firstPageErrorIndicatorBuilder(context,
-                                        tittle: showMessage("",MSG008)),
+                                        tittle: showMessage("", MSG008)),
                                     GestureDetector(
                                       onTap: () => _pagingController.refresh(),
                                       child: Text(
                                         showMessage('', MSG027),
                                         style: TextStyle(
-                                            color: primaryLight3Color, fontSize: 18),
+                                            color: primaryLight3Color,
+                                            fontSize: 18),
                                       ),
                                     ),
                                   ],
@@ -124,9 +124,11 @@ class showAllInvoicePageState extends State<showAllInvoicePage> {
                               },
                               newPageErrorIndicatorBuilder: (context) =>
                                   firstPageErrorIndicatorBuilder(context,
-                                      tittle: showMessage("",MSG008)),
+                                      tittle: showMessage("", MSG008)),
                               firstPageProgressIndicatorBuilder: (context) =>
                                   firstPageProgressIndicatorBuilder(),
+                              noItemsFoundIndicatorBuilder: (context) =>
+                                  noItemsFoundIndicatorBuilder(),
                               newPageProgressIndicatorBuilder: (context) =>
                                   newPageProgressIndicatorBuilder(),
                               itemBuilder: (context, item, index) {
@@ -154,7 +156,8 @@ class showAllInvoicePageState extends State<showAllInvoicePage> {
                         ),
                       ],
                     ),
-                  ),)
+                  ),
+                )
               ],
             ),
           ),
@@ -167,5 +170,21 @@ class showAllInvoicePageState extends State<showAllInvoicePage> {
   void dispose() {
     _pagingController.dispose();
     super.dispose();
+  }
+
+  Widget noItemsFoundIndicatorBuilder() {
+    return Column(
+      children: [
+        firstPageErrorIndicatorBuilder(context,
+            tittle: showMessage("", MSG008)),
+        GestureDetector(
+          onTap: () => _pagingController.refresh(),
+          child: Text(
+            showMessage('', MSG027),
+            style: TextStyle(color: welcome_color, fontSize: 18),
+          ),
+        ),
+      ],
+    );
   }
 }

@@ -17,7 +17,7 @@ class showNotice extends StatefulWidget {
 class _showNoticeState extends State<showNotice> {
   int _pageSize = 1;
   final PagingController<int, NoticeList> _pagingController =
-  PagingController(firstPageKey: 10);
+      PagingController(firstPageKey: 10);
   String _searchTerm;
   Notice notice;
   List<NoticeList> noticeList;
@@ -55,7 +55,7 @@ class _showNoticeState extends State<showNotice> {
         _pageSize,
         searchTerm: _searchTerm,
       );
-      noticeList =  notice.noticeList;
+      noticeList = notice.noticeList;
       final isLastPage = noticeList.length < pageKey;
       if (isLastPage) {
         _pagingController.appendLastPage(noticeList);
@@ -73,41 +73,58 @@ class _showNoticeState extends State<showNotice> {
 
   @override
   Widget build(BuildContext context) => CustomScrollView(
-    slivers: <Widget>[
-      PagedSliverList<int, NoticeList>(
-        pagingController: _pagingController,
-        builderDelegate: PagedChildBuilderDelegate<NoticeList>(
-            firstPageErrorIndicatorBuilder: (context) {
-              return Column(
-                children: [
-                  firstPageErrorIndicatorBuilder(context,
-                      tittle: showMessage(null, MSG008)),
-                  GestureDetector(
-                    onTap: () => _pagingController.refresh(),
-                    child: Text(
-                      showMessage(null, MSG027),
-                      style: TextStyle(color: welcome_color, fontSize: 18),
-                    ),
-                  ),
-                ],
-              );
-            },
-            firstPageProgressIndicatorBuilder: (context) =>
-                firstPageProgressIndicatorBuilder(),
-            newPageProgressIndicatorBuilder: (context) =>
-                newPageProgressIndicatorBuilder(),
-            itemBuilder: (context, item, index) {
-              return containerButton(context, item.id, item.title, item.content, "${item.createDate}", true);
-            }
-        ),
-      ),
-    ],
-  );
+        slivers: <Widget>[
+          PagedSliverList<int, NoticeList>(
+            pagingController: _pagingController,
+            builderDelegate: PagedChildBuilderDelegate<NoticeList>(
+                firstPageErrorIndicatorBuilder: (context) {
+                  return Column(
+                    children: [
+                      firstPageErrorIndicatorBuilder(context,
+                          tittle: showMessage(null, MSG008)),
+                      GestureDetector(
+                        onTap: () => _pagingController.refresh(),
+                        child: Text(
+                          showMessage(null, MSG027),
+                          style: TextStyle(color: welcome_color, fontSize: 18),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+                firstPageProgressIndicatorBuilder: (context) =>
+                    firstPageProgressIndicatorBuilder(),
+                noItemsFoundIndicatorBuilder: (context) =>
+                    noItemsFoundIndicatorBuilder(),
+                newPageProgressIndicatorBuilder: (context) =>
+                    newPageProgressIndicatorBuilder(),
+                itemBuilder: (context, item, index) {
+                  return containerButton(context, item.id, item.title,
+                      item.content, "${item.createDate}", true);
+                }),
+          ),
+        ],
+      );
 
   @override
   void dispose() {
     _pagingController.dispose();
     super.dispose();
   }
-}
 
+  Widget noItemsFoundIndicatorBuilder() {
+    return Column(
+      children: [
+        firstPageErrorIndicatorBuilder(context,
+            tittle: showMessage("", MSG008)),
+        GestureDetector(
+          onTap: () => _pagingController.refresh(),
+          child: Text(
+            showMessage('', MSG027),
+            style: TextStyle(color: welcome_color, fontSize: 18),
+          ),
+        ),
+      ],
+    );
+  }
+}

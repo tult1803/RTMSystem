@@ -32,7 +32,7 @@ class UpdateProfilePage extends StatefulWidget {
 }
 
 class _UpdateProfilePageState extends State<UpdateProfilePage> {
-  String title = "Thông tin cá nhân";
+  String title = "Thay đổi thông tin";
   String password, errPassword;
   int selectedRadio;
   bool checkShow = true, checkClick = false, checkPasswordSuccess = false;
