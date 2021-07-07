@@ -26,8 +26,7 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
   Store store;
   List<StoreElement> dataListStore;
   String _myStore, reason = '';
-  // File _image;
-
+  
   @override
   void initState() {
     setState(() {
@@ -53,59 +52,7 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
     return dataListStore;
   }
 
-  // //get image from camera
-  // _imageFromCamera() async {
-  //   PickedFile image = await ImagePicker()
-  //       .getImage(source: ImageSource.camera, imageQuality: 50);
-  //   if (image != null) {
-  //     setState(() {
-  //       _image = File(image.path);
-  //     });
-  //   }
-  // }
-
-  // //get image from gallery
-  // _imageFromGallery() async {
-  //   PickedFile image = await ImagePicker()
-  //       .getImage(source: ImageSource.gallery, imageQuality: 50);
-  //   if (image != null) {
-  //     setState(() {
-  //       _image = File(image.path);
-  //     });
-  //   }
-  // }
-
-  // // show option choice camera or gallery
-  // void showPicker(context) {
-  //   showModalBottomSheet(
-  //       context: context,
-  //       builder: (BuildContext bc) {
-  //         return SafeArea(
-  //             child: Wrap(
-  //           children: [
-  //             ListTile(
-  //               leading: Icon(Icons.photo_library),
-  //               title: Text('Gallery'),
-  //               onTap: () {
-  //                 _imageFromGallery();
-  //                 Navigator.of(context).pop();
-  //               },
-  //             ),
-  //             ListTile(
-  //               leading: Icon(Icons.camera_alt),
-  //               title: Text('Camera'),
-  //               onTap: () {
-  //                 _imageFromCamera();
-  //                 Navigator.of(context).pop();
-  //               },
-  //             )
-  //           ],
-  //         ));
-  //       });
-  // }
-
-  //Hiện tại khi nhập giá tiền mà k outFocus mà chọn camera thì keyboard vẫn show,
-  //và k tắt được, có lẽ nên đổi keyboard. Tuy nhiên keyboard_actions k gọi dk KeyboardActions.
+  
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -241,69 +188,6 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
       ],
     );
   }
-
-//show hinh anh da chon , có setState nên k tách dk
-  // Widget showImage(width, height, image) {
-  //   if (image != null) {
-  //     setState(() {
-  //       this.listInfor = [
-  //         this.money,
-  //         getDateTime(this.createDate.toString(),
-  //             dateFormat: 'yyyy-MM-dd'),
-  //         reason
-  //       ];
-  //     });
-  //     return Container(
-  //       margin: EdgeInsets.only(top: 12),
-  //       width: width,
-  //       height: height * 0.3,
-  //       child: Image.file(image, fit: BoxFit.scaleDown),
-  //     );
-  //   } else {
-  //     return Container();
-  //   }
-  // }
-  // //btn load image
-  // Widget btnImage(context, width, height) {
-  //   return SingleChildScrollView(
-  //       scrollDirection: Axis.horizontal,
-  //       child: Container(
-  //         child: Column(
-  //           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-  //           children: [
-  //             AutoSizeText("Thêm hình CMND", style: TextStyle(
-  //               fontWeight: FontWeight.w500,
-  //             )),
-  //             SizedBox(
-  //               height: 12,
-  //             ),
-  //             Container(
-  //               width: width,
-  //               height: height,
-  //               child: ElevatedButton(
-  //                 onPressed: () {
-  //                   showPicker(context);
-
-  //                 },
-  //                 child: Center(
-  //                   child: Icon(
-  //                     Icons.camera_alt,
-  //                     color: Colors.black,
-  //                   ),
-  //                 ),
-  //                 style: ElevatedButton.styleFrom(
-  //                   primary: Colors.white,
-  //                   shape: RoundedRectangleBorder(
-  //                     borderRadius: BorderRadius.all(Radius.circular(15)),
-  //                     side: BorderSide(color: Color(0xFFcccccc), width: 1),
-  //                   ),
-  //                 ),
-  //               ),
-  //             )
-  //           ],
-  //         ),
-  //       ));
-  // }
   // form để nhập số tiền
   Widget _formMoney(
       bool obscureText, String hintText, String tittle, TextInputType txtType) {
