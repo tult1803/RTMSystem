@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -214,10 +215,11 @@ Widget tableCell({String day,int oldPrice, int newPrice}) {
 
 Widget tableRow(String tittle, {Color colorText, bool isAlignmentRight}) {
   return Container(
+    height: 30,
     alignment:
         isAlignmentRight == null ? Alignment.centerRight : Alignment.center,
     margin: EdgeInsets.all(10),
-    child: Text(
+    child: AutoSizeText(
       tittle,
       style: TextStyle(color: colorText),
     ),
