@@ -27,3 +27,4 @@ String urlAdvanceHistory = "api/rtm/v1/advance/get-advance-history";
 String urlReturnAdvance = "api/rtm/v1/advance/return-advance";
 String urlProcessAdvanceBill = "api/rtm/v1/advance/process-advance-request";
 String urlValidateCustomer = "api/rtm/v1/user/validate-customer";
+String urlConfirmIdentifyCustomer = "api/rtm/v1/user/identify-customer";

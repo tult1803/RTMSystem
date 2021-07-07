@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:rtm_system/model/PostCreateRequestInvoice.dart';
 import 'package:rtm_system/model/deleteAPI_invoice.dart';
 import 'package:rtm_system/model/deleteAPI_invoiceRequest.dart';
+import 'package:rtm_system/model/model_validate_account.dart';
 import 'package:rtm_system/model/postAPI_Image.dart';
 import 'package:rtm_system/model/postAPI_createCustomer.dart';
 import 'package:rtm_system/model/postAPI_createInvoice.dart';
@@ -17,6 +18,8 @@ import 'package:rtm_system/model/putAPI_processAdvanceBill.dart';
 import 'package:rtm_system/model/putAPI_signInvoice.dart';
 import 'package:rtm_system/model/putAPI_updatePrice.dart';
 import 'package:rtm_system/model/putAPI_updateProfile.dart';
+import 'package:rtm_system/model/putAPT_ConfirmIdentifyCustomer.dart';
+import 'package:rtm_system/view/customer/Profile/confirm_data_verification.dart';
 import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/message_list.dart';
 import 'package:rtm_system/view/add_product_in_invoice.dart';
@@ -497,20 +500,55 @@ Future<void> putReturnAdvance(
 }
 
 Future<void> doValidateCustomer(BuildContext context,
-    {File cmndFront,File cmndBack,File face}) async {
-  int status;
+    {File cmndFront, File cmndBack, File face}) async {
+  DataValidateAccount account = DataValidateAccount();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   PostValidateCustomer validateCustomer = PostValidateCustomer();
-  status = await validateCustomer.createValidateCustomer(
-      prefs.get("access_token"),
-      cmndFront: cmndFront,
-      cmndBack: cmndBack,
-      face: face);
-
-  if(status == 200){
-    showCustomDialog(context, isSuccess: true, content: "Xác thực thành công", widgetToNavigator: HomeCustomerPage(index: 3,));
-  }else{
-    showCustomDialog(context, isSuccess: false, content: "Có lỗi xảy ra. Thử lại");
+  try {
+    account = await validateCustomer.createValidateCustomer(
+        prefs.get("access_token"),
+        cmndFront: cmndFront,
+        cmndBack: cmndBack,
+        face: face);
+    if (account.faceData.similarity >= 80) {
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => ConfirmDataVerification(
+                account: account,
+                accountId: prefs.get("accountId"),
+                check: true,
+              )));
+    } else {
+      showCustomDialog(context,
+          isSuccess: false,
+          content: "Ảnh chụp và CMND/CCCD không trùng khớp. Thử lại");
+    }
+  } catch (_) {
+    showCustomDialog(context,
+        isSuccess: false, content: "Có lỗi xảy ra. Thử lại");
   }
   return true;
+}
+
+Future doConfirmIdentifyCustomer(BuildContext context,
+    {String cmnd,
+    String birthday,
+    String fullName,
+    String address,
+    int gender}) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  PutConfirmIdentifyCustomer confirmIdentifyCustomer =
+      PutConfirmIdentifyCustomer();
+  int status = await confirmIdentifyCustomer.updateCustomer(
+      prefs.get("access_token"),
+      gender: gender,
+      birthday: birthday,
+      address: address,
+      cmnd: cmnd,
+      fullName: fullName);
+
+  if(status == 200){
+    showCustomDialog(context,isSuccess: true, content: "Xác minh thành công", widgetToNavigator: HomeCustomerPage(index: 3,));
+  }else{
+    showCustomDialog(context,isSuccess: false, content: "Có lỗi xảy ra. Xin thử lại");
+  }
 }
