@@ -496,7 +496,7 @@ Future<void> putReturnAdvance(
   }
 }
 
-Future<void> doValidateCustomer(
+Future<void> doValidateCustomer(BuildContext context,
     {File cmndFront,File cmndBack,File face}) async {
   int status;
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -506,5 +506,11 @@ Future<void> doValidateCustomer(
       cmndFront: cmndFront,
       cmndBack: cmndBack,
       face: face);
-  return status;
+
+  if(status == 200){
+    showCustomDialog(context, isSuccess: true, content: "Xác thực thành công", widgetToNavigator: HomeCustomerPage(index: 3,));
+  }else{
+    showCustomDialog(context, isSuccess: false, content: "Có lỗi xảy ra. Thử lại");
+  }
+  return true;
 }

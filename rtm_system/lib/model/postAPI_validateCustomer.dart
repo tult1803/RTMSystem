@@ -21,7 +21,6 @@ class PostValidateCustomer {
         "avt": byteFace,
       }),
     );
-    print(byteFace);
     print("Status postApi ValidateCustomer:${response.statusCode}");
     return response.statusCode;
   }
