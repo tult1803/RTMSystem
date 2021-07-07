@@ -3,10 +3,9 @@ import 'dart:io';
 import 'package:rtm_system/ultils/src/url_api.dart';
 import 'package:http/http.dart' as http;
 
-class PostValidateCustomer{
-
+class PostValidateCustomer {
   createValidateCustomer(String token,
-      {File face,File  cmndFront, File cmndBack}) async {
+      {File face, File cmndFront, File cmndBack}) async {
     final byteFace = face.readAsBytesSync();
     final bytecmndFront = cmndFront.readAsBytesSync();
     final bytecmndBack = cmndBack.readAsBytesSync();
@@ -17,12 +16,11 @@ class PostValidateCustomer{
         'Authorization': 'Bearer $token',
       },
       body: jsonEncode(<String, dynamic>{
-        "cmnd1": "$bytecmndFront",
-        "cmnd2": "$bytecmndBack",
-        "avt" : "$byteFace",
+        "cmnd1": bytecmndFront,
+        "cmnd2": bytecmndBack,
+        "avt": byteFace,
       }),
     );
-    
     print("Status postApi ValidateCustomer:${response.statusCode}");
     return response.statusCode;
   }

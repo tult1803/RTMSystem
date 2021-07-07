@@ -117,9 +117,6 @@ class _FaceIdentifyCardState extends State<FaceIdentifyCard> {
               primary: welcome_color,
             ),
             onPressed: () async{
-               // byteFront = imageFront.readAsBytesSync();
-               // byteFace = imageFace.readAsBytesSync();
-               // byteBack =imageBack.readAsBytesSync();
                     doValidateCustomer(cmndFrontBase64: imageFront, cmndBackBase64: imageBack, faceBase64: imageFace);
                   },
             child: Text("Xác thực", style: GoogleFonts.roboto(color: Colors.white, fontWeight: FontWeight.w400, fontSize: 17),)
