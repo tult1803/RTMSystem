@@ -13,6 +13,7 @@ class GetProduct {
         'Authorization': 'Bearer $token',
       },
     );
+
     print("Status getApi Product:${response.statusCode}");
     if (response.statusCode == 200) {
       List<dynamic> listProduct = json.decode(response.body);

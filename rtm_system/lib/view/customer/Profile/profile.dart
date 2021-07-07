@@ -12,19 +12,15 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    if(imageBack != null){
-      imageBack = null;
-    }
-    if(imageFront != null){
-      imageFront = null;
-    }
+    if (imageBack != null) imageBack = null;
+    if (imageFront != null) imageFront = null;
+    if (imageFace != null) imageFace = null;
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +28,11 @@ class _ProfilePageState extends State<ProfilePage> {
       appBar: AppBar(
         backgroundColor: primaryColor,
         centerTitle: true,
-        title: const Text('Thông tin cá nhân', style: TextStyle( color: Colors.white),),),
+        title: const Text(
+          'Thông tin cá nhân',
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
       body: showProfile(),
     );
   }

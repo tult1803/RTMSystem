@@ -491,110 +491,11 @@ Widget componentContainerDetailInvoice(BuildContext context,
           height: 5,
         ),
         // chỗ này show btn accpet or reject của customer
-        _showBtnProcessInvoice(context, statusId, id, isCustomer,
+        btnProcessInvoice(context, statusId, id, isCustomer,
             widgetToNavigator: widgetToNavigator),
       ],
     ),
   );
-}
-
-Widget _showBtnProcessInvoice(context, int statusId, String id, bool isCustomer,
-    {bool isRequest, Widget widgetToNavigator, Map<String, dynamic> map}) {
-  var size = MediaQuery.of(context).size;
-  //show button để xử lý hoàn thành đơn
-  //status = 0 là cho customer xoá hoá đơn gửi yêu cầu.
-  //status = 5 là cho customer sign invoice
-  // status = 1 là manager confirm
-  // status = 4 là accept or delete invoice. Customer: only accept NOT Reject.
-  if (statusId == 5 || statusId == 1) {
-    if (statusId == 5 && isCustomer == true) {
-      return SizedBox(
-        width: size.width * 0.5,
-        // ignore: deprecated_member_use
-        child: RaisedButton(
-          color: primaryColor,
-          onPressed: () {
-            doConfirmOrAcceptOrRejectInvoice(context, id, 1, isCustomer);
-          },
-          child: Text(
-            'Nhận tiền',
-            style: TextStyle(color: Colors.white, fontSize: 16),
-          ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          elevation: 10,
-        ),
-      );
-    } else
-      return Container();
-  } else if (statusId == 4) {
-    if (isCustomer) {
-      return SizedBox(
-        width: size.width * 0.5,
-        // ignore: deprecated_member_use
-        child: RaisedButton(
-          color: primaryColor,
-          onPressed: () {
-            doConfirmOrAcceptOrRejectInvoice(context, id, 2, isCustomer);
-          },
-          child: Text(
-            'Chấp nhận',
-            style: TextStyle(color: Colors.white, fontSize: 16),
-          ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          elevation: 10,
-        ),
-      );
-    } else {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Flexible(
-            // ignore: deprecated_member_use
-            child: RaisedButton(
-              color: Colors.redAccent,
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => ReasonToDelete(invoiceId: id,isRequest: isRequest != null ? true: false,isCustomer: isCustomer,widgetToNavigator: widgetToNavigator,)));
-              },
-              child: Text(
-                '${isRequest != null ? "Từ chối" : "Xoá"}',
-                style: TextStyle(color: Colors.white, fontSize: 16),
-              ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              elevation: 10,
-            ),
-          ),
-          Flexible(
-            // ignore: deprecated_member_use
-            child: RaisedButton(
-              color: Color(0xFF0BB791),
-              onPressed: () {
-                doConfirmOrAcceptOrRejectInvoice(context, id, 2, isCustomer,
-                    isRequest: isRequest,
-                    map: map,
-                    widgetToNavigator: widgetToNavigator);
-              },
-              child: Text(
-                '${isRequest != null ? "Tạo" : "Cập nhật"}',
-                style: TextStyle(color: Colors.white, fontSize: 16),
-              ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              elevation: 10,
-            ),
-          ),
-        ],
-      );
-    }
-  } else {
-    return Container();
-  }
 }
 
 //Dùng cho chi tiết sản phẩm
@@ -885,7 +786,7 @@ Widget componentContainerInvoiceRequest(BuildContext context,
         ),
         isCustomer
             ? Container()
-            : _showBtnProcessInvoice(context, 4, id, isCustomer,
+            : btnProcessInvoice(context, 4, id, isCustomer,
                 isRequest: isRequest,
                 widgetToNavigator: widgetToNavigator,
                 map: map),

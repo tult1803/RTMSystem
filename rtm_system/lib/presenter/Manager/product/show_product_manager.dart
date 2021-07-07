@@ -20,6 +20,7 @@ List<String> itemNameUpdatePrice = [];
 List<String> itemPriceUpdatePrice = [];
 List<String> itemIdUpdatePrice = [];
 
+// ignore: camel_case_types
 class _showAllProductState extends State<showAllProduct> {
   // String token;
   List<DataProduct> dataListProduct = [];

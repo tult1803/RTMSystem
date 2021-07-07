@@ -6,6 +6,7 @@ import 'package:rtm_system/model/postAPI_Image.dart';
 import 'package:rtm_system/model/postAPI_createCustomer.dart';
 import 'package:rtm_system/model/postAPI_createInvoice.dart';
 import 'package:rtm_system/model/postAPI_createNotice.dart';
+import 'package:rtm_system/model/postAPI_validateCustomer.dart';
 import 'package:rtm_system/model/profile_customer/getAPI_customer_phone.dart';
 import 'package:rtm_system/model/putAPI_ConfirmAdvanceRequest.dart';
 import 'package:rtm_system/model/putAPI_ReturnAdvance.dart';
@@ -491,4 +492,17 @@ Future<void> putReturnAdvance(
       content: showMessage(MSG031, MSG027),
     );
   }
+}
+
+Future<void> doValidateCustomer(
+    {String cmndFrontBase64, String cmndBackBase64, String faceBase64}) async {
+  int status;
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  PostValidateCustomer validateCustomer = PostValidateCustomer();
+  status = await validateCustomer.createValidateCustomer(
+      prefs.get("access_token"),
+      cmndFront: cmndFrontBase64,
+      cmndBack: cmndBackBase64,
+      face: faceBase64);
+  return status;
 }

@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:rtm_system/helpers/component.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 
+import 'face_verification.dart';
 import 'front_identity_card.dart';
 
 class BackIdentifyCard extends StatefulWidget {
@@ -61,7 +62,7 @@ class _BackIdentifyCardState extends State<BackIdentifyCard> {
         height: 300,
         color: Colors.white,
         child: Image.asset(
-          "images/cmnd.png",
+          "images/cmnd_back.png",
           fit: BoxFit.scaleDown,
         ),
       );
@@ -107,7 +108,9 @@ class _BackIdentifyCardState extends State<BackIdentifyCard> {
               elevation: 3,
               primary: welcome_color,
             ),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) =>  FaceIdentifyCard()));
+            },
             // child: Text("Tiếp tục", style: GoogleFonts.roboto(color: Colors.white, fontWeight: FontWeight.w400, fontSize: 17),)
             child: Icon(Icons.arrow_forward, ),
           )),
