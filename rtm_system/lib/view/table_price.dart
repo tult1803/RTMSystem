@@ -115,16 +115,15 @@ class _showTablePriceState extends State<showTablePrice> {
         // border: TableBorder.all(color: Colors.black54),
         defaultVerticalAlignment: TableCellVerticalAlignment.middle,
         columnWidths: {
-          0: FractionColumnWidth(0.25),
-          1: FractionColumnWidth(0.15),
-          2: FractionColumnWidth(0.2),
-          3: FractionColumnWidth(0.2),
-          3: FractionColumnWidth(0.2)
+          0: FractionColumnWidth(0.36),
+          1: FractionColumnWidth(0.22),
+          2: FractionColumnWidth(0.20),
+          3: FractionColumnWidth(0.22)
         },
         children: [
           TableRow(decoration: BoxDecoration(color: welcome_color), children: [
             tableRow("Ngày", colorText: Colors.white, isAlignmentRight: false),
-            tableRow("Giờ", colorText: Colors.white),
+            // tableRow("Giờ", colorText: Colors.white),
             tableRow("Thay đổi", colorText: Colors.white),
             tableRow("%", colorText: Colors.white),
             tableRow("Giá", colorText: Colors.white),
@@ -180,16 +179,15 @@ Widget tableCell({String day,int oldPrice, int newPrice}) {
       bottom: BorderSide(color: Colors.black45, width: 0.5),
     ),
     columnWidths: {
-      0: FractionColumnWidth(0.25),
-      1: FractionColumnWidth(0.15),
-      2: FractionColumnWidth(0.2),
-      3: FractionColumnWidth(0.2),
-      4: FractionColumnWidth(0.2),
+      0: FractionColumnWidth(0.36),
+      1: FractionColumnWidth(0.22),
+      2: FractionColumnWidth(0.20),
+      3: FractionColumnWidth(0.22)
     },
     children: [
       TableRow(children: [
-        tableRow("${getDateTime("$day", dateFormat: "dd-MM-yyyy")}"),
-        tableRow("${getDateTime("$day", dateFormat: "HH:mm")}"),
+        tableRow("${getDateTime("$day", dateFormat: "dd-MM-yyyy")} (${getDateTime("$day", dateFormat: "HH")}h)"),
+        // tableRow("${getDateTime("$day", dateFormat: "HH:mm")}"),
         tableRow("${getFormatPrice("$changePrice")}",
             colorText: changePrice < 0
                 ? Colors.redAccent
@@ -221,7 +219,7 @@ Widget tableRow(String tittle, {Color colorText, bool isAlignmentRight}) {
     margin: EdgeInsets.all(10),
     child: AutoSizeText(
       tittle,
-      style: TextStyle(color: colorText),
+      style: TextStyle(color: colorText)
     ),
   );
 }
