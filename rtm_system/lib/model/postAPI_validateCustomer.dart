@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 class PostValidateCustomer{
 
   createValidateCustomer(String token,
-      {String face, String cmndFront, String cmndBack}) async {
+      { face,  cmndFront,  cmndBack}) async {
     final response = await http.post(
       Uri.http('$urlMain', '$urlValidateCustomer'),
       headers: <String, String>{
@@ -13,13 +13,13 @@ class PostValidateCustomer{
         'Authorization': 'Bearer $token',
       },
       body: jsonEncode(<String, dynamic>{
-        "cmnd1": cmndFront,
-        "cmnd2": cmndBack,
-        "avt" : face,
+        "cmnd1": "$cmndFront",
+        "cmnd2": "$cmndBack",
+        "avt" : "$face",
       }),
     );
+    
     print("Status postApi ValidateCustomer:${response.statusCode}");
     return response.statusCode;
   }
-
 }

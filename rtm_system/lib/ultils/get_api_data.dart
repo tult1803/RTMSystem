@@ -495,7 +495,7 @@ Future<void> putReturnAdvance(
 }
 
 Future<void> doValidateCustomer(
-    {String cmndFrontBase64, String cmndBackBase64, String faceBase64}) async {
+    {cmndFrontBase64, cmndBackBase64, faceBase64}) async {
   int status;
   SharedPreferences prefs = await SharedPreferences.getInstance();
   PostValidateCustomer validateCustomer = PostValidateCustomer();

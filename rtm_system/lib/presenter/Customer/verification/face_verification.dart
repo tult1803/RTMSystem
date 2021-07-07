@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -102,7 +103,7 @@ class _FaceIdentifyCardState extends State<FaceIdentifyCard> {
   }
 
   Widget nextPage(image) {
-    String base64Front, base64Face, base64Back;
+    Uint8List byteFront, byteFace, byteBack;
     return Container(
       child: image == null
           ? null
@@ -115,11 +116,11 @@ class _FaceIdentifyCardState extends State<FaceIdentifyCard> {
               elevation: 3,
               primary: welcome_color,
             ),
-            onPressed: () {
-               base64Front = base64Encode(imageFront.readAsBytesSync());
-               base64Face = base64Encode(imageFace.readAsBytesSync());
-               base64Back = base64Encode(imageBack.readAsBytesSync());
-              doValidateCustomer(cmndFrontBase64: base64Front, cmndBackBase64: base64Back, faceBase64: base64Face);
+            onPressed: () async{
+               byteFront = imageFront.readAsBytesSync();
+               byteFace = imageFace.readAsBytesSync();
+               byteBack =imageBack.readAsBytesSync();
+                    doValidateCustomer(cmndFrontBase64: byteFront, cmndBackBase64: byteBack, faceBase64: byteFace);
                   },
             child: Text("Xác thực", style: GoogleFonts.roboto(color: Colors.white, fontWeight: FontWeight.w400, fontSize: 17),)
             // child: Icon(Icons.arrow_forward, ),
@@ -177,4 +178,5 @@ class _FaceIdentifyCardState extends State<FaceIdentifyCard> {
               ));
         });
   }
+
 }
