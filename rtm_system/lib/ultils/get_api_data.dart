@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:rtm_system/model/PostCreateRequestInvoice.dart';
 import 'package:rtm_system/model/deleteAPI_invoice.dart';
@@ -495,7 +497,7 @@ Future<void> putReturnAdvance(
 }
 
 Future<void> doValidateCustomer(
-    {cmndFrontBase64, cmndBackBase64, faceBase64}) async {
+    {File cmndFrontBase64,File cmndBackBase64,File faceBase64}) async {
   int status;
   SharedPreferences prefs = await SharedPreferences.getInstance();
   PostValidateCustomer validateCustomer = PostValidateCustomer();
