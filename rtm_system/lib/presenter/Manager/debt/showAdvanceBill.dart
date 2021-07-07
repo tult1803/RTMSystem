@@ -154,27 +154,6 @@ class showAdvancceBillManagerState extends State<showAdvancceBillManager> {
                          ),
                          isCustomer: false
                    );
-                  // return boxForAdvanceRequest(
-                  //     context: context,
-                  //     id: item['id'],
-                  //     status: item['status_id'],
-                  //     createDate: "${item['create_date']}",
-                  //     amount: "${item['amount']}",
-                  //     storeId: item['store_id'],
-                  //     name: item["customer_name"],
-                  //     receiveDate: item["receive_date"],
-                  //     imageUrl: item["image_url"],
-                  //     reason: item["reason"],
-                  //     widget: FormForDetailPage(
-                  //       tittle: "Chi tiết yêu cầu",
-                  //       bodyPage: DetailAdvancePage(
-                  //         isCustomer: false,
-                  //         id: item['id'],
-                  //         status: item['status_id'],
-                  //         isRequest: false,
-                  //       ),
-                  //     ),
-                  //     isCustomer: false);
                 }),
           ),
         ],

@@ -7,6 +7,7 @@ import 'package:rtm_system/ultils/get_api_data.dart';
 import 'package:rtm_system/helpers/dialog.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/form_reason.dart';
+import 'package:rtm_system/view/manager/home_manager_page.dart';
 import '../ultils/get_data.dart';
 
 // Hiện tại dùng cho trang "Profile"
@@ -866,7 +867,7 @@ Widget componentContainerDetailAdvanceRequest(BuildContext context,
           //show btn confirm nhan tien cua customer
           isCustomer
               ? btnConfirmAdvanceOfCustomer(context, id, statusId)
-              : Container(),
+              : statusId==4 ? btnProcessAdvanceBill(context,isCustomer: false,idAdvanceBill: id,widgetToNavigator: HomeAdminPage(index: 2,indexInsidePage: 1,)):Container(),
         ],
       ),
     );
