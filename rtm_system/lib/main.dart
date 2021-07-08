@@ -18,15 +18,15 @@ void configLoading() {
   EasyLoading.instance
     ..displayDuration = const Duration(milliseconds: 2000)
     ..indicatorType = EasyLoadingIndicatorType.fadingCircle
-    ..loadingStyle = EasyLoadingStyle.dark
+    ..loadingStyle = EasyLoadingStyle.custom
     ..indicatorSize = 45.0
     ..radius = 10.0
-    ..progressColor = Colors.yellow
-    ..backgroundColor = Colors.green
-    ..indicatorColor = Colors.yellow
-    ..textColor = Colors.yellow
-    ..maskColor = Colors.blue.withOpacity(0.5)
-    ..userInteractions = true;
+    ..progressColor = welcome_color
+    ..backgroundColor = Colors.white
+    ..indicatorColor = welcome_color
+    ..textColor = colorHexa("626D71")
+    ..maskColor = Colors.black12
+    ..userInteractions = false;
 }
 
 class MyApp extends StatelessWidget {

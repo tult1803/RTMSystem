@@ -512,7 +512,7 @@ Future<void> doValidateCustomer(BuildContext context,
   SharedPreferences prefs = await SharedPreferences.getInstance();
   PostValidateCustomer validateCustomer = PostValidateCustomer();
   try {
-    EasyLoading.show();
+    EasyLoading.show(status: 'Đang xử lý...', maskType: EasyLoadingMaskType.black,);
     account = await validateCustomer.createValidateCustomer(
         prefs.get("access_token"),
         cmndFront: cmndFront,

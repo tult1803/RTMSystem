@@ -39,12 +39,12 @@
 //         child: FlatButton(
 //           textColor: Colors.blue,
 //           child: Text('loadData'),
-//           onPressed: () {
-//             loadData();
+//           onPressed: () async{
+//             // loadData();
 //             // await Future.delayed(Duration(seconds: 2));
-//             // EasyLoading.show(status: 'loading...');
-//             // await Future.delayed(Duration(seconds: 5));
-//             // EasyLoading.dismiss();
+//             EasyLoading.show(status: 'Đang xử lý...', maskType: EasyLoadingMaskType.black,);
+//             await Future.delayed(Duration(seconds: 5));
+//             EasyLoading.dismiss();
 //           },
 //         ),
 //       ),
