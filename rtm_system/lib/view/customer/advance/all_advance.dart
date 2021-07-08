@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:rtm_system/model/profile_customer/getAPI_customer_phone.dart';
+import 'package:rtm_system/model/profile_customer/model_profile_customer.dart';
 import 'package:rtm_system/presenter/Customer/show_advance_request.dart';
 import 'package:rtm_system/presenter/Customer/show_history_advance.dart';
 import 'package:rtm_system/helpers/button.dart';
@@ -6,6 +8,7 @@ import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/customer/advance/create_request_advance.dart';
 import 'package:rtm_system/view/customer/getMoney_or_payDebt.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AdvancePage extends StatefulWidget {
   const AdvancePage({Key key}) : super(key: key);
@@ -21,7 +24,9 @@ class _AdvancePageState extends State<AdvancePage>
   TabController _tabController;
   String getFromDate, getToDate;
   int index, _selectedIndex;
-
+  GetAPIProfileCustomer getAPIProfileCustomer = GetAPIProfileCustomer();
+  InfomationCustomer infomationCustomer = InfomationCustomer();
+  int level = 0 ;
   @override
   void initState() {
     super.initState();
@@ -40,6 +45,20 @@ class _AdvancePageState extends State<AdvancePage>
       "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
       getToDate = "${getDateTime("$toDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
     });
+  }
+  Future getAPIProfile() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    String token = sharedPreferences.getString('access_token');
+    String phone = sharedPreferences.getString('phone');
+    // Đỗ dữ liệu lấy từ api
+    infomationCustomer =
+        await getAPIProfileCustomer.getProfileCustomer(token, phone);
+    if (infomationCustomer != null) {
+      setState(() {
+        level = infomationCustomer.level;
+      });
+    }
+    return infomationCustomer;
   }
   @override
   Widget build(BuildContext context) {
@@ -91,7 +110,16 @@ class _AdvancePageState extends State<AdvancePage>
           containerAdvanceHistory(size.height, 8),
         ],
       ),
-      floatingActionButton: _showFloatBtn(_selectedIndex),
+      floatingActionButton: level != 0
+          ? _showFloatBtn(_selectedIndex)
+          : Container(
+              width: 1,
+              height: 1,
+              child: FloatingActionButton(
+                backgroundColor: backgroundColor,
+                onPressed: () {},
+              ),
+            ),
     );
   }
   //show invoice advance request
