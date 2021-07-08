@@ -532,6 +532,7 @@ Future<void> doValidateCustomer(BuildContext context,
           content: "Thông tin không trùng khớp. Thử lại");
     }
   } catch (_) {
+    EasyLoading.dismiss();
     showCustomDialog(context,
         isSuccess: false, content: "Có lỗi xảy ra. Thử lại");
   }
