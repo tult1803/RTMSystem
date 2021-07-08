@@ -82,7 +82,7 @@ class _AdvancePageState extends State<AdvancePage>
               // icon: Icon(Icons.post_add_outlined,),
             ),
             Tab(
-              text: 'Chấp nhận',
+              text: 'Đã duyệt',
               // icon: Icon(Icons.access_time_outlined),
             ),
             Tab(

@@ -737,6 +737,7 @@ Widget componentContainerDetailAdvanceRequest(BuildContext context,
     String description,
     int amount,
     int statusId,
+    int activeStatus,
     String createDate,
     String activeDate,
     String reason,
@@ -791,8 +792,13 @@ Widget componentContainerDetailAdvanceRequest(BuildContext context,
           SizedBox(
             height: 10,
           ),
+          txtItemDetail(context, "Tình trạng", activeStatus == 5 ? "Chưa nhận tiền" : "Đã nhận tiền",
+              colorContent: getColorStatus(status: activeStatus)),
+          SizedBox(
+            height: 10,
+          ),
           //show btn confirm nhan tien cua customer
-          isCustomer
+          isCustomer && activeStatus == 5
               ? btnConfirmAdvanceOfCustomer(context, id, statusId)
               : statusId==4 ? btnProcessAdvanceBill(context,isCustomer: false,idAdvanceBill: id,widgetToNavigator: HomeAdminPage(index: 2,indexInsidePage: 1,)):Container(),
         ],

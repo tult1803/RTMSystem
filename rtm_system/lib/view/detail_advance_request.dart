@@ -57,6 +57,7 @@ class _DetailAdvancePageState extends State<DetailAdvancePage> {
                 managerName: advanceDetail.managerName,
                 managerPhone: '0912222-phone',
                 statusId: advanceDetail.statusId,
+                activeStatus: advanceDetail.acceptStatusId,
                 isCustomer: widget.isCustomer,
                 description: advanceDetail.description,
                 reason: advanceDetail.reason,
