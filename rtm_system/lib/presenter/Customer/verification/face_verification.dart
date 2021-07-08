@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -22,20 +23,24 @@ class _FaceIdentifyCardState extends State<FaceIdentifyCard> {
     var size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        leading: leadingAppbar(context,colorIcon: Colors.white),
+        leading: leadingAppbar(context, colorIcon: Colors.white),
         centerTitle: true,
-        title: const Text('Xác thực thông tin', style: TextStyle( color: Colors.white),),),
+        title: const Text(
+          'Xác thực thông tin',
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
       body: SingleChildScrollView(
           child: Container(
-            child: Column(
-              children: [
-                tittleBody(),
-                showImage(size.width, size.height, imageFace),
-                btnImage(context, size.width * 0.9, size.height * 0.1),
-                nextPage(imageFace),
-              ],
-            ),
-          )),
+        child: Column(
+          children: [
+            tittleBody(),
+            showImage(size.width, size.height, imageFace),
+            btnImage(context, size.width * 0.9, size.height * 0.1),
+            nextPage(imageFace),
+          ],
+        ),
+      )),
     );
   }
 
@@ -102,28 +107,33 @@ class _FaceIdentifyCardState extends State<FaceIdentifyCard> {
   }
 
   Widget nextPage(image) {
-    String base64Front, base64Face, base64Back;
     return Container(
       child: image == null
           ? null
           : Container(
-          width: 120,
-          height: 40,
-          margin: EdgeInsets.only(top: 20),
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              elevation: 3,
-              primary: welcome_color,
-            ),
-            onPressed: () {
-               base64Front = base64Encode(imageFront.readAsBytesSync());
-               base64Face = base64Encode(imageFace.readAsBytesSync());
-               base64Back = base64Encode(imageBack.readAsBytesSync());
-              doValidateCustomer(cmndFrontBase64: base64Front, cmndBackBase64: base64Back, faceBase64: base64Face);
+              width: 120,
+              height: 40,
+              margin: EdgeInsets.only(top: 20),
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    elevation: 3,
+                    primary: welcome_color,
+                  ),
+                  onPressed: ()  {
+                    doValidateCustomer(context,
+                        cmndFront: imageFront,
+                        cmndBack: imageBack,
+                        face: imageFace);
                   },
-            child: Text("Xác thực", style: GoogleFonts.roboto(color: Colors.white, fontWeight: FontWeight.w400, fontSize: 17),)
-            // child: Icon(Icons.arrow_forward, ),
-          )),
+                  child: Text(
+                    "Xác thực",
+                    style: GoogleFonts.roboto(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 17),
+                  )
+                  // child: Icon(Icons.arrow_forward, ),
+                  )),
     );
   }
 
@@ -156,25 +166,25 @@ class _FaceIdentifyCardState extends State<FaceIdentifyCard> {
         builder: (BuildContext bc) {
           return SafeArea(
               child: Wrap(
-                children: [
-                  ListTile(
-                    leading: Icon(Icons.photo_library),
-                    title: Text('Chọn ảnh trong thư viện'),
-                    onTap: () {
-                      _imageFromGallery();
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.camera_alt),
-                    title: Text('Mở camera'),
-                    onTap: () {
-                      _imageFromCamera();
-                      Navigator.of(context).pop();
-                    },
-                  )
-                ],
-              ));
+            children: [
+              ListTile(
+                leading: Icon(Icons.photo_library),
+                title: Text('Chọn ảnh trong thư viện'),
+                onTap: () {
+                  _imageFromGallery();
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.camera_alt),
+                title: Text('Mở camera'),
+                onTap: () {
+                  _imageFromCamera();
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          ));
         });
   }
 }

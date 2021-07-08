@@ -3,7 +3,8 @@ import 'dart:convert';
 import 'package:rtm_system/ultils/src/url_api.dart';
 import 'package:http/http.dart' as http;
 
-import 'model_login.dart';
+import '../model_login.dart';
+
 
 
 class PostLogin{

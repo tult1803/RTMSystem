@@ -374,7 +374,6 @@ Widget btnDeleteRequestPage(BuildContext context, double width,
     // ignore: deprecated_member_use
     child: FlatButton(
         onPressed: () async {
-          print(isInvoice);
           tittleButtonAlertDialog == "Hủy"
               ? showAlertDialog(
                   context,
@@ -566,7 +565,7 @@ Widget btnProcessInvoice(context, int statusId, String id, bool isCustomer,
       );
     } else {
       return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment:isRequest == true ? MainAxisAlignment.spaceAround : MainAxisAlignment.center,
         children: [
           Flexible(
             // ignore: deprecated_member_use

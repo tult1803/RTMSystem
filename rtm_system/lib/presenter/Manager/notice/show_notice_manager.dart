@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:rtm_system/model/notice/getAPI_all_notice.dart';
-import 'package:rtm_system/model/notice/model_all_notice.dart';
+import 'package:rtm_system/model/get/getAPI_all_notice.dart';
+import 'package:rtm_system/model/model_all_notice.dart';
 import 'package:rtm_system/helpers/button.dart';
 import 'package:rtm_system/helpers/component.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';

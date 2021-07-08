@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:rtm_system/model/getAPI_AdvanceRequest.dart';
-import 'package:rtm_system/model/model_AdvanceRequest.dart';
+import 'package:rtm_system/model/get/getAPI_AdvanceRequest.dart';
+import 'package:rtm_system/model/model_advance_request.dart';
 import 'package:rtm_system/presenter/Manager/debt/show_all_advance_bill.dart';
 import 'package:rtm_system/helpers/common_widget.dart';
 import 'package:rtm_system/helpers/component.dart';
@@ -154,27 +154,6 @@ class showAdvancceBillManagerState extends State<showAdvancceBillManager> {
                          ),
                          isCustomer: false
                    );
-                  // return boxForAdvanceRequest(
-                  //     context: context,
-                  //     id: item['id'],
-                  //     status: item['status_id'],
-                  //     createDate: "${item['create_date']}",
-                  //     amount: "${item['amount']}",
-                  //     storeId: item['store_id'],
-                  //     name: item["customer_name"],
-                  //     receiveDate: item["receive_date"],
-                  //     imageUrl: item["image_url"],
-                  //     reason: item["reason"],
-                  //     widget: FormForDetailPage(
-                  //       tittle: "Chi tiết yêu cầu",
-                  //       bodyPage: DetailAdvancePage(
-                  //         isCustomer: false,
-                  //         id: item['id'],
-                  //         status: item['status_id'],
-                  //         isRequest: false,
-                  //       ),
-                  //     ),
-                  //     isCustomer: false);
                 }),
           ),
         ],

@@ -97,7 +97,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
             ],
           ),
           // sau khi nhập mật khẩu xong thì có thể update thông tin. 
-          if(checkPasswordSuccess)
+          if(checkPasswordSuccess || widget.check == true)
             formUpdateProfile(
               fullname: widget.fullname,
               phone: widget.phone,

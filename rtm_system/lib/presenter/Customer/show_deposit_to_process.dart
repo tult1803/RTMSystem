@@ -5,7 +5,7 @@ import 'package:rtm_system/blocs/list_id_invoice.dart';
 import 'package:rtm_system/blocs/select_dates_bloc.dart';
 import 'package:rtm_system/blocs/total_amount_bloc.dart';
 import 'package:rtm_system/blocs/total_deposit_bloc.dart';
-import 'package:rtm_system/model/getAPI_invoice.dart';
+import 'package:rtm_system/model/get/getAPI_invoice.dart';
 import 'package:rtm_system/model/model_invoice.dart';
 import 'package:rtm_system/helpers/common_widget.dart';
 import 'package:rtm_system/ultils/get_data.dart';

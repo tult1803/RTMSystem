@@ -1,7 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:rtm_system/model/profile_customer/getAPI_customer_phone.dart';
-import 'package:rtm_system/model/profile_customer/model_profile_customer.dart';
+import 'package:rtm_system/model/get/getAPI_customer_phone.dart';
+import 'package:rtm_system/model/model_profile_customer.dart';
 import 'package:rtm_system/helpers/button.dart';
 import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';

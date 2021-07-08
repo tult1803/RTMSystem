@@ -1,20 +1,26 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:rtm_system/model/PostCreateRequestInvoice.dart';
-import 'package:rtm_system/model/deleteAPI_invoice.dart';
-import 'package:rtm_system/model/deleteAPI_invoiceRequest.dart';
-import 'package:rtm_system/model/postAPI_Image.dart';
-import 'package:rtm_system/model/postAPI_createCustomer.dart';
-import 'package:rtm_system/model/postAPI_createInvoice.dart';
-import 'package:rtm_system/model/postAPI_createNotice.dart';
-import 'package:rtm_system/model/postAPI_validateCustomer.dart';
-import 'package:rtm_system/model/profile_customer/getAPI_customer_phone.dart';
-import 'package:rtm_system/model/putAPI_ConfirmAdvanceRequest.dart';
-import 'package:rtm_system/model/putAPI_ReturnAdvance.dart';
-import 'package:rtm_system/model/putAPI_confirmInvoice.dart';
-import 'package:rtm_system/model/putAPI_processAdvanceBill.dart';
-import 'package:rtm_system/model/putAPI_signInvoice.dart';
-import 'package:rtm_system/model/putAPI_updatePrice.dart';
-import 'package:rtm_system/model/putAPI_updateProfile.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:rtm_system/model/delete/deleteAPI_invoice.dart';
+import 'package:rtm_system/model/delete/deleteAPI_invoiceRequest.dart';
+import 'package:rtm_system/model/model_validate_account.dart';
+import 'package:rtm_system/model/post/postAPI_CreateRequestInvoice.dart';
+import 'package:rtm_system/model/post/postAPI_Image.dart';
+import 'package:rtm_system/model/post/postAPI_createCustomer.dart';
+import 'package:rtm_system/model/post/postAPI_createInvoice.dart';
+import 'package:rtm_system/model/post/postAPI_createNotice.dart';
+import 'package:rtm_system/model/get/getAPI_customer_phone.dart';
+import 'package:rtm_system/model/post/postAPI_validateCustomer.dart';
+import 'package:rtm_system/model/put/putAPI_confirmAdvanceRequest.dart';
+import 'package:rtm_system/model/put/putAPI_confirmIdentifyCustomer.dart';
+import 'package:rtm_system/model/put/putAPI_returnAdvance.dart';
+import 'package:rtm_system/model/put/putAPI_confirmInvoice.dart';
+import 'package:rtm_system/model/put/putAPI_processAdvanceBill.dart';
+import 'package:rtm_system/model/put/putAPI_signInvoice.dart';
+import 'package:rtm_system/model/put/putAPI_updatePrice.dart';
+import 'package:rtm_system/model/put/putAPI_updateProfile.dart';
+import 'package:rtm_system/view/customer/Profile/confirm_data_verification.dart';
 import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/message_list.dart';
 import 'package:rtm_system/view/add_product_in_invoice.dart';
@@ -288,10 +294,8 @@ Future<void> doConfirmOrAcceptOrRejectInvoice(
             : print('Chấp nhận');
         break;
       case 3:
-        //manager k được xoá yêu cầu bán hàng chỉ xóa invoice
-        isRequest == false ??
-            doDeleteInvoice(context, invoiceId,
-                widgetToNavigator: widgetToNavigator);
+            doDeleteInvoice(context, invoiceId,isRequest,
+                widgetToNavigator: widgetToNavigator, reason: reason);
         break;
     }
   }
@@ -359,12 +363,20 @@ Future getDataCustomerFromPhone(String phone) async {
   }
 }
 
-Future doDeleteInvoice(BuildContext context, String invoiceId,
-    {Widget widgetToNavigator}) async {
+Future doDeleteInvoice(BuildContext context, String invoiceId, bool isRequest,
+    {Widget widgetToNavigator, String reason}) async {
+  int status;
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  DeleteInvoice deleteInvoice = DeleteInvoice();
-  int status =
-      await deleteInvoice.deleteInvoice(prefs.get('access_token'), invoiceId);
+  if(isRequest){
+    DeleteInvoiceRequest deleteInvoiceRequest = DeleteInvoiceRequest();
+    status = await deleteInvoiceRequest.deleteInvoiceRequest(
+        prefs.get('access_token'), invoiceId,
+        reason: reason);
+  }else {
+    DeleteInvoice deleteInvoice = DeleteInvoice();
+    status =
+    await deleteInvoice.deleteInvoice(prefs.get('access_token'), invoiceId);
+  }
   status == 200
       ? showCustomDialog(context,
           isSuccess: true,
@@ -494,15 +506,65 @@ Future<void> putReturnAdvance(
   }
 }
 
-Future<void> doValidateCustomer(
-    {String cmndFrontBase64, String cmndBackBase64, String faceBase64}) async {
-  int status;
+Future<void> doValidateCustomer(BuildContext context,
+    {File cmndFront, File cmndBack, File face}) async {
+  DataValidateAccount account = DataValidateAccount();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   PostValidateCustomer validateCustomer = PostValidateCustomer();
-  status = await validateCustomer.createValidateCustomer(
+  try {
+    EasyLoading.show(status: 'Đang xử lý...', maskType: EasyLoadingMaskType.black,);
+    account = await validateCustomer.createValidateCustomer(
+        prefs.get("access_token"),
+        cmndFront: cmndFront,
+        cmndBack: cmndBack,
+        face: face);
+    EasyLoading.dismiss();
+    if (account.faceData.similarity >= 80) {
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => ConfirmDataVerification(
+                account: account,
+                accountId: prefs.get("accountId"),
+                check: true,
+              )));
+    } else {
+      showCustomDialog(context,
+          isSuccess: false,
+          content: "Thông tin không trùng khớp. Thử lại");
+    }
+  } catch (_) {
+    EasyLoading.dismiss();
+    showCustomDialog(context,
+        isSuccess: false, content: "Có lỗi xảy ra. Thử lại");
+  }
+  return true;
+}
+
+Future doConfirmIdentifyCustomer(BuildContext context,
+    {String cmnd,
+    String birthday,
+    String fullName,
+    String address,
+    int gender}) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  PutConfirmIdentifyCustomer confirmIdentifyCustomer =
+      PutConfirmIdentifyCustomer();
+  int status = await confirmIdentifyCustomer.updateCustomer(
       prefs.get("access_token"),
-      cmndFront: cmndFrontBase64,
-      cmndBack: cmndBackBase64,
-      face: faceBase64);
-  return status;
+      gender: gender,
+      birthday: birthday,
+      address: address,
+      cmnd: cmnd,
+      fullName: fullName);
+
+  if (status == 200) {
+    showCustomDialog(context,
+        isSuccess: true,
+        content: "Xác minh thành công",
+        widgetToNavigator: HomeCustomerPage(
+          index: 3,
+        ));
+  } else {
+    showCustomDialog(context,
+        isSuccess: false, content: "Có lỗi xảy ra. Xin thử lại");
+  }
 }

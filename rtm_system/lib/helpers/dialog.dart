@@ -1,8 +1,9 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:rtm_system/model/putAPI_deactivateCustomer.dart';
-import 'package:rtm_system/model/deleteAPI_deactivateNotice.dart';
+import 'package:rtm_system/model/delete/deleteAPI_deactivateNotice.dart';
+import 'package:rtm_system/model/put/putAPI_deactivateCustomer.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 
 import 'component.dart';
@@ -10,17 +11,20 @@ import '../ultils/get_api_data.dart';
 
 //show khi nhấn các nút "Hủy" hoặc "Tạo"
 //Nếu muốn xóa thông báo thì truyền trạng thái vào isDeactivateNotice
-showAlertDialog(BuildContext context, String tittle, Widget widget,
-    {bool isDeactivate,
-    bool isInvoice,
-    bool isCustomer,
-    String token,
-    String reason,
-    String deactivateId,
-    bool isDeactivateNotice,
-      bool isAdvanceBill,
-    String id,
-    }) {
+showAlertDialog(
+  BuildContext context,
+  String tittle,
+  Widget widget, {
+  bool isDeactivate,
+  bool isInvoice,
+  bool isCustomer,
+  String token,
+  String reason,
+  String deactivateId,
+  bool isDeactivateNotice,
+  bool isAdvanceBill,
+  String id,
+}) {
   // Tạo button trong AlertDialog
   Widget btnAlert(String tittleA, Color color, bool checkCreate) {
     return FlatButton(
@@ -52,13 +56,14 @@ showAlertDialog(BuildContext context, String tittle, Widget widget,
                   context, "Có lỗi xảy ra. Xin thử lại", widget, false);
             }
           } else if (isInvoice != null) {
-           doConfirmOrAcceptOrRejectInvoice(context, id, 3, isCustomer,
-                    widgetToNavigator: widget,
-                    isRequest: isInvoice,
-                    reason: reason);
+            doConfirmOrAcceptOrRejectInvoice(context, id, 3, isCustomer,
+                widgetToNavigator: widget,
+                isRequest: isInvoice,
+                reason: reason);
           } else if (isAdvanceBill != null) {
-            doProcessAdvanceBill(context, id, 6,widgetToNavigator: widget, reason: reason);
-          }else {
+            doProcessAdvanceBill(context, id, 6,
+                widgetToNavigator: widget, reason: reason);
+          } else {
             Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(builder: (context) => widget),
@@ -204,6 +209,7 @@ Future<Dialog> showCustomDialog(BuildContext context,
     {bool isSuccess,
     String content,
     bool doPopNavigate,
+    double fontSize,
     Widget widgetToNavigator}) {
   return showDialog(
       context: context,
@@ -250,10 +256,10 @@ Future<Dialog> showCustomDialog(BuildContext context,
                         SizedBox(
                           height: 10,
                         ),
-                        Text(
+                        AutoSizeText(
                           content,
                           style: GoogleFonts.roboto(
-                              fontSize: 20,
+                              fontSize: fontSize == null ? 20 : fontSize,
                               color: Colors.white,
                               fontWeight: FontWeight.w400),
                         ),

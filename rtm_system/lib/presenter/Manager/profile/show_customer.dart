@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:rtm_system/model/getAPI_customer.dart';
-import 'package:rtm_system/model/model_AllCustomer.dart';
+import 'package:rtm_system/model/get/getAPI_customer.dart';
+import 'package:rtm_system/model/model_all_customer.dart';
 import 'package:rtm_system/presenter/infinite_scroll_pagination/common/character_search_input_sliver.dart';
 import 'package:rtm_system/helpers/common_widget.dart';
 import 'package:rtm_system/helpers/component.dart';

@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:rtm_system/model/profile_customer/model_profile_customer.dart';
+import 'package:rtm_system/model/model_profile_customer.dart';
 import 'package:rtm_system/ultils/src/url_api.dart';
 import 'package:http/http.dart' as http;
 

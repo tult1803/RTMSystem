@@ -1,7 +1,8 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:rtm_system/model/getAPI_product.dart';
+import 'package:rtm_system/model/get/getAPI_product.dart';
 import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -114,16 +115,15 @@ class _showTablePriceState extends State<showTablePrice> {
         // border: TableBorder.all(color: Colors.black54),
         defaultVerticalAlignment: TableCellVerticalAlignment.middle,
         columnWidths: {
-          0: FractionColumnWidth(0.25),
-          1: FractionColumnWidth(0.15),
-          2: FractionColumnWidth(0.2),
-          3: FractionColumnWidth(0.2),
-          3: FractionColumnWidth(0.2)
+          0: FractionColumnWidth(0.36),
+          1: FractionColumnWidth(0.22),
+          2: FractionColumnWidth(0.20),
+          3: FractionColumnWidth(0.22)
         },
         children: [
           TableRow(decoration: BoxDecoration(color: welcome_color), children: [
             tableRow("Ngày", colorText: Colors.white, isAlignmentRight: false),
-            tableRow("Giờ", colorText: Colors.white),
+            // tableRow("Giờ", colorText: Colors.white),
             tableRow("Thay đổi", colorText: Colors.white),
             tableRow("%", colorText: Colors.white),
             tableRow("Giá", colorText: Colors.white),
@@ -179,16 +179,15 @@ Widget tableCell({String day,int oldPrice, int newPrice}) {
       bottom: BorderSide(color: Colors.black45, width: 0.5),
     ),
     columnWidths: {
-      0: FractionColumnWidth(0.25),
-      1: FractionColumnWidth(0.15),
-      2: FractionColumnWidth(0.2),
-      3: FractionColumnWidth(0.2),
-      4: FractionColumnWidth(0.2),
+      0: FractionColumnWidth(0.36),
+      1: FractionColumnWidth(0.22),
+      2: FractionColumnWidth(0.20),
+      3: FractionColumnWidth(0.22)
     },
     children: [
       TableRow(children: [
-        tableRow("${getDateTime("$day", dateFormat: "dd-MM-yyyy")}"),
-        tableRow("${getDateTime("$day", dateFormat: "HH:mm")}"),
+        tableRow("${getDateTime("$day", dateFormat: "dd-MM-yyyy")} (${getDateTime("$day", dateFormat: "HH")}h)"),
+        // tableRow("${getDateTime("$day", dateFormat: "HH:mm")}"),
         tableRow("${getFormatPrice("$changePrice")}",
             colorText: changePrice < 0
                 ? Colors.redAccent
@@ -214,12 +213,13 @@ Widget tableCell({String day,int oldPrice, int newPrice}) {
 
 Widget tableRow(String tittle, {Color colorText, bool isAlignmentRight}) {
   return Container(
+    height: 30,
     alignment:
         isAlignmentRight == null ? Alignment.centerRight : Alignment.center,
     margin: EdgeInsets.all(10),
-    child: Text(
+    child: AutoSizeText(
       tittle,
-      style: TextStyle(color: colorText),
+      style: TextStyle(color: colorText)
     ),
   );
 }
