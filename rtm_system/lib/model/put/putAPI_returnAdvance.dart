@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 
 class PutReturnAdvance{
   putReturnAdvance(String token, List<String> id) async {
+    print(id);
     final response = await http.put(
       Uri.http('$urlMain', '$urlReturnAdvance'),
       headers: <String, String>{
@@ -16,6 +17,9 @@ class PutReturnAdvance{
         "invoices": id,
       }),
     );
+    print(jsonEncode(<String, dynamic>{
+        "invoices": id,
+      }));
     return response.statusCode;
   }
 
