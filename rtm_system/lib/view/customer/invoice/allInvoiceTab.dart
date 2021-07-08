@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:rtm_system/model/profile_customer/getAPI_customer_phone.dart';
-import 'package:rtm_system/model/profile_customer/model_profile_customer.dart';
+import 'package:rtm_system/model/get/getAPI_customer_phone.dart';
+import 'package:rtm_system/model/model_profile_customer.dart';
 import 'package:rtm_system/presenter/Customer/show_all_invoice.dart';
 import 'package:rtm_system/presenter/Customer/show_invoice_request.dart';
 import 'package:rtm_system/helpers/button.dart';
