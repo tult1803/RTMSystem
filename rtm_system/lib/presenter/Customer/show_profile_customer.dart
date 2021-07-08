@@ -21,6 +21,7 @@ class _showProfileState extends State<showProfile> {
   GetAPIProfileCustomer getAPIProfileCustomer = GetAPIProfileCustomer();
   InfomationCustomer infomationCustomer = InfomationCustomer();
   String password = '';
+  int level = 0;
 
   @override
   void initState() {
@@ -36,6 +37,11 @@ class _showProfileState extends State<showProfile> {
     // Đỗ dữ liệu lấy từ api
     infomationCustomer =
         await getAPIProfileCustomer.getProfileCustomer(token, phone);
+    if (infomationCustomer != null) {
+      setState(() {
+        level = infomationCustomer.level;
+      });
+    }
     return infomationCustomer;
   }
 
@@ -58,27 +64,27 @@ class _showProfileState extends State<showProfile> {
           return AlertDialog(
             // title: Text('Chỉnh sửa thông tin'),
             actions: <Widget>[
-              ListTile(
-                leading: Icon(Icons.person),
-                title: Text('Cập nhật thông tin'),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => UpdateProfilePage(
-                              cmnd: cmnd,
-                              password: password,
-                              fullname: fullname,
-                              gender: gender,
-                              phone: phone,
-                              birthday: birthday,
-                              address: address,
-                              check: check,
-                              account_id: accountId,
-                            )),
-                  );
-                },
-              ),
+              // ListTile(
+              //   leading: Icon(Icons.person),
+              //   title: Text('Cập nhật thông tin'),
+              //   onTap: () {
+              //     Navigator.push(
+              //       context,
+              //       MaterialPageRoute(
+              //           builder: (context) => UpdateProfilePage(
+              //                 cmnd: cmnd,
+              //                 password: password,
+              //                 fullname: fullname,
+              //                 gender: gender,
+              //                 phone: phone,
+              //                 birthday: birthday,
+              //                 address: address,
+              //                 check: check,
+              //                 account_id: accountId,
+              //               )),
+              //     );
+              //   },
+              // ),
               ListTile(
                 leading: Icon(Icons.password),
                 title: Text('Thay đổi mật khẩu'),
@@ -98,7 +104,8 @@ class _showProfileState extends State<showProfile> {
                 leading: Icon(Icons.perm_media_outlined),
                 title: Text('Xác thực ảnh CMND'),
                 onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AccountVerification()));
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => AccountVerification()));
                 },
               )
             ],
@@ -152,9 +159,6 @@ class _showProfileState extends State<showProfile> {
                             infomationCustomer.address.toString()),
                         _item(context, 'Loại tài khoản',
                             getLevel(level: infomationCustomer.level)),
-                        SizedBox(
-                          height: 12,
-                        ),
                       ],
                     ),
                   ),
@@ -173,29 +177,39 @@ class _showProfileState extends State<showProfile> {
       },
     );
   }
-
   Widget btnChooseOption(context, width, height) {
     return SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Container(
           child: ElevatedButton(
             onPressed: () {
-              showPicker(
-                  context,
-                  infomationCustomer.cmnd,
-                  this.password,
-                  infomationCustomer.fullname,
-                  infomationCustomer.gender,
-                  infomationCustomer.phone,
-                  infomationCustomer.birthday,
-                  infomationCustomer.address,
-                  false,
-                  infomationCustomer.accountId,
-                  true);
+              level == 0
+                  ? showPicker(
+                      context,
+                      infomationCustomer.cmnd,
+                      this.password,
+                      infomationCustomer.fullname,
+                      infomationCustomer.gender,
+                      infomationCustomer.phone,
+                      infomationCustomer.birthday,
+                      infomationCustomer.address,
+                      false,
+                      infomationCustomer.accountId,
+                      true)
+                  : Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => UpdatePasswordPage(
+                          password: password,
+                          account_id: infomationCustomer.accountId,
+                          isCustomer: true,
+                        ),
+                      ),
+                    );
             },
             child: Center(
               child: AutoSizeText(
-                "Chỉnh sửa thông tin",
+                level == 0 ? "Chỉnh sửa thông tin" : "Thay đổi mật khẩu",
                 style: TextStyle(
                   fontWeight: FontWeight.w500,
                 ),
@@ -219,16 +233,27 @@ class _showProfileState extends State<showProfile> {
     }
     var size = MediaQuery.of(context).size;
     return Container(
-      margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
+      margin: EdgeInsets.fromLTRB(12, 12, 12, 12),
       child: Column(
         children: [
-          ListTile(
-            title: Text(header),
-            trailing: Text(value),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              AutoSizeText(header),
+              Container(
+                width: size.width * 0.5,
+                child: AutoSizeText(
+                  value,
+                ),
+              )
+            ],
+          ),
+          SizedBox(
+            height: 5,
           ),
           SizedBox(
             height: 1,
-            width: size.width * 0.85,
+            width: size.width,
             child: Container(
               color: Color(0xFFBDBDBD),
             ),
