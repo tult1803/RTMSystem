@@ -495,7 +495,7 @@ Widget boxForInvoice(
                                 alignment: Alignment.topLeft,
                                 paddingLeftOfText: 10,
                                 paddingRightOfText: 10,
-                                tittle: "$dateSellAfterFormat",
+                                tittle: "$dateAfterFormat",
                                 fontWeight: FontWeight.w600,
                               )
                             : containerTextInvoice(
