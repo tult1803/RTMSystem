@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:rtm_system/model/putAPI_deactivateCustomer.dart';
-import 'package:rtm_system/model/deleteAPI_deactivateNotice.dart';
+import 'package:rtm_system/model/delete/deleteAPI_deactivateNotice.dart';
+import 'package:rtm_system/model/put/putAPI_deactivateCustomer.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 
 import 'component.dart';

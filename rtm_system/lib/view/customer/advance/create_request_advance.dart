@@ -2,7 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:rtm_system/model/getAPI_allStore.dart';
+import 'package:rtm_system/model/get/getAPI_allStore.dart';
 import 'package:rtm_system/model/model_store.dart';
 import 'package:rtm_system/helpers/component.dart';
 import 'package:rtm_system/ultils/get_data.dart';

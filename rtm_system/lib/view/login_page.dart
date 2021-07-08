@@ -4,7 +4,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rtm_system/model/model_login.dart';
-import 'package:rtm_system/model/postAPI_login.dart';
+import 'package:rtm_system/model/post/postAPI_login.dart';
 import 'package:rtm_system/presenter/check_login.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/customer/home_customer_page.dart';

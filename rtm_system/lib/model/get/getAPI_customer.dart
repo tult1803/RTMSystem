@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:rtm_system/ultils/src/url_api.dart';
 import 'package:http/http.dart' as http;
 
-import 'model_AllCustomer.dart';
+import '../model_all_customer.dart';
 
 
 

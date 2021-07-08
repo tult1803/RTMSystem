@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rtm_system/model/getAPI_product.dart';
+import 'package:rtm_system/model/get/getAPI_product.dart';
 import 'package:rtm_system/model/model_product.dart';
 import 'package:rtm_system/helpers/component.dart';
 import 'package:shared_preferences/shared_preferences.dart';

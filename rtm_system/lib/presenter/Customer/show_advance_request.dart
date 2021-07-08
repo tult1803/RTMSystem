@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:rtm_system/model/getAPI_AdvanceRequest.dart';
-import 'package:rtm_system/model/model_AdvanceRequest.dart';
+import 'package:rtm_system/model/get/getAPI_AdvanceRequest.dart';
+import 'package:rtm_system/model/model_advance_request.dart';
 import 'package:rtm_system/helpers/common_widget.dart';
 import 'package:rtm_system/helpers/component.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
