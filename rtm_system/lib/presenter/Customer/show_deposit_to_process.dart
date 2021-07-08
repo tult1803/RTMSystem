@@ -69,8 +69,10 @@ class showAllInvoicePageState extends State<showDepositToProcess> {
         future: loadInvoiceDeposit(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
+            List<String> invoiceIdList = [];
             return BlocBuilder<SelectDatesBloc, DateTimeRange>(
               builder: (context, state) {
+              invoiceIdList.clear();
                 List<Widget> children = [];
                 DateTime from = state.start;
                 DateTime to = state.end;
@@ -80,7 +82,6 @@ class showAllInvoicePageState extends State<showDepositToProcess> {
                       DateTime.parse("${element['create_time']}");
                   if (compare.isAfter(from) && compare.isBefore(to)) {
                     double amountDeposit = 0;
-                    List<String> invoiceIdList = [];
                     amountDeposit = getPriceTotal(
                         double.parse(element['price'].toString()),
                         double.parse(element['degree'].toString()),
@@ -89,8 +90,6 @@ class showAllInvoicePageState extends State<showDepositToProcess> {
                     BlocProvider.of<TotalDepositBloc>(context)
                         .emit(_totalDeposit);
                     invoiceIdList.add(element['id']);
-                    BlocProvider.of<ListInvoiceIdBloc>(context)
-                        .emit(invoiceIdList);
                     children.add(
                       boxForInvoice(
                           context: context,
@@ -114,6 +113,8 @@ class showAllInvoicePageState extends State<showDepositToProcess> {
                           isCustomer: true),
                     );
                   }
+                   BlocProvider.of<ListInvoiceIdBloc>(context)
+                        .emit(invoiceIdList);
                 });
                 return Column(
                   children: children,

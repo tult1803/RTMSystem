@@ -66,7 +66,7 @@ class _HomeAdminPageState extends State<HomeAdminPage> {
           items: <Widget>[
             Icon(Icons.home_outlined, size: 30),
             Icon(Icons.my_library_books_outlined, size: 30),
-            Icon(Icons.addchart, size: 30),
+            Icon(Icons.monetization_on_outlined, size: 30),
             Icon(Icons.notifications_none, size: 30),
             Icon(Icons.people_rounded, size: 30),
           ],

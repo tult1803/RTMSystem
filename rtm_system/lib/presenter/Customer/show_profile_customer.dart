@@ -6,7 +6,6 @@ import 'package:rtm_system/helpers/button.dart';
 import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/customer/Profile/account_verification.dart';
-import 'package:rtm_system/view/customer/Profile/update_profile.dart';
 import 'package:rtm_system/view/update_password.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -21,6 +20,7 @@ class _showProfileState extends State<showProfile> {
   GetAPIProfileCustomer getAPIProfileCustomer = GetAPIProfileCustomer();
   InfomationCustomer infomationCustomer = InfomationCustomer();
   String password = '';
+  int level = 0;
 
   @override
   void initState() {
@@ -36,74 +36,12 @@ class _showProfileState extends State<showProfile> {
     // Đỗ dữ liệu lấy từ api
     infomationCustomer =
         await getAPIProfileCustomer.getProfileCustomer(token, phone);
+    if (infomationCustomer != null) {
+      setState(() {
+        level = infomationCustomer.level;
+      });
+    }
     return infomationCustomer;
-  }
-
-// // show option choice update profile
-  void showPicker(
-      context,
-      String cmnd,
-      String password,
-      String fullname,
-      int gender,
-      String phone,
-      DateTime birthday,
-      String address,
-      bool check,
-      String accountId,
-      bool isCustomer) {
-    showDialog(
-        context: context,
-        builder: (BuildContext bc) {
-          return AlertDialog(
-            // title: Text('Chỉnh sửa thông tin'),
-            actions: <Widget>[
-              ListTile(
-                leading: Icon(Icons.person),
-                title: Text('Cập nhật thông tin'),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => UpdateProfilePage(
-                              cmnd: cmnd,
-                              password: password,
-                              fullname: fullname,
-                              gender: gender,
-                              phone: phone,
-                              birthday: birthday,
-                              address: address,
-                              check: check,
-                              account_id: accountId,
-                            )),
-                  );
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.password),
-                title: Text('Thay đổi mật khẩu'),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => UpdatePasswordPage(
-                              password: password,
-                              account_id: accountId,
-                              isCustomer: isCustomer,
-                            )),
-                  );
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.perm_media_outlined),
-                title: Text('Xác thực ảnh CMND'),
-                onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AccountVerification()));
-                },
-              )
-            ],
-          );
-        });
   }
 
   @override
@@ -116,16 +54,20 @@ class _showProfileState extends State<showProfile> {
           return SingleChildScrollView(
             child: Column(
               children: [
-                Container(
-                  width: size.width * 0.5,
-                  height: size.height * 0.16,
-                  child: Center(
-                    child: Image(
-                      image: AssetImage("images/avt.png"),
+                Row(
+                  children: [
+                    Container(
+                      width: size.width * 0.5,
+                      height: size.height * 0.16,
+                      child: Center(
+                        child: Image(
+                          image: AssetImage("images/avt.png"),
+                        ),
+                      ),
                     ),
-                  ),
+                    btnChooseOption(context, size.width * 0.45),
+                  ],
                 ),
-                btnLogout(context),
                 SizedBox(
                   height: 12,
                 ),
@@ -159,7 +101,7 @@ class _showProfileState extends State<showProfile> {
                     ),
                   ),
                 ),
-                btnChooseOption(context, size.width * 0.9, size.height * 0.1),
+                btnLogout(context),
                 SizedBox(
                   height: 12,
                 ),
@@ -174,43 +116,66 @@ class _showProfileState extends State<showProfile> {
     );
   }
 
-  Widget btnChooseOption(context, width, height) {
-    return SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Container(
-          child: ElevatedButton(
-            onPressed: () {
-              showPicker(
+  Widget btnChooseOption(context, width) {
+    return Container(
+        width: width,
+        child: Column(
+          children: [
+            TextButton(
+              onPressed: () {
+                Navigator.push(
                   context,
-                  infomationCustomer.cmnd,
-                  this.password,
-                  infomationCustomer.fullname,
-                  infomationCustomer.gender,
-                  infomationCustomer.phone,
-                  infomationCustomer.birthday,
-                  infomationCustomer.address,
-                  false,
-                  infomationCustomer.accountId,
-                  true);
-            },
-            child: Center(
-              child: AutoSizeText(
-                "Chỉnh sửa thông tin",
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
+                  MaterialPageRoute(
+                    builder: (context) => UpdatePasswordPage(
+                      password: password,
+                      account_id: infomationCustomer.accountId,
+                      isCustomer: true,
+                    ),
+                  ),
+                );
+              },
+              child: Center(
+                child: AutoSizeText(
+                  "Thay đổi mật khẩu",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              style: ElevatedButton.styleFrom(
+                primary: primaryColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
                 ),
               ),
             ),
-            style: ElevatedButton.styleFrom(
-              primary: primaryColor,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
+            level == 0 ? 
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => AccountVerification()));
+              },
+              child: Center(
+                child: AutoSizeText(
+                  "Xác thực ảnh CMND",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white,
+                  ),
+                ),
               ),
-            ),
-          ),
-        ));
+              style: ElevatedButton.styleFrom(
+                primary: primaryColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                ),
+              ),
+            ):Container(),
+          ],
+        ),
+      );
   }
-
   //Show thông tin của người dùng
   Widget _item(context, header, value) {
     // Khi giá trị get lên là rỗng thì set '' để load tránh lỗi trang
@@ -219,16 +184,27 @@ class _showProfileState extends State<showProfile> {
     }
     var size = MediaQuery.of(context).size;
     return Container(
-      margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
+      margin: EdgeInsets.fromLTRB(12, 12, 12, 0),
       child: Column(
         children: [
-          ListTile(
-            title: Text(header),
-            trailing: Text(value),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              AutoSizeText(header),
+              Container(
+                width: size.width * 0.5,
+                child: AutoSizeText(
+                  value,
+                ),
+              )
+            ],
+          ),
+          SizedBox(
+            height: 12,
           ),
           SizedBox(
             height: 1,
-            width: size.width * 0.85,
+            width: size.width,
             child: Container(
               color: Color(0xFFBDBDBD),
             ),
