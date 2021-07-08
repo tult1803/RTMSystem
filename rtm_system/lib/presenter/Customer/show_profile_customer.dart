@@ -6,7 +6,6 @@ import 'package:rtm_system/helpers/button.dart';
 import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/customer/Profile/account_verification.dart';
-import 'package:rtm_system/view/customer/Profile/update_profile.dart';
 import 'package:rtm_system/view/update_password.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -123,16 +122,22 @@ class _showProfileState extends State<showProfile> {
           return SingleChildScrollView(
             child: Column(
               children: [
-                Container(
-                  width: size.width * 0.5,
-                  height: size.height * 0.16,
-                  child: Center(
-                    child: Image(
-                      image: AssetImage("images/avt.png"),
+                Row(
+                  children: [
+                    Container(
+                      width: size.width * 0.5,
+                      height: size.height * 0.16,
+                      child: Center(
+                        child: Image(
+                          image: AssetImage("images/avt.png"),
+                        ),
+                      ),
                     ),
-                  ),
+                    btnChooseOption(
+                        context, size.width * 0.9, size.height * 0.1),
+                  ],
                 ),
-                btnLogout(context),
+                // btnLogout(context),
                 SizedBox(
                   height: 12,
                 ),
@@ -159,11 +164,15 @@ class _showProfileState extends State<showProfile> {
                             infomationCustomer.address.toString()),
                         _item(context, 'Loại tài khoản',
                             getLevel(level: infomationCustomer.level)),
+                        SizedBox(
+                          height: 12,
+                        ),
                       ],
                     ),
                   ),
                 ),
-                btnChooseOption(context, size.width * 0.9, size.height * 0.1),
+                // btnChooseOption(context, size.width * 0.9, size.height * 0.1),
+                btnLogout(context),
                 SizedBox(
                   height: 12,
                 ),
@@ -177,52 +186,52 @@ class _showProfileState extends State<showProfile> {
       },
     );
   }
+
   Widget btnChooseOption(context, width, height) {
-    return SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Container(
-          child: ElevatedButton(
-            onPressed: () {
-              level == 0
-                  ? showPicker(
-                      context,
-                      infomationCustomer.cmnd,
-                      this.password,
-                      infomationCustomer.fullname,
-                      infomationCustomer.gender,
-                      infomationCustomer.phone,
-                      infomationCustomer.birthday,
-                      infomationCustomer.address,
-                      false,
-                      infomationCustomer.accountId,
-                      true)
-                  : Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => UpdatePasswordPage(
-                          password: password,
-                          account_id: infomationCustomer.accountId,
-                          isCustomer: true,
-                        ),
-                      ),
-                    );
-            },
-            child: Center(
-              child: AutoSizeText(
-                level == 0 ? "Chỉnh sửa thông tin" : "Thay đổi mật khẩu",
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-            style: ElevatedButton.styleFrom(
-              primary: primaryColor,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-              ),
+    return Container(
+      child: TextButton(
+        onPressed: () {
+          level == 0
+              ? showPicker(
+                  context,
+                  infomationCustomer.cmnd,
+                  this.password,
+                  infomationCustomer.fullname,
+                  infomationCustomer.gender,
+                  infomationCustomer.phone,
+                  infomationCustomer.birthday,
+                  infomationCustomer.address,
+                  false,
+                  infomationCustomer.accountId,
+                  true)
+              : Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => UpdatePasswordPage(
+                      password: password,
+                      account_id: infomationCustomer.accountId,
+                      isCustomer: true,
+                    ),
+                  ),
+                );
+        },
+        child: Center(
+          child: AutoSizeText(
+            level == 0 ? "Chỉnh sửa thông tin" : "Thay đổi mật khẩu",
+            style: TextStyle(
+              fontWeight: FontWeight.w500,
+              color: Colors.white,
             ),
           ),
-        ));
+        ),
+        style: ElevatedButton.styleFrom(
+          primary: primaryColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+        ),
+      ),
+    );
   }
 
   //Show thông tin của người dùng
@@ -233,7 +242,7 @@ class _showProfileState extends State<showProfile> {
     }
     var size = MediaQuery.of(context).size;
     return Container(
-      margin: EdgeInsets.fromLTRB(12, 12, 12, 12),
+      margin: EdgeInsets.fromLTRB(12, 12, 12, 0),
       child: Column(
         children: [
           Row(
@@ -249,7 +258,7 @@ class _showProfileState extends State<showProfile> {
             ],
           ),
           SizedBox(
-            height: 5,
+            height: 12,
           ),
           SizedBox(
             height: 1,
