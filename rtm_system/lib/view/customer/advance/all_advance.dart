@@ -16,6 +16,7 @@ class AdvancePage extends StatefulWidget {
   @override
   State<AdvancePage> createState() => _AdvancePageState();
 }
+
 DateTime fromDate;
 DateTime toDate;
 
@@ -26,10 +27,11 @@ class _AdvancePageState extends State<AdvancePage>
   int index, _selectedIndex;
   GetAPIProfileCustomer getAPIProfileCustomer = GetAPIProfileCustomer();
   InfomationCustomer infomationCustomer = InfomationCustomer();
-  int level = 0 ;
+  int level = 0;
   @override
   void initState() {
     super.initState();
+    getAPIProfile();
     _tabController = TabController(length: 4, vsync: this);
     _tabController.addListener(() {
       setState(() {
@@ -42,10 +44,12 @@ class _AdvancePageState extends State<AdvancePage>
     fromDate = DateTime.now().subtract(Duration(days: 30));
     setState(() {
       getFromDate =
-      "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
-      getToDate = "${getDateTime("$toDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
+          "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
+      getToDate =
+          "${getDateTime("$toDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
     });
   }
+
   Future getAPIProfile() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     String token = sharedPreferences.getString('access_token');
@@ -60,15 +64,19 @@ class _AdvancePageState extends State<AdvancePage>
     }
     return infomationCustomer;
   }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
-        backgroundColor:  primaryColor,
+        backgroundColor: primaryColor,
         centerTitle: true,
-        title: const Text('Ứng tiền', style: TextStyle( color: Colors.white),),
+        title: const Text(
+          'Ứng tiền',
+          style: TextStyle(color: Colors.white),
+        ),
         bottom: TabBar(
           labelPadding: EdgeInsets.symmetric(horizontal: 7.0),
           indicatorColor: primaryColor,
@@ -93,7 +101,6 @@ class _AdvancePageState extends State<AdvancePage>
               text: 'Lịch sử giao dịch',
               // icon: Icon(Icons.access_time_outlined),
             ),
-
           ],
         ),
       ),
@@ -122,9 +129,10 @@ class _AdvancePageState extends State<AdvancePage>
             ),
     );
   }
+
   //show invoice advance request
-  Widget containerAdvance(height, status){
-    return  Container(
+  Widget containerAdvance(height, status) {
+    return Container(
         height: height,
         margin: EdgeInsets.only(left: 5, top: 12, right: 5),
         child: SingleChildScrollView(
@@ -132,15 +140,16 @@ class _AdvancePageState extends State<AdvancePage>
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               rowButtonDatetime(),
-              new showAdvanceRequestPage(status, fromDate: getFromDate, toDate: getToDate),
+              new showAdvanceRequestPage(status,
+                  fromDate: getFromDate, toDate: getToDate),
             ],
           ),
-        )
-    );
+        ));
   }
+
   //show invoice advance history
-  Widget containerAdvanceHistory(height, status){
-    return  Container(
+  Widget containerAdvanceHistory(height, status) {
+    return Container(
         height: height,
         margin: EdgeInsets.only(left: 5, top: 12, right: 5),
         child: SingleChildScrollView(
@@ -151,28 +160,34 @@ class _AdvancePageState extends State<AdvancePage>
               new showHistoryAdvancePage(),
             ],
           ),
-        )
-    );
+        ));
   }
-  Widget _showFloatBtn(index){
-    if(index == 1 ){
-      return  FloatingActionButton.extended(
+
+  Widget _showFloatBtn(index) {
+    if (index == 1) {
+      return FloatingActionButton.extended(
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => GetMoneyOrPayDebt(isPay: true,)),
+            MaterialPageRoute(
+                builder: (context) => GetMoneyOrPayDebt(
+                      isPay: true,
+                    )),
           );
         },
-        label: Text('Trả nợ', style: TextStyle(
-          color: Colors.white,
-        ),),
+        label: Text(
+          'Trả nợ',
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
         backgroundColor: primaryColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(50.0),
         ),
         elevation: 10,
       );
-    }else{
+    } else {
       return FloatingActionButton(
         onPressed: () {
           Navigator.push(
@@ -180,11 +195,16 @@ class _AdvancePageState extends State<AdvancePage>
             MaterialPageRoute(builder: (context) => CreateRequestAdvance()),
           );
         },
-        child :Icon(Icons.post_add_outlined, color: Colors.white, size: 25,),
+        child: Icon(
+          Icons.post_add_outlined,
+          color: Colors.white,
+          size: 25,
+        ),
         backgroundColor: primaryColor,
       );
     }
   }
+
   Widget rowButtonDatetime() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -236,10 +256,10 @@ class _AdvancePageState extends State<AdvancePage>
         builder: (context, child) {
           return Theme(
             data: Theme.of(context).copyWith(
-              //Dùng cho nút "X" của lịch
+                //Dùng cho nút "X" của lịch
                 appBarTheme: AppBarTheme(
                   iconTheme:
-                  theme.primaryIconTheme.copyWith(color: Colors.white),
+                      theme.primaryIconTheme.copyWith(color: Colors.white),
                 ),
                 //Dùng cho nút chọn ngày và background
                 colorScheme: ColorScheme.light(
@@ -253,9 +273,9 @@ class _AdvancePageState extends State<AdvancePage>
         fromDate = dateRange.start;
         toDate = dateRange.end;
         getFromDate =
-        "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
+            "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
         getToDate =
-        "${getDateTime("${toDate}", dateFormat: "yyyy-MM-dd 23:59:59")}";
+            "${getDateTime("${toDate}", dateFormat: "yyyy-MM-dd 23:59:59")}";
       });
     }
   }
