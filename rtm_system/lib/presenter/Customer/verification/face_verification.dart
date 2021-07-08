@@ -107,7 +107,6 @@ class _FaceIdentifyCardState extends State<FaceIdentifyCard> {
   }
 
   Widget nextPage(image) {
-    Uint8List byteFront, byteFace, byteBack;
     return Container(
       child: image == null
           ? null
@@ -120,7 +119,7 @@ class _FaceIdentifyCardState extends State<FaceIdentifyCard> {
                     elevation: 3,
                     primary: welcome_color,
                   ),
-                  onPressed: () async {
+                  onPressed: ()  {
                     doValidateCustomer(context,
                         cmndFront: imageFront,
                         cmndBack: imageBack,

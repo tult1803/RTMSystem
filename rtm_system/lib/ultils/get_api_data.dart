@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:rtm_system/model/delete/deleteAPI_invoice.dart';
 import 'package:rtm_system/model/delete/deleteAPI_invoiceRequest.dart';
 import 'package:rtm_system/model/model_validate_account.dart';
@@ -511,11 +512,13 @@ Future<void> doValidateCustomer(BuildContext context,
   SharedPreferences prefs = await SharedPreferences.getInstance();
   PostValidateCustomer validateCustomer = PostValidateCustomer();
   try {
+    EasyLoading.show();
     account = await validateCustomer.createValidateCustomer(
         prefs.get("access_token"),
         cmndFront: cmndFront,
         cmndBack: cmndBack,
         face: face);
+    EasyLoading.dismiss();
     if (account.faceData.similarity >= 80) {
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => ConfirmDataVerification(
