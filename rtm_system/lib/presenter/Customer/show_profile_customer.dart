@@ -44,74 +44,6 @@ class _showProfileState extends State<showProfile> {
     return infomationCustomer;
   }
 
-// // show option choice update profile
-  void showPicker(
-      context,
-      String cmnd,
-      String password,
-      String fullname,
-      int gender,
-      String phone,
-      DateTime birthday,
-      String address,
-      bool check,
-      String accountId,
-      bool isCustomer) {
-    showDialog(
-        context: context,
-        builder: (BuildContext bc) {
-          return AlertDialog(
-            // title: Text('Chỉnh sửa thông tin'),
-            actions: <Widget>[
-              // ListTile(
-              //   leading: Icon(Icons.person),
-              //   title: Text('Cập nhật thông tin'),
-              //   onTap: () {
-              //     Navigator.push(
-              //       context,
-              //       MaterialPageRoute(
-              //           builder: (context) => UpdateProfilePage(
-              //                 cmnd: cmnd,
-              //                 password: password,
-              //                 fullname: fullname,
-              //                 gender: gender,
-              //                 phone: phone,
-              //                 birthday: birthday,
-              //                 address: address,
-              //                 check: check,
-              //                 account_id: accountId,
-              //               )),
-              //     );
-              //   },
-              // ),
-              ListTile(
-                leading: Icon(Icons.password),
-                title: Text('Thay đổi mật khẩu'),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => UpdatePasswordPage(
-                              password: password,
-                              account_id: accountId,
-                              isCustomer: isCustomer,
-                            )),
-                  );
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.perm_media_outlined),
-                title: Text('Xác thực ảnh CMND'),
-                onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => AccountVerification()));
-                },
-              )
-            ],
-          );
-        });
-  }
-
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -133,11 +65,9 @@ class _showProfileState extends State<showProfile> {
                         ),
                       ),
                     ),
-                    btnChooseOption(
-                        context, size.width * 0.9, size.height * 0.1),
+                    btnChooseOption(context, size.width * 0.45),
                   ],
                 ),
-                // btnLogout(context),
                 SizedBox(
                   height: 12,
                 ),
@@ -171,7 +101,6 @@ class _showProfileState extends State<showProfile> {
                     ),
                   ),
                 ),
-                // btnChooseOption(context, size.width * 0.9, size.height * 0.1),
                 btnLogout(context),
                 SizedBox(
                   height: 12,
@@ -187,24 +116,14 @@ class _showProfileState extends State<showProfile> {
     );
   }
 
-  Widget btnChooseOption(context, width, height) {
+  Widget btnChooseOption(context, width) {
     return Container(
-      child: TextButton(
-        onPressed: () {
-          level == 0
-              ? showPicker(
-                  context,
-                  infomationCustomer.cmnd,
-                  this.password,
-                  infomationCustomer.fullname,
-                  infomationCustomer.gender,
-                  infomationCustomer.phone,
-                  infomationCustomer.birthday,
-                  infomationCustomer.address,
-                  false,
-                  infomationCustomer.accountId,
-                  true)
-              : Navigator.push(
+        width: width,
+        child: Column(
+          children: [
+            TextButton(
+              onPressed: () {
+                Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => UpdatePasswordPage(
@@ -214,26 +133,49 @@ class _showProfileState extends State<showProfile> {
                     ),
                   ),
                 );
-        },
-        child: Center(
-          child: AutoSizeText(
-            level == 0 ? "Chỉnh sửa thông tin" : "Thay đổi mật khẩu",
-            style: TextStyle(
-              fontWeight: FontWeight.w500,
-              color: Colors.white,
+              },
+              child: Center(
+                child: AutoSizeText(
+                  "Thay đổi mật khẩu",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              style: ElevatedButton.styleFrom(
+                primary: primaryColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                ),
+              ),
             ),
-          ),
+            level == 0 ? 
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => AccountVerification()));
+              },
+              child: Center(
+                child: AutoSizeText(
+                  "Xác thực ảnh CMND",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              style: ElevatedButton.styleFrom(
+                primary: primaryColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                ),
+              ),
+            ):Container(),
+          ],
         ),
-        style: ElevatedButton.styleFrom(
-          primary: primaryColor,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-        ),
-      ),
-    );
+      );
   }
-
   //Show thông tin của người dùng
   Widget _item(context, header, value) {
     // Khi giá trị get lên là rỗng thì set '' để load tránh lỗi trang
