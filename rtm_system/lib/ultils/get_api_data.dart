@@ -293,10 +293,8 @@ Future<void> doConfirmOrAcceptOrRejectInvoice(
             : print('Chấp nhận');
         break;
       case 3:
-        //manager k được xoá yêu cầu bán hàng chỉ xóa invoice
-        isRequest == false ??
-            doDeleteInvoice(context, invoiceId,
-                widgetToNavigator: widgetToNavigator);
+            doDeleteInvoice(context, invoiceId,isRequest,
+                widgetToNavigator: widgetToNavigator, reason: reason);
         break;
     }
   }
@@ -364,12 +362,20 @@ Future getDataCustomerFromPhone(String phone) async {
   }
 }
 
-Future doDeleteInvoice(BuildContext context, String invoiceId,
-    {Widget widgetToNavigator}) async {
+Future doDeleteInvoice(BuildContext context, String invoiceId, bool isRequest,
+    {Widget widgetToNavigator, String reason}) async {
+  int status;
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  DeleteInvoice deleteInvoice = DeleteInvoice();
-  int status =
-      await deleteInvoice.deleteInvoice(prefs.get('access_token'), invoiceId);
+  if(isRequest){
+    DeleteInvoiceRequest deleteInvoiceRequest = DeleteInvoiceRequest();
+    status = await deleteInvoiceRequest.deleteInvoiceRequest(
+        prefs.get('access_token'), invoiceId,
+        reason: reason);
+  }else {
+    DeleteInvoice deleteInvoice = DeleteInvoice();
+    status =
+    await deleteInvoice.deleteInvoice(prefs.get('access_token'), invoiceId);
+  }
   status == 200
       ? showCustomDialog(context,
           isSuccess: true,
@@ -520,7 +526,7 @@ Future<void> doValidateCustomer(BuildContext context,
     } else {
       showCustomDialog(context,
           isSuccess: false,
-          content: "Ảnh chụp và CMND/CCCD không trùng khớp. Thử lại");
+          content: "Thông tin không trùng khớp. Thử lại");
     }
   } catch (_) {
     showCustomDialog(context,

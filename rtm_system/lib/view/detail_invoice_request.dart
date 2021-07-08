@@ -52,6 +52,7 @@ class _DetailInvoiceRequestState extends State<DetailInvoiceRequest> {
           ),
             //dùng dialog có setState cho xoá yêu cầu của customer nên thêm ở đây
           if (widget.isCustomer)
+            // ignore: deprecated_member_use
             RaisedButton(
               color: Colors.redAccent,
               onPressed: () {

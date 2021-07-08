@@ -374,7 +374,6 @@ Widget btnDeleteRequestPage(BuildContext context, double width,
     // ignore: deprecated_member_use
     child: FlatButton(
         onPressed: () async {
-          print(isInvoice);
           tittleButtonAlertDialog == "Hủy"
               ? showAlertDialog(
                   context,
