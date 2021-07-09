@@ -4,9 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:rtm_system/helpers/button.dart';
 import 'package:rtm_system/helpers/common_widget.dart';
 import 'package:rtm_system/ultils/get_api_data.dart';
-import 'package:rtm_system/helpers/dialog.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
-import 'package:rtm_system/view/form_reason.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
 import '../ultils/get_data.dart';
 
@@ -728,8 +726,6 @@ Widget componentContainerInvoiceRequest(BuildContext context,
 // isCustomer để đó để manager có khác biệt thì dùng
 Widget componentContainerDetailAdvanceRequest(BuildContext context,
     {String id,
-    String managerName,
-    String managerPhone,
     String storeName,
     String storeId,
     String customerName,
@@ -740,6 +736,7 @@ Widget componentContainerDetailAdvanceRequest(BuildContext context,
     int activeStatus,
     String createDate,
     String activeDate,
+    String receiveDate,
     String reason,
     bool isCustomer,
     Widget widgetToNavigator}) {
@@ -774,6 +771,11 @@ Widget componentContainerDetailAdvanceRequest(BuildContext context,
                 ),
         ),
         txtItemDetail(context, "Số tiền", "${getFormatPrice("$amount")}đ"),
+        SizedBox(
+          height: 10,
+        ),
+        txtItemDetail(context, "Ngày đến",
+            "${getDateTime(receiveDate, dateFormat: "dd/MM/yyyy")}"),
         SizedBox(
           height: 10,
         ),

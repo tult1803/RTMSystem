@@ -208,65 +208,88 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
         // có nợ thì mới show ra, hiện tại api nợ = 0 vẫn trả được
         floatingActionButton: BlocBuilder<ListInvoiceIdBloc, List<String>>(
           builder: (context, state) {
-            return FloatingActionButton.extended(
-              onPressed: () {
-                //có bloc nên k thể tách hàm
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: Text('Thông báo'),
-                      content: SingleChildScrollView(
-                        child: Column(
-                          children: <Widget>[
-                            widget.isPay
-                                ? Text(showMessage('', MSG028))
-                                : Text(showMessage('', MSG029)),
-                          ],
-                        ),
-                      ),
-                      actions: <Widget>[
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: Text(
-                            'Không',
-                            style: TextStyle(
-                              color: Colors.redAccent,
-                            ),
-                          ),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            widget.isPay ? putReturnAdvance(context, state, totalAdvance) 
-                            //call api receive cash
-                            : "";
-                          },
-                          child: Text(
-                            'Có',
-                            style: TextStyle(
-                              color: welcome_color,
-                            ),
-                          ),
-                        ),
-                      ],
-                    );
-                  },
+            if (state.isNotEmpty) {
+              if (totalAdvance != 0) {
+                return Container(
+                  width: 1,
+                  height: 1,
+                  child: FloatingActionButton(
+                    backgroundColor: backgroundColor,
+                    onPressed: () {},
+                  ),
                 );
-              },
-              label: Text(
-                'Xác nhận',
-                style: TextStyle(
-                  color: Colors.white,
+              }
+              return FloatingActionButton.extended(
+                onPressed: () {
+                  //có bloc nên k thể tách hàm
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text('Thông báo'),
+                        content: SingleChildScrollView(
+                          child: Column(
+                            children: <Widget>[
+                              widget.isPay
+                                  ? Text(showMessage('', MSG028))
+                                  : Text(showMessage('', MSG029)),
+                            ],
+                          ),
+                        ),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: Text(
+                              'Không',
+                              style: TextStyle(
+                                color: Colors.redAccent,
+                              ),
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              widget.isPay
+                                  ? putReturnAdvance(
+                                      context, state, totalAdvance)
+                                  //call api receive cash
+                                  : "";
+                            },
+                            child: Text(
+                              'Có',
+                              style: TextStyle(
+                                color: welcome_color,
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                label: Text(
+                  'Xác nhận',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
                 ),
-              ),
-              backgroundColor: welcome_color,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(50.0),
-              ),
-              elevation: 10,
-            );
+                backgroundColor: welcome_color,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50.0),
+                ),
+                elevation: 10,
+              );
+            } else {
+              return Container(
+                width: 1,
+                height: 1,
+                child: FloatingActionButton(
+                  backgroundColor: backgroundColor,
+                  onPressed: () {},
+                ),
+              );
+            }
           },
         ),
       ),
