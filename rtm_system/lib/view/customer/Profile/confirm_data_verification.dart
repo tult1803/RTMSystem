@@ -26,7 +26,6 @@ class _ConfirmDataVerificationState extends State<ConfirmDataVerification> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _account = widget.account;
   }

@@ -46,7 +46,6 @@ class _showTablePriceState extends State<showTablePrice> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _pagingController.addPageRequestListener((pageKey) {
       _fetchPage(pageKey);
@@ -72,7 +71,6 @@ class _showTablePriceState extends State<showTablePrice> {
 
   @override
   void didUpdateWidget(covariant showTablePrice oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
     if(oldWidget.idProduct != widget.idProduct){
       _pagingController.refresh();
@@ -82,7 +80,6 @@ class _showTablePriceState extends State<showTablePrice> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     _pagingController.dispose();
     if(dataListProduct != null)dataListProduct.clear();

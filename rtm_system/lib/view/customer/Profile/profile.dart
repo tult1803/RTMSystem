@@ -14,7 +14,6 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     if (imageBack != null) imageBack = null;
     if (imageFront != null) imageFront = null;
