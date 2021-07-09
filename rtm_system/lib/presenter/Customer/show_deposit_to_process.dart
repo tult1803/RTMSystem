@@ -9,6 +9,7 @@ import 'package:rtm_system/model/get/getAPI_invoice.dart';
 import 'package:rtm_system/model/model_invoice.dart';
 import 'package:rtm_system/helpers/common_widget.dart';
 import 'package:rtm_system/ultils/get_data.dart';
+import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/ultils/src/message_list.dart';
 import 'package:rtm_system/view/detail_invoice.dart';
 import 'package:rtm_system/view/manager/form_detail_page.dart';
@@ -27,10 +28,8 @@ class showAllInvoicePageState extends State<showDepositToProcess> {
   Invoice invoice;
   List invoiceList;
 
-  Future<bool> loadInvoiceDeposit() async {
-    bool result = false;
-    try {
-      int _totalAmount = 0;
+  Future<List> loadInvoiceDeposit() async {
+    int _totalAmount = 0;
       SharedPreferences prefs = await SharedPreferences.getInstance();
       GetInvoice getAPIAllInvoice = GetInvoice();
       invoice = await getAPIAllInvoice.getInvoice(
@@ -44,7 +43,8 @@ class showAllInvoicePageState extends State<showDepositToProcess> {
         "",
       );
       invoiceList = invoice.invoices;
-      invoiceList.forEach((element) {
+      if(invoiceList != null){
+        invoiceList.forEach((element) {
         double amount = getPriceTotal(
                 double.parse(element['price'].toString()),
                 double.parse(element['degree'].toString()),
@@ -52,10 +52,9 @@ class showAllInvoicePageState extends State<showDepositToProcess> {
             0;
         _totalAmount += amount.round();
       });
+      }
       BlocProvider.of<TotalAmountBloc>(context).emit(_totalAmount);
-      result = true;
-    } catch (e) {}
-    return result;
+      return invoiceList;
   }
 
   @override
@@ -122,8 +121,13 @@ class showAllInvoicePageState extends State<showDepositToProcess> {
               },
             );
           } else if (snapshot.hasError) {
-            return Center(
-              child: AutoSizeText(showMessage(MSG030, MSG027)),
+            return Container(
+              margin: EdgeInsets.all(12),
+              child: Center(
+                child: Column(children: [
+                  AutoSizeText(showMessage("", MSG008),style: TextStyle(fontWeight: FontWeight.w500)),
+                ],),
+              ),
             );
           } else {
             return CircularProgressIndicator();
