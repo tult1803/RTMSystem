@@ -86,21 +86,8 @@ class _showAllNoticeState extends State<showAllNotice> {
           PagedSliverList<int, NoticeList>(
             pagingController: _pagingController,
             builderDelegate: PagedChildBuilderDelegate<NoticeList>(
-                firstPageErrorIndicatorBuilder: (context) {
-                  return Column(
-                    children: [
-                      firstPageErrorIndicatorBuilder(context,
-                          tittle: "Không có dữ liệu"),
-                      GestureDetector(
-                        onTap: () => _pagingController.refresh(),
-                        child: Text(
-                          "Nhấn để tải lại",
-                          style: TextStyle(color: welcome_color, fontSize: 18),
-                        ),
-                      ),
-                    ],
-                  );
-                },
+                firstPageErrorIndicatorBuilder: (context) => noItemFound(),
+                noItemsFoundIndicatorBuilder: (context) => noItemFound(),
                 firstPageProgressIndicatorBuilder: (context) =>
                     firstPageProgressIndicatorBuilder(),
                 newPageProgressIndicatorBuilder: (context) =>
@@ -122,5 +109,21 @@ class _showAllNoticeState extends State<showAllNotice> {
   void dispose() {
     _pagingController.dispose();
     super.dispose();
+  }
+
+  Widget noItemFound(){
+    return Column(
+      children: [
+        firstPageErrorIndicatorBuilder(context,
+            tittle: "Không có dữ liệu"),
+        GestureDetector(
+          onTap: () => _pagingController.refresh(),
+          child: Text(
+            "Nhấn để tải lại",
+            style: TextStyle(color: welcome_color, fontSize: 18),
+          ),
+        ),
+      ],
+    );
   }
 }
