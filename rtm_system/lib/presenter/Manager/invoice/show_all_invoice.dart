@@ -8,6 +8,7 @@ import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
 
+// ignore: camel_case_types
 class showAllInvoice extends StatefulWidget {
   final int index;
 
@@ -20,6 +21,7 @@ class showAllInvoice extends StatefulWidget {
 DateTime fromDate;
 DateTime toDate;
 String itemToSearch;
+// ignore: camel_case_types
 class _showAllInvoiceState extends State<showAllInvoice>
     with TickerProviderStateMixin {
   TabController _tabController;
@@ -31,7 +33,7 @@ class _showAllInvoiceState extends State<showAllInvoice>
   void initState() {
     super.initState();
     _tabController = TabController(
-        length: 6,
+        length: 5,
         vsync: this,
         initialIndex:
             widget.index == null ? index = 0 : index = this.widget.index);
@@ -103,7 +105,6 @@ class _showAllInvoiceState extends State<showAllInvoice>
       tabs: <Widget>[
         Tab(text: "Yêu cầu"),
         Tab(text: "Xử lý"),
-        Tab(text: "Hiệu lực"),
         Tab(text: "Ký gửi"),
         Tab(text: "Hoàn thành"),
         Tab(text: "Từ chối"),
@@ -135,7 +136,6 @@ class _showAllInvoiceState extends State<showAllInvoice>
             ),
             searchItem: itemToSearch,
           ),
-          new showInvoiceManager(1, fromDate: getFromDate, toDate: getToDate, searchItem: itemToSearch,),
           new showInvoiceManager(5, fromDate: getFromDate, toDate: getToDate, searchItem: itemToSearch,),
           new showInvoiceManager(3, fromDate: getFromDate, toDate: getToDate, searchItem: itemToSearch,),
           new showInvoiceManager(2, fromDate: getFromDate, toDate: getToDate, searchItem: itemToSearch,),

@@ -10,6 +10,7 @@ import 'manager/profile/confirm_create_customer.dart';
 
 //check: true là cho customer còn false là cho manager
 
+// ignore: must_be_immutable, camel_case_types
 class formUpdateProfile extends StatefulWidget {
   String fullname, phone, cmnd, address, password, accountId;
   int gender;
@@ -43,8 +44,9 @@ class formUpdateProfile extends StatefulWidget {
 
 enum GenderCharacter { women, men }
 
+// ignore: camel_case_types
 class _formUpdateProfileState extends State<formUpdateProfile> {
-  String errFulname, errPhone, errCMND, errAddress, errUser, errPass, errBirth;
+  String errFullName, errPhone, errCMND, errAddress, errUser, errPass, errBirth;
   GenderCharacter character;
   bool checkClick = false;
   String messageCancel = '';
@@ -77,7 +79,7 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
           Column(
             children: [
               _txtFormField(this.widget.fullname, false, "Nhập họ tên",
-                  "Họ và tên", errFulname, 1, TextInputType.text),
+                  "Họ và tên", errFullName, 1, TextInputType.text),
               _txtfield(
                   getDataTextField(this.widget.phone),
                   false,
@@ -503,9 +505,9 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
   bool _validateData() {
     bool check = false;
     if (this.widget.fullname == null || this.widget.fullname == "") {
-      errFulname = "Họ và tên trống";
+      errFullName = "Họ và tên trống";
     } else {
-      errFulname = null;
+      errFullName = null;
     }
     if (this.widget.phone == null || this.widget.phone == "") {
       errPhone = "Số điện thoại trống";
@@ -557,7 +559,7 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
         }
       }
     }
-    if (errFulname == null &&
+    if (errFullName == null &&
         errPhone == null &&
         errPass == null &&
         errBirth == null &&
