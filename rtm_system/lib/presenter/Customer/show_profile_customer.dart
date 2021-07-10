@@ -11,6 +11,7 @@ import 'package:rtm_system/view/customer/Profile/account_verification.dart';
 import 'package:rtm_system/view/update_password.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+// ignore: camel_case_types
 class showProfile extends StatefulWidget {
   const showProfile({Key key}) : super(key: key);
 
@@ -18,6 +19,7 @@ class showProfile extends StatefulWidget {
   _showProfileState createState() => _showProfileState();
 }
 
+// ignore: camel_case_types
 class _showProfileState extends State<showProfile> {
   GetAPIProfileCustomer getAPIProfileCustomer = GetAPIProfileCustomer();
   InfomationCustomer infomationCustomer = InfomationCustomer();
@@ -79,7 +81,7 @@ class _showProfileState extends State<showProfile> {
                     child: Column(
                       children: [
                         _item(context, 'Họ và tên',
-                            infomationCustomer.fullname),
+                            infomationCustomer.fullName),
                         _item(
                             context,
                             'Ngày sinh',

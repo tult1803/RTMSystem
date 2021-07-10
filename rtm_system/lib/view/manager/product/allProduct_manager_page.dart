@@ -9,7 +9,7 @@ import 'package:rtm_system/view/manager/process_Invoice_AdvanceBill/process_invo
 import 'package:rtm_system/view/manager/product/update_price_product_manager.dart';
 import 'package:rtm_system/view/manager/profile/allCustomer_manager.dart';
 
-import '../../add_product_in_invoice.dart';
+import '../../add_product_invoice.dart';
 
 class AllProduct extends StatefulWidget {
   const AllProduct({Key key}) : super(key: key);

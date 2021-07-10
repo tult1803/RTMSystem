@@ -24,7 +24,6 @@ List<String> itemIdUpdatePrice = [];
 // ignore: camel_case_types
 class _showAllProductState extends State<showAllProduct> {
   // String token;
-  List<DataProduct> dataListProduct = [];
   List<dynamic> dataList = [];
   final PagingController _pagingController = PagingController(firstPageKey: 50);
 

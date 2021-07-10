@@ -5,7 +5,7 @@ class InfomationCustomer {
   int statusId;
   String accountId;
   int advance;
-  String fullname;
+  String fullName;
   int gender;
   String phone;
   DateTime birthday;
@@ -18,7 +18,7 @@ class InfomationCustomer {
     this.statusId,
     this.accountId,
     this.advance,
-    this.fullname,
+    this.fullName,
     this.gender,
     this.phone,
     this.birthday,
@@ -33,7 +33,7 @@ class InfomationCustomer {
       statusId: json["status_id"],
       accountId: json["account_id"],
       advance: json["advance"],
-      fullname: json["fullname"],
+      fullName: json["fullname"],
       gender: json["gender"],
       phone: json["phone"],
       birthday: DateTime.parse(json["birthday"]),

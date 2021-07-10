@@ -21,6 +21,8 @@ class PostCreateInvoice{
         "invoice_request_id": invoiceRequestId
       }),
     );
+    // print( Uri.http('$urlMain', '$urlCreateInvoice'));
+    print("$customerId - $productId - $storeId - ${double.tryParse(quantity)} - ${double.tryParse(degree)} - $invoiceRequestId");
     print("Status postApi CreateInvoice:${response.statusCode}");
     return response.statusCode;
   }
