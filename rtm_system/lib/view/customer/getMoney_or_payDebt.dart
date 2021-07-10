@@ -209,7 +209,7 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
         floatingActionButton: BlocBuilder<ListInvoiceIdBloc, List<String>>(
           builder: (context, state) {
             if (state.isNotEmpty) {
-              if (totalAdvance != 0) {
+              if (totalAdvance == 0) {
                 return Container(
                   width: 1,
                   height: 1,

@@ -6,6 +6,7 @@ import 'package:rtm_system/helpers/common_widget.dart';
 import 'package:rtm_system/helpers/component.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/ultils/src/message_list.dart';
+import 'package:rtm_system/view/customer/advance/detail_advance_return.dart';
 import 'package:rtm_system/view/detail_advance_request.dart';
 import 'package:rtm_system/view/manager/form_detail_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -116,32 +117,54 @@ class _showHistoryAdvancePageState extends State<showHistoryAdvancePage> {
                                   newPageErrorIndicatorBuilder: (context) =>
                                       firstPageErrorIndicatorBuilder(context,
                                           tittle: showMessage("", MSG008)),
-                                  firstPageProgressIndicatorBuilder: (context) =>
+                                  firstPageProgressIndicatorBuilder:
+                                      (context) =>
                                           firstPageProgressIndicatorBuilder(),
                                   noItemsFoundIndicatorBuilder: (context) =>
                                       noItemsFoundIndicatorBuilder(),
                                   newPageProgressIndicatorBuilder: (context) =>
                                       newPageProgressIndicatorBuilder(),
                                   itemBuilder: (context, item, index) {
-                                    return boxForAdvanceHistory(
-                                      context: context,
-                                      id: item.id,
-                                      amount: item.amount,
-                                      customerId: item.customerId,
-                                      returnCash: item.returnCash,
-                                      isAdvance: item.advance,
-                                      dateTime: item.datetime,
-                                      receiveDate: item.receiveDate,
-                                      widget: FormForDetailPage(
-                                        tittle: "Chi tiết yêu cầu",
-                                        bodyPage: DetailAdvancePage(
-                                          isCustomer: true,
-                                          id: item.id,
-                                          status: 0,
-                                          isRequest: false,
+                                    var idSplit = item.id.split("-");
+                                    String prefixId = idSplit[0].trim();
+                                    if (prefixId == "TN") {
+                                       return boxForAdvanceHistory(
+                                        context: context,
+                                        id: item.id,
+                                        amount: item.amount,
+                                        customerId: item.customerId,
+                                        returnCash: item.returnCash,
+                                        isAdvance: item.advance,
+                                        dateTime: item.datetime,
+                                        receiveDate: item.receiveDate,
+                                        widget: FormForDetailPage(
+                                          tittle: "Chi tiết đơn hoàn trả",
+                                          bodyPage: DetailAdvanceReturn(
+                                            id: item.id,
+                                          ),
                                         ),
-                                      ),
-                                    );
+                                      );
+                                    } else {
+                                      return boxForAdvanceHistory(
+                                        context: context,
+                                        id: item.id,
+                                        amount: item.amount,
+                                        customerId: item.customerId,
+                                        returnCash: item.returnCash,
+                                        isAdvance: item.advance,
+                                        dateTime: item.datetime,
+                                        receiveDate: item.receiveDate,
+                                        widget: FormForDetailPage(
+                                          tittle: "Chi tiết yêu cầu",
+                                          bodyPage: DetailAdvancePage(
+                                            isCustomer: true,
+                                            id: item.id,
+                                            status: 0,
+                                            isRequest: false,
+                                          ),
+                                        ),
+                                      );
+                                    }
                                   }),
                         ),
                       ],
