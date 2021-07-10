@@ -4,6 +4,7 @@ import 'package:rtm_system/ultils/get_api_data.dart';
 import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 
+// ignore: camel_case_types
 class processCreateCustomer extends StatefulWidget {
   final String tittle, account_id;
   final List listCustomer;
@@ -15,6 +16,7 @@ class processCreateCustomer extends StatefulWidget {
   _processCreateCustomerState createState() => _processCreateCustomerState();
 }
 
+// ignore: camel_case_types
 class _processCreateCustomerState extends State<processCreateCustomer> {
   String fullname, phone, cmnd, address, password;
   DateTime birthday;

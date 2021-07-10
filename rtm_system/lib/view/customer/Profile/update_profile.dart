@@ -109,7 +109,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
               check: true,
               isUpdate: true,
               typeOfUpdate: 1,
-              account_id: widget.account_id,
+              accountId: widget.account_id,
               isCustomer: true,
             ),
             SizedBox(height: 15,),

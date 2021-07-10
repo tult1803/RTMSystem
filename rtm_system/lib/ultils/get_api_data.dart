@@ -18,8 +18,9 @@ import 'package:rtm_system/model/put/putAPI_returnAdvance.dart';
 import 'package:rtm_system/model/put/putAPI_confirmInvoice.dart';
 import 'package:rtm_system/model/put/putAPI_processAdvanceBill.dart';
 import 'package:rtm_system/model/put/putAPI_signInvoice.dart';
+import 'package:rtm_system/model/put/putAPI_updatePassword.dart';
 import 'package:rtm_system/model/put/putAPI_updatePrice.dart';
-import 'package:rtm_system/model/put/putAPI_updateProfile.dart';
+import 'package:rtm_system/model/put/putAPI_updateAccount.dart';
 import 'package:rtm_system/view/customer/Profile/confirm_data_verification.dart';
 import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/message_list.dart';
@@ -56,8 +57,6 @@ Future<void> getNotice(BuildContext context, String mainTittle, String content,
         context, "Tạo thất bại. Xin thử lại !!!", null, false);
 }
 
-//dung cho tạo khách hàng, cap nhat khach hang
-// ignore: non_constant_identifier_names
 Future post_put_ApiProfile(
     String phone,
     String password,
@@ -90,6 +89,33 @@ Future post_put_ApiProfile(
         phone, password, fullname, gender, cmnd, address, birthday);
   }
   return status;
+}
+
+Future<void> doUpdatePassword(BuildContext context,
+    {String accountId, String password, bool isCustomer}) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  PutUpdatePassword putUpdatePassword = PutUpdatePassword();
+  int status = await putUpdatePassword.updatePassword(
+      prefs.get("access_token"), accountId, password);
+  if (status == 200) {
+    prefs.setString("password", password);
+    if (isCustomer) {
+      showCustomDialog(context,
+          content: MSG003,
+          isSuccess: true,
+          widgetToNavigator: HomeCustomerPage(index: 3,));
+    } else {
+      showCustomDialog(context,
+          content: MSG003,
+          isSuccess: true,
+          widgetToNavigator: HomeAdminPage(index: 4,));
+    }
+  }else{
+    showCustomDialog(context,
+        content: MSG025,
+        isSuccess: false,
+        doPopNavigate: true);
+  }
 }
 
 Future<void> doCreateCustomer(
@@ -167,6 +193,7 @@ Future<void> put_API_PayAdvance(
         context, "Trả tiền thất bại. Xin thử lại !!!", null, false);
 }
 
+// ignore: non_constant_identifier_names
 Future<void> put_API_ConfirmAdvance(BuildContext context, id) async {
   int status;
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -294,8 +321,8 @@ Future<void> doConfirmOrAcceptOrRejectInvoice(
             : print('Chấp nhận');
         break;
       case 3:
-            doDeleteInvoice(context, invoiceId,isRequest,
-                widgetToNavigator: widgetToNavigator, reason: reason);
+        doDeleteInvoice(context, invoiceId, isRequest,
+            widgetToNavigator: widgetToNavigator, reason: reason);
         break;
     }
   }
@@ -367,15 +394,15 @@ Future doDeleteInvoice(BuildContext context, String invoiceId, bool isRequest,
     {Widget widgetToNavigator, String reason}) async {
   int status;
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  if(isRequest){
+  if (isRequest) {
     DeleteInvoiceRequest deleteInvoiceRequest = DeleteInvoiceRequest();
     status = await deleteInvoiceRequest.deleteInvoiceRequest(
         prefs.get('access_token'), invoiceId,
         reason: reason);
-  }else {
+  } else {
     DeleteInvoice deleteInvoice = DeleteInvoice();
     status =
-    await deleteInvoice.deleteInvoice(prefs.get('access_token'), invoiceId);
+        await deleteInvoice.deleteInvoice(prefs.get('access_token'), invoiceId);
   }
   status == 200
       ? showCustomDialog(context,
@@ -512,7 +539,10 @@ Future<void> doValidateCustomer(BuildContext context,
   SharedPreferences prefs = await SharedPreferences.getInstance();
   PostValidateCustomer validateCustomer = PostValidateCustomer();
   try {
-    EasyLoading.show(status: 'Đang xử lý...', maskType: EasyLoadingMaskType.black,);
+    EasyLoading.show(
+      status: 'Đang xử lý...',
+      maskType: EasyLoadingMaskType.black,
+    );
     account = await validateCustomer.createValidateCustomer(
         prefs.get("access_token"),
         cmndFront: cmndFront,
@@ -528,8 +558,7 @@ Future<void> doValidateCustomer(BuildContext context,
               )));
     } else {
       showCustomDialog(context,
-          isSuccess: false,
-          content: "Thông tin không trùng khớp. Thử lại");
+          isSuccess: false, content: "Thông tin không trùng khớp. Thử lại");
     }
   } catch (_) {
     EasyLoading.dismiss();
