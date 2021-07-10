@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:rtm_system/model/delete/deleteAPI_invoice.dart';
 import 'package:rtm_system/model/delete/deleteAPI_invoiceRequest.dart';
+import 'package:rtm_system/model/model_invoice_request.dart';
 import 'package:rtm_system/model/model_validate_account.dart';
 import 'package:rtm_system/model/post/postAPI_CreateRequestInvoice.dart';
 import 'package:rtm_system/model/post/postAPI_Image.dart';
@@ -261,7 +262,7 @@ Future<void> doConfirmOrAcceptOrRejectInvoice(
     {Widget widgetToNavigator,
     String reason,
     bool isRequest,
-    Map<String, dynamic> map}) async {
+      InvoiceRequestElement element}) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   int status;
   if (isCustomer) {
@@ -308,16 +309,16 @@ Future<void> doConfirmOrAcceptOrRejectInvoice(
             ? Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => AddProductPage(
                       tittle: "Tạo hoá đơn yêu cầu",
-                      customerId: map["customer_id"],
-                      invoiceRequestId: map["id"],
-                      phone: map["customer_phone"],
-                      fullName: map["customer_name"],
-                      storeName: map["store_name"],
-                      productName: map["product_name"],
-                      dateToPay: map["sell_date"],
-                      productId: map["product_id"],
-                      savePrice: "${map["price"]}",
-                      storeId: map["store_id"],
+                      customerId: element.customerId,
+                      invoiceRequestId: element.id,
+                      phone: element.customerPhone,
+                      fullName: element.customerName,
+                      storeName: element.storeName,
+                      productName: element.productName,
+                      dateToPay: element.sellDate,
+                      productId: element.productId,
+                      savePrice: "${element.price}",
+                      storeId: element.storeId,
                       isCustomer: false,
                       isChangeData: true,
                       widgetToNavigator: widgetToNavigator,

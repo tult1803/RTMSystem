@@ -12,6 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: camel_case_types
 // khi thêm data nó k load lại dk mà cần qua trang khác rồi ấn lại thì mới load lên
+// ignore: must_be_immutable, camel_case_types
 class showAllInvoiceRequestPage extends StatefulWidget {
   String fromDate, toDate;
 
@@ -22,11 +23,11 @@ class showAllInvoiceRequestPage extends StatefulWidget {
       showAllInvoiceRequestPageState();
 }
 
+// ignore: camel_case_types
 class showAllInvoiceRequestPageState extends State<showAllInvoiceRequestPage> {
   int _pageSize = 1;
   final PagingController _pagingController = PagingController(firstPageKey: 10);
   InvoiceRequest invoiceRequest;
-  List invoiceList;
 
   Future<void> _fetchPage(pageKey) async {
     try {
@@ -42,16 +43,15 @@ class showAllInvoiceRequestPageState extends State<showAllInvoiceRequestPage> {
         this.widget.toDate == null ? "" : "${this.widget.toDate}",
         searchTerm: "",
       );
-      invoiceList = invoiceRequest.invoiceRequests;
-      final isLastPage = invoiceList.length < pageKey;
+      final isLastPage = invoiceRequest.invoiceRequests.length < pageKey;
       if (isLastPage) {
-        _pagingController.appendLastPage(invoiceList);
+        _pagingController.appendLastPage(invoiceRequest.invoiceRequests);
       } else {
         setState(() {
           _pageSize += 1;
         });
         final nextPageKey = pageKey;
-        _pagingController.appendPage(invoiceList, nextPageKey);
+        _pagingController.appendPage(invoiceRequest.invoiceRequests, nextPageKey);
       }
     } catch (error) {
       _pagingController.error = error;
@@ -132,18 +132,18 @@ class showAllInvoiceRequestPageState extends State<showAllInvoiceRequestPage> {
                               itemBuilder: (context, item, index) {
                                 return boxForInvoiceRequest(
                                     context: context,
-                                    status: item['status_id'],
-                                    createDate: "${item['create_date']}",
-                                    price: "${item['price']}",
-                                    id: item['id'].toString(),
-                                    name: item["customer_name"],
-                                    product: item["product_name"],
-                                    sellDate: item["sell_date"],
+                                    status: item.statusId,
+                                    createDate: "${item.createDate}",
+                                    price: "${item.price}",
+                                    id: item.id.toString(),
+                                    name: item.customerName,
+                                    product: item.productName,
+                                    sellDate: item.sellDate,
                                     widget: FormForDetailPage(
                                       tittle: "Chi tiết yêu cầu",
                                       bodyPage: DetailInvoiceRequest(
                                         isCustomer: true,
-                                        map: item,
+                                        invoiceRequestElement: item,
                                       ),
                                     ),
                                     isCustomer: true);

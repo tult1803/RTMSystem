@@ -10,6 +10,7 @@ import 'package:rtm_system/view/detail_advance_request.dart';
 import 'package:rtm_system/view/manager/form_detail_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+// ignore: must_be_immutable, camel_case_types
 class showAdvanceRequestPage extends StatefulWidget {
   String fromDate, toDate;
   int status;
@@ -19,11 +20,11 @@ class showAdvanceRequestPage extends StatefulWidget {
   _showAdvanceRequestPageState createState() => _showAdvanceRequestPageState();
 }
 
+// ignore: camel_case_types
 class _showAdvanceRequestPageState extends State<showAdvanceRequestPage> {
   int _pageSize = 1;
   final PagingController _pagingController = PagingController(firstPageKey: 10);
   AdvanceRequest advanceRequest;
-  List advances;
 
   Future<void> _fetchPage(pageKey) async {
     try {
@@ -40,16 +41,15 @@ class _showAdvanceRequestPageState extends State<showAdvanceRequestPage> {
         this.widget.toDate == null ? "" : "${this.widget.toDate}",
         searchTerm: "",
       );
-      advances = advanceRequest.advances;
-      final isLastPage = advances.length < pageKey;
+      final isLastPage = advanceRequest.advances.length < pageKey;
       if (isLastPage) {
-        _pagingController.appendLastPage(advances);
+        _pagingController.appendLastPage(advanceRequest.advances);
       } else {
         setState(() {
           _pageSize += 1;
         });
         final nextPageKey = pageKey;
-        _pagingController.appendPage(advances, nextPageKey);
+        _pagingController.appendPage(advanceRequest.advances, nextPageKey);
       }
     } catch (error) {
       _pagingController.error = error;
@@ -129,24 +129,24 @@ class _showAdvanceRequestPageState extends State<showAdvanceRequestPage> {
                                   newPageProgressIndicatorBuilder(),
                               itemBuilder: (context, item, index) {
                                 return boxForAdvance(
-                                  context: context,
-                                  id: item['id'],
-                                  status: item['status_id'],
-                                  createDate: "${item['create_date']}",
-                                  amount: "${item['amount']}",
-                                  storeId: item['store_id'],
-                                  name: item["customer_name"],
-                                  receiveDate: item["receive_date"],
-                                  widget: FormForDetailPage(
-                                    tittle: "Chi tiết yêu cầu",
-                                    bodyPage: DetailAdvancePage(
-                                      isCustomer: true,
-                                      id: item['id'],
-                                      status: item['status_id'],
-                                      isRequest: false,
+                                    context: context,
+                                    id: item.id,
+                                    status: item.statusId,
+                                    createDate: "${item.createDate}",
+                                    amount: "${item.amount}",
+                                    storeId: item.storeId,
+                                    name: item.customerName,
+                                    receiveDate: item.receiveDate,
+                                    widget: FormForDetailPage(
+                                      tittle: "Chi tiết yêu cầu",
+                                      bodyPage: DetailAdvancePage(
+                                        isCustomer: true,
+                                        id: item.id,
+                                        status: item.statusId,
+                                        isRequest: false,
+                                      ),
                                     ),
-                                  ),
-                                  isCustomer: true
+                                    isCustomer: true
                                 );
                               }),
                         ),

@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:rtm_system/helpers/button.dart';
 import 'package:rtm_system/helpers/common_widget.dart';
 import 'package:rtm_system/model/model_advance_return_detail.dart';
+import 'package:rtm_system/model/model_invoice_request.dart';
 import 'package:rtm_system/ultils/get_api_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/ultils/src/message_list.dart';
@@ -679,7 +680,7 @@ Widget componentContainerInvoiceRequest(BuildContext context,
     bool isRequest,
     bool isCustomer,
     Widget widgetToNavigator,
-    Map<String, dynamic> map}) {
+    InvoiceRequestElement element}) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Column(
@@ -720,7 +721,7 @@ Widget componentContainerInvoiceRequest(BuildContext context,
             : btnProcessInvoice(context, 4, id, isCustomer,
                 isRequest: isRequest,
                 widgetToNavigator: widgetToNavigator,
-                map: map),
+                element: element),
       ],
     ),
   );
@@ -799,15 +800,16 @@ Widget componentContainerDetailAdvanceRequest(BuildContext context,
         SizedBox(
           height: 10,
         ),
-        if(activeStatus != null)
-        txtItemDetail(context, "Tình trạng",
-            activeStatus == 5 ? "Chưa nhận tiền" : "Đã nhận tiền",
-            colorContent: getColorStatus(status: activeStatus)),
+        if (activeStatus != null)
+          txtItemDetail(context, "Tình trạng",
+              activeStatus == 5 ? "Chưa nhận tiền" : "Đã nhận tiền",
+              colorContent: getColorStatus(status: activeStatus)),
         SizedBox(
           height: 10,
         ),
         //show btn for manager and customer
-        showBtnInAdvanceRequest(context, statusId, activeStatus, isCustomer, id, statusId, id, widgetToNavigator),
+        showBtnInAdvanceRequest(context, statusId, activeStatus, isCustomer, id,
+            statusId, id, widgetToNavigator),
       ],
     ),
   );
@@ -819,20 +821,22 @@ Widget showBtnInAdvanceRequest(context, status, activeStatus, bool isCustomer,
     if (status == 4) {
       //btn delete advance
       return ElevatedButton(
-          onPressed: () {
-            //call api
-          },
-          child: AutoSizeText(
-            "Xoá yêu cầu",
-            style: TextStyle(color: Colors.white,),
+        onPressed: () {
+          //call api
+        },
+        child: AutoSizeText(
+          "Xoá yêu cầu",
+          style: TextStyle(
+            color: Colors.white,
           ),
-         style: ElevatedButton.styleFrom(
-                primary: Colors.redAccent,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                ),
-              ),
-        );
+        ),
+        style: ElevatedButton.styleFrom(
+          primary: Colors.redAccent,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+        ),
+      );
     }
     if (activeStatus == 5) {
       return btnConfirmAdvanceOfCustomer(context, id, statusId);

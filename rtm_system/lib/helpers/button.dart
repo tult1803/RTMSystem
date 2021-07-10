@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:rtm_system/model/model_invoice_request.dart';
 import 'package:rtm_system/ultils/get_api_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/customer/home_customer_page.dart';
@@ -512,7 +513,7 @@ Widget btnProcessAdvanceBill(BuildContext context, {String idAdvanceBill,bool is
 
 
 Widget btnProcessInvoice(context, int statusId, String id, bool isCustomer,
-    {bool isRequest, Widget widgetToNavigator, Map<String, dynamic> map}) {
+    {bool isRequest, Widget widgetToNavigator, InvoiceRequestElement element}) {
   var size = MediaQuery.of(context).size;
   //show button để xử lý hoàn thành đơn
   //status = 0 là cho customer xoá hoá đơn gửi yêu cầu.
@@ -589,7 +590,7 @@ Widget btnProcessInvoice(context, int statusId, String id, bool isCustomer,
               onPressed: () {
                 doConfirmOrAcceptOrRejectInvoice(context, id, 2, isCustomer,
                     isRequest: isRequest,
-                    map: map,
+                    element: element,
                     widgetToNavigator: widgetToNavigator);
               },
               child: Text(

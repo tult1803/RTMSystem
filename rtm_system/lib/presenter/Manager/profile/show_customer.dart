@@ -10,6 +10,7 @@ import 'package:rtm_system/view/manager/form_detail_page.dart';
 import 'package:rtm_system/view/manager/profile/detail_customer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+// ignore: camel_case_types
 class showAllCustomer extends StatefulWidget {
   const showAllCustomer({Key key}) : super(key: key);
 
@@ -17,13 +18,13 @@ class showAllCustomer extends StatefulWidget {
   _showAllCustomerState createState() => _showAllCustomerState();
 }
 
+// ignore: camel_case_types
 class _showAllCustomerState extends State<showAllCustomer> {
   int _pageSize = 1;
   final PagingController _pagingController = PagingController(firstPageKey: 10);
   String token;
   String _searchTerm;
   Customer customer;
-  List customerList;
 
   Future<void> _fetchPage(pageKey) async {
     try {
@@ -39,16 +40,15 @@ class _showAllCustomerState extends State<showAllCustomer> {
         _pageSize,
         searchTerm: _searchTerm,
       );
-      customerList = customer.customerList;
-      final isLastPage = customerList.length < pageKey;
+      final isLastPage = customer.customerList.length < pageKey;
       if (isLastPage) {
-        _pagingController.appendLastPage(customerList);
+        _pagingController.appendLastPage(customer.customerList);
       } else {
         setState(() {
           _pageSize += 1;
         });
         final nextPageKey = pageKey;
-        _pagingController.appendPage(customerList, nextPageKey);
+        _pagingController.appendPage(customer.customerList, nextPageKey);
       }
     } catch (error) {
       print(error);
@@ -125,15 +125,15 @@ class _showAllCustomerState extends State<showAllCustomer> {
                 itemBuilder: (context, item, index) {
                   return boxForCustomer(
                       context: context,
-                      status: item['status_id'],
-                      level: item['level'],
-                      phone: item['phone'],
-                      name: item["fullname"],
-                      advance: item['advance'],
+                      status: item.statusId,
+                      level: item.level,
+                      phone: item.phone,
+                      name: item.fullName,
+                      advance: item.advance,
                       widget: FormForDetailPage(
                           tittle: "Chi tiết khách hàng",
                           bodyPage: DetailCustomer(
-                            map: item,
+                            customerList: item,
                             token: token,
                           )));
                 }),
