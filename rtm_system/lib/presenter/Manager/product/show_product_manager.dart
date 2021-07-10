@@ -9,6 +9,7 @@ import 'package:rtm_system/view/manager/form_detail_page.dart';
 import 'package:rtm_system/view/manager/product/detail_product.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+// ignore: camel_case_types
 class showAllProduct extends StatefulWidget {
   const showAllProduct({Key key}) : super(key: key);
 
@@ -84,25 +85,12 @@ class _showAllProductState extends State<showAllProduct> {
           PagedSliverList(
             pagingController: _pagingController,
             builderDelegate: PagedChildBuilderDelegate(
-                firstPageErrorIndicatorBuilder: (context) {
-                  return Column(
-                    children: [
-                      firstPageErrorIndicatorBuilder(context,
-                          tittle: "Không có dữ liệu"),
-                      GestureDetector(
-                        onTap: () => _pagingController.refresh(),
-                        child: Text(
-                          "Nhấn để tải lại",
-                          style: TextStyle(color: welcome_color, fontSize: 18),
-                        ),
-                      ),
-                    ],
-                  );
-                },
+                firstPageErrorIndicatorBuilder:(context) =>
+                    noItemsFoundIndicatorBuilder("Không có dữ liệu"),
                 firstPageProgressIndicatorBuilder: (context) =>
                     firstPageProgressIndicatorBuilder(),
                 noItemsFoundIndicatorBuilder: (context) =>
-                    noItemsFoundIndicatorBuilder(),
+                    noItemsFoundIndicatorBuilder("Không có dữ liệu"),
                 newPageProgressIndicatorBuilder: (context) =>
                     firstPageProgressIndicatorBuilder(),
                 itemBuilder: (context, item, index) {
@@ -140,11 +128,11 @@ class _showAllProductState extends State<showAllProduct> {
     super.dispose();
   }
 
-  Widget noItemsFoundIndicatorBuilder() {
+  Widget noItemsFoundIndicatorBuilder(String tittle) {
     return Column(
       children: [
         firstPageErrorIndicatorBuilder(context,
-            tittle: "Không có dữ liệu khách hàng"),
+            tittle: tittle),
         GestureDetector(
           onTap: () => _pagingController.refresh(),
           child: Text(

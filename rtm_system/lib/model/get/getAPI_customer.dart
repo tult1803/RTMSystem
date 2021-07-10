@@ -7,7 +7,6 @@ import '../model_all_customer.dart';
 
 
 class GetCustomer{
-  static int statusInvoice;
   createCustomer(String token, int type, String accountId, int pageNum, int pageNo, {String searchTerm}) async {
     final response = await http.get(
       Uri.http('$urlMain', '$urlCustomer/$type', { "accountId":"$accountId", "pageNum" : "$pageNum" ,"pageNo" : "$pageNo", "name": searchTerm }),
@@ -17,8 +16,7 @@ class GetCustomer{
         'Authorization': 'Bearer $token',
       },
     );
-    print("Status getApi Invoice:${response.statusCode}");
-    statusInvoice = response.statusCode;
+    print("Status getApi Customer:${response.statusCode}");
     if (response.statusCode == 200) {
       return  Customer.fromJson(jsonDecode(response.body));
     } else {

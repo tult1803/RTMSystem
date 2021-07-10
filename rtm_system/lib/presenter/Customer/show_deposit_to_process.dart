@@ -25,7 +25,6 @@ class showDepositToProcess extends StatefulWidget {
 
 class showAllInvoicePageState extends State<showDepositToProcess> {
   Invoice invoice;
-  List invoiceList;
 
   Future<List> loadInvoiceDeposit() async {
     int _totalAmount = 0;
@@ -41,19 +40,17 @@ class showAllInvoicePageState extends State<showDepositToProcess> {
         "",
         "",
       );
-      invoiceList = invoice.invoices;
-      if(invoiceList != null){
-        invoiceList.forEach((element) {
+      if(invoice.invoices != null){
+        invoice.invoices.forEach((element) {
         double amount = getPriceTotal(
-                double.parse(element['price'].toString()),
-                double.parse(element['degree'].toString()),
-                double.parse(element['quantity'].toString())) ??
-            0;
+                double.parse(element.price.toString()),
+                double.parse(element.degree.toString()),
+                double.parse(element.quantity.toString())) ?? 0;
         _totalAmount += amount.round();
       });
       }
       BlocProvider.of<TotalAmountBloc>(context).emit(_totalAmount);
-      return invoiceList;
+      return invoice.invoices;
   }
 
   @override
@@ -75,36 +72,36 @@ class showAllInvoicePageState extends State<showDepositToProcess> {
                 DateTime from = state.start;
                 DateTime to = state.end;
                 int _totalDeposit = 0;
-                invoiceList.forEach((element) {
+              invoice.invoices.forEach((element) {
                   DateTime compare =
-                      DateTime.parse("${element['create_time']}");
+                      DateTime.parse("${element.createTime}");
                   if (compare.isAfter(from) && compare.isBefore(to)) {
                     double amountDeposit = 0;
                     amountDeposit = getPriceTotal(
-                        double.parse(element['price'].toString()),
-                        double.parse(element['degree'].toString()),
-                        double.parse(element['quantity'].toString()));
+                        double.parse(element.price.toString()),
+                        double.parse(element.degree.toString()),
+                        double.parse(element.quantity.toString()));
                     _totalDeposit += amountDeposit.round();
                     BlocProvider.of<TotalDepositBloc>(context)
                         .emit(_totalDeposit);
-                    invoiceIdList.add(element['id']);
+                    invoiceIdList.add(element.id);
                     children.add(
                       boxForInvoice(
                           context: context,
-                          status: element['status_id'],
-                          createDate: "${element['create_time']}",
-                          price: element['price'],
-                          quantity: element['quantity'],
-                          degree: element['degree'],
-                          id: element['id'],
-                          activeDate: element["active_date"],
-                          name: element["customer_name"],
-                          product: element["product_name"],
+                          status: element.statusId,
+                          createDate: "${element.createTime}",
+                          price: element.price,
+                          quantity: element.quantity,
+                          degree: element.degree,
+                          id: element.id,
+                          activeDate: element.activeDate,
+                          name: element.customerName,
+                          product: element.productName,
                           widget: FormForDetailPage(
                             tittle: "Chi tiết hóa đơn",
                             bodyPage: DetailInvoice(
                               isCustomer: true,
-                              map: element,
+                              invoiceElement: element,
                             ),
                           ),
                           isRequest: false,

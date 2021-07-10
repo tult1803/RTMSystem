@@ -21,6 +21,7 @@ class showTablePrice extends StatefulWidget {
 class _showTablePriceState extends State<showTablePrice> {
   final PagingController _pagingController = PagingController(firstPageKey: 10);
   List dataListProduct;
+
   Future<void> _fetchPage(pageKey) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -66,13 +67,12 @@ class _showTablePriceState extends State<showTablePrice> {
         );
       }
     });
-
   }
 
   @override
   void didUpdateWidget(covariant showTablePrice oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if(oldWidget.idProduct != widget.idProduct){
+    if (oldWidget.idProduct != widget.idProduct) {
       _pagingController.refresh();
       dataListProduct.clear();
     }
@@ -82,14 +82,30 @@ class _showTablePriceState extends State<showTablePrice> {
   void dispose() {
     super.dispose();
     _pagingController.dispose();
-    if(dataListProduct != null)dataListProduct.clear();
+    if (dataListProduct != null) dataListProduct.clear();
   }
-
-
 
   @override
   Widget build(BuildContext context) {
-    return new Container(
+    return Theme(
+      data: ThemeData(
+        colorScheme: ColorScheme(
+          primary: welcome_color,
+          onPrimary: Colors.white10,
+          primaryVariant: Colors.white10,
+          background: Colors.white10,
+          onBackground: Colors.white10,
+          secondary: Colors.white10,
+          onSecondary: Colors.white10,
+          secondaryVariant: Colors.white10,
+          error: Colors.black,
+          onError: Colors.white10,
+          surface: Colors.white,
+          onSurface: Colors.white10,
+          brightness: Brightness.light,
+        ),
+      ),
+      child: new  Container(
         width: MediaQuery.of(context).size.width,
         margin: EdgeInsets.only(top: 20),
         child: Column(
@@ -100,7 +116,8 @@ class _showTablePriceState extends State<showTablePrice> {
             headerTable(),
             dataTable(),
           ],
-        ),
+        )
+      ),
     );
   }
 
@@ -131,32 +148,37 @@ class _showTablePriceState extends State<showTablePrice> {
   }
 
   Widget dataTable() {
-    return Container(
-      margin: EdgeInsets.only(left: 10, right: 10),
-      width: MediaQuery.of(context).size.width,
-      // height: 365,
-      height: MediaQuery.of(context).size.height * 0.4,
-      child: CustomScrollView(
-        // physics: NeverScrollableScrollPhysics(),
-        slivers: <Widget>[
-          PagedSliverList(
-              pagingController: _pagingController,
-              builderDelegate: PagedChildBuilderDelegate(
-                firstPageErrorIndicatorBuilder: (context) => Container(),
-                noItemsFoundIndicatorBuilder: (context) {
-                  return Container(child: Center(child: Text("Chưa chọn sản phẩm", style: TextStyle(color: Colors.black54),)),);
-                },
-                  itemBuilder: (context, item, index) {
-                return tableCell(
-                    day: "${item["updateDateTime"]}",
-                    newPrice: item["update_price"],
-                    oldPrice: _pagingController.value.itemList.elementAt(
-                        dataListProduct.length - 1 == index
-                            ? index
-                            : index + 1)["update_price"]);
-              })),
-        ],
-      ),
+    return  Container(
+        margin: EdgeInsets.only(left: 10, right: 10),
+        width: MediaQuery.of(context).size.width,
+        // height: 365,
+        height: MediaQuery.of(context).size.height * 0.4,
+        child: CustomScrollView(
+          // physics: NeverScrollableScrollPhysics(),
+          slivers: <Widget>[
+            PagedSliverList(
+                pagingController: _pagingController,
+                builderDelegate: PagedChildBuilderDelegate(
+                    firstPageErrorIndicatorBuilder: (context) => Container(),
+                    noItemsFoundIndicatorBuilder: (context) {
+                      return Container(
+                        child: Center(
+                            child: Text(
+                          "Chưa chọn sản phẩm",
+                          style: TextStyle(color: Colors.black54),
+                        )),
+                      );
+                    },
+                    itemBuilder: (context, item, index) {
+                      return tableCell(
+                          day: "${item["updateDateTime"]}",
+                          newPrice: item["update_price"],
+                          oldPrice: _pagingController.value.itemList.elementAt(
+                              dataListProduct.length - 1 == index
+                                  ? index
+                                  : index + 1)["update_price"]);
+                    })),
+          ])
     );
   }
 
@@ -167,7 +189,7 @@ class _showTablePriceState extends State<showTablePrice> {
   }
 }
 
-Widget tableCell({String day,int oldPrice, int newPrice}) {
+Widget tableCell({String day, int oldPrice, int newPrice}) {
   int changePrice = newPrice - oldPrice;
   var percentPrice =
       (double.tryParse("$changePrice") / double.tryParse("$oldPrice")) * 100;
@@ -183,7 +205,8 @@ Widget tableCell({String day,int oldPrice, int newPrice}) {
     },
     children: [
       TableRow(children: [
-        tableRow("${getDateTime("$day", dateFormat: "dd-MM-yyyy")} (${getDateTime("$day", dateFormat: "HH")}h)"),
+        tableRow(
+            "${getDateTime("$day", dateFormat: "dd-MM-yyyy")} (${getDateTime("$day", dateFormat: "HH")}h)"),
         // tableRow("${getDateTime("$day", dateFormat: "HH:mm")}"),
         tableRow("${getFormatPrice("$changePrice")}",
             colorText: changePrice < 0
@@ -214,9 +237,6 @@ Widget tableRow(String tittle, {Color colorText, bool isAlignmentRight}) {
     alignment:
         isAlignmentRight == null ? Alignment.centerRight : Alignment.center,
     margin: EdgeInsets.all(10),
-    child: AutoSizeText(
-      tittle,
-      style: TextStyle(color: colorText)
-    ),
+    child: AutoSizeText(tittle, style: TextStyle(color: colorText)),
   );
 }

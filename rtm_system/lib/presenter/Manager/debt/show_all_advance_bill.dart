@@ -7,6 +7,7 @@ import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
 
+// ignore: camel_case_types
 class showAllBill extends StatefulWidget {
   final int index;
 
@@ -19,6 +20,7 @@ class showAllBill extends StatefulWidget {
 DateTime fromDate;
 DateTime toDate;
 String itemToSearch;
+// ignore: camel_case_types
 class _showAllBillState extends State<showAllBill>
     with TickerProviderStateMixin {
   TabController _tabController;

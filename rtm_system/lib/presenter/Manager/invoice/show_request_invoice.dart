@@ -29,7 +29,6 @@ class showInvoiceRequestManagerState extends State<showInvoiceRequestManager> {
   final PagingController _pagingController = PagingController(firstPageKey: 10);
   String _searchTerm;
   InvoiceRequest invoice;
-  List invoiceList;
 
   Future<void> _fetchPage(pageKey) async {
     try {
@@ -47,16 +46,15 @@ class showInvoiceRequestManagerState extends State<showInvoiceRequestManager> {
         this.widget.toDate == null ? "" : "${this.widget.toDate}",
         searchTerm: itemToSearch,
       );
-      invoiceList = invoice.invoiceRequests;
-      final isLastPage = invoiceList.length < pageKey;
+      final isLastPage = invoice.invoiceRequests.length < pageKey;
       if (isLastPage) {
-        _pagingController.appendLastPage(invoiceList);
+        _pagingController.appendLastPage(invoice.invoiceRequests);
       } else {
         setState(() {
           _pageSize += 1;
         });
         final nextPageKey = pageKey;
-        _pagingController.appendPage(invoiceList, nextPageKey);
+        _pagingController.appendPage(invoice.invoiceRequests, nextPageKey);
       }
     } catch (error) {
       _pagingController.error = error;
@@ -124,25 +122,24 @@ class showInvoiceRequestManagerState extends State<showInvoiceRequestManager> {
                     newPageProgressIndicatorBuilder(),
                 itemBuilder: (context, item, index) {
                   return boxForInvoiceRequest(
-                        context: context,
-                        status: item['status_id'],
-                        createDate: "${item['create_date']}",
-                        price: "${item['price']}",
-                        id: item['id'].toString(),
-                        name: item["customer_name"],
-                        product: item["product_name"],
-                        sellDate: item["sell_date"],
-                        widget: FormForDetailPage(
-                          tittle: "Chi tiết yêu cầu",
-                          bodyPage: DetailInvoiceRequest(
-                            isCustomer: false,
-                            map: item,
-                            isRequest: true,
-                            widgetToNavigator: this.widget.widgetToNavigator,
-                          ),
+                      context: context,
+                      status: item.statusId,
+                      createDate: "${item.createDate}",
+                      price: "${item.price}",
+                      id: item.id.toString(),
+                      name: item.customerName,
+                      product: item.productName,
+                      sellDate: item.sellDate,
+                      widget: FormForDetailPage(
+                        tittle: "Chi tiết yêu cầu",
+                        bodyPage: DetailInvoiceRequest(
+                          isCustomer: false,
+                          isRequest: true,
+                          invoiceRequestElement: item,
+                          widgetToNavigator: this.widget.widgetToNavigator,
                         ),
-                        isCustomer: false,
-                  );
+                      ),
+                      isCustomer: false);
                 }),
           ),
         ],

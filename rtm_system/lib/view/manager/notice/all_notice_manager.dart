@@ -18,7 +18,6 @@ class _AllNoticeState extends State<AllNotice> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-
         backgroundColor: welcome_color,
         title: Center(
           child: AutoSizeText(

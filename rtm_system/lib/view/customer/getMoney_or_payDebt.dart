@@ -5,7 +5,6 @@ import 'package:rtm_system/blocs/list_id_invoice.dart';
 import 'package:rtm_system/blocs/select_dates_bloc.dart';
 import 'package:rtm_system/blocs/total_amount_bloc.dart';
 import 'package:rtm_system/blocs/total_deposit_bloc.dart';
-import 'package:rtm_system/model/model_invoice.dart';
 import 'package:rtm_system/model/model_product.dart';
 import 'package:rtm_system/model/get/getAPI_customer_phone.dart';
 import 'package:rtm_system/model/model_profile_customer.dart';
@@ -40,24 +39,21 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
   SelectDatesBloc _selectDatesBloc;
 
   GetAPIProfileCustomer getAPIProfileCustomer = GetAPIProfileCustomer();
-  InfomationCustomer infomationCustomer = InfomationCustomer();
-  Invoice invoice;
-  List invoiceList;
-
+  InfomationCustomer informationCustomer = InfomationCustomer();
   //get total advance
   Future getAPIProfile() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     String token = sharedPreferences.getString('access_token');
     String phone = sharedPreferences.getString('phone');
     // Đỗ dữ liệu lấy từ api
-    infomationCustomer =
+    informationCustomer =
         await getAPIProfileCustomer.getProfileCustomer(token, phone);
-    if (infomationCustomer != null) {
+    if (informationCustomer != null) {
       setState(() {
-        totalAdvance = infomationCustomer.advance;
+        totalAdvance = informationCustomer.advance;
       });
     }
-    return infomationCustomer;
+    return informationCustomer;
   }
 
   @override

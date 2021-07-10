@@ -10,7 +10,7 @@ import 'package:rtm_system/view/detail_advance_request.dart';
 import 'package:rtm_system/view/manager/form_detail_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-// ignore: camel_case_types
+// ignore: camel_case_types, must_be_immutable
 class showAdvancceBillManager extends StatefulWidget {
   int statusId;
   String fromDate, toDate, searchItem;
@@ -23,12 +23,12 @@ class showAdvancceBillManager extends StatefulWidget {
   showAdvancceBillManagerState createState() => showAdvancceBillManagerState();
 }
 
+// ignore: camel_case_types
 class showAdvancceBillManagerState extends State<showAdvancceBillManager> {
   int _pageSize = 1;
   final PagingController _pagingController = PagingController(firstPageKey: 10);
   String _searchTerm;
   AdvanceRequest advanceBill;
-  List advanceList;
 
   Future<void> _fetchPage(pageKey) async {
     try {
@@ -45,16 +45,15 @@ class showAdvancceBillManagerState extends State<showAdvancceBillManager> {
         this.widget.toDate == null ? "" : "${this.widget.toDate}",
         searchTerm: itemToSearch,
       );
-      advanceList = advanceBill.advances;
-      final isLastPage = advanceList.length < pageKey;
+      final isLastPage = advanceBill.advances.length < pageKey;
       if (isLastPage) {
-        _pagingController.appendLastPage(advanceList);
+        _pagingController.appendLastPage(advanceBill.advances);
       } else {
         setState(() {
           _pageSize += 1;
         });
         final nextPageKey = pageKey;
-        _pagingController.appendPage(advanceList, nextPageKey);
+        _pagingController.appendPage(advanceBill.advances, nextPageKey);
       }
     } catch (error) {
       // print(error);
@@ -132,22 +131,22 @@ class showAdvancceBillManagerState extends State<showAdvancceBillManager> {
                 newPageProgressIndicatorBuilder: (context) =>
                     newPageProgressIndicatorBuilder(),
                 itemBuilder: (context, item, index) {
-                   return boxForAdvance(
+                  return boxForAdvance(
                          context: context,
-                         id: item['id'],
-                         status: item['status_id'],
-                         createDate: "${item['create_date']}",
-                         amount: "${item['amount']}",
-                         storeId: item['store_id'],
-                         name: item["customer_name"],
-                         receiveDate: item["receive_date"],
-                         imageUrl: item["image_url"],
+                         id: item.id,
+                         status: item.statusId,
+                         createDate: "${item.createDate}",
+                         amount: "${item.amount}",
+                         storeId: item.storeId,
+                         name: item.customerName,
+                         receiveDate: item.receiveDate,
+                         imageUrl: item.imageUrl,
                          widget: FormForDetailPage(
                            tittle: "Chi tiết ứng tiền",
                            bodyPage: DetailAdvancePage(
                              isCustomer: false,
-                             id: item['id'],
-                             status: item['status_id'],
+                             id: item.id,
+                             status: item.statusId,
                              isRequest: false,
                              widgetToNavigator: widget.widgetToNavigator,
                            ),

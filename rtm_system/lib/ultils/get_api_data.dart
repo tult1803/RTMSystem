@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:rtm_system/model/delete/deleteAPI_invoice.dart';
 import 'package:rtm_system/model/delete/deleteAPI_invoiceRequest.dart';
+import 'package:rtm_system/model/model_invoice_request.dart';
 import 'package:rtm_system/model/model_validate_account.dart';
 import 'package:rtm_system/model/post/postAPI_CreateRequestInvoice.dart';
 import 'package:rtm_system/model/post/postAPI_Image.dart';
@@ -103,18 +104,20 @@ Future<void> doUpdatePassword(BuildContext context,
       showCustomDialog(context,
           content: MSG003,
           isSuccess: true,
-          widgetToNavigator: HomeCustomerPage(index: 3,));
+          widgetToNavigator: HomeCustomerPage(
+            index: 3,
+          ));
     } else {
       showCustomDialog(context,
           content: MSG003,
           isSuccess: true,
-          widgetToNavigator: HomeAdminPage(index: 4,));
+          widgetToNavigator: HomeAdminPage(
+            index: 4,
+          ));
     }
-  }else{
+  } else {
     showCustomDialog(context,
-        content: MSG025,
-        isSuccess: false,
-        doPopNavigate: true);
+        content: MSG025, isSuccess: false, doPopNavigate: true);
   }
 }
 
@@ -145,13 +148,15 @@ Future<void> doCreateCustomer(
           ),
           true);
     } else {
-      if (fullname.trim().isNotEmpty) {
-        prefs.setString("fullname", fullname);
-        prefs.setString("phone", phone);
-        prefs.setInt("gender", gender);
-        prefs.setString("birthday", birthday);
-      } else {
-        prefs.setString("password", password);
+      if (isCreate == null) {
+        if (fullname.trim().isNotEmpty) {
+          prefs.setString("fullname", fullname);
+          prefs.setString("phone", phone);
+          prefs.setInt("gender", gender);
+          prefs.setString("birthday", birthday);
+        } else {
+          prefs.setString("password", password);
+        }
       }
       showCustomDialog(
         context,
@@ -257,7 +262,7 @@ Future<void> doConfirmOrAcceptOrRejectInvoice(
     {Widget widgetToNavigator,
     String reason,
     bool isRequest,
-    Map<String, dynamic> map}) async {
+      InvoiceRequestElement element}) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   int status;
   if (isCustomer) {
@@ -304,16 +309,16 @@ Future<void> doConfirmOrAcceptOrRejectInvoice(
             ? Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => AddProductPage(
                       tittle: "Tạo hoá đơn yêu cầu",
-                      customerId: map["customer_id"],
-                      invoiceRequestId: map["id"],
-                      phone: map["customer_phone"],
-                      fullName: map["customer_name"],
-                      storeName: map["store_name"],
-                      productName: map["product_name"],
-                      dateToPay: map["sell_date"],
-                      productId: map["product_id"],
-                      savePrice: "${map["price"]}",
-                      storeId: map["store_id"],
+                      customerId: element.customerId,
+                      invoiceRequestId: element.id,
+                      phone: element.customerPhone,
+                      fullName: element.customerName,
+                      storeName: element.storeName,
+                      productName: element.productName,
+                      dateToPay: element.sellDate,
+                      productId: element.productId,
+                      savePrice: "${element.price}",
+                      storeId: element.storeId,
                       isCustomer: false,
                       isChangeData: true,
                       widgetToNavigator: widgetToNavigator,

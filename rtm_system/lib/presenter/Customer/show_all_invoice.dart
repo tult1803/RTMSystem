@@ -10,6 +10,7 @@ import 'package:rtm_system/view/detail_invoice.dart';
 import 'package:rtm_system/view/manager/form_detail_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+// ignore: must_be_immutable, camel_case_types
 class showAllInvoicePage extends StatefulWidget {
   int statusId;
   String fromDate, toDate;
@@ -20,12 +21,12 @@ class showAllInvoicePage extends StatefulWidget {
   showAllInvoicePageState createState() => showAllInvoicePageState();
 }
 
+// ignore: camel_case_types
 class showAllInvoicePageState extends State<showAllInvoicePage> {
   int _pageSize = 1;
   final PagingController _pagingController = PagingController(firstPageKey: 10);
   String _searchTerm;
   Invoice invoice;
-  List invoiceList;
 
   Future<void> _fetchPage(pageKey) async {
     try {
@@ -42,16 +43,15 @@ class showAllInvoicePageState extends State<showAllInvoicePage> {
         this.widget.toDate == null ? "" : "${this.widget.toDate}",
         searchTerm: _searchTerm,
       );
-      invoiceList = invoice.invoices;
-      final isLastPage = invoiceList.length < pageKey;
+      final isLastPage = invoice.invoices.length < pageKey;
       if (isLastPage) {
-        _pagingController.appendLastPage(invoiceList);
+        _pagingController.appendLastPage(invoice.invoices);
       } else {
         setState(() {
           _pageSize += 1;
         });
         final nextPageKey = pageKey;
-        _pagingController.appendPage(invoiceList, nextPageKey);
+        _pagingController.appendPage(invoice.invoices, nextPageKey);
       }
     } catch (error) {
       _pagingController.error = error;
@@ -134,20 +134,19 @@ class showAllInvoicePageState extends State<showAllInvoicePage> {
                               itemBuilder: (context, item, index) {
                                 return boxForInvoice(
                                     context: context,
-                                    status: item['status_id'],
-                                    createDate: "${item['create_time']}",
-                                    price: item['price'],
-                                    quantity: item['quantity'],
-                                    degree: item['degree'],
-                                    id: item['id'],
-                                    activeDate: item["active_date"],
-                                    name: item["customer_name"],
-                                    product: item["product_name"],
+                                    status: item.statusId,
+                                    createDate: "${item.createTime}",
+                                    price: item.price,
+                                    degree: item.degree,
+                                    quantity: item.quantity,
+                                    id: item.id,
+                                    name: item.customerName,
+                                    product: item.productName,
                                     widget: FormForDetailPage(
                                       tittle: "Chi tiết hóa đơn",
-                                      bodyPage: DetailInvoice(
+                                      bodyPage: new DetailInvoice(
                                         isCustomer: true,
-                                        map: item,
+                                        invoiceElement: item,
                                       ),
                                     ),
                                     isRequest: false,

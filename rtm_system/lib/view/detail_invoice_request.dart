@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:rtm_system/helpers/common_widget.dart';
 import 'package:rtm_system/helpers/component.dart';
+import 'package:rtm_system/model/model_invoice_request.dart';
 import 'package:rtm_system/ultils/get_api_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 
 class DetailInvoiceRequest extends StatefulWidget {
-  final Map<String, dynamic> map;
+  final InvoiceRequestElement invoiceRequestElement;
   final bool isCustomer;
   final isRequest;
   final Widget widgetToNavigator;
 
   DetailInvoiceRequest(
-      {this.map, this.isCustomer, this.isRequest, this.widgetToNavigator});
+      {this.invoiceRequestElement, this.isCustomer, this.isRequest, this.widgetToNavigator});
 
   @override
   _DetailInvoiceRequestState createState() => _DetailInvoiceRequestState();
@@ -36,15 +37,15 @@ class _DetailInvoiceRequestState extends State<DetailInvoiceRequest> {
             context,
             componentContainerInvoiceRequest(
               context,
-              id: "${this.widget.map["id"]}",
-              storeName: this.widget.map["store_name"],
-              customerName: this.widget.map["customer_name"],
-              customerPhone: this.widget.map["customer_phone"],
-              createDate: this.widget.map["create_date"],
-              sellDate: this.widget.map["sell_date"],
-              productName: this.widget.map["product_name"],
-              price: "${this.widget.map["price"]}",
-              map: this.widget.map,
+              id: "${widget.invoiceRequestElement.id}",
+              storeName: widget.invoiceRequestElement.storeName,
+              customerName: widget.invoiceRequestElement.customerName,
+              customerPhone: widget.invoiceRequestElement.customerPhone,
+              createDate: widget.invoiceRequestElement.createDate,
+              sellDate: widget.invoiceRequestElement.sellDate,
+              productName: widget.invoiceRequestElement.productName,
+              price: "${widget.invoiceRequestElement.price}",
+              element: this.widget.invoiceRequestElement,
               isCustomer: widget.isCustomer,
               isRequest: widget.isRequest,
               widgetToNavigator: this.widget.widgetToNavigator,
@@ -56,7 +57,7 @@ class _DetailInvoiceRequestState extends State<DetailInvoiceRequest> {
             RaisedButton(
               color: Colors.redAccent,
               onPressed: () {
-                _displayTextInputDialog(context, "${this.widget.map["id"]}");
+                _displayTextInputDialog(context, "${widget.invoiceRequestElement.id}");
               },
               child: Text(
                 'Xoá yêu cầu',
