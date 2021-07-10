@@ -1086,7 +1086,7 @@ Widget boxForAdvanceHistory({
                   alignment: Alignment.centerRight,
                   paddingLeftOfText: 10,
                   paddingRightOfText: 10,
-                  tittle: isAdvance ? "Chờ trả nợ" : "Đã trả nợ",
+                  tittle: isAdvance ? "Đã mượn" : "Đã trả nợ",
                   fontWeight: FontWeight.w600,
                   color: isAdvance ? getColorStatus(status: 4) : primaryColor,
                 ),

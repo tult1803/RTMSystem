@@ -1,9 +1,13 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:rtm_system/model/get/getAPI_AdvanceHistory.dart';
+import 'package:rtm_system/model/get/getAPI_customer_phone.dart';
 import 'package:rtm_system/model/model_advance_history.dart';
 import 'package:rtm_system/helpers/common_widget.dart';
 import 'package:rtm_system/helpers/component.dart';
+import 'package:rtm_system/model/model_profile_customer.dart';
+import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/ultils/src/message_list.dart';
 import 'package:rtm_system/view/customer/advance/detail_advance_return.dart';
@@ -21,6 +25,9 @@ class _showHistoryAdvancePageState extends State<showHistoryAdvancePage> {
   final PagingController<int, AdvanceHistory> _pagingController =
       PagingController(firstPageKey: 10);
   List<AdvanceHistory> advanceHistory = [];
+  int totalAdvance = 0;
+  GetAPIProfileCustomer getAPIProfileCustomer = GetAPIProfileCustomer();
+  InfomationCustomer infomationCustomer = InfomationCustomer();
 
   Future<void> _fetchPage(pageKey) async {
     try {
@@ -53,6 +60,22 @@ class _showHistoryAdvancePageState extends State<showHistoryAdvancePage> {
     }
   }
 
+//get total advance
+  Future getAPIProfile() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    String token = sharedPreferences.getString('access_token');
+    String phone = sharedPreferences.getString('phone');
+    // Đỗ dữ liệu lấy từ api
+    infomationCustomer =
+        await getAPIProfileCustomer.getProfileCustomer(token, phone);
+    if (infomationCustomer != null) {
+      setState(() {
+        totalAdvance = infomationCustomer.advance;
+      });
+    }
+    return infomationCustomer;
+  }
+
   //Hàm này nhận biết sự thay đổi của Widget để thực hiện hành động
   @override
   void didUpdateWidget(covariant showHistoryAdvancePage oldWidget) {
@@ -65,6 +88,7 @@ class _showHistoryAdvancePageState extends State<showHistoryAdvancePage> {
     _pagingController.addPageRequestListener((pageKey) {
       _fetchPage(pageKey);
     });
+    getAPIProfile();
   }
 
   @override
@@ -85,6 +109,12 @@ class _showHistoryAdvancePageState extends State<showHistoryAdvancePage> {
                   height: 0.5,
                   child: Container(),
                 ),
+                _txtItemDetail(
+                    context,
+                    'Tổng tiền nợ: ',
+                    totalAdvance != 0
+                        ? '${getFormatPrice(totalAdvance.toString())} đ'
+                        : "0 đ"),
                 Expanded(
                   child: Container(
                     margin: EdgeInsets.only(top: 0, left: 5, right: 5),
@@ -128,7 +158,7 @@ class _showHistoryAdvancePageState extends State<showHistoryAdvancePage> {
                                     var idSplit = item.id.split("-");
                                     String prefixId = idSplit[0].trim();
                                     if (prefixId == "TN") {
-                                       return boxForAdvanceHistory(
+                                      return boxForAdvanceHistory(
                                         context: context,
                                         id: item.id,
                                         amount: item.amount,
@@ -192,6 +222,50 @@ class _showHistoryAdvancePageState extends State<showHistoryAdvancePage> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _txtItemDetail(context, String title, String content) {
+    return Container(
+      margin: EdgeInsets.only(left: 10, right: 10, bottom: 14),
+      padding: EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black54,
+            blurRadius: 4,
+            offset: Offset(1, 2), // Shadow position
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              AutoSizeText(
+                title,
+                style: TextStyle(
+                  color: Color(0xFF0BB791),
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              AutoSizeText(
+                content,
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 5,
+          ),
+        ],
+      ),
     );
   }
 }
