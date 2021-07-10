@@ -103,18 +103,20 @@ Future<void> doUpdatePassword(BuildContext context,
       showCustomDialog(context,
           content: MSG003,
           isSuccess: true,
-          widgetToNavigator: HomeCustomerPage(index: 3,));
+          widgetToNavigator: HomeCustomerPage(
+            index: 3,
+          ));
     } else {
       showCustomDialog(context,
           content: MSG003,
           isSuccess: true,
-          widgetToNavigator: HomeAdminPage(index: 4,));
+          widgetToNavigator: HomeAdminPage(
+            index: 4,
+          ));
     }
-  }else{
+  } else {
     showCustomDialog(context,
-        content: MSG025,
-        isSuccess: false,
-        doPopNavigate: true);
+        content: MSG025, isSuccess: false, doPopNavigate: true);
   }
 }
 
@@ -145,13 +147,15 @@ Future<void> doCreateCustomer(
           ),
           true);
     } else {
-      if (fullname.trim().isNotEmpty) {
-        prefs.setString("fullname", fullname);
-        prefs.setString("phone", phone);
-        prefs.setInt("gender", gender);
-        prefs.setString("birthday", birthday);
-      } else {
-        prefs.setString("password", password);
+      if (isCreate == null) {
+        if (fullname.trim().isNotEmpty) {
+          prefs.setString("fullname", fullname);
+          prefs.setString("phone", phone);
+          prefs.setInt("gender", gender);
+          prefs.setString("birthday", birthday);
+        } else {
+          prefs.setString("password", password);
+        }
       }
       showCustomDialog(
         context,

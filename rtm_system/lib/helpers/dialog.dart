@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rtm_system/model/delete/deleteAPI_deactivateNotice.dart';
-import 'package:rtm_system/model/put/putAPI_deactivateCustomer.dart';
+import 'package:rtm_system/model/delete/deleteAPI_deactivateCustomer.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 
 import 'component.dart';
@@ -27,6 +27,7 @@ showAlertDialog(
 }) {
   // Tạo button trong AlertDialog
   Widget btnAlert(String tittleA, Color color, bool checkCreate) {
+    // ignore: deprecated_member_use
     return FlatButton(
       child: Text(
         tittleA,
@@ -35,7 +36,8 @@ showAlertDialog(
       onPressed: () async {
         if (checkCreate) {
           if (isDeactivate == true) {
-            PutDeactivateCustomer deactivateCustomer = PutDeactivateCustomer();
+            DeleteDeactivateCustomer deactivateCustomer =
+                DeleteDeactivateCustomer();
             DeleteDeactivateNotice deactivateNotice = DeleteDeactivateNotice();
             int status = isDeactivateNotice == null
                 ? await deactivateCustomer.deactivateCustomer(
@@ -43,17 +45,15 @@ showAlertDialog(
                 : await deactivateNotice.deactivateNotice(token, deactivateId);
             if (status == 200) {
               Navigator.of(context).pop();
-              showStatusAlertDialog(
-                  context,
-                  isDeactivateNotice == null
-                      ? "Hủy kích hoạt thành công"
-                      : "Ẩn thông báo thành công",
-                  widget,
-                  true);
+              showCustomDialog(context,
+                  isSuccess: true,
+                  content:
+                      "${isDeactivateNotice == null ? "Hủy kích hoạt thành công" : "Ẩn thông báo thành công"}",
+                  widgetToNavigator: widget);
             } else {
               Navigator.of(context).pop();
-              showStatusAlertDialog(
-                  context, "Có lỗi xảy ra. Xin thử lại", widget, false);
+              showCustomDialog(context,
+                  isSuccess: false, content: "Có lỗi xảy ra. Thử lại");
             }
           } else if (isInvoice != null) {
             doConfirmOrAcceptOrRejectInvoice(context, id, 3, isCustomer,
