@@ -8,9 +8,9 @@ import '../../form_update_profile.dart';
 
 class updateProfile extends StatefulWidget {
 
-  final String fullname, password, account_id;
+  final String fullname, password, accountId;
 
-  updateProfile({this.fullname, this.password, this.account_id});
+  updateProfile({this.fullname, this.password, this.accountId});
 
   @override
   _updateProfileState createState() => _updateProfileState();
@@ -44,7 +44,7 @@ class _updateProfileState extends State<updateProfile> {
       body: SingleChildScrollView(child: new formUpdateProfile(
         isUpdate: true,
         typeOfUpdate: 1,
-        account_id: this.widget.account_id,
+        accountId: this.widget.accountId,
         isCustomer: false,
         check: false,
         fullname: this.widget.fullname,

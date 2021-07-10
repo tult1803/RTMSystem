@@ -11,7 +11,7 @@ import 'manager/profile/confirm_create_customer.dart';
 //check: true là cho customer còn false là cho manager
 
 class formUpdateProfile extends StatefulWidget {
-  String fullname, phone, cmnd, address, password, account_id;
+  String fullname, phone, cmnd, address, password, accountId;
   int gender;
   DateTime birthday;
   final bool check, isCreate;
@@ -33,7 +33,7 @@ class formUpdateProfile extends StatefulWidget {
       this.isCreate,
       this.isUpdate,
       this.typeOfUpdate,
-      this.account_id,
+      this.accountId,
       this.isCustomer,
       this.list});
 
@@ -476,7 +476,7 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
                             listCustomer: listCustomer,
                             check: checkProfile,
                             isCustomer: this.widget.isCustomer,
-                            account_id: this.widget.account_id,
+                            account_id: this.widget.accountId,
                             isUpdate: this.widget.isUpdate,
                             typeOfUpdate: this.widget.typeOfUpdate,
                             isCreate: isCreate,
