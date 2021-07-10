@@ -1,3 +1,4 @@
+import 'package:async/async.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:rtm_system/model/get/getAPI_customer_phone.dart';
@@ -5,6 +6,7 @@ import 'package:rtm_system/model/model_profile_customer.dart';
 import 'package:rtm_system/helpers/button.dart';
 import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
+import 'package:rtm_system/ultils/src/message_list.dart';
 import 'package:rtm_system/view/customer/Profile/account_verification.dart';
 import 'package:rtm_system/view/update_password.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -20,35 +22,33 @@ class _showProfileState extends State<showProfile> {
   GetAPIProfileCustomer getAPIProfileCustomer = GetAPIProfileCustomer();
   InfomationCustomer infomationCustomer = InfomationCustomer();
   String password = '';
-  int level = 0;
 
   @override
   void initState() {
     super.initState();
-    this.getAPIProfile();
   }
 
-  Future getAPIProfile() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    String token = sharedPreferences.getString('access_token');
-    String phone = sharedPreferences.getString('phone');
-    password = sharedPreferences.getString('password');
-    // Đỗ dữ liệu lấy từ api
-    infomationCustomer =
-        await getAPIProfileCustomer.getProfileCustomer(token, phone);
-    if (infomationCustomer != null) {
-      setState(() {
-        level = infomationCustomer.level;
-      });
-    }
-    return infomationCustomer;
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  Future _getAPIProfile() async{
+    SharedPreferences sharedPreferences =
+          await SharedPreferences.getInstance();
+      String token = sharedPreferences.getString('access_token');
+      String phone = sharedPreferences.getString('phone');
+      password = sharedPreferences.getString('password');
+      infomationCustomer =
+          await getAPIProfileCustomer.getProfileCustomer(token, phone);
+      return infomationCustomer;
   }
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    return new FutureBuilder(
-      future: getAPIProfile(),
+    return FutureBuilder(
+      future: _getAPIProfile(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
           return SingleChildScrollView(
@@ -65,7 +65,7 @@ class _showProfileState extends State<showProfile> {
                         ),
                       ),
                     ),
-                    btnChooseOption(context, size.width * 0.45),
+                    btnChooseOption(context, size.width * 0.45, infomationCustomer.level),
                   ],
                 ),
                 SizedBox(
@@ -108,73 +108,98 @@ class _showProfileState extends State<showProfile> {
               ],
             ),
           );
-        }
-        return Container(
+        } else if (snapshot.hasError) {
+          return Container(
+            margin: EdgeInsets.all(12),
+            child: Center(
+              child: Column(
+                children: [
+                  AutoSizeText(showMessage("", MSG008),
+                      style: TextStyle(fontWeight: FontWeight.w500)),
+                ],
+              ),
+            ),
+          );
+        } else {
+          return Container(
             height: size.height,
-            child: Center(child: CircularProgressIndicator()));
+            child: Center(
+              child: Column(
+                children: [
+                  CircularProgressIndicator(),
+                  btnLogout(context),
+                  SizedBox(
+                    height: 12,
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
       },
     );
   }
 
-  Widget btnChooseOption(context, width) {
+  Widget btnChooseOption(context, width, int level) {
     return Container(
-        width: width,
-        child: Column(
-          children: [
-            TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => UpdatePasswordPage(
-                      password: password,
-                      account_id: infomationCustomer.accountId,
-                      isCustomer: true,
-                    ),
-                  ),
-                );
-              },
-              child: Center(
-                child: AutoSizeText(
-                  "Thay đổi mật khẩu",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white,
+      width: width,
+      child: Column(
+        children: [
+          TextButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => UpdatePasswordPage(
+                    password: password,
+                    account_id: infomationCustomer.accountId,
+                    isCustomer: true,
                   ),
                 ),
-              ),
-              style: ElevatedButton.styleFrom(
-                primary: primaryColor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
+              );
+            },
+            child: Center(
+              child: AutoSizeText(
+                "Thay đổi mật khẩu",
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  color: Colors.white,
                 ),
               ),
             ),
-            level == 0 ? 
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => AccountVerification()));
-              },
-              child: Center(
-                child: AutoSizeText(
-                  "Xác thực ảnh CMND",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white,
+            style: ElevatedButton.styleFrom(
+              primary: primaryColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              ),
+            ),
+          ),
+          level == 0
+              ? TextButton(
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => AccountVerification()));
+                  },
+                  child: Center(
+                    child: AutoSizeText(
+                      "Xác thực ảnh CMND",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              style: ElevatedButton.styleFrom(
-                primary: primaryColor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                ),
-              ),
-            ):Container(),
-          ],
-        ),
-      );
+                  style: ElevatedButton.styleFrom(
+                    primary: primaryColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                    ),
+                  ),
+                )
+              : Container(),
+        ],
+      ),
+    );
   }
   //Show thông tin của người dùng
   Widget _item(context, header, value) {
