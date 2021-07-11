@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:rtm_system/helpers/button.dart';
 import 'package:rtm_system/model/get/getAPI_AdvanceReturnDetail.dart';
 import 'package:rtm_system/helpers/common_widget.dart';
 import 'package:rtm_system/helpers/component.dart';
@@ -23,7 +24,6 @@ class _DetailAdvanceReturnState extends State<DetailAdvanceReturn> {
   @override
   void initState() {
     super.initState();
-    getDetail();
   }
 
   Future getDetail() async {
@@ -89,18 +89,18 @@ class _DetailAdvanceReturnState extends State<DetailAdvanceReturn> {
                         style: TextStyle(fontWeight: FontWeight.w500),
                       ),
                     ),
-                    SingleChildScrollView(
-                      child: Container(
-                        child: Column(
-                          children: children,
+                    Container(
+                      height: 360,
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: children,
+                          ),
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 24,
-                    ),
+                    btnConfirmAdvanceReturn(context, id: 'a'),
                   ],
-                )),
+                ),
+                ),
           );
         } else if (snapshot.hasError) {
           return Container(

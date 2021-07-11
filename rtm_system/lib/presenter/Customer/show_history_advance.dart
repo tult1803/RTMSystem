@@ -109,7 +109,7 @@ class _showHistoryAdvancePageState extends State<showHistoryAdvancePage> {
                   height: 0.5,
                   child: Container(),
                 ),
-                _txtItemDetail(
+                txtItem(
                     context,
                     'Tổng tiền nợ: ',
                     totalAdvance != 0
@@ -225,47 +225,4 @@ class _showHistoryAdvancePageState extends State<showHistoryAdvancePage> {
     );
   }
 
-  Widget _txtItemDetail(context, String title, String content) {
-    return Container(
-      margin: EdgeInsets.only(left: 10, right: 10, bottom: 14),
-      padding: EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black54,
-            blurRadius: 4,
-            offset: Offset(1, 2), // Shadow position
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              AutoSizeText(
-                title,
-                style: TextStyle(
-                  color: Color(0xFF0BB791),
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              AutoSizeText(
-                content,
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 5,
-          ),
-        ],
-      ),
-    );
-  }
 }
