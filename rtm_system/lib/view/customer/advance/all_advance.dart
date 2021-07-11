@@ -28,6 +28,7 @@ class _AdvancePageState extends State<AdvancePage>
   GetAPIProfileCustomer getAPIProfileCustomer = GetAPIProfileCustomer();
   InfomationCustomer infomationCustomer = InfomationCustomer();
   int level = 0;
+
   @override
   void initState() {
     super.initState();
@@ -57,11 +58,9 @@ class _AdvancePageState extends State<AdvancePage>
     // Đỗ dữ liệu lấy từ api
     infomationCustomer =
         await getAPIProfileCustomer.getProfileCustomer(token, phone);
-    if (infomationCustomer != null) {
-      setState(() {
-        level = infomationCustomer.level;
-      });
-    }
+    setState(() {
+      level = infomationCustomer.level;
+    });
     return infomationCustomer;
   }
 

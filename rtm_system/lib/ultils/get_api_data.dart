@@ -14,6 +14,7 @@ import 'package:rtm_system/model/post/postAPI_createNotice.dart';
 import 'package:rtm_system/model/get/getAPI_customer_phone.dart';
 import 'package:rtm_system/model/post/postAPI_validateCustomer.dart';
 import 'package:rtm_system/model/put/putAPI_confirmAdvanceRequest.dart';
+import 'package:rtm_system/model/put/putAPI_confirmAdvanceReturn.dart';
 import 'package:rtm_system/model/put/putAPI_confirmIdentifyCustomer.dart';
 import 'package:rtm_system/model/put/putAPI_returnAdvance.dart';
 import 'package:rtm_system/model/put/putAPI_confirmInvoice.dart';
@@ -600,5 +601,26 @@ Future doConfirmIdentifyCustomer(BuildContext context,
   } else {
     showCustomDialog(context,
         isSuccess: false, content: "Có lỗi xảy ra. Xin thử lại");
+  }
+}
+//confirm advance return
+ Future doConfirmAdvanceReturn(
+  BuildContext context, {
+  String id,
+}) async {
+  int status;
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  PutConfirmAdvanceReturn putConfirmAdvanceReturn = PutConfirmAdvanceReturn();
+  status = await putConfirmAdvanceReturn.putConfirmAdvanceReturn(prefs.get("access_token"), id);
+  if (status == 200) {
+    showCustomDialog(context,
+        isSuccess: true,
+        content: showMessage("", MSG022),
+        widgetToNavigator: HomeCustomerPage(
+          index: 1,
+        ));
+  } else {
+    showCustomDialog(context,
+        isSuccess: false, content: showMessage(MSG030, MSG027));
   }
 }

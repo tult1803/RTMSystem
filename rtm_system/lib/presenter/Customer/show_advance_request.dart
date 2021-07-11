@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:rtm_system/model/get/getAPI_AdvanceRequest.dart';
+import 'package:rtm_system/model/get/getAPI_customer_phone.dart';
 import 'package:rtm_system/model/model_advance_request.dart';
 import 'package:rtm_system/helpers/common_widget.dart';
 import 'package:rtm_system/helpers/component.dart';
+import 'package:rtm_system/model/model_profile_customer.dart';
+import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/ultils/src/message_list.dart';
 import 'package:rtm_system/view/detail_advance_request.dart';
@@ -25,7 +28,9 @@ class _showAdvanceRequestPageState extends State<showAdvanceRequestPage> {
   int _pageSize = 1;
   final PagingController _pagingController = PagingController(firstPageKey: 10);
   AdvanceRequest advanceRequest;
-
+int totalAdvance = 0;
+  GetAPIProfileCustomer getAPIProfileCustomer = GetAPIProfileCustomer();
+  InfomationCustomer infomationCustomer = InfomationCustomer();
   Future<void> _fetchPage(pageKey) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -55,6 +60,21 @@ class _showAdvanceRequestPageState extends State<showAdvanceRequestPage> {
       _pagingController.error = error;
     }
   }
+//get total advance
+  Future getAPIProfile() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    String token = sharedPreferences.getString('access_token');
+    String phone = sharedPreferences.getString('phone');
+    // Đỗ dữ liệu lấy từ api
+    infomationCustomer =
+        await getAPIProfileCustomer.getProfileCustomer(token, phone);
+    if (infomationCustomer != null) {
+      setState(() {
+        totalAdvance = infomationCustomer.advance;
+      });
+    }
+    return infomationCustomer;
+  }
 
   //Hàm này nhận biết sự thay đổi của Widget để thực hiện hành động
   @override
@@ -71,6 +91,7 @@ class _showAdvanceRequestPageState extends State<showAdvanceRequestPage> {
     _pagingController.addPageRequestListener((pageKey) {
       _fetchPage(pageKey);
     });
+    getAPIProfile();
   }
 
   @override
@@ -88,9 +109,15 @@ class _showAdvanceRequestPageState extends State<showAdvanceRequestPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(
-                  height: 0.5,
+                  height: 12,
                   child: Container(),
                 ),
+                txtItem(
+                    context,
+                    'Tổng tiền nợ: ',
+                    totalAdvance != 0
+                        ? '${getFormatPrice(totalAdvance.toString())} đ'
+                        : "0 đ"),
                 Expanded(
                   child: Container(
                     margin: EdgeInsets.only(top: 0, left: 5, right: 5),

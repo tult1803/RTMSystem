@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:rtm_system/model/model_invoice_request.dart';
 import 'package:rtm_system/ultils/get_api_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
+import 'package:rtm_system/ultils/src/message_list.dart';
 import 'package:rtm_system/view/customer/home_customer_page.dart';
 import 'package:rtm_system/view/detail_notice.dart';
 import 'package:rtm_system/view/form_reason.dart';
@@ -265,6 +266,7 @@ Widget btnLogout(context) {
     ),
   );
 }
+
 Widget btnConfirmAdvanceOfCustomer(context, id, int status) {
   var size = MediaQuery.of(context).size;
   if (status == 8) {
@@ -277,7 +279,10 @@ Widget btnConfirmAdvanceOfCustomer(context, id, int status) {
           onPressed: () {
             put_API_ConfirmAdvance(context, id);
           },
-          child: AutoSizeText('Xác nhận', style: TextStyle(color: Colors.white),),
+          child: AutoSizeText(
+            'Xác nhận',
+            style: TextStyle(color: Colors.white),
+          ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20.0),
           ),
@@ -360,9 +365,13 @@ Widget btnSubmitOrCancel(
   );
 }
 
-Widget btnDeleteRequestPage(BuildContext context, double width,
-    double height, Color color, String tittleButtonAlertDialog, bool isCustomer,
-    {Widget widgetToNavigator, bool isInvoice, String reason, String id, bool isAdvanceBill}) {
+Widget btnDeleteRequestPage(BuildContext context, double width, double height,
+    Color color, String tittleButtonAlertDialog, bool isCustomer,
+    {Widget widgetToNavigator,
+    bool isInvoice,
+    String reason,
+    String id,
+    bool isAdvanceBill}) {
   return Container(
     height: height,
     width: width,
@@ -376,15 +385,19 @@ Widget btnDeleteRequestPage(BuildContext context, double width,
           tittleButtonAlertDialog == "Hủy"
               ? showAlertDialog(
                   context,
-              isAdvanceBill ==null ?"Bạn muốn hủy xoá ${isInvoice == true ? "yêu cầu" : "hoá đơn"}":"Bạn muốn hủy từ chối ứng tiền",
+                  isAdvanceBill == null
+                      ? "Bạn muốn hủy xoá ${isInvoice == true ? "yêu cầu" : "hoá đơn"}"
+                      : "Bạn muốn hủy từ chối ứng tiền",
                   HomeAdminPage(
-                    index: isAdvanceBill ==null ? 1 : 2,
+                    index: isAdvanceBill == null ? 1 : 2,
                   ))
               : showAlertDialog(
                   context,
-            isAdvanceBill ==null ?"Bạn muốn xoá ${isInvoice == true ? "yêu cầu" : "hoá đơn"}":"Bạn muốn từ chối ứng tiền",
+                  isAdvanceBill == null
+                      ? "Bạn muốn xoá ${isInvoice == true ? "yêu cầu" : "hoá đơn"}"
+                      : "Bạn muốn từ chối ứng tiền",
                   HomeAdminPage(
-                    index: isAdvanceBill ==null ? 1 : 2,
+                    index: isAdvanceBill == null ? 1 : 2,
                   ),
                   isInvoice: isInvoice,
                   reason: reason,
@@ -463,7 +476,8 @@ Widget btnAcceptOrReject(BuildContext context, double width, Color color,
   ));
 }
 
-Widget btnProcessAdvanceBill(BuildContext context, {String idAdvanceBill,bool isCustomer, Widget widgetToNavigator}) {
+Widget btnProcessAdvanceBill(BuildContext context,
+    {String idAdvanceBill, bool isCustomer, Widget widgetToNavigator}) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceAround,
     children: [
@@ -477,7 +491,7 @@ Widget btnProcessAdvanceBill(BuildContext context, {String idAdvanceBill,bool is
                       invoiceId: idAdvanceBill,
                       isCustomer: isCustomer,
                       widgetToNavigator: widgetToNavigator,
-                  isAdvanceBill: true,
+                      isAdvanceBill: true,
                     )));
           },
           child: Text(
@@ -495,7 +509,10 @@ Widget btnProcessAdvanceBill(BuildContext context, {String idAdvanceBill,bool is
         child: RaisedButton(
           color: Color(0xFF0BB791),
           onPressed: () {
-            doProcessAdvanceBill(context, idAdvanceBill, 8,widgetToNavigator: HomeAdminPage(index: 2,));
+            doProcessAdvanceBill(context, idAdvanceBill, 8,
+                widgetToNavigator: HomeAdminPage(
+                  index: 2,
+                ));
           },
           child: Text(
             "Xác nhận",
@@ -510,7 +527,6 @@ Widget btnProcessAdvanceBill(BuildContext context, {String idAdvanceBill,bool is
     ],
   );
 }
-
 
 Widget btnProcessInvoice(context, int statusId, String id, bool isCustomer,
     {bool isRequest, Widget widgetToNavigator, InvoiceRequestElement element}) {
@@ -564,14 +580,22 @@ Widget btnProcessInvoice(context, int statusId, String id, bool isCustomer,
       );
     } else {
       return Row(
-        mainAxisAlignment:isRequest == true ? MainAxisAlignment.spaceAround : MainAxisAlignment.center,
+        mainAxisAlignment: isRequest == true
+            ? MainAxisAlignment.spaceAround
+            : MainAxisAlignment.center,
         children: [
           Flexible(
             // ignore: deprecated_member_use
             child: RaisedButton(
               color: Colors.redAccent,
               onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => ReasonToDelete(invoiceId: id,isRequest: isRequest != null ? true: false,isCustomer: isCustomer,widgetToNavigator: widgetToNavigator,)));
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => ReasonToDelete(
+                          invoiceId: id,
+                          isRequest: isRequest != null ? true : false,
+                          isCustomer: isCustomer,
+                          widgetToNavigator: widgetToNavigator,
+                        )));
               },
               child: Text(
                 '${isRequest != null ? "Từ chối" : "Xoá"}',
@@ -583,30 +607,96 @@ Widget btnProcessInvoice(context, int statusId, String id, bool isCustomer,
               elevation: 10,
             ),
           ),
-          isRequest == true ? Flexible(
-            // ignore: deprecated_member_use
-            child: RaisedButton(
-              color: Color(0xFF0BB791),
-              onPressed: () {
-                doConfirmOrAcceptOrRejectInvoice(context, id, 2, isCustomer,
-                    isRequest: isRequest,
-                    element: element,
-                    widgetToNavigator: widgetToNavigator);
-              },
-              child: Text(
-                '${isRequest != null ? "Tạo" : "Cập nhật"}',
-                style: TextStyle(color: Colors.white, fontSize: 16),
-              ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              elevation: 10,
-            ),
-          ):Container(),
+          isRequest == true
+              ? Flexible(
+                  // ignore: deprecated_member_use
+                  child: RaisedButton(
+                    color: Color(0xFF0BB791),
+                    onPressed: () {
+                      doConfirmOrAcceptOrRejectInvoice(
+                          context, id, 2, isCustomer,
+                          isRequest: isRequest,
+                          element: element,
+                          widgetToNavigator: widgetToNavigator);
+                    },
+                    child: Text(
+                      '${isRequest != null ? "Tạo" : "Cập nhật"}',
+                      style: TextStyle(color: Colors.white, fontSize: 16),
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    elevation: 10,
+                  ),
+                )
+              : Container(),
         ],
       );
     }
   } else {
     return Container();
   }
+} //btn in detail advance return
+
+Widget btnConfirmAdvanceReturn(
+  BuildContext context, {
+  String id,
+}) {
+  var size = MediaQuery.of(context).size;
+  return Container(
+    margin: EdgeInsets.only(top: 12, bottom: 12),
+    width: size.width * 0.5,
+    height: size.height * 0.05,
+    decoration: BoxDecoration(
+      color: primaryColor,
+      borderRadius: BorderRadius.circular(10),
+    ),
+    child: TextButton(
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('Thông báo'),
+                content: SingleChildScrollView(
+                  child: Column(
+                    children: <Widget>[
+                      Text(showMessage('', MSG032)),
+                    ],
+                  ),
+                ),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text(
+                      'Không',
+                      style: TextStyle(
+                        color: Colors.redAccent,
+                      ),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      doConfirmAdvanceReturn(context,id: id);
+                    },
+                    child: Text(
+                      'Có',
+                      style: TextStyle(
+                        color: welcome_color,
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
+          );
+        },
+        child: AutoSizeText(
+          "Nhận tiền hoàn trả",
+          style: TextStyle(
+              color: Colors.white, fontWeight: FontWeight.w500, fontSize: 16),
+        )),
+  );
 }
