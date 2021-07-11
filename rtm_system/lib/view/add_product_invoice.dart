@@ -13,6 +13,7 @@ import 'package:rtm_system/ultils/get_api_data.dart';
 import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/regExp.dart';
 import 'package:rtm_system/view/confirm_detail_invoice.dart';
+import 'package:rtm_system/view/manager/home_manager_page.dart';
 import 'package:rtm_system/view/table_price.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -58,13 +59,13 @@ class AddProductPage extends StatefulWidget {
 }
 
 InfomationCustomer infomationCustomer = InfomationCustomer();
-String phoneNewCustomer, nameNewCustomer;
+String phoneNewCustomer, nameNewCustomer, customerId;
 
 class _AddProductPageState extends State<AddProductPage> {
   String errorPhone, errorFullName, errorQuantity, errorDegree;
   String price, productName;
   String token, storeName;
-  String personSale = '', phoneSale = '', oldCusName;
+  String personSale = '', phoneSale = '', oldCusName, oldCusId;
   List listQuantity = [];
   List<DataProduct> dataListProduct = [];
   Store store;
@@ -128,6 +129,7 @@ class _AddProductPageState extends State<AddProductPage> {
     infomationCustomer = null;
     phoneNewCustomer = null;
     nameNewCustomer = null;
+    customerId = null;
   }
 
   @override
@@ -138,8 +140,12 @@ class _AddProductPageState extends State<AddProductPage> {
     _getStore();
   }
 
-  Future<void> _checkDataFromRequest() {
+  Future<void> _checkDataFromRequest() async {
     setState(() {
+
+      this.widget.customerId == null
+          ? customerId = ""
+          : customerId = widget.customerId;
       this.widget.phone == null
           ? phoneNewCustomer = ""
           : phoneNewCustomer = widget.phone;
@@ -372,9 +378,13 @@ class _AddProductPageState extends State<AddProductPage> {
             enabledFillName = true;
             // ignore: unnecessary_statements
             nameNewCustomer == oldCusName ? nameNewCustomer = "" : null;
+            // ignore: unnecessary_statements
+            customerId == oldCusId ? customerId = "" : null;
           } else {
-            oldCusName = infomationCustomer.fullname;
-            nameNewCustomer = infomationCustomer.fullname;
+            oldCusName = infomationCustomer.fullName;
+            nameNewCustomer = infomationCustomer.fullName;
+            oldCusId = infomationCustomer.accountId;
+            customerId = infomationCustomer.accountId;
             enabledFillName = false;
           }
           autoFocus = false;
@@ -861,7 +871,8 @@ class _AddProductPageState extends State<AddProductPage> {
     );
   }
 
-  Future<void> _navigator(String tittle) {
+  Future<void> _navigator(String tittle) async {
+    print(customerId);
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -870,7 +881,7 @@ class _AddProductPageState extends State<AddProductPage> {
                   bodyPage: confirmDetailInvoice(
                     storeId: "$_myStore",
                     productId: "$_myProduct",
-                    customerId: "${widget.customerId}",
+                    customerId: "$customerId",
                     invoiceRequestId: widget.invoiceRequestId,
                     customerName: "$nameNewCustomer",
                     phoneNumber: "$phoneNewCustomer",
@@ -880,7 +891,7 @@ class _AddProductPageState extends State<AddProductPage> {
                     price: "$price",
                     productName: "$productName",
                     storeName: "$storeName",
-                    widgetToNavigator: widget.widgetToNavigator,
+                    widgetToNavigator: widget.widgetToNavigator == null ? HomeAdminPage(index: 1, indexInsidePage: 1,) : widget.widgetToNavigator,
                     isCustomer: widget.isCustomer,
                   ),
                 )));

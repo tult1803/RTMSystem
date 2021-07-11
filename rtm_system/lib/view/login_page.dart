@@ -32,7 +32,7 @@ class LoginPageState extends State<LoginPage> {
   String username = "", accountId = "";
   String password;
   String accessToken = '';
-  String fullname = "";
+  String fullName = "";
   int gender = 0;
   String phone = '';
   String birthday = '';
@@ -89,10 +89,10 @@ class LoginPageState extends State<LoginPage> {
     data = await getAPI.createLogin(username, password);
     status = PostLogin.status;
     setState(() {
-      roleId = data.role_id;
-      accessToken = data.access_token;
+      roleId = data.roleId;
+      accessToken = data.accessToken;
       accountId = data.accountId;
-      fullname = data.fullname;
+      fullName = data.fullName;
       phone = data.phone;
       birthday = data.birthday;
       gender = data.gender;
@@ -107,7 +107,7 @@ class LoginPageState extends State<LoginPage> {
       print('Error from LoginApi !!!');
     }
     if (roleId == 3 && status == 200) {
-      savedInfoLogin(roleId, accountId, gender, accessToken, fullname, phone,
+      savedInfoLogin(roleId, accountId, gender, accessToken, fullName, phone,
           birthday, password);
       Navigator.pushAndRemoveUntil(
           context,
@@ -119,7 +119,7 @@ class LoginPageState extends State<LoginPage> {
       print('Status button: Done');
       _buttonState = ButtonState.normal;
     } else if (roleId == 2 && status == 200) {
-      savedInfoLogin(roleId, accountId, gender, accessToken, fullname, phone,
+      savedInfoLogin(roleId, accountId, gender, accessToken, fullName, phone,
           birthday, password);
       Navigator.pushAndRemoveUntil(
           context,

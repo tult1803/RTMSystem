@@ -18,7 +18,6 @@ class GetProduct {
     if (response.statusCode == 200) {
       List<dynamic> listProduct = json.decode(response.body);
       return listProduct;
-      // return DataProduct.fromJson(json.decode(response.body));
     } else {
       // throw an exception.
       throw Exception('Failed to load data');
