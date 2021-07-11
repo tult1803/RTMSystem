@@ -122,7 +122,6 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
                         listInfor: listInfor,
                         storeId: _myStore,
                         isCustomer: true,
-                        type: 1,
                       )),
             );
           }

@@ -903,7 +903,6 @@ Widget widgetCreateAdvance(context, List item, String storeId,
                 SizedBox(
                   height: 10,
                 ),
-                //khi nào có api sẽ tách chỗ này ra thành 1 hàm để gọi các btn khác nhau
                 SizedBox(
                   width: size.width * 0.4,
                   // ignore: deprecated_member_use

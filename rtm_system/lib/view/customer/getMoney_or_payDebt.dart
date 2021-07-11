@@ -376,7 +376,6 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
     }
   }
 
-  //show bang call API khi nao co API thi chuyen no qua trang khac
   Widget _txtItemDetail(context, String title, String content) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
