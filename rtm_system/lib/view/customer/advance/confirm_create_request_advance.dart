@@ -6,12 +6,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ConfirmCreateRequestAdvance extends StatefulWidget {
   const ConfirmCreateRequestAdvance({Key key, this.listInfor,
-    this.isCustomer, this.type, this.storeId}): super(key: key);
+    this.isCustomer, this.storeId}): super(key: key);
   final List listInfor;
   final bool isCustomer;
   final String storeId;
-  //1 is create, 2 is confirm : customer
-  final int type;
   @override
   _ConfirmCreateRequestAdvanceState createState() => _ConfirmCreateRequestAdvanceState();
 }
@@ -80,7 +78,7 @@ class _ConfirmCreateRequestAdvanceState extends State<ConfirmCreateRequestAdvanc
         ),
       ),
       body: widgetCreateAdvance( context, widget.listInfor,widget.storeId, nameProduct,
-          personSale, phoneSale, widget.type, widget.isCustomer),
+          personSale, phoneSale, 1, widget.isCustomer),
     );
   }
 }

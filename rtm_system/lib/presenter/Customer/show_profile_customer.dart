@@ -35,15 +35,14 @@ class _showProfileState extends State<showProfile> {
     super.dispose();
   }
 
-  Future _getAPIProfile() async{
-    SharedPreferences sharedPreferences =
-          await SharedPreferences.getInstance();
-      String token = sharedPreferences.getString('access_token');
-      String phone = sharedPreferences.getString('phone');
-      password = sharedPreferences.getString('password');
-      infomationCustomer =
-          await getAPIProfileCustomer.getProfileCustomer(token, phone);
-      return infomationCustomer;
+  Future _getAPIProfile() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    String token = sharedPreferences.getString('access_token');
+    String phone = sharedPreferences.getString('phone');
+    password = sharedPreferences.getString('password');
+    infomationCustomer =
+        await getAPIProfileCustomer.getProfileCustomer(token, phone);
+    return infomationCustomer;
   }
 
   @override
@@ -52,8 +51,9 @@ class _showProfileState extends State<showProfile> {
     return FutureBuilder(
       future: _getAPIProfile(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
-        if (snapshot.hasData) {
-          return SingleChildScrollView(
+        return Container(
+          height: size.height,
+          child: Center(
             child: Column(
               children: [
                 Row(
@@ -67,79 +67,71 @@ class _showProfileState extends State<showProfile> {
                         ),
                       ),
                     ),
-                    btnChooseOption(context, size.width * 0.45, infomationCustomer.level),
+                    btnChooseOption(
+                        context, size.width * 0.45, infomationCustomer.level),
                   ],
                 ),
                 SizedBox(
                   height: 12,
                 ),
-                //data infor show here
-                Container(
-                  margin: EdgeInsets.fromLTRB(0, 0, 0, 12),
-                  color: Colors.white,
-                  child: Center(
-                    child: Column(
-                      children: [
-                        _item(context, 'Họ và tên',
-                            infomationCustomer.fullName),
-                        _item(
-                            context,
-                            'Ngày sinh',
-                            getDateTime(infomationCustomer.birthday.toString(),
-                                dateFormat: 'dd-MM-yyyy')),
-                        _item(
-                            context, 'Số điện thoại', infomationCustomer.phone),
-                        _item(context, 'Giới tính',
-                            getGender(infomationCustomer.gender)),
-                        _item(context, 'CMND', infomationCustomer.cmnd),
-                        _item(context, 'Địa chỉ',
-                            infomationCustomer.address.toString()),
-                        _item(context, 'Loại tài khoản',
-                            getLevel(level: infomationCustomer.level)),
-                        SizedBox(
-                          height: 12,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                showInforCustomer(snapshot.hasData, snapshot.hasError),
                 btnLogout(context),
                 SizedBox(
                   height: 12,
                 ),
               ],
             ),
-          );
-        } else if (snapshot.hasError) {
-          return Container(
-            margin: EdgeInsets.all(12),
-            child: Center(
-              child: Column(
-                children: [
-                  AutoSizeText(showMessage("", MSG008),
-                      style: TextStyle(fontWeight: FontWeight.w500)),
-                ],
-              ),
-            ),
-          );
-        } else {
-          return Container(
-            height: size.height,
-            child: Center(
-              child: Column(
-                children: [
-                  CircularProgressIndicator(),
-                  btnLogout(context),
-                  SizedBox(
-                    height: 12,
-                  ),
-                ],
-              ),
-            ),
-          );
-        }
+          ),
+        );
+        // }
       },
     );
+  }
+
+  Widget showInforCustomer(hasData, isError) {
+    if (hasData) {
+      return Container(
+        margin: EdgeInsets.fromLTRB(0, 0, 0, 12),
+        color: Colors.white,
+        child: Center(
+          child: Column(
+            children: [
+              _item(context, 'Họ và tên', infomationCustomer.fullName),
+              _item(
+                  context,
+                  'Ngày sinh',
+                  getDateTime(infomationCustomer.birthday.toString(),
+                      dateFormat: 'dd-MM-yyyy')),
+              _item(context, 'Số điện thoại', infomationCustomer.phone),
+              _item(context, 'Giới tính', getGender(infomationCustomer.gender)),
+              _item(context, 'CMND', infomationCustomer.cmnd),
+              _item(context, 'Địa chỉ', infomationCustomer.address.toString()),
+              _item(context, 'Loại tài khoản',
+                  getLevel(level: infomationCustomer.level)),
+              SizedBox(
+                height: 12,
+              ),
+            ],
+          ),
+        ),
+      );
+    } else if (isError) {
+      return Container(
+        margin: EdgeInsets.all(12),
+        child: Center(
+          child: Column(
+            children: [
+              AutoSizeText(showMessage(MSG008, MSG027),
+                  style: TextStyle(fontWeight: FontWeight.w500)),
+            ],
+          ),
+        ),
+      );
+    } else {
+      return CircularProgressIndicator(
+        color: primaryColor,
+      );
+    }
   }
 
   Widget btnChooseOption(context, width, int level) {
@@ -203,6 +195,7 @@ class _showProfileState extends State<showProfile> {
       ),
     );
   }
+
   //Show thông tin của người dùng
   Widget _item(context, header, value) {
     // Khi giá trị get lên là rỗng thì set '' để load tránh lỗi trang
