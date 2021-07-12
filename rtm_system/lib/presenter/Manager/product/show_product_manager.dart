@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:rtm_system/model/get/getAPI_product.dart';
-import 'package:rtm_system/model/model_product.dart';
 import 'package:rtm_system/helpers/common_widget.dart';
 import 'package:rtm_system/helpers/component.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
@@ -34,6 +33,14 @@ class _showAllProductState extends State<showAllProduct> {
       GetProduct getProduct = GetProduct();
       dataList = await getProduct
           .getProduct(prefs.getString("access_token"), "", type: 0, limit: 0);
+
+      dataList.forEach((element) {
+        itemNameUpdatePrice.add("${element["name"]}");
+        itemPriceUpdatePrice.add("${element["update_price"]}");
+        itemDateUpdatePrice.add("${element["updateDateTime"]}");
+        itemIdUpdatePrice.add(element["id"]);
+      });
+
       final isLastPage = dataList.length < pageKey;
       if (isLastPage) {
         _pagingController.appendLastPage(dataList);
@@ -46,6 +53,7 @@ class _showAllProductState extends State<showAllProduct> {
       _pagingController.error = error;
     }
   }
+
 
   @override
   void initState() {
@@ -69,7 +77,6 @@ class _showAllProductState extends State<showAllProduct> {
       }
     });
     super.initState();
-    // _getToken();
   }
 
   @override
@@ -93,11 +100,6 @@ class _showAllProductState extends State<showAllProduct> {
                 newPageProgressIndicatorBuilder: (context) =>
                     firstPageProgressIndicatorBuilder(),
                 itemBuilder: (context, item, index) {
-                  if (itemNameUpdatePrice.length <= index) {
-                    itemNameUpdatePrice.add("${item["name"]}");
-                    itemPriceUpdatePrice.add("${item["update_price"]}");
-                    itemDateUpdatePrice.add("${item["updateDateTime"]}");
-                    itemIdUpdatePrice.add(item["id"]);}
                   return boxForProduct(
                       context: context,
                       id: item["id"],
