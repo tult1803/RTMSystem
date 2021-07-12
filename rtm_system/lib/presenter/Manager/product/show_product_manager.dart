@@ -20,6 +20,7 @@ class showAllProduct extends StatefulWidget {
 List<String> itemNameUpdatePrice = [];
 List<String> itemPriceUpdatePrice = [];
 List<String> itemIdUpdatePrice = [];
+List<String> itemDateUpdatePrice = [];
 
 // ignore: camel_case_types
 class _showAllProductState extends State<showAllProduct> {
@@ -31,8 +32,8 @@ class _showAllProductState extends State<showAllProduct> {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       GetProduct getProduct = GetProduct();
-      dataList =
-          await getProduct.getProduct(prefs.getString("access_token"), "",type: 0,limit: 0);
+      dataList = await getProduct
+          .getProduct(prefs.getString("access_token"), "", type: 0, limit: 0);
       final isLastPage = dataList.length < pageKey;
       if (isLastPage) {
         _pagingController.appendLastPage(dataList);
@@ -45,7 +46,6 @@ class _showAllProductState extends State<showAllProduct> {
       _pagingController.error = error;
     }
   }
-
 
   @override
   void initState() {
@@ -84,7 +84,7 @@ class _showAllProductState extends State<showAllProduct> {
           PagedSliverList(
             pagingController: _pagingController,
             builderDelegate: PagedChildBuilderDelegate(
-                firstPageErrorIndicatorBuilder:(context) =>
+                firstPageErrorIndicatorBuilder: (context) =>
                     noItemsFoundIndicatorBuilder("Không có dữ liệu"),
                 firstPageProgressIndicatorBuilder: (context) =>
                     firstPageProgressIndicatorBuilder(),
@@ -94,10 +94,10 @@ class _showAllProductState extends State<showAllProduct> {
                     firstPageProgressIndicatorBuilder(),
                 itemBuilder: (context, item, index) {
                   if (itemNameUpdatePrice.length <= index) {
-                    itemNameUpdatePrice.add(item["name"]);
+                    itemNameUpdatePrice.add("${item["name"]}");
                     itemPriceUpdatePrice.add("${item["update_price"]}");
+                    itemDateUpdatePrice.add("${item["updateDateTime"]}");
                     itemIdUpdatePrice.add(item["id"]);}
-                  _savedProductPrice(item["name"], "${item["update_price"]}");
                   return boxForProduct(
                       context: context,
                       id: item["id"],
@@ -117,10 +117,6 @@ class _showAllProductState extends State<showAllProduct> {
     );
   }
 
-  Future _savedProductPrice(String name, String value) async{
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString(name, value);
-  }
   @override
   void dispose() {
     _pagingController.dispose();
@@ -130,8 +126,7 @@ class _showAllProductState extends State<showAllProduct> {
   Widget noItemsFoundIndicatorBuilder(String tittle) {
     return Column(
       children: [
-        firstPageErrorIndicatorBuilder(context,
-            tittle: tittle),
+        firstPageErrorIndicatorBuilder(context, tittle: tittle),
         GestureDetector(
           onTap: () => _pagingController.refresh(),
           child: Text(

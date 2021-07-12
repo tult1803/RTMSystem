@@ -158,10 +158,10 @@ Widget btnDateTime(
         height: 35.0,
         width: 120,
         child: Row(children: [
-          Container(
-              padding: EdgeInsets.only(left: 5),
-              height: size.height,
-              child: icon),
+          // Container(
+          //     padding: EdgeInsets.only(left: 5),
+          //     height: size.height,
+          //     child: icon),
           Expanded(
               child: Container(
             height: size.height,

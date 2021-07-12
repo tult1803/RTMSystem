@@ -3,6 +3,7 @@ import 'package:rtm_system/presenter/Manager/notice/show_create_notice.dart';
 import 'package:rtm_system/helpers/component.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 
+// ignore: camel_case_types
 class createNotice extends StatefulWidget {
   const createNotice({Key key}) : super(key: key);
 
@@ -10,6 +11,7 @@ class createNotice extends StatefulWidget {
   _createNoticeState createState() => _createNoticeState();
 }
 
+// ignore: camel_case_types
 class _createNoticeState extends State<createNotice> {
   @override
   Widget build(BuildContext context) {
