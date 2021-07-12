@@ -822,7 +822,7 @@ Widget showBtnInAdvanceRequest(context, status, activeStatus, bool isCustomer,
       //btn delete advance
       return ElevatedButton(
         onPressed: () {
-          //call api
+          doDeleteAdvanceRequest(context, id);
         },
         child: AutoSizeText(
           "Xoá yêu cầu",

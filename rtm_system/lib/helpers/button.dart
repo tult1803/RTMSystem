@@ -536,6 +536,8 @@ Widget btnProcessInvoice(context, int statusId, String id, bool isCustomer,
   //status = 5 là cho customer sign invoice
   // status = 1 là manager confirm
   // status = 4 là accept or delete invoice. Customer: only accept NOT Reject.
+  List<String> invoiceIdToSign = [];
+  invoiceIdToSign.add(id);
   if (statusId == 5 || statusId == 1) {
     if (statusId == 5 && isCustomer == true) {
       return SizedBox(
@@ -544,7 +546,7 @@ Widget btnProcessInvoice(context, int statusId, String id, bool isCustomer,
         child: RaisedButton(
           color: primaryColor,
           onPressed: () {
-            doConfirmOrAcceptOrRejectInvoice(context, id, 1, isCustomer);
+            doConfirmOrAcceptOrRejectInvoice(context, "", invoiceIdToSign, 1, isCustomer);
           },
           child: Text(
             'Nhận tiền',
@@ -566,7 +568,7 @@ Widget btnProcessInvoice(context, int statusId, String id, bool isCustomer,
         child: RaisedButton(
           color: primaryColor,
           onPressed: () {
-            doConfirmOrAcceptOrRejectInvoice(context, id, 2, isCustomer);
+            doConfirmOrAcceptOrRejectInvoice(context, id, [], 2, isCustomer);
           },
           child: Text(
             'Chấp nhận',
@@ -614,7 +616,7 @@ Widget btnProcessInvoice(context, int statusId, String id, bool isCustomer,
                     color: Color(0xFF0BB791),
                     onPressed: () {
                       doConfirmOrAcceptOrRejectInvoice(
-                          context, id, 2, isCustomer,
+                          context, id,  [],2, isCustomer,
                           isRequest: isRequest,
                           element: element,
                           widgetToNavigator: widgetToNavigator);

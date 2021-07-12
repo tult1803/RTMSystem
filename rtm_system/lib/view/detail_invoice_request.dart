@@ -109,7 +109,7 @@ class _DetailInvoiceRequestState extends State<DetailInvoiceRequest> {
               ),
               TextButton(
                 onPressed: () {
-                  doConfirmOrAcceptOrRejectInvoice(context, id, 3, true,
+                  doConfirmOrAcceptOrRejectInvoice(context, id, [],3, true,
                       reason: reasonInput);
                 },
                 child: Text(

@@ -251,8 +251,7 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
                               widget.isPay
                                   ? putReturnAdvance(
                                       context, state, totalAdvance)
-                                  //call api receive cash
-                                  : "";
+                                  : doConfirmOrAcceptOrRejectInvoice(context, "", state, 1, true,);;
                             },
                             child: Text(
                               'Có',

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:rtm_system/model/delete/deleteAPI_deactivateAdvanceRequest.dart';
 import 'package:rtm_system/model/delete/deleteAPI_invoice.dart';
 import 'package:rtm_system/model/delete/deleteAPI_invoiceRequest.dart';
 import 'package:rtm_system/model/model_invoice_request.dart';
@@ -259,7 +260,7 @@ Future<void> putAPIUpdatePrice(BuildContext context, String productId,
 // Xac nhan hoa don, cho ca manager va customer
 // Customer : truyền invoice_id để xác nhận
 Future<void> doConfirmOrAcceptOrRejectInvoice(
-    BuildContext context, String invoiceId, int type, bool isCustomer,
+    BuildContext context, String invoiceId, List<String> invoiceIdSign, int type, bool isCustomer,
     {Widget widgetToNavigator,
     String reason,
     bool isRequest,
@@ -271,7 +272,7 @@ Future<void> doConfirmOrAcceptOrRejectInvoice(
     if (type == 1) {
       PutSignInvoice putSignInvoiceInvoice = PutSignInvoice();
       status = await putSignInvoiceInvoice.putSignInvoice(
-          prefs.get("access_token"), invoiceId);
+          prefs.get("access_token"), invoiceIdSign);
     } else if (type == 2) {
       PutConfirmInvoice putConfirmInvoice = PutConfirmInvoice();
       status = await putConfirmInvoice.putConfirmInvoice(
@@ -431,11 +432,11 @@ Future doDeleteInvoiceRequest(BuildContext context, String invoiceId,
   status == 200
       ? showCustomDialog(context,
           isSuccess: true,
-          content: "Đã từ chối hoá đơn",
+          content: showMessage("", MSG017),
           widgetToNavigator: widgetToNavigator)
       : showCustomDialog(context,
           isSuccess: false,
-          content: "Từ chối hoá đơn thất bại",
+          content: showMessage(MSG033, MSG027),
           doPopNavigate: true);
 }
 
@@ -623,4 +624,21 @@ Future doConfirmIdentifyCustomer(BuildContext context,
     showCustomDialog(context,
         isSuccess: false, content: showMessage(MSG030, MSG027));
   }
+}
+Future doDeleteAdvanceRequest(BuildContext context, String id) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  DeleteAdvanceRequest deleteAdvanceRequest = DeleteAdvanceRequest();
+  int status = await deleteAdvanceRequest.deleteAdvanceRequest(
+      prefs.get('access_token'), id);
+  status == 200
+      ? showCustomDialog(context,
+          isSuccess: true,
+          content: showMessage("", MSG017),
+          widgetToNavigator: HomeCustomerPage(
+          index: 1,
+        ))
+      : showCustomDialog(context,
+          isSuccess: false,
+          content: showMessage(MSG033, MSG027),
+          doPopNavigate: true);
 }
