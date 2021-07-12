@@ -36,7 +36,6 @@ String MSG029 = "Xác nhận quý khách sẽ nhận tiền bằng các ho�
 String MSG030 = "Đã có lỗi xảy ra.";
 String MSG031 = "Quý khách không có nợ.";
 String MSG032 = "Xác nhận quý khách đã nhận số tiền hoàn trả?";
-String MSG033 = "Huỷ bỏ thất bại";
 
 
 //use to show message

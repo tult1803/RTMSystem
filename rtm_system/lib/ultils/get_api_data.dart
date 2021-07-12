@@ -436,7 +436,7 @@ Future doDeleteInvoiceRequest(BuildContext context, String invoiceId,
           widgetToNavigator: widgetToNavigator)
       : showCustomDialog(context,
           isSuccess: false,
-          content: showMessage(MSG033, MSG027),
+          content: showMessage(MSG030, MSG027),
           doPopNavigate: true);
 }
 
@@ -604,8 +604,8 @@ Future doConfirmIdentifyCustomer(BuildContext context,
         isSuccess: false, content: "Có lỗi xảy ra. Xin thử lại");
   }
 }
-//confirm advance return
- Future doConfirmAdvanceReturn(
+//receive cash from advance return 
+ Future doReceiveReturnCash(
   BuildContext context, {
   String id,
 }) async {
@@ -625,6 +625,7 @@ Future doConfirmIdentifyCustomer(BuildContext context,
         isSuccess: false, content: showMessage(MSG030, MSG027));
   }
 }
+
 Future doDeleteAdvanceRequest(BuildContext context, String id) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   DeleteAdvanceRequest deleteAdvanceRequest = DeleteAdvanceRequest();
@@ -639,6 +640,6 @@ Future doDeleteAdvanceRequest(BuildContext context, String id) async {
         ))
       : showCustomDialog(context,
           isSuccess: false,
-          content: showMessage(MSG033, MSG027),
+          content: showMessage(MSG030, MSG027),
           doPopNavigate: true);
 }

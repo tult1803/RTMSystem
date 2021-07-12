@@ -171,6 +171,7 @@ class _showHistoryAdvancePageState extends State<showHistoryAdvancePage> {
                                           tittle: "Chi tiết đơn trả nợ",
                                           bodyPage: DetailAdvanceReturn(
                                             id: item.id,
+                                            isDone: item.receiveDate != null? true : false,
                                           ),
                                         ),
                                       );

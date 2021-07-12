@@ -890,7 +890,7 @@ Widget widgetCreateAdvance(context, List item, String storeId,
                 SizedBox(
                   height: 10,
                 ),
-                txtItemDetail(context, 'Số tiền', '${item[0]}'),
+                txtItemDetail(context, 'Số tiền', '${item[0]} đ'),
                 SizedBox(
                   height: 10,
                 ),
@@ -1045,7 +1045,8 @@ Widget componentContainerAdvanceReturnDetail(BuildContext context,
     String createDate,
     int returnCash,
     int total,
-    List<InvoiceInAdvanceReturn> invoices}) {
+    List<InvoiceInAdvanceReturn> invoices,
+    bool isDone}) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Column(
@@ -1061,6 +1062,17 @@ Widget componentContainerAdvanceReturnDetail(BuildContext context,
         ),
         txtItemDetail(
             context, "Số tiền hoàn trả", "${getFormatPrice("$returnCash")} đ"),
+        SizedBox(
+          height: 10,
+        ),
+        txtItemDetail(
+            context, "Tổng tiền ký gửi", "${getFormatPrice("$total")} đ"),
+        SizedBox(
+          height: 10,
+        ),
+        txtItemDetail(context, "Trạng thái",
+            isDone ? "Đã nhận tiền hoàn trả" : "Chưa nhận tiền hoàn trả",
+            colorContent: isDone ? primaryColor : Colors.redAccent),
       ],
     ),
   );

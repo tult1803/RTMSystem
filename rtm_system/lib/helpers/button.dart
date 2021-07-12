@@ -681,7 +681,7 @@ Widget btnConfirmAdvanceReturn(
                   ),
                   TextButton(
                     onPressed: () {
-                      doConfirmAdvanceReturn(context,id: id);
+                      doReceiveReturnCash(context,id: id);
                     },
                     child: Text(
                       'Có',
