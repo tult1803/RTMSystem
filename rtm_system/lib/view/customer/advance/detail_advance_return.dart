@@ -1,10 +1,12 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:rtm_system/helpers/button.dart';
 import 'package:rtm_system/model/get/getAPI_AdvanceReturnDetail.dart';
 import 'package:rtm_system/helpers/common_widget.dart';
 import 'package:rtm_system/helpers/component.dart';
 import 'package:rtm_system/model/model_advance_return_detail.dart';
+import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/ultils/src/message_list.dart';
 import 'package:rtm_system/view/customer/advance/detail_invoice_in_advance.dart';
 import 'package:rtm_system/view/manager/form_detail_page.dart';
@@ -12,8 +14,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class DetailAdvanceReturn extends StatefulWidget {
   final String id;
-
-  DetailAdvanceReturn({this.id});
+  final bool isDone;
+  DetailAdvanceReturn({this.id, this.isDone});
 
   @override
   _DetailAdvanceReturnState createState() => _DetailAdvanceReturnState();
@@ -21,6 +23,7 @@ class DetailAdvanceReturn extends StatefulWidget {
 
 class _DetailAdvanceReturnState extends State<DetailAdvanceReturn> {
   AdvanceReturnDetail advanceReturnDetail = AdvanceReturnDetail();
+
   @override
   void initState() {
     super.initState();
@@ -69,38 +72,51 @@ class _DetailAdvanceReturnState extends State<DetailAdvanceReturn> {
           });
           return SingleChildScrollView(
             child: containerDetail(
-                context,
-                Column(
-                  children: [
-                    componentContainerAdvanceReturnDetail(
-                      context,
-                      id: widget.id,
-                      createDate: advanceReturnDetail.createDate,
-                      invoices: advanceReturnDetail.invoices,
-                      returnCash: advanceReturnDetail.returnCash,
-                      total: advanceReturnDetail.total,
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Center(
-                      child: AutoSizeText(
-                        'Các hoá đơn dùng để trả nợ:',
-                        style: TextStyle(fontWeight: FontWeight.w500),
+              context,
+              Column(
+                children: [
+                  componentContainerAdvanceReturnDetail(
+                    context,
+                    id: widget.id,
+                    createDate: advanceReturnDetail.createDate,
+                    invoices: advanceReturnDetail.invoices,
+                    returnCash: advanceReturnDetail.returnCash,
+                    total: advanceReturnDetail.total,
+                    isDone: widget.isDone,
+                  ),
+                  Container(
+                    width: size.width,
+                    height: size.height * 0.5,
+                    child: ContainedTabBarView(
+                      tabBarProperties: TabBarProperties(
+                        indicatorColor: Colors.black,
+                        indicatorWeight: 1.0,
+                        labelColor: primaryColor,
+                        unselectedLabelColor: Colors.grey.withOpacity(1),
                       ),
-                    ),
-                    Container(
-                      height: 360,
-                        child: SingleChildScrollView(
-                          child: Column(
-                            children: children,
+                      tabs: [
+                        AutoSizeText('Đơn nợ'),
+                        AutoSizeText('Đơn ký gửi'),
+                      ],
+                      views: [
+                        //show advance 
+                        Container(color: Colors.lightBlueAccent),
+                        Container(
+                          height: 360,
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: children,
+                            ),
                           ),
                         ),
-                      ),
-                    btnConfirmAdvanceReturn(context, id: 'a'),
-                  ],
-                ),
-                ),
+                      ],
+                    ),
+                  ),
+                  if (widget.isDone == false)
+                    btnConfirmAdvanceReturn(context, id: widget.id),
+                ],
+              ),
+            ),
           );
         } else if (snapshot.hasError) {
           return Container(

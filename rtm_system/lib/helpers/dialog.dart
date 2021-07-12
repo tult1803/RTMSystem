@@ -56,7 +56,7 @@ showAlertDialog(
                   isSuccess: false, content: "Có lỗi xảy ra. Thử lại");
             }
           } else if (isInvoice != null) {
-            doConfirmOrAcceptOrRejectInvoice(context, id, 3, isCustomer,
+            doConfirmOrAcceptOrRejectInvoice(context, id, [],3, isCustomer,
                 widgetToNavigator: widget,
                 isRequest: isInvoice,
                 reason: reason);

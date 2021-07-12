@@ -1,6 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:rtm_system/blocs/list_id_advance.dart';
 import 'package:rtm_system/blocs/list_id_invoice.dart';
 import 'package:rtm_system/blocs/select_dates_bloc.dart';
 import 'package:rtm_system/blocs/total_amount_bloc.dart';
@@ -8,6 +10,7 @@ import 'package:rtm_system/blocs/total_deposit_bloc.dart';
 import 'package:rtm_system/model/model_product.dart';
 import 'package:rtm_system/model/get/getAPI_customer_phone.dart';
 import 'package:rtm_system/model/model_profile_customer.dart';
+import 'package:rtm_system/presenter/Customer/show_checkbox_advance.dart';
 import 'package:rtm_system/presenter/Customer/show_deposit_to_process.dart';
 import 'package:rtm_system/helpers/button.dart';
 import 'package:rtm_system/helpers/component.dart';
@@ -37,6 +40,7 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
   String title;
   int totalAdvance = 0;
   SelectDatesBloc _selectDatesBloc;
+  bool _value= false;
 
   GetAPIProfileCustomer getAPIProfileCustomer = GetAPIProfileCustomer();
   InfomationCustomer informationCustomer = InfomationCustomer();
@@ -71,6 +75,7 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return MultiBlocProvider(
       providers: [
         BlocProvider<TotalAmountBloc>(
@@ -84,6 +89,9 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
         ),
         BlocProvider<ListInvoiceIdBloc>(
           create: (context) => ListInvoiceIdBloc(),
+        ),
+        BlocProvider<ListAdvanceIdBloc>(
+          create: (context) => ListAdvanceIdBloc(),
         ),
       ],
       child: Scaffold(
@@ -151,48 +159,93 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 5,
-                ),
-                rowButtonDatetime(),
-                SizedBox(
-                  height: 5,
-                ),
-                //dữ liệu có dài hơn vẫn scroll ngang được, nếu k bị lỗi
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(10.0),
+                Container(
+                  margin: EdgeInsets.only(top: 12),
+                  width: size.width,
+                  height: size.height * 0.6,
+                  child: ContainedTabBarView(
+                    tabBarProperties: TabBarProperties(
+                      indicatorColor: Colors.green,
+                      indicatorWeight: 1.0,
+                      labelColor: primaryColor,
+                      unselectedLabelColor: Colors.grey.withOpacity(1),
+                      background: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.4),
+                              spreadRadius: 0.5,
+                              blurRadius: 2,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                    padding: EdgeInsets.all(12),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        AutoSizeText(
-                          'Tống tiền các hóa đơn:',
-                          style: TextStyle(
-                            color: Color(0xFF0BB791),
+                    tabs: [
+                      AutoSizeText('Đơn ký gửi'),
+                      AutoSizeText('Đơn nợ'),
+                    ],
+                    views: [
+                      //show advance
+                     
+                      Container(
+                        height: 360,
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: 5,
+                              ),
+                              rowButtonDatetime(),
+                              SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(10.0),
+                                    ),
+                                  ),
+                                  padding: EdgeInsets.all(12),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      AutoSizeText(
+                                        'Tống tiền các hóa đơn:',
+                                        style: TextStyle(
+                                          color: Color(0xFF0BB791),
+                                        ),
+                                      ),
+                                      BlocBuilder<TotalDepositBloc, int>(
+                                        builder: (context, state) {
+                                          return AutoSizeText(
+                                            "${getFormatPrice(state.toString())} đ",
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              showDepositToProcess(),
+                            ],
                           ),
                         ),
-                        BlocBuilder<TotalDepositBloc, int>(
-                          builder: (context, state) {
-                            return AutoSizeText(
-                              "${getFormatPrice(state.toString())} đ",
-                              style: TextStyle(
-                                color: Colors.black,
-                              ),
-                            );
-                          },
-                        ),
-                      ],
-                    ),
+                      ),
+                       Container(
+                         height: 360,
+                          child: SingleChildScrollView(
+                        child: CheckAdvance()
+                      )),
+                    ],
                   ),
                 ),
-                showDepositToProcess(),
                 SizedBox(
                   height: 12,
                 ),
@@ -251,7 +304,14 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
                               widget.isPay
                                   ? putReturnAdvance(
                                       context, state, totalAdvance)
-                                  : doConfirmOrAcceptOrRejectInvoice(context, "", state, 1, true,);;
+                                  : doConfirmOrAcceptOrRejectInvoice(
+                                      context,
+                                      "",
+                                      state,
+                                      1,
+                                      true,
+                                    );
+                              ;
                             },
                             child: Text(
                               'Có',
