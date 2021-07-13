@@ -7,7 +7,7 @@ import 'package:rtm_system/helpers/button.dart';
 import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/add_product_invoice.dart';
-import 'package:rtm_system/view/customer/getMoney_or_payDebt.dart';
+import 'package:rtm_system/view/customer/get_money_deposit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class InvoiceTab extends StatefulWidget {
@@ -167,9 +167,7 @@ class _InvoiceTabState extends State<InvoiceTab> with TickerProviderStateMixin {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => GetMoneyOrPayDebt(
-                      isPay: false,
-                    )),
+                builder: (context) => GetMoneyDeposit()),
           );
         },
         label: Text(

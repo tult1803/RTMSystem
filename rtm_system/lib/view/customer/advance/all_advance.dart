@@ -7,7 +7,7 @@ import 'package:rtm_system/helpers/button.dart';
 import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/customer/advance/create_request_advance.dart';
-import 'package:rtm_system/view/customer/getMoney_or_payDebt.dart';
+import 'package:rtm_system/view/customer/get_money_deposit.dart';
 import 'package:rtm_system/view/customer/pay_advance.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
