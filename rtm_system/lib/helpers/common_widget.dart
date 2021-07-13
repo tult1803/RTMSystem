@@ -587,7 +587,7 @@ Widget boxForAdvance({
                     alignment: Alignment.centerRight,
                     paddingLeftOfText: 10,
                     paddingRightOfText: 10,
-                    tittle: "${getStatus(status: status)}",
+                    tittle: status == 8 ? "Đã duyệt ": "${getStatus(status: status)}",
                     fontWeight: FontWeight.w600,
                     color: getColorStatus(status: status)),
               ),
@@ -1025,11 +1025,13 @@ Widget containerStores(BuildContext context, String name, String address,
 Widget boxForAdvanceHistory({
   BuildContext context,
   String id,
+  List idList,
   int amount,
   String customerId,
   int returnCash,
   bool isAdvance,
   String dateTime,
+  //ngay tra no
   String receiveDate,
   Widget widget,
 }) {
@@ -1041,14 +1043,10 @@ Widget boxForAdvanceHistory({
     amountAfterFormat = "${getFormatPrice(amount.toString())} đ";
     cashAfterFormat = "${getFormatPrice(returnCash.toString())} đ";
     dateTimeAfterFormat = "${getDateTime(dateTime, dateFormat: 'dd-MM-yyyy')}";
-    ;
     receiveDateAfterFormat =
         "${getDateTime(receiveDate, dateFormat: 'dd-MM-yyyy')}";
   } catch (_) {
-    amountAfterFormat = "$amount";
-    cashAfterFormat = "$returnCash";
-    dateTimeAfterFormat = "$dateTime";
-    receiveDateAfterFormat = "$receiveDate";
+   
   }
   return GestureDetector(
     onTap: () => Navigator.of(context)
@@ -1159,7 +1157,7 @@ Widget boxForAdvanceHistory({
                             color: primaryColor),
                       ],
                     ),
-              if (returnCash != 0)
+              if (isAdvance == false)
                 Flexible(
                   child: Column(
                     children: [
