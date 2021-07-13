@@ -2,7 +2,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:rtm_system/blocs/list_id_advance.dart';
 import 'package:rtm_system/blocs/list_id_invoice.dart';
 import 'package:rtm_system/blocs/select_dates_bloc.dart';
 import 'package:rtm_system/blocs/total_amount_bloc.dart';
@@ -10,7 +9,6 @@ import 'package:rtm_system/blocs/total_deposit_bloc.dart';
 import 'package:rtm_system/model/model_product.dart';
 import 'package:rtm_system/model/get/getAPI_customer_phone.dart';
 import 'package:rtm_system/model/model_profile_customer.dart';
-import 'package:rtm_system/presenter/Customer/show_checkbox_advance.dart';
 import 'package:rtm_system/presenter/Customer/show_deposit_to_process.dart';
 import 'package:rtm_system/helpers/button.dart';
 import 'package:rtm_system/helpers/component.dart';
@@ -89,9 +87,6 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
         ),
         BlocProvider<ListInvoiceIdBloc>(
           create: (context) => ListInvoiceIdBloc(),
-        ),
-        BlocProvider<ListAdvanceIdBloc>(
-          create: (context) => ListAdvanceIdBloc(),
         ),
       ],
       child: Scaffold(
@@ -238,11 +233,6 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
                           ),
                         ),
                       ),
-                       Container(
-                         height: 360,
-                          child: SingleChildScrollView(
-                        child: CheckAdvance()
-                      )),
                     ],
                   ),
                 ),

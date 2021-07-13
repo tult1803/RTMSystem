@@ -57,7 +57,6 @@ class MyApp extends StatelessWidget {
         builder: EasyLoading.init(),
         debugShowCheckedModeBanner: false,
         home: WelcomePage(),
-        // home: SimpleAnimatedList(),
       ),
     );
   }

@@ -5,6 +5,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:rtm_system/model/delete/deleteAPI_deactivateAdvanceRequest.dart';
 import 'package:rtm_system/model/delete/deleteAPI_invoice.dart';
 import 'package:rtm_system/model/delete/deleteAPI_invoiceRequest.dart';
+import 'package:rtm_system/model/get/getAPI_maintainCheck.dart';
 import 'package:rtm_system/model/model_invoice_request.dart';
 import 'package:rtm_system/model/model_validate_account.dart';
 import 'package:rtm_system/model/post/postAPI_CreateRequestInvoice.dart';
@@ -34,6 +35,12 @@ import 'package:rtm_system/view/manager/profile/allCustomer_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../helpers/dialog.dart';
+
+Future doCheckMaintain() async{
+  GetMaintainCheck maintainCheck = GetMaintainCheck();
+  int status = await maintainCheck.getMaintainCheck();
+  return status;
+}
 
 //dùng cho tạo thông báo
 Future postAPINotice(String tittle, String content) async {
