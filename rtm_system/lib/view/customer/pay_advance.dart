@@ -2,15 +2,17 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:rtm_system/blocs/list_id_advance.dart';
 import 'package:rtm_system/blocs/list_id_invoice.dart';
 import 'package:rtm_system/blocs/select_dates_bloc.dart';
 import 'package:rtm_system/blocs/total_amount_bloc.dart';
 import 'package:rtm_system/blocs/total_deposit_bloc.dart';
+import 'package:rtm_system/helpers/dialog.dart';
+import 'package:rtm_system/model/get/getAPI_AdvanceRequest.dart';
+import 'package:rtm_system/model/modelAdvance_checked.dart';
+import 'package:rtm_system/model/model_advance_request.dart';
 import 'package:rtm_system/model/model_product.dart';
 import 'package:rtm_system/model/get/getAPI_customer_phone.dart';
 import 'package:rtm_system/model/model_profile_customer.dart';
-import 'package:rtm_system/presenter/Customer/show_checkbox_advance.dart';
 import 'package:rtm_system/presenter/Customer/show_deposit_to_process.dart';
 import 'package:rtm_system/helpers/button.dart';
 import 'package:rtm_system/helpers/component.dart';
@@ -20,30 +22,30 @@ import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/ultils/src/message_list.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class GetMoneyOrPayDebt extends StatefulWidget {
-  const GetMoneyOrPayDebt({Key key, this.isPay}) : super(key: key);
-
-  // isPay = true là hoá đơn để trả nợ
-  final bool isPay;
-
+class PayDebt extends StatefulWidget {
+  const PayDebt({Key key}) : super(key: key);
   @override
-  _GetMoneyOrPayDebtState createState() => _GetMoneyOrPayDebtState();
+  _PayDebtState createState() => _PayDebtState();
 }
 
-class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
+class _PayDebtState extends State<PayDebt> {
   List<DataProduct> dataListProduct = [];
   bool checkClick = false;
   String errNameProduct, token;
   bool checkProduct = true;
   int idProduct;
-  // String getFromDate, getToDate;
   String title;
-  int totalAdvance = 0;
+  int totalAdvance = 0, totalAdvanceSelected = 0, totalDepositSelected;
   SelectDatesBloc _selectDatesBloc;
-  bool _value= false;
 
   GetAPIProfileCustomer getAPIProfileCustomer = GetAPIProfileCustomer();
   InfomationCustomer informationCustomer = InfomationCustomer();
+
+  List<AdvanceChecked> selectedContacts = [];
+  List<String> advanceIdList = [];
+  List<Advance> advanceAccept = [];
+  List<AdvanceChecked> advanceItem = [];
+
   //get total advance
   Future getAPIProfile() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
@@ -60,6 +62,35 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
     return informationCustomer;
   }
 
+  Future<List<Advance>> loadAdvance() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    AdvanceRequest listAdvance;
+    GetAdvanceRequest getAdvanceRequest = GetAdvanceRequest();
+    listAdvance = await getAdvanceRequest.getAdvanceRequest(
+      prefs.get("access_token"),
+      prefs.get("accountId"),
+      prefs.get("phone"),
+      8, //get all status
+      10000,
+      1,
+      "",
+      "",
+      searchTerm: "",
+    );
+    advanceAccept.clear();
+    advanceAccept = listAdvance.advances;
+    advanceAccept.forEach((element) {
+      var idSplit = element.id.split("-");
+      String prefixId = idSplit[0].trim();
+      if (prefixId == "UT") {
+        addIdAndAmount(element.id, element.amount);
+      } else {
+        print("tra no");
+      }
+    });
+    return advanceAccept;
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -69,8 +100,10 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
   void initState() {
     super.initState();
     _selectDatesBloc = SelectDatesBloc(SelectDatesBloc.initDate());
-    widget.isPay ? title = 'Trả nợ' : title = 'Nhận tiền';
+    title = 'Trả nợ';
     getAPIProfile();
+    loadAdvance();
+    totalDepositSelected = 0;
   }
 
   @override
@@ -89,9 +122,6 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
         ),
         BlocProvider<ListInvoiceIdBloc>(
           create: (context) => ListInvoiceIdBloc(),
-        ),
-        BlocProvider<ListAdvanceIdBloc>(
-          create: (context) => ListAdvanceIdBloc(),
         ),
       ],
       child: Scaffold(
@@ -119,17 +149,15 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
                       borderRadius: BorderRadius.all(Radius.circular(10))),
                   child: Column(
                     children: [
-                      if (widget.isPay)
-                        _txtItemDetail(
-                            context,
-                            'Tổng tiền nợ: ',
-                            totalAdvance != 0
-                                ? '${getFormatPrice(totalAdvance.toString())} đ'
-                                : "0 đ"),
-                      if (widget.isPay)
-                        SizedBox(
-                          height: 10,
-                        ),
+                      _txtItemDetail(
+                          context,
+                          'Tổng tiền nợ: ',
+                          totalAdvance != 0
+                              ? '${getFormatPrice(totalAdvance.toString())} đ'
+                              : "0 đ"),
+                      SizedBox(
+                        height: 10,
+                      ),
                       BlocBuilder<TotalAmountBloc, int>(
                         builder: (context, state) {
                           return _txtItemDetail(context, 'Số tiền hiện có:',
@@ -159,6 +187,71 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
                     ),
                   ),
                 ),
+                SizedBox(
+                  height: 12,
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10.0),
+                    ),
+                  ),
+                  padding: EdgeInsets.all(12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      AutoSizeText(
+                        'Tống đơn ký gửi đã chọn:',
+                        style: TextStyle(
+                          color: Color(0xFF0BB791),
+                        ),
+                      ),
+                      BlocBuilder<TotalDepositBloc, int>(
+                        builder: (context, state) {
+                          totalDepositSelected = state;
+                          return AutoSizeText(
+                            "${getFormatPrice(state.toString())} đ",
+                            style: TextStyle(
+                              color: Colors.black,
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 12,
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10.0),
+                    ),
+                  ),
+                  padding: EdgeInsets.all(12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      AutoSizeText(
+                        'Tống đơn nợ đã chọn(${selectedContacts.length}/ ${advanceItem.length}):',
+                        style: TextStyle(
+                          color: Color(0xFF0BB791),
+                        ),
+                      ),
+                      AutoSizeText(
+                        totalAdvanceSelected != 0
+                            ? "${getFormatPrice(totalAdvanceSelected.toString())} đ"
+                            : "$totalAdvanceSelected đ",
+                        style: TextStyle(
+                          color: Colors.black,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
                 Container(
                   margin: EdgeInsets.only(top: 12),
                   width: size.width,
@@ -176,8 +269,6 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
                           boxShadow: [
                             BoxShadow(
                               color: Colors.grey.withOpacity(0.4),
-                              spreadRadius: 0.5,
-                              blurRadius: 2,
                             ),
                           ],
                         ),
@@ -188,8 +279,6 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
                       AutoSizeText('Đơn nợ'),
                     ],
                     views: [
-                      //show advance
-                     
                       Container(
                         height: 360,
                         child: SingleChildScrollView(
@@ -199,50 +288,39 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
                                 height: 5,
                               ),
                               rowButtonDatetime(),
-                              SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(10.0),
-                                    ),
-                                  ),
-                                  padding: EdgeInsets.all(12),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      AutoSizeText(
-                                        'Tống tiền các hóa đơn:',
-                                        style: TextStyle(
-                                          color: Color(0xFF0BB791),
-                                        ),
-                                      ),
-                                      BlocBuilder<TotalDepositBloc, int>(
-                                        builder: (context, state) {
-                                          return AutoSizeText(
-                                            "${getFormatPrice(state.toString())} đ",
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
                               showDepositToProcess(),
                             ],
                           ),
                         ),
                       ),
-                       Container(
-                         height: 360,
-                          child: SingleChildScrollView(
-                        child: CheckAdvance()
-                      )),
+                      Container(
+                        height: 500,
+                        margin: EdgeInsets.fromLTRB(5, 12, 5, 12),
+                        child: Column(
+                          children: [
+                            if (advanceItem.length > 0)
+                              Container(
+                                height: 300,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: ListView.builder(
+                                    itemCount: advanceItem.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      // return item
+                                      return AdvanceItem(
+                                        advanceItem[index].id,
+                                        advanceItem[index].amount,
+                                        advanceItem[index].isSelected,
+                                        index,
+                                      );
+                                    }),
+                              ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -258,17 +336,15 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
         floatingActionButton: BlocBuilder<ListInvoiceIdBloc, List<String>>(
           builder: (context, state) {
             if (state.isNotEmpty) {
-              if (widget.isPay) {
-                if (totalAdvance == 0) {
-                  return Container(
-                    width: 1,
-                    height: 1,
-                    child: FloatingActionButton(
-                      backgroundColor: backgroundColor,
-                      onPressed: () {},
-                    ),
-                  );
-                }
+              if (totalAdvance == 0) {
+                return Container(
+                  width: 1,
+                  height: 1,
+                  child: FloatingActionButton(
+                    backgroundColor: backgroundColor,
+                    onPressed: () {},
+                  ),
+                );
               }
               return FloatingActionButton.extended(
                 onPressed: () {
@@ -281,9 +357,7 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
                         content: SingleChildScrollView(
                           child: Column(
                             children: <Widget>[
-                              widget.isPay
-                                  ? Text(showMessage('', MSG028))
-                                  : Text(showMessage('', MSG029)),
+                              Text(showMessage('', MSG028)),
                             ],
                           ),
                         ),
@@ -301,17 +375,22 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
                           ),
                           TextButton(
                             onPressed: () {
-                              widget.isPay
-                                  ? putReturnAdvance(
-                                      context, state, totalAdvance)
-                                  : doConfirmOrAcceptOrRejectInvoice(
-                                      context,
-                                      "",
-                                      state,
-                                      1,
-                                      true,
-                                    );
-                              ;
+                              if (selectedContacts.length > 0) {
+                                if (totalAdvanceSelected >
+                                    totalDepositSelected) {
+                                  showCustomDialog(
+                                    context,
+                                    isSuccess: false,
+                                    content: showMessage("", MSG033),
+                                  );
+                                } else {
+                                  selectedContacts.forEach((element) {
+                                    advanceIdList.add(element.id);
+                                  });
+                                  putReturnAdvance(context, state,
+                                      advanceIdList, totalAdvance);
+                                }
+                              }
                             },
                             child: Text(
                               'Có',
@@ -350,6 +429,68 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
           },
         ),
       ),
+    );
+  }
+
+  void addTotalAdvance(int amount) {
+    setState(() {
+      totalAdvanceSelected += amount;
+    });
+  }
+
+  void removeTotalAdvance(int amount) {
+    setState(() {
+      totalAdvanceSelected -= amount;
+    });
+  }
+
+  void addIdAndAmount(String id, int amount) {
+    final expense = AdvanceChecked(
+      id: id,
+      amount: amount,
+      isSelected: false,
+    );
+    advanceItem.add(expense);
+  }
+
+  Widget AdvanceItem(String id, int amount, bool isSelected, int index) {
+    return ListTile(
+      title: Text(
+        "Mã: $id",
+        style: TextStyle(
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+      subtitle: Text(
+        "Số tiền: ${getFormatPrice(amount.toString())} đ",
+        style: TextStyle(
+          // fontWeight: FontWeight.w500,
+          color: primaryColor
+        ),
+      ),
+      trailing: isSelected
+          ? Icon(
+              Icons.check_circle,
+              color: Colors.green[700],
+            )
+          : Icon(
+              Icons.check_circle_outline,
+              color: Colors.grey,
+            ),
+      onTap: () {
+        setState(() {
+          advanceItem[index].isSelected = !advanceItem[index].isSelected;
+          if (advanceItem[index].isSelected == true) {
+            selectedContacts.add(
+                AdvanceChecked(id: id, amount: amount, isSelected: isSelected));
+            addTotalAdvance(amount);
+          } else if (advanceItem[index].isSelected == false) {
+            selectedContacts
+                .removeWhere((element) => element.id == advanceItem[index].id);
+            removeTotalAdvance(amount);
+          }
+        });
+      },
     );
   }
 

@@ -250,7 +250,7 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
                             onPressed: () {
                               widget.isPay
                                   ? putReturnAdvance(
-                                      context, state, totalAdvance)
+                                      context, state,[], totalAdvance)
                                   : doConfirmOrAcceptOrRejectInvoice(context, "", state, 1, true,);;
                             },
                             child: Text(

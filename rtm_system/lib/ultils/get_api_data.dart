@@ -510,13 +510,13 @@ Future doCreateInvoice(BuildContext context,
 }
 
 Future<void> putReturnAdvance(
-    BuildContext context, List<String> invoiceId, int totalAdvance) async {
+    BuildContext context, List<String> invoiceId, List<String> advanceId, int totalAdvance) async {
   int status;
   SharedPreferences prefs = await SharedPreferences.getInstance();
   if (totalAdvance != 0) {
     PutReturnAdvance putReturnAdvance = PutReturnAdvance();
     status = await putReturnAdvance.putReturnAdvance(
-        prefs.get("access_token"), invoiceId);
+        prefs.get("access_token"), invoiceId, advanceId);
     if (status == 200) {
       showStatusAlertDialog(
           context,
