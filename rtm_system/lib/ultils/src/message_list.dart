@@ -37,6 +37,7 @@ String MSG030 = "Đã có lỗi xảy ra.";
 String MSG031 = "Quý khách không có nợ.";
 String MSG032 = "Xác nhận quý khách đã nhận số tiền hoàn trả?";
 String MSG033 = "Vui lòng chọn tiền nợ nhỏ hơn hoặc bằng tiền ký gửi";
+String MSG034 = "Vui lòng chọn đơn nợ!";
 
 
 //use to show message

@@ -1,6 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:rtm_system/blocs/count_total_invoices.dart';
+import 'package:rtm_system/blocs/count_total_invoices_selected.dart';
 import 'package:rtm_system/blocs/list_id_invoice.dart';
 import 'package:rtm_system/blocs/select_dates_bloc.dart';
 import 'package:rtm_system/blocs/total_amount_bloc.dart';
@@ -54,6 +56,12 @@ class _GetMoneyDepositState extends State<GetMoneyDeposit> {
         ),
         BlocProvider<ListInvoiceIdBloc>(
           create: (context) => ListInvoiceIdBloc(),
+        ),
+        BlocProvider<CountTotalInvoicesBloc>(
+          create: (context) => CountTotalInvoicesBloc(),
+        ),
+        BlocProvider<CountTotalInvoicesSelectedBloc>(
+          create: (context) => CountTotalInvoicesSelectedBloc(),
         ),
       ],
       child: Scaffold(
@@ -119,35 +127,43 @@ class _GetMoneyDepositState extends State<GetMoneyDeposit> {
                 ),
                 Container(
                   margin: EdgeInsets.only(left: 5, right: 5),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(10.0),
-                      ),
-                    ),
-                    padding: EdgeInsets.all(12),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        AutoSizeText(
-                          'Tống tiền các hóa đơn:',
-                          style: TextStyle(
-                            color: Color(0xFF0BB791),
-                          ),
-                        ),
-                        BlocBuilder<TotalDepositBloc, int>(
-                          builder: (context, state) {
-                            return AutoSizeText(
-                              "${getFormatPrice(state.toString())} đ",
-                              style: TextStyle(
-                                color: Colors.black,
-                              ),
-                            );
-                          },
-                        ),
-                      ],
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10.0),
                     ),
                   ),
+                  padding: EdgeInsets.all(12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      BlocBuilder<CountTotalInvoicesSelectedBloc, int>(
+                        builder: (context, state1) {
+                          return BlocBuilder<CountTotalInvoicesBloc, int>(
+                            builder: (context, state2) {
+                              return AutoSizeText(
+                                'Tống tiền các hóa đơn($state1/$state2):',
+                                style: TextStyle(
+                                  color: Color(0xFF0BB791),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      ),
+                      BlocBuilder<TotalDepositBloc, int>(
+                        builder: (context, state) {
+                          return AutoSizeText(
+                            "${getFormatPrice(state.toString())} đ",
+                            style: TextStyle(
+                              color: Colors.black,
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
                 showDepositToProcess(),
                 SizedBox(
                   height: 12,
@@ -190,7 +206,14 @@ class _GetMoneyDepositState extends State<GetMoneyDeposit> {
                           ),
                           TextButton(
                             onPressed: () {
-                              doConfirmOrAcceptOrRejectInvoice(context, "", state, 1, true,);;
+                              doConfirmOrAcceptOrRejectInvoice(
+                                context,
+                                "",
+                                state,
+                                1,
+                                true,
+                              );
+                              ;
                             },
                             child: Text(
                               'Có',

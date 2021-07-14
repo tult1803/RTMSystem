@@ -2,6 +2,8 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:rtm_system/blocs/count_total_invoices.dart';
+import 'package:rtm_system/blocs/count_total_invoices_selected.dart';
 import 'package:rtm_system/blocs/list_id_invoice.dart';
 import 'package:rtm_system/blocs/select_dates_bloc.dart';
 import 'package:rtm_system/blocs/total_amount_bloc.dart';
@@ -123,6 +125,12 @@ class _PayDebtState extends State<PayDebt> {
         BlocProvider<ListInvoiceIdBloc>(
           create: (context) => ListInvoiceIdBloc(),
         ),
+        BlocProvider<CountTotalInvoicesBloc>(
+          create: (context) => CountTotalInvoicesBloc(),
+        ),
+        BlocProvider<CountTotalInvoicesSelectedBloc>(
+          create: (context) => CountTotalInvoicesSelectedBloc(),
+        ),
       ],
       child: Scaffold(
         backgroundColor: Color(0xffEEEEEE),
@@ -201,11 +209,19 @@ class _PayDebtState extends State<PayDebt> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      AutoSizeText(
-                        'Tống đơn ký gửi đã chọn:',
-                        style: TextStyle(
-                          color: Color(0xFF0BB791),
-                        ),
+                      BlocBuilder<CountTotalInvoicesSelectedBloc, int>(
+                        builder: (context, state1) {
+                          return BlocBuilder<CountTotalInvoicesBloc, int>(
+                            builder: (context, state2) {
+                              return AutoSizeText(
+                                'Tống đơn ký gửi đã chọn($state1/$state2):',
+                                style: TextStyle(
+                                  color: Color(0xFF0BB791),
+                                ),
+                              );
+                            },
+                          );
+                        },
                       ),
                       BlocBuilder<TotalDepositBloc, int>(
                         builder: (context, state) {
@@ -293,6 +309,7 @@ class _PayDebtState extends State<PayDebt> {
                           ),
                         ),
                       ),
+
                       Container(
                         height: 500,
                         margin: EdgeInsets.fromLTRB(5, 12, 5, 12),
@@ -390,6 +407,12 @@ class _PayDebtState extends State<PayDebt> {
                                   putReturnAdvance(context, state,
                                       advanceIdList, totalAdvance);
                                 }
+                              }else{
+                                showCustomDialog(
+                                    context,
+                                    isSuccess: false,
+                                    content: showMessage("", MSG034),
+                                  );
                               }
                             },
                             child: Text(
@@ -464,9 +487,8 @@ class _PayDebtState extends State<PayDebt> {
       subtitle: Text(
         "Số tiền: ${getFormatPrice(amount.toString())} đ",
         style: TextStyle(
-          // fontWeight: FontWeight.w500,
-          color: primaryColor
-        ),
+            // fontWeight: FontWeight.w500,
+            color: primaryColor),
       ),
       trailing: isSelected
           ? Icon(
