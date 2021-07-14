@@ -8,6 +8,7 @@ import 'package:rtm_system/model/model_invoice_request.dart';
 import 'package:rtm_system/ultils/get_api_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
+import 'package:rtm_system/view/manager/product/update_price_product_manager.dart';
 import '../ultils/get_data.dart';
 
 // Hiện tại dùng cho trang "Profile"
@@ -448,8 +449,20 @@ Widget componentContainerDetailProduct(BuildContext context, Map item) {
         SizedBox(
           height: 10,
         ),
-        txtItemDetail(context, "Giá (1kg)",
-            "${getFormatPrice("${item["update_price"]}")} đ"),
+        Row(
+          children: [
+            txtItemDetail(context, "Giá (1kg)",
+                "${getFormatPrice("${item["update_price"]}")} đ"),
+            GestureDetector(onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => updatePriceProduct(chosenValue: "${item["name"]}",))),
+            child: Container(margin: EdgeInsets.only(top: 5, left: 10),child: Icon(Icons.update, color: Colors.blueAccent,))),
+          ],
+        ),
+        SizedBox(
+          height: 1,
+          child: Container(
+            color: Color(0xFFBDBDBD),
+          ),
+        ),
         SizedBox(
           height: 10,
         ),
