@@ -219,6 +219,7 @@ Widget buttonProfile(BuildContext context, double left, double right,
 Widget btnLogout(context) {
   var size = MediaQuery.of(context).size;
   return Container(
+    margin: EdgeInsets.only(top: 10),
     width: size.width * 0.4,
     child: Center(
       child: TextButton(

@@ -1,9 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:rtm_system/helpers/button.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
 
+// ignore: camel_case_types
 class showCreateNotice extends StatefulWidget {
   const showCreateNotice({Key key}) : super(key: key);
 
@@ -11,6 +13,7 @@ class showCreateNotice extends StatefulWidget {
   _showCreateNoticeState createState() => _showCreateNoticeState();
 }
 
+// ignore: camel_case_types
 class _showCreateNoticeState extends State<showCreateNotice> {
   String tittle="", description="";
   var fDate = new DateFormat('dd-MM-yyyy');
@@ -23,16 +26,19 @@ class _showCreateNoticeState extends State<showCreateNotice> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Card(
-              margin: EdgeInsets.only(top: 20, left: 10, right: 10, bottom: 20),
-              shape: RoundedRectangleBorder(
+            Container(
+              margin: EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black54,
+                    blurRadius: 5,
+                    offset: Offset(0, 0), // Shadow position
+                  ),
+                ],
               ),
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Colors.black, width: 1),
-                ),
                 width: size.width,
                 // height: 300,
                 child: Container(
@@ -55,7 +61,6 @@ class _showCreateNoticeState extends State<showCreateNotice> {
                   ),
                 ),
               ),
-            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

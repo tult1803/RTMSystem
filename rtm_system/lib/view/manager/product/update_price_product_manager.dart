@@ -1,5 +1,5 @@
-
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -10,16 +10,20 @@ import 'package:rtm_system/ultils/get_api_data.dart';
 import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/table_price.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+// ignore: must_be_immutable, camel_case_types
 class updatePriceProduct extends StatefulWidget {
   String chosenValue;
   Widget widgetToNavigate;
+
   updatePriceProduct({this.chosenValue, this.widgetToNavigate});
 
   @override
   _updatePriceProductState createState() => _updatePriceProductState();
 }
 
+// ignore: camel_case_types
 class _updatePriceProductState extends State<updatePriceProduct> {
   TextEditingController _controller = TextEditingController();
   int indexValue;
@@ -27,6 +31,7 @@ class _updatePriceProductState extends State<updatePriceProduct> {
   double price, currentPrice;
   bool isClick = false;
   String _value;
+
   @override
   void initState() {
     super.initState();
@@ -38,8 +43,8 @@ class _updatePriceProductState extends State<updatePriceProduct> {
     super.dispose();
   }
 
-  void isNotEmptyChoose(){
-    if(this.widget.chosenValue != null){
+  void isNotEmptyChoose() {
+    if (this.widget.chosenValue != null) {
       setState(() {
         isClick = true;
         _value = this.widget.chosenValue;
@@ -51,6 +56,7 @@ class _updatePriceProductState extends State<updatePriceProduct> {
       });
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -81,7 +87,7 @@ class _updatePriceProductState extends State<updatePriceProduct> {
                 child: btnSubmitValidate(
                     context, 200, 40, welcome_color, "Cập nhật"),
               ),
-             showTablePrice(idProduct: productId),
+              showTablePrice(idProduct: productId),
             ],
           ),
         ),
@@ -103,6 +109,16 @@ class _updatePriceProductState extends State<updatePriceProduct> {
     }
   }
 
+  bool checkDate(value) {
+    int index = itemNameUpdatePrice.indexOf(value);
+    DateTime productDate =
+        DateTime.tryParse(itemDateUpdatePrice.elementAt(index));
+    if (productDate.day - DateTime.now().day == 0) {
+      return true;
+    }
+    return false;
+  }
+
   Widget _dropDownList() {
     return Container(
       height: 50,
@@ -122,9 +138,12 @@ class _updatePriceProductState extends State<updatePriceProduct> {
               itemNameUpdatePrice.map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(
               value: value,
-              child: Text(
-                value,
-                style: TextStyle(color: Colors.black),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Text("$value", style: TextStyle(color: Colors.black)),
+                  checkDate(value) ? Icon(Icons.check, color: Colors.green,) : SizedBox(),
+                ],
               ),
             );
           }).toList(),
@@ -232,10 +251,14 @@ class _updatePriceProductState extends State<updatePriceProduct> {
                   ? showCustomDialog(context,
                       content: "Xin hãy nhập giá mới", isSuccess: false)
                   // ignore: unnecessary_statements
-                  : { itemIdUpdatePrice.clear(),
+                  : {
+                      itemIdUpdatePrice.clear(),
                       itemPriceUpdatePrice.clear(),
                       itemNameUpdatePrice.clear(),
-                      putAPIUpdatePrice(context, productId, price, this.widget.chosenValue),};
+                      itemDateUpdatePrice.clear(),
+                      putAPIUpdatePrice(
+                          context, productId, price, this.widget.chosenValue),
+                    };
             }
           },
           child: Center(
