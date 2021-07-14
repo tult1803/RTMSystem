@@ -1,13 +1,13 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:rtm_system/blocs/count_total_invoices.dart';
+import 'package:rtm_system/blocs/count_total_invoices_selected.dart';
 import 'package:rtm_system/blocs/list_id_invoice.dart';
 import 'package:rtm_system/blocs/select_dates_bloc.dart';
 import 'package:rtm_system/blocs/total_amount_bloc.dart';
 import 'package:rtm_system/blocs/total_deposit_bloc.dart';
 import 'package:rtm_system/model/model_product.dart';
-import 'package:rtm_system/model/get/getAPI_customer_phone.dart';
-import 'package:rtm_system/model/model_profile_customer.dart';
 import 'package:rtm_system/presenter/Customer/show_deposit_to_process.dart';
 import 'package:rtm_system/helpers/button.dart';
 import 'package:rtm_system/helpers/component.dart';
@@ -15,47 +15,20 @@ import 'package:rtm_system/ultils/get_api_data.dart';
 import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/ultils/src/message_list.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-class GetMoneyOrPayDebt extends StatefulWidget {
-  const GetMoneyOrPayDebt({Key key, this.isPay}) : super(key: key);
-
-  // isPay = true là hoá đơn để trả nợ
-  final bool isPay;
-
+class GetMoneyDeposit extends StatefulWidget {
   @override
-  _GetMoneyOrPayDebtState createState() => _GetMoneyOrPayDebtState();
+  _GetMoneyDepositState createState() => _GetMoneyDepositState();
 }
 
-class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
+class _GetMoneyDepositState extends State<GetMoneyDeposit> {
   List<DataProduct> dataListProduct = [];
   bool checkClick = false;
   String errNameProduct, token;
   bool checkProduct = true;
   int idProduct;
-  // String getFromDate, getToDate;
   String title;
-  int totalAdvance = 0;
   SelectDatesBloc _selectDatesBloc;
-
-  GetAPIProfileCustomer getAPIProfileCustomer = GetAPIProfileCustomer();
-  InfomationCustomer informationCustomer = InfomationCustomer();
-  //get total advance
-  Future getAPIProfile() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    String token = sharedPreferences.getString('access_token');
-    String phone = sharedPreferences.getString('phone');
-    // Đỗ dữ liệu lấy từ api
-    informationCustomer =
-        await getAPIProfileCustomer.getProfileCustomer(token, phone);
-    if (informationCustomer != null) {
-      setState(() {
-        totalAdvance = informationCustomer.advance;
-      });
-    }
-    return informationCustomer;
-  }
-
   @override
   void dispose() {
     super.dispose();
@@ -65,8 +38,7 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
   void initState() {
     super.initState();
     _selectDatesBloc = SelectDatesBloc(SelectDatesBloc.initDate());
-    widget.isPay ? title = 'Trả nợ' : title = 'Nhận tiền';
-    getAPIProfile();
+    title = 'Nhận tiền';
   }
 
   @override
@@ -84,6 +56,12 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
         ),
         BlocProvider<ListInvoiceIdBloc>(
           create: (context) => ListInvoiceIdBloc(),
+        ),
+        BlocProvider<CountTotalInvoicesBloc>(
+          create: (context) => CountTotalInvoicesBloc(),
+        ),
+        BlocProvider<CountTotalInvoicesSelectedBloc>(
+          create: (context) => CountTotalInvoicesSelectedBloc(),
         ),
       ],
       child: Scaffold(
@@ -111,17 +89,6 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
                       borderRadius: BorderRadius.all(Radius.circular(10))),
                   child: Column(
                     children: [
-                      if (widget.isPay)
-                        _txtItemDetail(
-                            context,
-                            'Tổng tiền nợ: ',
-                            totalAdvance != 0
-                                ? '${getFormatPrice(totalAdvance.toString())} đ'
-                                : "0 đ"),
-                      if (widget.isPay)
-                        SizedBox(
-                          height: 10,
-                        ),
                       BlocBuilder<TotalAmountBloc, int>(
                         builder: (context, state) {
                           return _txtItemDetail(context, 'Số tiền hiện có:',
@@ -158,38 +125,43 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
                 SizedBox(
                   height: 5,
                 ),
-                //dữ liệu có dài hơn vẫn scroll ngang được, nếu k bị lỗi
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(10.0),
+                Container(
+                  margin: EdgeInsets.only(left: 5, right: 5),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10.0),
+                    ),
+                  ),
+                  padding: EdgeInsets.all(12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      BlocBuilder<CountTotalInvoicesSelectedBloc, int>(
+                        builder: (context, state1) {
+                          return BlocBuilder<CountTotalInvoicesBloc, int>(
+                            builder: (context, state2) {
+                              return AutoSizeText(
+                                'Tống tiền các hóa đơn($state1/$state2):',
+                                style: TextStyle(
+                                  color: Color(0xFF0BB791),
+                                ),
+                              );
+                            },
+                          );
+                        },
                       ),
-                    ),
-                    padding: EdgeInsets.all(12),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        AutoSizeText(
-                          'Tống tiền các hóa đơn:',
-                          style: TextStyle(
-                            color: Color(0xFF0BB791),
-                          ),
-                        ),
-                        BlocBuilder<TotalDepositBloc, int>(
-                          builder: (context, state) {
-                            return AutoSizeText(
-                              "${getFormatPrice(state.toString())} đ",
-                              style: TextStyle(
-                                color: Colors.black,
-                              ),
-                            );
-                          },
-                        ),
-                      ],
-                    ),
+                      BlocBuilder<TotalDepositBloc, int>(
+                        builder: (context, state) {
+                          return AutoSizeText(
+                            "${getFormatPrice(state.toString())} đ",
+                            style: TextStyle(
+                              color: Colors.black,
+                            ),
+                          );
+                        },
+                      ),
+                    ],
                   ),
                 ),
                 showDepositToProcess(),
@@ -205,18 +177,6 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
         floatingActionButton: BlocBuilder<ListInvoiceIdBloc, List<String>>(
           builder: (context, state) {
             if (state.isNotEmpty) {
-              if (widget.isPay) {
-                if (totalAdvance == 0) {
-                  return Container(
-                    width: 1,
-                    height: 1,
-                    child: FloatingActionButton(
-                      backgroundColor: backgroundColor,
-                      onPressed: () {},
-                    ),
-                  );
-                }
-              }
               return FloatingActionButton.extended(
                 onPressed: () {
                   //có bloc nên k thể tách hàm
@@ -228,9 +188,7 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
                         content: SingleChildScrollView(
                           child: Column(
                             children: <Widget>[
-                              widget.isPay
-                                  ? Text(showMessage('', MSG028))
-                                  : Text(showMessage('', MSG029)),
+                              Text(showMessage('', MSG029)),
                             ],
                           ),
                         ),
@@ -248,10 +206,14 @@ class _GetMoneyOrPayDebtState extends State<GetMoneyOrPayDebt> {
                           ),
                           TextButton(
                             onPressed: () {
-                              widget.isPay
-                                  ? putReturnAdvance(
-                                      context, state, totalAdvance)
-                                  : doConfirmOrAcceptOrRejectInvoice(context, "", state, 1, true,);;
+                              doConfirmOrAcceptOrRejectInvoice(
+                                context,
+                                "",
+                                state,
+                                1,
+                                true,
+                              );
+                              ;
                             },
                             child: Text(
                               'Có',

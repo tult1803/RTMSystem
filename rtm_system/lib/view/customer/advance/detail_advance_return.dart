@@ -6,6 +6,7 @@ import 'package:rtm_system/model/get/getAPI_AdvanceReturnDetail.dart';
 import 'package:rtm_system/helpers/common_widget.dart';
 import 'package:rtm_system/helpers/component.dart';
 import 'package:rtm_system/model/model_advance_return_detail.dart';
+import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/ultils/src/message_list.dart';
 import 'package:rtm_system/view/customer/advance/detail_invoice_in_advance.dart';
@@ -48,9 +49,10 @@ class _DetailAdvanceReturnState extends State<DetailAdvanceReturn> {
       future: getDetail(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
-          List<Widget> children = [];
+          List<Widget> childrenInvoice = [];
+          List<Widget> childrenAdvance = [];
           advanceReturnDetail.invoices.forEach((element) {
-            children.add(boxForInvoice(
+            childrenInvoice.add(boxForInvoice(
                 context: context,
                 status: element.statusId,
                 createDate: element.createTime,
@@ -69,6 +71,16 @@ class _DetailAdvanceReturnState extends State<DetailAdvanceReturn> {
                 ),
                 isRequest: false,
                 isCustomer: true));
+          });
+          advanceReturnDetail.advances.forEach((element) {
+            childrenAdvance.add(boxForAdvanceHistory(
+              context: context,
+              id: element.id,
+              amount: element.amount,
+              isAdvance: true,
+              dateTime: element.doneDate,
+              returnCash: 0,
+            ));
           });
           return SingleChildScrollView(
             child: containerDetail(
@@ -99,13 +111,20 @@ class _DetailAdvanceReturnState extends State<DetailAdvanceReturn> {
                         AutoSizeText('Đơn ký gửi'),
                       ],
                       views: [
-                        //show advance 
-                        Container(color: Colors.lightBlueAccent),
+                        //show advance
                         Container(
                           height: 360,
                           child: SingleChildScrollView(
                             child: Column(
-                              children: children,
+                              children: childrenAdvance,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          height: 360,
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: childrenInvoice,
                             ),
                           ),
                         ),

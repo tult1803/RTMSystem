@@ -7,10 +7,6 @@ import 'package:rtm_system/model/model_advance_return_detail.dart';
 import 'package:rtm_system/model/model_invoice_request.dart';
 import 'package:rtm_system/ultils/get_api_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
-import 'package:rtm_system/ultils/src/message_list.dart';
-import 'package:rtm_system/view/customer/advance/detail_invoice_in_advance.dart';
-import 'package:rtm_system/view/detail_invoice.dart';
-import 'package:rtm_system/view/manager/form_detail_page.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
 import '../ultils/get_data.dart';
 
