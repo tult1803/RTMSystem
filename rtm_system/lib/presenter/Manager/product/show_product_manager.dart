@@ -33,8 +33,8 @@ class _showAllProductState extends State<showAllProduct> {
       GetProduct getProduct = GetProduct();
       dataList = await getProduct
           .getProduct(prefs.getString("access_token"), "", type: 0, limit: 0);
-
-      dataList.forEach((element) {
+      print('${itemNameUpdatePrice.length} < ${dataList.length}');
+      if(itemNameUpdatePrice.length < dataList.length) dataList.forEach((element) {
         itemNameUpdatePrice.add("${element["name"]}");
         itemPriceUpdatePrice.add("${element["update_price"]}");
         itemDateUpdatePrice.add("${element["updateDateTime"]}");

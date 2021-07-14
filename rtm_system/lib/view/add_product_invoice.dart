@@ -848,7 +848,7 @@ class _AddProductPageState extends State<AddProductPage> {
             width: 130,
             margin: EdgeInsets.only(left: 15),
             child: Text(
-              "${widget.dateToPay != null ? "Giá đã giữ" : "Giá hiên tại"}",
+              "${widget.dateToPay != null ? "Giá đã giữ" : "Giá hiện tại"}",
               style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
             ),
           ),
