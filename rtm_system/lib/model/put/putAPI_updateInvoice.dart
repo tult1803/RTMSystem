@@ -19,6 +19,7 @@ class PutUpdateInvoice{
         "degree": degree,
       }),
     );
+    print('$id - $quantity - $degree');
     print("Status putAPI Update Invoice:${response.statusCode}");
     return response.statusCode;
   }

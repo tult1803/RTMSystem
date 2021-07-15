@@ -111,7 +111,7 @@ Future<void> doUpdateInvoice(BuildContext context, {String id ,double quantity, 
           content: MSG003,
           isSuccess: true,
           widgetToNavigator: HomeAdminPage(
-            index: 4,
+            index: 1,indexInsidePage: 1,
           ));
 
   } else {

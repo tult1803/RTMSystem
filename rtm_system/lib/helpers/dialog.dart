@@ -1,10 +1,14 @@
+import 'dart:ffi';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rtm_system/model/delete/deleteAPI_deactivateNotice.dart';
 import 'package:rtm_system/model/delete/deleteAPI_deactivateCustomer.dart';
+import 'package:rtm_system/ultils/check_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 
 import 'component.dart';
@@ -288,19 +292,20 @@ Future<Dialog> showCustomDialog(BuildContext context,
       });
 }
 
-Future showTextFieldDialog(BuildContext context, {bool isDegree}) async {
+Future showTextFieldDialog(BuildContext context, {bool isDegree, String id}) async {
+  double quantity = 0, degree = 0;
   return await showDialog(
     context: context,
     builder: (context) {
       return new AlertDialog(
         contentPadding: const EdgeInsets.all(15.0),
         content: Container(
-          height: isDegree == null ? 80 : 140,
+          height: !isDegree ? 80 : 140,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              new TextField(
+              new TextFormField(
                 autofocus: true,
                 cursorColor: welcome_color,
                 keyboardType: TextInputType.numberWithOptions(
@@ -317,12 +322,15 @@ Future showTextFieldDialog(BuildContext context, {bool isDegree}) async {
                         color: Color(0xFF0BB791),
                       ),
                     )),
+                onChanged: (value) {
+                  quantity = double.tryParse(value);
+                },
               ),
               Container(
                 margin: EdgeInsets.only(top: 15),
-                child: isDegree == null
+                child: !isDegree
                     ? null
-                    : TextField(
+                    : TextFormField(
                         autofocus: true,
                         cursorColor: welcome_color,
                         keyboardType: TextInputType.numberWithOptions(
@@ -331,20 +339,24 @@ Future showTextFieldDialog(BuildContext context, {bool isDegree}) async {
                           FilteringTextInputFormatter.allow(RegExp(r'[.[0-9]')),
                         ],
                         decoration: new InputDecoration(
-                            labelText: 'Khối lượng',
+                            labelText: 'Số độ',
                             labelStyle: TextStyle(color: Colors.black54),
-                            hintText: 'Nhập khối lượng',
+                            hintText: 'Nhập số độ',
                             focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(
                                 color: Color(0xFF0BB791),
                               ),
                             )),
+                        onChanged: (value1) {
+                          degree = double.tryParse(value1);
+                        },
                       ),
               ),
             ],
           ),
         ),
         actions: <Widget>[
+          // ignore: deprecated_member_use
           new FlatButton(
               child: const Text(
                 'Hủy',
@@ -353,16 +365,24 @@ Future showTextFieldDialog(BuildContext context, {bool isDegree}) async {
               onPressed: () {
                 Navigator.pop(context);
               }),
+          // ignore: deprecated_member_use
           new FlatButton(
               child: const Text(
                 'Xác nhận',
                 style: TextStyle(color: Colors.green),
               ),
-              onPressed: () {
-                Navigator.pop(context);
+              onPressed: () async {
+                bool check = await checkInputUpdateInvoice(context,
+                    isDegree: isDegree, quantity: quantity, degree: degree);
+                if (!check) {
+                  print('sai');
+                } else
+                  // Navigator.pop(context);
+                doUpdateInvoice(context,id: id, degree: degree, quantity: quantity);
               })
         ],
       );
     },
   );
 }
+

@@ -618,7 +618,7 @@ Widget btnProcessInvoice(context, int statusId, String id, bool isCustomer,
                           isRequest: isRequest,
                           element: element,
                           widgetToNavigator: widgetToNavigator)
-                      : showTextFieldDialog(context, isDegree:isDegree);
+                      : showTextFieldDialog(context, isDegree:isDegree, id: id);
                     },
                     child: Text(
                       '${isRequest != null ? "Tạo" : "Cập nhật"}',
