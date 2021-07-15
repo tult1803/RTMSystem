@@ -185,7 +185,7 @@ class _showHistoryAdvancePageState extends State<showHistoryAdvancePage> {
                                         dateTime: item.datetime,
                                         receiveDate: item.receiveDate,
                                         widget: FormForDetailPage(
-                                          tittle: "Chi tiết yêu cầu",
+                                          tittle: "Chi tiết ứng tiền",
                                           bodyPage: DetailAdvancePage(
                                             isCustomer: true,
                                             id: item.id,
