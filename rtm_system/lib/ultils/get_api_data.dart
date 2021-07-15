@@ -22,6 +22,7 @@ import 'package:rtm_system/model/put/putAPI_returnAdvance.dart';
 import 'package:rtm_system/model/put/putAPI_confirmInvoice.dart';
 import 'package:rtm_system/model/put/putAPI_processAdvanceBill.dart';
 import 'package:rtm_system/model/put/putAPI_signInvoice.dart';
+import 'package:rtm_system/model/put/putAPI_updateInvoice.dart';
 import 'package:rtm_system/model/put/putAPI_updatePassword.dart';
 import 'package:rtm_system/model/put/putAPI_updatePrice.dart';
 import 'package:rtm_system/model/put/putAPI_updateAccount.dart';
@@ -99,6 +100,24 @@ Future post_put_ApiProfile(
         phone, password, fullname, gender, cmnd, address, birthday);
   }
   return status;
+}
+
+Future<void> doUpdateInvoice(BuildContext context, {String id ,double quantity, double degree}) async{
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  PutUpdateInvoice updateInvoice = PutUpdateInvoice();
+  int status = await updateInvoice.updateInvoice( prefs.get("access_token"), id, quantity, degree);
+  if (status == 200) {
+      showCustomDialog(context,
+          content: MSG003,
+          isSuccess: true,
+          widgetToNavigator: HomeAdminPage(
+            index: 1,indexInsidePage: 1,
+          ));
+
+  } else {
+    showCustomDialog(context,
+        content: MSG025, isSuccess: false, doPopNavigate: true);
+  }
 }
 
 Future<void> doUpdatePassword(BuildContext context,

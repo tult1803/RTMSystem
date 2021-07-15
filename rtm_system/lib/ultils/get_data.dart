@@ -142,5 +142,6 @@ getDateTime(String date, {String dateFormat}) {
 //Format giá 100.000.000
 getFormatPrice(String price) {
   final oCcy = new NumberFormat("#,##0", "en_US");
-  return oCcy.format(double.parse("${price}"));
+  return oCcy.format(double.parse("$price"));
 }
+

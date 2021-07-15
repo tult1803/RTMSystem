@@ -421,7 +421,7 @@ Widget componentContainerDetailInvoice(BuildContext context,
         ),
         // chỗ này show btn accpet or reject của customer
         btnProcessInvoice(context, statusId, id, isCustomer,
-            widgetToNavigator: widgetToNavigator),
+            widgetToNavigator: widgetToNavigator, isDegree: degree == 0 ? false : true),
       ],
     ),
   );
