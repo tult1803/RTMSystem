@@ -40,6 +40,10 @@ class _updatePriceProductState extends State<updatePriceProduct> {
 
   @override
   void dispose() {
+    itemIdUpdatePrice.clear();
+    itemPriceUpdatePrice.clear();
+    itemNameUpdatePrice.clear();
+    itemDateUpdatePrice.clear();
     super.dispose();
   }
 
@@ -252,10 +256,6 @@ class _updatePriceProductState extends State<updatePriceProduct> {
                       content: "Xin hãy nhập giá mới", isSuccess: false)
                   // ignore: unnecessary_statements
                   : {
-                      itemIdUpdatePrice.clear(),
-                      itemPriceUpdatePrice.clear(),
-                      itemNameUpdatePrice.clear(),
-                      itemDateUpdatePrice.clear(),
                       putAPIUpdatePrice(
                           context, productId, price, this.widget.chosenValue),
                     };

@@ -26,12 +26,20 @@ class _AllNoticeState extends State<AllNotice> {
                 color: Colors.white, fontWeight: FontWeight.w500, fontSize: 25),
           ),
         ),
-        bottom: PreferredSize(
-            child: btnMain(
-                context,150, "Tạo thông báo", Icon(Icons.notifications_outlined), createNotice()),
-            preferredSize: Size.fromHeight(60.0)),
       ),
       body: new showAllNotice(),
+      floatingActionButton: new FloatingActionButton(
+        //
+        onPressed: () => Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => createNotice())),
+        child: new Icon(
+          Icons.add_alert_outlined,
+          color: Colors.white,
+          size: 30,
+        ),
+        elevation: 2,
+      ),
+
     );
   }
 }

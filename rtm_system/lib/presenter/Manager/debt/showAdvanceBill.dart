@@ -106,27 +106,11 @@ class showAdvancceBillManagerState extends State<showAdvancceBillManager> {
           PagedSliverList(
             pagingController: _pagingController,
             builderDelegate: PagedChildBuilderDelegate(
-                firstPageErrorIndicatorBuilder: (context) {
-                  return Column(
-                    children: [
-                      firstPageErrorIndicatorBuilder(context,
-                          tittle: "Không có dữ liệu"),
-                      GestureDetector(
-                        onTap: () => _pagingController.refresh(),
-                        child: Text(
-                          "Nhấn để tải lại",
-                          style: TextStyle(color: welcome_color, fontSize: 18),
-                        ),
-                      ),
-                    ],
-                  );
-                },
+                firstPageErrorIndicatorBuilder: (context) => noItemFound(),
                 newPageErrorIndicatorBuilder: (context) =>
                     firstPageErrorIndicatorBuilder(context,
                         tittle: "Không có dữ liệu"),
-                noItemsFoundIndicatorBuilder: (context) =>
-                    firstPageErrorIndicatorBuilder(context,
-                        tittle: "Không có dữ liệu"),
+                noItemsFoundIndicatorBuilder: (context) => noItemFound(),
                 firstPageProgressIndicatorBuilder: (context) =>
                     firstPageProgressIndicatorBuilder(),
                 newPageProgressIndicatorBuilder: (context) =>
@@ -161,6 +145,21 @@ class showAdvancceBillManagerState extends State<showAdvancceBillManager> {
     ));
   }
 
+  Widget noItemFound(){
+    return Column(
+      children: [
+        firstPageErrorIndicatorBuilder(context,
+            tittle: "Không có dữ liệu"),
+        GestureDetector(
+          onTap: () => _pagingController.refresh(),
+          child: Text(
+            "Nhấn để tải lại",
+            style: TextStyle(color: welcome_color, fontSize: 18),
+          ),
+        ),
+      ],
+    );
+  }
   //Dùng để search
   void _updateSearchTerm(String searchTerm) {
     _searchTerm = searchTerm;
