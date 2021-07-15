@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rtm_system/model/delete/deleteAPI_deactivateNotice.dart';
 import 'package:rtm_system/model/delete/deleteAPI_deactivateCustomer.dart';
@@ -56,7 +57,7 @@ showAlertDialog(
                   isSuccess: false, content: "Có lỗi xảy ra. Thử lại");
             }
           } else if (isInvoice != null) {
-            doConfirmOrAcceptOrRejectInvoice(context, id, [],3, isCustomer,
+            doConfirmOrAcceptOrRejectInvoice(context, id, [], 3, isCustomer,
                 widgetToNavigator: widget,
                 isRequest: isInvoice,
                 reason: reason);
@@ -285,4 +286,83 @@ Future<Dialog> showCustomDialog(BuildContext context,
               ),
             ));
       });
+}
+
+Future showTextFieldDialog(BuildContext context, {bool isDegree}) async {
+  return await showDialog(
+    context: context,
+    builder: (context) {
+      return new AlertDialog(
+        contentPadding: const EdgeInsets.all(15.0),
+        content: Container(
+          height: isDegree == null ? 80 : 140,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              new TextField(
+                autofocus: true,
+                cursorColor: welcome_color,
+                keyboardType: TextInputType.numberWithOptions(
+                    signed: true, decimal: true),
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'[.[0-9]')),
+                ],
+                decoration: new InputDecoration(
+                    labelText: 'Khối lượng',
+                    labelStyle: TextStyle(color: Colors.black54),
+                    hintText: 'Nhập khối lượng',
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color(0xFF0BB791),
+                      ),
+                    )),
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 15),
+                child: isDegree == null
+                    ? null
+                    : TextField(
+                        autofocus: true,
+                        cursorColor: welcome_color,
+                        keyboardType: TextInputType.numberWithOptions(
+                            signed: true, decimal: true),
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(RegExp(r'[.[0-9]')),
+                        ],
+                        decoration: new InputDecoration(
+                            labelText: 'Khối lượng',
+                            labelStyle: TextStyle(color: Colors.black54),
+                            hintText: 'Nhập khối lượng',
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0xFF0BB791),
+                              ),
+                            )),
+                      ),
+              ),
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          new FlatButton(
+              child: const Text(
+                'Hủy',
+                style: TextStyle(color: Colors.redAccent),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              }),
+          new FlatButton(
+              child: const Text(
+                'Xác nhận',
+                style: TextStyle(color: Colors.green),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              })
+        ],
+      );
+    },
+  );
 }

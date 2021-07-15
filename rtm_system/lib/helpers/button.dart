@@ -530,7 +530,7 @@ Widget btnProcessAdvanceBill(BuildContext context,
 }
 
 Widget btnProcessInvoice(context, int statusId, String id, bool isCustomer,
-    {bool isRequest, Widget widgetToNavigator, InvoiceRequestElement element}) {
+    {bool isRequest, Widget widgetToNavigator, bool isDegree,InvoiceRequestElement element}) {
   var size = MediaQuery.of(context).size;
   //show button để xử lý hoàn thành đơn
   //status = 0 là cho customer xoá hoá đơn gửi yêu cầu.
@@ -583,9 +583,7 @@ Widget btnProcessInvoice(context, int statusId, String id, bool isCustomer,
       );
     } else {
       return Row(
-        mainAxisAlignment: isRequest == true
-            ? MainAxisAlignment.spaceAround
-            : MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Flexible(
             // ignore: deprecated_member_use
@@ -601,7 +599,7 @@ Widget btnProcessInvoice(context, int statusId, String id, bool isCustomer,
                         )));
               },
               child: Text(
-                '${isRequest != null ? "Từ chối" : "Xoá"}',
+                '${isRequest != null ? "Từ chối" : "Xóa"}',
                 style: TextStyle(color: Colors.white, fontSize: 16),
               ),
               shape: RoundedRectangleBorder(
@@ -610,17 +608,17 @@ Widget btnProcessInvoice(context, int statusId, String id, bool isCustomer,
               elevation: 10,
             ),
           ),
-          isRequest == true
-              ? Flexible(
+          Flexible(
                   // ignore: deprecated_member_use
                   child: RaisedButton(
                     color: Color(0xFF0BB791),
                     onPressed: () {
-                      doConfirmOrAcceptOrRejectInvoice(
+                      isRequest != null ? doConfirmOrAcceptOrRejectInvoice(
                           context, id,  [],2, isCustomer,
                           isRequest: isRequest,
                           element: element,
-                          widgetToNavigator: widgetToNavigator);
+                          widgetToNavigator: widgetToNavigator)
+                      : showTextFieldDialog(context, isDegree:isDegree);
                     },
                     child: Text(
                       '${isRequest != null ? "Tạo" : "Cập nhật"}',
@@ -632,7 +630,6 @@ Widget btnProcessInvoice(context, int statusId, String id, bool isCustomer,
                     elevation: 10,
                   ),
                 )
-              : Container(),
         ],
       );
     }
