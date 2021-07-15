@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:rtm_system/presenter/Manager/product/show_product_manager.dart';
 import 'package:rtm_system/helpers/dialog.dart';
 import 'package:rtm_system/helpers/component.dart';
+import 'package:rtm_system/ultils/check_data.dart';
 import 'package:rtm_system/ultils/get_api_data.dart';
 import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
@@ -249,8 +250,9 @@ class _updatePriceProductState extends State<updatePriceProduct> {
           borderRadius: BorderRadius.circular(10),
         ),
         child: TextButton(
-          onPressed: () {
-            if (_checkSubmit()) {
+          onPressed: () async{
+            bool checkInput = await checkUpdatePriceProduct(context, isClick: isClick, price: price);
+            if (checkInput) {
               currentPrice == price
                   ? showCustomDialog(context,
                       content: "Xin hãy nhập giá mới", isSuccess: false)
@@ -273,23 +275,4 @@ class _updatePriceProductState extends State<updatePriceProduct> {
         ));
   }
 
-  _checkSubmit() {
-    if (isClick) {
-      if (price != null) {
-        if (price > 1000) {
-          return true;
-        } else {
-          showCustomDialog(context,
-              content: "Giá phải lớn hơn 1000đ", isSuccess: false);
-          return false;
-        }
-      } else {
-        showCustomDialog(context, content: "Giá đang trống", isSuccess: false);
-        return false;
-      }
-    } else {
-      showCustomDialog(context, content: "Hãy chọn sản phẩm", isSuccess: false);
-      return false;
-    }
-  }
 }

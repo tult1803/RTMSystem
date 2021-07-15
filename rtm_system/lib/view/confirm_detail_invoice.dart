@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rtm_system/helpers/component.dart';
 
+// ignore: must_be_immutable, camel_case_types
 class confirmDetailInvoice extends StatelessWidget {
   bool isCustomer;
   String customerName, phoneNumber, storeId;

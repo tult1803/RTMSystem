@@ -29,7 +29,7 @@ import 'package:rtm_system/model/put/putAPI_updateAccount.dart';
 import 'package:rtm_system/view/customer/Profile/confirm_data_verification.dart';
 import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/message_list.dart';
-import 'package:rtm_system/view/add_product_invoice.dart';
+import 'package:rtm_system/presenter/Manager/invoice/add_product_invoice.dart';
 import 'package:rtm_system/view/customer/home_customer_page.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
 import 'package:rtm_system/view/manager/profile/allCustomer_manager.dart';

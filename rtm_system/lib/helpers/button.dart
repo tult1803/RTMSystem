@@ -60,6 +60,7 @@ Widget btnDateTimeForCustomer(
     children: <Widget>[
       SizedBox(
         width: size.width * 0.35,
+        // ignore: deprecated_member_use
         child: RaisedButton(
           color: Colors.white,
           onPressed: () {},

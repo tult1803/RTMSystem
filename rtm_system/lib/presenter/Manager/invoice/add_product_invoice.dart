@@ -9,6 +9,7 @@ import 'package:rtm_system/model/model_store.dart';
 import 'package:rtm_system/model/model_profile_customer.dart';
 import 'package:rtm_system/helpers/dialog.dart';
 import 'package:rtm_system/helpers/component.dart';
+import 'package:rtm_system/ultils/check_data.dart';
 import 'package:rtm_system/ultils/get_api_data.dart';
 import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/regExp.dart';
@@ -17,7 +18,7 @@ import 'package:rtm_system/view/manager/home_manager_page.dart';
 import 'package:rtm_system/view/table_price.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'manager/form_detail_page.dart';
+import '../../../view/manager/form_detail_page.dart';
 
 // ignore: must_be_immutable
 class AddProductPage extends StatefulWidget {
@@ -142,7 +143,6 @@ class _AddProductPageState extends State<AddProductPage> {
 
   Future<void> _checkDataFromRequest() async {
     setState(() {
-
       this.widget.customerId == null
           ? customerId = ""
           : customerId = widget.customerId;
@@ -291,17 +291,21 @@ class _AddProductPageState extends State<AddProductPage> {
       ),
     );
   }
-  Widget showPriceTable(){
-    if(widget.isCustomer){
-      if(_myProduct != null){
-        return showTablePrice(idProduct: _myProduct,);
-      }else{
+
+  Widget showPriceTable() {
+    if (widget.isCustomer) {
+      if (_myProduct != null) {
+        return showTablePrice(
+          idProduct: _myProduct,
+        );
+      } else {
         return Container();
       }
-    }else{
-       return Container();
+    } else {
+      return Container();
     }
   }
+
   Widget txtAutoFillByPhone({
     TextEditingController controller,
     String error,
@@ -322,8 +326,12 @@ class _AddProductPageState extends State<AddProductPage> {
               autocorrect: false,
               obscureText: false,
               enabled: enabled,
-              onSubmitted: (value) {
+              onSubmitted: (value) async {
                 doOnSubmittedTextField(type, value);
+                if (tittle.contains("Điện thoại")) {
+                  errorPhone = await checkPhoneNumber(value);
+                } else
+                  errorFullName = await checkFullName(context, nameNewCustomer);
               },
               maxLines: 1,
               keyboardType: txtInputType,
@@ -489,45 +497,25 @@ class _AddProductPageState extends State<AddProductPage> {
     );
   }
 
-  void _validate() {
-    if (phoneNewCustomer == null || phoneNewCustomer == "") {
-      errorPhone = "Số điện thoại trống";
-    } else {
-      if (!checkFormatPhone.hasMatch(phoneNewCustomer) ||
-          phoneNewCustomer.length > 11) {
-        errorPhone = "Số điện thoại sai (10-11 só)";
-      } else {
-        errorPhone = null;
-      }
-    }
-    if (nameNewCustomer == null || nameNewCustomer == " ") {
-      errorFullName = "Tên khách hàng trống";
-    } else {
-      errorFullName = null;
-      if (_myProduct == null) {
-        showCustomDialog(context,
-            content: "Chưa chọn sản phẩm", isSuccess: false);
-      }
-    }
-    if (quantity == 0) {
-      errorQuantity = "Số ký đang trống";
-    } else
-      errorQuantity = null;
-    if (!checkProduct) {
-      if (degree == 0) {
-        errorDegree = "Số độ trống";
-      } else
-        errorDegree = null;
-    }
+  void _validate() async {
+    errorPhone = await checkPhoneNumber(phoneNewCustomer);
+    errorFullName = await checkFullName(context, nameNewCustomer);
+    checkChooseProduct(context, _myProduct);
+    errorQuantity = await checkQuantity(quantity);
+    errorDegree = await checkDegree(checkProduct, degree);
+
     if (errorPhone == null &&
         errorQuantity == null &&
         errorFullName == null &&
         _myProduct != null) {
-      if (checkProduct) {
-        _navigator("Xác nhận hóa đơn");
-      } else if (!checkProduct && errorDegree == null) {
+      if (checkProduct || (!checkProduct && errorDegree == null)) {
         _navigator("Xác nhận hóa đơn");
       }
+      // if (checkProduct ) {
+      //   _navigator("Xác nhận hóa đơn");
+      // } else if (!checkProduct && errorDegree == null) {
+      //   _navigator("Xác nhận hóa đơn");
+      // }
     }
   }
 
@@ -561,9 +549,12 @@ class _AddProductPageState extends State<AddProductPage> {
                       setState(() {
                         _myProduct = newValue;
                         _getCurrentPrice(newValue);
-                        _myProduct == "SP-1000003"
-                            ? checkProduct = false
-                            : checkProduct = true;
+                        if (_myProduct == "SP-1000003") {
+                          checkProduct = false;
+                        } else {
+                          degree = 0;
+                          checkProduct = true;
+                        }
                         checkClick = true;
                       });
                     }
@@ -655,20 +646,24 @@ class _AddProductPageState extends State<AddProductPage> {
       color: Colors.white,
       child: TextField(
         controller: isQuantity ? txtController : null,
-        onSubmitted: (value) {
-          if (value.isNotEmpty) {
+        onSubmitted: (value) async {
+          try {
             if (isQuantity) {
-              insertQuantity(value);
-              quantity = 0;
-              listQuantity.forEach((element) {
-                quantity += double.parse(element);
-              });
-              txtController.clear();
-            } else
-              this.degree = double.parse(value);
-            setState(() {
-              checkClick = true;
-            });
+              if (value.isNotEmpty) {
+                insertQuantity(value);
+                quantity = 0;
+                listQuantity.forEach((element) {
+                  quantity += double.parse(element);
+                });
+                txtController.clear();
+                errorQuantity = await checkQuantity(quantity);
+              }
+            } else {
+              this.degree = double.tryParse(value.isEmpty ? "0" : value);
+              errorDegree = await checkDegree(checkProduct, degree);
+            }
+          } catch (_) {
+            print('Lỗi add_product_invoice => _txtItemProduct ');
           }
         },
         maxLines: maxLines,
@@ -711,7 +706,7 @@ class _AddProductPageState extends State<AddProductPage> {
   //Hiển thị ra các container nhỏ khi nhập số cân
   Widget containerWeight({String value}) {
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
         setState(() {
           removeAtQuantity(value);
           quantity = 0;
@@ -719,6 +714,7 @@ class _AddProductPageState extends State<AddProductPage> {
             quantity += double.parse(element);
           });
         });
+        errorQuantity = await checkQuantity(quantity);
       },
       child: Container(
           margin: EdgeInsets.only(top: 10),
@@ -891,7 +887,12 @@ class _AddProductPageState extends State<AddProductPage> {
                     price: "$price",
                     productName: "$productName",
                     storeName: "$storeName",
-                    widgetToNavigator: widget.widgetToNavigator == null ? HomeAdminPage(index: 1, indexInsidePage: 1,) : widget.widgetToNavigator,
+                    widgetToNavigator: widget.widgetToNavigator == null
+                        ? HomeAdminPage(
+                            index: 1,
+                            indexInsidePage: 1,
+                          )
+                        : widget.widgetToNavigator,
                     isCustomer: widget.isCustomer,
                   ),
                 )));
