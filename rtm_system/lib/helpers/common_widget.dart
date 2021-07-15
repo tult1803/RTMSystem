@@ -1030,6 +1030,7 @@ Widget boxForAdvanceHistory({
   String customerId,
   int returnCash,
   bool isAdvance,
+  bool isPaid,
   String dateTime,
   //ngay tra no
   String receiveDate,
@@ -1038,7 +1039,7 @@ Widget boxForAdvanceHistory({
   String amountAfterFormat,
       cashAfterFormat,
       dateTimeAfterFormat,
-      receiveDateAfterFormat;
+      receiveDateAfterFormat, titleStatus;
   try {
     amountAfterFormat = "${getFormatPrice(amount.toString())} đ";
     cashAfterFormat = "${getFormatPrice(returnCash.toString())} đ";
@@ -1047,6 +1048,17 @@ Widget boxForAdvanceHistory({
         "${getDateTime(receiveDate, dateFormat: 'dd-MM-yyyy')}";
   } catch (_) {
    
+  }
+  Color statusAdvance;
+  if(isAdvance && isPaid){
+    titleStatus = "Đã trả nợ" ;
+    statusAdvance = primaryColor;
+  }else if(!isAdvance && !isPaid){
+    titleStatus = "Đã trả xong" ;
+    statusAdvance = primaryColor;
+  }else{
+    titleStatus = "Đã mượn" ;
+    statusAdvance = getColorStatus(status: 4);
   }
   return GestureDetector(
     onTap: () => Navigator.of(context)
@@ -1084,9 +1096,9 @@ Widget boxForAdvanceHistory({
                   alignment: Alignment.centerRight,
                   paddingLeftOfText: 10,
                   paddingRightOfText: 10,
-                  tittle: isAdvance ? "Đã mượn" : "Đã trả nợ",
+                  tittle: titleStatus,
                   fontWeight: FontWeight.w600,
-                  color: isAdvance ? getColorStatus(status: 4) : primaryColor,
+                  color: statusAdvance,
                 ),
               ),
             ],
