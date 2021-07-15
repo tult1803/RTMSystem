@@ -1052,10 +1052,10 @@ Widget boxForAdvanceHistory({
   Color statusAdvance;
   if(isAdvance && isPaid){
     titleStatus = "Đã trả nợ" ;
-    statusAdvance = primaryColor;
+    statusAdvance = getColorStatus(status: 9);
   }else if(!isAdvance && !isPaid){
     titleStatus = "Đã trả xong" ;
-    statusAdvance = primaryColor;
+    statusAdvance = getColorStatus(status: 9);
   }else{
     titleStatus = "Đã mượn" ;
     statusAdvance = getColorStatus(status: 4);

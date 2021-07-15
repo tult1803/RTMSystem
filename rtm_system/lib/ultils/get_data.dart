@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 
-
 //Chuyển trạng thái từ số thành chữ
 getLevel({int level}) {
   switch (level) {
@@ -53,6 +52,8 @@ getStatus({int status}) {
       break;
     case 8:
       return "Chấp nhận";
+    case 9:
+      return "Đã trả nợ";
       break;
   }
 }
@@ -71,11 +72,11 @@ getStatusUpdatePrice({String date}) {
 getColorStatusUpdatePrice({String date}) {
   Color color = Colors.black54;
   DateTime toDay = DateTime.now();
-   toDay
-      .difference(
-      DateTime.parse(getDateTime(date, dateFormat: "yyyy-MM-dd")))
-      .inDays ==
-      0
+  toDay
+              .difference(
+                  DateTime.parse(getDateTime(date, dateFormat: "yyyy-MM-dd")))
+              .inDays ==
+          0
       ? color = Colors.green
       : color = Colors.redAccent;
   return color;
@@ -100,6 +101,8 @@ getColorStatus({int status}) {
     color = primaryColor;
   } else if (status == 7) {
     color = Colors.blueGrey;
+  } else if (status == 9) {
+    color = primaryColor;
   }
 
   return color;
@@ -141,4 +144,3 @@ getFormatPrice(String price) {
   final oCcy = new NumberFormat("#,##0", "en_US");
   return oCcy.format(double.parse("${price}"));
 }
-
