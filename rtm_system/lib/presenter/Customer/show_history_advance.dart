@@ -166,6 +166,7 @@ class _showHistoryAdvancePageState extends State<showHistoryAdvancePage> {
                                         isAdvance: item.advance,
                                         dateTime: item.datetime,
                                         receiveDate: item.receiveDate,
+                                        isPaid: item.paid,
                                         widget: FormForDetailPage(
                                           tittle: "Chi tiết đơn trả nợ",
                                           bodyPage: DetailAdvanceReturn(
@@ -184,8 +185,9 @@ class _showHistoryAdvancePageState extends State<showHistoryAdvancePage> {
                                         isAdvance: item.advance,
                                         dateTime: item.datetime,
                                         receiveDate: item.receiveDate,
+                                        isPaid: item.paid,
                                         widget: FormForDetailPage(
-                                          tittle: "Chi tiết yêu cầu",
+                                          tittle: "Chi tiết ứng tiền",
                                           bodyPage: DetailAdvancePage(
                                             isCustomer: true,
                                             id: item.id,

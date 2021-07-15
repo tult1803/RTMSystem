@@ -36,6 +36,7 @@ class showAdvancceBillManagerState extends State<showAdvancceBillManager> {
       GetAdvanceRequest getAPIAllInvoice = GetAdvanceRequest();
       advanceBill = await getAPIAllInvoice.getAdvanceRequest(
         prefs.get("access_token"),
+        0,
         "",
         prefs.get("phone"),
         widget.statusId,

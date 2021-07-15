@@ -70,6 +70,7 @@ class _PayDebtState extends State<PayDebt> {
     GetAdvanceRequest getAdvanceRequest = GetAdvanceRequest();
     listAdvance = await getAdvanceRequest.getAdvanceRequest(
       prefs.get("access_token"),
+      1,
       prefs.get("accountId"),
       prefs.get("phone"),
       8, //get all status
@@ -311,7 +312,6 @@ class _PayDebtState extends State<PayDebt> {
                       ),
 
                       Container(
-                        height: 500,
                         margin: EdgeInsets.fromLTRB(5, 12, 5, 12),
                         child: Column(
                           children: [

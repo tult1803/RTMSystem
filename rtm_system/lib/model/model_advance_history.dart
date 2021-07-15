@@ -7,6 +7,7 @@ class AdvanceHistory {
         this.returnCash,
         this.advance,
         this.receiveDate,
+        this.paid,
     });
 
     String id;
@@ -16,6 +17,7 @@ class AdvanceHistory {
     int returnCash;
     bool advance;
     String receiveDate;
+    bool paid;
 
     factory AdvanceHistory.fromJson(Map<String, dynamic> json) => AdvanceHistory(
         id: json["id"],
@@ -25,5 +27,6 @@ class AdvanceHistory {
         returnCash: json["return_cash"],
         advance: json["_advance"],
         receiveDate: json["receive_date"] == null ? null : json["receive_date"],
+        paid: json["_paid"],
     );
 }

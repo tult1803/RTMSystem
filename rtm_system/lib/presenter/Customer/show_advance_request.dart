@@ -37,6 +37,7 @@ int totalAdvance = 0;
       GetAdvanceRequest getAdvanceRequest = GetAdvanceRequest();
       advanceRequest = await getAdvanceRequest.getAdvanceRequest(
         prefs.get("access_token"),
+        0,
         prefs.get("accountId"),
         prefs.get("phone"),
         widget.status == null ? 0 : widget.status, //get all status
@@ -165,7 +166,7 @@ int totalAdvance = 0;
                                     name: item.customerName,
                                     receiveDate: item.receiveDate,
                                     widget: FormForDetailPage(
-                                      tittle: "Chi tiết yêu cầu",
+                                      tittle: "Chi tiết ứng tiền",
                                       bodyPage: DetailAdvancePage(
                                         isCustomer: true,
                                         id: item.id,
