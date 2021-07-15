@@ -50,35 +50,33 @@ class _showProfileState extends State<showProfile> {
     return FutureBuilder(
       future: _getAPIProfile(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return Container(
-          height: size.height,
-          child: Center(
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      width: size.width * 0.5,
-                      height: size.height * 0.16,
-                      child: Center(
-                        child: Image(
-                          image: AssetImage("images/avt.png"),
+        return SingleChildScrollView(
+          child: Container(
+            child: Center(
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        width: size.width * 0.5,
+                        height: size.height * 0.16,
+                        child: Center(
+                          child: Image(
+                            image: AssetImage("images/avt.png"),
+                          ),
                         ),
                       ),
-                    ),
-                    btnChooseOption(
-                        context, size.width * 0.45, infomationCustomer.level),
-                  ],
-                ),
-                SizedBox(
-                  height: 12,
-                ),
-                showInforCustomer(snapshot.hasData, snapshot.hasError),
-                btnLogout(context),
-                SizedBox(
-                  height: 12,
-                ),
-              ],
+                      btnChooseOption(
+                          context, size.width * 0.45, infomationCustomer.level),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 12,
+                  ),
+                  showInforCustomer(snapshot.hasData, snapshot.hasError),
+                  btnLogout(context),
+                ],
+              ),
             ),
           ),
         );
@@ -90,7 +88,7 @@ class _showProfileState extends State<showProfile> {
   Widget showInforCustomer(hasData, isError) {
     if (hasData) {
       return Container(
-        margin: EdgeInsets.fromLTRB(0, 0, 0, 12),
+        margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
         color: Colors.white,
         child: Center(
           child: Column(

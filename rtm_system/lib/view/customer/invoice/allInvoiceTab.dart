@@ -6,7 +6,7 @@ import 'package:rtm_system/presenter/Customer/show_invoice_request.dart';
 import 'package:rtm_system/helpers/button.dart';
 import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
-import 'package:rtm_system/view/add_product_invoice.dart';
+import 'package:rtm_system/presenter/Manager/invoice/add_product_invoice.dart';
 import 'package:rtm_system/view/customer/get_money_deposit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
