@@ -37,13 +37,27 @@ dependencies:
   rxdart: ^0.27.1
   firebase_core: ^1.2.0
   google_fonts: ^2.1.0
+  flutter_easyloading: ^3.0.0
   flutter_datetime_picker:
     git:
       url: https://github.com/Realank/flutter_datetime_picker.git
       ref: master
+
+  path: ^1.8.0
+  path_provider: ^2.0.2
+  camera: ^0.8.1+3
+  image_picker: ^0.8.0+4
+  thumbnailer: ^2.0.0
+  multipart_request: ^0.3.1
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.0
+  dio: ^4.0.0
+  async: ^2.6.1
+  get: ^4.1.4
+  flutter_bloc: ^7.0.1
+  contained_tab_bar_view: ^0.8.0
+  grouped_buttons: ^1.0.4
 
 dev_dependencies:
   flutter_test:
@@ -63,6 +77,12 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
       - images/rtmLogo.png
+      - images/maintain.png
+      - images/cmnd_front.png
+      - images/cmnd_back.png
+      - images/face_scan.png
+      - images/iconSad.png
+      - images/iconSmile.png
       - images/icon.png
       - images/logo_profile.png
       - images/notice_detail.png

@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:rtm_system/presenter/Manager/profile/showCustomer.dart';
-import 'package:rtm_system/ultils/commonWidget.dart';
-import 'package:rtm_system/ultils/component.dart';
+import 'package:rtm_system/presenter/Manager/profile/show_customer.dart';
+import 'package:rtm_system/helpers/common_widget.dart';
+import 'package:rtm_system/helpers/component.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 
-import 'createNewCustomer.dart';
+import '../home_manager_page.dart';
+import 'create_new_customer.dart';
 
 class AllCustomer extends StatefulWidget {
-  const AllCustomer({Key key}) : super(key: key);
+final Widget widgetToNavigator;
+
+  const AllCustomer({this.widgetToNavigator});
 
   @override
   _AllCustomerState createState() => _AllCustomerState();
@@ -18,7 +21,7 @@ class _AllCustomerState extends State<AllCustomer> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: leadingAppbar(context),
+        leading: leadingAppbar(context, widget: this.widget.widgetToNavigator == null ? HomeAdminPage(index: 4,): this.widget.widgetToNavigator),
         centerTitle: true,
         backgroundColor: welcome_color,
         title: Text(

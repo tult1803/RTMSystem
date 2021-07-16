@@ -4,7 +4,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rtm_system/model/model_login.dart';
-import 'package:rtm_system/model/postAPI_login.dart';
+import 'package:rtm_system/model/post/postAPI_login.dart';
 import 'package:rtm_system/presenter/check_login.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/customer/home_customer_page.dart';
@@ -28,11 +28,11 @@ class LoginPageState extends State<LoginPage> {
     color: Colors.black54,
   );
   static bool isLogin = false;
-  var roleId = 0, accountId = 0;
-  String username = "";
+  var roleId = 0;
+  String username = "", accountId = "";
   String password;
   String accessToken = '';
-  String fullname = "";
+  String fullName = "";
   int gender = 0;
   String phone = '';
   String birthday = '';
@@ -40,7 +40,6 @@ class LoginPageState extends State<LoginPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     checkSaveLogin(context);
   }
@@ -90,10 +89,10 @@ class LoginPageState extends State<LoginPage> {
     data = await getAPI.createLogin(username, password);
     status = PostLogin.status;
     setState(() {
-      roleId = data.role_id;
-      accessToken = data.access_token;
+      roleId = data.roleId;
+      accessToken = data.accessToken;
       accountId = data.accountId;
-      fullname = data.fullname;
+      fullName = data.fullName;
       phone = data.phone;
       birthday = data.birthday;
       gender = data.gender;
@@ -108,25 +107,25 @@ class LoginPageState extends State<LoginPage> {
       print('Error from LoginApi !!!');
     }
     if (roleId == 3 && status == 200) {
-      savedInfoLogin(roleId, accountId, gender, accessToken, fullname, phone,
+      savedInfoLogin(roleId, accountId, gender, accessToken, fullName, phone,
           birthday, password);
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
               builder: (context) => HomeCustomerPage(
-                    index: 2,
+                    index: 0,
                   )),
           (route) => false);
       print('Status button: Done');
       _buttonState = ButtonState.normal;
     } else if (roleId == 2 && status == 200) {
-      savedInfoLogin(roleId, accountId, gender, accessToken, fullname, phone,
+      savedInfoLogin(roleId, accountId, gender, accessToken, fullName, phone,
           birthday, password);
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
               builder: (context) => HomeAdminPage(
-                    index: 2,
+                    index: 0,
                   )),
           (route) => false);
       print('Status button: Done');

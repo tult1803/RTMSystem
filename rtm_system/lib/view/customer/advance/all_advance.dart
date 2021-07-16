@@ -1,93 +1,222 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:rtm_system/presenter/Customer/show_all_advance.dart';
-import 'package:rtm_system/ultils/commonWidget.dart';
-import 'package:rtm_system/ultils/component.dart';
+import 'package:rtm_system/helpers/component.dart';
+import 'package:rtm_system/model/get/getAPI_customer_phone.dart';
+import 'package:rtm_system/model/model_profile_customer.dart';
+import 'package:rtm_system/presenter/Customer/show_advance_request.dart';
+import 'package:rtm_system/presenter/Customer/show_history_advance.dart';
+import 'package:rtm_system/helpers/button.dart';
+import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/customer/advance/create_request_advance.dart';
-import 'package:rtm_system/view/customer/getMoney_or_payDebt.dart';
+import 'package:rtm_system/view/customer/pay_advance.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AdvancePage extends StatefulWidget {
-  const AdvancePage({Key key, this.money}) : super(key: key);
-  final String money;
+  const AdvancePage({Key key}) : super(key: key);
 
   @override
-  _AdvancePageState createState() => _AdvancePageState();
+  State<AdvancePage> createState() => _AdvancePageState();
 }
 
-class _AdvancePageState extends State<AdvancePage> {
-  var currentDate = new DateTime.now();
-  var formatter = new DateFormat('dd-MM-yyyy');
-  DateTime fromDate;
-  DateTime toDate;
-  String search = '';
+DateTime fromDate;
+DateTime toDate;
+
+class _AdvancePageState extends State<AdvancePage> with TickerProviderStateMixin {
+  TabController _tabController;
+  String getFromDate, getToDate;
+  int index, _selectedIndex;
+  GetAPIProfileCustomer getAPIProfileCustomer = GetAPIProfileCustomer();
+  InfomationCustomer infomationCustomer = InfomationCustomer();
+  int level = 0;
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+     //tab 1: yeu cau
+    index = 0;
+    _tabController = TabController(length: 4, vsync: this);
+    _tabController.addListener(() {
+      setState(() {
+        _selectedIndex = _tabController.index;
+      });
+    });
+    getAPIProfile();
     toDate = DateTime.now();
     fromDate = DateTime.now().subtract(Duration(days: 30));
+    setState(() {
+      getFromDate =
+          "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
+      getToDate =
+          "${getDateTime("$toDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
+    });
+  }
+
+  Future getAPIProfile() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    String token = sharedPreferences.getString('access_token');
+    String phone = sharedPreferences.getString('phone');
+    // Đỗ dữ liệu lấy từ api
+    infomationCustomer =
+        await getAPIProfileCustomer.getProfileCustomer(token, phone);
+    setState(() {
+      level = infomationCustomer.level;
+    });
+    return infomationCustomer;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffEEEEEE),
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(0.0),
-        child: AppBar(
-          backgroundColor: Color(0xFF0BB791),
-          elevation: 0,
+      backgroundColor: backgroundColor,
+      appBar: AppBar(
+        backgroundColor: primaryColor,
+        centerTitle: true,
+        title: titleAppBar('Ứng tiền'),
+        bottom: bottomTabBar(),
+      ),
+      body: tabView(),
+      floatingActionButton: level != 0
+          ? showFloatBtn(_selectedIndex)
+          : showHiddenFloatBtn(),
+    );
+  }
+
+  Widget bottomTabBar() {
+    return TabBar(
+      labelPadding: EdgeInsets.symmetric(horizontal: 7.0),
+      indicatorColor: primaryColor,
+      isScrollable: true,
+      labelColor: Colors.white,
+      unselectedLabelColor: Colors.white.withOpacity(0.5),
+      controller: _tabController,
+      tabs: <Widget>[
+        Tab(
+          text: 'Chờ duyệt',
         ),
-      ),
-      body: SingleChildScrollView(
-        child: Container(
-            margin: EdgeInsets.only(
-              bottom: 12,
-            ),
-            child: Column(
-              children: [
-                headerInvoice(
-                    'Ứng tiền', 'Tổng số tiền phải trả', '${widget.money} VND'),
-                Container(
-                  margin: EdgeInsets.only(top: 12, bottom: 5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      _txtFormField(this.search, false, "Nhập mã hoá đơn", 1,
-                          TextInputType.text),
-                      btnWaitingProcess(context, false),
-                    ],
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    btnDateTime(context, "${formatter.format(fromDate)}",
-                        Icon(Icons.date_range), datePick()),
-                    SizedBox(
-                      child: Center(
-                          child: Container(
-                              alignment: Alignment.topCenter,
-                              height: 20,
-                              child: Text(
-                                "-",
-                                style: TextStyle(fontSize: 20),
-                              ))),
-                    ),
-                    btnDateTime(context, "${formatter.format(toDate)}",
-                        Icon(Icons.date_range), datePick()),
-                  ],
-                ),
-                SizedBox(
-                  height: 12,
-                ),
-                showAdvance(),
-                _showBottomButton(),
-              ],
-            )),
-      ),
+        Tab(
+          text: 'Đã duyệt',
+        ),
+        Tab(
+          text: 'Huỷ bỏ',
+        ),
+        Tab(
+          text: 'Lịch sử giao dịch',
+        ),
+      ],
+    );
+  }
+  Widget tabView(){
+    var size = MediaQuery.of(context).size;
+    return TabBarView(
+        controller: _tabController,
+        children: <Widget>[
+          //show advance chờ xử lý
+          containerAdvance(size.height, 4),
+          //Show advance được chấp nhận, đã mượn
+          containerAdvance(size.height, 8),
+          //Show advance bị từ chối
+          containerAdvance(size.height, 6),
+          //show advance đã trả
+          containerAdvanceHistory(size.height, 8),
+        ],
+      );
+  }
+  //show invoice advance request
+  Widget containerAdvance(height, status) {
+    return Container(
+        height: height,
+        margin: EdgeInsets.only(left: 5, top: 12, right: 5),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              rowButtonDatetime(),
+              new showAdvanceRequestPage(status,
+                  fromDate: getFromDate, toDate: getToDate),
+            ],
+          ),
+        ));
+  }
+
+  //show invoice advance history
+  Widget containerAdvanceHistory(height, status) {
+    return Container(
+        height: height,
+        margin: EdgeInsets.only(left: 5, top: 12, right: 5),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              new showHistoryAdvancePage(),
+            ],
+          ),
+        ));
+  }
+  
+  Widget showFloatBtn(index) {
+    if (index == 1) {
+      return FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => PayDebt()),
+          );
+        },
+        label: Text(
+          'Trả nợ',
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+        backgroundColor: primaryColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(50.0),
+        ),
+        elevation: 10,
+      );
+    } else {
+      return FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => CreateRequestAdvance()),
+          );
+        },
+        child: Icon(
+          Icons.post_add_outlined,
+          color: Colors.white,
+          size: 25,
+        ),
+        backgroundColor: primaryColor,
+      );
+    }
+  }
+
+  Widget rowButtonDatetime() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        btnDateTimeForCustomer(
+            context,
+            "${getDateTime("$fromDate", dateFormat: "dd-MM-yyyy")}",
+            Icon(Icons.date_range),
+            datePick()),
+        SizedBox(
+          child: Center(
+              child: Container(
+                  alignment: Alignment.topCenter,
+                  height: 20,
+                  child: Text(
+                    "-",
+                    style: TextStyle(fontSize: 20),
+                  ))),
+        ),
+        btnDateTimeForCustomer(
+            context,
+            "${getDateTime("$toDate", dateFormat: "dd-MM-yyyy")}",
+            Icon(Icons.date_range),
+            datePick()),
+      ],
     );
   }
 
@@ -98,6 +227,7 @@ class _AdvancePageState extends State<AdvancePage> {
           pickedDate();
         });
       },
+      child: null,
     );
   }
 
@@ -120,7 +250,7 @@ class _AdvancePageState extends State<AdvancePage> {
                 ),
                 //Dùng cho nút chọn ngày và background
                 colorScheme: ColorScheme.light(
-                  primary: welcome_color,
+                  primary: primaryColor,
                 )),
             child: child,
           );
@@ -129,126 +259,11 @@ class _AdvancePageState extends State<AdvancePage> {
       setState(() {
         fromDate = dateRange.start;
         toDate = dateRange.end;
+        getFromDate =
+            "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
+        getToDate =
+            "${getDateTime("${toDate}", dateFormat: "yyyy-MM-dd 23:59:59")}";
       });
     }
-  }
-
-  Widget btnDateTime(
-      BuildContext context, String tittle, Icon icon, Widget widget) {
-    var size = MediaQuery.of(context).size;
-    return Stack(
-      children: <Widget>[
-        SizedBox(
-          width: 140,
-          child: RaisedButton(
-            color: Colors.white70,
-            onPressed: () {},
-            child: Text('$tittle'),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            elevation: 10,
-          ),
-        ),
-        Container(
-            decoration: BoxDecoration(
-              color: Colors.white10,
-              borderRadius: BorderRadius.circular(5),
-              // border: Border.all(color: Colors.black, width: 0.5),
-            ),
-            height: 35.0,
-            width: 120,
-            child: widget),
-      ],
-    );
-  }
-
-  Widget _showBottomButton() {
-    var size = MediaQuery.of(context).size;
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Container(
-              width: size.width * 0.4,
-              child: RaisedButton(
-                color: Colors.white70,
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => GetMoneyOrPayDebt(isPay: true,)),
-                  );
-                },
-                child: Text('Trả nợ'),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                elevation: 10,
-              ),
-            ),
-            Container(
-              width: size.width * 0.4,
-              child: RaisedButton(
-                  color: Color(0xFF0BB791),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => CreateRequestAdvance()),
-                    );
-                  },
-                  child: Text(
-                    'Ứng tiền',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                    ),
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  elevation: 10),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _txtFormField(String value, bool obscureText, String hintText,
-      int maxLines, TextInputType txtType) {
-    var size = MediaQuery.of(context).size;
-    return SizedBox(
-      width:size.width * 0.6,
-      child: TextFormField(
-        initialValue: value,
-        obscureText: obscureText,
-        onChanged: (value) {
-          setState(() {
-            this.search = value.trim();
-          });
-        },
-        maxLines: maxLines,
-        keyboardType: txtType,
-        style: TextStyle(fontSize: 15),
-        cursorColor: welcome_color,
-        decoration: InputDecoration(
-          border: UnderlineInputBorder(),
-          hintText: '$hintText',
-          //Sau khi click vào "Nhập tiêu đề" thì màu viền sẽ đổi
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: welcome_color),
-          ),
-          //Hiển thị Icon góc phải
-          suffixIcon: Icon(
-            Icons.search,
-            color: Colors.black54,
-          ),
-          contentPadding: EdgeInsets.all(15),
-        ),
-      ),
-    );
   }
 }

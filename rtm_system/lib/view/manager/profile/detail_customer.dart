@@ -1,40 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:rtm_system/ultils/commonWidget.dart';
-import 'package:rtm_system/ultils/component.dart';
-import 'package:rtm_system/ultils/helpers.dart';
+import 'package:rtm_system/helpers/common_widget.dart';
+import 'package:rtm_system/helpers/component.dart';
+import 'package:rtm_system/model/model_all_customer.dart';
+import 'package:rtm_system/ultils/get_data.dart';
 
 class DetailCustomer extends StatefulWidget {
-  final Map<String, dynamic> map;
+  final CustomerList customerList;
   final String token;
-  DetailCustomer({this.token, this.map});
+  DetailCustomer({this.token, this.customerList});
 
   @override
   _DetailCustomerState createState() => _DetailCustomerState();
 }
 
 class _DetailCustomerState extends State<DetailCustomer> {
-  int id, accountId, advance, statusId;
-  String cmnd, fullName, phone, birthday, address, gender, status;
-  String vip;
+  int id, advance, statusId;
+  String cmnd, fullName, phone, birthday, address, gender, status, accountId;
 
   Future _getData(){
     setState(() {
-      id = this.widget.map["id"];
-      statusId = this.widget.map["status_id"];
-      status = '${getStatus(status: this.widget.map["status_id"])}';
-      accountId = this.widget.map["account_id"];
-      advance = this.widget.map["advance"];
-      cmnd = this.widget.map["cmnd"];
-      fullName = this.widget.map["fullname"];
-      phone = this.widget.map["phone"];
-      birthday = this.widget.map["birthday"];
-      address = this.widget.map["address"];
+      id = widget.customerList.id;
+      statusId = widget.customerList.statusId;
+      status = '${getStatus(status: widget.customerList.statusId)}';
+      accountId = widget.customerList.accountId;
+      advance = widget.customerList.advance;
+      cmnd = widget.customerList.cmnd;
+      fullName = widget.customerList.fullName;
+      phone = widget.customerList.phone;
+      birthday = widget.customerList.birthday;
+      address = widget.customerList.address;
     });
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     _getData();
     super.initState();
   }
@@ -53,10 +52,10 @@ class _DetailCustomerState extends State<DetailCustomer> {
               advance: advance,
               birthday: birthday,
               cmnd: cmnd,
-              gender: getGender(this.widget.map["gender"]),
+              gender: getGender(widget.customerList.gender),
               phone: phone,
               status: status,
-              vip: getVip(this.widget.map["vip"]),
+              level: "${getLevel(level: widget.customerList.level)}",
               statusId: statusId,
             ),
           )),

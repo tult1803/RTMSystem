@@ -1,42 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:intl/intl.dart';
-import 'package:rtm_system/model/getAPI_invoice.dart';
+import 'package:rtm_system/model/get/getAPI_invoice.dart';
 import 'package:rtm_system/model/model_invoice.dart';
-import 'package:rtm_system/ultils/commonWidget.dart';
-import 'package:rtm_system/ultils/component.dart';
+import 'package:rtm_system/helpers/common_widget.dart';
+import 'package:rtm_system/helpers/component.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
-import 'package:rtm_system/view/detailInvoice.dart';
-import 'package:rtm_system/view/manager/formForDetail_page.dart';
+import 'package:rtm_system/ultils/src/message_list.dart';
+import 'package:rtm_system/view/detail_invoice.dart';
+import 'package:rtm_system/view/manager/form_detail_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+// ignore: must_be_immutable, camel_case_types
 class showAllInvoicePage extends StatefulWidget {
-  const showAllInvoicePage(
-      {Key key, this.idProduct, this.isAll, this.status, this.from, this.to})
-      : super(key: key);
-  final String idProduct;
-  final bool isAll;
-  final DateTime from;
-  final DateTime to;
+  int statusId;
+  String fromDate, toDate;
 
-  //status = 0 is load all
-  final int status;
+  showAllInvoicePage(this.statusId, {this.fromDate, this.toDate});
 
   @override
-  _showAllInvoicePageState createState() => _showAllInvoicePageState();
+  showAllInvoicePageState createState() => showAllInvoicePageState();
 }
 
-DateTime fromDate;
-DateTime toDate;
-var fDate = new DateFormat('dd-MM-yyyy');
-var date = new DateFormat('yyyy-MM-dd hh:mm:ss');
-class _showAllInvoicePageState extends State<showAllInvoicePage> {
+// ignore: camel_case_types
+class showAllInvoicePageState extends State<showAllInvoicePage> {
   int _pageSize = 1;
   final PagingController _pagingController = PagingController(firstPageKey: 10);
-
   String _searchTerm;
   Invoice invoice;
-  List invoiceList;
 
   Future<void> _fetchPage(pageKey) async {
     try {
@@ -45,104 +35,132 @@ class _showAllInvoicePageState extends State<showAllInvoicePage> {
       invoice = await getAPIAllInvoice.getInvoice(
         prefs.get("access_token"),
         prefs.get("accountId"),
-        int.parse(widget.idProduct),
-        widget.status,
+        "",
+        this.widget.statusId,
         pageKey,
         _pageSize,
-        fromDate,
-        toDate,
+        this.widget.fromDate == null ? "" : "${this.widget.fromDate}",
+        this.widget.toDate == null ? "" : "${this.widget.toDate}",
         searchTerm: _searchTerm,
       );
-      invoiceList = invoice.invoices;
-      // print("${_pagingController}");
-      final isLastPage = invoiceList.length < pageKey;
+      final isLastPage = invoice.invoices.length < pageKey;
       if (isLastPage) {
-        _pagingController.appendLastPage(invoiceList);
+        _pagingController.appendLastPage(invoice.invoices);
       } else {
         setState(() {
           _pageSize += 1;
         });
         final nextPageKey = pageKey;
-        _pagingController.appendPage(invoiceList, nextPageKey);
+        _pagingController.appendPage(invoice.invoices, nextPageKey);
       }
     } catch (error) {
-      print(error);
       _pagingController.error = error;
+    }
+  }
+
+  //Hàm này nhận biết sự thay đổi của Widget để thực hiện hành động
+  @override
+  void didUpdateWidget(covariant showAllInvoicePage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.toDate != this.widget.toDate) {
+      _pagingController.refresh();
     }
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _pagingController.addPageRequestListener((pageKey) {
       _fetchPage(pageKey);
-    });
-    setState(() {
-      fromDate = widget.from;
-      toDate = widget.to;
-    });
-
-    // toDate = DateTime.now();
-    // fromDate = DateTime.now().subtract(Duration(days: 30));
-    _pagingController.addStatusListener((status) {
-      if (status == PagingStatus.subsequentPageError) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text(
-              'Có lỗi xảy ra',
-            ),
-            action: SnackBarAction(
-              label: 'Thử lại',
-              onPressed: () => _pagingController.retryLastFailedRequest(),
-            ),
-          ),
-        );
-      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-
-    return Container(
-      margin: EdgeInsets.only(top: 0, left: 5, right: 5),
-      height: widget.isAll ? size.height : size.height * 0.5,
-      width: size.width,
-      child: new CustomScrollView(
-        slivers: <Widget>[
-          PagedSliverList(
-            pagingController: _pagingController,
-            builderDelegate: PagedChildBuilderDelegate(
-                firstPageErrorIndicatorBuilder: (context) =>
-                    firstPageErrorIndicatorBuilder(context,
-                        tittle: "Không có dữ liệu"),
-                firstPageProgressIndicatorBuilder: (context) =>
-                    firstPageProgressIndicatorBuilder(),
-                newPageProgressIndicatorBuilder: (context) =>
-                    newPageProgressIndicatorBuilder(),
-                itemBuilder: (context, item, index) {
-                  return boxForInvoice(
-                      context: context,
-                      status: item['status_id'],
-                      date: "${item['create_time']}",
-                      total: "${item['price']}",
-                      id: item['id'],
-                      name: item["customer_name"],
-                      product: item["product_name"],
-                      widget: FormForDetailPage(
-                        tittle: "Chi tiết hóa đơn",
-                        bodyPage: DetailInvoice(
-                          map: item,
-                          isCustomer: true,
+    return SingleChildScrollView(
+      child: Container(
+        // nếu để size.height khi nó show từ 6 invoice trở lên, sẽ không thể chọn hoá đơn thứ 5 or 6.
+        // khi kéo xuống thả ra nó tự động trở lại hoá đơn đầu
+        height: size.height * 0.65,
+        width: size.width,
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(5, 12, 5, 8),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: 0.5,
+                  child: Container(),
+                ),
+                Expanded(
+                  child: Container(
+                    margin: EdgeInsets.only(top: 0, left: 5, right: 5),
+                    height: size.height,
+                    width: size.width,
+                    child: new CustomScrollView(
+                      slivers: <Widget>[
+                        PagedSliverList(
+                          pagingController: _pagingController,
+                          builderDelegate: PagedChildBuilderDelegate(
+                              firstPageErrorIndicatorBuilder: (context) {
+                                return Column(
+                                  children: [
+                                    firstPageErrorIndicatorBuilder(context,
+                                        tittle: showMessage("", MSG008)),
+                                    GestureDetector(
+                                      onTap: () => _pagingController.refresh(),
+                                      child: Text(
+                                        showMessage('', MSG027),
+                                        style: TextStyle(
+                                            color: primaryLight3Color,
+                                            fontSize: 18),
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                              newPageErrorIndicatorBuilder: (context) =>
+                                  firstPageErrorIndicatorBuilder(context,
+                                      tittle: showMessage("", MSG008)),
+                              firstPageProgressIndicatorBuilder: (context) =>
+                                  firstPageProgressIndicatorBuilder(),
+                              noItemsFoundIndicatorBuilder: (context) =>
+                                  noItemsFoundIndicatorBuilder(),
+                              newPageProgressIndicatorBuilder: (context) =>
+                                  newPageProgressIndicatorBuilder(),
+                              itemBuilder: (context, item, index) {
+                                return boxForInvoice(
+                                    context: context,
+                                    status: item.statusId,
+                                    createDate: "${item.createTime}",
+                                    price: item.price,
+                                    degree: item.degree,
+                                    quantity: item.quantity,
+                                    id: item.id,
+                                    name: item.customerName,
+                                    product: item.productName,
+                                    widget: FormForDetailPage(
+                                      tittle: "Chi tiết hóa đơn",
+                                      bodyPage: new DetailInvoice(
+                                        isCustomer: true,
+                                        invoiceElement: item,
+                                      ),
+                                    ),
+                                    isRequest: false,
+                                    isCustomer: true);
+                              }),
                         ),
-                      ),
-                      isCustomer: true,
-                      isRequest: false);
-                }),
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
-        ],
+        ),
       ),
     );
   }
@@ -153,49 +171,19 @@ class _showAllInvoicePageState extends State<showAllInvoicePage> {
     super.dispose();
   }
 
-//Copy nó để tái sử dụng cho các trang khác nếu cần
-// Không thể tách vì nó có hàm setState
-  Widget datePick() {
-    return TextButton(
-      onPressed: () {
-        setState(() {
-          pickedDate();
-        });
-      },
+  Widget noItemsFoundIndicatorBuilder() {
+    return Column(
+      children: [
+        firstPageErrorIndicatorBuilder(context,
+            tittle: showMessage("", MSG008)),
+        GestureDetector(
+          onTap: () => _pagingController.refresh(),
+          child: Text(
+            showMessage('', MSG027),
+            style: TextStyle(color: welcome_color, fontSize: 18),
+          ),
+        ),
+      ],
     );
-  }
-
-  Future pickedDate() async {
-    final initialDateRange = DateTimeRange(start: fromDate, end: toDate);
-    final ThemeData theme = Theme.of(context);
-    DateTimeRange dateRange = await showDateRangePicker(
-        context: context,
-        firstDate: DateTime(2000),
-        lastDate: DateTime.now(),
-        initialDateRange: initialDateRange,
-        saveText: "Xác nhận",
-        builder: (context, child) {
-          return Theme(
-            data: Theme.of(context).copyWith(
-                //Dùng cho nút "X" của lịch
-                appBarTheme: AppBarTheme(
-                  iconTheme:
-                      theme.primaryIconTheme.copyWith(color: Colors.white),
-                ),
-                //Dùng cho nút chọn ngày và background
-                colorScheme: ColorScheme.light(
-                  primary: welcome_color,
-                )),
-            child: child,
-          );
-        });
-    if (dateRange != null) {
-      print('Date ' + fromDate.toString());
-      setState(() {
-        fromDate = dateRange.start;
-        toDate = dateRange.end;
-        _pagingController.refresh();
-      });
-    }
   }
 }

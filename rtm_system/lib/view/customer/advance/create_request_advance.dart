@@ -2,16 +2,17 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:intl/intl.dart';
-import 'package:rtm_system/ultils/alertDialog.dart';
-import 'package:rtm_system/ultils/component.dart';
+import 'package:rtm_system/model/get/getAPI_allStore.dart';
+import 'package:rtm_system/model/model_store.dart';
+import 'package:rtm_system/helpers/component.dart';
+import 'package:rtm_system/ultils/get_data.dart';
+import 'package:rtm_system/ultils/src/color_ultils.dart';
+import 'package:rtm_system/ultils/src/message_list.dart';
 import 'package:rtm_system/ultils/src/regExp.dart';
-import 'package:rtm_system/view/customer/advance/detail_advance.dart';
-import 'package:rtm_system/view/customer/home_customer_page.dart';
+import 'package:rtm_system/view/customer/advance/confirm_create_request_advance.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CreateRequestAdvance extends StatefulWidget {
-  const CreateRequestAdvance({Key key}) : super(key: key);
-
   @override
   _CreateRequestAdvanceState createState() => _CreateRequestAdvanceState();
 }
@@ -19,122 +20,156 @@ class CreateRequestAdvance extends StatefulWidget {
 final _formKey = GlobalKey<FormState>();
 
 class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
-  final f = new DateFormat('dd/MM/yyyy');
   String money;
-  DateTime dateNow = DateTime.now();
-  DateTime dateSale = DateTime.now();
-  String status = 'Dang cho';
+  DateTime createDate;
+  List listInfor;
+  Store store;
+  List<StoreElement> dataListStore;
+  String _myStore, reason = '';
+
+  Future _getStore() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    GetAPIAllStore getAPIAllStore = GetAPIAllStore();
+    store = await getAPIAllStore.getStores(
+      prefs.get("access_token"),
+      1000,
+      1,
+    );
+    dataListStore = store.stores;
+    setState(() {
+      if (dataListStore.length == 1) {
+        _myStore = dataListStore[0].id;
+      }
+    });
+    return dataListStore;
+  }
+
   @override
   void initState() {
-    // TODO: implement initState
+    setState(() {
+      createDate = DateTime.now();
+    });
+    _getStore();
   }
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: Color(0xffEEEEEE),
+      backgroundColor: backgroundColor,
       appBar: AppBar(
         leading: leadingAppbar(context),
         centerTitle: true,
-        backgroundColor: Color(0xFF0BB791),
-        title: Text(
-          "Tạo yêu cầu ứng tiền",
-          style: TextStyle(
-              color: Colors.white, fontWeight: FontWeight.w500, fontSize: 22),
-        ),
+        backgroundColor: primaryColor,
+        title: titleAppBar("Tạo yêu cầu ứng tiền"),
       ),
       body: SingleChildScrollView(
         child: Container(
             color: Colors.white,
-            margin: EdgeInsets.only(
-              top: 50,
-            ),
+            margin: EdgeInsets.only(top: 50, bottom: 24),
             child: Column(
               children: [
+                _dropdownListStore(),
+                SizedBox(
+                  height: 1,
+                  child: Container(
+                    margin: EdgeInsets.only(left: 10, right: 10),
+                    width: size.width,
+                    color: Colors.black45,
+                  ),
+                ),
                 Column(
                   children: [
                     _formMoney(false, "Nhập số tiền VND", "Số tiền",
                         TextInputType.number),
+                    _txtFormField('', false, "Nhập lý do ứng tiền ", "Lý do", 1,
+                        TextInputType.text),
                     SizedBox(
-                      height: 20,
+                      height: 10,
                     ),
                     btnDateSale(context),
                   ],
                 ),
                 SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    btnCreateOrCancel(context, 120, 40, Colors.redAccent,
-                          "Hủy", "yeu cau ung tien", false, 0),
-                    SizedBox(width: 20),
-                    btnCreateOrCancel(context, 140, 40, Color(0xFF0BB791),
-                        "Tạo", "yeu cau ung tien", true, 0),
-                  ],
-                ),
-                SizedBox(
-                  height: 10,
+                  height: 20,
                 ),
               ],
             )),
       ),
-    );
-  }
-// use to create or cancel in create request advance/ invoice
-  Widget btnCreateOrCancel(
-      BuildContext context,
-      double width,
-      double height,
-      Color color,
-      String tittleButtonAlertDialog,
-      String contentFeature,
-      bool action,
-      int indexOfBottomBar,) {
-    return Container(
-      height: height,
-      width: width,
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(5),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          if (_formKey.currentState.validate()) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ConfirmCreateRequestAdvance(
+                        listInfor: listInfor,
+                        storeId: _myStore,
+                        isCustomer: true,
+                      )),
+            );
+          }
+        },
+        label: titleAppBar('Tạo mới'),
+        backgroundColor: primaryColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(50.0),
+        ),
+        elevation: 10,
       ),
-      child: FlatButton(
-          onPressed: () async {
-              if (action) {
-                if (_formKey.currentState.validate()) {
-                  //call api post
-                  int status = 200;
-                  // await postAPIAdvance(money, dateSale);
-                  if (status == 200) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => DetailAdvancePage(status: 'Dang cho')),
-                    );
-                  } else
-                    showStatusAlertDialog(
-                        context, "Tạo ${contentFeature} thất bại.\n Vui long thử lại!", null, false);
-                }
-              } else {
-                showAlertDialog(
-                    context,
-                    "Bạn muốn hủy tạo ${contentFeature} ?",
-                    HomeCustomerPage(
-                      index: indexOfBottomBar,
-                    ));
-              }
-          },
-          child: Center(
-              child: Text(
-                tittleButtonAlertDialog,
-                style: TextStyle(
-                    color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
-              ))),
     );
   }
+
+  Widget _dropdownListStore() {
+    return Row(
+      children: [
+        Expanded(
+          child: Container(
+            height: 40,
+            margin: EdgeInsets.only(top: 5, bottom: 10),
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(10.0),
+                )),
+            child: DropdownButtonHideUnderline(
+              child: ButtonTheme(
+                alignedDropdown: true,
+                child: DropdownButton<String>(
+                  value: _myStore,
+                  iconSize: 30,
+                  icon: (null),
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  hint: Text('Chọn cửa hàng'),
+                  onChanged: (String newValue) async {
+                    setState(() {
+                      _myStore = newValue;
+                    });
+                  },
+                  items: dataListStore?.map((item) {
+                        return new DropdownMenuItem(
+                          child: new Text(item.name),
+                          value: item.id.toString(),
+                        );
+                      })?.toList() ??
+                      [],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  // form để nhập số tiền
   Widget _formMoney(
       bool obscureText, String hintText, String tittle, TextInputType txtType) {
+    var size = MediaQuery.of(context).size;
     return Form(
       key: _formKey,
       child: Container(
@@ -144,12 +179,12 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
           // The validator receives the text that the user has entered.
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return 'So tien k de trong';
+              return showMessage(tittle, MSG001);
             } else if (!checkFormatMoney.hasMatch(value)) {
-              return "Số tien chỉ nhập số";
-            } else if (!checkLengthMoney.hasMatch(value)) {
-              print(value);
-              return "So tien lon hon 10,000 VND";
+              return showMessage('', MSG026);
+            } else if (value.length <= 6) {
+              // số tiền phải là từ 100 trở lên
+              return showMessage('', MSG006);
             }
             return null;
           },
@@ -159,25 +194,28 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
           obscureText: obscureText,
           onChanged: (value) {
             this.money = value;
-            // print(value);
-            // print(errMoney);
+            this.listInfor = [
+              this.money,
+              getDateTime(this.createDate.toString(), dateFormat: 'yyyy-MM-dd'),
+              reason
+            ];
           },
-          style: TextStyle(fontSize: 16),
-          cursorColor: Color(0xFF0BB791),
+          // style: TextStyle(fontSize: 16),
+          cursorColor: primaryColor,
           decoration: InputDecoration(
             border: UnderlineInputBorder(),
             hintText: '$hintText',
             //Sau khi click vào "Nhập so tien" thì màu viền sẽ đổi
             focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                color: Color(0xFF0BB791),
+                color: primaryColor,
               ),
             ),
 
             //Hiển thị text góc phải
             prefixIcon: Container(
                 margin: EdgeInsets.only(top: 15, left: 5),
-                width: 100,
+                width: size.width * 0.2,
                 child: AutoSizeText(
                   "${tittle}",
                   style: TextStyle(fontWeight: FontWeight.w500),
@@ -194,6 +232,7 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
     );
   }
 
+  //Chọn ngày
   Widget btnDateSale(context) {
     var size = MediaQuery.of(context).size;
     return Container(
@@ -207,11 +246,18 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
                 showTitleActions: true,
                 onConfirm: (date) {
                   setState(() {
-                    dateSale = date;
+                    createDate = date;
+                    this.listInfor = [
+                      this.money,
+                      getDateTime(this.createDate.toString(),
+                          dateFormat: 'yyyy-MM-dd'),
+                      reason
+                    ];
                   });
                 },
-                currentTime: dateNow,
+                currentTime: createDate,
                 maxTime: DateTime(DateTime.now().year + 100, 12, 31),
+                // yêu cầu ứng tiền chỉ từ ngày hiện tại tới tương lai chứ trong quá khứ k có
                 minTime: DateTime(DateTime.now().year, DateTime.now().month,
                     DateTime.now().day),
                 locale: LocaleType.vi,
@@ -222,14 +268,19 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
                 Container(
                   width: 100,
                   margin: EdgeInsets.only(left: 15),
-                  child: Text(
-                    "Ngày bán",
-                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
+                  child: AutoSizeText(
+                    "Ngày ứng tiền",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
+                ),
+                SizedBox(
+                  width: 20,
                 ),
                 Expanded(
                   child: Text(
-                    '${f.format(dateSale)}',
+                    '${getDateTime(createDate.toString(), dateFormat: 'dd-MM-yyyy')}',
                     style: TextStyle(fontSize: 16),
                   ),
                 ),
@@ -251,10 +302,62 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
             child: Container(
               margin: EdgeInsets.only(left: 10, right: 10),
               width: size.width,
-              color: Colors.black45,
+              color: lineColor,
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  //form reason is can NULL
+  Widget _txtFormField(String value, bool obscureText, String hintText,
+      String tittle, int maxLines, TextInputType txtType) {
+    var size = MediaQuery.of(context).size;
+    return Container(
+      margin: EdgeInsets.only(top: 10, left: 10, right: 10),
+      child: TextFormField(
+        initialValue: value,
+        obscureText: obscureText,
+        onChanged: (value) {
+          setState(() {
+            reason = value;
+            this.listInfor = [
+              this.money,
+              getDateTime(this.createDate.toString(), dateFormat: 'yyyy-MM-dd'),
+              reason
+            ];
+          });
+        },
+        maxLines: maxLines,
+        keyboardType: txtType,
+        style: TextStyle(fontSize: 15),
+        cursorColor: welcome_color,
+        decoration: InputDecoration(
+          border: UnderlineInputBorder(),
+          hintText: '$hintText',
+
+          //Sau khi click vào "Nhập tiêu đề" thì màu viền sẽ đổi
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: welcome_color),
+          ),
+
+          //Hiển thị text góc phải
+          prefixIcon: Container(
+              margin: EdgeInsets.only(top: 15, left: 5),
+              width: size.width * 0.2,
+              child: AutoSizeText(
+                "${tittle}",
+                style: TextStyle(fontWeight: FontWeight.w500),
+              )),
+
+          //Hiển thị Icon góc phải
+          suffixIcon: Icon(
+            Icons.create,
+            color: Colors.black54,
+          ),
+          contentPadding: EdgeInsets.all(15),
+        ),
       ),
     );
   }
