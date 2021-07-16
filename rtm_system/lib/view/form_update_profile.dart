@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:rtm_system/helpers/dialog.dart';
 import 'package:rtm_system/helpers/button.dart';
+import 'package:rtm_system/ultils/check_data.dart';
 import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
-import 'package:rtm_system/ultils/src/regExp.dart';
 import 'manager/profile/confirm_create_customer.dart';
 
 //check: true là cho customer còn false là cho manager
@@ -251,6 +251,26 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
             ];
           });
         },
+        onSubmitted: (value) {
+          print('no');
+          setState(() {
+            if (tittle == "Họ và tên") {
+              errFullName = checkFullName(context, widget.fullname);
+            } else if (tittle == "Số điện thoại") {
+              errPhone = checkPhoneNumber(widget.phone);
+            } else if (tittle == "CMND/CCCD") {
+              errCMND = checkCMND(widget.cmnd);
+            } else if (tittle == "Địa chỉ") {
+              errAddress = checkAddress(widget.address);
+            } else if (tittle == "Mật khẩu") {
+              if (widget.isUpdate) {
+                errPass = null;
+              } else {
+                errPass = checkPassword(widget.password, 1);
+              }
+            }
+          });
+        },
         maxLines: maxLines,
         keyboardType: txtType,
         style: TextStyle(fontSize: 15),
@@ -322,6 +342,26 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
               this.widget.password,
               this.widget.birthday
             ];
+          });
+        },
+        onFieldSubmitted: (value) {
+          print('no');
+          setState(() {
+            if (tittle == "Họ và tên") {
+              errFullName = checkFullName(context, widget.fullname);
+            } else if (tittle == "Số điện thoại") {
+              errPhone = checkPhoneNumber(widget.phone);
+            } else if (tittle == "CMND/CCCD") {
+              errCMND = checkCMND(widget.cmnd);
+            } else if (tittle == "Địa chỉ") {
+              errAddress = checkAddress(widget.address);
+            } else if (tittle == "Mật khẩu") {
+              if (widget.isUpdate) {
+                errPass = null;
+              } else {
+                errPass = checkPassword(widget.password, 1);
+              }
+            }
           });
         },
         maxLines: maxLines,
@@ -468,9 +508,9 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
           borderRadius: BorderRadius.circular(10),
         ),
         child: TextButton(
-          onPressed: () {
+          onPressed: () async {
+            bool check = await _validateData();
             setState(() {
-              bool check = _validateData();
               if (checkClick) {
                 if (check) {
                   Navigator.of(context).push(MaterialPageRoute(
@@ -478,7 +518,7 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
                             listCustomer: listCustomer,
                             check: checkProfile,
                             isCustomer: this.widget.isCustomer,
-                            account_id: this.widget.accountId,
+                            accountId: this.widget.accountId,
                             isUpdate: this.widget.isUpdate,
                             typeOfUpdate: this.widget.typeOfUpdate,
                             isCreate: isCreate,
@@ -502,62 +542,17 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
         ));
   }
 
-  bool _validateData() {
-    bool check = false;
-    if (this.widget.fullname == null || this.widget.fullname == "") {
-      errFullName = "Họ và tên trống";
-    } else {
-      errFullName = null;
-    }
-    if (this.widget.phone == null || this.widget.phone == "") {
-      errPhone = "Số điện thoại trống";
-    } else {
-      try {
-        if (!checkFormatPhone.hasMatch(this.widget.phone) ||
-            this.widget.phone.length > 11) {
-          errPhone = "Số điện thoại sai (10-11 só)";
-        } else {
-          errPhone = null;
-        }
-      } catch (_) {
-        errPhone = "Số điện thoại chỉ nhập số";
-      }
-    }
+  Future _validateData() async {
+    errFullName = await checkFullName(context, widget.fullname);
+    errPhone = await checkPhoneNumber(widget.phone);
     if (this.widget.check == true) {
-      if (this.widget.cmnd == null || this.widget.cmnd == "") {
-        errCMND = "CMND/CCCD trống";
-      } else {
-        //Lỗi RegExp nên không dùng nó mà dùng try-catch
-        try {
-          if (this.widget.cmnd.length < 9 || this.widget.cmnd.length > 12) {
-            errCMND = "CMND/CCCD sai";
-          } else {
-            errCMND = null;
-          }
-        } catch (_) {
-          errCMND = "CMND/CCCD chỉ nhập số";
-        }
-      }
-      if (this.widget.address == null || this.widget.address == "") {
-        errAddress = "Địa chỉ trống";
-      } else {
-        errAddress = null;
-      }
+      errCMND = await checkCMND(widget.cmnd);
+      errAddress = await checkAddress(widget.address);
     }
     if (widget.isUpdate) {
       errPass = null;
     } else {
-      if (this.widget.password == null || this.widget.password == "") {
-        errPass = "Mật khẩu trống";
-        print("Mật khẩu trống");
-      } else {
-        if (!checkFormatPassword.hasMatch(this.widget.password)) {
-          errPass = "Mật khẩu ít nhất 6 kí tự (chữ và số)";
-          print("Mật khẩu ít nhất 6 kí tự (chữ và số)");
-        } else {
-          errPass = null;
-        }
-      }
+      errPass = checkPassword(widget.password, 1);
     }
     if (errFullName == null &&
         errPhone == null &&
@@ -566,9 +561,9 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
         errCMND == null &&
         errAddress == null &&
         errUser == null) {
-      check = true;
+      return true;
     }
-    return check;
+    return false;
   }
 
   Widget _checkCMND() {

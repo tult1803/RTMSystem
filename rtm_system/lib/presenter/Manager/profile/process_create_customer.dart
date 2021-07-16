@@ -6,11 +6,11 @@ import 'package:rtm_system/ultils/src/color_ultils.dart';
 
 // ignore: camel_case_types
 class processCreateCustomer extends StatefulWidget {
-  final String tittle, account_id;
+  final String tittle, accountId;
   final List listCustomer;
   final bool isCustomer, isUpdate, isCreate;
   final int typeOfUpdate;
-  processCreateCustomer({this.tittle, this.listCustomer, this.isCustomer, this.isUpdate,this.typeOfUpdate, this.account_id, this.isCreate});
+  processCreateCustomer({this.tittle, this.listCustomer, this.isCustomer, this.isUpdate,this.typeOfUpdate, this.accountId, this.isCreate});
 
   @override
   _processCreateCustomerState createState() => _processCreateCustomerState();
@@ -51,7 +51,7 @@ class _processCreateCustomerState extends State<processCreateCustomer> {
       ),
       child: TextButton(
           onPressed: () {
-            doCreateCustomer(context, phone, password, fullname, gender, cmnd, address, "${getDateTime("$birthday", dateFormat: 'yyyy-MM-dd')}", this.widget.isCustomer, this.widget.typeOfUpdate,this.widget.account_id, isCreate: this.widget.isCreate, isUpdate: this.widget.isUpdate);
+            doCreateCustomer(context, phone, password, fullname, gender, cmnd, address, "${getDateTime("$birthday", dateFormat: 'yyyy-MM-dd')}", this.widget.isCustomer, this.widget.typeOfUpdate,this.widget.accountId, isCreate: this.widget.isCreate, isUpdate: this.widget.isUpdate);
           },
           child: Text(
             "${this.widget.tittle}",

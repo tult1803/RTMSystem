@@ -8,7 +8,8 @@ checkInputUpdateInvoice(BuildContext context,
     {bool isDegree, double quantity, double degree}) {
   if (isDegree) {
     if (quantity == 0 && degree == 0) {
-      showCupertinoAlertDialog(context, showMessage("Khối lượng, số độ", MSG001));
+      showCupertinoAlertDialog(
+          context, showMessage("Khối lượng, số độ", MSG001));
       return false;
     } else if (quantity == 0) {
       showCupertinoAlertDialog(context, showMessage("Khối lượng", MSG001));
@@ -37,11 +38,13 @@ checkUpdatePriceProduct(BuildContext context, {bool isClick, double price}) {
         return false;
       }
     } else {
-      showCustomDialog(context, content: showMessage("Giá", MSG001), isSuccess: false);
+      showCustomDialog(context,
+          content: showMessage("Giá", MSG001), isSuccess: false);
       return false;
     }
   } else {
-    showCustomDialog(context, content: showMessage("", MSG013), isSuccess: false);
+    showCustomDialog(context,
+        content: showMessage("", MSG013), isSuccess: false);
     return false;
   }
 }
@@ -50,10 +53,14 @@ checkPhoneNumber(String phone) {
   if (phone == null || phone == "") {
     return showMessage("Số điện thoại", MSG001);
   } else {
-    if (!checkFormatPhone.hasMatch(phone) || phone.length > 11) {
-      return showMessage("", MSG014);
-    } else {
-      return null;
+    try {
+      if (!checkFormatPhone.hasMatch(phone) || phone.length > 11) {
+        return showMessage("", MSG014);
+      } else {
+        return null;
+      }
+    } catch (_) {
+      return showMessage("", MSG026);
     }
   }
 }
@@ -67,7 +74,8 @@ checkFullName(BuildContext context, String name) {
 
 checkChooseProduct(BuildContext context, String product) {
   if (product == null) {
-    showCustomDialog(context, content: showMessage("", MSG013), isSuccess: false);
+    showCustomDialog(context,
+        content: showMessage("", MSG013), isSuccess: false);
   }
 }
 
@@ -115,12 +123,38 @@ checkPassword(String password, int type, {String passwordCheck}) {
       case 1:
         if (!checkFormatPassword.hasMatch(password)) {
           return showMessage("", MSG016);
-        } else return null;
-          break;
+        } else
+          return null;
+        break;
       case 2:
         if (password != passwordCheck) {
           return showMessage("", MSG021);
-        } else return null;
+        } else
+          return null;
         break;
     }
+}
+
+checkCMND(String cmnd) {
+  if (cmnd == null || cmnd == "") {
+    return showMessage("CMND/CCCD", MSG001);
+  } else {
+    try {
+      if (cmnd.length < 9 || cmnd.length > 12) {
+        return showMessage("CMND/CCCD", MSG020);
+      } else {
+        return null;
+      }
+    } catch (_) {
+      return showMessage("", MSG026);
+    }
+  }
+}
+
+checkAddress(String address) {
+  if (address == null || address == "") {
+    return showMessage("Địa chỉ", MSG001);
+  } else {
+    return null;
+  }
 }

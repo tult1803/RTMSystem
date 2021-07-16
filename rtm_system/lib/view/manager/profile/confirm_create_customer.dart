@@ -9,9 +9,9 @@ class ConfirmCreateCustomer extends StatefulWidget {
   // fullname, gender, phone, CMND, address, password
   final List listCustomer;
   final bool check, isUpdate, isCustomer, isCreate;
-  final String account_id;
+  final String accountId;
   final int typeOfUpdate;
-  ConfirmCreateCustomer({this.listCustomer, this.check, this.isUpdate,this.typeOfUpdate, this.account_id, this.isCustomer, this.isCreate});
+  ConfirmCreateCustomer({this.listCustomer, this.check, this.isUpdate,this.typeOfUpdate, this.accountId, this.isCustomer, this.isCreate});
 
   @override
   _ConfirmCreateCustomerState createState() => _ConfirmCreateCustomerState();
@@ -76,7 +76,7 @@ class _ConfirmCreateCustomerState extends State<ConfirmCreateCustomer> {
                       isCustomer: this.widget.isCustomer,
                       isUpdate: this.widget.isUpdate,
                       typeOfUpdate: this.widget.typeOfUpdate,
-                      account_id: this.widget.account_id),
+                      accountId: this.widget.accountId),
                 ],
               ),
             ),
