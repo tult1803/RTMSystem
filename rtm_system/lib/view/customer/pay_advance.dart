@@ -31,12 +31,6 @@ class PayDebt extends StatefulWidget {
 }
 
 class _PayDebtState extends State<PayDebt> {
-  List<DataProduct> dataListProduct = [];
-  bool checkClick = false;
-  String errNameProduct, token;
-  bool checkProduct = true;
-  int idProduct;
-  String title;
   int totalAdvance = 0, totalAdvanceSelected = 0, totalDepositSelected;
   SelectDatesBloc _selectDatesBloc;
 
@@ -103,7 +97,6 @@ class _PayDebtState extends State<PayDebt> {
   void initState() {
     super.initState();
     _selectDatesBloc = SelectDatesBloc(SelectDatesBloc.initDate());
-    title = 'Trả nợ';
     getAPIProfile();
     loadAdvance();
     totalDepositSelected = 0;
@@ -134,17 +127,12 @@ class _PayDebtState extends State<PayDebt> {
         ),
       ],
       child: Scaffold(
-        backgroundColor: Color(0xffEEEEEE),
+        backgroundColor: backgroundColor,
         appBar: AppBar(
           centerTitle: true,
           leading: leadingAppbar(context),
           backgroundColor: Color(0xFF0BB791),
-          title: Text(
-            title,
-            style: TextStyle(
-              color: Colors.white,
-            ),
-          ),
+          title: titleAppBar('Trả nợ'),
         ),
         body: SingleChildScrollView(
           child: Container(
@@ -179,23 +167,7 @@ class _PayDebtState extends State<PayDebt> {
                 SizedBox(
                   height: 12,
                 ),
-                Container(
-                  padding: EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(10.0),
-                    ),
-                  ),
-                  child: Center(
-                    child: AutoSizeText(
-                      'Các hóa đơn sẽ được thanh toán:',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                ),
+                containerTextInProcess(),
                 SizedBox(
                   height: 12,
                 ),
@@ -217,7 +189,7 @@ class _PayDebtState extends State<PayDebt> {
                               return AutoSizeText(
                                 'Tống đơn ký gửi đã chọn($state1/$state2):',
                                 style: TextStyle(
-                                  color: Color(0xFF0BB791),
+                                  color: primaryColor,
                                 ),
                               );
                             },
@@ -255,7 +227,7 @@ class _PayDebtState extends State<PayDebt> {
                       AutoSizeText(
                         'Tống đơn nợ đã chọn(${selectedContacts.length}/ ${advanceItem.length}):',
                         style: TextStyle(
-                          color: Color(0xFF0BB791),
+                          color: primaryColor,
                         ),
                       ),
                       AutoSizeText(
@@ -344,24 +316,15 @@ class _PayDebtState extends State<PayDebt> {
                 SizedBox(
                   height: 12,
                 ),
-                // _showBottomButton()
               ],
             ),
           ),
         ),
-        // có nợ thì mới show ra, hiện tại api nợ = 0 vẫn trả được
         floatingActionButton: BlocBuilder<ListInvoiceIdBloc, List<String>>(
           builder: (context, state) {
             if (state.isNotEmpty) {
               if (totalAdvance == 0) {
-                return Container(
-                  width: 1,
-                  height: 1,
-                  child: FloatingActionButton(
-                    backgroundColor: backgroundColor,
-                    onPressed: () {},
-                  ),
-                );
+                return showHiddenFloatBtn();
               }
               return FloatingActionButton.extended(
                 onPressed: () {
@@ -418,7 +381,7 @@ class _PayDebtState extends State<PayDebt> {
                             child: Text(
                               'Có',
                               style: TextStyle(
-                                color: welcome_color,
+                                color: primaryColor,
                               ),
                             ),
                           ),
@@ -427,27 +390,15 @@ class _PayDebtState extends State<PayDebt> {
                     },
                   );
                 },
-                label: Text(
-                  'Xác nhận',
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
-                ),
-                backgroundColor: welcome_color,
+                label: titleAppBar('Xác nhận'),
+                backgroundColor: primaryColor,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(50.0),
                 ),
                 elevation: 10,
               );
             } else {
-              return Container(
-                width: 1,
-                height: 1,
-                child: FloatingActionButton(
-                  backgroundColor: backgroundColor,
-                  onPressed: () {},
-                ),
-              );
+              return showHiddenFloatBtn();
             }
           },
         ),
@@ -580,7 +531,7 @@ class _PayDebtState extends State<PayDebt> {
                 ),
                 //Dùng cho nút chọn ngày và background
                 colorScheme: ColorScheme.light(
-                  primary: welcome_color,
+                  primary: primaryColor,
                 )),
             child: child,
           );
@@ -607,7 +558,7 @@ class _PayDebtState extends State<PayDebt> {
             AutoSizeText(
               title,
               style: TextStyle(
-                color: Color(0xFF0BB791),
+                color: primaryColor,
               ),
               overflow: TextOverflow.clip,
               textAlign: TextAlign.left,
@@ -631,7 +582,7 @@ class _PayDebtState extends State<PayDebt> {
         SizedBox(
           height: 1,
           child: Container(
-            color: Color(0xFFBDBDBD),
+            color: lineColor,
           ),
         ),
       ],

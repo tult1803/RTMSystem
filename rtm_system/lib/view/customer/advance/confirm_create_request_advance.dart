@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:rtm_system/model/get/getAPI_product.dart';
 import 'package:rtm_system/model/model_product.dart';
 import 'package:rtm_system/helpers/component.dart';
+import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ConfirmCreateRequestAdvance extends StatefulWidget {
@@ -66,9 +67,9 @@ class _ConfirmCreateRequestAdvanceState extends State<ConfirmCreateRequestAdvanc
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffEEEEEE),
+      backgroundColor: backgroundColor,
       appBar: AppBar(
-        backgroundColor: Color(0xFF0BB791),
+        backgroundColor: primaryColor,
         centerTitle: true,
         leading: leadingAppbar(context),
         title: Text(

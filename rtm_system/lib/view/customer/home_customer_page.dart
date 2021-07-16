@@ -21,9 +21,7 @@ class _HomeCustomerPageState extends State<HomeCustomerPage> {
   GlobalKey _bottomNavigationKey = GlobalKey();
   int _index;
   Widget _widget;
-
-  //call api return money advance
-
+  
   @override
   void initState() {
     super.initState();

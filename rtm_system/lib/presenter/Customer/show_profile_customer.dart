@@ -1,11 +1,11 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:rtm_system/helpers/common_widget.dart';
 import 'package:rtm_system/model/get/getAPI_customer_phone.dart';
 import 'package:rtm_system/model/model_profile_customer.dart';
 import 'package:rtm_system/helpers/button.dart';
 import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
-import 'package:rtm_system/ultils/src/message_list.dart';
 import 'package:rtm_system/view/customer/Profile/account_verification.dart';
 import 'package:rtm_system/view/update_password.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -57,15 +57,7 @@ class _showProfileState extends State<showProfile> {
                 children: [
                   Row(
                     children: [
-                      Container(
-                        width: size.width * 0.5,
-                        height: size.height * 0.16,
-                        child: Center(
-                          child: Image(
-                            image: AssetImage("images/avt.png"),
-                          ),
-                        ),
-                      ),
+                      containerAvt(),
                       btnChooseOption(
                           context, size.width * 0.45, infomationCustomer.level),
                     ],
@@ -80,8 +72,20 @@ class _showProfileState extends State<showProfile> {
             ),
           ),
         );
-        // }
       },
+    );
+  }
+
+  Widget containerAvt() {
+    var size = MediaQuery.of(context).size;
+    return Container(
+      width: size.width * 0.5,
+      height: size.height * 0.16,
+      child: Center(
+        child: Image(
+          image: AssetImage("images/avt.png"),
+        ),
+      ),
     );
   }
 
@@ -113,17 +117,7 @@ class _showProfileState extends State<showProfile> {
         ),
       );
     } else if (isError) {
-      return Container(
-        margin: EdgeInsets.all(12),
-        child: Center(
-          child: Column(
-            children: [
-              AutoSizeText(showMessage(MSG008, MSG027),
-                  style: TextStyle(fontWeight: FontWeight.w500)),
-            ],
-          ),
-        ),
-      );
+      return showErrorLoadData();
     } else {
       return CircularProgressIndicator(
         color: primaryColor,
@@ -223,7 +217,7 @@ class _showProfileState extends State<showProfile> {
             height: 1,
             width: size.width,
             child: Container(
-              color: Color(0xFFBDBDBD),
+              color: lineColor,
             ),
           ),
         ],

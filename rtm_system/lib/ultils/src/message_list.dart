@@ -39,6 +39,12 @@ String MSG032 = "Xác nhận quý khách đã nhận số tiền hoàn trả
 String MSG033 = "Vui lòng chọn tiền nợ nhỏ hơn hoặc bằng tiền ký gửi";
 String MSG034 = "Vui lòng chọn đơn nợ!";
 String MSG035 = "Giá phải lớn hơn 1.000đ";
+String MSG036 = "Mất kết nối internet.";
+String MSG037 = "Trả tiền thất bại";
+String MSG038 = "Nhận tiền thất bại";
+String MSG039 = "Giá sản phẩm đã cập nhật";
+String MSG040 = "Đã xoá thành công";
+String MSG041 = "Xoá thất bại";
 
 
 //use to show message

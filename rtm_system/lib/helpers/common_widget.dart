@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rtm_system/helpers/dialog.dart';
+import 'package:rtm_system/ultils/src/message_list.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
 import 'package:rtm_system/view/manager/profile/allCustomer_manager.dart';
 import 'component.dart';
@@ -587,7 +588,9 @@ Widget boxForAdvance({
                     alignment: Alignment.centerRight,
                     paddingLeftOfText: 10,
                     paddingRightOfText: 10,
-                    tittle: status == 8 ? "Đã duyệt ": "${getStatus(status: status)}",
+                    tittle: status == 8
+                        ? "Đã duyệt "
+                        : "${getStatus(status: status)}",
                     fontWeight: FontWeight.w600,
                     color: getColorStatus(status: status)),
               ),
@@ -1039,25 +1042,24 @@ Widget boxForAdvanceHistory({
   String amountAfterFormat,
       cashAfterFormat,
       dateTimeAfterFormat,
-      receiveDateAfterFormat, titleStatus;
+      receiveDateAfterFormat,
+      titleStatus;
   try {
     amountAfterFormat = "${getFormatPrice(amount.toString())} đ";
     cashAfterFormat = "${getFormatPrice(returnCash.toString())} đ";
     dateTimeAfterFormat = "${getDateTime(dateTime, dateFormat: 'dd-MM-yyyy')}";
     receiveDateAfterFormat =
         "${getDateTime(receiveDate, dateFormat: 'dd-MM-yyyy')}";
-  } catch (_) {
-   
-  }
+  } catch (_) {}
   Color statusAdvance;
-  if(isAdvance && isPaid){
-    titleStatus = "Đã trả nợ" ;
+  if (isAdvance && isPaid) {
+    titleStatus = "Đã trả nợ";
     statusAdvance = getColorStatus(status: 9);
-  }else if(!isAdvance && !isPaid){
-    titleStatus = "Đã trả xong" ;
+  } else if (!isAdvance && !isPaid) {
+    titleStatus = "Đã trả xong";
     statusAdvance = getColorStatus(status: 9);
-  }else{
-    titleStatus = "Đã mượn" ;
+  } else {
+    titleStatus = "Đã mượn";
     statusAdvance = getColorStatus(status: 4);
   }
   return GestureDetector(
@@ -1451,3 +1453,18 @@ Widget boxForInvoiceRequest(
     ),
   );
 }
+
+Widget showErrorLoadData() {
+  return Container(
+    margin: EdgeInsets.all(12),
+    child: Center(
+      child: Column(
+        children: [
+          AutoSizeText(showMessage(MSG008, MSG027),
+              style: TextStyle(fontWeight: FontWeight.w500)),
+        ],
+      ),
+    ),
+  );
+}
+
