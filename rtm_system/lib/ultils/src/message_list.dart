@@ -15,7 +15,7 @@ String MSG009 = "Tên khách hàng không tồn tại.";
 String MSG010 = "Vui lòng chọn loại hóa đơn.";
 String MSG011 = "Hóa đơn đã được xác nhận không thể thay đổi.";
 String MSG012 = "Đã xác nhận thành công.";
-String MSG013 = "Vui lòng chọn loại sản phẩm.";
+String MSG013 = "Vui lòng chọn sản phẩm.";
 String MSG014 = "Số điện thoại là 10 hoặc 11 số.";
 String MSG015 = "Vui lòng chọn ngày sinh.";
 String MSG016 = "Độ dài mật khẩu lớn hơn 6 ký tự, bao gồm chữ và số.";
@@ -38,6 +38,7 @@ String MSG031 = "Quý khách không có nợ.";
 String MSG032 = "Xác nhận quý khách đã nhận số tiền hoàn trả?";
 String MSG033 = "Vui lòng chọn tiền nợ nhỏ hơn hoặc bằng tiền ký gửi";
 String MSG034 = "Vui lòng chọn đơn nợ!";
+String MSG035 = "Giá phải lớn hơn 1.000đ";
 
 
 //use to show message
