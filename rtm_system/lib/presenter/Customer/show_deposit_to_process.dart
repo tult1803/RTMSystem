@@ -123,17 +123,7 @@ class showAllInvoicePageState extends State<showDepositToProcess> {
               },
             );
           } else if (snapshot.hasError) {
-            return Container(
-              margin: EdgeInsets.all(12),
-              child: Center(
-                child: Column(
-                  children: [
-                    AutoSizeText(showMessage("", MSG008),
-                        style: TextStyle(fontWeight: FontWeight.w500)),
-                  ],
-                ),
-              ),
-            );
+            return showErrorLoadData();
           } else {
             return CircularProgressIndicator(
               color: primaryColor,

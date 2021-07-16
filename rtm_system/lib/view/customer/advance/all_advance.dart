@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rtm_system/helpers/component.dart';
 import 'package:rtm_system/model/get/getAPI_customer_phone.dart';
 import 'package:rtm_system/model/model_profile_customer.dart';
 import 'package:rtm_system/presenter/Customer/show_advance_request.dart';
@@ -7,7 +8,6 @@ import 'package:rtm_system/helpers/button.dart';
 import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/customer/advance/create_request_advance.dart';
-import 'package:rtm_system/view/customer/get_money_deposit.dart';
 import 'package:rtm_system/view/customer/pay_advance.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -21,8 +21,7 @@ class AdvancePage extends StatefulWidget {
 DateTime fromDate;
 DateTime toDate;
 
-class _AdvancePageState extends State<AdvancePage>
-    with TickerProviderStateMixin {
+class _AdvancePageState extends State<AdvancePage> with TickerProviderStateMixin {
   TabController _tabController;
   String getFromDate, getToDate;
   int index, _selectedIndex;
@@ -33,15 +32,15 @@ class _AdvancePageState extends State<AdvancePage>
   @override
   void initState() {
     super.initState();
-    getAPIProfile();
+     //tab 1: yeu cau
+    index = 0;
     _tabController = TabController(length: 4, vsync: this);
     _tabController.addListener(() {
       setState(() {
         _selectedIndex = _tabController.index;
       });
     });
-    //tab 1: yeu cau
-    index = 0;
+    getAPIProfile();
     toDate = DateTime.now();
     fromDate = DateTime.now().subtract(Duration(days: 30));
     setState(() {
@@ -67,44 +66,48 @@ class _AdvancePageState extends State<AdvancePage>
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
         backgroundColor: primaryColor,
         centerTitle: true,
-        title: const Text(
-          'Ứng tiền',
-          style: TextStyle(color: Colors.white),
-        ),
-        bottom: TabBar(
-          labelPadding: EdgeInsets.symmetric(horizontal: 7.0),
-          indicatorColor: primaryColor,
-          isScrollable: true,
-          labelColor: Colors.white,
-          unselectedLabelColor: Colors.white.withOpacity(0.5),
-          controller: _tabController,
-          tabs: <Widget>[
-            Tab(
-              text: 'Chờ duyệt',
-              // icon: Icon(Icons.post_add_outlined,),
-            ),
-            Tab(
-              text: 'Đã duyệt',
-              // icon: Icon(Icons.access_time_outlined),
-            ),
-            Tab(
-              text: 'Huỷ bỏ',
-              // icon: Icon(Icons.access_time_outlined),
-            ),
-            Tab(
-              text: 'Lịch sử giao dịch',
-              // icon: Icon(Icons.access_time_outlined),
-            ),
-          ],
-        ),
+        title: titleAppBar('Ứng tiền'),
+        bottom: bottomTabBar(),
       ),
-      body: TabBarView(
+      body: tabView(),
+      floatingActionButton: level != 0
+          ? showFloatBtn(_selectedIndex)
+          : showHiddenFloatBtn(),
+    );
+  }
+
+  Widget bottomTabBar() {
+    return TabBar(
+      labelPadding: EdgeInsets.symmetric(horizontal: 7.0),
+      indicatorColor: primaryColor,
+      isScrollable: true,
+      labelColor: Colors.white,
+      unselectedLabelColor: Colors.white.withOpacity(0.5),
+      controller: _tabController,
+      tabs: <Widget>[
+        Tab(
+          text: 'Chờ duyệt',
+        ),
+        Tab(
+          text: 'Đã duyệt',
+        ),
+        Tab(
+          text: 'Huỷ bỏ',
+        ),
+        Tab(
+          text: 'Lịch sử giao dịch',
+        ),
+      ],
+    );
+  }
+  Widget tabView(){
+    var size = MediaQuery.of(context).size;
+    return TabBarView(
         controller: _tabController,
         children: <Widget>[
           //show advance chờ xử lý
@@ -116,20 +119,8 @@ class _AdvancePageState extends State<AdvancePage>
           //show advance đã trả
           containerAdvanceHistory(size.height, 8),
         ],
-      ),
-      floatingActionButton: level != 0
-          ? _showFloatBtn(_selectedIndex)
-          : Container(
-              width: 1,
-              height: 1,
-              child: FloatingActionButton(
-                backgroundColor: backgroundColor,
-                onPressed: () {},
-              ),
-            ),
-    );
+      );
   }
-
   //show invoice advance request
   Widget containerAdvance(height, status) {
     return Container(
@@ -156,21 +147,19 @@ class _AdvancePageState extends State<AdvancePage>
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              // rowButtonDatetime(),
               new showHistoryAdvancePage(),
             ],
           ),
         ));
   }
-
-  Widget _showFloatBtn(index) {
+  
+  Widget showFloatBtn(index) {
     if (index == 1) {
       return FloatingActionButton.extended(
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(
-                builder: (context) => PayDebt()),
+            MaterialPageRoute(builder: (context) => PayDebt()),
           );
         },
         label: Text(

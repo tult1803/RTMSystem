@@ -58,14 +58,14 @@ Future<void> getNotice(BuildContext context, String mainTittle, String content,
   if (status == 200) {
     showStatusAlertDialog(
         context,
-        "Tạo thành công.",
+        showMessage("", MSG002),
         HomeAdminPage(
           index: indexOfBottomBar,
         ),
         true);
   } else
     showStatusAlertDialog(
-        context, "Tạo thất bại. Xin thử lại !!!", null, false);
+        context, showMessage(MSG024, MSG027), null, false);
 }
 
 Future post_put_ApiProfile(
@@ -216,14 +216,14 @@ Future<void> put_API_PayAdvance(
   if (status == 200) {
     showStatusAlertDialog(
         context,
-        "Đã trả tiền thành công.",
+        showMessage("", MSG019),
         HomeCustomerPage(
           index: 0,
         ),
         true);
   } else
     showStatusAlertDialog(
-        context, "Trả tiền thất bại. Xin thử lại !!!", null, false);
+        context, showMessage(MSG037, MSG027), null, false);
 }
 
 // ignore: non_constant_identifier_names
@@ -271,7 +271,7 @@ Future<void> putAPIUpdatePrice(BuildContext context, String productId,
     prefs.setString("$productName", "$price");
     showCustomDialog(context,
         isSuccess: true,
-        content: "Giá sản phẩm đã cập nhật",
+        content: showMessage("", MSG039),
         widgetToNavigator: HomeAdminPage(
           index: 0,
         ));
@@ -279,7 +279,7 @@ Future<void> putAPIUpdatePrice(BuildContext context, String productId,
     showCustomDialog(
       context,
       isSuccess: false,
-      content: "Cập nhật giá thất bại",
+      content: showMessage("", MSG025),
     );
 }
 
@@ -440,11 +440,11 @@ Future doDeleteInvoice(BuildContext context, String invoiceId, bool isRequest,
   status == 200
       ? showCustomDialog(context,
           isSuccess: true,
-          content: "Đã xoá hoá đơn",
+          content: showMessage("", MSG040),
           widgetToNavigator: widgetToNavigator)
       : showCustomDialog(context,
           isSuccess: false,
-          content: "Xoá hoá đơn thất bại",
+          content: showMessage("", MSG041),
           doPopNavigate: true);
 }
 
@@ -521,17 +521,17 @@ Future doCreateInvoice(BuildContext context,
       ? isCustomer
           ? showCustomDialog(context,
               isSuccess: true,
-              content: "Đã gửi yêu cầu bán hàng",
+              content: showMessage("", MSG002),
               widgetToNavigator: HomeCustomerPage(
                 index: 0,
               ))
           : showCustomDialog(context,
               isSuccess: true,
-              content: "Tạo hoá đơn thành công",
+              content: showMessage("", MSG002),
               widgetToNavigator: widgetToNavigator)
       : showCustomDialog(context,
           isSuccess: false,
-          content: "Tạo hoá đơn thất bại",
+          content: showMessage("", MSG024),
           doPopNavigate: true);
 }
 
@@ -596,7 +596,7 @@ Future<void> doValidateCustomer(BuildContext context,
   } catch (_) {
     EasyLoading.dismiss();
     showCustomDialog(context,
-        isSuccess: false, content: "Có lỗi xảy ra. Thử lại");
+        isSuccess: false, content: showMessage(MSG030, MSG027));
   }
   return true;
 }
@@ -627,7 +627,7 @@ Future doConfirmIdentifyCustomer(BuildContext context,
         ));
   } else {
     showCustomDialog(context,
-        isSuccess: false, content: "Có lỗi xảy ra. Xin thử lại");
+        isSuccess: false, content: showMessage(MSG030, MSG027));
   }
 }
 //receive cash from advance return 

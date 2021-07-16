@@ -421,7 +421,8 @@ Widget componentContainerDetailInvoice(BuildContext context,
         ),
         // chỗ này show btn accpet or reject của customer
         btnProcessInvoice(context, statusId, id, isCustomer,
-            widgetToNavigator: widgetToNavigator, isDegree: degree == 0 ? false : true),
+            widgetToNavigator: widgetToNavigator,
+            isDegree: degree == 0 ? false : true),
       ],
     ),
   );
@@ -453,8 +454,17 @@ Widget componentContainerDetailProduct(BuildContext context, Map item) {
           children: [
             txtItemDetail(context, "Giá (1kg)",
                 "${getFormatPrice("${item["update_price"]}")} đ"),
-            GestureDetector(onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => updatePriceProduct(chosenValue: "${item["name"]}",))),
-            child: Container(margin: EdgeInsets.only(top: 5, left: 10),child: Icon(Icons.update, color: Colors.blueAccent,))),
+            GestureDetector(
+                onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => updatePriceProduct(
+                          chosenValue: "${item["name"]}",
+                        ))),
+                child: Container(
+                    margin: EdgeInsets.only(top: 5, left: 10),
+                    child: Icon(
+                      Icons.update,
+                      color: Colors.blueAccent,
+                    ))),
           ],
         ),
         SizedBox(
@@ -1086,47 +1096,74 @@ Widget componentContainerAdvanceReturnDetail(BuildContext context,
     ),
   );
 }
-// this is total advance show in Ung tien screen 
+
+// this is total advance show in Ung tien screen
 Widget txtItem(context, String title, String content) {
+  return Container(
+    margin: EdgeInsets.only(left: 12, right: 12, bottom: 14),
+    padding: EdgeInsets.all(10),
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(10),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black54,
+          blurRadius: 4,
+          offset: Offset(1, 2), // Shadow position
+        ),
+      ],
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            AutoSizeText(
+              title,
+              style: TextStyle(
+                color: Color(0xFF0BB791),
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            AutoSizeText(
+              content,
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+        SizedBox(
+          height: 5,
+        ),
+      ],
+    ),
+  );
+}
+
+Widget titleAppBar(name) {
+  return Text(
+    name,
+    style: TextStyle(color: Colors.white),
+  );
+}
+ Widget containerTextInProcess() {
     return Container(
-      margin: EdgeInsets.only(left: 12, right: 12, bottom: 14),
-      padding: EdgeInsets.all(10),
+      padding: EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black54,
-            blurRadius: 4,
-            offset: Offset(1, 2), // Shadow position
-          ),
-        ],
+        borderRadius: BorderRadius.all(
+          Radius.circular(10.0),
+        ),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              AutoSizeText(
-                title,
-                style: TextStyle(
-                  color: Color(0xFF0BB791),
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              AutoSizeText(
-                content,
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
+      child: Center(
+        child: AutoSizeText(
+          'Các hóa đơn sẽ được thanh toán:',
+          style: TextStyle(
+            fontWeight: FontWeight.w500,
           ),
-          SizedBox(
-            height: 5,
-          ),
-        ],
+        ),
       ),
     );
   }

@@ -701,3 +701,14 @@ Widget btnConfirmAdvanceReturn(
         )),
   );
 }
+
+Widget showHiddenFloatBtn() {
+  return Container(
+    width: 1,
+    height: 1,
+    child: FloatingActionButton(
+      backgroundColor: backgroundColor,
+      onPressed: () {},
+    ),
+  );
+}

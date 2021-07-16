@@ -26,14 +26,6 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
   Store store;
   List<StoreElement> dataListStore;
   String _myStore, reason = '';
-  
-  @override
-  void initState() {
-    setState(() {
-      createDate = DateTime.now();
-    });
-    _getStore();
-  }
 
   Future _getStore() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -52,7 +44,14 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
     return dataListStore;
   }
 
-  
+  @override
+  void initState() {
+    setState(() {
+      createDate = DateTime.now();
+    });
+    _getStore();
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -62,11 +61,7 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
         leading: leadingAppbar(context),
         centerTitle: true,
         backgroundColor: primaryColor,
-        title: Text(
-          "Tạo yêu cầu ứng tiền",
-          style: TextStyle(
-              color: Colors.white, fontWeight: FontWeight.w500, fontSize: 22),
-        ),
+        title: titleAppBar("Tạo yêu cầu ứng tiền"),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -96,18 +91,7 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
                   ],
                 ),
                 SizedBox(
-                  height: 10,
-                ),
-                // Container(
-                //   child: Column(
-                //     children: [
-                //       btnImage(context, size.width * 0.9, size.height * 0.1),
-                //       showImage(size.width, size.height, _image),
-                //     ],
-                //   ),
-                // ),
-                SizedBox(
-                  height: 10,
+                  height: 20,
                 ),
               ],
             )),
@@ -126,12 +110,7 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
             );
           }
         },
-        label: Text(
-          'Tạo mới',
-          style: TextStyle(
-            color: Colors.white,
-          ),
-        ),
+        label: titleAppBar('Tạo mới'),
         backgroundColor: primaryColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(50.0),
@@ -165,7 +144,7 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                   ),
-                  hint: Text('Chon cửa hàng'),
+                  hint: Text('Chọn cửa hàng'),
                   onChanged: (String newValue) async {
                     setState(() {
                       _myStore = newValue;
@@ -174,7 +153,6 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
                   items: dataListStore?.map((item) {
                         return new DropdownMenuItem(
                           child: new Text(item.name),
-                          //chuyen id de create
                           value: item.id.toString(),
                         );
                       })?.toList() ??
@@ -187,6 +165,7 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
       ],
     );
   }
+
   // form để nhập số tiền
   Widget _formMoney(
       bool obscureText, String hintText, String tittle, TextInputType txtType) {
@@ -222,14 +201,14 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
             ];
           },
           // style: TextStyle(fontSize: 16),
-          cursorColor: Color(0xFF0BB791),
+          cursorColor: primaryColor,
           decoration: InputDecoration(
             border: UnderlineInputBorder(),
             hintText: '$hintText',
             //Sau khi click vào "Nhập so tien" thì màu viền sẽ đổi
             focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                color: Color(0xFF0BB791),
+                color: primaryColor,
               ),
             ),
 
@@ -323,7 +302,7 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
             child: Container(
               margin: EdgeInsets.only(left: 10, right: 10),
               width: size.width,
-              color: Colors.black45,
+              color: lineColor,
             ),
           ),
         ],

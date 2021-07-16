@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:rtm_system/helpers/component.dart';
 import 'package:rtm_system/presenter/Customer/show_profile_customer.dart';
 import 'package:rtm_system/presenter/Customer/verification/front_identity_card.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
@@ -27,10 +28,7 @@ class _ProfilePageState extends State<ProfilePage> {
       appBar: AppBar(
         backgroundColor: primaryColor,
         centerTitle: true,
-        title: const Text(
-          'Thông tin cá nhân',
-          style: TextStyle(color: Colors.white),
-        ),
+        title: titleAppBar("Thông tin cá nhân"),
       ),
       body: showProfile(),
     );

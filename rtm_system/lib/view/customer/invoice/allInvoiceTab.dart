@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rtm_system/helpers/component.dart';
 import 'package:rtm_system/model/get/getAPI_customer_phone.dart';
 import 'package:rtm_system/model/model_profile_customer.dart';
 import 'package:rtm_system/presenter/Customer/show_all_invoice.dart';
@@ -26,24 +27,7 @@ class _InvoiceTabState extends State<InvoiceTab> with TickerProviderStateMixin {
   int index, _selectedIndex;
   GetAPIProfileCustomer getAPIProfileCustomer = GetAPIProfileCustomer();
   InfomationCustomer infomationCustomer = InfomationCustomer();
-  int level = 0 ;
-  @override
-  void initState() {
-    super.initState();
-    getAPIProfile();
-    _tabController = TabController(length: 5, vsync: this);
-    _tabController.addListener(() {
-      setState(() {
-        _selectedIndex = _tabController.index;
-      });
-    });
-    index = 0;
-    toDate = DateTime.now();
-    fromDate = DateTime.now().subtract(Duration(days: 30));
-    getFromDate =
-        "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
-    getToDate = "${getDateTime("$toDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
-  }
+  int level = 0;
 
   Future getAPIProfile() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
@@ -61,84 +45,82 @@ class _InvoiceTabState extends State<InvoiceTab> with TickerProviderStateMixin {
   }
 
   @override
+  void initState() {
+    super.initState();
+    index = 0;
+    _tabController = TabController(length: 5, vsync: this);
+    _tabController.addListener(() {
+      setState(() {
+        _selectedIndex = _tabController.index;
+      });
+    });
+    getAPIProfile();
+    toDate = DateTime.now();
+    fromDate = DateTime.now().subtract(Duration(days: 30));
+    getFromDate =
+        "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
+    getToDate = "${getDateTime("$toDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
+  }
+
+  @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
         backgroundColor: primaryColor,
         centerTitle: true,
-        title: const Text(
-          'Hoá đơn',
-          style: TextStyle(color: Colors.white),
-        ),
-        bottom: TabBar(
-          labelPadding: EdgeInsets.symmetric(horizontal: 12.0),
-          indicatorColor: primaryColor,
-          isScrollable: true,
-          labelColor: Colors.white,
-          unselectedLabelColor: Colors.white.withOpacity(0.5),
-          controller: _tabController,
-          tabs: <Widget>[
-            Tab(
-              text: 'Chờ duyệt',
-              // icon: Icon(Icons.post_add_outlined,),
-            ),
-            Tab(
-              text: 'Chờ xác nhận',
-              // icon: Icon(Icons.access_time_outlined),
-            ),
-            Tab(
-              text: 'Ký gửi',
-              // icon: Icon(Icons.attach_money),
-            ),
-            Tab(
-              text: 'Bán hàng',
-              // icon: Icon(Icons.my_library_books_outlined),
-            ),
-            Tab(
-              text: 'Huỷ bỏ',
-              // icon: Icon(Icons.my_library_books_outlined),
-            ),
-          ],
-        ),
+        title: titleAppBar('Hoá đơn'),
+        bottom: bottomTabBar(),
       ),
-      body: TabBarView(
-        controller: _tabController,
-        children: <Widget>[
-          //Show invoice request
-          Container(
-              height: size.height,
-              margin: EdgeInsets.only(left: 5, top: 12, right: 5),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    rowButtonDatetime(),
-                    new showAllInvoiceRequestPage(
-                        fromDate: getFromDate, toDate: getToDate),
-                  ],
-                ),
-              )),
-          //Show invoice processing
-          containerInvoice(size.height, 4),
-          //Show invoice deposit
-          containerInvoice(size.height, 5),
-          //Show sale's invoice: -1 ( done, undone, actice)
-          containerInvoice(size.height, 3),
-          containerInvoice(size.height, 2),
-        ],
-      ),
-      floatingActionButton: level != 0
-          ? _showFloatBtn(_selectedIndex)
-          : Container(
-              width: 1,
-              height: 1,
-              child: FloatingActionButton(
-                backgroundColor: backgroundColor,
-                onPressed: () {},
-              ),
-            ),
+      body: tabView(),
+      floatingActionButton:
+          level != 0 ? _showFloatBtn(_selectedIndex) : showHiddenFloatBtn(),
+    );
+  }
+
+  Widget bottomTabBar() {
+    return TabBar(
+      labelPadding: EdgeInsets.symmetric(horizontal: 12.0),
+      indicatorColor: primaryColor,
+      isScrollable: true,
+      labelColor: Colors.white,
+      unselectedLabelColor: Colors.white.withOpacity(0.5),
+      controller: _tabController,
+      tabs: <Widget>[
+        Tab(
+          text: 'Chờ duyệt',
+        ),
+        Tab(
+          text: 'Chờ xác nhận',
+        ),
+        Tab(
+          text: 'Ký gửi',
+        ),
+        Tab(
+          text: 'Bán hàng',
+        ),
+        Tab(
+          text: 'Huỷ bỏ',
+        ),
+      ],
+    );
+  }
+
+  Widget tabView() {
+    var size = MediaQuery.of(context).size;
+    return TabBarView(
+      controller: _tabController,
+      children: <Widget>[
+        //Show invoice request
+        containerInvoiceRequest(),
+        //Show invoice processing
+        containerInvoice(size.height, 4),
+        //Show invoice deposit
+        containerInvoice(size.height, 5),
+        //Show sale's invoice: -1 ( done, undone, actice)
+        containerInvoice(size.height, 3),
+        containerInvoice(size.height, 2),
+      ],
     );
   }
 
@@ -159,6 +141,24 @@ class _InvoiceTabState extends State<InvoiceTab> with TickerProviderStateMixin {
         ));
   }
 
+  Widget containerInvoiceRequest() {
+    var size = MediaQuery.of(context).size;
+    return Container(
+      height: size.height,
+      margin: EdgeInsets.only(left: 5, top: 12, right: 5),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            rowButtonDatetime(),
+            new showAllInvoiceRequestPage(
+                fromDate: getFromDate, toDate: getToDate),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _showFloatBtn(index) {
     //index = 2 là tab thứ 2 "Ký gửi"
     if (index == 2) {
@@ -166,8 +166,7 @@ class _InvoiceTabState extends State<InvoiceTab> with TickerProviderStateMixin {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(
-                builder: (context) => GetMoneyDeposit()),
+            MaterialPageRoute(builder: (context) => GetMoneyDeposit()),
           );
         },
         label: Text(

@@ -138,25 +138,22 @@ class _DetailAdvanceReturnState extends State<DetailAdvanceReturn> {
             ),
           );
         } else if (snapshot.hasError) {
-          return Container(
-            margin: EdgeInsets.all(12),
-            child: Center(
-              child: Column(
-                children: [
-                  AutoSizeText(showMessage("", MSG008),
-                      style: TextStyle(fontWeight: FontWeight.w500)),
-                ],
-              ),
-            ),
-          );
+          return showErrorLoadData();
         }
-        return Container(
-            height: size.height,
-            child: Center(
-                child: CircularProgressIndicator(
-              color: Colors.white,
-            )));
+        return circularProgress(context);
       },
     );
   }
+
+  Widget circularProgress(context) {
+  var size = MediaQuery.of(context).size;
+  return Container(
+    height: size.height,
+    child: Center(
+      child: CircularProgressIndicator(
+        color: Colors.white,
+      ),
+    ),
+  );
+}
 }

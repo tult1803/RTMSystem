@@ -86,7 +86,7 @@ class _showNoticeState extends State<showNotice> {
                         onTap: () => _pagingController.refresh(),
                         child: Text(
                           showMessage(null, MSG027),
-                          style: TextStyle(color: welcome_color, fontSize: 18),
+                          style: TextStyle(color: primaryColor, fontSize: 18),
                         ),
                       ),
                     ],
@@ -121,7 +121,7 @@ class _showNoticeState extends State<showNotice> {
           onTap: () => _pagingController.refresh(),
           child: Text(
             showMessage('', MSG027),
-            style: TextStyle(color: welcome_color, fontSize: 18),
+            style: TextStyle(color: primaryColor, fontSize: 18),
           ),
         ),
       ],
