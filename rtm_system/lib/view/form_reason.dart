@@ -119,6 +119,3 @@ class _ReasonToDeleteState extends State<ReasonToDelete> {
   }
 }
 
-// doConfirmOrAcceptOrRejectInvoice(context, id, 3, isCustomer,
-// widgetToNavigator: widgetToNavigator, isRequest: isRequest);
-//
