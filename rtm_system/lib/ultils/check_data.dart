@@ -44,7 +44,7 @@ checkUpdatePriceProduct(BuildContext context, {bool isClick, double price}) {
     }
   } else {
     showCustomDialog(context,
-        content: showMessage("", MSG013), isSuccess: false);
+        content: showMessage("", MSG023), isSuccess: false);
     return false;
   }
 }
@@ -75,7 +75,7 @@ checkFullName(BuildContext context, String name) {
 checkChooseProduct(BuildContext context, String product) {
   if (product == null) {
     showCustomDialog(context,
-        content: showMessage("", MSG013), isSuccess: false);
+        content: showMessage("", MSG023), isSuccess: false);
   }
 }
 
