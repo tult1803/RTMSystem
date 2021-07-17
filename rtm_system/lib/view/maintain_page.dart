@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:rtm_system/ultils/src/color_ultils.dart';
 
 class MaintainPage extends StatefulWidget {
   const MaintainPage({Key key}) : super(key: key);
