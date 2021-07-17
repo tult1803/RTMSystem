@@ -695,7 +695,7 @@ Widget btnConfirmAdvanceReturn(
           );
         },
         child: AutoSizeText(
-          "Nhận tiền hoàn trả",
+          "Nhận tiền",
           style: TextStyle(
               color: Colors.white, fontWeight: FontWeight.w500, fontSize: 16),
         )),
