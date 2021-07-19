@@ -14,7 +14,6 @@ import 'package:rtm_system/ultils/get_api_data.dart';
 import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/view/confirm_detail_invoice.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
-import 'package:rtm_system/view/table_price.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../view/manager/form_detail_page.dart';
@@ -388,8 +387,8 @@ class _AddProductPageState extends State<AddProductPage> {
             // ignore: unnecessary_statements
             customerId == oldCusId ? customerId = "" : null;
           } else {
-            oldCusName = infomationCustomer.fullName;
-            nameNewCustomer = infomationCustomer.fullName;
+            oldCusName = infomationCustomer.fullname;
+            nameNewCustomer = infomationCustomer.fullname;
             oldCusId = infomationCustomer.accountId;
             customerId = infomationCustomer.accountId;
             enabledFillName = false;

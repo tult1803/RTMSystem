@@ -131,6 +131,7 @@ class showAdvancceBillManagerState extends State<showAdvancceBillManager> {
                            bodyPage: DetailAdvancePage(
                              isCustomer: false,
                              id: item.id,
+                             phoneCustomer: item.customerPhone,
                              status: item.statusId,
                              isRequest: false,
                              widgetToNavigator: widget.widgetToNavigator,

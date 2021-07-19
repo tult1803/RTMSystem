@@ -98,7 +98,7 @@ class _showProfileState extends State<showProfile> {
         child: Center(
           child: Column(
             children: [
-              _item(context, 'Họ và tên', infomationCustomer.fullName),
+              _item(context, 'Họ và tên', infomationCustomer.fullname),
               _item(
                   context,
                   'Ngày sinh',

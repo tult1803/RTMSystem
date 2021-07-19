@@ -21,18 +21,17 @@ class AdvancePage extends StatefulWidget {
 DateTime fromDate;
 DateTime toDate;
 
-class _AdvancePageState extends State<AdvancePage> with TickerProviderStateMixin {
+class _AdvancePageState extends State<AdvancePage>
+    with TickerProviderStateMixin {
   TabController _tabController;
   String getFromDate, getToDate;
   int index, _selectedIndex;
-  GetAPIProfileCustomer getAPIProfileCustomer = GetAPIProfileCustomer();
-  InfomationCustomer infomationCustomer = InfomationCustomer();
   int level = 0;
 
   @override
   void initState() {
     super.initState();
-     //tab 1: yeu cau
+    //tab 1: yeu cau
     index = 0;
     _tabController = TabController(length: 4, vsync: this);
     _tabController.addListener(() {
@@ -55,6 +54,8 @@ class _AdvancePageState extends State<AdvancePage> with TickerProviderStateMixin
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     String token = sharedPreferences.getString('access_token');
     String phone = sharedPreferences.getString('phone');
+    GetAPIProfileCustomer getAPIProfileCustomer = GetAPIProfileCustomer();
+    InfomationCustomer infomationCustomer = InfomationCustomer();
     // Đỗ dữ liệu lấy từ api
     infomationCustomer =
         await getAPIProfileCustomer.getProfileCustomer(token, phone);
@@ -75,9 +76,8 @@ class _AdvancePageState extends State<AdvancePage> with TickerProviderStateMixin
         bottom: bottomTabBar(),
       ),
       body: tabView(),
-      floatingActionButton: level != 0
-          ? showFloatBtn(_selectedIndex)
-          : showHiddenFloatBtn(),
+      floatingActionButton:
+          level != 0 ? showFloatBtn(_selectedIndex) : showHiddenFloatBtn(),
     );
   }
 
@@ -105,22 +105,24 @@ class _AdvancePageState extends State<AdvancePage> with TickerProviderStateMixin
       ],
     );
   }
-  Widget tabView(){
+
+  Widget tabView() {
     var size = MediaQuery.of(context).size;
     return TabBarView(
-        controller: _tabController,
-        children: <Widget>[
-          //show advance chờ xử lý
-          containerAdvance(size.height, 4),
-          //Show advance được chấp nhận, đã mượn
-          containerAdvance(size.height, 8),
-          //Show advance bị từ chối
-          containerAdvance(size.height, 6),
-          //show advance đã trả
-          containerAdvanceHistory(size.height, 8),
-        ],
-      );
+      controller: _tabController,
+      children: <Widget>[
+        //show advance chờ xử lý
+        containerAdvance(size.height, 4),
+        //Show advance được chấp nhận, đã mượn
+        containerAdvance(size.height, 8),
+        //Show advance bị từ chối
+        containerAdvance(size.height, 6),
+        //show advance đã trả
+        containerAdvanceHistory(size.height, 8),
+      ],
+    );
   }
+
   //show invoice advance request
   Widget containerAdvance(height, status) {
     return Container(
@@ -152,7 +154,7 @@ class _AdvancePageState extends State<AdvancePage> with TickerProviderStateMixin
           ),
         ));
   }
-  
+
   Widget showFloatBtn(index) {
     if (index == 1) {
       return FloatingActionButton.extended(
