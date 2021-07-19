@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:rtm_system/helpers/dialog.dart';
 import 'package:rtm_system/model/get/getAPI_allStore.dart';
 import 'package:rtm_system/model/model_store.dart';
 import 'package:rtm_system/helpers/component.dart';
@@ -98,16 +99,23 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          if (_formKey.currentState.validate()) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => ConfirmCreateRequestAdvance(
-                        listInfor: listInfor,
-                        storeId: _myStore,
-                        isCustomer: true,
-                      )),
-            );
+          if (_myStore == null) {
+            showCustomDialog(context,
+                isSuccess: false,
+                content: showMessage("Cửa hàng", MSG001),
+                doPopNavigate: true);
+          } else {
+            if (_formKey.currentState.validate()) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ConfirmCreateRequestAdvance(
+                          listInfor: listInfor,
+                          storeId: _myStore,
+                          isCustomer: true,
+                        )),
+              );
+            }
           }
         },
         label: titleAppBar('Tạo mới'),

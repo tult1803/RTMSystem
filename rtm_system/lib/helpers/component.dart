@@ -764,7 +764,10 @@ Widget componentContainerDetailAdvanceRequest(BuildContext context,
     String receiveDate,
     String reason,
     bool isCustomer,
+    String imageUrl,
     Widget widgetToNavigator}) {
+      var size = MediaQuery.of(context).size;
+      print(imageUrl);
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Column(
@@ -825,6 +828,12 @@ Widget componentContainerDetailAdvanceRequest(BuildContext context,
               colorContent: getColorStatus(status: activeStatus)),
         SizedBox(
           height: 10,
+        ),
+        //hiển thị ảnh cmnd mặt trước, vì khách có thể mượn tiền phải xác thực tài khoản nên 
+        // không cần bắt null url.
+        if(!isCustomer)
+        Container(
+          child: Image.network(imageUrl),
         ),
         //show btn for manager and customer
         showBtnInAdvanceRequest(context, statusId, activeStatus, isCustomer, id,
@@ -965,6 +974,7 @@ Widget componentDetailCreateInvoice(
   String price,
   String dateToPay,
   bool isCustomer,
+  int level,
   Widget widgetToNavigator,
 }) {
   return Padding(
@@ -989,7 +999,9 @@ Widget componentDetailCreateInvoice(
         SizedBox(
           height: 10,
         ),
+        if(level == 2)
         txtItemDetail(context, "Giá bán", "${getFormatPrice(price)} đ"),
+        if(level == 2)
         SizedBox(
           height: 10,
         ),

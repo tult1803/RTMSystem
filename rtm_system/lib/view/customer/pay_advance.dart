@@ -12,7 +12,6 @@ import 'package:rtm_system/helpers/dialog.dart';
 import 'package:rtm_system/model/get/getAPI_AdvanceRequest.dart';
 import 'package:rtm_system/model/modelAdvance_checked.dart';
 import 'package:rtm_system/model/model_advance_request.dart';
-import 'package:rtm_system/model/model_product.dart';
 import 'package:rtm_system/model/get/getAPI_customer_phone.dart';
 import 'package:rtm_system/model/model_profile_customer.dart';
 import 'package:rtm_system/presenter/Customer/show_deposit_to_process.dart';
@@ -61,6 +60,7 @@ class _PayDebtState extends State<PayDebt> {
   Future<List<Advance>> loadAdvance() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     AdvanceRequest listAdvance;
+    advanceAccept.clear();
     GetAdvanceRequest getAdvanceRequest = GetAdvanceRequest();
     listAdvance = await getAdvanceRequest.getAdvanceRequest(
       prefs.get("access_token"),
@@ -74,17 +74,15 @@ class _PayDebtState extends State<PayDebt> {
       "",
       searchTerm: "",
     );
-    advanceAccept.clear();
     advanceAccept = listAdvance.advances;
-    advanceAccept.forEach((element) {
-      var idSplit = element.id.split("-");
-      String prefixId = idSplit[0].trim();
-      if (prefixId == "UT") {
-        addIdAndAmount(element.id, element.amount);
-      } else {
-        print("tra no");
-      }
-    });
+    if (advanceAccept != null) {
+      advanceAccept.forEach((element) {
+        setState(() {
+          addIdAndAmount(element.id, element.amount);
+        });
+      });
+    }
+
     return advanceAccept;
   }
 
@@ -282,7 +280,6 @@ class _PayDebtState extends State<PayDebt> {
                           ),
                         ),
                       ),
-
                       Container(
                         margin: EdgeInsets.fromLTRB(5, 12, 5, 12),
                         child: Column(
@@ -370,12 +367,12 @@ class _PayDebtState extends State<PayDebt> {
                                   putReturnAdvance(context, state,
                                       advanceIdList, totalAdvance);
                                 }
-                              }else{
+                              } else {
                                 showCustomDialog(
-                                    context,
-                                    isSuccess: false,
-                                    content: showMessage("", MSG034),
-                                  );
+                                  context,
+                                  isSuccess: false,
+                                  content: showMessage("", MSG034),
+                                );
                               }
                             },
                             child: Text(

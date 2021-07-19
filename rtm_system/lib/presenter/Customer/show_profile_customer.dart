@@ -7,6 +7,7 @@ import 'package:rtm_system/helpers/button.dart';
 import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/customer/Profile/account_verification.dart';
+import 'package:rtm_system/view/customer/Profile/update_profile.dart';
 import 'package:rtm_system/view/update_password.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -97,7 +98,7 @@ class _showProfileState extends State<showProfile> {
         child: Center(
           child: Column(
             children: [
-              _item(context, 'Họ và tên', infomationCustomer.fullName),
+              _item(context, 'Họ và tên', infomationCustomer.fullname),
               _item(
                   context,
                   'Ngày sinh',
@@ -159,34 +160,71 @@ class _showProfileState extends State<showProfile> {
               ),
             ),
           ),
-          level == 0
-              ? TextButton(
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => AccountVerification()));
-                  },
-                  child: Center(
-                    child: AutoSizeText(
-                      "Xác thực ảnh CMND",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    primary: primaryColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                    ),
-                  ),
-                )
-              : Container(),
+          if (level == 0)
+            twoBtnForCustomer0(),
         ],
       ),
     );
   }
+  Widget twoBtnForCustomer0(){
+    return Column(
+      children: [
+        TextButton(
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => UpdateProfilePage(
+                        password: password,
+                        accountId: infomationCustomer.id.toString(),
+                        address: infomationCustomer.address,
+                        phone: infomationCustomer.phone,
+                        birthday: DateTime.parse(getDateTime(infomationCustomer.birthday, dateFormat: "yyyy-MM-dd")), 
+                        check: false,
+                        cmnd: infomationCustomer.cmnd,
+                        fullname: infomationCustomer.fullname,
+                        gender: infomationCustomer.gender,
+                        )));
+              },
+              child: Center(
+                child: AutoSizeText(
+                  "Cập nhật thông tin",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              style: ElevatedButton.styleFrom(
+                primary: primaryColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                ),
+              ),
+            ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => AccountVerification()));
+            },
+            child: Center(
+              child: AutoSizeText(
+                "Xác thực ảnh CMND",
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            style: ElevatedButton.styleFrom(
+              primary: primaryColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              ),
+            ),
+          )
+      ],
 
+    );
+  }
   //Show thông tin của người dùng
   Widget _item(context, header, value) {
     // Khi giá trị get lên là rỗng thì set '' để load tránh lỗi trang

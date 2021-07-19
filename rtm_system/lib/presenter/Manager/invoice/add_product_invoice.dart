@@ -15,7 +15,6 @@ import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/message_list.dart';
 import 'package:rtm_system/view/confirm_detail_invoice.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
-import 'package:rtm_system/view/table_price.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../view/manager/form_detail_page.dart';
@@ -35,6 +34,7 @@ class AddProductPage extends StatefulWidget {
       savePrice,
       productName,
       storeName;
+      final int level;
 
   //true is Customer role
   final bool isCustomer;
@@ -53,7 +53,8 @@ class AddProductPage extends StatefulWidget {
       this.widgetToNavigator,
       this.productName,
       this.storeName,
-      this.isChangeData});
+      this.isChangeData,
+      this.level});
 
   @override
   _AddProductPageState createState() => _AddProductPageState();
@@ -283,26 +284,26 @@ class _AddProductPageState extends State<AddProductPage> {
                 SizedBox(
                   height: 10,
                 ),
-                showPriceTable(),
+                // showPriceTable(),
               ],
             )),
       ),
     );
   }
 
-  Widget showPriceTable() {
-    if (widget.isCustomer) {
-      if (_myProduct != null) {
-        return showTablePrice(
-          idProduct: _myProduct,
-        );
-      } else {
-        return Container();
-      }
-    } else {
-      return Container();
-    }
-  }
+  // Widget showPriceTable() {
+  //   if (widget.isCustomer) {
+  //     if (_myProduct != null) {
+  //       return showTablePrice(
+  //         idProduct: _myProduct,
+  //       );
+  //     } else {
+  //       return Container();
+  //     }
+  //   } else {
+  //     return Container();
+  //   }
+  // }
 
   Widget txtAutoFillByPhone({
     TextEditingController controller,
@@ -385,8 +386,8 @@ class _AddProductPageState extends State<AddProductPage> {
             // ignore: unnecessary_statements
             customerId == oldCusId ? customerId = "" : null;
           } else {
-            oldCusName = infomationCustomer.fullName;
-            nameNewCustomer = infomationCustomer.fullName;
+            oldCusName = infomationCustomer.fullname;
+            nameNewCustomer = infomationCustomer.fullname;
             oldCusId = infomationCustomer.accountId;
             customerId = infomationCustomer.accountId;
           }
@@ -468,13 +469,25 @@ class _AddProductPageState extends State<AddProductPage> {
           onPressed: () {
             setState(() {
               if (widget.isCustomer) {
-                _myProduct == null
-                    ? showCustomDialog(
-                        context,
-                        content: "Chưa chọn sản phẩm",
-                        isSuccess: false,
-                      )
-                    : _navigator("Xác nhận giữ giá");
+                if (_myStore == null) {
+                  showCustomDialog(
+                    context,
+                    content: showMessage("Cửa hàng", MSG001),
+                    isSuccess: false,
+                  );
+                } else {
+                  if(_myProduct == null){
+showCustomDialog(
+                          context,
+                          content: "Chưa chọn sản phẩm",
+                          isSuccess: false,
+                        );
+                  }else{
+                     widget.level == 1? _navigator("Xác nhận bán hàng"): _navigator("Xác nhận giữ giá");
+                  }
+                       
+                    
+                }
               } else {
                 _validate();
               }
@@ -866,6 +879,7 @@ class _AddProductPageState extends State<AddProductPage> {
             builder: (context) => FormForDetailPage(
                   tittle: tittle,
                   bodyPage: confirmDetailInvoice(
+                  level: widget.level,
                     storeId: "$_myStore",
                     productId: "$_myProduct",
                     customerId: "$customerId",
@@ -884,6 +898,7 @@ class _AddProductPageState extends State<AddProductPage> {
                             indexInsidePage: 1,
                           )
                         : widget.widgetToNavigator,
+                      
                     isCustomer: widget.isCustomer,
                   ),
                 )));
