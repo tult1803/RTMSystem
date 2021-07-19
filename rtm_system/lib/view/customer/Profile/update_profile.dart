@@ -7,24 +7,22 @@ class UpdateProfilePage extends StatefulWidget {
   const UpdateProfilePage({
     Key key,
     this.fullname,
-    this.phone,
     this.gender,
     this.password,
     this.cmnd,
     this.address,
     this.birthday,
     this.check,
-    this.account_id,
+    this.accountId,
   }) : super(key: key);
   final String cmnd;
   final String fullname;
   final int gender;
-  final String phone;
   final String password;
   final DateTime birthday;
   final String address;
   final bool check;
-  final String account_id;
+  final String accountId;
 
 
   @override
@@ -98,20 +96,21 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
           ),
           // sau khi nhập mật khẩu xong thì có thể update thông tin. 
           if(checkPasswordSuccess || widget.check == true)
-            formUpdateProfile(
-              fullname: widget.fullname,
-              phone: widget.phone,
-              cmnd: widget.cmnd,
-              address: widget.address,
-              password: widget.password,
-              birthday: widget.birthday,
-              gender: widget.gender,
-              check: true,
-              isUpdate: true,
-              typeOfUpdate: 1,
-              accountId: widget.account_id,
-              isCustomer: true,
-            ),
+            // formUpdateProfile(
+            //   fullname: widget.fullname,
+            //   cmnd: widget.cmnd,
+            //   phone: "",
+            //   address: widget.address,
+            //   password: widget.password,
+            //   birthday: widget.birthday,
+            //   gender: widget.gender,
+            //   check: true,
+            //   isUpdate: true,
+            //   typeOfUpdate: 1,
+            //   accountId: widget.accountId,
+            //   isCustomer: true,
+            // ),
+            Text('Form update'),
             SizedBox(height: 15,),
             if(checkPasswordSuccess == false)
             btnSubmitValidate(context, size.width * 0.3, size.height * 0.05, Color(0xFF0BB791), "Kiểm tra"),
