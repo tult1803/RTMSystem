@@ -111,7 +111,7 @@ Widget txtItemDetail(context, String tittle, String content,
     children: [
       Container(
         child: AutoSizeText(
-          tittle,
+          tittle == null ? "-----" : tittle,
           style: TextStyle(
             color: Colors.black45,
             fontSize: 12,
@@ -128,7 +128,7 @@ Widget txtItemDetail(context, String tittle, String content,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            content,
+            content == null ? "-----" : content,
             style: GoogleFonts.roboto(
               fontSize: 16,
               color: colorContent,
@@ -491,10 +491,10 @@ Widget componentContainerDetailProduct(BuildContext context, Map item) {
 Widget componentContainerDetailCustomer(BuildContext context,
     {String status,
     String token,
-    String account_id,
+    String accountId,
     int statusId,
     int advance,
-    String fullname,
+    String fullName,
     String cmnd,
     String phone,
     String address,
@@ -505,23 +505,23 @@ Widget componentContainerDetailCustomer(BuildContext context,
     padding: const EdgeInsets.all(8.0),
     child: Column(
       children: [
-        txtItemDetail(context, "ID khách hàng", "$account_id"),
+        txtItemDetail(context, "ID khách hàng", accountId),
         SizedBox(
           height: 10,
         ),
-        txtItemDetail(context, "Họ và tên", "$fullname"),
+        txtItemDetail(context, "Họ và tên", fullName),
         SizedBox(
           height: 10,
         ),
-        txtItemDetail(context, "Giới tính", "$gender"),
+        txtItemDetail(context, "Giới tính", gender),
         SizedBox(
           height: 10,
         ),
-        txtItemDetail(context, "Điện thoại", "$phone"),
+        txtItemDetail(context, "Điện thoại", phone),
         SizedBox(
           height: 10,
         ),
-        txtItemDetail(context, "CMND/CCCD", "$cmnd"),
+        txtItemDetail(context, "CMND/CCCD", cmnd),
         SizedBox(
           height: 10,
         ),
@@ -530,7 +530,7 @@ Widget componentContainerDetailCustomer(BuildContext context,
         SizedBox(
           height: 10,
         ),
-        txtItemDetail(context, "Địa chỉ", "$address"),
+        txtItemDetail(context, "Địa chỉ", address),
         SizedBox(
           height: 10,
         ),
@@ -538,7 +538,7 @@ Widget componentContainerDetailCustomer(BuildContext context,
         SizedBox(
           height: 10,
         ),
-        txtItemDetail(context, "Loại tài khoản", "$level"),
+        txtItemDetail(context, "Loại tài khoản", level),
         SizedBox(
           height: 10,
         ),
@@ -551,7 +551,7 @@ Widget componentContainerDetailCustomer(BuildContext context,
             token: token,
             context: context,
             status: status,
-            deactivateId: account_id),
+            deactivateId: accountId),
         SizedBox(
           height: 5,
         ),

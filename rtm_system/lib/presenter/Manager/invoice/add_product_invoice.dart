@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:rtm_system/model/get/getAPI_allStore.dart';
 import 'package:rtm_system/model/get/getAPI_product.dart';
 import 'package:rtm_system/model/model_product.dart';
@@ -13,7 +12,7 @@ import 'package:rtm_system/helpers/component.dart';
 import 'package:rtm_system/ultils/check_data.dart';
 import 'package:rtm_system/ultils/get_api_data.dart';
 import 'package:rtm_system/ultils/get_data.dart';
-import 'package:rtm_system/ultils/src/regExp.dart';
+import 'package:rtm_system/ultils/src/message_list.dart';
 import 'package:rtm_system/view/confirm_detail_invoice.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
 import 'package:rtm_system/view/table_price.dart';
@@ -64,7 +63,7 @@ InfomationCustomer infomationCustomer = InfomationCustomer();
 String phoneNewCustomer, nameNewCustomer, customerId;
 
 class _AddProductPageState extends State<AddProductPage> {
-  String errorPhone, errorFullName, errorQuantity, errorDegree;
+  String errorPhone, errorQuantity, errorDegree;
   String price, productName;
   String token, storeName;
   String personSale = '', phoneSale = '', oldCusName, oldCusId;
@@ -74,7 +73,7 @@ class _AddProductPageState extends State<AddProductPage> {
   List<StoreElement> dataListStore;
   bool checkClick = false;
   var txtController = TextEditingController();
-  bool autoFocus = false, enabledFillName = true;
+  bool autoFocus = false;
 
   //field to sales
   double quantity = 0, degree = 0;
@@ -221,14 +220,12 @@ class _AddProductPageState extends State<AddProductPage> {
                       error: errorPhone,
                     ),
                     txtAutoFillByPhone(
-                      enabled:
-                          widget.isChangeData == null ? enabledFillName : false,
+                      enabled: false,
                       isCustomer: this.widget.isCustomer,
                       controller: getDataTextField(nameNewCustomer),
                       type: "name",
                       tittle: "Tên khách hàng",
                       txtInputType: TextInputType.name,
-                      error: errorFullName,
                     ),
                     SizedBox(
                       height: 10,
@@ -331,8 +328,7 @@ class _AddProductPageState extends State<AddProductPage> {
                 doOnSubmittedTextField(type, value);
                 if (tittle.contains("Điện thoại")) {
                   errorPhone = await checkPhoneNumber(value);
-                } else
-                  errorFullName = await checkFullName(context, nameNewCustomer);
+                }
               },
               maxLines: 1,
               keyboardType: txtInputType,
@@ -384,7 +380,6 @@ class _AddProductPageState extends State<AddProductPage> {
         infomationCustomer = await getDataCustomerFromPhone(value);
         setState(() {
           if (infomationCustomer == null) {
-            enabledFillName = true;
             // ignore: unnecessary_statements
             nameNewCustomer == oldCusName ? nameNewCustomer = "" : null;
             // ignore: unnecessary_statements
@@ -394,7 +389,6 @@ class _AddProductPageState extends State<AddProductPage> {
             nameNewCustomer = infomationCustomer.fullName;
             oldCusId = infomationCustomer.accountId;
             customerId = infomationCustomer.accountId;
-            enabledFillName = false;
           }
           autoFocus = false;
         });
@@ -500,23 +494,20 @@ class _AddProductPageState extends State<AddProductPage> {
 
   void _validate() async {
     errorPhone = await checkPhoneNumber(phoneNewCustomer);
-    errorFullName = await checkFullName(context, nameNewCustomer);
     checkChooseProduct(context, _myProduct);
     errorQuantity = await checkQuantity(quantity);
     errorDegree = await checkDegree(checkProduct, degree);
 
     if (errorPhone == null &&
         errorQuantity == null &&
-        errorFullName == null &&
         _myProduct != null) {
       if (checkProduct || (!checkProduct && errorDegree == null)) {
-        _navigator("Xác nhận hóa đơn");
+        if(nameNewCustomer.isNotEmpty){
+          _navigator("Xác nhận hóa đơn");
+        }else{
+          showCustomDialog(context,isSuccess: false, content: showMessage("", MSG009));
+        }
       }
-      // if (checkProduct ) {
-      //   _navigator("Xác nhận hóa đơn");
-      // } else if (!checkProduct && errorDegree == null) {
-      //   _navigator("Xác nhận hóa đơn");
-      // }
     }
   }
 
@@ -869,7 +860,6 @@ class _AddProductPageState extends State<AddProductPage> {
   }
 
   Future<void> _navigator(String tittle) async {
-    print(customerId);
     Navigator.push(
         context,
         MaterialPageRoute(

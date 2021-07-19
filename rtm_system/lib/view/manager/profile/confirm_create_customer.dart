@@ -27,7 +27,7 @@ class _ConfirmCreateCustomerState extends State<ConfirmCreateCustomer> {
     _getData();
   }
 
-  Future<void> _getData() {
+  Future<void> _getData() async {
     setState(() {
       fullname = this.widget.listCustomer[0];
       if (this.widget.listCustomer[1] == 1) {
@@ -66,7 +66,7 @@ class _ConfirmCreateCustomerState extends State<ConfirmCreateCustomer> {
                   _checkPhone(),
                   txtConfirm(context, "Họ và tên", fullname),
                   txtConfirm(context, "Giới tính", "$gender"),
-                  txtConfirm(context, "Ngày sinh", "${getDateTime("$birthday", dateFormat: 'dd/MM/yyyy')}"),
+                  txtConfirm(context, "Ngày sinh", "${birthday == null ? "----" : getDateTime("$birthday", dateFormat: 'dd/MM/yyyy')}"),
                   _checkCMND(),
                   _checkAddress(),
                   processCreateCustomer(
@@ -86,14 +86,14 @@ class _ConfirmCreateCustomerState extends State<ConfirmCreateCustomer> {
 
   Widget _checkCMND() {
     if (this.widget.check) {
-      return txtConfirm(context, "CMND/CCCD", cmnd);
+      return txtConfirm(context, "CMND/CCCD", "${cmnd == null ? "----" : cmnd}");
     } else
       return Container();
   }
 
   Widget _checkAddress() {
     if (this.widget.check) {
-      return txtConfirm(context, "Địa chỉ", address);
+      return txtConfirm(context, "Địa chỉ","${address  == null ? "----" : address}");
     } else
       return Container();
   }
