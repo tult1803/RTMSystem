@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'package:rtm_system/ultils/src/url_api.dart';
 import 'package:http/http.dart' as http;
 
-class PutUpdateProfile {
-  updateProfile(
+class PutUpdateProfileCustomer {
+  updateProfileCustomer(
     String token,
     String cmnd,
     String birthday,
@@ -11,8 +11,9 @@ class PutUpdateProfile {
     String address,
     int gender,
   ) async {
+    print(birthday);
     final response = await http.put(
-      Uri.http('$urlMain', '$urlUpdatePassword'),
+      Uri.http('$urlMain', '$urlUpdateCustomer'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $token',
@@ -25,8 +26,7 @@ class PutUpdateProfile {
         "gender": gender,
       }),
     );
-
-    print("Status putAPI updateProfile:${response.statusCode}");
+    print("Status putAPI updateProfileCustomer:${response.statusCode}");
     return response.statusCode;
   }
 }

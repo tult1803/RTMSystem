@@ -12,6 +12,7 @@ class UpdateProfilePage extends StatefulWidget {
     this.cmnd,
     this.address,
     this.birthday,
+    this.phone,
     this.check,
     this.accountId,
   }) : super(key: key);
@@ -21,6 +22,7 @@ class UpdateProfilePage extends StatefulWidget {
   final String password;
   final DateTime birthday;
   final String address;
+  final String phone;
   final bool check;
   final String accountId;
 
@@ -96,21 +98,20 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
           ),
           // sau khi nhập mật khẩu xong thì có thể update thông tin. 
           if(checkPasswordSuccess || widget.check == true)
-            // formUpdateProfile(
-            //   fullname: widget.fullname,
-            //   cmnd: widget.cmnd,
-            //   phone: "",
-            //   address: widget.address,
-            //   password: widget.password,
-            //   birthday: widget.birthday,
-            //   gender: widget.gender,
-            //   check: true,
-            //   isUpdate: true,
-            //   typeOfUpdate: 1,
-            //   accountId: widget.accountId,
-            //   isCustomer: true,
-            // ),
-            Text('Form update'),
+            formUpdateProfile(
+              fullname: widget.fullname,
+              cmnd: widget.cmnd,
+              phone: widget.phone,
+              address: widget.address,
+              password: widget.password,
+              birthday: widget.birthday,
+              gender: widget.gender,
+              check: true,
+              isUpdate: true,
+              typeOfUpdate: 1,
+              accountId: widget.accountId,
+              isCustomer: true,
+            ),
             SizedBox(height: 15,),
             if(checkPasswordSuccess == false)
             btnSubmitValidate(context, size.width * 0.3, size.height * 0.05, Color(0xFF0BB791), "Kiểm tra"),

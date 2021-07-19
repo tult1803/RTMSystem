@@ -174,7 +174,15 @@ class _showProfileState extends State<showProfile> {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => UpdateProfilePage(
                         password: password,
-                        accountId: infomationCustomer.id.toString())));
+                        accountId: infomationCustomer.id.toString(),
+                        address: infomationCustomer.address,
+                        phone: infomationCustomer.phone,
+                        birthday: DateTime.parse(getDateTime(infomationCustomer.birthday, dateFormat: "yyyy-MM-dd")), 
+                        check: false,
+                        cmnd: infomationCustomer.cmnd,
+                        fullname: infomationCustomer.fullname,
+                        gender: infomationCustomer.gender,
+                        )));
               },
               child: Center(
                 child: AutoSizeText(

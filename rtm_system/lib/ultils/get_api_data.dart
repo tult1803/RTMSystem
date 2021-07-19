@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:http/http.dart';
 import 'package:rtm_system/model/delete/deleteAPI_deactivateAdvanceRequest.dart';
 import 'package:rtm_system/model/delete/deleteAPI_invoice.dart';
 import 'package:rtm_system/model/delete/deleteAPI_invoiceRequest.dart';
@@ -15,6 +16,7 @@ import 'package:rtm_system/model/post/postAPI_createInvoice.dart';
 import 'package:rtm_system/model/post/postAPI_createNotice.dart';
 import 'package:rtm_system/model/get/getAPI_customer_phone.dart';
 import 'package:rtm_system/model/post/postAPI_validateCustomer.dart';
+import 'package:rtm_system/model/put/putAPI_UpdateProfile.dart';
 import 'package:rtm_system/model/put/putAPI_confirmAdvanceRequest.dart';
 import 'package:rtm_system/model/put/putAPI_confirmAdvanceReturn.dart';
 import 'package:rtm_system/model/put/putAPI_confirmIdentifyCustomer.dart';
@@ -78,22 +80,30 @@ Future post_put_ApiProfile(
     String birthday,
     bool isUpdate,
     int typeOfUpdate,
-    String accountId) async {
+    String accountId,
+    isCustomer) async {
   int status;
   SharedPreferences prefs = await SharedPreferences.getInstance();
   if (isUpdate) {
-    PutUpdateProfile _putUpdate = PutUpdateProfile();
-    status = await _putUpdate.updateProfile(
-        prefs.get("access_token"),
-        phone,
-        typeOfUpdate,
-        accountId,
-        password,
-        fullname,
-        gender,
-        cmnd,
-        address,
-        birthday);
+    if (isCustomer) {
+      print("zo");
+      PutUpdateProfileCustomer putUpdateProfile = PutUpdateProfileCustomer();
+      status = await putUpdateProfile.updateProfileCustomer(
+          prefs.get("access_token"), cmnd, birthday, fullname, address, gender);
+    } else {
+      PutUpdateProfile _putUpdate = PutUpdateProfile();
+      status = await _putUpdate.updateProfile(
+          prefs.get("access_token"),
+          phone,
+          typeOfUpdate,
+          accountId,
+          password,
+          fullname,
+          gender,
+          cmnd,
+          address,
+          birthday);
+    }
   } else {
     PostCreateCustomer _createCustomer = PostCreateCustomer();
     status = await _createCustomer.createCustomer(prefs.get("access_token"),
@@ -165,12 +175,12 @@ Future<void> doCreateCustomer(
     bool isUpdate}) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   int status = await post_put_ApiProfile(phone, password, fullname, gender,
-      cmnd, address, birthday, isUpdate, typeOfUpdate, accountId);
+      cmnd, address, birthday, isUpdate, typeOfUpdate, accountId, isCustomer);
   if (status == 200) {
     if (isCustomer) {
       showStatusAlertDialog(
           context,
-          "Đã cập nhật",
+          showMessage("", MSG003),
           HomeCustomerPage(
             index: 3,
           ),

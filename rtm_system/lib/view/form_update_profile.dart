@@ -78,16 +78,17 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
         children: [
           Column(
             children: [
-              _txtFormField(this.widget.fullname, false, "Nhập họ tên",
-                  "Họ và tên", errFullName, 1, TextInputType.text),
-              _txtfield(
-                  getDataTextField(this.widget.phone),
-                  false,
-                  "Nhập số điện thoại",
-                  "Số điện thoại",
-                  errPhone,
-                  1,
-                  TextInputType.phone),
+                _txtFormField(this.widget.fullname, false, "Nhập họ tên",
+                    "Họ và tên", errFullName, 1, TextInputType.text),
+              if (!widget.isCustomer)
+                _txtfield(
+                    getDataTextField(this.widget.phone),
+                    false,
+                    "Nhập số điện thoại",
+                    "Số điện thoại",
+                    errPhone,
+                    1,
+                    TextInputType.phone),
               _checkPassword(),
               radioButton(context),
               btnBirthday(context),

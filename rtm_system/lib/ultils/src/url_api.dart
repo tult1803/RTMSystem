@@ -34,3 +34,4 @@ String urlReceiveReturnCash = "api/rtm/v1/advance/get-return-cash";
 String urlDeleteAdvanceRequest = "api/rtm/v1/advance/delete-advance-request";
 String urlMaintainCheck = "api/auth/v1/health-check";
 String urlUpdateInvoice = "api/rtm/v1/invoice/update-invoice";
+String urlUpdateCustomer = "api/rtm/v1/user/update-customer";
