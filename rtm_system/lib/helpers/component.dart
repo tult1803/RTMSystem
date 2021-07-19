@@ -974,6 +974,7 @@ Widget componentDetailCreateInvoice(
   String price,
   String dateToPay,
   bool isCustomer,
+  int level,
   Widget widgetToNavigator,
 }) {
   return Padding(
@@ -998,7 +999,9 @@ Widget componentDetailCreateInvoice(
         SizedBox(
           height: 10,
         ),
+        if(level == 2)
         txtItemDetail(context, "Giá bán", "${getFormatPrice(price)} đ"),
+        if(level == 2)
         SizedBox(
           height: 10,
         ),

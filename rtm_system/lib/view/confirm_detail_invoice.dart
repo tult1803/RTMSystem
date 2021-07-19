@@ -8,6 +8,7 @@ class confirmDetailInvoice extends StatelessWidget {
   String storeName,productName, productId;
   String quantity, degree, customerId;
   String price, dateToPay, invoiceRequestId;
+  int level;
   Widget widgetToNavigator;
   @override
   Widget build(BuildContext context) {
@@ -34,6 +35,7 @@ class confirmDetailInvoice extends StatelessWidget {
             productName: productName,
             storeName: storeName,
             widgetToNavigator: widgetToNavigator,
+            level: level,
       ),
         ),
     );
@@ -53,5 +55,6 @@ class confirmDetailInvoice extends StatelessWidget {
       this.price,
       this.dateToPay,
       this.invoiceRequestId,
-      this.widgetToNavigator});
+      this.widgetToNavigator, 
+      this.level});
 }

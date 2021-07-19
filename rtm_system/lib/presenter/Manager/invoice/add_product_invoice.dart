@@ -12,6 +12,7 @@ import 'package:rtm_system/helpers/component.dart';
 import 'package:rtm_system/ultils/check_data.dart';
 import 'package:rtm_system/ultils/get_api_data.dart';
 import 'package:rtm_system/ultils/get_data.dart';
+import 'package:rtm_system/ultils/src/message_list.dart';
 import 'package:rtm_system/view/confirm_detail_invoice.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -33,6 +34,7 @@ class AddProductPage extends StatefulWidget {
       savePrice,
       productName,
       storeName;
+      final int level;
 
   //true is Customer role
   final bool isCustomer;
@@ -51,7 +53,8 @@ class AddProductPage extends StatefulWidget {
       this.widgetToNavigator,
       this.productName,
       this.storeName,
-      this.isChangeData});
+      this.isChangeData,
+      this.level});
 
   @override
   _AddProductPageState createState() => _AddProductPageState();
@@ -471,13 +474,25 @@ class _AddProductPageState extends State<AddProductPage> {
           onPressed: () {
             setState(() {
               if (widget.isCustomer) {
-                _myProduct == null
-                    ? showCustomDialog(
-                        context,
-                        content: "Chưa chọn sản phẩm",
-                        isSuccess: false,
-                      )
-                    : _navigator("Xác nhận giữ giá");
+                if (_myStore == null) {
+                  showCustomDialog(
+                    context,
+                    content: showMessage("Cửa hàng", MSG001),
+                    isSuccess: false,
+                  );
+                } else {
+                  if(_myProduct == null){
+showCustomDialog(
+                          context,
+                          content: "Chưa chọn sản phẩm",
+                          isSuccess: false,
+                        );
+                  }else{
+                     widget.level == 1? _navigator("Xác nhận bán hàng"): _navigator("Xác nhận giữ giá");
+                  }
+                       
+                    
+                }
               } else {
                 _validate();
               }
@@ -873,6 +888,7 @@ class _AddProductPageState extends State<AddProductPage> {
             builder: (context) => FormForDetailPage(
                   tittle: tittle,
                   bodyPage: confirmDetailInvoice(
+                  level: widget.level,
                     storeId: "$_myStore",
                     productId: "$_myProduct",
                     customerId: "$customerId",
@@ -891,6 +907,7 @@ class _AddProductPageState extends State<AddProductPage> {
                             indexInsidePage: 1,
                           )
                         : widget.widgetToNavigator,
+                      
                     isCustomer: widget.isCustomer,
                   ),
                 )));

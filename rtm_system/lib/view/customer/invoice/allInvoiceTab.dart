@@ -191,6 +191,7 @@ class _InvoiceTabState extends State<InvoiceTab> with TickerProviderStateMixin {
                 builder: (context) => AddProductPage(
                       isCustomer: true,
                       tittle: "Tạo yêu cầu bán hàng",
+                      level: level,
                     )),
           );
         },
