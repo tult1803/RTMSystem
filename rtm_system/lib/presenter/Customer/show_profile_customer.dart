@@ -42,6 +42,7 @@ class _showProfileState extends State<showProfile> {
     password = sharedPreferences.getString('password');
     infomationCustomer =
         await getAPIProfileCustomer.getProfileCustomer(token, phone);
+
     return infomationCustomer;
   }
 
@@ -174,14 +175,22 @@ class _showProfileState extends State<showProfile> {
                 builder: (context) => UpdateProfilePage(
                       password: password,
                       accountId: infomationCustomer.id.toString(),
-                      address: infomationCustomer.address,
+                      address: infomationCustomer.address == null
+                          ? null
+                          : infomationCustomer.address,
                       phone: infomationCustomer.phone,
-                      birthday: DateTime.parse(getDateTime(
-                          infomationCustomer.birthday,
-                          dateFormat: "yyyy-MM-dd")),
+                      birthday: infomationCustomer.birthday == null
+                          ? null
+                          : DateTime.parse(getDateTime(
+                              infomationCustomer.birthday,
+                              dateFormat: "yyyy-MM-dd")),
                       check: false,
-                      cmnd: infomationCustomer.cmnd,
-                      fullname: infomationCustomer.fullname,
+                      cmnd: infomationCustomer.cmnd == null
+                          ? null
+                          : infomationCustomer.cmnd,
+                      fullname: infomationCustomer.fullname == null
+                          ? null
+                          : infomationCustomer.fullname,
                       gender: infomationCustomer.gender,
                     )));
           },
