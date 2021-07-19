@@ -165,7 +165,7 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
                     ];
                   });
                 },
-                currentTime: this.widget.birthday,
+                // currentTime: this.widget.birthday,
                 maxTime: DateTime(DateTime.now().year, 12, 31),
                 minTime: DateTime(DateTime.now().year - 111),
                 locale: LocaleType.vi,
@@ -183,8 +183,8 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
                 ),
                 Expanded(
                   child: Text(
-                    '${getDateTime("${this.widget.birthday}", dateFormat: "dd/MM/yyyy")}',
-                    style: TextStyle(fontSize: 16),
+                    '${widget.birthday == null ? "dd/MM/yyyy" : getDateTime("${this.widget.birthday}", dateFormat: "dd/MM/yyyy")}',
+                    style: TextStyle(fontSize: 16, color: widget.birthday == null ? Colors.black45 : Colors.black87),
                   ),
                 ),
                 Container(

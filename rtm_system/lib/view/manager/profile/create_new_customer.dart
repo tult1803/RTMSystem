@@ -34,7 +34,7 @@ class _CreateCustomerState extends State<CreateCustomer> {
           isCustomer: false,
           isUpdate: false,
           isCreate: true,
-          birthday: DateTime.now(),
+          // birthday: DateTime.now(),
         )));
   }
 }
