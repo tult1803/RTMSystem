@@ -99,15 +99,14 @@ class _showProfileState extends State<showProfile> {
           child: Column(
             children: [
               _item(context, 'Họ và tên', infomationCustomer.fullname),
-              _item(
-                  context,
-                  'Ngày sinh',
-                  getDateTime(infomationCustomer.birthday.toString(),
-                      dateFormat: 'dd-MM-yyyy')),
+              _item(context, 'Ngày sinh',
+                  "${infomationCustomer.birthday == null ? "-----" : getDateTime(infomationCustomer.birthday, dateFormat: 'dd-MM-yyyy')}"),
               _item(context, 'Số điện thoại', infomationCustomer.phone),
               _item(context, 'Giới tính', getGender(infomationCustomer.gender)),
-              _item(context, 'CMND', infomationCustomer.cmnd),
-              _item(context, 'Địa chỉ', infomationCustomer.address.toString()),
+              _item(context, 'CMND',
+                  "${infomationCustomer.cmnd == null ? "-----" : infomationCustomer.cmnd}"),
+              _item(context, 'Địa chỉ',
+                  "${infomationCustomer.address == null ? "-----" : infomationCustomer.address}"),
               _item(context, 'Loại tài khoản',
                   getLevel(level: infomationCustomer.level)),
               SizedBox(
@@ -160,71 +159,73 @@ class _showProfileState extends State<showProfile> {
               ),
             ),
           ),
-          if (level == 0)
-            twoBtnForCustomer0(),
+          if (level == 0) twoBtnForCustomer0(),
         ],
       ),
     );
   }
-  Widget twoBtnForCustomer0(){
+
+  Widget twoBtnForCustomer0() {
     return Column(
       children: [
         TextButton(
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => UpdateProfilePage(
-                        password: password,
-                        accountId: infomationCustomer.id.toString(),
-                        address: infomationCustomer.address,
-                        phone: infomationCustomer.phone,
-                        birthday: DateTime.parse(getDateTime(infomationCustomer.birthday, dateFormat: "yyyy-MM-dd")), 
-                        check: false,
-                        cmnd: infomationCustomer.cmnd,
-                        fullname: infomationCustomer.fullname,
-                        gender: infomationCustomer.gender,
-                        )));
-              },
-              child: Center(
-                child: AutoSizeText(
-                  "Cập nhật thông tin",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-              style: ElevatedButton.styleFrom(
-                primary: primaryColor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                ),
+          onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => UpdateProfilePage(
+                      password: password,
+                      accountId: infomationCustomer.id.toString(),
+                      address: infomationCustomer.address,
+                      phone: infomationCustomer.phone,
+                      birthday: DateTime.parse(getDateTime(
+                          infomationCustomer.birthday,
+                          dateFormat: "yyyy-MM-dd")),
+                      check: false,
+                      cmnd: infomationCustomer.cmnd,
+                      fullname: infomationCustomer.fullname,
+                      gender: infomationCustomer.gender,
+                    )));
+          },
+          child: Center(
+            child: AutoSizeText(
+              "Cập nhật thông tin",
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                color: Colors.white,
               ),
             ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => AccountVerification()));
-            },
-            child: Center(
-              child: AutoSizeText(
-                "Xác thực ảnh CMND",
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white,
-                ),
+          ),
+          style: ElevatedButton.styleFrom(
+            primary: primaryColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
+          ),
+        ),
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => AccountVerification()));
+          },
+          child: Center(
+            child: AutoSizeText(
+              "Xác thực ảnh CMND",
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                color: Colors.white,
               ),
             ),
-            style: ElevatedButton.styleFrom(
-              primary: primaryColor,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-              ),
+          ),
+          style: ElevatedButton.styleFrom(
+            primary: primaryColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
             ),
-          )
+          ),
+        )
       ],
-
     );
   }
+
   //Show thông tin của người dùng
   Widget _item(context, header, value) {
     // Khi giá trị get lên là rỗng thì set '' để load tránh lỗi trang

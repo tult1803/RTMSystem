@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:rtm_system/helpers/component.dart';
+import 'package:rtm_system/ultils/get_api_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 
 import 'face_verification.dart';
@@ -104,15 +105,23 @@ class _BackIdentifyCardState extends State<BackIdentifyCard> {
           height: 40,
           margin: EdgeInsets.only(top: 20),
           child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              elevation: 3,
-              primary: welcome_color,
-            ),
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) =>  FaceIdentifyCard()));
-            },
-            // child: Text("Tiếp tục", style: GoogleFonts.roboto(color: Colors.white, fontWeight: FontWeight.w400, fontSize: 17),)
-            child: Icon(Icons.arrow_forward, ),
+              style: ElevatedButton.styleFrom(
+                elevation: 3,
+                primary: welcome_color,
+              ),
+              onPressed: ()  {
+                doValidateCustomer(context,
+                    cmndFront: imageFront,
+                    cmndBack: imageBack);
+              },
+              child: Text(
+                "Gửi",
+                style: GoogleFonts.roboto(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w400,
+                    fontSize: 17),
+              )
+            // child: Icon(Icons.arrow_forward, ),
           )),
     );
   }

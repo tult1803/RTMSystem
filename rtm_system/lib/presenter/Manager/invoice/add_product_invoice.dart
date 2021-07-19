@@ -34,7 +34,7 @@ class AddProductPage extends StatefulWidget {
       savePrice,
       productName,
       storeName;
-      final int level;
+  final int level;
 
   //true is Customer role
   final bool isCustomer;
@@ -470,23 +470,15 @@ class _AddProductPageState extends State<AddProductPage> {
             setState(() {
               if (widget.isCustomer) {
                 if (_myStore == null) {
-                  showCustomDialog(
-                    context,
-                    content: showMessage("Cửa hàng", MSG001),
-                    isSuccess: false,
-                  );
+                  checkChooseStore(context, _myStore);
                 } else {
-                  if(_myProduct == null){
-showCustomDialog(
-                          context,
-                          content: "Chưa chọn sản phẩm",
-                          isSuccess: false,
-                        );
-                  }else{
-                     widget.level == 1? _navigator("Xác nhận bán hàng"): _navigator("Xác nhận giữ giá");
+                  if (_myProduct == null) {
+                    checkChooseProduct(context, _myProduct);
+                  } else {
+                    widget.level == 1
+                        ? _navigator("Xác nhận bán hàng")
+                        : _navigator("Xác nhận giữ giá");
                   }
-                       
-                    
                 }
               } else {
                 _validate();
@@ -510,15 +502,17 @@ showCustomDialog(
     checkChooseProduct(context, _myProduct);
     errorQuantity = await checkQuantity(quantity);
     errorDegree = await checkDegree(checkProduct, degree);
-
+    checkChooseStore(context, _myStore);
     if (errorPhone == null &&
         errorQuantity == null &&
-        _myProduct != null) {
+        _myProduct != null &&
+        _myStore != null) {
       if (checkProduct || (!checkProduct && errorDegree == null)) {
-        if(nameNewCustomer.isNotEmpty){
+        if (nameNewCustomer.isNotEmpty) {
           _navigator("Xác nhận hóa đơn");
-        }else{
-          showCustomDialog(context,isSuccess: false, content: showMessage("", MSG009));
+        } else {
+          showCustomDialog(context,
+              isSuccess: false, content: showMessage("", MSG009));
         }
       }
     }
@@ -879,7 +873,7 @@ showCustomDialog(
             builder: (context) => FormForDetailPage(
                   tittle: tittle,
                   bodyPage: confirmDetailInvoice(
-                  level: widget.level,
+                    level: widget.level,
                     storeId: "$_myStore",
                     productId: "$_myProduct",
                     customerId: "$customerId",
@@ -898,7 +892,6 @@ showCustomDialog(
                             indexInsidePage: 1,
                           )
                         : widget.widgetToNavigator,
-                      
                     isCustomer: widget.isCustomer,
                   ),
                 )));

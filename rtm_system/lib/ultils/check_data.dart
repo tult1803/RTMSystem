@@ -79,6 +79,13 @@ checkChooseProduct(BuildContext context, String product) {
   }
 }
 
+checkChooseStore(BuildContext context, String store) {
+  if (store == null) {
+    showCustomDialog(context,
+        content: showMessage("", MSG042), isSuccess: false);
+  }
+}
+
 checkQuantity(double quantity) {
   if (quantity == 0) {
     return showMessage("Số ký", MSG001);
