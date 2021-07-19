@@ -12,7 +12,6 @@ import 'package:rtm_system/helpers/component.dart';
 import 'package:rtm_system/ultils/check_data.dart';
 import 'package:rtm_system/ultils/get_api_data.dart';
 import 'package:rtm_system/ultils/get_data.dart';
-import 'package:rtm_system/ultils/src/regExp.dart';
 import 'package:rtm_system/view/confirm_detail_invoice.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
 import 'package:rtm_system/view/table_price.dart';
@@ -285,26 +284,26 @@ class _AddProductPageState extends State<AddProductPage> {
                 SizedBox(
                   height: 10,
                 ),
-                showPriceTable(),
+                // showPriceTable(),
               ],
             )),
       ),
     );
   }
 
-  Widget showPriceTable() {
-    if (widget.isCustomer) {
-      if (_myProduct != null) {
-        return showTablePrice(
-          idProduct: _myProduct,
-        );
-      } else {
-        return Container();
-      }
-    } else {
-      return Container();
-    }
-  }
+  // Widget showPriceTable() {
+  //   if (widget.isCustomer) {
+  //     if (_myProduct != null) {
+  //       return showTablePrice(
+  //         idProduct: _myProduct,
+  //       );
+  //     } else {
+  //       return Container();
+  //     }
+  //   } else {
+  //     return Container();
+  //   }
+  // }
 
   Widget txtAutoFillByPhone({
     TextEditingController controller,
