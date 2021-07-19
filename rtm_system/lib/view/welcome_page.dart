@@ -16,7 +16,7 @@ class _WelcomePageState extends State<WelcomePage> {
   @override
   void initState() {
     super.initState();
-    _Timer();
+    _timer();
   }
 
   @override
@@ -27,8 +27,8 @@ class _WelcomePageState extends State<WelcomePage> {
     );
   }
 
-  Future _Timer(){
-    Timer _timer = new Timer.periodic(Duration(seconds: 3), (Timer timer) async{
+  _timer(){
+     new Timer.periodic(Duration(seconds: 3), (Timer timer) async{
       int status = await doCheckMaintain();
       Navigator.pushAndRemoveUntil(
           this.context,

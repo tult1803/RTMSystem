@@ -584,9 +584,11 @@ Widget btnProcessInvoice(context, int statusId, String id, bool isCustomer,
       );
     } else {
       return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: isRequest == null
+            ? MainAxisAlignment.spaceAround
+        : MainAxisAlignment.center,
         children: [
-          Flexible(
+          isRequest == null ? Flexible(
             // ignore: deprecated_member_use
             child: RaisedButton(
               color: Colors.redAccent,
@@ -608,27 +610,30 @@ Widget btnProcessInvoice(context, int statusId, String id, bool isCustomer,
               ),
               elevation: 10,
             ),
-          ),
+          ): Container(),
           Flexible(
-                  // ignore: deprecated_member_use
-                  child: RaisedButton(
-                    color: Color(0xFF0BB791),
-                    onPressed: () {
-                      isRequest != null ? doConfirmOrAcceptOrRejectInvoice(
-                          context, id,  [],2, isCustomer,
-                          isRequest: isRequest,
-                          element: element,
-                          widgetToNavigator: widgetToNavigator)
-                      : showTextFieldDialog(context, isDegree:isDegree, id: id);
-                    },
-                    child: Text(
-                      '${isRequest != null ? "Tạo" : "Cập nhật"}',
-                      style: TextStyle(color: Colors.white, fontSize: 16),
+                  child: Container(
+                    width: isRequest != null ? 150 : 100,
+                    // ignore: deprecated_member_use
+                    child: RaisedButton(
+                      color: Color(0xFF0BB791),
+                      onPressed: () {
+                        isRequest != null ? doConfirmOrAcceptOrRejectInvoice(
+                            context, id,  [],2, isCustomer,
+                            isRequest: isRequest,
+                            element: element,
+                            widgetToNavigator: widgetToNavigator)
+                        : showTextFieldDialog(context, isDegree:isDegree, id: id);
+                      },
+                      child: Text(
+                        '${isRequest != null ? "Tạo" : "Cập nhật"}',
+                        style: TextStyle(color: Colors.white, fontSize: 16),
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      elevation: 10,
                     ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    elevation: 10,
                   ),
                 )
         ],

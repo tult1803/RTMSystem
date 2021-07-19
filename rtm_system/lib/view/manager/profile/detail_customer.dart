@@ -17,6 +17,7 @@ class _DetailCustomerState extends State<DetailCustomer> {
   int id, advance, statusId;
   String cmnd, fullName, phone, birthday, address, gender, status, accountId;
 
+  // ignore: missing_return
   Future _getData(){
     setState(() {
       id = widget.customerList.id;
@@ -46,8 +47,8 @@ class _DetailCustomerState extends State<DetailCustomer> {
             componentContainerDetailCustomer(
                 context,
               token: this.widget.token,
-              account_id: accountId,
-              fullname: fullName,
+              accountId: accountId,
+              fullName: fullName,
               address: address,
               advance: advance,
               birthday: birthday,

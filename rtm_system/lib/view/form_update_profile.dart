@@ -48,14 +48,14 @@ enum GenderCharacter { women, men }
 class _formUpdateProfileState extends State<formUpdateProfile> {
   String errFullName, errPhone, errCMND, errAddress, errUser, errPass, errBirth;
   GenderCharacter character;
-  bool checkClick = false;
+  bool checkClick;
   String messageCancel = '';
   int indexOfBottomBar = 0;
 
   @override
   void initState() {
     super.initState();
-
+    checkClick = widget.isCreate ? true : false;
     if (this.widget.gender == 0) {
       character = GenderCharacter.women;
     } else
@@ -65,7 +65,7 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
     } else
       messageCancel = 'Bạn muốn huỷ tạo khách hàng?';
     if (widget.check) {
-      indexOfBottomBar = 3;
+      indexOfBottomBar = 0;
     } else {
       indexOfBottomBar = 4;
     }
@@ -166,7 +166,7 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
                     ];
                   });
                 },
-                currentTime: this.widget.birthday,
+                // currentTime: this.widget.birthday,
                 maxTime: DateTime(DateTime.now().year, 12, 31),
                 minTime: DateTime(DateTime.now().year - 111),
                 locale: LocaleType.vi,
@@ -184,8 +184,8 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
                 ),
                 Expanded(
                   child: Text(
-                    '${getDateTime("${this.widget.birthday}", dateFormat: "dd/MM/yyyy")}',
-                    style: TextStyle(fontSize: 16),
+                    '${widget.birthday == null ? "dd/MM/yyyy" : getDateTime("${this.widget.birthday}", dateFormat: "dd/MM/yyyy")}',
+                    style: TextStyle(fontSize: 16, color: widget.birthday == null ? Colors.black45 : Colors.black87),
                   ),
                 ),
                 Container(
@@ -228,14 +228,10 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
         controller: _controller,
         obscureText: obscureText,
         onChanged: (value) {
-          if (tittle == "Họ và tên") {
-            this.widget.fullname = value.trim();
-          } else if (tittle == "Số điện thoại") {
+          if (tittle == "Số điện thoại") {
             this.widget.phone = value.trim();
           } else if (tittle == "CMND/CCCD") {
             this.widget.cmnd = value.trim();
-          } else if (tittle == "Địa chỉ") {
-            this.widget.address = value.trim();
           } else if (tittle == "Mật khẩu") {
             this.widget.password = value.trim();
           }
@@ -253,16 +249,12 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
           });
         },
         onSubmitted: (value) {
-          print('no');
+          print(!widget.isCreate);
           setState(() {
-            if (tittle == "Họ và tên") {
-              errFullName = checkFullName(context, widget.fullname);
-            } else if (tittle == "Số điện thoại") {
+           if (tittle == "Số điện thoại") {
               errPhone = checkPhoneNumber(widget.phone);
-            } else if (tittle == "CMND/CCCD") {
+            } else if (tittle == "CMND/CCCD" && !widget.isCreate || tittle == "CMND/CCCD" && value.isNotEmpty) {
               errCMND = checkCMND(widget.cmnd);
-            } else if (tittle == "Địa chỉ") {
-              errAddress = checkAddress(widget.address);
             } else if (tittle == "Mật khẩu") {
               if (widget.isUpdate) {
                 errPass = null;
@@ -270,6 +262,9 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
                 errPass = checkPassword(widget.password, 1);
               }
             }
+           if(tittle == "CMND/CCCD" && value.isEmpty && widget.isCreate){
+             errCMND = null;
+           }
           });
         },
         maxLines: maxLines,
@@ -323,14 +318,8 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
         onChanged: (value) {
           if (tittle == "Họ và tên") {
             this.widget.fullname = value.trim();
-          } else if (tittle == "Số điện thoại") {
-            this.widget.phone = value.trim();
-          } else if (tittle == "CMND/CCCD") {
-            this.widget.cmnd = value.trim();
           } else if (tittle == "Địa chỉ") {
             this.widget.address = value.trim();
-          } else if (tittle == "Mật khẩu") {
-            this.widget.password = value.trim();
           }
           setState(() {
             checkClick = true;
@@ -346,22 +335,11 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
           });
         },
         onFieldSubmitted: (value) {
-          print('no');
           setState(() {
             if (tittle == "Họ và tên") {
               errFullName = checkFullName(context, widget.fullname);
-            } else if (tittle == "Số điện thoại") {
-              errPhone = checkPhoneNumber(widget.phone);
-            } else if (tittle == "CMND/CCCD") {
-              errCMND = checkCMND(widget.cmnd);
-            } else if (tittle == "Địa chỉ") {
+            }else if (tittle == "Địa chỉ" && !widget.isCreate || tittle == "Địa chỉ" && value.isNotEmpty) {
               errAddress = checkAddress(widget.address);
-            } else if (tittle == "Mật khẩu") {
-              if (widget.isUpdate) {
-                errPass = null;
-              } else {
-                errPass = checkPassword(widget.password, 1);
-              }
             }
           });
         },
@@ -546,10 +524,11 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
   Future _validateData() async {
     errFullName = await checkFullName(context, widget.fullname);
     errPhone = await checkPhoneNumber(widget.phone);
+    if(!widget.isCreate){
     if (this.widget.check == true) {
       errCMND = await checkCMND(widget.cmnd);
       errAddress = await checkAddress(widget.address);
-    }
+    }}
     if (widget.isUpdate) {
       errPass = null;
     } else {

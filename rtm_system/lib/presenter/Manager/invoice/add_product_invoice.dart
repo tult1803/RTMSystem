@@ -64,7 +64,7 @@ InfomationCustomer infomationCustomer = InfomationCustomer();
 String phoneNewCustomer, nameNewCustomer, customerId;
 
 class _AddProductPageState extends State<AddProductPage> {
-  String errorPhone, errorFullName, errorQuantity, errorDegree;
+  String errorPhone, errorQuantity, errorDegree;
   String price, productName;
   String token, storeName;
   String personSale = '', phoneSale = '', oldCusName, oldCusId;
@@ -74,7 +74,7 @@ class _AddProductPageState extends State<AddProductPage> {
   List<StoreElement> dataListStore;
   bool checkClick = false;
   var txtController = TextEditingController();
-  bool autoFocus = false, enabledFillName = true;
+  bool autoFocus = false;
 
   //field to sales
   double quantity = 0, degree = 0;
@@ -221,14 +221,12 @@ class _AddProductPageState extends State<AddProductPage> {
                       error: errorPhone,
                     ),
                     txtAutoFillByPhone(
-                      enabled:
-                          widget.isChangeData == null ? enabledFillName : false,
+                      enabled: false,
                       isCustomer: this.widget.isCustomer,
                       controller: getDataTextField(nameNewCustomer),
                       type: "name",
                       tittle: "Tên khách hàng",
                       txtInputType: TextInputType.name,
-                      error: errorFullName,
                     ),
                     SizedBox(
                       height: 10,
@@ -331,8 +329,7 @@ class _AddProductPageState extends State<AddProductPage> {
                 doOnSubmittedTextField(type, value);
                 if (tittle.contains("Điện thoại")) {
                   errorPhone = await checkPhoneNumber(value);
-                } else
-                  errorFullName = await checkFullName(context, nameNewCustomer);
+                }
               },
               maxLines: 1,
               keyboardType: txtInputType,
@@ -384,7 +381,6 @@ class _AddProductPageState extends State<AddProductPage> {
         infomationCustomer = await getDataCustomerFromPhone(value);
         setState(() {
           if (infomationCustomer == null) {
-            enabledFillName = true;
             // ignore: unnecessary_statements
             nameNewCustomer == oldCusName ? nameNewCustomer = "" : null;
             // ignore: unnecessary_statements
@@ -394,7 +390,6 @@ class _AddProductPageState extends State<AddProductPage> {
             nameNewCustomer = infomationCustomer.fullname;
             oldCusId = infomationCustomer.accountId;
             customerId = infomationCustomer.accountId;
-            enabledFillName = false;
           }
           autoFocus = false;
         });
@@ -512,23 +507,20 @@ showCustomDialog(
 
   void _validate() async {
     errorPhone = await checkPhoneNumber(phoneNewCustomer);
-    errorFullName = await checkFullName(context, nameNewCustomer);
     checkChooseProduct(context, _myProduct);
     errorQuantity = await checkQuantity(quantity);
     errorDegree = await checkDegree(checkProduct, degree);
 
     if (errorPhone == null &&
         errorQuantity == null &&
-        errorFullName == null &&
         _myProduct != null) {
       if (checkProduct || (!checkProduct && errorDegree == null)) {
-        _navigator("Xác nhận hóa đơn");
+        if(nameNewCustomer.isNotEmpty){
+          _navigator("Xác nhận hóa đơn");
+        }else{
+          showCustomDialog(context,isSuccess: false, content: showMessage("", MSG009));
+        }
       }
-      // if (checkProduct ) {
-      //   _navigator("Xác nhận hóa đơn");
-      // } else if (!checkProduct && errorDegree == null) {
-      //   _navigator("Xác nhận hóa đơn");
-      // }
     }
   }
 
@@ -881,7 +873,6 @@ showCustomDialog(
   }
 
   Future<void> _navigator(String tittle) async {
-    print(customerId);
     Navigator.push(
         context,
         MaterialPageRoute(
