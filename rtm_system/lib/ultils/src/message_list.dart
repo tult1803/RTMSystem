@@ -45,6 +45,7 @@ String MSG038 = "Nhận tiền thất bại";
 String MSG039 = "Giá sản phẩm đã cập nhật";
 String MSG040 = "Đã xoá thành công";
 String MSG041 = "Xoá thất bại";
+String MSG042 = "Vui lòng chọn cửa hàng";
 
 
 //use to show message

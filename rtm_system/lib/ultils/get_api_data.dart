@@ -590,32 +590,29 @@ Future<void> putReturnAdvance(BuildContext context, List<String> invoiceId,
 }
 
 Future<void> doValidateCustomer(BuildContext context,
-    {File cmndFront, File cmndBack, File face}) async {
-  DataValidateAccount account = DataValidateAccount();
+    {File cmndFront, File cmndBack}) async {
+  int status;
   SharedPreferences prefs = await SharedPreferences.getInstance();
   PostValidateCustomer validateCustomer = PostValidateCustomer();
   try {
     EasyLoading.show(
-      status: 'Đang xử lý...',
+      status: 'Đang gửi...',
       maskType: EasyLoadingMaskType.black,
     );
-    account = await validateCustomer.createValidateCustomer(
+    status = await validateCustomer.createValidateCustomer(
         prefs.get("access_token"),
         cmndFront: cmndFront,
-        cmndBack: cmndBack,
-        face: face);
-    EasyLoading.dismiss();
-    if (account.faceData.similarity >= 80) {
+        cmndBack: cmndBack,);
+    if(status == 200){
+      EasyLoading.showSuccess("Đã gửi", duration: Duration(seconds: 1));
+      EasyLoading.dismiss();
       Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => ConfirmDataVerification(
-                account: account,
-                accountId: prefs.get("accountId"),
-                check: true,
-              )));
-    } else {
-      showCustomDialog(context,
-          isSuccess: false, content: "Thông tin không trùng khớp. Thử lại");
+          builder: (context) => HomeCustomerPage(index: 3,)));
+    }else{
+      EasyLoading.dismiss();
+      EasyLoading.showError("Gửi thất bại", duration: Duration(seconds: 1));
     }
+
   } catch (_) {
     EasyLoading.dismiss();
     showCustomDialog(context,
