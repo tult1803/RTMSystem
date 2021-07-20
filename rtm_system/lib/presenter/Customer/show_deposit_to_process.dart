@@ -109,6 +109,9 @@ class showAllInvoicePageState extends State<showDepositToProcess> {
                           isRequest: false,
                           isCustomer: true),
                     );
+                  } else {
+                    BlocProvider.of<TotalDepositBloc>(context)
+                        .emit(_totalDeposit);
                   }
                   BlocProvider.of<ListInvoiceIdBloc>(context)
                       .emit(invoiceIdList);

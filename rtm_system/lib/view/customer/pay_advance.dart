@@ -185,7 +185,7 @@ class _PayDebtState extends State<PayDebt> {
                           return BlocBuilder<CountTotalInvoicesBloc, int>(
                             builder: (context, state2) {
                               return AutoSizeText(
-                                'Tống đơn ký gửi đã chọn($state1/$state2):',
+                                'Tống tiền đơn ký gửi đã chọn($state1/$state2):',
                                 style: TextStyle(
                                   color: primaryColor,
                                 ),
@@ -223,7 +223,7 @@ class _PayDebtState extends State<PayDebt> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       AutoSizeText(
-                        'Tống đơn nợ đã chọn(${selectedContacts.length}/ ${advanceItem.length}):',
+                        'Tống tiền đơn nợ đã chọn(${selectedContacts.length}/ ${advanceItem.length}):',
                         style: TextStyle(
                           color: primaryColor,
                         ),
@@ -319,84 +319,98 @@ class _PayDebtState extends State<PayDebt> {
         ),
         floatingActionButton: BlocBuilder<ListInvoiceIdBloc, List<String>>(
           builder: (context, state) {
-            if (state.isNotEmpty) {
-              if (totalAdvance == 0) {
-                return showHiddenFloatBtn();
-              }
-              return FloatingActionButton.extended(
-                onPressed: () {
-                  //có bloc nên k thể tách hàm
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: Text('Thông báo'),
-                        content: SingleChildScrollView(
-                          child: Column(
-                            children: <Widget>[
-                              Text(showMessage('', MSG028)),
-                            ],
-                          ),
-                        ),
-                        actions: <Widget>[
-                          TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: Text(
-                              'Không',
-                              style: TextStyle(
-                                color: Colors.redAccent,
-                              ),
-                            ),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              if (selectedContacts.length > 0) {
-                                if (totalAdvanceSelected >
-                                    totalDepositSelected) {
-                                  showCustomDialog(
-                                    context,
-                                    isSuccess: false,
-                                    content: showMessage("", MSG033),
-                                  );
-                                } else {
-                                  selectedContacts.forEach((element) {
-                                    advanceIdList.add(element.id);
-                                  });
-                                  putReturnAdvance(context, state,
-                                      advanceIdList, totalAdvance);
-                                }
-                              } else {
-                                showCustomDialog(
-                                  context,
-                                  isSuccess: false,
-                                  content: showMessage("", MSG034),
-                                );
-                              }
-                            },
-                            child: Text(
-                              'Có',
-                              style: TextStyle(
-                                color: primaryColor,
-                              ),
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
-                label: titleAppBar('Xác nhận'),
-                backgroundColor: primaryColor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(50.0),
-                ),
-                elevation: 10,
-              );
-            } else {
+            if (totalAdvance == 0) {
               return showHiddenFloatBtn();
             }
+            return BlocBuilder<CountTotalInvoicesSelectedBloc, int>(
+              builder: (context, state1) {
+                return FloatingActionButton.extended(
+                  onPressed: () {
+                    if (state1 == 0) {
+                      showCustomDialog(
+                        context,
+                        isSuccess: false,
+                        content: showMessage("", MSG043),
+                      );
+                    } else if (selectedContacts.length == 0) {
+                      showCustomDialog(
+                        context,
+                        isSuccess: false,
+                        content: showMessage("", MSG034),
+                      );
+                    } else {
+                      //có bloc nên k thể tách hàm
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text('Thông báo'),
+                            content: SingleChildScrollView(
+                              child: Column(
+                                children: <Widget>[
+                                  Text(showMessage('', MSG028)),
+                                ],
+                              ),
+                            ),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text(
+                                  'Không',
+                                  style: TextStyle(
+                                    color: Colors.redAccent,
+                                  ),
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  if (selectedContacts.length > 0) {
+                                    if (totalAdvanceSelected >
+                                        totalDepositSelected) {
+                                      showCustomDialog(
+                                        context,
+                                        isSuccess: false,
+                                        content: showMessage("", MSG033),
+                                      );
+                                    } else {
+                                      selectedContacts.forEach((element) {
+                                        advanceIdList.add(element.id);
+                                      });
+                                      putReturnAdvance(context, state,
+                                          advanceIdList, totalAdvance);
+                                    }
+                                  } else {
+                                    showCustomDialog(
+                                      context,
+                                      isSuccess: false,
+                                      content: showMessage("", MSG034),
+                                    );
+                                  }
+                                },
+                                child: Text(
+                                  'Có',
+                                  style: TextStyle(
+                                    color: primaryColor,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }
+                  },
+                  label: titleAppBar('Xác nhận'),
+                  backgroundColor: primaryColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50.0),
+                  ),
+                  elevation: 10,
+                );
+              },
+            );
           },
         ),
       ),
