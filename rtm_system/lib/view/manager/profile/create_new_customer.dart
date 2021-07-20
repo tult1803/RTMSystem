@@ -29,6 +29,7 @@ class _CreateCustomerState extends State<CreateCustomer> {
         ),
         body: SingleChildScrollView(
             child: new formUpdateProfile(
+              isUpgrade: false,
           check: true,
           isCustomer: false,
           isUpdate: false,

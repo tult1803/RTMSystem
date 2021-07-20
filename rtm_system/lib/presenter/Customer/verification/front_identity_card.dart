@@ -3,17 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
-import 'package:rtm_system/presenter/Customer/verification/back_identity_card.dart';
-import 'package:rtm_system/ultils/src/color_ultils.dart';
+import 'package:rtm_system/view/customer/Profile/upgrade_account.dart';
 
 class FrontIdentifyCard extends StatefulWidget {
   @override
   _FrontIdentifyCardState createState() => _FrontIdentifyCardState();
 }
 
-File imageBack;
-File imageFront;
-File imageFace;
 class _FrontIdentifyCardState extends State<FrontIdentifyCard> {
 
   @override
@@ -26,7 +22,6 @@ class _FrontIdentifyCardState extends State<FrontIdentifyCard> {
             tittleBody(),
             showImage(size.width, size.height, imageFront),
             btnImage(context, size.width * 0.9, size.height * 0.1),
-            nextPage(imageFront),
           ],
         ),
       ),
@@ -66,9 +61,8 @@ class _FrontIdentifyCardState extends State<FrontIdentifyCard> {
 
   Widget btnImage(context, width, height) {
     return Container(
-      margin: EdgeInsets.only(top: 10),
-      width: 250,
-      height: 50,
+      width: 150,
+      height: 40,
       child: ElevatedButton(
         onPressed: () {
           showPicker(context);
@@ -87,27 +81,6 @@ class _FrontIdentifyCardState extends State<FrontIdentifyCard> {
           ),
         ),
       ),
-    );
-  }
-  Widget nextPage(image) {
-    return Container(
-      child: image == null
-          ? null
-          : Container(
-              width: 120,
-              height: 40,
-              margin: EdgeInsets.only(top: 20),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  elevation: 3,
-                  primary: welcome_color,
-                ),
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) =>  BackIdentifyCard()));
-                },
-                // child: Text("Tiếp tục", style: GoogleFonts.roboto(color: Colors.white, fontWeight: FontWeight.w400, fontSize: 17),)
-                child: Icon(Icons.arrow_forward, ),
-              )),
     );
   }
 

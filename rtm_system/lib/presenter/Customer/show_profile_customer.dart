@@ -8,6 +8,7 @@ import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/customer/Profile/account_verification.dart';
 import 'package:rtm_system/view/customer/Profile/update_profile.dart';
+import 'package:rtm_system/view/customer/Profile/upgrade_account.dart';
 import 'package:rtm_system/view/update_password.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -160,79 +161,99 @@ class _showProfileState extends State<showProfile> {
               ),
             ),
           ),
-          if (level == 0) twoBtnForCustomer0(),
+          if (level == 0) btnUpgradeAccount(),
         ],
       ),
     );
   }
 
-  Widget twoBtnForCustomer0() {
-    return Column(
-      children: [
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => UpdateProfilePage(
-                      password: password,
-                      accountId: infomationCustomer.id.toString(),
-                      address: infomationCustomer.address == null
-                          ? null
-                          : infomationCustomer.address,
-                      phone: infomationCustomer.phone,
-                      birthday: infomationCustomer.birthday == null
-                          ? null
-                          : DateTime.parse(getDateTime(
-                              infomationCustomer.birthday,
-                              dateFormat: "yyyy-MM-dd")),
-                      check: false,
-                      cmnd: infomationCustomer.cmnd == null
-                          ? null
-                          : infomationCustomer.cmnd,
-                      fullname: infomationCustomer.fullname == null
-                          ? null
-                          : infomationCustomer.fullname,
-                      gender: infomationCustomer.gender,
-                    )));
-          },
-          child: Center(
-            child: AutoSizeText(
-              "Cập nhật thông tin",
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
-                color: Colors.white,
-              ),
-            ),
-          ),
-          style: ElevatedButton.styleFrom(
-            primary: primaryColor,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
+  Widget btnUpgradeAccount() {
+    return TextButton(
+        onPressed: () {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => UpgradeAccount(informationCustomer: infomationCustomer,)));
+        },
+        child: Center(
+          child: AutoSizeText(
+            "Nâng cấp tài khoản",
+            style: TextStyle(
+              fontWeight: FontWeight.w500,
+              color: Colors.white,
             ),
           ),
         ),
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => AccountVerification()));
-          },
-          child: Center(
-            child: AutoSizeText(
-              "Xác thực ảnh CMND",
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
-                color: Colors.white,
-              ),
-            ),
+        style: ElevatedButton.styleFrom(
+          primary: primaryColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
-          style: ElevatedButton.styleFrom(
-            primary: primaryColor,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            ),
-          ),
-        )
-      ],
-    );
+        ));
+    // return Column(
+    //   children: [
+    //     TextButton(
+    //       onPressed: () {
+    //         Navigator.of(context).push(MaterialPageRoute(
+    //             builder: (context) => UpdateProfilePage(
+    //                   password: password,
+    //                   accountId: infomationCustomer.id.toString(),
+    //                   address: infomationCustomer.address == null
+    //                       ? null
+    //                       : infomationCustomer.address,
+    //                   phone: infomationCustomer.phone,
+    //                   birthday: infomationCustomer.birthday == null
+    //                       ? null
+    //                       : DateTime.parse(getDateTime(
+    //                           infomationCustomer.birthday,
+    //                           dateFormat: "yyyy-MM-dd")),
+    //                   check: false,
+    //                   cmnd: infomationCustomer.cmnd == null
+    //                       ? null
+    //                       : infomationCustomer.cmnd,
+    //                   fullname: infomationCustomer.fullname == null
+    //                       ? null
+    //                       : infomationCustomer.fullname,
+    //                   gender: infomationCustomer.gender,
+    //                 )));
+    //       },
+    //       child: Center(
+    //         child: AutoSizeText(
+    //           "Cập nhật thông tin",
+    //           style: TextStyle(
+    //             fontWeight: FontWeight.w500,
+    //             color: Colors.white,
+    //           ),
+    //         ),
+    //       ),
+    //       style: ElevatedButton.styleFrom(
+    //         primary: primaryColor,
+    //         shape: RoundedRectangleBorder(
+    //           borderRadius: BorderRadius.all(Radius.circular(10)),
+    //         ),
+    //       ),
+    //     ),
+    //     TextButton(
+    //       onPressed: () {
+    //         Navigator.of(context).push(
+    //             MaterialPageRoute(builder: (context) => AccountVerification()));
+    //       },
+    //       child: Center(
+    //         child: AutoSizeText(
+    //           "Xác thực ảnh CMND",
+    //           style: TextStyle(
+    //             fontWeight: FontWeight.w500,
+    //             color: Colors.white,
+    //           ),
+    //         ),
+    //       ),
+    //       style: ElevatedButton.styleFrom(
+    //         primary: primaryColor,
+    //         shape: RoundedRectangleBorder(
+    //           borderRadius: BorderRadius.all(Radius.circular(10)),
+    //         ),
+    //       ),
+    //     )
+    //   ],
+    // );
   }
 
   //Show thông tin của người dùng

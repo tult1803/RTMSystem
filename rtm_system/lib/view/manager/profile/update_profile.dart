@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../form_update_profile.dart';
 
+// ignore: camel_case_types
 class updateProfile extends StatefulWidget {
   final String fullname, password, accountId;
 
@@ -50,6 +51,7 @@ class _updateProfileState extends State<updateProfile> {
           typeOfUpdate: 1,
           accountId: this.widget.accountId,
           isCustomer: false,
+          isUpgrade: false,
           check: false,
           fullname: this.widget.fullname,
           birthday: birthday,
