@@ -326,7 +326,13 @@ class _PayDebtState extends State<PayDebt> {
               builder: (context, state1) {
                 return FloatingActionButton.extended(
                   onPressed: () {
-                    if (state1 == 0) {
+                    if (state.length == 0) {
+                      showCustomDialog(
+                        context,
+                        isSuccess: false,
+                        content: showMessage("", MSG044),
+                      );
+                    } else if (state1 == 0) {
                       showCustomDialog(
                         context,
                         isSuccess: false,

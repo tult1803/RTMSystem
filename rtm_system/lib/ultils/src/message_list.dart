@@ -47,6 +47,7 @@ String MSG040 = "Đã xoá thành công";
 String MSG041 = "Xoá thất bại";
 String MSG042 = "Vui lòng chọn cửa hàng";
 String MSG043 = "Vui lòng chọn đơn ký gửi!";
+String MSG044 = "Không có hoá đơn ký gửi để trả nợ.";
 
 
 //use to show message
