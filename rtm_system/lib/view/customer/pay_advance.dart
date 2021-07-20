@@ -36,7 +36,7 @@ class _PayDebtState extends State<PayDebt> {
   GetAPIProfileCustomer getAPIProfileCustomer = GetAPIProfileCustomer();
   InfomationCustomer informationCustomer = InfomationCustomer();
 
-  List<AdvanceChecked> selectedContacts = [];
+  List<AdvanceChecked> selectedAdvances = [];
   List<String> advanceIdList = [];
   List<Advance> advanceAccept = [];
   List<AdvanceChecked> advanceItem = [];
@@ -223,7 +223,7 @@ class _PayDebtState extends State<PayDebt> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       AutoSizeText(
-                        'Tống tiền đơn nợ đã chọn(${selectedContacts.length}/ ${advanceItem.length}):',
+                        'Tống tiền đơn nợ đã chọn(${selectedAdvances.length}/ ${advanceItem.length}):',
                         style: TextStyle(
                           color: primaryColor,
                         ),
@@ -340,11 +340,18 @@ class _PayDebtState extends State<PayDebt> {
                             isSuccess: false,
                             content: showMessage("", MSG043),
                           );
-                        } else if (selectedContacts.length == 0) {
+                        } else if (selectedAdvances.length == 0) {
                           showCustomDialog(
                             context,
                             isSuccess: false,
                             content: showMessage("", MSG034),
+                          );
+                        } else if (totalAdvanceSelected >
+                            totalDepositSelected) {
+                          showCustomDialog(
+                            context,
+                            isSuccess: false,
+                            content: showMessage("", MSG033),
                           );
                         } else {
                           //có bloc nên k thể tách hàm
@@ -374,28 +381,11 @@ class _PayDebtState extends State<PayDebt> {
                                   ),
                                   TextButton(
                                     onPressed: () {
-                                      if (selectedContacts.length > 0) {
-                                        if (totalAdvanceSelected >
-                                            totalDepositSelected) {
-                                          showCustomDialog(
-                                            context,
-                                            isSuccess: false,
-                                            content: showMessage("", MSG033),
-                                          );
-                                        } else {
-                                          selectedContacts.forEach((element) {
-                                            advanceIdList.add(element.id);
-                                          });
-                                          putReturnAdvance(context, state,
-                                              advanceIdList, totalAdvance);
-                                        }
-                                      } else {
-                                        showCustomDialog(
-                                          context,
-                                          isSuccess: false,
-                                          content: showMessage("", MSG034),
-                                        );
-                                      }
+                                      selectedAdvances.forEach((element) {
+                                        advanceIdList.add(element.id);
+                                      });
+                                      putReturnAdvance(context, state,
+                                          advanceIdList, totalAdvance);
                                     },
                                     child: Text(
                                       'Có',
@@ -475,11 +465,11 @@ class _PayDebtState extends State<PayDebt> {
         setState(() {
           advanceItem[index].isSelected = !advanceItem[index].isSelected;
           if (advanceItem[index].isSelected == true) {
-            selectedContacts.add(
+            selectedAdvances.add(
                 AdvanceChecked(id: id, amount: amount, isSelected: isSelected));
             addTotalAdvance(amount);
           } else if (advanceItem[index].isSelected == false) {
-            selectedContacts
+            selectedAdvances
                 .removeWhere((element) => element.id == advanceItem[index].id);
             removeTotalAdvance(amount);
           }
