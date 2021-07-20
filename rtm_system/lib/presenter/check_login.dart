@@ -216,7 +216,7 @@ void savedInfoLogin(int role_id, String accountId, int gender, String access_tok
   prefs.setString("fullname", fullname);
   prefs.setString("phone", phone);
   prefs.setInt("gender", gender);
-  prefs.setString("birthday", birthday);
+  prefs.setString("birthday", "$birthday");
   prefs.setString("password", password);
   print('Login is saved !!!!');
 }
