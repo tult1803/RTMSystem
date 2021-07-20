@@ -6,6 +6,7 @@ import 'package:rtm_system/helpers/button.dart';
 import 'package:rtm_system/ultils/check_data.dart';
 import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
+import 'customer/Profile/upgrade_account.dart';
 import 'manager/profile/confirm_create_customer.dart';
 
 //check: true là cho customer còn false là cho manager
@@ -15,7 +16,7 @@ class formUpdateProfile extends StatefulWidget {
   String fullname, phone, cmnd, address, password, accountId;
   int gender;
   DateTime birthday;
-  final bool check, isCreate;
+  final bool check, isCreate, isUpgrade;
   final int typeOfUpdate;
 
   // True là sẽ gọi api update, false là gọi api createCustomer
@@ -36,6 +37,7 @@ class formUpdateProfile extends StatefulWidget {
       this.typeOfUpdate,
       this.accountId,
       this.isCustomer,
+      this.isUpgrade,
       this.list});
 
   @override
@@ -78,8 +80,8 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
         children: [
           Column(
             children: [
-                _txtFormField(this.widget.fullname, false, "Nhập họ tên",
-                    "Họ và tên", errFullName, 1, TextInputType.text),
+              _txtFormField(this.widget.fullname, false, "Nhập họ tên",
+                  "Họ và tên", errFullName, 1, TextInputType.text),
               if (!widget.isCustomer)
                 _txtfield(
                     getDataTextField(this.widget.phone),
@@ -99,28 +101,29 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
           SizedBox(
             height: 20,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              btnSubmitOrCancel(
-                  context,
-                  120,
-                  40,
-                  Colors.redAccent,
-                  "Hủy",
-                  "",
-                  "",
-                  null,
-                  false,
-                  indexOfBottomBar,
-                  this.widget.isCustomer,
-                  messageCancel),
-              SizedBox(width: 20),
-              btnSubmitValidate(context, 120, 40, welcome_color, "Kiểm tra",
-                  this.widget.list, this.widget.check,
-                  isCreate: this.widget.isCreate),
-            ],
-          ),
+          if (!widget.isUpgrade)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                btnSubmitOrCancel(
+                    context,
+                    120,
+                    40,
+                    Colors.redAccent,
+                    "Hủy",
+                    "",
+                    "",
+                    null,
+                    false,
+                    indexOfBottomBar,
+                    this.widget.isCustomer,
+                    messageCancel),
+                SizedBox(width: 20),
+                btnSubmitValidate(context, 120, 40, welcome_color, "Kiểm tra",
+                    this.widget.list, this.widget.check,
+                    isCreate: this.widget.isCreate),
+              ],
+            ),
         ],
       ),
     );
@@ -154,6 +157,7 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
                 onConfirm: (date) {
                   setState(() {
                     checkClick = true;
+                    getDataCustomer(2, getDateTime("$date", dateFormat: "yyyy-MM-dd"));
                     this.widget.birthday = date;
                     this.widget.list = [
                       this.widget.fullname,
@@ -176,7 +180,9 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
               children: [
                 Container(
                   width: 100,
-                  margin: EdgeInsets.only(left: 15),
+                  margin: widget.isUpgrade
+                      ? EdgeInsets.only(left: 5)
+                      : EdgeInsets.only(left: 15),
                   child: AutoSizeText(
                     "Ngày sinh",
                     style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
@@ -185,7 +191,11 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
                 Expanded(
                   child: Text(
                     '${widget.birthday == null ? "dd/MM/yyyy" : getDateTime("${this.widget.birthday}", dateFormat: "dd/MM/yyyy")}',
-                    style: TextStyle(fontSize: 16, color: widget.birthday == null ? Colors.black45 : Colors.black87),
+                    style: TextStyle(
+                        fontSize: 16,
+                        color: widget.birthday == null
+                            ? Colors.black45
+                            : Colors.black87),
                   ),
                 ),
                 Container(
@@ -204,7 +214,9 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
           SizedBox(
             height: 1,
             child: Container(
-              margin: EdgeInsets.only(left: 10, right: 10),
+              margin: widget.isUpgrade
+                  ? EdgeInsets.only(left: 0)
+                  : EdgeInsets.only(left: 10, right: 10),
               width: size.width,
               color: Colors.black45,
             ),
@@ -223,7 +235,9 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
       int maxLines,
       TextInputType txtType) {
     return Container(
-      margin: EdgeInsets.only(top: 10, left: 10, right: 10),
+      margin: widget.isUpgrade
+          ? null
+          : EdgeInsets.only(top: 10, left: 10, right: 10),
       child: TextField(
         controller: _controller,
         obscureText: obscureText,
@@ -232,6 +246,7 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
             this.widget.phone = value.trim();
           } else if (tittle == "CMND/CCCD") {
             this.widget.cmnd = value.trim();
+            getDataCustomer(3, value.trim());
           } else if (tittle == "Mật khẩu") {
             this.widget.password = value.trim();
           }
@@ -250,10 +265,12 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
         },
         onSubmitted: (value) {
           setState(() {
-           if (tittle == "Số điện thoại") {
+            if (tittle == "Số điện thoại") {
               errPhone = checkPhoneNumber(widget.phone);
-            } else if (tittle == "CMND/CCCD" && !widget.isCreate || tittle == "CMND/CCCD" && value.isNotEmpty) {
+            } else if (tittle == "CMND/CCCD" && !widget.isCreate ||
+                tittle == "CMND/CCCD" && value.isNotEmpty) {
               errCMND = checkCMND(widget.cmnd);
+              getErrorDataCustomer(3, errCMND);
             } else if (tittle == "Mật khẩu") {
               if (widget.isUpdate) {
                 errPass = null;
@@ -261,9 +278,10 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
                 errPass = checkPassword(widget.password, 1);
               }
             }
-           if(tittle == "CMND/CCCD" && value.isEmpty && widget.isCreate){
-             errCMND = null;
-           }
+            if (tittle == "CMND/CCCD" && value.isEmpty && widget.isCreate) {
+              errCMND = null;
+              getErrorDataCustomer(3, errCMND);
+            }
           });
         },
         maxLines: maxLines,
@@ -310,15 +328,19 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
   Widget _txtFormField(String value, bool obscureText, String hintText,
       String tittle, String error, int maxLines, TextInputType txtType) {
     return Container(
-      margin: EdgeInsets.only(top: 10, left: 10, right: 10),
+      margin: widget.isUpgrade
+          ? null
+          : EdgeInsets.only(top: 10, left: 10, right: 10),
       child: TextFormField(
         initialValue: value,
         obscureText: obscureText,
         onChanged: (value) {
           if (tittle == "Họ và tên") {
             this.widget.fullname = value.trim();
+            getDataCustomer(0, value.trim());
           } else if (tittle == "Địa chỉ") {
             this.widget.address = value.trim();
+            getDataCustomer(4, value.trim());
           }
           setState(() {
             checkClick = true;
@@ -337,8 +359,11 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
           setState(() {
             if (tittle == "Họ và tên") {
               errFullName = checkFullName(context, widget.fullname);
-            }else if (tittle == "Địa chỉ" && !widget.isCreate || tittle == "Địa chỉ" && value.isNotEmpty) {
+              getErrorDataCustomer(0, errFullName);
+            } else if (tittle == "Địa chỉ" && !widget.isCreate ||
+                tittle == "Địa chỉ" && value.isNotEmpty) {
               errAddress = checkAddress(widget.address);
+              getErrorDataCustomer(4, errAddress);
             }
           });
         },
@@ -387,13 +412,19 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
   Widget radioButton(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Padding(
-      padding: const EdgeInsets.only(top: 0, right: 10),
+      padding: widget.isUpgrade
+          ? EdgeInsets.only(top: 0)
+          : EdgeInsets.only(top: 0, right: 10),
       child: Column(
         children: [
           Row(
             children: <Widget>[
               Container(
-                margin: EdgeInsets.only(top: 10, left: 0),
+                alignment: Alignment.centerLeft,
+                padding: widget.isUpgrade
+                    ? EdgeInsets.only(right: 20)
+                    : EdgeInsets.only(right: 0),
+                margin: EdgeInsets.only(top: 10, right: 0),
                 width: 85,
                 height: 50,
                 child: Center(
@@ -413,6 +444,7 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
                   groupValue: character,
                   onChanged: (GenderCharacter value) {
                     setState(() {
+                      getDataCustomer(1, value == GenderCharacter.men ? 1: 0);
                       checkClick = true;
                       character = value;
                       this.widget.list = [
@@ -438,6 +470,7 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
                     groupValue: character,
                     onChanged: (GenderCharacter value) {
                       setState(() {
+                        getDataCustomer(1, value == GenderCharacter.men ? 1: 0);
                         this.checkClick = true;
                         character = value;
                         this.widget.list = [
@@ -459,7 +492,9 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
           SizedBox(
             height: 1,
             child: Container(
-              margin: EdgeInsets.only(left: 10, right: 0),
+              margin: widget.isUpgrade
+                  ? EdgeInsets.only(top: 0)
+                  : EdgeInsets.only(left: 10),
               width: size.width,
               color: Colors.black45,
             ),
@@ -523,11 +558,12 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
   Future _validateData() async {
     errFullName = await checkFullName(context, widget.fullname);
     errPhone = await checkPhoneNumber(widget.phone);
-    if(!widget.isCreate){
-    if (this.widget.check == true) {
-      errCMND = await checkCMND(widget.cmnd);
-      errAddress = await checkAddress(widget.address);
-    }}
+    if (!widget.isCreate) {
+      if (this.widget.check == true) {
+        errCMND = await checkCMND(widget.cmnd);
+        errAddress = await checkAddress(widget.address);
+      }
+    }
     if (widget.isUpdate) {
       errPass = null;
     } else {
@@ -564,5 +600,19 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
         ? Container()
         : _txtfield(getDataTextField(this.widget.password), true,
             "Nhập mật khẩu", "Mật khẩu", errPass, 1, TextInputType.text);
+  }
+
+  void getDataCustomer(int index, value){
+    if(widget.isUpgrade) {
+      dataCustomer.removeAt(index);
+      dataCustomer.insert(index, value);
+    }
+  }
+
+  void getErrorDataCustomer(int index, value){
+    if(widget.isUpgrade) {
+      errorData.removeAt(index);
+      errorData.insert(index, "$value");
+    }
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -7,6 +9,7 @@ import 'package:rtm_system/model/model_advance_return_detail.dart';
 import 'package:rtm_system/model/model_invoice_request.dart';
 import 'package:rtm_system/ultils/get_api_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
+import 'package:rtm_system/view/customer/Profile/show_image_cmnd.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
 import 'package:rtm_system/view/manager/product/update_price_product_manager.dart';
 import '../ultils/get_data.dart';
@@ -500,6 +503,9 @@ Widget componentContainerDetailCustomer(BuildContext context,
     String address,
     String birthday,
     String gender,
+    String imageCMNDF,
+    String imageCMNDB,
+    bool needConfirm,
     String level}) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
@@ -521,7 +527,39 @@ Widget componentContainerDetailCustomer(BuildContext context,
         SizedBox(
           height: 10,
         ),
-        txtItemDetail(context, "CMND/CCCD", cmnd),
+        Row(
+          children: [
+            txtItemDetail(context, "CMND/CCCD", cmnd),
+            Expanded(
+              child: GestureDetector(
+                  onTap: () {
+                    if (imageCMNDF != null)
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => ImageCMND(
+                                imageFCMND: imageCMNDF,
+                                imageBCMND: imageCMNDB,
+                              )));
+                  },
+                  child: Container(
+                      alignment: Alignment.centerRight,
+                      margin: EdgeInsets.only(top: 5, right: 10),
+                      child: Text(
+                        imageCMNDF == null
+                            ? "Chờ cập nhật"
+                            : needConfirm ? "Chờ xác nhận" : "Xem ảnh",
+                        style: TextStyle(
+                            color: imageCMNDF == null
+                                ? Colors.redAccent
+                                : needConfirm ? Colors.orange :Colors.blueAccent),
+                      ))),
+            ),
+          ],
+        ),
+        SizedBox(
+            height: 1,
+            child: Container(
+              color: Color(0xFFBDBDBD),
+            )),
         SizedBox(
           height: 10,
         ),
@@ -766,8 +804,7 @@ Widget componentContainerDetailAdvanceRequest(BuildContext context,
     bool isCustomer,
     String imageUrl,
     Widget widgetToNavigator}) {
-      var size = MediaQuery.of(context).size;
-      print(imageUrl);
+  var size = MediaQuery.of(context).size;
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Column(
@@ -830,12 +867,12 @@ Widget componentContainerDetailAdvanceRequest(BuildContext context,
         SizedBox(
           height: 10,
         ),
-        //hiển thị ảnh cmnd mặt trước, vì khách có thể mượn tiền phải xác thực tài khoản nên 
+        //hiển thị ảnh cmnd mặt trước, vì khách có thể mượn tiền phải xác thực tài khoản nên
         // không cần bắt null url.
-        if(!isCustomer)
-        Container(
-          child: Image.network(imageUrl),
-        ),
+        if (!isCustomer)
+          Container(
+            child: Image.network(imageUrl),
+          ),
         //show btn for manager and customer
         showBtnInAdvanceRequest(context, statusId, activeStatus, isCustomer, id,
             statusId, id, widgetToNavigator),
@@ -1000,12 +1037,12 @@ Widget componentDetailCreateInvoice(
         SizedBox(
           height: 10,
         ),
-        if(level == 2)
-        txtItemDetail(context, "Giá bán", "${getFormatPrice(price)} đ"),
-        if(level == 2)
-        SizedBox(
-          height: 10,
-        ),
+        if (level == 2)
+          txtItemDetail(context, "Giá bán", "${getFormatPrice(price)} đ"),
+        if (level == 2)
+          SizedBox(
+            height: 10,
+          ),
         Container(
           child: isCustomer
               ? null
@@ -1161,22 +1198,23 @@ Widget titleAppBar(name) {
     style: TextStyle(color: Colors.white),
   );
 }
- Widget containerTextInProcess() {
-    return Container(
-      padding: EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.all(
-          Radius.circular(10.0),
+
+Widget containerTextInProcess() {
+  return Container(
+    padding: EdgeInsets.all(12),
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.all(
+        Radius.circular(10.0),
+      ),
+    ),
+    child: Center(
+      child: AutoSizeText(
+        'Các hóa đơn sẽ được thanh toán:',
+        style: TextStyle(
+          fontWeight: FontWeight.w500,
         ),
       ),
-      child: Center(
-        child: AutoSizeText(
-          'Các hóa đơn sẽ được thanh toán:',
-          style: TextStyle(
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ),
-    );
-  }
+    ),
+  );
+}

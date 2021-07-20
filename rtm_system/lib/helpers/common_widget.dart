@@ -875,10 +875,18 @@ Widget boxForProduct(
 }
 
 // Đang dùng cho các trang detail "Sản phẩm", "Hóa đơn", "Ứng tiền", "Khách hàng"
-Widget containerDetail(BuildContext context, Widget widget) {
+Widget containerDetail(BuildContext context, Widget widget,
+    {double marginLeft,
+    double marginRight,
+    double marginBottom,
+    double marginTop}) {
   var size = MediaQuery.of(context).size;
   return Container(
-    margin: EdgeInsets.only(left: 10, right: 10, bottom: 50),
+    margin: EdgeInsets.only(
+        left: marginLeft == null ? 0 : marginLeft,
+        right: marginRight == null ? 0 : marginRight,
+        bottom: marginBottom == null ? 0 : marginBottom,
+        top: marginTop == null ? 0 : marginTop),
     width: size.width,
     decoration: BoxDecoration(
       color: Colors.white,
@@ -1467,4 +1475,3 @@ Widget showErrorLoadData() {
     ),
   );
 }
-

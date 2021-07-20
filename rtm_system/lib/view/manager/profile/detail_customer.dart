@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:rtm_system/helpers/common_widget.dart';
 import 'package:rtm_system/helpers/component.dart';
 import 'package:rtm_system/model/model_all_customer.dart';
 import 'package:rtm_system/ultils/get_data.dart';
+import 'package:rtm_system/ultils/src/color_ultils.dart';
 
 class DetailCustomer extends StatefulWidget {
   final CustomerList customerList;
   final String token;
+
   DetailCustomer({this.token, this.customerList});
 
   @override
@@ -16,9 +19,11 @@ class DetailCustomer extends StatefulWidget {
 class _DetailCustomerState extends State<DetailCustomer> {
   int id, advance, statusId;
   String cmnd, fullName, phone, birthday, address, gender, status, accountId;
+  String imageCMNDF, imageCMNDB;
+  bool needConfirm;
 
   // ignore: missing_return
-  Future _getData(){
+  Future _getData() {
     setState(() {
       id = widget.customerList.id;
       statusId = widget.customerList.statusId;
@@ -30,6 +35,9 @@ class _DetailCustomerState extends State<DetailCustomer> {
       phone = widget.customerList.phone;
       birthday = widget.customerList.birthday;
       address = widget.customerList.address;
+      imageCMNDB = widget.customerList.cmndBack;
+      imageCMNDF = widget.customerList.cmndFront;
+      needConfirm = widget.customerList.needConfirm;
     });
   }
 
@@ -38,28 +46,39 @@ class _DetailCustomerState extends State<DetailCustomer> {
     _getData();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 15),
       child: SingleChildScrollView(
-          child: containerDetail(context,
-            componentContainerDetailCustomer(
+          child: Column(
+        children: [
+          containerDetail(
+              context,
+              componentContainerDetailCustomer(
                 context,
-              token: this.widget.token,
-              accountId: accountId,
-              fullName: fullName,
-              address: address,
-              advance: advance,
-              birthday: birthday,
-              cmnd: cmnd,
-              gender: getGender(widget.customerList.gender),
-              phone: phone,
-              status: status,
-              level: "${getLevel(level: widget.customerList.level)}",
-              statusId: statusId,
-            ),
-          )),
+                token: this.widget.token,
+                accountId: accountId,
+                fullName: fullName,
+                address: address,
+                advance: advance,
+                birthday: birthday,
+                cmnd: cmnd,
+                gender: getGender(widget.customerList.gender),
+                phone: phone,
+                status: status,
+                level: "${getLevel(level: widget.customerList.level)}",
+                statusId: statusId,
+                imageCMNDB: imageCMNDB,
+                imageCMNDF: imageCMNDF,
+                needConfirm: needConfirm,
+              ),
+              marginBottom: 50,
+              marginRight: 10,
+              marginLeft: 10,
+              marginTop: 15),
+        ],
+      )),
     );
   }
 }

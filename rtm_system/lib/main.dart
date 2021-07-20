@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:rtm_system/demo.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/welcome_page.dart';
 
@@ -57,6 +58,7 @@ class MyApp extends StatelessWidget {
         builder: EasyLoading.init(),
         debugShowCheckedModeBanner: false,
         home: WelcomePage(),
+        // home: SimpleAnimatedList(),
       ),
     );
   }

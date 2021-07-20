@@ -16,9 +16,6 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
-    if (imageBack != null) imageBack = null;
-    if (imageFront != null) imageFront = null;
-    if (imageFace != null) imageFace = null;
   }
 
   @override
