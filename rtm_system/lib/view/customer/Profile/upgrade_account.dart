@@ -6,6 +6,7 @@ import 'package:rtm_system/helpers/component.dart';
 import 'package:rtm_system/model/model_profile_customer.dart';
 import 'package:rtm_system/presenter/Customer/verification/back_identity_card.dart';
 import 'package:rtm_system/presenter/Customer/verification/front_identity_card.dart';
+import 'package:rtm_system/ultils/get_api_data.dart';
 import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 
@@ -217,6 +218,8 @@ class _UpgradeAccountState extends State<UpgradeAccount> {
         currentStep = 1;
       }else if(imageBack == null){
         currentStep = 2;
+      }else{
+        doUpgradeCustomer(context,cmndFront: imageFront, cmndBack: imageBack, data: dataCustomer);
       }
     });
   }
