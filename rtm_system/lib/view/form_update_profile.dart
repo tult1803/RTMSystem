@@ -249,7 +249,6 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
           });
         },
         onSubmitted: (value) {
-          print(!widget.isCreate);
           setState(() {
            if (tittle == "Số điện thoại") {
               errPhone = checkPhoneNumber(widget.phone);

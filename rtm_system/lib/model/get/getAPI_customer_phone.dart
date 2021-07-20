@@ -5,7 +5,6 @@ import 'package:http/http.dart' as http;
 
 class GetAPIProfileCustomer{
   getProfileCustomer(String token, String phone) async {
-    print(Uri.http('$urlMain', '$urlProfileCustomer/$phone'));
     final response = await http.get(
       Uri.http('$urlMain', '$urlProfileCustomer/$phone'),
       headers: <String, String>{

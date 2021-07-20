@@ -111,6 +111,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
               typeOfUpdate: 1,
               accountId: widget.accountId,
               isCustomer: true,
+              isCreate: false,
             ),
             SizedBox(height: 15,),
             if(checkPasswordSuccess == false)
