@@ -47,6 +47,7 @@ String MSG040 = "Đã xoá thành công";
 String MSG041 = "Xoá thất bại";
 String MSG042 = "Vui lòng chọn cửa hàng";
 
+String MSG043 = "Tải thông tin thất bại";
 
 //use to show message
 String showMessage(String name, String msg){
