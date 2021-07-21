@@ -6,8 +6,6 @@ import 'package:rtm_system/model/model_profile_customer.dart';
 import 'package:rtm_system/helpers/button.dart';
 import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
-import 'package:rtm_system/view/customer/Profile/account_verification.dart';
-import 'package:rtm_system/view/customer/Profile/update_profile.dart';
 import 'package:rtm_system/view/customer/Profile/upgrade_account.dart';
 import 'package:rtm_system/view/update_password.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -175,7 +173,7 @@ class _showProfileState extends State<showProfile> {
         },
         child: Center(
           child: AutoSizeText(
-            "Nâng cấp tài khoản",
+            "Cập nhật tài khoản",
             style: TextStyle(
               fontWeight: FontWeight.w500,
               color: Colors.white,

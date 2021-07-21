@@ -1,9 +1,5 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:rtm_system/ultils/src/color_ultils.dart';
 
 class SimpleAnimatedList extends StatefulWidget {
   const SimpleAnimatedList({Key key}) : super(key: key);

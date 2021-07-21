@@ -804,7 +804,6 @@ Widget componentContainerDetailAdvanceRequest(BuildContext context,
     bool isCustomer,
     String imageUrl,
     Widget widgetToNavigator}) {
-  var size = MediaQuery.of(context).size;
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Column(

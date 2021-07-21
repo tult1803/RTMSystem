@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rtm_system/helpers/component.dart';
@@ -36,7 +35,6 @@ class _UpgradeAccountState extends State<UpgradeAccount> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     dataCustomer = ["null", "null", "null", "null", "null"];
     errorData = ["null", "null", "null", "null", "null"];
@@ -152,7 +150,6 @@ class _UpgradeAccountState extends State<UpgradeAccount> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     informationCustomer = null;
     if (imageBack != null) imageBack = null;
@@ -169,7 +166,7 @@ class _UpgradeAccountState extends State<UpgradeAccount> {
         appBar: AppBar(
           centerTitle: true,
           leading: leadingAppbar(context, colorIcon: Colors.white),
-          title: titleAppBar('Nâng cấp tài khoản'),
+          title: titleAppBar('Cập nhật tài khoản'),
         ),
         body: Column(children: <Widget>[
           Expanded(

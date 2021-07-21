@@ -1,7 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:rtm_system/presenter/Manager/notice/show_notice_manager.dart';
-import 'package:rtm_system/helpers/common_widget.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/manager/notice/create_notice_manager.dart';
 

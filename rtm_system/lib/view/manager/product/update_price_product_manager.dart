@@ -13,7 +13,6 @@ import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/ultils/src/message_list.dart';
 import 'package:rtm_system/view/table_price.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: must_be_immutable, camel_case_types
 class updatePriceProduct extends StatefulWidget {
