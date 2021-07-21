@@ -5,6 +5,7 @@ import 'package:rtm_system/helpers/common_widget.dart';
 import 'package:rtm_system/helpers/component.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/manager/form_detail_page.dart';
+import 'package:rtm_system/view/manager/home_manager_page.dart';
 import 'package:rtm_system/view/manager/product/detail_product.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -56,6 +57,10 @@ class _showAllProductState extends State<showAllProduct> {
 
   @override
   void initState() {
+    itemIdUpdatePrice.clear();
+    itemPriceUpdatePrice.clear();
+    itemNameUpdatePrice.clear();
+    itemDateUpdatePrice.clear();
     _pagingController.addPageRequestListener((pageKey) {
       _fetchPage(pageKey);
     });
@@ -107,6 +112,7 @@ class _showAllProductState extends State<showAllProduct> {
                       typeOfProduct: "${item["type"]}",
                       price: "${item["update_price"]}",
                       widget: FormForDetailPage(
+                          navigatorWidget: HomeAdminPage(index: 0,),
                           tittle: "Chi tiết sản phẩm",
                           bodyPage: DetailProduct(
                             itemDetailProduct: item,

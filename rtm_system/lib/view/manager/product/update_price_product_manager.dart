@@ -40,16 +40,7 @@ class _updatePriceProductState extends State<updatePriceProduct> {
     super.initState();
     isNotEmptyChoose();
   }
-
-  @override
-  void dispose() {
-    itemIdUpdatePrice.clear();
-    itemPriceUpdatePrice.clear();
-    itemNameUpdatePrice.clear();
-    itemDateUpdatePrice.clear();
-    super.dispose();
-  }
-
+  
   void isNotEmptyChoose() {
     try {
       if (this.widget.chosenValue != null) {
@@ -63,8 +54,9 @@ class _updatePriceProductState extends State<updatePriceProduct> {
           getDataTextField("${getFormatPrice("$price")}");
         });
       }
-    }catch(_){
-      EasyLoading.showError(showMessage("", MSG043), duration: Duration(seconds: 2));
+    } catch (_) {
+      EasyLoading.showError(showMessage("", MSG043),
+          duration: Duration(seconds: 2));
     }
   }
 
@@ -153,7 +145,12 @@ class _updatePriceProductState extends State<updatePriceProduct> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Text("$value", style: TextStyle(color: Colors.black)),
-                  checkDate(value) ? Icon(Icons.check, color: Colors.green,) : SizedBox(),
+                  checkDate(value)
+                      ? Icon(
+                          Icons.check,
+                          color: Colors.green,
+                        )
+                      : SizedBox(),
                 ],
               ),
             );
@@ -256,8 +253,9 @@ class _updatePriceProductState extends State<updatePriceProduct> {
           borderRadius: BorderRadius.circular(10),
         ),
         child: TextButton(
-          onPressed: () async{
-            bool checkInput = await checkUpdatePriceProduct(context, isClick: isClick, price: price);
+          onPressed: () async {
+            bool checkInput = await checkUpdatePriceProduct(context,
+                isClick: isClick, price: price);
             if (checkInput) {
               currentPrice == price
                   ? showCustomDialog(context,
@@ -280,5 +278,4 @@ class _updatePriceProductState extends State<updatePriceProduct> {
           ),
         ));
   }
-
 }

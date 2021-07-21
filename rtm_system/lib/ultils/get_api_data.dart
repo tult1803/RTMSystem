@@ -1,15 +1,12 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:http/http.dart';
 import 'package:rtm_system/model/delete/deleteAPI_deactivateAdvanceRequest.dart';
 import 'package:rtm_system/model/delete/deleteAPI_invoice.dart';
 import 'package:rtm_system/model/delete/deleteAPI_invoiceRequest.dart';
 import 'package:rtm_system/model/get/getAPI_maintainCheck.dart';
 import 'package:rtm_system/model/model_invoice_request.dart';
 import 'package:rtm_system/model/model_profile_customer.dart';
-import 'package:rtm_system/model/model_validate_account.dart';
 import 'package:rtm_system/model/post/postAPI_CreateRequestInvoice.dart';
 import 'package:rtm_system/model/post/postAPI_Image.dart';
 import 'package:rtm_system/model/post/postAPI_createCustomer.dart';
@@ -29,7 +26,6 @@ import 'package:rtm_system/model/put/putAPI_updateInvoice.dart';
 import 'package:rtm_system/model/put/putAPI_updatePassword.dart';
 import 'package:rtm_system/model/put/putAPI_updatePrice.dart';
 import 'package:rtm_system/model/put/putAPI_updateAccount.dart';
-import 'package:rtm_system/view/customer/Profile/confirm_data_verification.dart';
 import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/message_list.dart';
 import 'package:rtm_system/presenter/Manager/invoice/add_product_invoice.dart';
@@ -628,8 +624,7 @@ Future<void> doUpgradeCustomer(BuildContext context,
     statusData = await updateData.updateProfileCustomer(
         prefs.get("access_token"), prefs.get("accountId"),data.elementAt(3), data.elementAt(2), data.elementAt(0), data.elementAt(4), data.elementAt(1));
     if (statusImage == 200 && statusData == 200) {
-      EasyLoading.showSuccess("Đã gửi", duration: Duration(seconds: 1));
-      EasyLoading.dismiss();
+      EasyLoading.showSuccess("Đã gửi", duration: Duration(seconds: 2));
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => HomeCustomerPage(index: 3,)));
     } else {

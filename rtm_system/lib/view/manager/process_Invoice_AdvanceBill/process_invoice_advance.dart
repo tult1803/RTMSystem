@@ -39,22 +39,16 @@ class _requestInvoiceAdvanceState extends State<requestInvoiceAdvance> {
     return Scaffold(
         appBar: AppBar(
           leading: leadingAppbar(context,
-              colorIcon: Colors.black,
+              colorIcon: Colors.white,
               widget: HomeAdminPage(
                 index: 0,
               )),
           title: Text(
             "Yêu cầu chờ xử lý",
-            style: GoogleFonts.roboto(color: Colors.black, fontSize: 20),
+            style: GoogleFonts.roboto(color: Colors.white, fontSize: 20),
           ),
           centerTitle: true,
-          backgroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.elliptical(30, 10),
-              bottomRight: Radius.elliptical(30, 10),
-            ),
-          ),
+          backgroundColor: welcome_color,
           bottom: PreferredSize(
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 0),
@@ -96,18 +90,18 @@ class _requestInvoiceAdvanceState extends State<requestInvoiceAdvance> {
         Flexible(
             child: componentBottomProcessBar(
                 title: "Hoá đơn",
-                colorTitle: isInvoice ? welcome_color : Colors.black54)),
+                colorTitle: isInvoice ? Colors.white : Colors.black87)),
         Padding(
           padding: const EdgeInsets.only(bottom: 5.0),
           child: Text(
             "|",
-            style: TextStyle(color: Colors.black54, fontSize: 20),
+            style: TextStyle(color: Colors.black87, fontSize: 20),
           ),
         ),
         Flexible(
             child: componentBottomProcessBar(
                 title: "Ứng tiền",
-                colorTitle: !isInvoice ? welcome_color : Colors.black54)),
+                colorTitle: !isInvoice ? Colors.white : Colors.black87)),
       ],
     );
   }
@@ -125,7 +119,7 @@ class _requestInvoiceAdvanceState extends State<requestInvoiceAdvance> {
         child: Container(
             margin: EdgeInsets.only(left: 0, right: 0),
             height: 40,
-            color: Colors.white10,
+            color: welcome_color,
             child: Center(
                 child: Text(
               title,

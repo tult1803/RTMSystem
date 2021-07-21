@@ -6,8 +6,6 @@ import 'package:rtm_system/model/model_profile_customer.dart';
 import 'package:rtm_system/helpers/button.dart';
 import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
-import 'package:rtm_system/view/customer/Profile/account_verification.dart';
-import 'package:rtm_system/view/customer/Profile/update_profile.dart';
 import 'package:rtm_system/view/customer/Profile/upgrade_account.dart';
 import 'package:rtm_system/view/update_password.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -110,7 +108,7 @@ class _showProfileState extends State<showProfile> {
               _item(context, 'Địa chỉ',
                   "${infomationCustomer.address == null ? "-----" : infomationCustomer.address}"),
               _item(context, 'Loại tài khoản',
-                  getLevel(level: infomationCustomer.level)),
+                  "${getLevel(level: infomationCustomer.level)} ${infomationCustomer.needConfirm ? "- Chờ xác nhận" : ""}"),
               SizedBox(
                 height: 12,
               ),
@@ -161,7 +159,7 @@ class _showProfileState extends State<showProfile> {
               ),
             ),
           ),
-          if (level == 0) btnUpgradeAccount(),
+          if (level == 0 && !infomationCustomer.needConfirm) btnUpgradeAccount(),
         ],
       ),
     );
