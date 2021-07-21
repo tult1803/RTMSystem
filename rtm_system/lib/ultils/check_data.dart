@@ -175,3 +175,13 @@ comparePrice(String price, String currentPrice){
     return price;
   }
 }
+
+checkStatusUpgrade(int statusImage, int statusData){
+  if(statusImage == 200 && statusData != 200){
+    return "dữ liệu";
+  }else if(statusImage != 200 && statusData == 200){
+    return "ảnh";
+  }else if(statusImage != 200 && statusData != 200){
+    return "ảnh và dữ liệu";
+  }else return "";
+}

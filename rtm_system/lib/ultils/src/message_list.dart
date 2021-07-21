@@ -53,6 +53,9 @@ String MSG046 = "Số tiền không vượt quá 50.000.000 VND";
 String MSG047 = "Số tiền không vượt quá 100.000.000 VND";
 String MSG048 = "Hạn mức tối đa 50.000.000 VND";
 String MSG049 = "Hạn mức tối đa 100.000.000 VND";
+/// =====================
+String MSG050 = "Kiểm tra lại thông tin";
+String MSG051 = "Kiểm tra lại";
 //use to show message
 String showMessage(String name, String msg){
   return name.isEmpty || name == null? msg : name + " " + msg;

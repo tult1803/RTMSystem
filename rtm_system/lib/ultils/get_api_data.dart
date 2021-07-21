@@ -35,6 +35,7 @@ import 'package:rtm_system/view/manager/profile/allCustomer_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../helpers/dialog.dart';
+import 'check_data.dart';
 
 Future doCheckMaintain() async {
   GetMaintainCheck maintainCheck = GetMaintainCheck();
@@ -624,12 +625,11 @@ Future<void> doUpgradeCustomer(BuildContext context,
     statusData = await updateData.updateProfileCustomer(
         prefs.get("access_token"), prefs.get("accountId"),data.elementAt(3), data.elementAt(2), data.elementAt(0), data.elementAt(4), data.elementAt(1));
     if (statusImage == 200 && statusData == 200) {
-      EasyLoading.showSuccess("Đã gửi", duration: Duration(seconds: 2));
+      EasyLoading.showSuccess("Đã gửi", duration: Duration(seconds: 2), maskType: EasyLoadingMaskType.black);
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => HomeCustomerPage(index: 3,)));
     } else {
-      EasyLoading.dismiss();
-      EasyLoading.showError("Gửi ${statusImage == 200 ? "ảnh" : "dữ liệu"} thất bại", duration: Duration(seconds: 1));
+      EasyLoading.showError("Gửi ${checkStatusUpgrade(statusImage, statusData)} thất bại", duration: Duration(seconds: 2), maskType: EasyLoadingMaskType.black);
     }
   } catch (_) {
     EasyLoading.dismiss();
