@@ -49,7 +49,8 @@ String MSG042 = "Vui lòng chọn cửa hàng";
 String MSG043 = "Vui lòng chọn đơn ký gửi!";
 String MSG044 = "Không có hoá đơn ký gửi để trả nợ.";
 String MSG045 = "Tải thông tin thất bại";
-
+String MSG046 = "Số tiền không vượt quá 50,000,000 VND";
+String MSG047 = "Số tiền không vượt quá 100,000,000 VND";
 //use to show message
 String showMessage(String name, String msg){
   return name.isEmpty || name == null? msg : name + " " + msg;

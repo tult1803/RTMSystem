@@ -14,6 +14,8 @@ import 'package:rtm_system/view/customer/advance/confirm_create_request_advance.
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CreateRequestAdvance extends StatefulWidget {
+  final int levelCustomer;
+  CreateRequestAdvance({this.levelCustomer});
   @override
   _CreateRequestAdvanceState createState() => _CreateRequestAdvanceState();
 }
@@ -186,6 +188,9 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
         child: TextFormField(
           // The validator receives the text that the user has entered.
           validator: (value) {
+            var numberSplit = value.split(",");
+            String prefixId = numberSplit.join();
+            int valueMoney = int.parse(prefixId);
             if (value == null || value.isEmpty) {
               return showMessage(tittle, MSG001);
             } else if (!checkFormatMoney.hasMatch(value)) {
@@ -193,6 +198,14 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
             } else if (value.length <= 6) {
               // số tiền phải là từ 100 trở lên
               return showMessage('', MSG006);
+            } else if (widget.levelCustomer == 1) {
+              if (valueMoney > 50000000) {
+                return showMessage('', MSG046);
+              }
+            } else if (widget.levelCustomer == 2) {
+              if (valueMoney > 100000000) {
+                return showMessage('', MSG047);
+              }
             }
             return null;
           },
