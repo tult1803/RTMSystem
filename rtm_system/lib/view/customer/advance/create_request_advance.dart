@@ -148,7 +148,6 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
     String moneyJoin = numberSplit.join();
     int valueMoney = int.parse(moneyJoin);
     int checkMoney = valueMoney + totalAdvance;
-    print(checkMoney);
     if (widget.levelCustomer == 1) {
       if (checkMoney > 50000000) {
         showCustomDialog(context,
