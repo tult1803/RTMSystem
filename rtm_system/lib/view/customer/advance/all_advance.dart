@@ -181,7 +181,7 @@ class _AdvancePageState extends State<AdvancePage>
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => CreateRequestAdvance()),
+            MaterialPageRoute(builder: (context) => CreateRequestAdvance(levelCustomer: level,)),
           );
         },
         child: Icon(

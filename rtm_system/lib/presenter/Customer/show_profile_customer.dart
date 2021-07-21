@@ -173,7 +173,7 @@ class _showProfileState extends State<showProfile> {
         },
         child: Center(
           child: AutoSizeText(
-            "Nâng cấp tài khoản",
+            "Cập nhật tài khoản",
             style: TextStyle(
               fontWeight: FontWeight.w500,
               color: Colors.white,

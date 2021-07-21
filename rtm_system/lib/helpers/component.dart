@@ -804,7 +804,6 @@ Widget componentContainerDetailAdvanceRequest(BuildContext context,
     bool isCustomer,
     String imageUrl,
     Widget widgetToNavigator}) {
-  var size = MediaQuery.of(context).size;
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Column(
@@ -839,11 +838,12 @@ Widget componentContainerDetailAdvanceRequest(BuildContext context,
         SizedBox(
           height: 10,
         ),
-        txtItemDetail(context, "Ngày đến",
+        txtItemDetail(context, "Ngày sẽ đến",
             "${getDateTime(receiveDate, dateFormat: "dd/MM/yyyy")}"),
         SizedBox(
           height: 10,
         ),
+        if(activeDate != null)
         txtItemDetail(context, "Ngày nhận tiền",
             "${getDateTime(activeDate, dateFormat: "dd/MM/yyyy")}"),
         SizedBox(
