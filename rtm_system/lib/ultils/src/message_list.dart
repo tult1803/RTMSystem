@@ -38,7 +38,7 @@ String MSG031 = "Quý khách không có nợ.";
 String MSG032 = "Xác nhận quý khách đã nhận số tiền hoàn trả?";
 String MSG033 = "Vui lòng chọn tiền nợ nhỏ hơn hoặc bằng tiền ký gửi";
 String MSG034 = "Vui lòng chọn đơn nợ!";
-String MSG035 = "Giá phải lớn hơn 1.000đ";
+String MSG035 = "Giá phải lớn hơn 0";
 String MSG036 = "Mất kết nối internet.";
 String MSG037 = "Trả tiền thất bại";
 String MSG038 = "Nhận tiền thất bại";
@@ -49,10 +49,10 @@ String MSG042 = "Vui lòng chọn cửa hàng";
 String MSG043 = "Vui lòng chọn đơn ký gửi!";
 String MSG044 = "Không có hoá đơn ký gửi để trả nợ.";
 String MSG045 = "Tải thông tin thất bại";
-String MSG046 = "Số tiền không vượt quá 50,000,000 VND";
-String MSG047 = "Số tiền không vượt quá 100,000,000 VND";
-String MSG048 = "Hạn mức tối đa 50,000,000 VND";
-String MSG049 = "Hạn mức tối đa 100,000,000 VND";
+String MSG046 = "Số tiền không vượt quá 50.000.000 VND";
+String MSG047 = "Số tiền không vượt quá 100.000.000 VND";
+String MSG048 = "Hạn mức tối đa 50.000.000 VND";
+String MSG049 = "Hạn mức tối đa 100.000.000 VND";
 //use to show message
 String showMessage(String name, String msg){
   return name.isEmpty || name == null? msg : name + " " + msg;

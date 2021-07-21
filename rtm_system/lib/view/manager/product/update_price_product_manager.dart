@@ -188,7 +188,7 @@ class _updatePriceProductState extends State<updatePriceProduct> {
         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
         decoration: InputDecoration(
           border: OutlineInputBorder(),
-          hintText: "000,000",
+          hintText: "000.000",
           //Sau khi click vào "Nhập tiêu đề" thì màu viền sẽ đổi
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(color: welcome_color),

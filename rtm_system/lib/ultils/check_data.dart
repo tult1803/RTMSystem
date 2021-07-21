@@ -30,7 +30,7 @@ checkInputUpdateInvoice(BuildContext context,
 checkUpdatePriceProduct(BuildContext context, {bool isClick, double price}) {
   if (isClick) {
     if (price != null) {
-      if (price > 1000) {
+      if (price > 0) {
         return true;
       } else {
         showCustomDialog(context,
@@ -163,5 +163,15 @@ checkAddress(String address) {
     return showMessage("Địa chỉ", MSG001);
   } else {
     return null;
+  }
+}
+
+comparePrice(String price, String currentPrice){
+  double formatPrice = double.parse(price);
+  double formatCurrentPrice = double.parse(currentPrice);
+  if(formatCurrentPrice > formatPrice){
+    return formatCurrentPrice;
+  }else {
+    return price;
   }
 }

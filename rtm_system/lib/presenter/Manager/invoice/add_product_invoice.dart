@@ -65,7 +65,7 @@ String phoneNewCustomer, nameNewCustomer, customerId;
 
 class _AddProductPageState extends State<AddProductPage> {
   String errorPhone, errorQuantity, errorDegree;
-  String price, productName;
+  String price, productName, currentPrice = "0", priceSell = "0";
   String token, storeName;
   String personSale = '', phoneSale = '', oldCusName, oldCusId;
   List listQuantity = [];
@@ -95,9 +95,15 @@ class _AddProductPageState extends State<AddProductPage> {
     dataListProduct.clear();
     if (token.isNotEmpty) {
       dataList = await getProduct.getProduct(token, "");
-      dataList.forEach((element) {
+      dataList.forEach((element) async{
         Map<dynamic, dynamic> data = element;
         dataListProduct.add(DataProduct.fromJson(data));
+        if (widget.dateToPay != null) {
+          if (element["id"] == widget.productId) {
+            currentPrice = "${element["update_price"]}";
+            priceSell = "${comparePrice(price, currentPrice)}";
+          }
+        }
       });
       setState(() {
         // ignore: unnecessary_statements
@@ -106,7 +112,6 @@ class _AddProductPageState extends State<AddProductPage> {
       return dataListProduct;
     }
   }
-
   Future _getStore() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     GetAPIAllStore getAPIAllStore = GetAPIAllStore();
@@ -261,6 +266,18 @@ class _AddProductPageState extends State<AddProductPage> {
                         ),
                         btnCurrentPrice(context, price),
                         SizedBox(
+                          height: 5,
+                        ),
+                        if (widget.dateToPay != null)
+                          btnCurrentPrice(context, "$currentPrice",
+                              tittle: "Giá hiện tại"),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        if (widget.dateToPay != null)
+                          _showMoneyOrQuantity(
+                              "Giá bán", "${getFormatPrice(priceSell)} VNĐ"),
+                        SizedBox(
                           height: 10,
                         ),
                         if (!widget.isCustomer)
@@ -272,7 +289,7 @@ class _AddProductPageState extends State<AddProductPage> {
                         //Khi manager tạo hoá đơn thì mới có giá lúc bán để show
                         if (!widget.isCustomer)
                           _showMoneyOrQuantity("Thành tiền",
-                              "${getFormatPrice('${getPriceTotal(double.tryParse(price), degree, quantity)}')}đ"),
+                              "${getFormatPrice('${getPriceTotal(double.tryParse(priceSell), degree, quantity)}')}đ"),
                       ]),
                     ),
                   ],
@@ -829,7 +846,7 @@ class _AddProductPageState extends State<AddProductPage> {
     );
   }
 
-  Widget btnCurrentPrice(context, String price) {
+  Widget btnCurrentPrice(context, String price, {String tittle}) {
     return Container(
       height: 45,
       decoration: BoxDecoration(
@@ -843,7 +860,7 @@ class _AddProductPageState extends State<AddProductPage> {
             width: 130,
             margin: EdgeInsets.only(left: 15),
             child: Text(
-              "${widget.dateToPay != null ? "Giá đã giữ" : "Giá hiện tại"}",
+              "${tittle == null ? widget.dateToPay != null ? "Giá đã giữ" : "Giá hiện tại" : tittle}",
               style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
             ),
           ),
@@ -883,7 +900,7 @@ class _AddProductPageState extends State<AddProductPage> {
                     dateToPay: "$dateSale",
                     degree: "$degree",
                     quantity: "$quantity",
-                    price: "$price",
+                    price: "$priceSell",
                     productName: "$productName",
                     storeName: "$storeName",
                     widgetToNavigator: widget.widgetToNavigator == null
