@@ -70,8 +70,8 @@ Future<void> getNotice(BuildContext context, String mainTittle, String content,
     showStatusAlertDialog(context, showMessage(MSG024, MSG027), null, false);
 }
 
-Future post_put_ApiProfile(
-    String phone,
+/// Hàm này chờ xử lý
+Future post_put_ApiProfile(String phone,
     String password,
     String fullname,
     int gender,
@@ -86,10 +86,9 @@ Future post_put_ApiProfile(
   SharedPreferences prefs = await SharedPreferences.getInstance();
   if (isUpdate) {
     if (isCustomer) {
-      print("zo");
       PutUpdateProfileCustomer putUpdateProfile = PutUpdateProfileCustomer();
       status = await putUpdateProfile.updateProfileCustomer(
-          prefs.get("access_token"), cmnd, birthday, fullname, address, gender);
+          prefs.get("access_token"),prefs.get("accountId") ,cmnd, birthday, fullname, address, gender);
     } else {
       PutUpdateProfile _putUpdate = PutUpdateProfile();
       status = await _putUpdate.updateProfile(
@@ -106,8 +105,15 @@ Future post_put_ApiProfile(
     }
   } else {
     PostCreateCustomer _createCustomer = PostCreateCustomer();
-    status = await _createCustomer.createCustomer(prefs.get("access_token"),
-        phone, password, fullname, gender, cmnd, address, birthday);
+    status = await _createCustomer.createCustomer(
+        prefs.get("access_token"),
+        phone,
+        password,
+        fullname,
+        gender,
+        cmnd,
+        address,
+        birthday);
   }
   return status;
 }
@@ -161,8 +167,7 @@ Future<void> doUpdatePassword(BuildContext context,
   }
 }
 
-Future<void> doCreateCustomer(
-    BuildContext context,
+Future<void> doCreateCustomer(BuildContext context,
     String phone,
     String password,
     String fullname,
@@ -174,10 +179,20 @@ Future<void> doCreateCustomer(
     int typeOfUpdate,
     String accountId,
     {bool isCreate,
-    bool isUpdate}) async {
+      bool isUpdate}) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  int status = await post_put_ApiProfile(phone, password, fullname, gender,
-      cmnd, address, birthday, isUpdate, typeOfUpdate, accountId, isCustomer);
+  int status = await post_put_ApiProfile(
+      phone,
+      password,
+      fullname,
+      gender,
+      cmnd,
+      address,
+      birthday,
+      isUpdate,
+      typeOfUpdate,
+      accountId,
+      isCustomer);
   if (status == 200) {
     if (isCustomer) {
       showStatusAlertDialog(
@@ -189,7 +204,9 @@ Future<void> doCreateCustomer(
           true);
     } else {
       if (isCreate == null) {
-        if (fullname.trim().isNotEmpty) {
+        if (fullname
+            .trim()
+            .isNotEmpty) {
           prefs.setString("fullname", fullname);
           prefs.setString("phone", phone);
           prefs.setInt("gender", gender);
@@ -206,8 +223,8 @@ Future<void> doCreateCustomer(
         isSuccess: true,
         widgetToNavigator: isCreate == null
             ? HomeAdminPage(
-                index: 4,
-              )
+          index: 4,
+        )
             : AllCustomer(),
       );
     }
@@ -221,9 +238,7 @@ Future<void> doCreateCustomer(
 }
 
 // ignore: non_constant_identifier_names
-Future<void> put_API_PayAdvance(
-  BuildContext context,
-) async {
+Future<void> put_API_PayAdvance(BuildContext context,) async {
   int status = 200;
   if (status == 200) {
     showStatusAlertDialog(
@@ -242,7 +257,7 @@ Future<void> put_API_ConfirmAdvance(BuildContext context, id) async {
   int status;
   SharedPreferences prefs = await SharedPreferences.getInstance();
   PutConfirmAdvanceRequest putConfirmAdvanceRequest =
-      PutConfirmAdvanceRequest();
+  PutConfirmAdvanceRequest();
   status = await putConfirmAdvanceRequest.putConfirmAdvanceRequest(
       prefs.get("access_token"), id);
   if (status == 200) {
@@ -299,9 +314,9 @@ Future<void> putAPIUpdatePrice(BuildContext context, String productId,
 Future<void> doConfirmOrAcceptOrRejectInvoice(BuildContext context,
     String invoiceId, List<String> invoiceIdSign, int type, bool isCustomer,
     {Widget widgetToNavigator,
-    String reason,
-    bool isRequest,
-    InvoiceRequestElement element}) async {
+      String reason,
+      bool isRequest,
+      InvoiceRequestElement element}) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   int status;
   if (isCustomer) {
@@ -346,22 +361,23 @@ Future<void> doConfirmOrAcceptOrRejectInvoice(BuildContext context,
       case 2:
         isRequest == true
             ? Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => AddProductPage(
-                      tittle: "Tạo hoá đơn yêu cầu",
-                      customerId: element.customerId,
-                      invoiceRequestId: element.id,
-                      phone: element.customerPhone,
-                      fullName: element.customerName,
-                      storeName: element.storeName,
-                      productName: element.productName,
-                      dateToPay: element.sellDate,
-                      productId: element.productId,
-                      savePrice: "${element.price}",
-                      storeId: element.storeId,
-                      isCustomer: false,
-                      isChangeData: true,
-                      widgetToNavigator: widgetToNavigator,
-                    )))
+            builder: (context) =>
+                AddProductPage(
+                  tittle: "Tạo hoá đơn yêu cầu",
+                  customerId: element.customerId,
+                  invoiceRequestId: element.id,
+                  phone: element.customerPhone,
+                  fullName: element.customerName,
+                  storeName: element.storeName,
+                  productName: element.productName,
+                  dateToPay: element.sellDate,
+                  productId: element.productId,
+                  savePrice: "${element.price}",
+                  storeId: element.storeId,
+                  isCustomer: false,
+                  isChangeData: true,
+                  widgetToNavigator: widgetToNavigator,
+                )))
             : print('Chấp nhận');
         break;
       case 3:
@@ -373,8 +389,7 @@ Future<void> doConfirmOrAcceptOrRejectInvoice(BuildContext context,
 }
 
 //Tao advance request
-Future<void> doCreateRequestAdvance(
-    BuildContext context,
+Future<void> doCreateRequestAdvance(BuildContext context,
     String accountId,
     String money,
     String reason,
@@ -458,17 +473,17 @@ Future doDeleteInvoice(BuildContext context, String invoiceId, bool isRequest,
   } else {
     DeleteInvoice deleteInvoice = DeleteInvoice();
     status =
-        await deleteInvoice.deleteInvoice(prefs.get('access_token'), invoiceId);
+    await deleteInvoice.deleteInvoice(prefs.get('access_token'), invoiceId);
   }
   status == 200
       ? showCustomDialog(context,
-          isSuccess: true,
-          content: showMessage("", MSG040),
-          widgetToNavigator: widgetToNavigator)
+      isSuccess: true,
+      content: showMessage("", MSG040),
+      widgetToNavigator: widgetToNavigator)
       : showCustomDialog(context,
-          isSuccess: false,
-          content: showMessage("", MSG041),
-          doPopNavigate: true);
+      isSuccess: false,
+      content: showMessage("", MSG041),
+      doPopNavigate: true);
 }
 
 Future doDeleteInvoiceRequest(BuildContext context, String invoiceId,
@@ -480,17 +495,17 @@ Future doDeleteInvoiceRequest(BuildContext context, String invoiceId,
       reason: reason);
   status == 200
       ? showCustomDialog(context,
-          isSuccess: true,
-          content: showMessage("", MSG017),
-          widgetToNavigator: widgetToNavigator)
+      isSuccess: true,
+      content: showMessage("", MSG017),
+      widgetToNavigator: widgetToNavigator)
       : showCustomDialog(context,
-          isSuccess: false,
-          content: showMessage(MSG030, MSG027),
-          doPopNavigate: true);
+      isSuccess: false,
+      content: showMessage(MSG030, MSG027),
+      doPopNavigate: true);
 }
 
-Future doProcessAdvanceBill(
-    BuildContext context, String invoiceId, int statusProcess,
+Future doProcessAdvanceBill(BuildContext context, String invoiceId,
+    int statusProcess,
     {Widget widgetToNavigator, String reason}) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   PutProcessAdvanceBill processAdvanceBill = PutProcessAdvanceBill();
@@ -501,30 +516,30 @@ Future doProcessAdvanceBill(
       reason: reason);
   status == 200
       ? showCustomDialog(context,
-          isSuccess: true,
-          content: statusProcess == 6
-              ? "Đã từ chối ứng tiền"
-              : "Xác nhận đơn thành công",
-          widgetToNavigator: widgetToNavigator)
+      isSuccess: true,
+      content: statusProcess == 6
+          ? "Đã từ chối ứng tiền"
+          : "Xác nhận đơn thành công",
+      widgetToNavigator: widgetToNavigator)
       : showCustomDialog(context,
-          isSuccess: false,
-          content: statusProcess == 6
-              ? "Từ chối ứng tiền thất bại"
-              : "Xác nhận đơn thất bại",
-          doPopNavigate: true);
+      isSuccess: false,
+      content: statusProcess == 6
+          ? "Từ chối ứng tiền thất bại"
+          : "Xác nhận đơn thất bại",
+      doPopNavigate: true);
 }
 
 ///Dùng để tạo hoá đơn và tạo yêu cầu giữ giá ( Request Invoice )
 Future doCreateInvoice(BuildContext context,
     {String customerId,
-    String productId,
-    String storeId,
-    String sellDate,
-    String quantity,
-    String degree,
-    String invoiceRequestId,
-    bool isCustomer,
-    Widget widgetToNavigator}) async {
+      String productId,
+      String storeId,
+      String sellDate,
+      String quantity,
+      String degree,
+      String invoiceRequestId,
+      bool isCustomer,
+      Widget widgetToNavigator}) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   int status;
   if (isCustomer) {
@@ -536,26 +551,32 @@ Future doCreateInvoice(BuildContext context,
         storeId);
   } else {
     PostCreateInvoice createInvoice = PostCreateInvoice();
-    status = await createInvoice.createInvoice(prefs.get('access_token'),
-        customerId, productId, storeId, quantity, degree, invoiceRequestId);
+    status = await createInvoice.createInvoice(
+        prefs.get('access_token'),
+        customerId,
+        productId,
+        storeId,
+        quantity,
+        degree,
+        invoiceRequestId);
   }
 
   status == 200
       ? isCustomer
-          ? showCustomDialog(context,
-              isSuccess: true,
-              content: showMessage("", MSG002),
-              widgetToNavigator: HomeCustomerPage(
-                index: 0,
-              ))
-          : showCustomDialog(context,
-              isSuccess: true,
-              content: showMessage("", MSG002),
-              widgetToNavigator: widgetToNavigator)
+      ? showCustomDialog(context,
+      isSuccess: true,
+      content: showMessage("", MSG002),
+      widgetToNavigator: HomeCustomerPage(
+        index: 0,
+      ))
       : showCustomDialog(context,
-          isSuccess: false,
-          content: showMessage("", MSG024),
-          doPopNavigate: true);
+      isSuccess: true,
+      content: showMessage("", MSG002),
+      widgetToNavigator: widgetToNavigator)
+      : showCustomDialog(context,
+      isSuccess: false,
+      content: showMessage("", MSG024),
+      doPopNavigate: true);
 }
 
 Future<void> putReturnAdvance(BuildContext context, List<String> invoiceId,
@@ -589,30 +610,32 @@ Future<void> putReturnAdvance(BuildContext context, List<String> invoiceId,
   }
 }
 
-Future<void> doValidateCustomer(BuildContext context,
-    {File cmndFront, File cmndBack}) async {
-  int status;
+Future<void> doUpgradeCustomer(BuildContext context,
+    {File cmndFront, File cmndBack, List data}) async {
+  int statusImage, statusData;
   SharedPreferences prefs = await SharedPreferences.getInstance();
   PostValidateCustomer validateCustomer = PostValidateCustomer();
+  PutUpdateProfileCustomer updateData = PutUpdateProfileCustomer();
   try {
     EasyLoading.show(
-      status: 'Đang gửi...',
+      status: 'Đang xử lý...',
       maskType: EasyLoadingMaskType.black,
     );
-    status = await validateCustomer.createValidateCustomer(
-        prefs.get("access_token"),
-        cmndFront: cmndFront,
-        cmndBack: cmndBack,);
-    if(status == 200){
+    statusImage = await validateCustomer.createValidateCustomer(
+      prefs.get("access_token"),
+      cmndFront: cmndFront,
+      cmndBack: cmndBack,);
+    statusData = await updateData.updateProfileCustomer(
+        prefs.get("access_token"), prefs.get("accountId"),data.elementAt(3), data.elementAt(2), data.elementAt(0), data.elementAt(4), data.elementAt(1));
+    if (statusImage == 200 && statusData == 200) {
       EasyLoading.showSuccess("Đã gửi", duration: Duration(seconds: 1));
       EasyLoading.dismiss();
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => HomeCustomerPage(index: 3,)));
-    }else{
+    } else {
       EasyLoading.dismiss();
-      EasyLoading.showError("Gửi thất bại", duration: Duration(seconds: 1));
+      EasyLoading.showError("Gửi ${statusImage == 200 ? "ảnh" : "dữ liệu"} thất bại", duration: Duration(seconds: 1));
     }
-
   } catch (_) {
     EasyLoading.dismiss();
     showCustomDialog(context,
@@ -623,13 +646,13 @@ Future<void> doValidateCustomer(BuildContext context,
 
 Future doConfirmIdentifyCustomer(BuildContext context,
     {String cmnd,
-    String birthday,
-    String fullName,
-    String address,
-    int gender}) async {
+      String birthday,
+      String fullName,
+      String address,
+      int gender}) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   PutConfirmIdentifyCustomer confirmIdentifyCustomer =
-      PutConfirmIdentifyCustomer();
+  PutConfirmIdentifyCustomer();
   int status = await confirmIdentifyCustomer.updateCustomer(
       prefs.get("access_token"),
       gender: gender,
@@ -652,8 +675,7 @@ Future doConfirmIdentifyCustomer(BuildContext context,
 }
 
 //receive cash from advance return
-Future doReceiveReturnCash(
-  BuildContext context, {
+Future doReceiveReturnCash(BuildContext context, {
   String id,
 }) async {
   int status;
@@ -681,13 +703,13 @@ Future doDeleteAdvanceRequest(BuildContext context, String id) async {
       prefs.get('access_token'), id);
   status == 200
       ? showCustomDialog(context,
-          isSuccess: true,
-          content: showMessage("", MSG017),
-          widgetToNavigator: HomeCustomerPage(
-            index: 1,
-          ))
+      isSuccess: true,
+      content: showMessage("", MSG017),
+      widgetToNavigator: HomeCustomerPage(
+        index: 1,
+      ))
       : showCustomDialog(context,
-          isSuccess: false,
-          content: showMessage(MSG030, MSG027),
-          doPopNavigate: true);
+      isSuccess: false,
+      content: showMessage(MSG030, MSG027),
+      doPopNavigate: true);
 }

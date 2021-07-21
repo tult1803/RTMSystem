@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:rtm_system/helpers/dialog.dart';
@@ -170,7 +171,6 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
                     ];
                   });
                 },
-                // currentTime: this.widget.birthday,
                 maxTime: DateTime(DateTime.now().year, 12, 31),
                 minTime: DateTime(DateTime.now().year - 111),
                 locale: LocaleType.vi,
@@ -199,10 +199,12 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
                   ),
                 ),
                 Container(
-                  width: 70,
-                  child: Icon(
-                    Icons.calendar_today,
-                    color: Colors.black45,
+                  child: widget.isUpgrade ? null : Container(
+                    width: 70,
+                    child: Icon(
+                      Icons.calendar_today,
+                      color: Colors.black45,
+                    ),
                   ),
                 ),
               ],
@@ -236,7 +238,7 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
       TextInputType txtType) {
     return Container(
       margin: widget.isUpgrade
-          ? null
+          ? EdgeInsets.only(top: 4)
           : EdgeInsets.only(top: 10, left: 10, right: 10),
       child: TextField(
         controller: _controller,
@@ -307,7 +309,7 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
               )),
 
           //Hiển thị Icon góc phải
-          suffixIcon: Icon(
+          suffixIcon: widget.isUpgrade ? null : Icon(
             Icons.create,
             color: Colors.black54,
           ),
@@ -390,7 +392,7 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
               )),
 
           //Hiển thị Icon góc phải
-          suffixIcon: Icon(
+          suffixIcon: widget.isUpgrade ? null : Icon(
             Icons.create,
             color: Colors.black54,
           ),
@@ -420,20 +422,19 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
           Row(
             children: <Widget>[
               Container(
-                alignment: Alignment.centerLeft,
-                padding: widget.isUpgrade
-                    ? EdgeInsets.only(right: 20)
-                    : EdgeInsets.only(right: 0),
-                margin: EdgeInsets.only(top: 10, right: 0),
-                width: 85,
-                height: 50,
-                child: Center(
-                    child: Text("Giới tính",
-                        style: TextStyle(fontWeight: FontWeight.w500))),
+                child: widget.isUpgrade ? null : Container(
+                  alignment: Alignment.centerLeft,
+                  padding: EdgeInsets.only(left: 15),
+                  margin: EdgeInsets.only(top: 10, right: 0),
+                  width: 85,
+                  height: 50,
+                      child: AutoSizeText("Giới tính",
+                          style: TextStyle(fontWeight: FontWeight.w500, )),
+                ),
               ),
               Container(
                 height: 50,
-                width: 130,
+                width: 120,
                 child: RadioListTile<GenderCharacter>(
                   activeColor: welcome_color,
                   title: const AutoSizeText(
@@ -460,12 +461,12 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
                   },
                 ),
               ),
-              Expanded(
+              Flexible(
                 child: Container(
                   height: 50,
                   child: RadioListTile<GenderCharacter>(
                     activeColor: welcome_color,
-                    title: const AutoSizeText('Nữ'),
+                    title:  AutoSizeText('Nữ'),
                     value: GenderCharacter.women,
                     groupValue: character,
                     onChanged: (GenderCharacter value) {

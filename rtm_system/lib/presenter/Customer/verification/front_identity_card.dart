@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:rtm_system/view/customer/Profile/upgrade_account.dart';
@@ -19,22 +18,12 @@ class _FrontIdentifyCardState extends State<FrontIdentifyCard> {
       child: Container(
         child: Column(
           children: [
-            tittleBody(),
             showImage(size.width, size.height, imageFront),
             btnImage(context, size.width * 0.9, size.height * 0.1),
           ],
         ),
       ),
     );
-  }
-
-  Widget tittleBody() {
-    return Container(
-        margin: EdgeInsets.only(top: 10),
-        child: Text(
-          "Chụp ảnh mặt trước CMND/CCCD",
-          style: GoogleFonts.roboto(fontSize: 17, fontWeight: FontWeight.w500),
-        ));
   }
 
   Widget showImage(width, height, image) {

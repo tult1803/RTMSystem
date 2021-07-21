@@ -19,21 +19,11 @@ class _BackIdentifyCardState extends State<BackIdentifyCard> {
       child: Container(
         child: Column(
           children: [
-            tittleBody(),
             showImage(size.width, size.height, imageBack),
             btnImage(context, size.width * 0.9, size.height * 0.1),
           ],
     ))
     );
-  }
-
-  Widget tittleBody() {
-    return Container(
-        margin: EdgeInsets.only(top: 10),
-        child: Text(
-          "Chụp ảnh mặt sau CMND/CCCD",
-          style: GoogleFonts.roboto(fontSize: 17, fontWeight: FontWeight.w500),
-        ));
   }
 
   Widget showImage(width, height, image) {
