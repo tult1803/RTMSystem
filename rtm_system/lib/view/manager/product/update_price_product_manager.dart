@@ -40,7 +40,7 @@ class _updatePriceProductState extends State<updatePriceProduct> {
     super.initState();
     isNotEmptyChoose();
   }
-  
+
   void isNotEmptyChoose() {
     try {
       if (this.widget.chosenValue != null) {
