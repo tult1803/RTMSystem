@@ -64,7 +64,7 @@ class _updatePriceProductState extends State<updatePriceProduct> {
         });
       }
     }catch(_){
-      EasyLoading.showError(showMessage("", MSG043), duration: Duration(seconds: 2));
+      EasyLoading.showError(showMessage("", MSG045), duration: Duration(seconds: 2));
     }
   }
 

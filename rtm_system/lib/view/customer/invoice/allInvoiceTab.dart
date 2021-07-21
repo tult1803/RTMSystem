@@ -73,8 +73,7 @@ class _InvoiceTabState extends State<InvoiceTab> with TickerProviderStateMixin {
         bottom: bottomTabBar(),
       ),
       body: tabView(),
-      floatingActionButton:
-          level != 0 ? _showFloatBtn(_selectedIndex) : showHiddenFloatBtn(),
+      floatingActionButton: showFloatBtn(_selectedIndex, level),
     );
   }
 
@@ -159,48 +158,56 @@ class _InvoiceTabState extends State<InvoiceTab> with TickerProviderStateMixin {
     );
   }
 
-  Widget _showFloatBtn(index) {
+  Widget showFloatBtn(index, levelCustomer) {
     //index = 2 là tab thứ 2 "Ký gửi"
     if (index == 2) {
-      return FloatingActionButton.extended(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => GetMoneyDeposit()),
-          );
-        },
-        label: Text(
-          'Nhận tiền',
-          style: TextStyle(
-            color: Colors.white,
+      if (levelCustomer != 0) {
+        return FloatingActionButton.extended(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => GetMoneyDeposit()),
+            );
+          },
+          label: Text(
+            'Nhận tiền',
+            style: TextStyle(
+              color: Colors.white,
+            ),
           ),
-        ),
-        backgroundColor: primaryColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(50.0),
-        ),
-        elevation: 10,
-      );
+          backgroundColor: primaryColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(50.0),
+          ),
+          elevation: 10,
+        );
+      } else{
+      return showHiddenFloatBtn();
+      }
     } else {
-      return FloatingActionButton(
-        backgroundColor: primaryColor,
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => AddProductPage(
-                      isCustomer: true,
-                      tittle: "Tạo yêu cầu bán hàng",
-                      level: level,
-                    )),
-          );
-        },
-        child: Icon(
-          Icons.post_add_outlined,
-          color: Colors.white,
-          size: 25,
-        ),
-      );
+      if (levelCustomer == 2) {
+        return FloatingActionButton(
+          backgroundColor: primaryColor,
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => AddProductPage(
+                        isCustomer: true,
+                        tittle: "Tạo yêu cầu bán hàng",
+                        level: level,
+                      )),
+            );
+          },
+          child: Icon(
+            Icons.post_add_outlined,
+            color: Colors.white,
+            size: 25,
+          ),
+        );
+      } else {
+        return showHiddenFloatBtn();
+      }
     }
   }
 

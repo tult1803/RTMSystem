@@ -48,8 +48,7 @@ String MSG041 = "Xoá thất bại";
 String MSG042 = "Vui lòng chọn cửa hàng";
 String MSG043 = "Vui lòng chọn đơn ký gửi!";
 String MSG044 = "Không có hoá đơn ký gửi để trả nợ.";
-
-String MSG043 = "Tải thông tin thất bại";
+String MSG045 = "Tải thông tin thất bại";
 
 //use to show message
 String showMessage(String name, String msg){
