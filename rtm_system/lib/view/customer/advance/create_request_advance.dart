@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:rtm_system/helpers/dialog.dart';
 import 'package:rtm_system/model/get/getAPI_allStore.dart';
+import 'package:rtm_system/model/get/getAPI_customer_phone.dart';
+import 'package:rtm_system/model/model_profile_customer.dart';
 import 'package:rtm_system/model/model_store.dart';
 import 'package:rtm_system/helpers/component.dart';
 import 'package:rtm_system/ultils/get_data.dart';
@@ -29,6 +31,7 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
   Store store;
   List<StoreElement> dataListStore;
   String _myStore, reason = '';
+  int totalAdvance = 0;
 
   Future _getStore() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -47,11 +50,31 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
     return dataListStore;
   }
 
+  //get total advance
+  Future getAPIProfile() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    String token = sharedPreferences.getString('access_token');
+    String phone = sharedPreferences.getString('phone');
+    GetAPIProfileCustomer getAPIProfileCustomer = GetAPIProfileCustomer();
+    InfomationCustomer informationCustomer = InfomationCustomer();
+
+    // Đỗ dữ liệu lấy từ api
+    informationCustomer =
+        await getAPIProfileCustomer.getProfileCustomer(token, phone);
+    if (informationCustomer != null) {
+      setState(() {
+        totalAdvance = informationCustomer.advance;
+      });
+    }
+    return informationCustomer;
+  }
+
   @override
   void initState() {
     setState(() {
       createDate = DateTime.now();
     });
+    getAPIProfile();
     _getStore();
   }
 
@@ -101,24 +124,7 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          if (_myStore == null) {
-            showCustomDialog(context,
-                isSuccess: false,
-                content: showMessage("Cửa hàng", MSG001),
-                doPopNavigate: true);
-          } else {
-            if (_formKey.currentState.validate()) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => ConfirmCreateRequestAdvance(
-                          listInfor: listInfor,
-                          storeId: _myStore,
-                          isCustomer: true,
-                        )),
-              );
-            }
-          }
+          validData();
         },
         label: titleAppBar('Tạo mới'),
         backgroundColor: primaryColor,
@@ -128,6 +134,59 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
         elevation: 10,
       ),
     );
+  }
+
+  void validData() {
+    if (_myStore == null) {
+            showCustomDialog(context,
+                isSuccess: false,
+                content: showMessage("Cửa hàng", MSG001),
+                doPopNavigate: true);
+          } else {
+            if (_formKey.currentState.validate()) {
+              var numberSplit = money.split(",");
+    String moneyJoin = numberSplit.join();
+    int valueMoney = int.parse(moneyJoin);
+    int checkMoney = valueMoney + totalAdvance;
+    print(checkMoney);
+    if (widget.levelCustomer == 1) {
+      if (checkMoney > 50000000) {
+        showCustomDialog(context,
+            isSuccess: false,
+            content: showMessage("", MSG048),
+            doPopNavigate: true);
+      } else {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => ConfirmCreateRequestAdvance(
+                    listInfor: listInfor,
+                    storeId: _myStore,
+                    isCustomer: true,
+                  )),
+        );
+      }
+    } else if (widget.levelCustomer == 2) {
+      if (checkMoney > 100000000) {
+        showCustomDialog(context,
+            isSuccess: false,
+            content: showMessage("", MSG049),
+            doPopNavigate: true);
+      } else {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => ConfirmCreateRequestAdvance(
+                    listInfor: listInfor,
+                    storeId: _myStore,
+                    isCustomer: true,
+                  )),
+        );
+      }
+    }
+            }
+          }
+    
   }
 
   Widget _dropdownListStore() {
@@ -189,8 +248,8 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
           // The validator receives the text that the user has entered.
           validator: (value) {
             var numberSplit = value.split(",");
-            String prefixId = numberSplit.join();
-            int valueMoney = int.parse(prefixId);
+            String moneyJoin = numberSplit.join();
+            int valueMoney = int.parse(moneyJoin);
             if (value == null || value.isEmpty) {
               return showMessage(tittle, MSG001);
             } else if (!checkFormatMoney.hasMatch(value)) {
