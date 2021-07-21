@@ -434,7 +434,7 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
               ),
               Container(
                 height: 50,
-                width: 120,
+                width: 130,
                 child: RadioListTile<GenderCharacter>(
                   activeColor: welcome_color,
                   title: const AutoSizeText(
