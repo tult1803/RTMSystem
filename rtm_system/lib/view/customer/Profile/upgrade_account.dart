@@ -63,6 +63,7 @@ class _UpgradeAccountState extends State<UpgradeAccount> {
     dataCustomer.insert(index, value);
   }
 
+  // ignore: missing_return
   List<Step> _createSteps(BuildContext context) {
     steps = [
       Step(
@@ -163,15 +164,18 @@ class _UpgradeAccountState extends State<UpgradeAccount> {
   @override
   Widget build(BuildContext context) {
     _createSteps(context);
-
     return new Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          leading: leadingAppbar(context, colorIcon: Colors.white),
-          title: titleAppBar('Xác thực tài khoản'),
-        ),
-        body: Column(children: <Widget>[
-          Expanded(
+      appBar: AppBar(
+        centerTitle: true,
+        leading: leadingAppbar(context, colorIcon: Colors.white),
+        title: titleAppBar('Xác thực tài khoản'),
+      ),
+      body: Column(children: <Widget>[
+        Expanded(
+          child: Theme(
+            data: ThemeData(
+              colorScheme: ColorScheme.light(primary: welcome_color),
+            ),
             child: Stepper(
               type: StepperType.vertical,
               steps: steps,
@@ -205,37 +209,46 @@ class _UpgradeAccountState extends State<UpgradeAccount> {
               },
             ),
           ),
-        ]));
+        ),
+      ]),
+    );
   }
 
-  void checkData() async{
+  void checkData() async {
     checkErrorData = await _checkErrorData();
     setState(() {
-      if(dataCustomer.contains("null") || !checkErrorData){
+      if (dataCustomer.contains("null") || !checkErrorData) {
         currentStep = 0;
-        EasyLoading.showError(showMessage("", MSG050), duration: Duration(seconds: 1), maskType: EasyLoadingMaskType.black);
-      }else if(imageFront == null){
+        EasyLoading.showError(showMessage("", MSG050),
+            duration: Duration(seconds: 1),
+            maskType: EasyLoadingMaskType.black);
+      } else if (imageFront == null) {
         currentStep = 1;
-        EasyLoading.showError(showMessage(MSG051, "mặt trước CMND/CCCD"), duration: Duration(seconds: 1), maskType: EasyLoadingMaskType.black);
-      }else if(imageBack == null){
+        EasyLoading.showError(showMessage(MSG051, "mặt trước CMND/CCCD"),
+            duration: Duration(seconds: 1),
+            maskType: EasyLoadingMaskType.black);
+      } else if (imageBack == null) {
         currentStep = 2;
-        EasyLoading.showError(showMessage(MSG051, "mặt sau CMND/CCCD"), duration: Duration(seconds: 1), maskType: EasyLoadingMaskType.black);
-      }else{
-         doUpgradeCustomer(context,cmndFront: imageFront, cmndBack: imageBack, data: dataCustomer);
+        EasyLoading.showError(showMessage(MSG051, "mặt sau CMND/CCCD"),
+            duration: Duration(seconds: 1),
+            maskType: EasyLoadingMaskType.black);
+      } else {
+        doUpgradeCustomer(context,
+            cmndFront: imageFront, cmndBack: imageBack, data: dataCustomer);
       }
     });
   }
 
-  Future _checkErrorData() async{
+  Future _checkErrorData() async {
     bool check = true;
     errorData.forEach((element) {
-      if(element != "null"){
+      if (element != "null") {
         check = false;
       }
-
     });
     return check;
   }
+
   Widget btnStep(String tittle,
       {double borderRadius,
       Color colorContainer,

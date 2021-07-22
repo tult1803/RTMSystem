@@ -66,7 +66,8 @@ class _showProfileState extends State<showProfile> {
                   SizedBox(
                     height: 12,
                   ),
-                  showInforCustomer(snapshot.hasData, snapshot.hasError),
+                  showInforCustomer(
+                      context, snapshot.hasData, snapshot.hasError),
                   btnLogout(context),
                 ],
               ),
@@ -90,7 +91,7 @@ class _showProfileState extends State<showProfile> {
     );
   }
 
-  Widget showInforCustomer(hasData, isError) {
+  Widget showInforCustomer(BuildContext context, hasData, isError) {
     if (hasData) {
       return Container(
         margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
@@ -119,8 +120,19 @@ class _showProfileState extends State<showProfile> {
     } else if (isError) {
       return showErrorLoadData();
     } else {
-      return CircularProgressIndicator(
-        color: primaryColor,
+      return Container(
+        width: MediaQuery.of(context).size.width,
+        height: 300,
+        color: Colors.white54,
+        child: Center(
+          child: SizedBox(
+            child: CircularProgressIndicator(
+              color: welcome_color,
+            ),
+            height: 35,
+            width: 35,
+          ),
+        ),
       );
     }
   }
@@ -159,7 +171,8 @@ class _showProfileState extends State<showProfile> {
               ),
             ),
           ),
-          if (level == 0 && !infomationCustomer.needConfirm) btnUpgradeAccount(),
+          if (level == 0 && !infomationCustomer.needConfirm)
+            btnUpgradeAccount(),
         ],
       ),
     );
@@ -168,8 +181,10 @@ class _showProfileState extends State<showProfile> {
   Widget btnUpgradeAccount() {
     return TextButton(
         onPressed: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => UpgradeAccount(informationCustomer: infomationCustomer,)));
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => UpgradeAccount(
+                    informationCustomer: infomationCustomer,
+                  )));
         },
         child: Center(
           child: AutoSizeText(
