@@ -1,9 +1,7 @@
 import 'dart:async';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rtm_system/model/model_login.dart';
 import 'package:rtm_system/model/post/postAPI_login.dart';
@@ -33,6 +31,7 @@ class LoginPageState extends State<LoginPage> {
   );
   static bool isLogin = false;
   var roleId = 0;
+  int status;
   String username = "", accountId = "";
   String password;
   String accessToken = '';
@@ -80,13 +79,24 @@ class LoginPageState extends State<LoginPage> {
                   height: 15,
                 ),
                 _checkLogin(),
+                SizedBox(
+                  height: 15,
+                ),
+                forgotPassword(),
               ],
             ),
           ),
         ));
   }
 
-  int status;
+  Widget forgotPassword(){
+    return GestureDetector(
+      onTap: () {
+        /// Chờ code ===== ///
+      },
+      child: Text("Quên mật khẩu", style: GoogleFonts.roboto(color: welcome_color, fontSize: 16),),
+    );
+  }
 
   Future loginApi() async {
     // Đỗ dữ liệu lấy từ api
@@ -205,6 +215,11 @@ class LoginPageState extends State<LoginPage> {
         child: TextField(
           onChanged: (value) {
             username = value.trim();
+          },
+          onSubmitted: (value) {
+            setState(() {
+              errorUsername =  checkPhoneNumber(username);
+            });
           },
           cursorColor: welcome_color,
           keyboardType: TextInputType.number,
