@@ -138,10 +138,7 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
 
   void validData() {
     if (_myStore == null) {
-            showCustomDialog(context,
-                isSuccess: false,
-                content: showMessage("Cửa hàng", MSG001),
-                doPopNavigate: true);
+      showEasyLoadingError(context,  showMessage("Cửa hàng", MSG001));
           } else {
             if (_formKey.currentState.validate()) {
               var numberSplit = money.split(",");
@@ -151,10 +148,7 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
     print(checkMoney);
     if (widget.levelCustomer == 1) {
       if (checkMoney > 50000000) {
-        showCustomDialog(context,
-            isSuccess: false,
-            content: showMessage("", MSG048),
-            doPopNavigate: true);
+        showEasyLoadingError(context, showMessage("", MSG048), waitTime: 2);
       } else {
         Navigator.push(
           context,
@@ -168,10 +162,7 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
       }
     } else if (widget.levelCustomer == 2) {
       if (checkMoney > 100000000) {
-        showCustomDialog(context,
-            isSuccess: false,
-            content: showMessage("", MSG049),
-            doPopNavigate: true);
+        showEasyLoadingError(context, showMessage("", MSG049), waitTime: 2);
       } else {
         Navigator.push(
           context,

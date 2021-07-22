@@ -68,7 +68,8 @@ Future<void> getNotice(BuildContext context, String mainTittle, String content,
 }
 
 /// Hàm này chờ xử lý
-Future post_put_ApiProfile(String phone,
+Future post_put_ApiProfile(
+    String phone,
     String password,
     String fullname,
     int gender,
@@ -85,7 +86,13 @@ Future post_put_ApiProfile(String phone,
     if (isCustomer) {
       PutUpdateProfileCustomer putUpdateProfile = PutUpdateProfileCustomer();
       status = await putUpdateProfile.updateProfileCustomer(
-          prefs.get("access_token"),prefs.get("accountId") ,cmnd, birthday, fullname, address, gender);
+          prefs.get("access_token"),
+          prefs.get("accountId"),
+          cmnd,
+          birthday,
+          fullname,
+          address,
+          gender);
     } else {
       PutUpdateProfile _putUpdate = PutUpdateProfile();
       status = await _putUpdate.updateProfile(
@@ -102,15 +109,8 @@ Future post_put_ApiProfile(String phone,
     }
   } else {
     PostCreateCustomer _createCustomer = PostCreateCustomer();
-    status = await _createCustomer.createCustomer(
-        prefs.get("access_token"),
-        phone,
-        password,
-        fullname,
-        gender,
-        cmnd,
-        address,
-        birthday);
+    status = await _createCustomer.createCustomer(prefs.get("access_token"),
+        phone, password, fullname, gender, cmnd, address, birthday);
   }
   return status;
 }
@@ -119,19 +119,14 @@ Future<void> doUpdateInvoice(BuildContext context,
     {String id, double quantity, double degree}) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   PutUpdateInvoice updateInvoice = PutUpdateInvoice();
+  showEasyLoading(context, MSG052);
   int status = await updateInvoice.updateInvoice(
       prefs.get("access_token"), id, quantity, degree);
   if (status == 200) {
-    showCustomDialog(context,
-        content: MSG003,
-        isSuccess: true,
-        widgetToNavigator: HomeAdminPage(
-          index: 1,
-          indexInsidePage: 1,
-        ));
+    showEasyLoadingSuccess(context, MSG003,
+        widget: HomeAdminPage(index: 1, indexInsidePage: 1));
   } else {
-    showCustomDialog(context,
-        content: MSG025, isSuccess: false, doPopNavigate: true);
+    showEasyLoadingError(context, MSG025,);
   }
 }
 
@@ -139,32 +134,29 @@ Future<void> doUpdatePassword(BuildContext context,
     {String accountId, String password, bool isCustomer}) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   PutUpdatePassword putUpdatePassword = PutUpdatePassword();
+  showEasyLoading(context, MSG052);
   int status = await putUpdatePassword.updatePassword(
       prefs.get("access_token"), accountId, password);
   if (status == 200) {
     prefs.setString("password", password);
     if (isCustomer) {
-      showCustomDialog(context,
-          content: MSG003,
-          isSuccess: true,
-          widgetToNavigator: HomeCustomerPage(
+      showEasyLoadingSuccess(context, MSG003,
+          widget: HomeCustomerPage(
             index: 3,
           ));
     } else {
-      showCustomDialog(context,
-          content: MSG003,
-          isSuccess: true,
-          widgetToNavigator: HomeAdminPage(
+      showEasyLoadingSuccess(context, MSG003,
+          widget: HomeAdminPage(
             index: 4,
           ));
     }
   } else {
-    showCustomDialog(context,
-        content: MSG025, isSuccess: false, doPopNavigate: true);
+    showEasyLoadingError(context, MSG025,);
   }
 }
 
-Future<void> doCreateCustomer(BuildContext context,
+Future<void> doCreateCustomer(
+    BuildContext context,
     String phone,
     String password,
     String fullname,
@@ -176,34 +168,20 @@ Future<void> doCreateCustomer(BuildContext context,
     int typeOfUpdate,
     String accountId,
     {bool isCreate,
-      bool isUpdate}) async {
+    bool isUpdate}) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  int status = await post_put_ApiProfile(
-      phone,
-      password,
-      fullname,
-      gender,
-      cmnd,
-      address,
-      birthday,
-      isUpdate,
-      typeOfUpdate,
-      accountId,
-      isCustomer);
+  showEasyLoading(context, MSG052);
+  int status = await post_put_ApiProfile(phone, password, fullname, gender,
+      cmnd, address, birthday, isUpdate, typeOfUpdate, accountId, isCustomer);
   if (status == 200) {
     if (isCustomer) {
-      showStatusAlertDialog(
-          context,
-          showMessage("", MSG003),
-          HomeCustomerPage(
+      showEasyLoadingSuccess(context, MSG003,
+          widget: HomeCustomerPage(
             index: 3,
-          ),
-          true);
+          ));
     } else {
       if (isCreate == null) {
-        if (fullname
-            .trim()
-            .isNotEmpty) {
+        if (fullname.trim().isNotEmpty) {
           prefs.setString("fullname", fullname);
           prefs.setString("phone", phone);
           prefs.setInt("gender", gender);
@@ -212,30 +190,19 @@ Future<void> doCreateCustomer(BuildContext context,
           prefs.setString("password", password);
         }
       }
-      showCustomDialog(
-        context,
-        content: MSG003,
-
-        ///MSG003
-        isSuccess: true,
-        widgetToNavigator: isCreate == null
-            ? HomeAdminPage(
-          index: 4,
-        )
-            : AllCustomer(),
-      );
+      showEasyLoadingSuccess(context, MSG003,
+          widget: isCreate == null
+              ? HomeAdminPage(index: 4)
+              : AllCustomer());
     }
   } else
-    showCustomDialog(context,
-        content: MSG025,
-
-        ///MSG025
-        isSuccess: false,
-        doPopNavigate: true);
+    showEasyLoadingError(context, MSG025,);
 }
 
 // ignore: non_constant_identifier_names
-Future<void> put_API_PayAdvance(BuildContext context,) async {
+Future<void> put_API_PayAdvance(
+  BuildContext context,
+) async {
   int status = 200;
   if (status == 200) {
     showStatusAlertDialog(
@@ -254,7 +221,7 @@ Future<void> put_API_ConfirmAdvance(BuildContext context, id) async {
   int status;
   SharedPreferences prefs = await SharedPreferences.getInstance();
   PutConfirmAdvanceRequest putConfirmAdvanceRequest =
-  PutConfirmAdvanceRequest();
+      PutConfirmAdvanceRequest();
   status = await putConfirmAdvanceRequest.putConfirmAdvanceRequest(
       prefs.get("access_token"), id);
   if (status == 200) {
@@ -287,23 +254,18 @@ Future<void> putAPIUpdatePrice(BuildContext context, String productId,
   int status;
   SharedPreferences prefs = await SharedPreferences.getInstance();
   PutUpdatePrice putUpdatePrice = PutUpdatePrice();
+  showEasyLoading(context, MSG052);
   status = await putUpdatePrice.updatePrice(
       prefs.get("access_token"), prefs.get("accountId"), productId, price);
 
   if (status == 200) {
     prefs.setString("$productName", "$price");
-    showCustomDialog(context,
-        isSuccess: true,
-        content: showMessage("", MSG039),
-        widgetToNavigator: HomeAdminPage(
+    showEasyLoadingSuccess(context, showMessage("", MSG039),
+        widget: HomeAdminPage(
           index: 0,
         ));
   } else
-    showCustomDialog(
-      context,
-      isSuccess: false,
-      content: showMessage("", MSG025),
-    );
+    showEasyLoadingError(context, showMessage("", MSG025));
 }
 
 // Xac nhan hoa don, cho ca manager va customer
@@ -311,12 +273,13 @@ Future<void> putAPIUpdatePrice(BuildContext context, String productId,
 Future<void> doConfirmOrAcceptOrRejectInvoice(BuildContext context,
     String invoiceId, List<String> invoiceIdSign, int type, bool isCustomer,
     {Widget widgetToNavigator,
-      String reason,
-      bool isRequest,
-      InvoiceRequestElement element}) async {
+    String reason,
+    bool isRequest,
+    InvoiceRequestElement element}) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   int status;
   if (isCustomer) {
+    showEasyLoading(context, MSG052);
     // 1 is sign invoice, 2 is accept invoice, 3 is delete request
     if (type == 1) {
       PutSignInvoice putSignInvoiceInvoice = PutSignInvoice();
@@ -333,21 +296,15 @@ Future<void> doConfirmOrAcceptOrRejectInvoice(BuildContext context,
           reason: reason);
     }
     if (status == 200) {
-      showStatusAlertDialog(
-          context,
-          showMessage("", MSG012),
-          HomeCustomerPage(
+      showEasyLoadingSuccess(context, showMessage("", MSG012),
+          widget: HomeCustomerPage(
             index: 0,
-          ),
-          true);
+          ));
     } else {
-      showStatusAlertDialog(
-          context,
-          showMessage(MSG025, MSG027),
-          HomeCustomerPage(
+      showEasyLoadingError(context, showMessage(MSG025, MSG027),
+          widget: HomeCustomerPage(
             index: 0,
-          ),
-          true);
+          ));
     }
   } else {
     //call api tao invoice cua manager
@@ -358,23 +315,22 @@ Future<void> doConfirmOrAcceptOrRejectInvoice(BuildContext context,
       case 2:
         isRequest == true
             ? Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) =>
-                AddProductPage(
-                  tittle: "Tạo hoá đơn yêu cầu",
-                  customerId: element.customerId,
-                  invoiceRequestId: element.id,
-                  phone: element.customerPhone,
-                  fullName: element.customerName,
-                  storeName: element.storeName,
-                  productName: element.productName,
-                  dateToPay: element.sellDate,
-                  productId: element.productId,
-                  savePrice: "${element.price}",
-                  storeId: element.storeId,
-                  isCustomer: false,
-                  isChangeData: true,
-                  widgetToNavigator: widgetToNavigator,
-                )))
+                builder: (context) => AddProductPage(
+                      tittle: "Tạo hoá đơn yêu cầu",
+                      customerId: element.customerId,
+                      invoiceRequestId: element.id,
+                      phone: element.customerPhone,
+                      fullName: element.customerName,
+                      storeName: element.storeName,
+                      productName: element.productName,
+                      dateToPay: element.sellDate,
+                      productId: element.productId,
+                      savePrice: "${element.price}",
+                      storeId: element.storeId,
+                      isCustomer: false,
+                      isChangeData: true,
+                      widgetToNavigator: widgetToNavigator,
+                    )))
             : print('Chấp nhận');
         break;
       case 3:
@@ -386,7 +342,8 @@ Future<void> doConfirmOrAcceptOrRejectInvoice(BuildContext context,
 }
 
 //Tao advance request
-Future<void> doCreateRequestAdvance(BuildContext context,
+Future<void> doCreateRequestAdvance(
+    BuildContext context,
     String accountId,
     String money,
     String reason,
@@ -462,6 +419,7 @@ Future doDeleteInvoice(BuildContext context, String invoiceId, bool isRequest,
     {Widget widgetToNavigator, String reason}) async {
   int status;
   SharedPreferences prefs = await SharedPreferences.getInstance();
+  showEasyLoading(context, MSG052);
   if (isRequest) {
     DeleteInvoiceRequest deleteInvoiceRequest = DeleteInvoiceRequest();
     status = await deleteInvoiceRequest.deleteInvoiceRequest(
@@ -469,76 +427,56 @@ Future doDeleteInvoice(BuildContext context, String invoiceId, bool isRequest,
         reason: reason);
   } else {
     DeleteInvoice deleteInvoice = DeleteInvoice();
-    status =
-    await deleteInvoice.deleteInvoice(prefs.get('access_token'), invoiceId);
+    status = await deleteInvoice.deleteInvoice(prefs.get('access_token'), invoiceId);
   }
   status == 200
-      ? showCustomDialog(context,
-      isSuccess: true,
-      content: showMessage("", MSG040),
-      widgetToNavigator: widgetToNavigator)
-      : showCustomDialog(context,
-      isSuccess: false,
-      content: showMessage("", MSG041),
-      doPopNavigate: true);
+      ? showEasyLoadingSuccess(context, showMessage("", MSG040),widget: widgetToNavigator)
+      : showEasyLoadingError(context, showMessage("", MSG041));
 }
 
 Future doDeleteInvoiceRequest(BuildContext context, String invoiceId,
     {Widget widgetToNavigator, String reason}) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   DeleteInvoiceRequest deleteInvoiceRequest = DeleteInvoiceRequest();
+  showEasyLoading(context, MSG052);
   int status = await deleteInvoiceRequest.deleteInvoiceRequest(
       prefs.get('access_token'), invoiceId,
       reason: reason);
   status == 200
-      ? showCustomDialog(context,
-      isSuccess: true,
-      content: showMessage("", MSG017),
-      widgetToNavigator: widgetToNavigator)
-      : showCustomDialog(context,
-      isSuccess: false,
-      content: showMessage(MSG030, MSG027),
-      doPopNavigate: true);
+      ? showEasyLoadingSuccess(context, showMessage("", MSG017),widget: widgetToNavigator)
+      : showEasyLoadingError(context, showMessage(MSG030, MSG027));
 }
 
-Future doProcessAdvanceBill(BuildContext context, String invoiceId,
-    int statusProcess,
+Future doProcessAdvanceBill(
+    BuildContext context, String invoiceId, int statusProcess,
     {Widget widgetToNavigator, String reason}) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   PutProcessAdvanceBill processAdvanceBill = PutProcessAdvanceBill();
+  showEasyLoading(context, MSG052);
   int status = await processAdvanceBill.putProcessAdvanceBill(
       prefs.get('access_token'),
       id: invoiceId,
       status: statusProcess,
       reason: reason);
   status == 200
-      ? showCustomDialog(context,
-      isSuccess: true,
-      content: statusProcess == 6
-          ? "Đã từ chối ứng tiền"
-          : "Xác nhận đơn thành công",
-      widgetToNavigator: widgetToNavigator)
-      : showCustomDialog(context,
-      isSuccess: false,
-      content: statusProcess == 6
-          ? "Từ chối ứng tiền thất bại"
-          : "Xác nhận đơn thất bại",
-      doPopNavigate: true);
+      ? showEasyLoadingSuccess(context, statusProcess == 6 ? "Đã từ chối ứng tiền" : "Xác nhận đơn thành công",widget: widgetToNavigator)
+      : showEasyLoadingError(context, statusProcess == 6 ? "Từ chối ứng tiền thất bại" : "Xác nhận đơn thất bại");
 }
 
 ///Dùng để tạo hoá đơn và tạo yêu cầu giữ giá ( Request Invoice )
 Future doCreateInvoice(BuildContext context,
     {String customerId,
-      String productId,
-      String storeId,
-      String sellDate,
-      String quantity,
-      String degree,
-      String invoiceRequestId,
-      bool isCustomer,
-      Widget widgetToNavigator}) async {
+    String productId,
+    String storeId,
+    String sellDate,
+    String quantity,
+    String degree,
+    String invoiceRequestId,
+    bool isCustomer,
+    Widget widgetToNavigator}) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   int status;
+  showEasyLoading(context, MSG052);
   if (isCustomer) {
     PostCreateRequestInvoice createRequestInvoice = PostCreateRequestInvoice();
     status = await createRequestInvoice.createRequestInvoice(
@@ -548,62 +486,32 @@ Future doCreateInvoice(BuildContext context,
         storeId);
   } else {
     PostCreateInvoice createInvoice = PostCreateInvoice();
-    status = await createInvoice.createInvoice(
-        prefs.get('access_token'),
-        customerId,
-        productId,
-        storeId,
-        quantity,
-        degree,
-        invoiceRequestId);
+    status = await createInvoice.createInvoice(prefs.get('access_token'),
+        customerId, productId, storeId, quantity, degree, invoiceRequestId);
   }
 
   status == 200
       ? isCustomer
-      ? showCustomDialog(context,
-      isSuccess: true,
-      content: showMessage("", MSG002),
-      widgetToNavigator: HomeCustomerPage(
-        index: 0,
-      ))
-      : showCustomDialog(context,
-      isSuccess: true,
-      content: showMessage("", MSG002),
-      widgetToNavigator: widgetToNavigator)
-      : showCustomDialog(context,
-      isSuccess: false,
-      content: showMessage("", MSG024),
-      doPopNavigate: true);
+          ? showEasyLoadingSuccess(context, showMessage("", MSG002),widget: HomeCustomerPage(index: 0,))
+          : showEasyLoadingSuccess(context, showMessage("", MSG002),widget: widgetToNavigator)
+      : showEasyLoadingError(context, showMessage("", MSG024));
 }
 
 Future<void> putReturnAdvance(BuildContext context, List<String> invoiceId,
     List<String> advanceId, int totalAdvance) async {
   int status;
   SharedPreferences prefs = await SharedPreferences.getInstance();
+  showEasyLoading(context, MSG052);
   if (totalAdvance != 0) {
     PutReturnAdvance putReturnAdvance = PutReturnAdvance();
     status = await putReturnAdvance.putReturnAdvance(
         prefs.get("access_token"), invoiceId, advanceId);
     if (status == 200) {
-      showStatusAlertDialog(
-          context,
-          showMessage("", MSG019),
-          HomeCustomerPage(
-            index: 1,
-          ),
-          true);
+      showEasyLoadingSuccess(context, showMessage("", MSG019),widget: HomeCustomerPage(index: 1));
     } else
-      showCustomDialog(
-        context,
-        isSuccess: false,
-        content: showMessage("", MSG025),
-      );
+      showEasyLoadingError(context, showMessage("", MSG025));
   } else {
-    showCustomDialog(
-      context,
-      isSuccess: false,
-      content: showMessage(MSG031, MSG027),
-    );
+    showEasyLoadingError(context, showMessage(MSG031, MSG027));
   }
 }
 
@@ -614,97 +522,90 @@ Future<void> doUpgradeCustomer(BuildContext context,
   PostValidateCustomer validateCustomer = PostValidateCustomer();
   PutUpdateProfileCustomer updateData = PutUpdateProfileCustomer();
   try {
-    EasyLoading.show(
-      status: 'Đang xử lý...',
-      maskType: EasyLoadingMaskType.black,
-    );
+    showEasyLoading(context, MSG052);
     statusImage = await validateCustomer.createValidateCustomer(
       prefs.get("access_token"),
       cmndFront: cmndFront,
-      cmndBack: cmndBack,);
+      cmndBack: cmndBack,
+    );
     statusData = await updateData.updateProfileCustomer(
-        prefs.get("access_token"), prefs.get("accountId"),data.elementAt(3), data.elementAt(2), data.elementAt(0), data.elementAt(4), data.elementAt(1));
+        prefs.get("access_token"),
+        prefs.get("accountId"),
+        data.elementAt(3),
+        data.elementAt(2),
+        data.elementAt(0),
+        data.elementAt(4),
+        data.elementAt(1));
     if (statusImage == 200 && statusData == 200) {
-      EasyLoading.showSuccess("Đã gửi", duration: Duration(seconds: 2), maskType: EasyLoadingMaskType.black);
-      Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => HomeCustomerPage(index: 3,)));
+      showEasyLoadingSuccess(context, "Đã gửi", waitTime: 2, widget: HomeCustomerPage(index: 3));
     } else {
-      EasyLoading.showError("Gửi ${checkStatusUpgrade(statusImage, statusData)} thất bại", duration: Duration(seconds: 2), maskType: EasyLoadingMaskType.black);
+      showEasyLoadingError(context,"Gửi ${checkStatusUpgrade(statusImage, statusData)} thất bại", waitTime: 2);
     }
   } catch (_) {
-    EasyLoading.dismiss();
-    showCustomDialog(context,
-        isSuccess: false, content: showMessage(MSG030, MSG027));
+    showEasyLoadingError(context, showMessage(MSG030, MSG027), waitTime: 2);
   }
   return true;
 }
 
-Future doConfirmIdentifyCustomer(BuildContext context,
-    {String cmnd,
-      String birthday,
-      String fullName,
-      String address,
-      int gender}) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  PutConfirmIdentifyCustomer confirmIdentifyCustomer =
-  PutConfirmIdentifyCustomer();
-  int status = await confirmIdentifyCustomer.updateCustomer(
-      prefs.get("access_token"),
-      gender: gender,
-      birthday: birthday,
-      address: address,
-      cmnd: cmnd,
-      fullName: fullName);
-
-  if (status == 200) {
-    showCustomDialog(context,
-        isSuccess: true,
-        content: "Xác minh thành công",
-        widgetToNavigator: HomeCustomerPage(
-          index: 3,
-        ));
-  } else {
-    showCustomDialog(context,
-        isSuccess: false, content: showMessage(MSG030, MSG027));
-  }
-}
+// Future doConfirmIdentifyCustomer(BuildContext context,
+//     {String cmnd,
+//     String birthday,
+//     String fullName,
+//     String address,
+//     int gender}) async {
+//   SharedPreferences prefs = await SharedPreferences.getInstance();
+//   PutConfirmIdentifyCustomer confirmIdentifyCustomer =
+//       PutConfirmIdentifyCustomer();
+//   showEasyLoading(context, MSG052);
+//   // showEasyLoading(context, MSG052);
+//   // showEasyLoadingSuccess(context, showMessage("", MSG019),widget: HomeCustomerPage(index: 1));
+//   // showEasyLoadingError(context, showMessage("", MSG025));
+//   int status = await confirmIdentifyCustomer.updateCustomer(
+//       prefs.get("access_token"),
+//       gender: gender,
+//       birthday: birthday,
+//       address: address,
+//       cmnd: cmnd,
+//       fullName: fullName);
+//
+//   if (status == 200) {
+//     showCustomDialog(context,
+//         isSuccess: true,
+//         content: "Xác minh thành công",
+//         widgetToNavigator: HomeCustomerPage(
+//           index: 3,
+//         ));
+//   } else {
+//     showCustomDialog(context,
+//         isSuccess: false, content: showMessage(MSG030, MSG027));
+//   }
+// }
 
 //receive cash from advance return
-Future doReceiveReturnCash(BuildContext context, {
+Future doReceiveReturnCash(
+  BuildContext context, {
   String id,
 }) async {
   int status;
   SharedPreferences prefs = await SharedPreferences.getInstance();
   PutConfirmAdvanceReturn putConfirmAdvanceReturn = PutConfirmAdvanceReturn();
+  showEasyLoading(context, MSG052);
   status = await putConfirmAdvanceReturn.putConfirmAdvanceReturn(
       prefs.get("access_token"), id);
   if (status == 200) {
-    showCustomDialog(context,
-        isSuccess: true,
-        content: showMessage("", MSG022),
-        widgetToNavigator: HomeCustomerPage(
-          index: 1,
-        ));
+    showEasyLoadingSuccess(context, showMessage("", MSG022),widget: HomeCustomerPage(index: 1));
   } else {
-    showCustomDialog(context,
-        isSuccess: false, content: showMessage(MSG030, MSG027));
+    showEasyLoadingError(context, showMessage(MSG030, MSG027));
   }
 }
 
 Future doDeleteAdvanceRequest(BuildContext context, String id) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   DeleteAdvanceRequest deleteAdvanceRequest = DeleteAdvanceRequest();
+  showEasyLoading(context, MSG052);
   int status = await deleteAdvanceRequest.deleteAdvanceRequest(
       prefs.get('access_token'), id);
   status == 200
-      ? showCustomDialog(context,
-      isSuccess: true,
-      content: showMessage("", MSG017),
-      widgetToNavigator: HomeCustomerPage(
-        index: 1,
-      ))
-      : showCustomDialog(context,
-      isSuccess: false,
-      content: showMessage(MSG030, MSG027),
-      doPopNavigate: true);
+      ? showEasyLoadingSuccess(context, showMessage("", MSG017),widget: HomeCustomerPage(index: 1))
+      : showEasyLoadingError(context, showMessage(MSG030, MSG027));
 }

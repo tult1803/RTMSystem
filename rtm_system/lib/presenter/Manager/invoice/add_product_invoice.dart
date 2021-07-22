@@ -528,8 +528,7 @@ class _AddProductPageState extends State<AddProductPage> {
         if (nameNewCustomer.isNotEmpty) {
           _navigator("Xác nhận hóa đơn");
         } else {
-          showCustomDialog(context,
-              isSuccess: false, content: showMessage("", MSG009));
+          showEasyLoadingError(context, showMessage("", MSG009));
         }
       }
     }

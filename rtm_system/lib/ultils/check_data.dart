@@ -33,18 +33,15 @@ checkUpdatePriceProduct(BuildContext context, {bool isClick, double price}) {
       if (price > 0) {
         return true;
       } else {
-        showCustomDialog(context,
-            content: showMessage("", MSG035), isSuccess: false);
+        showEasyLoadingError(context,  showMessage("", MSG035));
         return false;
       }
     } else {
-      showCustomDialog(context,
-          content: showMessage("Giá", MSG001), isSuccess: false);
+      showEasyLoadingError(context,  showMessage("", MSG001));
       return false;
     }
   } else {
-    showCustomDialog(context,
-        content: showMessage("", MSG023), isSuccess: false);
+    showEasyLoadingError(context,  showMessage("", MSG023));
     return false;
   }
 }
@@ -74,15 +71,13 @@ checkFullName(BuildContext context, String name) {
 
 checkChooseProduct(BuildContext context, String product) {
   if (product == null) {
-    showCustomDialog(context,
-        content: showMessage("", MSG023), isSuccess: false);
+    showEasyLoadingError(context,  showMessage("", MSG023));
   }
 }
 
 checkChooseStore(BuildContext context, String store) {
   if (store == null) {
-    showCustomDialog(context,
-        content: showMessage("", MSG042), isSuccess: false);
+    showEasyLoadingError(context,  showMessage("", MSG042));
   }
 }
 

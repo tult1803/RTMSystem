@@ -327,18 +327,12 @@ Widget btnSubmitOrCancel(
             if (mainTittle == "") {
               showStatusAlertDialog(context, txtError, null, false);
             } else {
+              showEasyLoading(context, MSG052);
               int status = await postAPINotice(mainTittle, content);
               if (status == 200) {
-                showCustomDialog(context,
-                    isSuccess: true,
-                    content: "Tạo thành công",
-                    doPopNavigate: true,
-                    widgetToNavigator: widgetToNavigator);
+                showEasyLoadingSuccess(context, MSG002, widget: widgetToNavigator);
               } else
-                showCustomDialog(context,
-                    isSuccess: false,
-                    content: "Tạo thất bại. Xin thử lại",
-                    doPopNavigate: true);
+                showEasyLoadingError(context, showMessage(MSG024, MSG027));
             }
           } else {
             if (isCustomer) {

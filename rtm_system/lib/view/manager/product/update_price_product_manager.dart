@@ -256,8 +256,7 @@ class _updatePriceProductState extends State<updatePriceProduct> {
                 isClick: isClick, price: price);
             if (checkInput) {
               currentPrice == price
-                  ? showCustomDialog(context,
-                      content: "Xin hãy nhập giá mới", isSuccess: false)
+                  ? showEasyLoadingError(context, MSG055)
                   // ignore: unnecessary_statements
                   : {
                       putAPIUpdatePrice(
