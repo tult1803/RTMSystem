@@ -913,7 +913,7 @@ Widget btnDeactivateCustomer(
   if (status != "Không hoạt động") {
     return Container(
       width: 160,
-      height: 50,
+      height: 40,
       decoration: BoxDecoration(
         color: Colors.redAccent,
         borderRadius: BorderRadius.circular(10),

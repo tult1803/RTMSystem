@@ -10,6 +10,8 @@ import 'package:rtm_system/model/model_invoice_request.dart';
 import 'package:rtm_system/ultils/get_api_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/customer/Profile/show_image_cmnd.dart';
+import 'package:rtm_system/view/customer/Profile/update_profile.dart';
+import 'package:rtm_system/view/form_update_profile.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
 import 'package:rtm_system/view/manager/product/update_price_product_manager.dart';
 import '../ultils/get_data.dart';
@@ -546,11 +548,15 @@ Widget componentContainerDetailCustomer(BuildContext context,
                       child: Text(
                         imageCMNDF == null
                             ? "Chờ cập nhật"
-                            : needConfirm ? "Chờ xác nhận" : "Xem ảnh",
+                            : needConfirm
+                                ? "Chờ xác nhận"
+                                : "Xem ảnh",
                         style: TextStyle(
                             color: imageCMNDF == null
                                 ? Colors.redAccent
-                                : needConfirm ? Colors.orange :Colors.blueAccent),
+                                : needConfirm
+                                    ? Colors.orange
+                                    : Colors.blueAccent),
                       ))),
             ),
           ],
@@ -585,11 +591,39 @@ Widget componentContainerDetailCustomer(BuildContext context,
         SizedBox(
           height: 10,
         ),
-        btnDeactivateCustomer(
-            token: token,
-            context: context,
-            status: status,
-            deactivateId: accountId),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Flexible(
+              child: btnDeactivateCustomer(
+                  token: token,
+                  context: context,
+                  status: status,
+                  deactivateId: accountId),
+            ),
+            Flexible(
+                child: miniContainer(
+                  context: context,
+                  tittle: "Cập nhật",
+                  colorContainer: welcome_color,
+                  colorText: Colors.white,
+                  borderRadius: 10,
+                  height: 40,
+                  fontSize: 17,
+                  isPush: true,
+                  widget: UpdateProfilePage(
+                    fullname: fullName,
+                    phone: phone,
+                    gender: int.tryParse(gender),
+                    cmnd: cmnd,
+                    address: address,
+                    accountId: accountId,
+                    check: false,
+                    birthday: DateTime.tryParse(birthday),
+                  ),
+                )),
+          ],
+        ),
         SizedBox(
           height: 5,
         ),
@@ -626,15 +660,17 @@ Widget miniContainer(
     double fontSize,
     FontWeight fontWeightText,
     bool doPopNavigate,
+      bool isPush,
     Widget widget}) {
   return GestureDetector(
       onTap: () => widget == null
           ? doPopNavigate == null
               ? null
               : Navigator.of(context).pop()
-          : Navigator.of(context).pushAndRemoveUntil(
+          : isPush == null ? Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(builder: (context) => widget),
-              (route) => false),
+              (route) => false) :Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => widget)) ,
       child: Container(
         margin: EdgeInsets.only(
           right: marginRight == null ? 0 : marginRight,
@@ -843,9 +879,9 @@ Widget componentContainerDetailAdvanceRequest(BuildContext context,
         SizedBox(
           height: 10,
         ),
-        if(activeDate != null)
-        txtItemDetail(context, "Ngày nhận tiền",
-            "${getDateTime(activeDate, dateFormat: "dd/MM/yyyy")}"),
+        if (activeDate != null)
+          txtItemDetail(context, "Ngày nhận tiền",
+              "${getDateTime(activeDate, dateFormat: "dd/MM/yyyy")}"),
         SizedBox(
           height: 10,
         ),

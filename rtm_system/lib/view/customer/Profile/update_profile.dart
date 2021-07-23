@@ -78,9 +78,9 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
               accountId: widget.accountId,
               isCustomer: true,
               isCreate: false,
+              isUpgrade: false,
             ),
       ),
     );
   }
-
 }

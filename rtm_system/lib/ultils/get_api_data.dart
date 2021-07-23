@@ -87,7 +87,7 @@ Future post_put_ApiProfile(
       PutUpdateProfileCustomer putUpdateProfile = PutUpdateProfileCustomer();
       status = await putUpdateProfile.updateProfileCustomer(
           prefs.get("access_token"),
-          prefs.get("accountId"),
+          accountId,
           cmnd,
           birthday,
           fullname,
@@ -176,9 +176,7 @@ Future<void> doCreateCustomer(
   if (status == 200) {
     if (isCustomer) {
       showEasyLoadingSuccess(context, MSG003,
-          widget: HomeCustomerPage(
-            index: 3,
-          ));
+          widget: AllCustomer());
     } else {
       if (isCreate == null) {
         if (fullname.trim().isNotEmpty) {
