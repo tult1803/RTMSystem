@@ -40,15 +40,6 @@ class _updatePriceProductState extends State<updatePriceProduct> {
     isNotEmptyChoose();
   }
 
-  @override
-  void dispose() {
-    itemIdUpdatePrice.clear();
-    itemPriceUpdatePrice.clear();
-    itemNameUpdatePrice.clear();
-    itemDateUpdatePrice.clear();
-    super.dispose();
-  }
-
   void isNotEmptyChoose() {
     try {
       if (this.widget.chosenValue != null) {
@@ -152,7 +143,12 @@ class _updatePriceProductState extends State<updatePriceProduct> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Text("$value", style: TextStyle(color: Colors.black)),
-                  checkDate(value) ? Icon(Icons.check, color: Colors.green,) : SizedBox(),
+                  checkDate(value)
+                      ? Icon(
+                          Icons.check,
+                          color: Colors.green,
+                        )
+                      : SizedBox(),
                 ],
               ),
             );
@@ -192,7 +188,7 @@ class _updatePriceProductState extends State<updatePriceProduct> {
         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
         decoration: InputDecoration(
           border: OutlineInputBorder(),
-          hintText: "000,000",
+          hintText: "000.000",
           //Sau khi click vào "Nhập tiêu đề" thì màu viền sẽ đổi
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(color: welcome_color),
@@ -255,12 +251,12 @@ class _updatePriceProductState extends State<updatePriceProduct> {
           borderRadius: BorderRadius.circular(10),
         ),
         child: TextButton(
-          onPressed: () async{
-            bool checkInput = await checkUpdatePriceProduct(context, isClick: isClick, price: price);
+          onPressed: () async {
+            bool checkInput = await checkUpdatePriceProduct(context,
+                isClick: isClick, price: price);
             if (checkInput) {
               currentPrice == price
-                  ? showCustomDialog(context,
-                      content: "Xin hãy nhập giá mới", isSuccess: false)
+                  ? showEasyLoadingError(context, MSG055)
                   // ignore: unnecessary_statements
                   : {
                       putAPIUpdatePrice(
@@ -279,5 +275,4 @@ class _updatePriceProductState extends State<updatePriceProduct> {
           ),
         ));
   }
-
 }

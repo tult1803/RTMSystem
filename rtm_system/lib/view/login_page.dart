@@ -1,12 +1,14 @@
 import 'dart:async';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rtm_system/model/model_login.dart';
 import 'package:rtm_system/model/post/postAPI_login.dart';
 import 'package:rtm_system/presenter/check_login.dart';
+import 'package:rtm_system/ultils/check_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
+import 'package:rtm_system/ultils/src/message_list.dart';
 import 'package:rtm_system/view/customer/home_customer_page.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
 
@@ -29,6 +31,7 @@ class LoginPageState extends State<LoginPage> {
   );
   static bool isLogin = false;
   var roleId = 0;
+  int status;
   String username = "", accountId = "";
   String password;
   String accessToken = '';
@@ -76,17 +79,29 @@ class LoginPageState extends State<LoginPage> {
                   height: 15,
                 ),
                 _checkLogin(),
+                SizedBox(
+                  height: 15,
+                ),
+                forgotPassword(),
               ],
             ),
           ),
         ));
   }
 
-  int status;
+  Widget forgotPassword(){
+    return GestureDetector(
+      onTap: () {
+        /// Chờ code ===== ///
+      },
+      child: Text("Quên mật khẩu", style: GoogleFonts.roboto(color: welcome_color, fontSize: 16),),
+    );
+  }
 
   Future loginApi() async {
     // Đỗ dữ liệu lấy từ api
     data = await getAPI.createLogin(username, password);
+
     status = PostLogin.status;
     setState(() {
       roleId = data.roleId;
@@ -135,8 +150,6 @@ class LoginPageState extends State<LoginPage> {
     }
   }
 
-  bool isCheckU = false;
-  bool isCheckP = false;
 
   Widget _checkLogin() {
     return Container(
@@ -169,7 +182,7 @@ class LoginPageState extends State<LoginPage> {
           if (status == false) {
             _buttonState = ButtonState.error;
             print('Status button: Error');
-            error = "Sai Tên đăng nhập hoặc mật khẩu";
+            error = showMessage("Số điện thoại hoặc mật khẩu", MSG020);
             timer.cancel();
           }
         },
@@ -180,21 +193,14 @@ class LoginPageState extends State<LoginPage> {
   void _checkTextLogin() {
     setState(() {
       error = "";
-      if (username == null || username == "") {
-        isCheckU = false;
-        errorUsername = "Tên đăng nhập trống";
-      } else {
-        isCheckU = true;
-        errorUsername = null;
-      }
+        errorUsername =  checkPhoneNumber(username);
       if (password == null || password == "") {
-        isCheckP = false;
         errorPassword = "Mật khẩu trống";
       } else {
-        isCheckP = true;
         errorPassword = null;
       }
-      if (isCheckU && isCheckP) {
+
+      if (errorUsername == null && errorPassword == null) {
         _buttonState = ButtonState.inProgress;
         print('Status button: Process');
         afterLogin();
@@ -210,10 +216,19 @@ class LoginPageState extends State<LoginPage> {
           onChanged: (value) {
             username = value.trim();
           },
+          onSubmitted: (value) {
+            setState(() {
+              errorUsername =  checkPhoneNumber(username);
+            });
+          },
           cursorColor: welcome_color,
+          keyboardType: TextInputType.number,
+          inputFormatters: [
+            FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+          ],
           decoration: InputDecoration(
             border: UnderlineInputBorder(),
-            labelText: "Tên đăng nhập",
+            labelText: "Số điện thoại",
             labelStyle: TextStyle(color: Colors.black54),
             contentPadding: EdgeInsets.only(top: 14, left: 10),
             //Sau khi click vào "Nhập tiêu đề" thì màu viền sẽ đổi
@@ -222,7 +237,7 @@ class LoginPageState extends State<LoginPage> {
             ),
             //Hiển thị Icon góc phải
             suffixIcon: Icon(
-              Icons.person_outline_sharp,
+              Icons.phone_iphone,
               color: Colors.black54,
             ),
             //Hiển thị lỗi

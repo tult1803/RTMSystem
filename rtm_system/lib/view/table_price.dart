@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:rtm_system/helpers/component.dart';
 import 'package:rtm_system/model/get/getAPI_product.dart';
 import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
@@ -105,19 +106,18 @@ class _showTablePriceState extends State<showTablePrice> {
           brightness: Brightness.light,
         ),
       ),
-      child: new  Container(
-        width: MediaQuery.of(context).size.width,
-        margin: EdgeInsets.only(top: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            tittleTable(),
-            headerTable(),
-            dataTable(),
-          ],
-        )
-      ),
+      child: new Container(
+          width: MediaQuery.of(context).size.width,
+          margin: EdgeInsets.only(top: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              tittleTable(),
+              headerTable(),
+              dataTable(),
+            ],
+          )),
     );
   }
 
@@ -137,7 +137,6 @@ class _showTablePriceState extends State<showTablePrice> {
         children: [
           TableRow(decoration: BoxDecoration(color: welcome_color), children: [
             tableRow("Ngày", colorText: Colors.white, isAlignmentRight: false),
-            // tableRow("Giờ", colorText: Colors.white),
             tableRow("Thay đổi", colorText: Colors.white),
             tableRow("%", colorText: Colors.white),
             tableRow("Giá", colorText: Colors.white),
@@ -148,38 +147,51 @@ class _showTablePriceState extends State<showTablePrice> {
   }
 
   Widget dataTable() {
-    return  Container(
+    return Container(
         margin: EdgeInsets.only(left: 10, right: 10),
         width: MediaQuery.of(context).size.width,
         // height: 365,
         height: MediaQuery.of(context).size.height * 0.4,
         child: CustomScrollView(
-          // physics: NeverScrollableScrollPhysics(),
-          slivers: <Widget>[
-            PagedSliverList(
-                pagingController: _pagingController,
-                builderDelegate: PagedChildBuilderDelegate(
-                    firstPageErrorIndicatorBuilder: (context) => Container(),
-                    noItemsFoundIndicatorBuilder: (context) {
-                      return Container(
-                        child: Center(
-                            child: Text(
-                          "Chưa chọn sản phẩm",
-                          style: TextStyle(color: Colors.black54),
-                        )),
-                      );
-                    },
-                    itemBuilder: (context, item, index) {
-                      return tableCell(
-                          day: "${item["updateDateTime"]}",
-                          newPrice: item["update_price"],
-                          oldPrice: _pagingController.value.itemList.elementAt(
-                              dataListProduct.length - 1 == index
-                                  ? index
-                                  : index + 1)["update_price"]);
-                    })),
-          ])
-    );
+            // physics: NeverScrollableScrollPhysics(),
+            slivers: <Widget>[
+              PagedSliverList(
+                  pagingController: _pagingController,
+                  builderDelegate: PagedChildBuilderDelegate(
+                      noItemsFoundIndicatorBuilder: (context) {
+                    return Container(
+                      child: Center(
+                          child: Text(
+                        "Chưa chọn sản phẩm",
+                        style: TextStyle(color: Colors.black54),
+                      )),
+                    );
+                  }, firstPageErrorIndicatorBuilder: (context) {
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        firstPageErrorIndicatorBuilder(context,
+                            tittle: "Lỗi tải dữ liệu"),
+                        GestureDetector(
+                          onTap: () => _pagingController.refresh(),
+                          child: Icon(
+                            Icons.refresh,
+                            color: welcome_color,
+                            size: 35,
+                          ),
+                        ),
+                      ],
+                    );
+                  }, itemBuilder: (context, item, index) {
+                    return tableCell(
+                        day: "${item["updateDateTime"]}",
+                        newPrice: item["update_price"],
+                        oldPrice: _pagingController.value.itemList.elementAt(
+                            dataListProduct.length - 1 == index
+                                ? index
+                                : index + 1)["update_price"]);
+                  })),
+            ]));
   }
 
   Widget tittleTable() {

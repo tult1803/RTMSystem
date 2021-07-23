@@ -3,6 +3,7 @@ import 'package:rtm_system/helpers/button.dart';
 import 'package:rtm_system/ultils/check_data.dart';
 import 'package:rtm_system/ultils/get_api_data.dart';
 
+// ignore: camel_case_types
 class formUpdatePasswordPage extends StatefulWidget {
   final String currentPassword;
   final String account_id;
@@ -15,6 +16,7 @@ class formUpdatePasswordPage extends StatefulWidget {
   _formUpdatePasswordPageState createState() => _formUpdatePasswordPageState();
 }
 
+// ignore: camel_case_types
 class _formUpdatePasswordPageState extends State<formUpdatePasswordPage> {
   String errPassword, errNewPassword, errConfirmPassword;
   String password, newPassword, confirmPassword;

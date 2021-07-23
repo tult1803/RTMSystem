@@ -17,7 +17,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class CreateRequestAdvance extends StatefulWidget {
   final int levelCustomer;
+
   CreateRequestAdvance({this.levelCustomer});
+
   @override
   _CreateRequestAdvanceState createState() => _CreateRequestAdvanceState();
 }
@@ -138,10 +140,17 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
 
   void validData() {
     if (_myStore == null) {
-            showCustomDialog(context,
-                isSuccess: false,
-                content: showMessage("Cửa hàng", MSG001),
-                doPopNavigate: true);
+      showEasyLoadingError(context, showMessage("Cửa hàng", MSG001));
+    } else {
+      if (_formKey.currentState.validate()) {
+        var numberSplit = money.split(",");
+        String moneyJoin = numberSplit.join();
+        int valueMoney = int.parse(moneyJoin);
+        int checkMoney = valueMoney + totalAdvance;
+        print(checkMoney);
+        if (widget.levelCustomer == 1) {
+          if (checkMoney > 50000000) {
+            showEasyLoadingError(context, showMessage("", MSG048), waitTime: 2);
           } else {
             if (_formKey.currentState.validate()) {
               var numberSplit = money.split(",");
@@ -165,27 +174,7 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
                   )),
         );
       }
-    } else if (widget.levelCustomer == 2) {
-      if (checkMoney > 100000000) {
-        showCustomDialog(context,
-            isSuccess: false,
-            content: showMessage("", MSG049),
-            doPopNavigate: true);
-      } else {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => ConfirmCreateRequestAdvance(
-                    listInfor: listInfor,
-                    storeId: _myStore,
-                    isCustomer: true,
-                  )),
-        );
-      }
     }
-            }
-          }
-    
   }
 
   Widget _dropdownListStore() {

@@ -30,21 +30,18 @@ checkInputUpdateInvoice(BuildContext context,
 checkUpdatePriceProduct(BuildContext context, {bool isClick, double price}) {
   if (isClick) {
     if (price != null) {
-      if (price > 1000) {
+      if (price > 0) {
         return true;
       } else {
-        showCustomDialog(context,
-            content: showMessage("", MSG035), isSuccess: false);
+        showEasyLoadingError(context,  showMessage("", MSG035));
         return false;
       }
     } else {
-      showCustomDialog(context,
-          content: showMessage("Giá", MSG001), isSuccess: false);
+      showEasyLoadingError(context,  showMessage("", MSG001));
       return false;
     }
   } else {
-    showCustomDialog(context,
-        content: showMessage("", MSG023), isSuccess: false);
+    showEasyLoadingError(context,  showMessage("", MSG023));
     return false;
   }
 }
@@ -74,15 +71,13 @@ checkFullName(BuildContext context, String name) {
 
 checkChooseProduct(BuildContext context, String product) {
   if (product == null) {
-    showCustomDialog(context,
-        content: showMessage("", MSG023), isSuccess: false);
+    showEasyLoadingError(context,  showMessage("", MSG023));
   }
 }
 
 checkChooseStore(BuildContext context, String store) {
   if (store == null) {
-    showCustomDialog(context,
-        content: showMessage("", MSG042), isSuccess: false);
+    showEasyLoadingError(context,  showMessage("", MSG042));
   }
 }
 
@@ -164,4 +159,24 @@ checkAddress(String address) {
   } else {
     return null;
   }
+}
+
+comparePrice(String price, String currentPrice){
+  double formatPrice = double.parse(price);
+  double formatCurrentPrice = double.parse(currentPrice);
+  if(formatCurrentPrice > formatPrice){
+    return formatCurrentPrice;
+  }else {
+    return price;
+  }
+}
+
+checkStatusUpgrade(int statusImage, int statusData){
+  if(statusImage == 200 && statusData != 200){
+    return "dữ liệu";
+  }else if(statusImage != 200 && statusData == 200){
+    return "ảnh";
+  }else if(statusImage != 200 && statusData != 200){
+    return "ảnh và dữ liệu";
+  }else return "";
 }

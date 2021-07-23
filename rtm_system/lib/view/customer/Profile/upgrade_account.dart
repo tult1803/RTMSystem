@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rtm_system/helpers/component.dart';
 import 'package:rtm_system/model/model_profile_customer.dart';
@@ -8,6 +9,7 @@ import 'package:rtm_system/presenter/Customer/verification/front_identity_card.d
 import 'package:rtm_system/ultils/get_api_data.dart';
 import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
+import 'package:rtm_system/ultils/src/message_list.dart';
 
 import '../../form_update_profile.dart';
 
@@ -61,6 +63,7 @@ class _UpgradeAccountState extends State<UpgradeAccount> {
     dataCustomer.insert(index, value);
   }
 
+  // ignore: missing_return
   List<Step> _createSteps(BuildContext context) {
     steps = [
       Step(
@@ -161,15 +164,18 @@ class _UpgradeAccountState extends State<UpgradeAccount> {
   @override
   Widget build(BuildContext context) {
     _createSteps(context);
-
     return new Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          leading: leadingAppbar(context, colorIcon: Colors.white),
-          title: titleAppBar('Cập nhật tài khoản'),
-        ),
-        body: Column(children: <Widget>[
-          Expanded(
+      appBar: AppBar(
+        centerTitle: true,
+        leading: leadingAppbar(context, colorIcon: Colors.white),
+        title: titleAppBar('Xác thực tài khoản'),
+      ),
+      body: Column(children: <Widget>[
+        Expanded(
+          child: Theme(
+            data: ThemeData(
+              colorScheme: ColorScheme.light(primary: welcome_color),
+            ),
             child: Stepper(
               type: StepperType.vertical,
               steps: steps,
@@ -203,34 +209,46 @@ class _UpgradeAccountState extends State<UpgradeAccount> {
               },
             ),
           ),
-        ]));
+        ),
+      ]),
+    );
   }
 
-  void checkData() async{
+  void checkData() async {
     checkErrorData = await _checkErrorData();
     setState(() {
-      if(dataCustomer.contains("null") || !checkErrorData){
+      if (dataCustomer.contains("null") || !checkErrorData) {
         currentStep = 0;
-      }else if(imageFront == null){
+        EasyLoading.showError(showMessage("", MSG050),
+            duration: Duration(seconds: 1),
+            maskType: EasyLoadingMaskType.black);
+      } else if (imageFront == null) {
         currentStep = 1;
-      }else if(imageBack == null){
+        EasyLoading.showError(showMessage(MSG051, "mặt trước CMND/CCCD"),
+            duration: Duration(seconds: 1),
+            maskType: EasyLoadingMaskType.black);
+      } else if (imageBack == null) {
         currentStep = 2;
-      }else{
-        doUpgradeCustomer(context,cmndFront: imageFront, cmndBack: imageBack, data: dataCustomer);
+        EasyLoading.showError(showMessage(MSG051, "mặt sau CMND/CCCD"),
+            duration: Duration(seconds: 1),
+            maskType: EasyLoadingMaskType.black);
+      } else {
+        doUpgradeCustomer(context,
+            cmndFront: imageFront, cmndBack: imageBack, data: dataCustomer);
       }
     });
   }
 
-  Future _checkErrorData() async{
+  Future _checkErrorData() async {
     bool check = true;
     errorData.forEach((element) {
-      if(element != "null"){
+      if (element != "null") {
         check = false;
       }
-
     });
     return check;
   }
+
   Widget btnStep(String tittle,
       {double borderRadius,
       Color colorContainer,

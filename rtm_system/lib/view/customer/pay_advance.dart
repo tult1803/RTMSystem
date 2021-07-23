@@ -329,30 +329,14 @@ class _PayDebtState extends State<PayDebt> {
                     return FloatingActionButton.extended(
                       onPressed: () {
                         if (state2 == 0) {
-                          showCustomDialog(
-                            context,
-                            isSuccess: false,
-                            content: showMessage("", MSG044),
-                          );
+                         showEasyLoadingError(context, showMessage("", MSG044));
                         } else if (state1 == 0) {
-                          showCustomDialog(
-                            context,
-                            isSuccess: false,
-                            content: showMessage("", MSG043),
-                          );
+                          showEasyLoadingError(context, showMessage("", MSG043));
                         } else if (selectedAdvances.length == 0) {
-                          showCustomDialog(
-                            context,
-                            isSuccess: false,
-                            content: showMessage("", MSG034),
-                          );
+                          showEasyLoadingError(context, showMessage("", MSG034));
                         } else if (totalAdvanceSelected >
                             totalDepositSelected) {
-                          showCustomDialog(
-                            context,
-                            isSuccess: false,
-                            content: showMessage("", MSG033),
-                          );
+                          showEasyLoadingError(context, showMessage("", MSG033));
                         } else {
                           //có bloc nên k thể tách hàm
                           showDialog(

@@ -25,6 +25,8 @@ class _DetailProductState extends State<DetailProduct> {
           child: containerDetail(
         context,
         componentContainerDetailProduct(context, this.widget.itemDetailProduct),
+            marginLeft: 5,
+            marginRight: 5
       )),
     );
   }

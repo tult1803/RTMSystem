@@ -69,7 +69,6 @@ class ThousandsSeparatorInputFormatter extends TextInputFormatter {
       );
     }
 
-    // If the new value and old value are the same, just return as-is
     return newValue;
   }
 }

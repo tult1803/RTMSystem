@@ -190,7 +190,7 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
                 ),
                 Expanded(
                   child: Text(
-                    '${widget.birthday == null ? "dd/MM/yyyy" : getDateTime("${this.widget.birthday}", dateFormat: "dd/MM/yyyy")}',
+                    '${widget.birthday == null ? "Không bắt buộc" : getDateTime("${this.widget.birthday}", dateFormat: "dd/MM/yyyy")}',
                     style: TextStyle(
                         fontSize: 16,
                         color: widget.birthday == null
@@ -434,7 +434,7 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
               ),
               Container(
                 height: 50,
-                width: 120,
+                width: 130,
                 child: RadioListTile<GenderCharacter>(
                   activeColor: welcome_color,
                   title: const AutoSizeText(
@@ -584,14 +584,14 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
 
   Widget _checkCMND() {
     return this.widget.check
-        ? _txtfield(getDataTextField(this.widget.cmnd), false, "Nhập CMND/CCCD",
+        ? _txtfield(getDataTextField(this.widget.cmnd), false, "Không bắt buộc",
             "CMND/CCCD", errCMND, 1, TextInputType.phone)
         : Container();
   }
 
   Widget _checkAddress() {
     return this.widget.check
-        ? _txtFormField(this.widget.address, false, "Nhập địa chỉ", "Địa chỉ",
+        ? _txtFormField(this.widget.address, false, "Không bắt buộc", "Địa chỉ",
             errAddress, 1, TextInputType.streetAddress)
         : Container();
   }

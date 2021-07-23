@@ -2,11 +2,14 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:path/path.dart';
 import 'package:rtm_system/model/delete/deleteAPI_deactivateNotice.dart';
 import 'package:rtm_system/model/delete/deleteAPI_deactivateCustomer.dart';
 import 'package:rtm_system/ultils/check_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
+import 'package:rtm_system/ultils/src/message_list.dart';
 
 import 'component.dart';
 import '../ultils/get_api_data.dart';
@@ -41,21 +44,17 @@ showAlertDialog(
             DeleteDeactivateCustomer deactivateCustomer =
                 DeleteDeactivateCustomer();
             DeleteDeactivateNotice deactivateNotice = DeleteDeactivateNotice();
+            showEasyLoading(context, MSG052);
             int status = isDeactivateNotice == null
                 ? await deactivateCustomer.deactivateCustomer(
                     token, deactivateId)
                 : await deactivateNotice.deactivateNotice(token, deactivateId);
             if (status == 200) {
               Navigator.of(context).pop();
-              showCustomDialog(context,
-                  isSuccess: true,
-                  content:
-                      "${isDeactivateNotice == null ? "Hủy kích hoạt thành công" : "Ẩn thông báo thành công"}",
-                  widgetToNavigator: widget);
+              showEasyLoadingSuccess(context, "${isDeactivateNotice == null ? MSG053 : MSG054}", widget: widget);
             } else {
               Navigator.of(context).pop();
-              showCustomDialog(context,
-                  isSuccess: false, content: "Có lỗi xảy ra. Thử lại");
+              showEasyLoadingError(context, MSG027);
             }
           } else if (isInvoice != null) {
             doConfirmOrAcceptOrRejectInvoice(context, id, [], 3, isCustomer,
@@ -207,87 +206,87 @@ showAlertDialogAPI(BuildContext context, String tittle, Widget widget, status) {
 //Đang thử nghiệm
 //Nếu muốn sử dụng navigator.pop thì trạng thái " doNavigate " không được null phải true hoặc false
 //isSuccess là thể hiện hành động đã thành công hay thất bại
-Future<Dialog> showCustomDialog(BuildContext context,
-    {bool isSuccess,
-    String content,
-    bool doPopNavigate,
-    double fontSize,
-    Widget widgetToNavigator}) {
-  return showDialog(
-      context: context,
-      builder: (context) {
-        var size = MediaQuery.of(context).size;
-        return Dialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(5),
-            ),
-            elevation: 0,
-            backgroundColor: Colors.white,
-            child: Container(
-              height: 280,
-              width: size.width * 0.8,
-              decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(10)),
-              child: Column(
-                children: [
-                  Container(
-                      margin: EdgeInsets.only(top: 10, bottom: 10),
-                      child: Image.asset(
-                        isSuccess
-                            ? "images/iconSmile.png"
-                            : "images/iconSad.png",
-                        height: 100,
-                        width: 100,
-                      )),
-                  Expanded(
-                      child: Container(
-                    width: size.width,
-                    color: isSuccess ? welcome_color : Colors.redAccent,
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          isSuccess ? "Thành công" : "Thất bại",
-                          style: GoogleFonts.roboto(
-                              fontSize: 25,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        AutoSizeText(
-                          content,
-                          style: GoogleFonts.roboto(
-                              fontSize: fontSize == null ? 20 : fontSize,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w400),
-                        ),
-                        miniContainer(
-                          context: context,
-                          marginTop: 20,
-                          height: 40,
-                          width: 150,
-                          tittle: "Xác nhận",
-                          colorContainer: Colors.white,
-                          borderRadius: 10,
-                          fontSize: 18,
-                          doPopNavigate:
-                              doPopNavigate == null ? false : doPopNavigate,
-                          widget: widgetToNavigator == null
-                              ? null
-                              : widgetToNavigator,
-                        ),
-                      ],
-                    ),
-                  )),
-                ],
-              ),
-            ));
-      });
-}
+// Future<Dialog> showCustomDialog(BuildContext context,
+//     {bool isSuccess,
+//     String content,
+//     bool doPopNavigate,
+//     double fontSize,
+//     Widget widgetToNavigator}) {
+//   return showDialog(
+//       context: context,
+//       builder: (context) {
+//         var size = MediaQuery.of(context).size;
+//         return Dialog(
+//             shape: RoundedRectangleBorder(
+//               borderRadius: BorderRadius.circular(5),
+//             ),
+//             elevation: 0,
+//             backgroundColor: Colors.white,
+//             child: Container(
+//               height: 280,
+//               width: size.width * 0.8,
+//               decoration: BoxDecoration(
+//                   color: Colors.white, borderRadius: BorderRadius.circular(10)),
+//               child: Column(
+//                 children: [
+//                   Container(
+//                       margin: EdgeInsets.only(top: 10, bottom: 10),
+//                       child: Image.asset(
+//                         isSuccess
+//                             ? "images/iconSmile.png"
+//                             : "images/iconSad.png",
+//                         height: 100,
+//                         width: 100,
+//                       )),
+//                   Expanded(
+//                       child: Container(
+//                     width: size.width,
+//                     color: isSuccess ? welcome_color : Colors.redAccent,
+//                     child: Column(
+//                       children: [
+//                         SizedBox(
+//                           height: 10,
+//                         ),
+//                         Text(
+//                           isSuccess ? "Thành công" : "Thất bại",
+//                           style: GoogleFonts.roboto(
+//                               fontSize: 25,
+//                               color: Colors.white,
+//                               fontWeight: FontWeight.w600),
+//                         ),
+//                         SizedBox(
+//                           height: 10,
+//                         ),
+//                         AutoSizeText(
+//                           content,
+//                           style: GoogleFonts.roboto(
+//                               fontSize: fontSize == null ? 20 : fontSize,
+//                               color: Colors.white,
+//                               fontWeight: FontWeight.w400),
+//                         ),
+//                         miniContainer(
+//                           context: context,
+//                           marginTop: 20,
+//                           height: 40,
+//                           width: 150,
+//                           tittle: "Xác nhận",
+//                           colorContainer: Colors.white,
+//                           borderRadius: 10,
+//                           fontSize: 18,
+//                           doPopNavigate:
+//                               doPopNavigate == null ? false : doPopNavigate,
+//                           widget: widgetToNavigator == null
+//                               ? null
+//                               : widgetToNavigator,
+//                         ),
+//                       ],
+//                     ),
+//                   )),
+//                 ],
+//               ),
+//             ));
+//       });
+// }
 
 Future showTextFieldDialog(BuildContext context, {bool isDegree, String id}) async {
   double quantity = 0, degree = 0;
@@ -383,3 +382,16 @@ Future showTextFieldDialog(BuildContext context, {bool isDegree, String id}) asy
   );
 }
 
+showEasyLoadingSuccess(BuildContext context, String status, {int waitTime, Widget widget}){
+  EasyLoading.showSuccess(status, maskType: EasyLoadingMaskType.black, duration: Duration(seconds: waitTime == null ? 1 : waitTime));
+  if(widget != null)Navigator.of(context).push(MaterialPageRoute(builder: (context) => widget));
+}
+
+showEasyLoadingError(BuildContext context, String status, {int waitTime, Widget widget}){
+  EasyLoading.showError(status, maskType: EasyLoadingMaskType.black, duration: Duration(seconds: waitTime == null ? 1 : waitTime));
+  if(widget != null)Navigator.of(context).push(MaterialPageRoute(builder: (context) => widget));
+}
+
+showEasyLoading(BuildContext context, String status){
+  EasyLoading.show(status: status, maskType: EasyLoadingMaskType.black,);
+}
