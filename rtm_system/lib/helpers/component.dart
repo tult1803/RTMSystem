@@ -931,7 +931,7 @@ Widget widgetCreateAdvance(context, List item, String storeId,
   if (item[2] == null || item[2] == '') {
     reason = 'Ứng tiền';
   } else {
-    reason = item[3];
+    reason = item[2];
   }
   return SingleChildScrollView(
       child: Container(

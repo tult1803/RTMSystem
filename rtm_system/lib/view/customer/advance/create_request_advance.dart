@@ -17,9 +17,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class CreateRequestAdvance extends StatefulWidget {
   final int levelCustomer;
-
   CreateRequestAdvance({this.levelCustomer});
-
   @override
   _CreateRequestAdvanceState createState() => _CreateRequestAdvanceState();
 }
@@ -140,17 +138,17 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
 
   void validData() {
     if (_myStore == null) {
-      showEasyLoadingError(context, showMessage("Cửa hàng", MSG001));
+      showStatusAlertDialog(context, showMessage("", MSG042), null, false);
     } else {
       if (_formKey.currentState.validate()) {
         var numberSplit = money.split(",");
         String moneyJoin = numberSplit.join();
         int valueMoney = int.parse(moneyJoin);
         int checkMoney = valueMoney + totalAdvance;
-        print(checkMoney);
         if (widget.levelCustomer == 1) {
           if (checkMoney > 50000000) {
-            showEasyLoadingError(context, showMessage("", MSG048), waitTime: 2);
+            showStatusAlertDialog(
+                context, showMessage("", MSG048), null, false);
           } else {
             Navigator.push(
               context,
@@ -164,7 +162,8 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
           }
         } else if (widget.levelCustomer == 2) {
           if (checkMoney > 100000000) {
-            showEasyLoadingError(context, showMessage("", MSG049), waitTime: 2);
+            showStatusAlertDialog(
+                context, showMessage("", MSG049), null, false);
           } else {
             Navigator.push(
               context,
@@ -239,25 +238,29 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
         child: TextFormField(
           // The validator receives the text that the user has entered.
           validator: (value) {
-            var numberSplit = value.split(",");
-            String moneyJoin = numberSplit.join();
-            int valueMoney = int.parse(moneyJoin);
+            int valueMoney = 0;
             if (value == null || value.isEmpty) {
               return showMessage(tittle, MSG001);
-            } else if (!checkFormatMoney.hasMatch(value)) {
-              return showMessage('', MSG026);
-            } else if (value.length <= 6) {
-              // số tiền phải là từ 100 trở lên
-              return showMessage('', MSG006);
-            } else if (widget.levelCustomer == 1) {
-              if (valueMoney > 50000000) {
-                return showMessage('', MSG046);
-              }
-            } else if (widget.levelCustomer == 2) {
-              if (valueMoney > 100000000) {
-                return showMessage('', MSG047);
+            } else {
+              var numberSplit = money.split(",");
+              String moneyJoin = numberSplit.join();
+              valueMoney = int.parse(moneyJoin);
+              if (!checkFormatMoney.hasMatch(value)) {
+                return showMessage('', MSG026);
+              } else if (value.length <= 6) {
+                // số tiền phải là từ 100 trở lên
+                return showMessage('', MSG006);
+              } else if (widget.levelCustomer == 1) {
+                if (valueMoney > 50000000) {
+                  return showMessage('', MSG046);
+                }
+              } else if (widget.levelCustomer == 2) {
+                if (valueMoney > 100000000) {
+                  return showMessage('', MSG047);
+                }
               }
             }
+
             return null;
           },
           maxLines: 1,
