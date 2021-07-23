@@ -607,7 +607,7 @@ Widget btnProcessInvoice(context, int statusId, String id, bool isCustomer,
           ): Container(),
           Flexible(
                   child: Container(
-                    width: isRequest != null ? 150 : 100,
+                    width: isRequest != null ? 150 : 120,
                     // ignore: deprecated_member_use
                     child: RaisedButton(
                       color: Color(0xFF0BB791),
