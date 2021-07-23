@@ -138,54 +138,53 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
 
   void validData() {
     if (_myStore == null) {
+      showCustomDialog(context,
+          isSuccess: false,
+          content: showMessage("", MSG042),
+          doPopNavigate: true);
+    } else {
+      if (_formKey.currentState.validate()) {
+        var numberSplit = money.split(",");
+        String moneyJoin = numberSplit.join();
+        int valueMoney = int.parse(moneyJoin);
+        int checkMoney = valueMoney + totalAdvance;
+        if (widget.levelCustomer == 1) {
+          if (checkMoney > 50000000) {
             showCustomDialog(context,
                 isSuccess: false,
-                content: showMessage("", MSG042),
+                content: showMessage("", MSG048),
                 doPopNavigate: true);
           } else {
-            if (_formKey.currentState.validate()) {
-              var numberSplit = money.split(",");
-    String moneyJoin = numberSplit.join();
-    int valueMoney = int.parse(moneyJoin);
-    int checkMoney = valueMoney + totalAdvance;
-    if (widget.levelCustomer == 1) {
-      if (checkMoney > 50000000) {
-        showCustomDialog(context,
-            isSuccess: false,
-            content: showMessage("", MSG048),
-            doPopNavigate: true);
-      } else {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => ConfirmCreateRequestAdvance(
-                    listInfor: listInfor,
-                    storeId: _myStore,
-                    isCustomer: true,
-                  )),
-        );
-      }
-    } else if (widget.levelCustomer == 2) {
-      if (checkMoney > 100000000) {
-        showCustomDialog(context,
-            isSuccess: false,
-            content: showMessage("", MSG049),
-            doPopNavigate: true);
-      } else {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => ConfirmCreateRequestAdvance(
-                    listInfor: listInfor,
-                    storeId: _myStore,
-                    isCustomer: true,
-                  )),
-        );
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ConfirmCreateRequestAdvance(
+                        listInfor: listInfor,
+                        storeId: _myStore,
+                        isCustomer: true,
+                      )),
+            );
+          }
+        } else if (widget.levelCustomer == 2) {
+          if (checkMoney > 100000000) {
+            showCustomDialog(context,
+                isSuccess: false,
+                content: showMessage("", MSG049),
+                doPopNavigate: true);
+          } else {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ConfirmCreateRequestAdvance(
+                        listInfor: listInfor,
+                        storeId: _myStore,
+                        isCustomer: true,
+                      )),
+            );
+          }
+        }
       }
     }
-            }
-          }
-    
   }
 
   Widget _dropdownListStore() {
@@ -246,25 +245,29 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
         child: TextFormField(
           // The validator receives the text that the user has entered.
           validator: (value) {
-            var numberSplit = value.split(",");
-            String moneyJoin = numberSplit.join();
-            int valueMoney = int.parse(moneyJoin);
+            int valueMoney = 0;
             if (value == null || value.isEmpty) {
               return showMessage(tittle, MSG001);
-            } else if (!checkFormatMoney.hasMatch(value)) {
-              return showMessage('', MSG026);
-            } else if (value.length <= 6) {
-              // số tiền phải là từ 100 trở lên
-              return showMessage('', MSG006);
-            } else if (widget.levelCustomer == 1) {
-              if (valueMoney > 50000000) {
-                return showMessage('', MSG046);
-              }
-            } else if (widget.levelCustomer == 2) {
-              if (valueMoney > 100000000) {
-                return showMessage('', MSG047);
+            } else {
+              var numberSplit = money.split(",");
+              String moneyJoin = numberSplit.join();
+              valueMoney = int.parse(moneyJoin);
+              if (!checkFormatMoney.hasMatch(value)) {
+                return showMessage('', MSG026);
+              } else if (value.length <= 6) {
+                // số tiền phải là từ 100 trở lên
+                return showMessage('', MSG006);
+              } else if (widget.levelCustomer == 1) {
+                if (valueMoney > 50000000) {
+                  return showMessage('', MSG046);
+                }
+              } else if (widget.levelCustomer == 2) {
+                if (valueMoney > 100000000) {
+                  return showMessage('', MSG047);
+                }
               }
             }
+
             return null;
           },
           maxLines: 1,
