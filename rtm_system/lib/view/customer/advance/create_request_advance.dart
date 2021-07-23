@@ -140,7 +140,7 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
     if (_myStore == null) {
             showCustomDialog(context,
                 isSuccess: false,
-                content: showMessage("Cửa hàng", MSG001),
+                content: showMessage("", MSG042),
                 doPopNavigate: true);
           } else {
             if (_formKey.currentState.validate()) {
