@@ -138,10 +138,7 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
 
   void validData() {
     if (_myStore == null) {
-      showCustomDialog(context,
-          isSuccess: false,
-          content: showMessage("", MSG042),
-          doPopNavigate: true);
+      showStatusAlertDialog(context, showMessage("", MSG042), null, false);
     } else {
       if (_formKey.currentState.validate()) {
         var numberSplit = money.split(",");
@@ -150,10 +147,8 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
         int checkMoney = valueMoney + totalAdvance;
         if (widget.levelCustomer == 1) {
           if (checkMoney > 50000000) {
-            showCustomDialog(context,
-                isSuccess: false,
-                content: showMessage("", MSG048),
-                doPopNavigate: true);
+            showStatusAlertDialog(
+                context, showMessage("", MSG048), null, false);
           } else {
             Navigator.push(
               context,
@@ -167,10 +162,8 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
           }
         } else if (widget.levelCustomer == 2) {
           if (checkMoney > 100000000) {
-            showCustomDialog(context,
-                isSuccess: false,
-                content: showMessage("", MSG049),
-                doPopNavigate: true);
+            showStatusAlertDialog(
+                context, showMessage("", MSG049), null, false);
           } else {
             Navigator.push(
               context,
