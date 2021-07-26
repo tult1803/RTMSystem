@@ -382,16 +382,29 @@ Future showTextFieldDialog(BuildContext context, {bool isDegree, String id}) asy
   );
 }
 
-showEasyLoadingSuccess(BuildContext context, String status, {int waitTime, Widget widget}){
-  EasyLoading.showSuccess(status, maskType: EasyLoadingMaskType.black, duration: Duration(seconds: waitTime == null ? 1 : waitTime));
-  if(widget != null)Navigator.of(context).push(MaterialPageRoute(builder: (context) => widget));
+showEasyLoadingSuccess(BuildContext context, String status,
+    {int waitTime, Widget widget}) {
+  EasyLoading.showSuccess(status,
+      maskType: EasyLoadingMaskType.black,
+      duration: Duration(seconds: waitTime == null ? 1 : waitTime));
+  if (widget != null)
+    Navigator.pushAndRemoveUntil(context,
+        MaterialPageRoute(builder: (context) => widget), (route) => false);
 }
 
-showEasyLoadingError(BuildContext context, String status, {int waitTime, Widget widget}){
-  EasyLoading.showError(status, maskType: EasyLoadingMaskType.black, duration: Duration(seconds: waitTime == null ? 1 : waitTime));
-  if(widget != null)Navigator.of(context).push(MaterialPageRoute(builder: (context) => widget));
+showEasyLoadingError(BuildContext context, String status,
+    {int waitTime, Widget widget}) {
+  EasyLoading.showError(status,
+      maskType: EasyLoadingMaskType.black,
+      duration: Duration(seconds: waitTime == null ? 1 : waitTime));
+  if (widget != null)
+    Navigator.pushAndRemoveUntil(context,
+        MaterialPageRoute(builder: (context) => widget), (route) => false);
 }
 
-showEasyLoading(BuildContext context, String status){
-  EasyLoading.show(status: status, maskType: EasyLoadingMaskType.black,);
+showEasyLoading(BuildContext context, String status) {
+  EasyLoading.show(
+    status: status,
+    maskType: EasyLoadingMaskType.black,
+  );
 }
