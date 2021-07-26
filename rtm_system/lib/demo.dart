@@ -1,114 +1,113 @@
-// import 'package:flutter/cupertino.dart';
-// import 'package:flutter/material.dart';
-//
-// class SimpleAnimatedList extends StatefulWidget {
-//   const SimpleAnimatedList({Key key}) : super(key: key);
-//
-//   @override
-//   _SimpleAnimatedListState createState() => _SimpleAnimatedListState();
-// }
-//
-// class _SimpleAnimatedListState extends State<SimpleAnimatedList> {
-//   int _current;
-//
-//   List<StepState> _listState;
-//
-//   @override
-//   void initState() {
-//     _current = 0;
-//     _listState = [
-//       StepState.indexed,
-//       StepState.editing,
-//       StepState.complete,
-//     ];
-//     super.initState();
-//   }
-//
-//   List<Step> _createSteps(BuildContext context) {
-//     List<Step> _steps = <Step>[
-//       new Step(
-//         state: _current == 0
-//             ? _listState[1]
-//             : _current > 0
-//                 ? _listState[2]
-//                 : _listState[0],
-//         title: new Text('Step 1'),
-//         content: new Text('Do Something'),
-//         isActive: true,
-//       ),
-//       new Step(
-//         state: _current == 1
-//             ? _listState[1]
-//             : _current > 1
-//                 ? _listState[2]
-//                 : _listState[0],
-//         title: new Text('Step 2'),
-//         content: new Text('Do Something'),
-//         isActive: true,
-//       ),
-//       new Step(
-//         state: _current == 2
-//             ? _listState[1]
-//             : _current > 2
-//                 ? _listState[2]
-//                 : _listState[0],
-//         title: new Text('Step 3'),
-//         content: new Text('Do Something'),
-//         isActive: true,
-//       ),
-//     ];
-//     return _steps;
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     List<Step> _stepList = _createSteps(context);
-//     return new Scaffold(
-//       appBar: new AppBar(
-//         title: new Text('Stepper Example'),
-//       ),
-//       body: new Container(
-//         padding: new EdgeInsets.all(20.0),
-//         child: new Center(
-//           child: new Column(
-//             children: <Widget>[
-//               Expanded(
-//                 child: Stepper(
-//                   type: StepperType.vertical,
-//                   steps: _stepList,
-//                   currentStep: _current,
-//                   onStepContinue: () {
-//                     setState(() {
-//                       if (_current < _stepList.length - 1) {
-//                         _current++;
-//                       } else {
-//                         _current = _stepList.length - 1;
-//                       }
-//                       //_setStep(context);
-//                     });
-//                   },
-//                   onStepCancel: () {
-//                     setState(() {
-//                       if (_current > 0) {
-//                         _current--;
-//                       } else {
-//                         _current = 0;
-//                       }
-//                       //_setStep(context);
-//                     });
-//                   },
-//                   onStepTapped: (int i) {
-//                     setState(() {
-//                       _current = i;
-//                     });
-//                   },
-//                 ),
-//               ),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
-//
+import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:rtm_system/helpers/dialog.dart';
+
+
+class Login extends StatefulWidget {
+  @override
+  _LoginState createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> with ChangeNotifier {
+  String phone, verificationId, otp, phoneCheck;
+
+  FirebaseAuth _auth = FirebaseAuth.instance;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text("OTP Security"),
+      ),
+      body: Column(
+        children: [
+          TextField(
+            keyboardType: TextInputType.phone,
+            onChanged: (value) {
+              setState(() {
+                phone = value.trim();
+              });
+            },
+            decoration: InputDecoration(
+              hintText: "Phone Number",
+            ),
+          ),
+          // ignore: deprecated_member_use
+          FlatButton(
+              onPressed: () async {
+                await _auth.verifyPhoneNumber(
+                    phoneNumber: checkPhone(phone),
+                    verificationCompleted: (phoneAuthCredential) async {
+                      print('Verification Completed');
+                      // signInWithPhoneAuthCredential(phoneAuthCredential);
+                    },
+                    verificationFailed: (error) async {
+                      print('error: ${error.message}');
+                      SnackBar(content: Text(error.message));
+                    },
+                    codeSent: (verificationId, forceResendingToken) async {
+                      setState(() {
+                        this.verificationId = verificationId;
+                      });
+                    },
+                    codeAutoRetrievalTimeout: (verificationId) async {
+                      print('codeAutoRetrievalTimeout: $verificationId');
+                    });
+              },
+              child: Text("Send")),
+          TextField(
+            keyboardType: TextInputType.number,
+            onChanged: (otp) {
+              setState(() {
+                this.otp = otp.trim();
+              });
+            },
+            decoration: InputDecoration(
+              hintText: "OTP Code",
+            ),
+          ),
+          // ignore: deprecated_member_use
+          FlatButton(
+              onPressed: () async {
+                PhoneAuthCredential phoneAuthCredential =
+                PhoneAuthProvider.credential(
+                    verificationId: verificationId, smsCode: otp);
+
+                signInWithPhoneAuthCredential(phoneAuthCredential);
+              },
+              child: Text("Check OTP")),
+          Text("${checkPhone(phone)}"),
+        ],
+      ),
+    );
+  }
+
+  void signInWithPhoneAuthCredential(PhoneAuthCredential phoneAuth) async {
+    try {
+      final authCredential = await _auth.signInWithCredential(phoneAuth);
+      if (authCredential.user != null) {
+        showEasyLoadingSuccess(context, 'OTP Successed !!!');
+      } else
+        showEasyLoadingError(context,  'OTP Failed !!!');
+    } on FirebaseAuthException catch (e) {
+      SnackBar(content: Text(e.message));
+      showEasyLoadingError(context,  'OTP Failed !!!');
+    }
+  }
+
+  checkPhone(String phone) {
+    try {
+      if (phone.substring(0, 3) == "+84") {
+        return phone;
+      } else {
+        if (phone.substring(0, 1) == "0") {
+          return "+84${phone.substring(1)}";
+        }
+      }
+      return phone;
+    } catch (e) {
+      return phone;
+    }
+  }
+}
