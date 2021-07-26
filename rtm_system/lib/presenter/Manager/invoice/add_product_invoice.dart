@@ -289,7 +289,7 @@ class _AddProductPageState extends State<AddProductPage> {
                         //Khi manager tạo hoá đơn thì mới có giá lúc bán để show
                         if (!widget.isCustomer)
                           _showMoneyOrQuantity("Thành tiền",
-                              "${getFormatPrice('${getPriceTotal(double.tryParse(priceSell), degree, quantity)}')}đ"),
+                              "${getFormatPrice('${getPriceTotal(double.tryParse(widget.dateToPay != null ? priceSell : price), degree, quantity)}')}đ"),
                       ]),
                     ),
                   ],
@@ -899,7 +899,7 @@ class _AddProductPageState extends State<AddProductPage> {
                     dateToPay: "$dateSale",
                     degree: "$degree",
                     quantity: "$quantity",
-                    price: "$priceSell",
+                    price: "${widget.dateToPay != null ? priceSell : price}",
                     productName: "$productName",
                     storeName: "$storeName",
                     widgetToNavigator: widget.widgetToNavigator == null
