@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
-import 'package:rtm_system/view/otp/otp_screen.dart';
 import 'package:rtm_system/view/welcome_page.dart';
 
 import 'demo.dart';
@@ -60,7 +59,7 @@ class MyApp extends StatelessWidget {
         builder: EasyLoading.init(),
         debugShowCheckedModeBanner: false,
         home: WelcomePage(),
-        // home: OtpScreen(),
+        // home: OTPSms(),
       ),
     );
   }

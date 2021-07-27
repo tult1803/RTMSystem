@@ -70,7 +70,7 @@ class _BodyState extends State<Body> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    if(widget.phoneNumber != null)doSendSMS();
+    // if(widget.phoneNumber != null)doSendSMS();
   }
   @override
   Widget build(BuildContext context) {

@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 
 import '../../forgot_password.dart';
@@ -65,6 +66,8 @@ class _OtpFormState extends State<OtpForm> {
                   child: SizedBox(
                     child: TextFormField(
                       autofocus: true,
+                      maxLength: 1,
+                      maxLengthEnforcement: MaxLengthEnforcement.enforced,
                       style: TextStyle(fontSize: 24),
                       keyboardType: TextInputType.number,
                       textAlign: TextAlign.center,
@@ -80,6 +83,8 @@ class _OtpFormState extends State<OtpForm> {
                   child: SizedBox(
                     child: TextFormField(
                       focusNode: pin2FocusNode,
+                      maxLength: 1,
+                      maxLengthEnforcement: MaxLengthEnforcement.enforced,
                       style: TextStyle(fontSize: 24),
                       keyboardType: TextInputType.number,
                       textAlign: TextAlign.center,
@@ -93,6 +98,8 @@ class _OtpFormState extends State<OtpForm> {
                   child: SizedBox(
                     child: TextFormField(
                       focusNode: pin3FocusNode,
+                      maxLength: 1,
+                      maxLengthEnforcement: MaxLengthEnforcement.enforced,
                       style: TextStyle(fontSize: 24),
                       keyboardType: TextInputType.number,
                       textAlign: TextAlign.center,
@@ -106,6 +113,8 @@ class _OtpFormState extends State<OtpForm> {
                   child: SizedBox(
                     child: TextFormField(
                       focusNode: pin4FocusNode,
+                      maxLength: 1,
+                      maxLengthEnforcement: MaxLengthEnforcement.enforced,
                       style: TextStyle(fontSize: 24),
                       keyboardType: TextInputType.number,
                       textAlign: TextAlign.center,
@@ -119,6 +128,8 @@ class _OtpFormState extends State<OtpForm> {
                   child: SizedBox(
                     child: TextFormField(
                       focusNode: pin5FocusNode,
+                      maxLength: 1,
+                      maxLengthEnforcement: MaxLengthEnforcement.enforced,
                       style: TextStyle(fontSize: 24),
                       keyboardType: TextInputType.number,
                       textAlign: TextAlign.center,
@@ -132,6 +143,8 @@ class _OtpFormState extends State<OtpForm> {
                   child: SizedBox(
                     child: TextFormField(
                       focusNode: pin6FocusNode,
+                      maxLength: 1,
+                      maxLengthEnforcement: MaxLengthEnforcement.enforced,
                       style: TextStyle(fontSize: 24),
                       keyboardType: TextInputType.number,
                       textAlign: TextAlign.center,
@@ -158,6 +171,7 @@ class _OtpFormState extends State<OtpForm> {
 
   final otpInputDecoration = InputDecoration(
     contentPadding: EdgeInsets.symmetric(vertical: 15),
+    counterText: "",
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(15),
       borderSide: BorderSide(color: welcome_color),
