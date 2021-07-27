@@ -411,67 +411,6 @@ Widget btnDeleteRequestPage(BuildContext context, double width, double height,
   );
 }
 
-// chấp nhận hoặc từ chối hóa đơn
-Widget btnAcceptOrReject(BuildContext context, double width, Color color,
-    String tittleButtonAlertDialog, bool action, int indexOfBottomBar) {
-  return Container(
-      child: SizedBox(
-    width: width,
-    // ignore: deprecated_member_use
-    child: RaisedButton(
-      color: color,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-      onPressed: () async {
-        if (action) {
-          int status = 200;
-          // await postAPINotice(mainTittle, content);
-          // gọi api trả lại gì đó khi chấp nhận hoặc từ chối
-          if (status == 200) {
-            //chở lại trang all invoice
-            if (tittleButtonAlertDialog == 'Từ chối') {
-              showStatusAlertDialog(
-                  context,
-                  "Đã từ chối thông tin.",
-                  HomeCustomerPage(
-                    index: indexOfBottomBar,
-                  ),
-                  true);
-            } else {
-              showStatusAlertDialog(
-                  context,
-                  "Đã xác nhận thông tin.",
-                  HomeCustomerPage(
-                    index: indexOfBottomBar,
-                  ),
-                  true);
-            }
-          } else
-            showStatusAlertDialog(context, "Xác nhận thất bại", null, false);
-        } else {
-          //chở lại trang all invoice
-          showAlertDialog(
-              context,
-              "Từ chối xác nhận thông tin?",
-              HomeCustomerPage(
-                index: indexOfBottomBar,
-              ));
-        }
-      },
-      child: Center(
-        child: Text(
-          tittleButtonAlertDialog,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-          ),
-        ),
-      ),
-    ),
-  ));
-}
-
 Widget btnProcessAdvanceBill(BuildContext context,
     {String idAdvanceBill, bool isCustomer, Widget widgetToNavigator}) {
   return Row(

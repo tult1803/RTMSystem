@@ -8,6 +8,7 @@ import 'package:rtm_system/model/get/getAPI_customer_phone.dart';
 import 'package:rtm_system/model/model_profile_customer.dart';
 import 'package:rtm_system/model/model_store.dart';
 import 'package:rtm_system/helpers/component.dart';
+import 'package:rtm_system/ultils/check_data.dart';
 import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/ultils/src/message_list.dart';
@@ -138,7 +139,7 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
 
   void validData() {
     if (_myStore == null) {
-      showStatusAlertDialog(context, showMessage("", MSG042), null, false);
+      checkChooseStore(context, _myStore);
     } else {
       if (_formKey.currentState.validate()) {
         var numberSplit = money.split(",");
@@ -147,8 +148,7 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
         int checkMoney = valueMoney + totalAdvance;
         if (widget.levelCustomer == 1) {
           if (checkMoney > 50000000) {
-            showStatusAlertDialog(
-                context, showMessage("", MSG048), null, false);
+            showEasyLoadingError(context,  showMessage("", MSG048));
           } else {
             Navigator.push(
               context,
@@ -162,8 +162,7 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
           }
         } else if (widget.levelCustomer == 2) {
           if (checkMoney > 100000000) {
-            showStatusAlertDialog(
-                context, showMessage("", MSG049), null, false);
+            showEasyLoadingError(context,  showMessage("", MSG049));
           } else {
             Navigator.push(
               context,

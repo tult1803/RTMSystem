@@ -974,8 +974,8 @@ Widget widgetCreateAdvance(context, List item, String storeId,
                   child: RaisedButton(
                     color: Color(0xFF0BB791),
                     onPressed: () {
-                      doCreateRequestAdvance(context, 'TK-111', item[0], reason,
-                          item[1], storeId, type, true);
+                      createRequestAdvance(context, 'TK-111', item[0], reason,
+                          item[1], storeId);
                     },
                     child: AutoSizeText(
                       'Xác nhận',
