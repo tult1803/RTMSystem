@@ -49,10 +49,10 @@ enum GenderCharacter { women, men }
 
 // ignore: camel_case_types
 class _formUpdateProfileState extends State<formUpdateProfile> {
-  String errFullName, errPhone, errCMND, errAddress, errUser, errPass, errBirth;
+  String errFullName, errPhone, errCMND, errAddress, errUser, errPass, errBirth, errConfirmPassword;
   GenderCharacter character;
   bool checkClick;
-  String messageCancel = '';
+  String messageCancel = '', confirmPassword;
   int indexOfBottomBar = 0;
 
   @override
@@ -93,6 +93,7 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
                     1,
                     TextInputType.phone),
               _checkPassword(),
+              _checkConfirmPassword(),
               radioButton(context),
               btnBirthday(context),
               _checkCMND(),
@@ -251,6 +252,9 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
             getDataCustomer(3, value.trim());
           } else if (tittle == "Mật khẩu") {
             this.widget.password = value.trim();
+          }else if (tittle == "Xác nhận") {
+            confirmPassword = value.trim();
+            // "Xác nhận"
           }
           setState(() {
             checkClick = true;
@@ -278,6 +282,12 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
                 errPass = null;
               } else {
                 errPass = checkPassword(widget.password, 1);
+              }
+            }else if (tittle == "Xác nhận") {
+              if (widget.isUpdate) {
+                errConfirmPassword = null;
+              } else {
+                errConfirmPassword = checkPassword(widget.password, 2, passwordCheck: confirmPassword);
               }
             }
             if (tittle == "CMND/CCCD" && value.isEmpty && widget.isCreate) {
@@ -567,12 +577,16 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
     }
     if (widget.isUpdate) {
       errPass = null;
+      errConfirmPassword = null;
     } else {
       errPass = checkPassword(widget.password, 1);
+      errConfirmPassword = checkPassword(widget.password, 2, passwordCheck: confirmPassword);
     }
+
     if (errFullName == null &&
         errPhone == null &&
         errPass == null &&
+        errConfirmPassword == null &&
         errBirth == null &&
         errCMND == null &&
         errAddress == null &&
@@ -603,6 +617,12 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
             "Nhập mật khẩu", "Mật khẩu", errPass, 1, TextInputType.text);
   }
 
+  Widget _checkConfirmPassword() {
+    return this.widget.isUpdate
+        ? Container()
+        : _txtfield(getDataTextField(confirmPassword), true,
+        "Nhập lại mật khẩu", "Xác nhận", errConfirmPassword, 1, TextInputType.text);
+  }
   void getDataCustomer(int index, value){
     if(widget.isUpgrade) {
       dataCustomer.removeAt(index);

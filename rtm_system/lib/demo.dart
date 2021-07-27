@@ -5,12 +5,12 @@ import 'package:rtm_system/helpers/dialog.dart';
 import 'package:rtm_system/ultils/src/message_list.dart';
 
 
-class OTPLogin extends StatefulWidget {
+class OTPSms extends StatefulWidget {
   @override
-  _OTPLoginState createState() => _OTPLoginState();
+  _OTPSmsState createState() => _OTPSmsState();
 }
 
-class _OTPLoginState extends State<OTPLogin> with ChangeNotifier {
+class _OTPSmsState extends State<OTPSms> with ChangeNotifier {
   String phone, verificationId, otp, phoneCheck;
 
   FirebaseAuth _auth = FirebaseAuth.instance;

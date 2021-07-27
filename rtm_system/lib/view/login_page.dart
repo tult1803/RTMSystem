@@ -93,7 +93,7 @@ class LoginPageState extends State<LoginPage> {
   Widget forgotPassword(){
     return GestureDetector(
       onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(builder: (context) => OTPLogin(),));
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) => OTPSms()));
       },
       child: Text("Quên mật khẩu", style: GoogleFonts.roboto(color: welcome_color, fontSize: 16),),
     );
