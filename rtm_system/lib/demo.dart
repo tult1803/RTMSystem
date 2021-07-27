@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:rtm_system/helpers/dialog.dart';
+import 'package:rtm_system/ultils/check_data.dart';
 import 'package:rtm_system/ultils/src/message_list.dart';
 
 
@@ -40,7 +42,7 @@ class _OTPSmsState extends State<OTPSms> with ChangeNotifier {
               onPressed: () async {
                 showEasyLoading(context, "$MSG052");
                 await _auth.verifyPhoneNumber(
-                    phoneNumber: checkPhone(phone),
+                    phoneNumber: convertPhone(phone),
                     verificationCompleted: (phoneAuthCredential) async {
                       print('Verification Completed');
                       // signInWithPhoneAuthCredential(phoneAuthCredential);
@@ -69,6 +71,9 @@ class _OTPSmsState extends State<OTPSms> with ChangeNotifier {
             decoration: InputDecoration(
               hintText: "OTP Code",
             ),
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp(r'[[0-9]')),
+            ],
           ),
           // ignore: deprecated_member_use
           FlatButton(
@@ -79,7 +84,7 @@ class _OTPSmsState extends State<OTPSms> with ChangeNotifier {
                 signInWithPhoneAuthCredential(phoneAuthCredential);
               },
               child: Text("Check OTP")),
-          Text("${checkPhone(phone)}"),
+          Text("${convertPhone(phone)}"),
         ],
       ),
     );
@@ -98,16 +103,21 @@ class _OTPSmsState extends State<OTPSms> with ChangeNotifier {
     }
   }
 
-  checkPhone(String phone) {
+  //Convert from String to country phone (+84)
+  convertPhone(String phone) {
+    String error = checkPhoneNumber(phone);
     try {
-      if (phone.substring(0, 3) == "+84") {
-        return phone;
-      } else {
-        if (phone.substring(0, 1) == "0") {
-          return "+84${phone.substring(1)}";
+      if (error == null) {
+        if (phone.substring(0, 3) == "+84") {
+          return phone;
+        } else {
+          if (phone.substring(0, 1) == "0") {
+            return "+84${phone.substring(1)}";
+          }
         }
+        return null;
       }
-      return phone;
+      return null;
     } catch (e) {
       return phone;
     }

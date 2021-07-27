@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:rtm_system/demo.dart';
 import 'package:rtm_system/model/model_login.dart';
 import 'package:rtm_system/model/post/postAPI_login.dart';
 import 'package:rtm_system/presenter/check_login.dart';
@@ -11,6 +10,7 @@ import 'package:rtm_system/ultils/check_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/ultils/src/message_list.dart';
 import 'package:rtm_system/view/customer/home_customer_page.dart';
+import 'package:rtm_system/view/forgot_password.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -93,7 +93,7 @@ class LoginPageState extends State<LoginPage> {
   Widget forgotPassword(){
     return GestureDetector(
       onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(builder: (context) => OTPSms()));
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) => ForgotPassword()));
       },
       child: Text("Quên mật khẩu", style: GoogleFonts.roboto(color: welcome_color, fontSize: 16),),
     );

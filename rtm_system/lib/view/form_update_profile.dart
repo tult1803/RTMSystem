@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:rtm_system/helpers/dialog.dart';
 import 'package:rtm_system/helpers/button.dart';
@@ -244,6 +245,9 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
       child: TextField(
         controller: _controller,
         obscureText: obscureText,
+        inputFormatters: [
+          if (tittle == "Số điện thoại" || tittle == "CMND/CCCD") FilteringTextInputFormatter.allow(RegExp(r'[[0-9]')),
+        ],
         onChanged: (value) {
           if (tittle == "Số điện thoại") {
             this.widget.phone = value.trim();
