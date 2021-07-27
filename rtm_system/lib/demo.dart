@@ -3,12 +3,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:rtm_system/helpers/dialog.dart';
 
 
-class Login extends StatefulWidget {
+class OTPLogin extends StatefulWidget {
   @override
-  _LoginState createState() => _LoginState();
+  _OTPLoginState createState() => _OTPLoginState();
 }
 
-class _LoginState extends State<Login> with ChangeNotifier {
+class _OTPLoginState extends State<OTPLogin> with ChangeNotifier {
   String phone, verificationId, otp, phoneCheck;
 
   FirebaseAuth _auth = FirebaseAuth.instance;

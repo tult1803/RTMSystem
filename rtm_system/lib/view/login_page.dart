@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:rtm_system/demo.dart';
 import 'package:rtm_system/model/model_login.dart';
 import 'package:rtm_system/model/post/postAPI_login.dart';
 import 'package:rtm_system/presenter/check_login.dart';
@@ -92,7 +93,7 @@ class LoginPageState extends State<LoginPage> {
   Widget forgotPassword(){
     return GestureDetector(
       onTap: () {
-        /// Chờ code ===== ///
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) => OTPLogin(),));
       },
       child: Text("Quên mật khẩu", style: GoogleFonts.roboto(color: welcome_color, fontSize: 16),),
     );
