@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:rtm_system/helpers/dialog.dart';
+import 'package:rtm_system/ultils/src/message_list.dart';
 
 
 class OTPLogin extends StatefulWidget {
@@ -36,6 +38,7 @@ class _OTPLoginState extends State<OTPLogin> with ChangeNotifier {
           // ignore: deprecated_member_use
           FlatButton(
               onPressed: () async {
+                showEasyLoading(context, "$MSG052");
                 await _auth.verifyPhoneNumber(
                     phoneNumber: checkPhone(phone),
                     verificationCompleted: (phoneAuthCredential) async {
@@ -44,7 +47,6 @@ class _OTPLoginState extends State<OTPLogin> with ChangeNotifier {
                     },
                     verificationFailed: (error) async {
                       print('error: ${error.message}');
-                      SnackBar(content: Text(error.message));
                     },
                     codeSent: (verificationId, forceResendingToken) async {
                       setState(() {
@@ -54,6 +56,7 @@ class _OTPLoginState extends State<OTPLogin> with ChangeNotifier {
                     codeAutoRetrievalTimeout: (verificationId) async {
                       print('codeAutoRetrievalTimeout: $verificationId');
                     });
+                EasyLoading.dismiss();
               },
               child: Text("Send")),
           TextField(
@@ -73,7 +76,6 @@ class _OTPLoginState extends State<OTPLogin> with ChangeNotifier {
                 PhoneAuthCredential phoneAuthCredential =
                 PhoneAuthProvider.credential(
                     verificationId: verificationId, smsCode: otp);
-
                 signInWithPhoneAuthCredential(phoneAuthCredential);
               },
               child: Text("Check OTP")),
@@ -85,13 +87,13 @@ class _OTPLoginState extends State<OTPLogin> with ChangeNotifier {
 
   void signInWithPhoneAuthCredential(PhoneAuthCredential phoneAuth) async {
     try {
+      showEasyLoading(context, "$MSG052");
       final authCredential = await _auth.signInWithCredential(phoneAuth);
       if (authCredential.user != null) {
         showEasyLoadingSuccess(context, 'OTP Successed !!!');
       } else
         showEasyLoadingError(context,  'OTP Failed !!!');
     } on FirebaseAuthException catch (e) {
-      SnackBar(content: Text(e.message));
       showEasyLoadingError(context,  'OTP Failed !!!');
     }
   }
