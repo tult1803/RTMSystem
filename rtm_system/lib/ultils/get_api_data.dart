@@ -17,7 +17,6 @@ import 'package:rtm_system/model/post/postAPI_validateCustomer.dart';
 import 'package:rtm_system/model/put/putAPI_UpdateProfile.dart';
 import 'package:rtm_system/model/put/putAPI_confirmAdvanceRequest.dart';
 import 'package:rtm_system/model/put/putAPI_confirmAdvanceReturn.dart';
-import 'package:rtm_system/model/put/putAPI_confirmIdentifyCustomer.dart';
 import 'package:rtm_system/model/put/putAPI_returnAdvance.dart';
 import 'package:rtm_system/model/put/putAPI_confirmInvoice.dart';
 import 'package:rtm_system/model/put/putAPI_processAdvanceBill.dart';
@@ -126,7 +125,10 @@ Future<void> doUpdateInvoice(BuildContext context,
     showEasyLoadingSuccess(context, MSG003,
         widget: HomeAdminPage(index: 1, indexInsidePage: 1));
   } else {
-    showEasyLoadingError(context, MSG025,);
+    showEasyLoadingError(
+      context,
+      MSG025,
+    );
   }
 }
 
@@ -151,7 +153,10 @@ Future<void> doUpdatePassword(BuildContext context,
           ));
     }
   } else {
-    showEasyLoadingError(context, MSG025,);
+    showEasyLoadingError(
+      context,
+      MSG025,
+    );
   }
 }
 
@@ -191,29 +196,13 @@ Future<void> doCreateCustomer(
         }
       }
       showEasyLoadingSuccess(context, MSG003,
-          widget: isCreate == null
-              ? HomeAdminPage(index: 4)
-              : AllCustomer());
+          widget: isCreate == null ? HomeAdminPage(index: 4) : AllCustomer());
     }
   } else
-    showEasyLoadingError(context, MSG025,);
-}
-
-// ignore: non_constant_identifier_names
-Future<void> put_API_PayAdvance(
-  BuildContext context,
-) async {
-  int status = 200;
-  if (status == 200) {
-    showStatusAlertDialog(
-        context,
-        showMessage("", MSG019),
-        HomeCustomerPage(
-          index: 0,
-        ),
-        true);
-  } else
-    showStatusAlertDialog(context, showMessage(MSG037, MSG027), null, false);
+    showEasyLoadingError(
+      context,
+      MSG025,
+    );
 }
 
 // ignore: non_constant_identifier_names
@@ -222,31 +211,15 @@ Future<void> put_API_ConfirmAdvance(BuildContext context, id) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   PutConfirmAdvanceRequest putConfirmAdvanceRequest =
       PutConfirmAdvanceRequest();
+  showEasyLoading(context, MSG052);
   status = await putConfirmAdvanceRequest.putConfirmAdvanceRequest(
       prefs.get("access_token"), id);
-  if (status == 200) {
-    showStatusAlertDialog(
-        context,
-        showMessage('', MSG012),
-        HomeCustomerPage(
-          index: 1,
-        ),
-        true);
-  } else
-    showStatusAlertDialog(context, showMessage(MSG025, MSG027), null, false);
-}
-
-// ignore: non_constant_identifier_names
-Future<void> put_API_GetMoney(BuildContext context, indexPage) async {
-  int status = 200;
-  //await post_put_ApiProfile();
-  showAlertDialogAPI(
-      context,
-      'Nhan tien nha?',
-      HomeCustomerPage(
-        index: indexPage,
-      ),
-      status);
+  status == 200
+      ? showEasyLoadingSuccess(context, showMessage("", MSG012),
+          widget: HomeCustomerPage(
+            index: 1,
+          ))
+      : showEasyLoadingError(context, showMessage(MSG025, MSG027));
 }
 
 Future<void> putAPIUpdatePrice(BuildContext context, String productId,
@@ -342,54 +315,27 @@ Future<void> doConfirmOrAcceptOrRejectInvoice(BuildContext context,
 }
 
 //Tao advance request
-Future<void> doCreateRequestAdvance(
-    BuildContext context,
-    String accountId,
-    String money,
-    String reason,
-    date,
-    storeId,
-    int type,
-    bool isCustomer) async {
+Future<void> createRequestAdvance(BuildContext context, String accountId,
+    String money, String reason, date, storeId) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   int status;
-  if (isCustomer) {
-    // 1 is create request advance, 2 is accept advance
-    if (type == 1) {
-      ImageService imageService = ImageService();
-      status = await imageService.postCreateAdvance(
-        prefs.get("access_token"),
-        prefs.get("accountId"),
-        storeId,
-        money,
-        reason,
-        getDateTime(date, dateFormat: 'yyyy-MM-dd HH:mm:ss'),
-      );
-    } else if (type == 2) {
-      //Call API
-    }
-    if (status == 200) {
-      showStatusAlertDialog(
-          context,
-          showMessage("", MSG012),
-          HomeCustomerPage(
+  showEasyLoading(context, MSG052);
+  // 1 is create request advance, 2 is accept advance
+  ImageService imageService = ImageService();
+  status = await imageService.postCreateAdvance(
+    prefs.get("access_token"),
+    prefs.get("accountId"),
+    storeId,
+    money,
+    reason,
+    getDateTime(date, dateFormat: 'yyyy-MM-dd HH:mm:ss'),
+  );
+  status == 200
+      ? showEasyLoadingSuccess(context, showMessage("", MSG002),
+          widget: HomeCustomerPage(
             index: 1,
-          ),
-          true);
-    } else {
-      showStatusAlertDialog(context, showMessage(MSG025, MSG027), null, false);
-    }
-  } else {
-    //call api tao invoice cua manager
-    switch (type) {
-      case 1:
-        break;
-      case 2:
-        break;
-      case 3:
-        break;
-    }
-  }
+          ))
+      : showEasyLoadingError(context, showMessage("", MSG024));
 }
 
 Future getDataCustomerFromPhone(String phone) async {
@@ -427,10 +373,12 @@ Future doDeleteInvoice(BuildContext context, String invoiceId, bool isRequest,
         reason: reason);
   } else {
     DeleteInvoice deleteInvoice = DeleteInvoice();
-    status = await deleteInvoice.deleteInvoice(prefs.get('access_token'), invoiceId);
+    status =
+        await deleteInvoice.deleteInvoice(prefs.get('access_token'), invoiceId);
   }
   status == 200
-      ? showEasyLoadingSuccess(context, showMessage("", MSG040),widget: widgetToNavigator)
+      ? showEasyLoadingSuccess(context, showMessage("", MSG040),
+          widget: widgetToNavigator)
       : showEasyLoadingError(context, showMessage("", MSG041));
 }
 
@@ -443,7 +391,8 @@ Future doDeleteInvoiceRequest(BuildContext context, String invoiceId,
       prefs.get('access_token'), invoiceId,
       reason: reason);
   status == 200
-      ? showEasyLoadingSuccess(context, showMessage("", MSG017),widget: widgetToNavigator)
+      ? showEasyLoadingSuccess(context, showMessage("", MSG017),
+          widget: widgetToNavigator)
       : showEasyLoadingError(context, showMessage(MSG030, MSG027));
 }
 
@@ -459,8 +408,17 @@ Future doProcessAdvanceBill(
       status: statusProcess,
       reason: reason);
   status == 200
-      ? showEasyLoadingSuccess(context, statusProcess == 6 ? "Đã từ chối ứng tiền" : "Xác nhận đơn thành công",widget: widgetToNavigator)
-      : showEasyLoadingError(context, statusProcess == 6 ? "Từ chối ứng tiền thất bại" : "Xác nhận đơn thất bại");
+      ? showEasyLoadingSuccess(
+          context,
+          statusProcess == 6
+              ? "Đã từ chối ứng tiền"
+              : "Xác nhận đơn thành công",
+          widget: widgetToNavigator)
+      : showEasyLoadingError(
+          context,
+          statusProcess == 6
+              ? "Từ chối ứng tiền thất bại"
+              : "Xác nhận đơn thất bại");
 }
 
 ///Dùng để tạo hoá đơn và tạo yêu cầu giữ giá ( Request Invoice )
@@ -492,8 +450,12 @@ Future doCreateInvoice(BuildContext context,
 
   status == 200
       ? isCustomer
-          ? showEasyLoadingSuccess(context, showMessage("", MSG002),widget: HomeCustomerPage(index: 0,))
-          : showEasyLoadingSuccess(context, showMessage("", MSG002),widget: widgetToNavigator)
+          ? showEasyLoadingSuccess(context, showMessage("", MSG002),
+              widget: HomeCustomerPage(
+                index: 0,
+              ))
+          : showEasyLoadingSuccess(context, showMessage("", MSG002),
+              widget: widgetToNavigator)
       : showEasyLoadingError(context, showMessage("", MSG024));
 }
 
@@ -507,7 +469,8 @@ Future<void> putReturnAdvance(BuildContext context, List<String> invoiceId,
     status = await putReturnAdvance.putReturnAdvance(
         prefs.get("access_token"), invoiceId, advanceId);
     if (status == 200) {
-      showEasyLoadingSuccess(context, showMessage("", MSG019),widget: HomeCustomerPage(index: 1));
+      showEasyLoadingSuccess(context, showMessage("", MSG019),
+          widget: HomeCustomerPage(index: 1));
     } else
       showEasyLoadingError(context, showMessage("", MSG025));
   } else {
@@ -537,9 +500,12 @@ Future<void> doUpgradeCustomer(BuildContext context,
         data.elementAt(4),
         data.elementAt(1));
     if (statusImage == 200 && statusData == 200) {
-      showEasyLoadingSuccess(context, "Đã gửi", waitTime: 2, widget: HomeCustomerPage(index: 3));
+      showEasyLoadingSuccess(context, "Đã gửi",
+          waitTime: 2, widget: HomeCustomerPage(index: 3));
     } else {
-      showEasyLoadingError(context,"Gửi ${checkStatusUpgrade(statusImage, statusData)} thất bại", waitTime: 2);
+      showEasyLoadingError(context,
+          "Gửi ${checkStatusUpgrade(statusImage, statusData)} thất bại",
+          waitTime: 2);
     }
   } catch (_) {
     showEasyLoadingError(context, showMessage(MSG030, MSG027), waitTime: 2);
@@ -593,7 +559,8 @@ Future doReceiveReturnCash(
   status = await putConfirmAdvanceReturn.putConfirmAdvanceReturn(
       prefs.get("access_token"), id);
   if (status == 200) {
-    showEasyLoadingSuccess(context, showMessage("", MSG022),widget: HomeCustomerPage(index: 1));
+    showEasyLoadingSuccess(context, showMessage("", MSG022),
+        widget: HomeCustomerPage(index: 1));
   } else {
     showEasyLoadingError(context, showMessage(MSG030, MSG027));
   }
@@ -606,6 +573,7 @@ Future doDeleteAdvanceRequest(BuildContext context, String id) async {
   int status = await deleteAdvanceRequest.deleteAdvanceRequest(
       prefs.get('access_token'), id);
   status == 200
-      ? showEasyLoadingSuccess(context, showMessage("", MSG017),widget: HomeCustomerPage(index: 1))
+      ? showEasyLoadingSuccess(context, showMessage("", MSG017),
+          widget: HomeCustomerPage(index: 1))
       : showEasyLoadingError(context, showMessage(MSG030, MSG027));
 }

@@ -7,6 +7,7 @@ import 'package:rtm_system/blocs/list_id_invoice.dart';
 import 'package:rtm_system/blocs/select_dates_bloc.dart';
 import 'package:rtm_system/blocs/total_amount_bloc.dart';
 import 'package:rtm_system/blocs/total_deposit_bloc.dart';
+import 'package:rtm_system/helpers/dialog.dart';
 import 'package:rtm_system/presenter/Customer/show_deposit_to_process.dart';
 import 'package:rtm_system/helpers/button.dart';
 import 'package:rtm_system/helpers/component.dart';
@@ -22,6 +23,7 @@ class GetMoneyDeposit extends StatefulWidget {
 
 class _GetMoneyDepositState extends State<GetMoneyDeposit> {
   SelectDatesBloc _selectDatesBloc;
+  int totalDepositSelected;
   @override
   void dispose() {
     super.dispose();
@@ -31,6 +33,7 @@ class _GetMoneyDepositState extends State<GetMoneyDeposit> {
   void initState() {
     super.initState();
     _selectDatesBloc = SelectDatesBloc(SelectDatesBloc.initDate());
+    totalDepositSelected = 0;
   }
 
   @override
@@ -113,7 +116,7 @@ class _GetMoneyDepositState extends State<GetMoneyDeposit> {
                           return BlocBuilder<CountTotalInvoicesBloc, int>(
                             builder: (context, state2) {
                               return AutoSizeText(
-                                'Tống tiền các hóa đơn($state1/$state2):',
+                                'Tống tiền các hoá đơn đã chọn($state1/$state2):',
                                 style: TextStyle(
                                   color: primaryColor,
                                 ),
@@ -124,6 +127,7 @@ class _GetMoneyDepositState extends State<GetMoneyDeposit> {
                       ),
                       BlocBuilder<TotalDepositBloc, int>(
                         builder: (context, state) {
+                          totalDepositSelected = state;
                           return AutoSizeText(
                             "${getFormatPrice(state.toString())} đ",
                             style: TextStyle(
@@ -145,67 +149,73 @@ class _GetMoneyDepositState extends State<GetMoneyDeposit> {
         ),
         floatingActionButton: BlocBuilder<ListInvoiceIdBloc, List<String>>(
           builder: (context, state) {
-            if (state.isNotEmpty) {
-              return FloatingActionButton.extended(
-                onPressed: () {
-                  //có bloc nên k thể tách hàm
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: Text('Thông báo'),
-                        content: SingleChildScrollView(
-                          child: Column(
-                            children: <Widget>[
-                              Text(showMessage('', MSG029)),
+            return BlocBuilder<TotalAmountBloc, int>(
+              builder: (context, state1) {
+                if (state1 == 0) {
+                  return showHiddenFloatBtn();
+                }
+                return FloatingActionButton.extended(
+                  onPressed: () {
+                    if (totalDepositSelected == 0) {
+                      showEasyLoadingError(context, showMessage("", MSG043));
+                    } else {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text('Thông báo'),
+                            content: SingleChildScrollView(
+                              child: Column(
+                                children: <Widget>[
+                                  Text(showMessage('', MSG029)),
+                                ],
+                              ),
+                            ),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text(
+                                  'Không',
+                                  style: TextStyle(
+                                    color: Colors.redAccent,
+                                  ),
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  doConfirmOrAcceptOrRejectInvoice(
+                                    context,
+                                    "",
+                                    state,
+                                    1,
+                                    true,
+                                  );
+                                  ;
+                                },
+                                child: Text(
+                                  'Có',
+                                  style: TextStyle(
+                                    color: primaryColor,
+                                  ),
+                                ),
+                              ),
                             ],
-                          ),
-                        ),
-                        actions: <Widget>[
-                          TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: Text(
-                              'Không',
-                              style: TextStyle(
-                                color: Colors.redAccent,
-                              ),
-                            ),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              doConfirmOrAcceptOrRejectInvoice(
-                                context,
-                                "",
-                                state,
-                                1,
-                                true,
-                              );
-                              ;
-                            },
-                            child: Text(
-                              'Có',
-                              style: TextStyle(
-                                color: primaryColor,
-                              ),
-                            ),
-                          ),
-                        ],
+                          );
+                        },
                       );
-                    },
-                  );
-                },
-                label: titleAppBar('Xác nhận'),
-                backgroundColor: primaryColor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(50.0),
-                ),
-                elevation: 10,
-              );
-            } else {
-              return showHiddenFloatBtn();
-            }
+                    }
+                  },
+                  label: titleAppBar('Xác nhận'),
+                  backgroundColor: primaryColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50.0),
+                  ),
+                  elevation: 10,
+                );
+              },
+            );
           },
         ),
       ),
