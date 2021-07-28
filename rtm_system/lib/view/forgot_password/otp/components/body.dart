@@ -8,8 +8,9 @@ import 'package:rtm_system/helpers/dialog.dart';
 import 'package:rtm_system/ultils/check_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/ultils/src/message_list.dart';
+import 'package:rtm_system/view/forgot_password/input_password.dart';
 
-import '../../forgot_password.dart';
+import '../../check_phone.dart';
 import 'otp_form.dart';
 
 class Body extends StatefulWidget {
@@ -34,7 +35,7 @@ class _BodyState extends State<Body> {
         verificationCompleted: (phoneAuthCredential) async {},
         verificationFailed: (error) async {
           print('error: ${error.message}');
-          showEasyLoadingError(context, "Có lỗi xảy ra");
+          showEasyLoadingError(context, "$MSG030");
         },
         codeSent: (verificationId, forceResendingToken) async {
           print('verificationId: $verificationId');
@@ -163,10 +164,13 @@ class _BodyState extends State<Body> {
       showEasyLoading(context, "$MSG052");
       final authCredential = await _auth.signInWithCredential(phoneAuth);
       if (authCredential.user != null) {
-        showEasyLoadingSuccess(context, 'OTP Successed !!!');
+        EasyLoading.dismiss();
+        authCredential.user.getIdToken().then((value) {
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => InputNewPassword(firebaseToken: value,)));
+        });
       }
     } on FirebaseAuthException catch (e) {
-      showEasyLoadingError(context, 'Mã OTP hợp lệ');
+      showEasyLoadingError(context, '$MSG056');
     }
   }
 }

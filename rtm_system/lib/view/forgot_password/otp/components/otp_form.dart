@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 
-import '../../forgot_password.dart';
+import '../../check_phone.dart';
 
 class OtpForm extends StatefulWidget {
 
@@ -65,7 +65,6 @@ class _OtpFormState extends State<OtpForm> {
                 Flexible(
                   child: SizedBox(
                     child: TextFormField(
-                      autofocus: true,
                       maxLength: 1,
                       maxLengthEnforcement: MaxLengthEnforcement.enforced,
                       style: TextStyle(fontSize: 24),

@@ -5,8 +5,10 @@ import 'package:keyboard_actions/keyboard_actions.dart';
 import 'package:keyboard_actions/keyboard_actions_config.dart';
 import 'package:rtm_system/helpers/component.dart';
 import 'package:rtm_system/ultils/check_data.dart';
+import 'package:rtm_system/ultils/get_api_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
-import 'package:rtm_system/view/otp/otp_screen.dart';
+
+import 'otp/otp_screen.dart';
 
 class ForgotPassword extends StatefulWidget {
   @override
@@ -86,15 +88,18 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   ),
                   // ignore: deprecated_member_use
                   child: FlatButton(
-                      onPressed: () {
+                      onPressed: () async {
                         setState(() {
                           errorPhone = checkPhoneNumber(phone);
                         });
-                        if (errorPhone == null)
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => OtpScreen(
-                                    phoneNumber: phone,
-                                  )));
+                        if (errorPhone == null) {
+                          bool check = await doCheckAccount(context, phone);
+                          if (check)
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => OtpScreen(
+                                      phoneNumber: phone,
+                                    )));
+                        }
                       },
                       child: Text(
                         "Xác nhận",
@@ -181,18 +186,4 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       ),
     );
   }
-
-// doCheckAccount(String phone) async{
-//   print(phone);
-//   InfomationCustomer infomationCustomer = InfomationCustomer();
-//   showEasyLoading(context, "$MSG052");
-//   infomationCustomer = await getDataCustomerFromPhone(phone);
-//   if(infomationCustomer == null){
-//     // showEasyLoadingError(context, "$MSG009");
-//     return false;
-//   }else{
-//     showEasyLoadingSuccess(context, "Ố kê");
-//     return true;
-//   }
-// }
 }

@@ -100,7 +100,7 @@ checkDegree(bool checkProduct, double degree) {
 
 checkPassword(String password, int type, {String passwordCheck}) {
   ///type 0 : password
-  ///type 1 : currentPassword
+  ///type 1 : newPassword
   ///type 2 : confirmPassword
   if (password == null || password == "") {
     switch (type) {
