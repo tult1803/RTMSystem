@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:keyboard_actions/keyboard_actions.dart';
+import 'package:keyboard_actions/keyboard_actions_config.dart';
 import 'package:rtm_system/helpers/component.dart';
 import 'package:rtm_system/ultils/check_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
@@ -15,7 +17,7 @@ String pin1, pin2, pin3, pin4, pin5, pin6;
 
 class _ForgotPasswordState extends State<ForgotPassword> {
   String phone, errorPhone;
-
+  final FocusNode _nodePhone = FocusNode();
   @override
   void initState() {
     // TODO: implement initState
@@ -26,6 +28,13 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     pin4 = null;
     pin5 = null;
     pin6 = null;
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _nodePhone.dispose();
   }
   @override
   Widget build(BuildContext context) {
@@ -80,51 +89,73 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     );
   }
 
+  KeyboardActionsConfig keyBoardConfig(BuildContext context) {
+    return KeyboardActionsConfig(
+      keyboardActionsPlatform: KeyboardActionsPlatform.ALL,
+      // keyboardBarColor: Colors.grey[200],
+      nextFocus: true,
+      actions: [
+        KeyboardActionsItem(
+          focusNode: _nodePhone,
+          displayDoneButton: true,
+          onTapAction: () {
+            errorPhone = checkPhoneNumber(phone);
+          },
+        ),
+      ],
+    );
+  }
+
   Widget _txtfield(String hintText, String error) {
     return Container(
       margin: EdgeInsets.only(left: 20, right: 20),
       width: 280,
-      child: TextField(
-        autofocus: true,
-        textAlign: TextAlign.center,
-        inputFormatters: [
-          FilteringTextInputFormatter.allow(RegExp(r'[[0-9]')),
-        ],
-        onChanged: (value) {
-          phone = value.trim();
-        },
-        onSubmitted: (value) {
-          setState(() {
-            errorPhone = checkPhoneNumber(value.trim());
-          });
-        },
-        maxLines: 1,
-        keyboardType: TextInputType.number,
-        style: TextStyle(fontSize: 20),
-        cursorColor: welcome_color,
-        decoration: InputDecoration(
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15),
-            borderSide: BorderSide(color: welcome_color),
+      child: KeyboardActions(
+        config: keyBoardConfig(context),
+        disableScroll: true,
+        child: TextField(
+          focusNode: _nodePhone,
+          autofocus: true,
+          textAlign: TextAlign.center,
+          inputFormatters: [
+            FilteringTextInputFormatter.allow(RegExp(r'[[0-9]')),
+          ],
+          onChanged: (value) {
+            phone = value.trim();
+          },
+          onSubmitted: (value) {
+            setState(() {
+              errorPhone = checkPhoneNumber(value.trim());
+            });
+          },
+          maxLines: 1,
+          keyboardType: TextInputType.number,
+          style: TextStyle(fontSize: 20),
+          cursorColor: welcome_color,
+          decoration: InputDecoration(
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(15),
+              borderSide: BorderSide(color: welcome_color),
+            ),
+            hintText: '$hintText',
+            //Sau khi click vào "Nhập tiêu đề" thì màu viền sẽ đổi
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: BorderSide(color: welcome_color),
+            ),
+            //Hiển thị Icon góc phải
+            suffixIcon: Icon(
+              Icons.phone_iphone,
+              color: Colors.black54,
+            ),
+            //Hiển thị lỗi
+            focusedErrorBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.redAccent),
+            ),
+            //Nhận thông báo lỗi
+            errorText: error,
+            contentPadding: EdgeInsets.all(15),
           ),
-          hintText: '$hintText',
-          //Sau khi click vào "Nhập tiêu đề" thì màu viền sẽ đổi
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20),
-            borderSide: BorderSide(color: welcome_color),
-          ),
-          //Hiển thị Icon góc phải
-          suffixIcon: Icon(
-            Icons.phone_iphone,
-            color: Colors.black54,
-          ),
-          //Hiển thị lỗi
-          focusedErrorBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.redAccent),
-          ),
-          //Nhận thông báo lỗi
-          errorText: error,
-          contentPadding: EdgeInsets.all(15),
         ),
       ),
     );

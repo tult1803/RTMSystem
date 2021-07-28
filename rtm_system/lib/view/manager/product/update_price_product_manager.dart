@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:keyboard_actions/keyboard_actions.dart';
+import 'package:keyboard_actions/keyboard_actions_config.dart';
 import 'package:rtm_system/presenter/Manager/product/show_product_manager.dart';
 import 'package:rtm_system/helpers/dialog.dart';
 import 'package:rtm_system/helpers/component.dart';
@@ -33,13 +35,19 @@ class _updatePriceProductState extends State<updatePriceProduct> {
   double price, currentPrice;
   bool isClick = false;
   String _value;
-
+  final FocusNode _nodePrice = FocusNode();
   @override
   void initState() {
     super.initState();
     isNotEmptyChoose();
   }
 
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _nodePrice.dispose();
+  }
   void isNotEmptyChoose() {
     try {
       if (this.widget.chosenValue != null) {
@@ -137,7 +145,7 @@ class _updatePriceProductState extends State<updatePriceProduct> {
           iconEnabledColor: Colors.black,
           items:
               itemNameUpdatePrice.map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
+                return DropdownMenuItem<String>(
               value: value,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -174,69 +182,89 @@ class _updatePriceProductState extends State<updatePriceProduct> {
     );
   }
 
+  KeyboardActionsConfig keyBoardConfig(BuildContext context) {
+    return KeyboardActionsConfig(
+      keyboardActionsPlatform: KeyboardActionsPlatform.ALL,
+      // keyboardBarColor: Colors.grey[200],
+      nextFocus: true,
+      actions: [
+        KeyboardActionsItem(
+          focusNode: _nodePrice,
+          displayDoneButton: true,
+          onTapAction: () {},
+        ),
+      ],
+    );
+  }
+
   Widget _txt(String value) {
     return Container(
       height: 50,
       width: 200,
       margin: EdgeInsets.only(top: 20),
-      child: TextField(
-        textAlign: TextAlign.right,
-        controller: _controller,
-        keyboardType: TextInputType.number,
-        cursorColor: welcome_color,
-        style: TextStyle(fontSize: 15),
-        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-        decoration: InputDecoration(
-          border: OutlineInputBorder(),
-          hintText: "000.000",
-          //Sau khi click vào "Nhập tiêu đề" thì màu viền sẽ đổi
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: welcome_color),
-          ),
+      child: KeyboardActions(
+        disableScroll: true,
+        config: keyBoardConfig(context),
+        child: TextField(
+          focusNode: _nodePrice,
+          textAlign: TextAlign.right,
+          controller: _controller,
+          keyboardType: TextInputType.number,
+          cursorColor: welcome_color,
+          style: TextStyle(fontSize: 15),
+          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+          decoration: InputDecoration(
+            border: OutlineInputBorder(),
+            hintText: "000.000",
+            //Sau khi click vào "Nhập tiêu đề" thì màu viền sẽ đổi
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: welcome_color),
+            ),
 
-          //Hiển thị text góc phải
-          prefixIcon: Container(
-              // margin: EdgeInsets.only(top: 15, left: 10),
-              width: 200 * 0.2,
+            //Hiển thị text góc phải
+            prefixIcon: Container(
+                // margin: EdgeInsets.only(top: 15, left: 10),
+                width: 200 * 0.2,
+                child: Center(
+                  child: AutoSizeText(
+                    "Giá",
+                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+                  ),
+                )),
+
+            //Hiển thị Icon góc phải
+            suffixIcon: Container(
+              width: 200 * 0.1,
               child: Center(
                 child: AutoSizeText(
-                  "Giá",
+                  "VNĐ",
                   style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
                 ),
-              )),
-
-          //Hiển thị Icon góc phải
-          suffixIcon: Container(
-            width: 200 * 0.1,
-            child: Center(
-              child: AutoSizeText(
-                "VNĐ",
-                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
               ),
             ),
-          ),
 
-          //Hiển thị lỗi
-          focusedErrorBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.redAccent),
-          ),
-          //Nhận thông báo lỗi
-          errorText: error,
+            //Hiển thị lỗi
+            focusedErrorBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.redAccent),
+            ),
+            //Nhận thông báo lỗi
+            errorText: error,
 
-          // contentPadding: EdgeInsets.all(15),
-          contentPadding:
-              const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+            // contentPadding: EdgeInsets.all(15),
+            contentPadding:
+                const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+          ),
+          onChanged: (value) {
+            setState(() {
+              if (value.isEmpty) {
+                price = null;
+              } else {
+                price = double.parse(value);
+                getDataTextField("${getFormatPrice("$price")}");
+              }
+            });
+          },
         ),
-        onChanged: (value) {
-          setState(() {
-            if (value.isEmpty) {
-              price = null;
-            } else {
-              price = double.parse(value);
-              getDataTextField("${getFormatPrice("$price")}");
-            }
-          });
-        },
       ),
     );
   }
