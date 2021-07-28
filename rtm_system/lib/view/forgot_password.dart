@@ -18,6 +18,7 @@ String pin1, pin2, pin3, pin4, pin5, pin6;
 class _ForgotPasswordState extends State<ForgotPassword> {
   String phone, errorPhone;
   final FocusNode _nodePhone = FocusNode();
+
   @override
   void initState() {
     // TODO: implement initState
@@ -36,54 +37,74 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     super.dispose();
     _nodePhone.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+
     return Scaffold(
       appBar: AppBar(
         leading: leadingAppbar(context, colorIcon: Colors.white),
         centerTitle: true,
         title: titleAppBar("Quên mật khẩu"),
       ),
-      body: Container(
-        width: size.width,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            _txtfield("Nhập số điện thoại", errorPhone),
-            SizedBox(height: 20),
-            Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: welcome_color,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black54,
-                      blurRadius: 3,
-                      offset: Offset(1, 1), // Shadow position
-                    ),
-                  ],
-                ),
-                // ignore: deprecated_member_use
-                child: FlatButton(
-                    onPressed: () {
+      body: Center(
+        child: Container(
+          margin: EdgeInsets.only(left: 20, right: 20),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black54,
+                blurRadius: 3,
+                offset: Offset(1, 1), // Shadow position
+              ),
+            ],
+          ),
+          width: size.width,
+          height: 200,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _txtfield("Nhập số điện thoại", errorPhone),
+              SizedBox(height: 20),
+              Container(
+                  width: 280,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: welcome_color,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black54,
+                        blurRadius: 3,
+                        offset: Offset(1, 1), // Shadow position
+                      ),
+                    ],
+                  ),
+                  // ignore: deprecated_member_use
+                  child: FlatButton(
+                      onPressed: () {
                         setState(() {
                           errorPhone = checkPhoneNumber(phone);
-                          if (errorPhone == null)
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => OtpScreen(
-                                      phoneNumber: phone,
-                                    )));});
-                    },
-                    child: Text(
-                      "Xác nhận",
-                      style: GoogleFonts.roboto(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 17),
-                    )))
-          ],
+                        });
+                        if (errorPhone == null)
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => OtpScreen(
+                                    phoneNumber: phone,
+                                  )));
+                      },
+                      child: Text(
+                        "Xác nhận",
+                        style: GoogleFonts.roboto(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 17),
+                      )))
+            ],
+          ),
         ),
       ),
     );
@@ -116,7 +137,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         child: TextField(
           focusNode: _nodePhone,
           autofocus: true,
-          textAlign: TextAlign.center,
+          textAlign: TextAlign.left,
           inputFormatters: [
             FilteringTextInputFormatter.allow(RegExp(r'[[0-9]')),
           ],
@@ -161,4 +182,17 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     );
   }
 
+// doCheckAccount(String phone) async{
+//   print(phone);
+//   InfomationCustomer infomationCustomer = InfomationCustomer();
+//   showEasyLoading(context, "$MSG052");
+//   infomationCustomer = await getDataCustomerFromPhone(phone);
+//   if(infomationCustomer == null){
+//     // showEasyLoadingError(context, "$MSG009");
+//     return false;
+//   }else{
+//     showEasyLoadingSuccess(context, "Ố kê");
+//     return true;
+//   }
+// }
 }

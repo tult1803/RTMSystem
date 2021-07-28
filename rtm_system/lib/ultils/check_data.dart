@@ -180,3 +180,23 @@ checkStatusUpgrade(int statusImage, int statusData){
     return "ảnh và dữ liệu";
   }else return "";
 }
+
+//Convert from String to country phone (+84)
+convertPhone(String phone) {
+  String error = checkPhoneNumber(phone);
+  try {
+    if (error == null) {
+      if (phone.substring(0, 3) == "+84") {
+        return phone;
+      } else {
+        if (phone.substring(0, 1) == "0") {
+          return "+84${phone.substring(1)}";
+        }
+      }
+      return null;
+    }
+    return null;
+  } catch (e) {
+    return phone;
+  }
+}
