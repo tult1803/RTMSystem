@@ -401,16 +401,11 @@ Widget componentContainerDetailInvoice(BuildContext context,
         SizedBox(
           height: 10,
         ),
-        txtItemDetail(context, "Ngày xác nhận của khách hàng",
+        txtItemDetail(context, "Ngày khách hàng xác nhận",
             "${getDateTime(customerConfirmDate)}"),
         SizedBox(
           height: 10,
         ),
-        // txtItemDetail(context, "Ngày xác nhận của quản lý",
-        //     "${getDateTime(managerConfirmDate)}"),
-        // SizedBox(
-        //   height: 10,
-        // ),
         SizedBox(
           height: 10,
         ),
