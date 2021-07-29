@@ -38,7 +38,6 @@ class _DetailInvoiceState extends State<DetailInvoice> {
               degree: widget.invoiceElement.degree,
               quantity: widget.invoiceElement.quantity,
               customerConfirmDate: widget.invoiceElement.customerSignDate,
-              // managerConfirmDate: this.widget.map["manager_sign_date"],
               statusId: widget.invoiceElement.statusId,
               customerId: widget.invoiceElement.customerId,
               managerId: widget.invoiceElement.managerId,
