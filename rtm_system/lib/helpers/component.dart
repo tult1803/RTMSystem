@@ -1031,7 +1031,7 @@ Widget componentDetailCreateInvoice(
           height: 10,
         ),
         if (level == 2)
-          txtItemDetail(context, "Giá bán", "${getFormatPrice(price)} đ"),
+          txtItemDetail(context, "Giá sản phẩm", "${getFormatPrice(price)} đ"),
         if (level == 2)
           SizedBox(
             height: 10,
