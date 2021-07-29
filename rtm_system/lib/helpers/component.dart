@@ -387,7 +387,7 @@ Widget componentContainerDetailInvoice(BuildContext context,
         Container(
           child: degree == 0
               ? SizedBox(height: 1)
-              : txtItemDetail(context, "Độ", "$degree"),
+              : txtItemDetail(context, "Số độ", "$degree"),
         ),
         SizedBox(
           height: 10,
