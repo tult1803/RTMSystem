@@ -15,7 +15,6 @@ class _ContactPageState extends State<ContactPage> {
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
-        leading: leadingAppbar(context, colorIcon: Colors.white),
         backgroundColor: primaryColor,
         title: Text('Liên hệ', style: TextStyle(
           color: Colors.white,
