@@ -15,6 +15,7 @@ import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/message_list.dart';
 import 'package:rtm_system/view/confirm_detail_invoice.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
+import 'package:rtm_system/view/table_price.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../view/manager/form_detail_page.dart';
@@ -94,7 +95,7 @@ class _AddProductPageState extends State<AddProductPage> {
     GetProduct getProduct = GetProduct();
     dataListProduct.clear();
     if (token.isNotEmpty) {
-      dataList = await getProduct.getProduct(token, "");
+      dataList = await getProduct.getProduct(token, "",limit: null, type: widget.level == 2 ? 1: 2);
       dataList.forEach((element) async{
         Map<dynamic, dynamic> data = element;
         dataListProduct.add(DataProduct.fromJson(data));
@@ -301,26 +302,26 @@ class _AddProductPageState extends State<AddProductPage> {
                 SizedBox(
                   height: 10,
                 ),
-                // showPriceTable(),
+                showPriceTable(),
               ],
             )),
       ),
     );
   }
 
-  // Widget showPriceTable() {
-  //   if (widget.isCustomer) {
-  //     if (_myProduct != null) {
-  //       return showTablePrice(
-  //         idProduct: _myProduct,
-  //       );
-  //     } else {
-  //       return Container();
-  //     }
-  //   } else {
-  //     return Container();
-  //   }
-  // }
+  Widget showPriceTable() {
+    if (widget.isCustomer) {
+      if (_myProduct != null) {
+        return showTablePrice(
+          idProduct: _myProduct,
+        );
+      } else {
+        return Container();
+      }
+    } else {
+      return Container();
+    }
+  }
 
   Widget txtAutoFillByPhone({
     TextEditingController controller,
@@ -760,7 +761,7 @@ class _AddProductPageState extends State<AddProductPage> {
     setState(() {
       dataListProduct.forEach((element) {
         if (element.id == value) {
-          price = element.price;
+          price = element.price.toString();
         }
       });
     });

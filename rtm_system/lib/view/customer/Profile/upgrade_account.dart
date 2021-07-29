@@ -168,7 +168,7 @@ class _UpgradeAccountState extends State<UpgradeAccount> {
       appBar: AppBar(
         centerTitle: true,
         leading: leadingAppbar(context, colorIcon: Colors.white),
-        title: titleAppBar('Xác thực tài khoản'),
+        title: titleAppBar('Cập nhật tài khoản'),
       ),
       body: Column(children: <Widget>[
         Expanded(
