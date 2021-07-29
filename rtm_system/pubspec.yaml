@@ -60,6 +60,7 @@ dependencies:
   grouped_buttons: ^1.0.4
   firebase_auth: ^3.0.1
   keyboard_actions: ^3.4.3
+  translator: ^0.1.7
 
 dev_dependencies:
   flutter_test:

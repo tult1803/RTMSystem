@@ -9,6 +9,7 @@ import 'package:rtm_system/ultils/check_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/ultils/src/message_list.dart';
 import 'package:rtm_system/view/forgot_password/input_password.dart';
+import 'package:translator/translator.dart';
 
 import '../../check_phone.dart';
 import 'otp_form.dart';
@@ -23,6 +24,7 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
+  final translator = GoogleTranslator();
   int timeSMS = 0;
   String verificationId, otp;
   FirebaseAuth _auth = FirebaseAuth.instance;
@@ -34,8 +36,9 @@ class _BodyState extends State<Body> {
         timeout: Duration(seconds: 120),
         verificationCompleted: (phoneAuthCredential) async {},
         verificationFailed: (error) async {
-          print('error: ${error.message}');
-          showEasyLoadingError(context, "$MSG030");
+          /// Dung google translate error message
+         var err = await translator.translate("${error.code}", from: "en", to: 'vi');
+           showEasyLoadingError(context, "${err.text[0].toUpperCase()}${err.text.substring(1)}");
         },
         codeSent: (verificationId, forceResendingToken) async {
           print('verificationId: $verificationId');
@@ -135,7 +138,6 @@ class _BodyState extends State<Body> {
       otp = "$pin1$pin2$pin3$pin4$pin5$pin6";
     });
   }
-
   Row buildTimer() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
