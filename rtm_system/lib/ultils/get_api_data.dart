@@ -5,7 +5,7 @@ import 'package:rtm_system/model/delete/deleteAPI_deactivateAdvanceRequest.dart'
 import 'package:rtm_system/model/delete/deleteAPI_invoice.dart';
 import 'package:rtm_system/model/delete/deleteAPI_invoiceRequest.dart';
 import 'package:rtm_system/model/get/getAPI_check_account.dart';
-import 'package:rtm_system/model/get/getAPI_forget_password.dart';
+import 'package:rtm_system/model/post/postAPI_forget_password.dart';
 import 'package:rtm_system/model/get/getAPI_maintainCheck.dart';
 import 'package:rtm_system/model/model_invoice_request.dart';
 import 'package:rtm_system/model/model_profile_customer.dart';
