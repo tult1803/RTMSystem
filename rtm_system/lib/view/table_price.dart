@@ -30,7 +30,7 @@ class _showTablePriceState extends State<showTablePrice> {
       dataListProduct = await getProduct.getProduct(
         prefs.get("access_token"),
         widget.idProduct,
-        type: 2,
+        type: 3,
         limit: 10,
       );
       final isLastPage = dataListProduct.length - 1 < pageKey;
