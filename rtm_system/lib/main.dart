@@ -7,8 +7,6 @@ import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/forgot_password/input_password.dart';
 import 'package:rtm_system/view/welcome_page.dart';
 
-import 'demo.dart';
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();

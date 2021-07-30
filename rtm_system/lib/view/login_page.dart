@@ -26,7 +26,6 @@ Timer _timer;
 PostLogin getAPI = PostLogin();
 DataLogin data;
 
-
 class LoginPageState extends State<LoginPage> {
   final FocusNode _nodeUsername = FocusNode();
   bool obscureTextPassword = true;
@@ -101,12 +100,16 @@ class LoginPageState extends State<LoginPage> {
         ));
   }
 
-  Widget forgotPassword(){
+  Widget forgotPassword() {
     return GestureDetector(
       onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(builder: (context) => ForgotPassword()));
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => ForgotPassword()));
       },
-      child: Text("Quên mật khẩu", style: GoogleFonts.roboto(color: welcome_color, fontSize: 16),),
+      child: Text(
+        "Quên mật khẩu",
+        style: GoogleFonts.roboto(color: welcome_color, fontSize: 16),
+      ),
     );
   }
 
@@ -162,7 +165,6 @@ class LoginPageState extends State<LoginPage> {
     }
   }
 
-
   Widget _checkLogin() {
     return Container(
       height: 45,
@@ -205,7 +207,7 @@ class LoginPageState extends State<LoginPage> {
   void _checkTextLogin() {
     setState(() {
       error = "";
-        errorUsername =  checkPhoneNumber(username);
+      errorUsername = checkPhoneNumber(username);
       if (password == null || password == "") {
         errorPassword = "Mật khẩu trống";
       } else {
@@ -251,7 +253,7 @@ class LoginPageState extends State<LoginPage> {
           },
           onSubmitted: (value) {
             setState(() {
-              errorUsername =  checkPhoneNumber(username);
+              errorUsername = checkPhoneNumber(username);
             });
           },
           cursorColor: welcome_color,
