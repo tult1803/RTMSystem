@@ -349,7 +349,6 @@ Widget componentContainerDetailInvoice(BuildContext context,
     String createTime,
     String storeName,
     String customerConfirmDate,
-    // String managerConfirmDate,
     String activeDate,
     bool isCustomer,
     Widget widgetToNavigator}) {
@@ -375,7 +374,7 @@ Widget componentContainerDetailInvoice(BuildContext context,
         SizedBox(
           height: 10,
         ),
-        txtItemDetail(context, "Tên khách hàng", "$customerName",
+        txtItemDetail(context, "Khách hàng", "$customerName",
             subContent: customerPhone),
         SizedBox(
           height: 10,
@@ -388,12 +387,12 @@ Widget componentContainerDetailInvoice(BuildContext context,
         Container(
           child: degree == 0
               ? SizedBox(height: 1)
-              : txtItemDetail(context, "Độ", "$degree"),
+              : txtItemDetail(context, "Số độ", "$degree"),
         ),
         SizedBox(
           height: 10,
         ),
-        txtItemDetail(context, "Khối lượng", "$quantity kg"),
+        txtItemDetail(context, "Khối lượng sản phẩm", "$quantity kg"),
         SizedBox(
           height: 10,
         ),
@@ -402,16 +401,11 @@ Widget componentContainerDetailInvoice(BuildContext context,
         SizedBox(
           height: 10,
         ),
-        txtItemDetail(context, "Ngày xác nhận của khách hàng",
+        txtItemDetail(context, "Ngày khách hàng xác nhận",
             "${getDateTime(customerConfirmDate)}"),
         SizedBox(
           height: 10,
         ),
-        // txtItemDetail(context, "Ngày xác nhận của quản lý",
-        //     "${getDateTime(managerConfirmDate)}"),
-        // SizedBox(
-        //   height: 10,
-        // ),
         SizedBox(
           height: 10,
         ),
@@ -1037,7 +1031,7 @@ Widget componentDetailCreateInvoice(
           height: 10,
         ),
         if (level == 2)
-          txtItemDetail(context, "Giá bán", "${getFormatPrice(price)} đ"),
+          txtItemDetail(context, "Giá sản phẩm", "${getFormatPrice(price)} đ"),
         if (level == 2)
           SizedBox(
             height: 10,
