@@ -225,7 +225,7 @@ class LoginPageState extends State<LoginPage> {
       error = "";
       errorUsername = checkPhoneNumber(username);
       if (password == null || password == "") {
-        errorPassword = "Mật khẩu trống";
+        errorPassword = showMessage("Mật khẩu", MSG001);
       } else {
         errorPassword = null;
       }
