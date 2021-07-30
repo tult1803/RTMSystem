@@ -4,6 +4,8 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:rtm_system/model/delete/deleteAPI_deactivateAdvanceRequest.dart';
 import 'package:rtm_system/model/delete/deleteAPI_invoice.dart';
 import 'package:rtm_system/model/delete/deleteAPI_invoiceRequest.dart';
+import 'package:rtm_system/model/get/getAPI_check_account.dart';
+import 'package:rtm_system/model/post/postAPI_forget_password.dart';
 import 'package:rtm_system/model/get/getAPI_maintainCheck.dart';
 import 'package:rtm_system/model/model_invoice_request.dart';
 import 'package:rtm_system/model/model_profile_customer.dart';
@@ -29,6 +31,7 @@ import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/message_list.dart';
 import 'package:rtm_system/presenter/Manager/invoice/add_product_invoice.dart';
 import 'package:rtm_system/view/customer/home_customer_page.dart';
+import 'package:rtm_system/view/login_page.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
 import 'package:rtm_system/view/manager/profile/allCustomer_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -576,4 +579,28 @@ Future doDeleteAdvanceRequest(BuildContext context, String id) async {
       ? showEasyLoadingSuccess(context, showMessage("", MSG017),
           widget: HomeCustomerPage(index: 1))
       : showEasyLoadingError(context, showMessage(MSG030, MSG027));
+}
+
+Future doCheckAccount(BuildContext context,String phone) async{
+  CheckAccount account = CheckAccount();
+  showEasyLoading(context, "$MSG052");
+  int status = await account.checkAccount(phone);
+  if(status == 200){
+    EasyLoading.dismiss();
+    return true;
+  }else{
+    showEasyLoadingError(context, "$MSG009");
+    return false;
+  }
+}
+
+Future doForgotPassword(BuildContext context,String fbToken, String password,String confirmPassword) async{
+  ChangeForgotPassword forgotPassword = ChangeForgotPassword();
+  showEasyLoading(context, "$MSG052");
+  int status = await forgotPassword.getPassword(fbToken, password, confirmPassword);
+  if(status == 200){
+    showEasyLoadingSuccess(context, "$MSG003", widget: LoginPage());
+  }else{
+    showEasyLoadingError(context, "$MSG025");
+  }
 }

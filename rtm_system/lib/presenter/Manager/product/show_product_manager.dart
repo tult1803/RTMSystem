@@ -40,7 +40,6 @@ class _showAllProductState extends State<showAllProduct> {
         itemDateUpdatePrice.add("${element["updateDateTime"]}");
         itemIdUpdatePrice.add(element["id"]);
       });
-
       final isLastPage = dataList.length < pageKey;
       if (isLastPage) {
         _pagingController.appendLastPage(dataList);

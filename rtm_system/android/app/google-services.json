@@ -37,6 +37,13 @@
             {
               "client_id": "238509483118-hgjtljcl1s80hvqq0mk872a3o0u9ts84.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "238509483118-h31o6cl8ui3ir0t4mk7billkvsnj1hai.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.rtmSystem"
+              }
             }
           ]
         }

@@ -18,7 +18,7 @@ String MSG012 = "Đã xác nhận thành công.";
 String MSG013 = "Vui lòng chọn loại sản phẩm.";
 String MSG014 = "Số điện thoại là 10 hoặc 11 số.";
 String MSG015 = "Vui lòng chọn ngày sinh.";
-String MSG016 = "Độ dài mật khẩu lớn hơn 6 ký tự, bao gồm chữ và số.";
+String MSG016 = "Độ dài lớn hơn 6, bao gồm chữ và số.";
 String MSG017 = "Đã hủy bỏ thành công.";
 String MSG018 = "Từ chối xác nhận thông tin?";
 String MSG019 = "Đã trả tiền thành công.";
@@ -60,6 +60,7 @@ String MSG052 = "Đang xử lý...";
 String MSG053 = "Hủy kích hoạt thành công";
 String MSG054 = "Ẩn thông báo thành công";
 String MSG055 = "Xin hãy nhập giá mới";
+String MSG056 = "Mã OTP không hợp lệ";
 //use to show message
 String showMessage(String name, String msg){
   return name.isEmpty || name == null? msg : name + " " + msg;

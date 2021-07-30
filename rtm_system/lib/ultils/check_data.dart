@@ -100,7 +100,7 @@ checkDegree(bool checkProduct, double degree) {
 
 checkPassword(String password, int type, {String passwordCheck}) {
   ///type 0 : password
-  ///type 1 : currentPassword
+  ///type 1 : newPassword
   ///type 2 : confirmPassword
   if (password == null || password == "") {
     switch (type) {
@@ -179,4 +179,24 @@ checkStatusUpgrade(int statusImage, int statusData){
   }else if(statusImage != 200 && statusData != 200){
     return "ảnh và dữ liệu";
   }else return "";
+}
+
+//Convert from String to country phone (+84)
+convertPhone(String phone) {
+  String error = checkPhoneNumber(phone);
+  try {
+    if (error == null) {
+      if (phone.substring(0, 3) == "+84") {
+        return phone;
+      } else {
+        if (phone.substring(0, 1) == "0") {
+          return "+84${phone.substring(1)}";
+        }
+      }
+      return null;
+    }
+    return null;
+  } catch (e) {
+    return phone;
+  }
 }

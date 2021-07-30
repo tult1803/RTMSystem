@@ -10,7 +10,10 @@ import 'package:rtm_system/ultils/check_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/ultils/src/message_list.dart';
 import 'package:rtm_system/view/customer/home_customer_page.dart';
+import 'package:rtm_system/view/forgot_password/check_phone.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
+import 'package:keyboard_actions/keyboard_actions.dart';
+import 'package:keyboard_actions/keyboard_actions_config.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -24,6 +27,7 @@ PostLogin getAPI = PostLogin();
 DataLogin data;
 
 class LoginPageState extends State<LoginPage> {
+  final FocusNode _nodeUsername = FocusNode();
   bool obscureTextPassword = true;
   Icon iconPassword = Icon(
     Icons.visibility_outlined,
@@ -45,6 +49,13 @@ class LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
     checkSaveLogin(context);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _nodeUsername.dispose();
   }
 
   @override
@@ -89,12 +100,16 @@ class LoginPageState extends State<LoginPage> {
         ));
   }
 
-  Widget forgotPassword(){
+  Widget forgotPassword() {
     return GestureDetector(
       onTap: () {
-        /// Chờ code ===== ///
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => ForgotPassword()));
       },
-      child: Text("Quên mật khẩu", style: GoogleFonts.roboto(color: welcome_color, fontSize: 16),),
+      child: Text(
+        "Quên mật khẩu",
+        style: GoogleFonts.roboto(color: welcome_color, fontSize: 16),
+      ),
     );
   }
 
@@ -150,7 +165,6 @@ class LoginPageState extends State<LoginPage> {
     }
   }
 
-
   Widget _checkLogin() {
     return Container(
       height: 45,
@@ -193,7 +207,7 @@ class LoginPageState extends State<LoginPage> {
   void _checkTextLogin() {
     setState(() {
       error = "";
-        errorUsername =  checkPhoneNumber(username);
+      errorUsername = checkPhoneNumber(username);
       if (password == null || password == "") {
         errorPassword = "Mật khẩu trống";
       } else {
@@ -208,17 +222,38 @@ class LoginPageState extends State<LoginPage> {
     });
   }
 
+  KeyboardActionsConfig keyBoardConfig(BuildContext context) {
+    return KeyboardActionsConfig(
+      keyboardActionsPlatform: KeyboardActionsPlatform.ALL,
+      nextFocus: true,
+      actions: [
+        KeyboardActionsItem(
+          focusNode: _nodeUsername,
+          displayDoneButton: true,
+          onTapAction: () {
+            setState(() {
+              errorUsername = checkPhoneNumber(username);
+            });
+          },
+        ),
+      ],
+    );
+  }
+
   Widget _txtUsername() {
     return Container(
       margin: EdgeInsets.only(left: 40, right: 40),
-      child: Material(
+      child: KeyboardActions(
+        disableScroll: true,
+        config: keyBoardConfig(context),
         child: TextField(
+          focusNode: _nodeUsername,
           onChanged: (value) {
             username = value.trim();
           },
           onSubmitted: (value) {
             setState(() {
-              errorUsername =  checkPhoneNumber(username);
+              errorUsername = checkPhoneNumber(username);
             });
           },
           cursorColor: welcome_color,
