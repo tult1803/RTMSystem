@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -10,10 +9,11 @@ import 'package:rtm_system/ultils/check_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/ultils/src/message_list.dart';
 import 'package:rtm_system/view/customer/home_customer_page.dart';
-import 'package:rtm_system/view/forgot_password/check_phone.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 import 'package:keyboard_actions/keyboard_actions_config.dart';
+
+import 'check_phone.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -89,6 +89,10 @@ class LoginPageState extends State<LoginPage> {
                 SizedBox(
                   height: 15,
                 ),
+                loginOTP(context),
+                SizedBox(
+                  height: 15,
+                ),
                 _checkLogin(),
                 SizedBox(
                   height: 15,
@@ -100,11 +104,23 @@ class LoginPageState extends State<LoginPage> {
         ));
   }
 
+  Widget loginOTP(BuildContext context){
+   return GestureDetector(
+     onTap: () {
+       Navigator.of(context).push(MaterialPageRoute(builder: (context) => CheckPhone(isLogin: true,)));
+     },
+     child: Container(
+         width: MediaQuery.of(context).size.width,
+         margin: EdgeInsets.only(left: 50, right: 40),
+         child: Text("Đăng nhập bằng sms", style: GoogleFonts.roboto(color: Colors.blueAccent, fontWeight: FontWeight.w400,),)),
+   ) ;
+  }
+
   Widget forgotPassword() {
     return GestureDetector(
       onTap: () {
         Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => ForgotPassword()));
+            .push(MaterialPageRoute(builder: (context) => CheckPhone(isLogin: false,)));
       },
       child: Text(
         "Quên mật khẩu",

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -8,7 +6,7 @@ import 'package:rtm_system/helpers/dialog.dart';
 import 'package:rtm_system/ultils/check_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/ultils/src/message_list.dart';
-import 'package:rtm_system/view/forgot_password/input_password.dart';
+import 'package:rtm_system/view/login/forgot_password/input_password.dart';
 import 'package:translator/translator.dart';
 
 import '../../check_phone.dart';
@@ -16,8 +14,9 @@ import 'otp_form.dart';
 
 class Body extends StatefulWidget {
   final String phoneNumber;
+  final bool isLogin;
 
-  Body({this.phoneNumber});
+  Body({this.phoneNumber, this.isLogin});
 
   @override
   _BodyState createState() => _BodyState();
@@ -37,8 +36,10 @@ class _BodyState extends State<Body> {
         verificationCompleted: (phoneAuthCredential) async {},
         verificationFailed: (error) async {
           /// Dung google translate error message
-         var err = await translator.translate("${error.code}", from: "en", to: 'vi');
-           showEasyLoadingError(context, "${err.text[0].toUpperCase()}${err.text.substring(1)}");
+          var err =
+              await translator.translate("${error.code}", from: "en", to: 'vi');
+          showEasyLoadingError(
+              context, "${err.text[0].toUpperCase()}${err.text.substring(1)}");
         },
         codeSent: (verificationId, forceResendingToken) async {
           print('verificationId: $verificationId');
@@ -50,12 +51,11 @@ class _BodyState extends State<Body> {
     EasyLoading.dismiss();
   }
 
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    if(widget.phoneNumber != null)doSendSMS();
+    if (widget.phoneNumber != null) doSendSMS();
   }
 
   @override
@@ -138,6 +138,7 @@ class _BodyState extends State<Body> {
       otp = "$pin1$pin2$pin3$pin4$pin5$pin6";
     });
   }
+
   Row buildTimer() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -168,7 +169,15 @@ class _BodyState extends State<Body> {
       if (authCredential.user != null) {
         EasyLoading.dismiss();
         authCredential.user.getIdToken().then((value) {
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => InputNewPassword(firebaseToken: value,)));
+          if (widget.isLogin) {
+            ///============================ Cho lam login ============================
+
+          } else {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => InputNewPassword(
+                      firebaseToken: value,
+                    )));
+          }
         });
       }
     } on FirebaseAuthException catch (e) {

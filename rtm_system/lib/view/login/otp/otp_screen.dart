@@ -7,7 +7,9 @@ import 'components/body.dart';
 
 class OtpScreen extends StatelessWidget {
   final String phoneNumber;
-   OtpScreen({this.phoneNumber});
+  final bool isLogin;
+
+  OtpScreen({this.phoneNumber, this.isLogin});
 
   @override
   Widget build(BuildContext context) {
