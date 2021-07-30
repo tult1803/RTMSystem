@@ -23,7 +23,7 @@ class OtpScreen extends StatelessWidget {
           data: ThemeData(
             textSelectionTheme: TextSelectionThemeData(cursorColor: welcome_color),
           ),
-          child: Body(phoneNumber: phoneNumber)),
+          child: Body(phoneNumber: phoneNumber, isLogin: isLogin,)),
     );
   }
 }

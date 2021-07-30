@@ -612,7 +612,6 @@ Future doForgotPassword(BuildContext context,String fbToken, String password,Str
 Future doLoginOTP(BuildContext context,String phone, String firebaseToken) async {
   DataLogin data;
   PostLogin getAPI = PostLogin();
-  showEasyLoading(context, "$MSG052");
   try {
     data = await getAPI.createLogin(phone,
         password: "", firebaseToken: firebaseToken);
@@ -637,6 +636,7 @@ Future doLoginOTP(BuildContext context,String phone, String firebaseToken) async
                 (route) => false);
         print('Status button: Done');
       }
+      EasyLoading.dismiss();
     }else showEasyLoadingError(context, '$MSG030');
   } catch (_) {
     showEasyLoadingError(context, '$MSG027');

@@ -5,8 +5,6 @@ import 'package:http/http.dart' as http;
 
 import '../model_login.dart';
 
-
-
 class PostLogin{
   static int status;
   createLogin(String username, {String password, String firebaseToken}) async {
@@ -25,7 +23,7 @@ class PostLogin{
   if (response.statusCode == 200) {
     // If the server did return a 201 CREATED response,
     // then parse the JSON.
-    status = 200;
+      status = 200;
     return DataLogin.fromJson(json.decode(response.body));
   } else if (response.statusCode == 400) {
     status = 400;

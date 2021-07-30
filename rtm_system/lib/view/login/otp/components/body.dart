@@ -173,17 +173,19 @@ class _BodyState extends State<Body> {
       showEasyLoading(context, "$MSG052");
       final authCredential = await _auth.signInWithCredential(phoneAuth);
       if (authCredential.user != null) {
-        EasyLoading.dismiss();
-        authCredential.user.getIdToken().then((value) {
-          if (widget.isLogin) {
+        if (widget.isLogin) {
+          authCredential.user.getIdToken().then((value) {
             doLoginOTP(context, phone, value);
-          } else {
+          });
+        } else {
+        authCredential.user.getIdToken().then((value) {
+          EasyLoading.dismiss();
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => InputNewPassword(
                       firebaseToken: value,
                     )));
-          }
         });
+        }
       }
     } on FirebaseAuthException catch (e) {
       showEasyLoadingError(context, '$MSG056');
