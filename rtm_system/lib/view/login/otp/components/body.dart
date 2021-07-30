@@ -3,10 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rtm_system/helpers/dialog.dart';
+import 'package:rtm_system/model/model_login.dart';
+import 'package:rtm_system/model/post/postAPI_login.dart';
+import 'package:rtm_system/presenter/check_login.dart';
 import 'package:rtm_system/ultils/check_data.dart';
+import 'package:rtm_system/ultils/get_api_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/ultils/src/message_list.dart';
+import 'package:rtm_system/view/customer/home_customer_page.dart';
 import 'package:rtm_system/view/login/forgot_password/input_password.dart';
+import 'package:rtm_system/view/manager/home_manager_page.dart';
 import 'package:translator/translator.dart';
 
 import '../../check_phone.dart';
@@ -107,7 +113,7 @@ class _BodyState extends State<Body> {
               PhoneAuthCredential phoneAuthCredential =
                   PhoneAuthProvider.credential(
                       verificationId: verificationId, smsCode: otp);
-              signInWithPhoneAuthCredential(phoneAuthCredential);
+              signInWithPhoneAuthCredential(phoneAuthCredential, phone: widget.phoneNumber);
             },
             child: Text(
               "Xác nhận",
@@ -162,7 +168,7 @@ class _BodyState extends State<Body> {
     );
   }
 
-  void signInWithPhoneAuthCredential(PhoneAuthCredential phoneAuth) async {
+  void signInWithPhoneAuthCredential(PhoneAuthCredential phoneAuth, {String phone}) async {
     try {
       showEasyLoading(context, "$MSG052");
       final authCredential = await _auth.signInWithCredential(phoneAuth);
@@ -170,8 +176,7 @@ class _BodyState extends State<Body> {
         EasyLoading.dismiss();
         authCredential.user.getIdToken().then((value) {
           if (widget.isLogin) {
-            ///============================ Cho lam login ============================
-
+            doLoginOTP(context, phone, value);
           } else {
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => InputNewPassword(
@@ -184,4 +189,5 @@ class _BodyState extends State<Body> {
       showEasyLoadingError(context, '$MSG056');
     }
   }
+
 }

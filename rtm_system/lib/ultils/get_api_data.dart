@@ -5,6 +5,7 @@ import 'package:rtm_system/model/delete/deleteAPI_deactivateAdvanceRequest.dart'
 import 'package:rtm_system/model/delete/deleteAPI_invoice.dart';
 import 'package:rtm_system/model/delete/deleteAPI_invoiceRequest.dart';
 import 'package:rtm_system/model/get/getAPI_check_account.dart';
+import 'package:rtm_system/model/model_login.dart';
 import 'package:rtm_system/model/post/postAPI_forget_password.dart';
 import 'package:rtm_system/model/get/getAPI_maintainCheck.dart';
 import 'package:rtm_system/model/model_invoice_request.dart';
@@ -15,6 +16,7 @@ import 'package:rtm_system/model/post/postAPI_createCustomer.dart';
 import 'package:rtm_system/model/post/postAPI_createInvoice.dart';
 import 'package:rtm_system/model/post/postAPI_createNotice.dart';
 import 'package:rtm_system/model/get/getAPI_customer_phone.dart';
+import 'package:rtm_system/model/post/postAPI_login.dart';
 import 'package:rtm_system/model/post/postAPI_validateCustomer.dart';
 import 'package:rtm_system/model/put/putAPI_UpdateProfile.dart';
 import 'package:rtm_system/model/put/putAPI_confirmAdvanceRequest.dart';
@@ -27,6 +29,7 @@ import 'package:rtm_system/model/put/putAPI_updateInvoice.dart';
 import 'package:rtm_system/model/put/putAPI_updatePassword.dart';
 import 'package:rtm_system/model/put/putAPI_updatePrice.dart';
 import 'package:rtm_system/model/put/putAPI_updateAccount.dart';
+import 'package:rtm_system/presenter/check_login.dart';
 import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/message_list.dart';
 import 'package:rtm_system/presenter/Manager/invoice/add_product_invoice.dart';
@@ -603,5 +606,39 @@ Future doForgotPassword(BuildContext context,String fbToken, String password,Str
     showEasyLoadingSuccess(context, "$MSG003", widget: LoginPage());
   }else{
     showEasyLoadingError(context, "$MSG025");
+  }
+}
+
+Future doLoginOTP(BuildContext context,String phone, String firebaseToken) async {
+  DataLogin data;
+  PostLogin getAPI = PostLogin();
+  showEasyLoading(context, "$MSG052");
+  try {
+    data = await getAPI.createLogin(phone,
+        password: "", firebaseToken: firebaseToken);
+    if (data != null) {
+      savedInfoLogin(data.roleId, data.accountId, data.gender,
+          data.accessToken, data.fullName, data.phone, data.birthday, "");
+      if (data.roleId == 3) {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+                builder: (context) => HomeCustomerPage(
+                  index: 0,
+                )),
+                (route) => false);
+      } else if (data.roleId == 2) {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+                builder: (context) => HomeAdminPage(
+                  index: 0,
+                )),
+                (route) => false);
+        print('Status button: Done');
+      }
+    }else showEasyLoadingError(context, '$MSG030');
+  } catch (_) {
+    showEasyLoadingError(context, '$MSG027');
   }
 }

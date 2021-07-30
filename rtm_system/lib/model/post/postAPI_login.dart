@@ -9,7 +9,7 @@ import '../model_login.dart';
 
 class PostLogin{
   static int status;
-  createLogin(String username, String password) async {
+  createLogin(String username, {String password, String firebaseToken}) async {
   final response = await http.post(
     Uri.http('$urlMain', '$urlLogin'),
     headers: <String, String>{
@@ -17,7 +17,8 @@ class PostLogin{
     },
     body: jsonEncode(<String, dynamic>{
       "username": username,
-      "password": password
+      "password": password,
+      "firebase_token" : firebaseToken,
     }),
   );
   print("Status postApi Login:${response.statusCode}");

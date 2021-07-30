@@ -131,8 +131,7 @@ class LoginPageState extends State<LoginPage> {
 
   Future loginApi() async {
     // Đỗ dữ liệu lấy từ api
-    data = await getAPI.createLogin(username, password);
-
+    data = await getAPI.createLogin(username, password: password, firebaseToken: "");
     status = PostLogin.status;
     setState(() {
       roleId = data.roleId;
