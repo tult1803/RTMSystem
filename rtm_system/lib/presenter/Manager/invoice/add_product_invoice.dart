@@ -83,6 +83,7 @@ class _AddProductPageState extends State<AddProductPage> {
   String _myProduct, _myStore;
   bool checkProduct = true;
   DateTime dateSale;
+  int type;
 
   Future _getProduct() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -104,6 +105,11 @@ class _AddProductPageState extends State<AddProductPage> {
             currentPrice = "${element["update_price"]}";
             priceSell = "${comparePrice(price, currentPrice)}";
           }
+        }
+        if(widget.productId == element["id"]){
+          setState(() {
+            type =element["type"];
+          });
         }
       });
       setState(() {
@@ -160,12 +166,12 @@ class _AddProductPageState extends State<AddProductPage> {
           ? nameNewCustomer = ""
           : nameNewCustomer = widget.fullName;
       this.widget.storeId == null ? _myStore = null : _myStore = widget.storeId;
-      this.widget.productId == null
-          ? _myProduct = null
-          : widget.productId == "SP-1000003"
-              // ignore: unnecessary_statements
-              ? {_myProduct = widget.productId, checkProduct = false}
-              : _myProduct = widget.productId;
+      if(widget.productId == null){
+        _myProduct = null;
+      }else{
+        type == 0? checkProduct = true: checkProduct =false;
+        _myProduct = widget.productId;
+      }
       this.widget.savePrice == null ? price = "0" : price = widget.savePrice;
       this.widget.dateToPay == null
           ? dateSale = DateTime.now()
@@ -565,12 +571,6 @@ class _AddProductPageState extends State<AddProductPage> {
                       setState(() {
                         _myProduct = newValue;
                         _getCurrentPrice(newValue);
-                        if (_myProduct == "SP-1000003") {
-                          checkProduct = false;
-                        } else {
-                          degree = 0;
-                          checkProduct = true;
-                        }
                         checkClick = true;
                       });
                     }
@@ -584,6 +584,16 @@ class _AddProductPageState extends State<AddProductPage> {
                             if (widget.productName == null) {
                               setState(() {
                                 productName = item.name;
+                              });
+                            }
+                            if(item.type == 0){
+                              setState(() {
+                                checkProduct = false;
+                              });
+                            }else{
+                              setState(() {
+                                degree = 0;
+                                checkProduct = true;
                               });
                             }
                           },
