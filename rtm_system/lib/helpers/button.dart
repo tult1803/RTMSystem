@@ -445,9 +445,7 @@ Widget btnProcessAdvanceBill(BuildContext context,
           color: Color(0xFF0BB791),
           onPressed: () {
             doProcessAdvanceBill(context, idAdvanceBill, 8,
-                widgetToNavigator: HomeAdminPage(
-                  index: 2,
-                ));
+                widgetToNavigator: widgetToNavigator);
           },
           child: Text(
             "Xác nhận",

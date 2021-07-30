@@ -199,7 +199,7 @@ Future<void> doCreateCustomer(
         }
       }
       showEasyLoadingSuccess(context, MSG003,
-          widget: isCreate == null ? HomeAdminPage(index: 4) : AllCustomer());
+          widget: isCreate == false ? HomeAdminPage(index: 4) : AllCustomer());
     }
   } else
     showEasyLoadingError(
@@ -410,6 +410,7 @@ Future doProcessAdvanceBill(
       id: invoiceId,
       status: statusProcess,
       reason: reason);
+
   status == 200
       ? showEasyLoadingSuccess(
           context,

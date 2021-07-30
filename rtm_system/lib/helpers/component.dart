@@ -864,7 +864,7 @@ Widget componentContainerDetailAdvanceRequest(BuildContext context,
         // không cần bắt null url.
         if (!isCustomer)
           Container(
-            child: Image.network(imageUrl),
+            child: imageUrl == null ? null : Image.network(imageUrl),
           ),
         //show btn for manager and customer
         showBtnInAdvanceRequest(context, statusId, activeStatus, isCustomer, id,
@@ -907,10 +907,8 @@ Widget showBtnInAdvanceRequest(context, status, activeStatus, bool isCustomer,
       return btnProcessAdvanceBill(context,
           isCustomer: false,
           idAdvanceBill: id,
-          widgetToNavigator: HomeAdminPage(
-            index: 2,
-            indexInsidePage: 1,
-          ));
+          widgetToNavigator: widgetToNavigator
+      );
     } else {
       return Container();
     }

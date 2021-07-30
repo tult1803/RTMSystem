@@ -12,7 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: camel_case_types, must_be_immutable
 class showAdvancceBillManager extends StatefulWidget {
-  int statusId;
+  final int statusId;
   String fromDate, toDate, searchItem;
   final Widget widgetToNavigator;
 
