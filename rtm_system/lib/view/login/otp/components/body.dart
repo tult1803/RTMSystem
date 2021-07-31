@@ -3,18 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rtm_system/helpers/dialog.dart';
-import 'package:rtm_system/model/model_login.dart';
-import 'package:rtm_system/model/post/postAPI_login.dart';
-import 'package:rtm_system/presenter/check_login.dart';
 import 'package:rtm_system/ultils/check_data.dart';
 import 'package:rtm_system/ultils/get_api_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/ultils/src/message_list.dart';
-import 'package:rtm_system/view/customer/home_customer_page.dart';
 import 'package:rtm_system/view/login/forgot_password/input_password.dart';
-import 'package:rtm_system/view/manager/home_manager_page.dart';
 import 'package:translator/translator.dart';
-
 import '../../check_phone.dart';
 import 'otp_form.dart';
 
