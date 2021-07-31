@@ -6,8 +6,7 @@ import 'package:http/http.dart' as http;
 //Type = 0 là update Password, != 0 là updata dữ liệu khác
 //CMND mà trống là update manager, ngược lại là update Customer
 class PutUpdatePrice{
-
-  updatePrice(String token, String account_id, String product_id, double price) async {
+  updatePrice(String token, String accountId, String productId, double price) async {
     final response = await http.put(
       Uri.http('$urlMain', '$urlUpdatePrice'),
       headers: <String, String>{
@@ -15,8 +14,8 @@ class PutUpdatePrice{
         'Authorization': 'Bearer $token',
       },
       body: jsonEncode(<String, dynamic>{
-        "account_id": account_id,
-        "product_id": product_id,
+        "account_id": accountId,
+        "product_id": productId,
         "price": price,
       }),
     );

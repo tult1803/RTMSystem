@@ -945,7 +945,7 @@ Widget widgetCreateAdvance(context, List item, String storeId,
             margin: EdgeInsets.fromLTRB(24, 12, 24, 12),
             child: Column(
               children: [
-                txtPersonInvoice(context, 'Người tạo', '${name}', '${phone}'),
+                txtPersonInvoice(context, 'Người tạo', '$name', '$phone'),
                 SizedBox(
                   height: 10,
                 ),

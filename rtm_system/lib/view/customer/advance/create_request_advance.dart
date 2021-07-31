@@ -291,7 +291,7 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
                 margin: EdgeInsets.only(top: 15, left: 5),
                 width: size.width * 0.2,
                 child: AutoSizeText(
-                  "${tittle}",
+                  "$tittle",
                   style: TextStyle(fontWeight: FontWeight.w500),
                 )),
             //Hiển thị Icon góc phải
@@ -421,7 +421,7 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
               margin: EdgeInsets.only(top: 15, left: 5),
               width: size.width * 0.2,
               child: AutoSizeText(
-                "${tittle}",
+                "$tittle",
                 style: TextStyle(fontWeight: FontWeight.w500),
               )),
 

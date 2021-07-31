@@ -4,9 +4,9 @@ import 'package:http/http.dart' as http;
 
 class GetAdvanceHistory{
   static int statusInvoice;
-  getAdvanceHistory(String token, String account_id,int pageNum, int pageNo) async {
+  getAdvanceHistory(String token, String accountId,int pageNum, int pageNo) async {
     final response = await http.get(
-      Uri.http('$urlMain', '$urlAdvanceHistory/$account_id', {  "pageNum" : "${pageNum}" ,"pageNo" : "${pageNo}" }),
+      Uri.http('$urlMain', '$urlAdvanceHistory/$accountId', {  "pageNum" : "$pageNum" ,"pageNo" : "$pageNo" }),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Accept': 'application/json',

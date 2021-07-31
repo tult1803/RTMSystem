@@ -4,9 +4,9 @@ import 'package:rtm_system/helpers/component.dart';
 import 'package:rtm_system/view/form_change_password.dart';
 
 class UpdatePasswordPage extends StatefulWidget {
-  UpdatePasswordPage({this.password, this.account_id, this.isCustomer});
+  UpdatePasswordPage({this.password, this.accountId, this.isCustomer});
   final String password;
-  final String account_id;
+  final String accountId;
   final bool isCustomer;
   @override
   _UpdateProfilePageState createState() => _UpdateProfilePageState();
@@ -31,7 +31,7 @@ class _UpdateProfilePageState extends State<UpdatePasswordPage> {
       body: SingleChildScrollView(
         child: new formUpdatePasswordPage(
           currentPassword: widget.password,
-          account_id: widget.account_id,
+          accountId: widget.accountId,
           isCustomer: this.widget.isCustomer,
         ),
       ),

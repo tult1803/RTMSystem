@@ -6,11 +6,11 @@ import 'package:rtm_system/ultils/get_api_data.dart';
 // ignore: camel_case_types
 class formUpdatePasswordPage extends StatefulWidget {
   final String currentPassword;
-  final String account_id;
+  final String accountId;
   final bool isCustomer;
 
   formUpdatePasswordPage(
-      {this.currentPassword, this.account_id, this.isCustomer});
+      {this.currentPassword, this.accountId, this.isCustomer});
 
   @override
   _formUpdatePasswordPageState createState() => _formUpdatePasswordPageState();
@@ -227,7 +227,7 @@ class _formUpdatePasswordPageState extends State<formUpdatePasswordPage> {
                 //chỉ cần pw và account_id để change pw, những field khác truyền để đủ field theo function
                 doUpdatePassword(context,
                     isCustomer: widget.isCustomer,
-                    accountId: "${widget.account_id}",
+                    accountId: "${widget.accountId}",
                     password: newPassword);
               }
             });

@@ -1,17 +1,12 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:path/path.dart';
 import 'package:rtm_system/model/delete/deleteAPI_deactivateNotice.dart';
 import 'package:rtm_system/model/delete/deleteAPI_deactivateCustomer.dart';
 import 'package:rtm_system/ultils/check_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/ultils/src/message_list.dart';
-
-import 'component.dart';
 import '../ultils/get_api_data.dart';
 
 //show khi nhấn các nút "Hủy" hoặc "Tạo"

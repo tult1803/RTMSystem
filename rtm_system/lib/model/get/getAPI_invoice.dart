@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 class GetInvoice{
   getInvoice(String token, String customerId, String productId, int statusId,int pageNum, int pageNo,String from, String to, {String searchTerm}) async {
     final response = await http.get(
-      Uri.http('$urlMain', '$urlInvoice', { "customer_id" : "$customerId", "product_id": "$productId","status_id" : "$statusId","pageNum" : "${pageNum}" ,"pageNo" : "${pageNo}", "from" : "$from", "to" : "$to", "customer_phone": searchTerm}),
+      Uri.http('$urlMain', '$urlInvoice', { "customer_id" : "$customerId", "product_id": "$productId","status_id" : "$statusId","pageNum" : "$pageNum" ,"pageNo" : "$pageNo", "from" : "$from", "to" : "$to", "customer_phone": searchTerm}),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Accept': 'application/json',
