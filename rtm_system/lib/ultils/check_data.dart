@@ -117,8 +117,8 @@ checkPassword(String password, int type, {String passwordCheck}) {
   } else
     switch (type) {
       case 0:
-        if (passwordCheck != password) {
-          return showMessage("Mật khẩu", MSG020);
+        if (!checkFormatPassword.hasMatch(password)) {
+          return showMessage("", MSG016);
         } else
           return null;
         break;

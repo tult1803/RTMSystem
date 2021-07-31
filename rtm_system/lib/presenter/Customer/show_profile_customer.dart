@@ -148,7 +148,6 @@ class _showProfileState extends State<showProfile> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => UpdatePasswordPage(
-                    password: password,
                     accountId: infomationCustomer.accountId,
                     isCustomer: true,
                   ),

@@ -96,8 +96,9 @@ class _AddProductPageState extends State<AddProductPage> {
     GetProduct getProduct = GetProduct();
     dataListProduct.clear();
     if (token.isNotEmpty) {
-      dataList = await getProduct.getProduct(token, "",limit: null, type: widget.level == 2 ? 1: 2);
-      dataList.forEach((element) async{
+      dataList = await getProduct.getProduct(token, "",
+          limit: null, type: widget.level == 2 ? 1 : 2);
+      dataList.forEach((element) async {
         Map<dynamic, dynamic> data = element;
         dataListProduct.add(DataProduct.fromJson(data));
         if (widget.dateToPay != null) {
@@ -106,9 +107,9 @@ class _AddProductPageState extends State<AddProductPage> {
             priceSell = "${comparePrice(price, currentPrice)}";
           }
         }
-        if(widget.productId == element["id"]){
+        if (widget.productId == element["id"]) {
           setState(() {
-            type =element["type"];
+            type = element["type"];
           });
         }
       });
@@ -119,6 +120,7 @@ class _AddProductPageState extends State<AddProductPage> {
       return dataListProduct;
     }
   }
+
   Future _getStore() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     GetAPIAllStore getAPIAllStore = GetAPIAllStore();
@@ -166,16 +168,18 @@ class _AddProductPageState extends State<AddProductPage> {
           ? nameNewCustomer = ""
           : nameNewCustomer = widget.fullName;
       this.widget.storeId == null ? _myStore = null : _myStore = widget.storeId;
-      if(widget.productId == null){
+      if (widget.productId == null) {
         _myProduct = null;
-      }else{
-        type == 0? checkProduct = true: checkProduct =false;
+      } else {
+        type == 0 ? checkProduct = true : checkProduct = false;
         _myProduct = widget.productId;
       }
       this.widget.savePrice == null ? price = "0" : price = widget.savePrice;
       this.widget.dateToPay == null
           ? dateSale = DateTime.now()
-          : dateSale = DateTime.parse(widget.dateToPay);
+          /// Nếu muốn Tạo hóa đơn lấy theo ngày trên yêu cầu thì mở comment dòng này ///
+          // : dateSale = DateTime.parse(widget.dateToPay);
+          : dateSale = DateTime.now();
       this.widget.productName == null
           ? productName = ""
           : productName = widget.productName;
@@ -586,11 +590,11 @@ class _AddProductPageState extends State<AddProductPage> {
                                 productName = item.name;
                               });
                             }
-                            if(item.type == 0){
+                            if (item.type == 0) {
                               setState(() {
                                 checkProduct = false;
                               });
-                            }else{
+                            } else {
                               setState(() {
                                 degree = 0;
                                 checkProduct = true;
@@ -802,21 +806,21 @@ class _AddProductPageState extends State<AddProductPage> {
           ),
           GestureDetector(
             onTap: () {
-              if (widget.dateToPay == null) {
-                DatePicker.showDatePicker(
-                  context,
-                  showTitleActions: true,
-                  onConfirm: (date) {
-                    setState(() {
-                      dateSale = date;
-                    });
-                  },
-                  maxTime: DateTime(DateTime.now().year + 100, 12, 31),
-                  minTime: DateTime(DateTime.now().year, DateTime.now().month,
-                      DateTime.now().day),
-                  locale: LocaleType.vi,
-                );
-              }
+              ///Nếu muốn cho customer chọn ngày thì mở comment dòng này
+              // if (widget.dateToPay == null) {
+              //   DatePicker.showDatePicker(
+              //     context,
+              //     showTitleActions: true,
+              //     onConfirm: (date) {
+              //       setState(() {
+              //         dateSale = date;
+              //       });
+              //     },
+              //     minTime: DateTime.now(),
+              //     maxTime: DateTime.now(),
+              //     locale: LocaleType.vi,
+              //   );
+              // }
             },
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,

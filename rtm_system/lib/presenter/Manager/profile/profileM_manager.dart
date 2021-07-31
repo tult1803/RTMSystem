@@ -7,6 +7,7 @@ import 'package:rtm_system/view/manager/profile/update_profile.dart';
 import 'package:rtm_system/view/update_password.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+// ignore: camel_case_types
 class profilePage extends StatefulWidget {
   const profilePage({Key key}) : super(key: key);
 
@@ -14,14 +15,15 @@ class profilePage extends StatefulWidget {
   _profilePageState createState() => _profilePageState();
 }
 
+// ignore: camel_case_types
 class _profilePageState extends State<profilePage> {
   String fullname = " ";
-  String password;
   String accountId;
+  int gender;
   Future _getFullName() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-       password = prefs.get("password");
+      gender = prefs.getInt("gender");
        accountId = "${prefs.get("accountId")}";
       if (prefs.getString("fullname") != null) {
         fullname = prefs.getString("fullname");
@@ -47,7 +49,7 @@ class _profilePageState extends State<profilePage> {
           headerProfile(),
           buttonProfile(context, 15, 15, 20, 0, "Thông tin các cửa hàng", ContactPage()),
           buttonProfile(context,15, 15, 20, 0, "Quản lý khách hàng", AllCustomer()),
-          buttonProfile(context,15, 15, 20, 0, "Thay đổi mật khẩu", UpdatePasswordPage(accountId: accountId, password: password, isCustomer: false,)),
+          buttonProfile(context,15, 15, 20, 0, "Thay đổi mật khẩu", UpdatePasswordPage(accountId: accountId, isCustomer: false,)),
           btnLogout(context),
         ],
       ),
@@ -75,7 +77,7 @@ class _profilePageState extends State<profilePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 txtFullNameProfile("$fullname"),
-                txtCanClick(context, updateProfile(fullname: fullname,accountId: accountId,password: password, ),"Cập nhật thông tin"),
+                txtCanClick(context, updateProfile(fullname: fullname,accountId: accountId,gender: gender, ),"Cập nhật thông tin"),
               ],
             )),
           ],

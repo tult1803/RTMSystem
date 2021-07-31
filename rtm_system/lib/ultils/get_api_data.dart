@@ -72,7 +72,7 @@ Future<void> getNotice(BuildContext context, String mainTittle, String content,
     showStatusAlertDialog(context, showMessage(MSG024, MSG027), null, false);
 }
 
-/// Hàm này chờ xử lý
+// ignore: non_constant_identifier_names
 Future post_put_ApiProfile(
     String phone,
     String password,
@@ -102,14 +102,8 @@ Future post_put_ApiProfile(
       PutUpdateProfile _putUpdate = PutUpdateProfile();
       status = await _putUpdate.updateProfile(
           prefs.get("access_token"),
-          phone,
-          typeOfUpdate,
-          accountId,
-          password,
           fullname,
           gender,
-          cmnd,
-          address,
           birthday);
     }
   } else {
@@ -191,15 +185,11 @@ Future<void> doCreateCustomer(
             index: 3,
           ));
     } else {
-      if (isCreate == null) {
-        if (fullname.trim().isNotEmpty) {
+      if (isCreate == false) {
           prefs.setString("fullname", fullname);
           prefs.setString("phone", phone);
           prefs.setInt("gender", gender);
           prefs.setString("birthday", birthday);
-        } else {
-          prefs.setString("password", password);
-        }
       }
       showEasyLoadingSuccess(context, MSG003,
           widget: isCreate == false ? HomeAdminPage(index: 4) : AllCustomer());
@@ -617,7 +607,7 @@ Future doLoginOTP(BuildContext context,String phone, String firebaseToken) async
         password: "", firebaseToken: firebaseToken);
     if (data != null) {
       savedInfoLogin(data.roleId, data.accountId, data.gender,
-          data.accessToken, data.fullName, data.phone, data.birthday, "");
+          data.accessToken, data.fullName, data.phone, data.birthday);
       if (data.roleId == 3) {
         Navigator.pushAndRemoveUntil(
             context,
