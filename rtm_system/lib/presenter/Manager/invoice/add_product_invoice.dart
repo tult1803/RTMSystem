@@ -817,8 +817,9 @@ class _AddProductPageState extends State<AddProductPage> {
               //       });
               //     },
               //     minTime: DateTime.now(),
-              //     maxTime: DateTime.now(),
+              //     maxTime: DateTime.now().subtract(Duration(days: -7)),
               //     locale: LocaleType.vi,
+              //
               //   );
               // }
             },
