@@ -3,10 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rtm_system/helpers/dialog.dart';
+import 'package:rtm_system/model/model_login.dart';
+import 'package:rtm_system/model/post/postAPI_login.dart';
+import 'package:rtm_system/presenter/check_login.dart';
 import 'package:rtm_system/ultils/check_data.dart';
+import 'package:rtm_system/ultils/get_api_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/ultils/src/message_list.dart';
-import 'package:rtm_system/view/forgot_password/input_password.dart';
+import 'package:rtm_system/view/customer/home_customer_page.dart';
+import 'package:rtm_system/view/login/forgot_password/input_password.dart';
+import 'package:rtm_system/view/manager/home_manager_page.dart';
 import 'package:translator/translator.dart';
 
 import '../../check_phone.dart';
@@ -14,8 +20,9 @@ import 'otp_form.dart';
 
 class Body extends StatefulWidget {
   final String phoneNumber;
+  final bool isLogin;
 
-  Body({this.phoneNumber});
+  Body({this.phoneNumber, this.isLogin});
 
   @override
   _BodyState createState() => _BodyState();
@@ -35,8 +42,10 @@ class _BodyState extends State<Body> {
         verificationCompleted: (phoneAuthCredential) async {},
         verificationFailed: (error) async {
           /// Dung google translate error message
-         var err = await translator.translate("${error.code}", from: "en", to: 'vi');
-           showEasyLoadingError(context, "${err.text[0].toUpperCase()}${err.text.substring(1)}");
+          var err =
+              await translator.translate("${error.code}", from: "en", to: 'vi');
+          showEasyLoadingError(
+              context, "${err.text[0].toUpperCase()}${err.text.substring(1)}");
         },
         codeSent: (verificationId, forceResendingToken) async {
           print('verificationId: $verificationId');
@@ -48,11 +57,10 @@ class _BodyState extends State<Body> {
     EasyLoading.dismiss();
   }
 
-
   @override
   void initState() {
     super.initState();
-    if(widget.phoneNumber != null)doSendSMS();
+    if (widget.phoneNumber != null) doSendSMS();
   }
 
   @override
@@ -104,7 +112,7 @@ class _BodyState extends State<Body> {
               PhoneAuthCredential phoneAuthCredential =
                   PhoneAuthProvider.credential(
                       verificationId: verificationId, smsCode: otp);
-              signInWithPhoneAuthCredential(phoneAuthCredential);
+              signInWithPhoneAuthCredential(phoneAuthCredential, phone: widget.phoneNumber);
             },
             child: Text(
               "Xác nhận",
@@ -135,6 +143,7 @@ class _BodyState extends State<Body> {
       otp = "$pin1$pin2$pin3$pin4$pin5$pin6";
     });
   }
+
   Row buildTimer() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -158,18 +167,28 @@ class _BodyState extends State<Body> {
     );
   }
 
-  void signInWithPhoneAuthCredential(PhoneAuthCredential phoneAuth) async {
+  void signInWithPhoneAuthCredential(PhoneAuthCredential phoneAuth, {String phone}) async {
     try {
       showEasyLoading(context, "$MSG052");
       final authCredential = await _auth.signInWithCredential(phoneAuth);
       if (authCredential.user != null) {
-        EasyLoading.dismiss();
+        if (widget.isLogin) {
+          authCredential.user.getIdToken().then((value) {
+            doLoginOTP(context, phone, value);
+          });
+        } else {
         authCredential.user.getIdToken().then((value) {
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => InputNewPassword(firebaseToken: value,)));
+          EasyLoading.dismiss();
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => InputNewPassword(
+                      firebaseToken: value,
+                    )));
         });
+        }
       }
     } on FirebaseAuthException catch (e) {
       showEasyLoadingError(context, '$MSG056');
     }
   }
+
 }

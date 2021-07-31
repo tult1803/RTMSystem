@@ -87,7 +87,7 @@ class _DetailAdvancePageState extends State<DetailAdvancePage> {
                 description: advanceDetail.description,
                 reason: advanceDetail.reason,
                 imageUrl: imageUrl,
-                widgetToNavigator: this.widget.widgetToNavigator,
+                widgetToNavigator: widget.widgetToNavigator,
               ),
             ),
           );

@@ -7,7 +7,9 @@ import 'components/body.dart';
 
 class OtpScreen extends StatelessWidget {
   final String phoneNumber;
-   OtpScreen({this.phoneNumber});
+  final bool isLogin;
+
+  OtpScreen({this.phoneNumber, this.isLogin});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,7 @@ class OtpScreen extends StatelessWidget {
           data: ThemeData(
             textSelectionTheme: TextSelectionThemeData(cursorColor: welcome_color),
           ),
-          child: Body(phoneNumber: phoneNumber)),
+          child: Body(phoneNumber: phoneNumber, isLogin: isLogin,)),
     );
   }
 }

@@ -540,11 +540,15 @@ Widget componentContainerDetailCustomer(BuildContext context,
                       child: Text(
                         imageCMNDF == null
                             ? "Chờ cập nhật"
-                            : needConfirm ? "Chờ xác nhận" : "Xem ảnh",
+                            : needConfirm
+                                ? "Chờ xác nhận"
+                                : "Xem ảnh",
                         style: TextStyle(
                             color: imageCMNDF == null
                                 ? Colors.redAccent
-                                : needConfirm ? Colors.orange :Colors.blueAccent),
+                                : needConfirm
+                                    ? Colors.orange
+                                    : Colors.blueAccent),
                       ))),
             ),
           ],
@@ -566,7 +570,7 @@ Widget componentContainerDetailCustomer(BuildContext context,
         SizedBox(
           height: 10,
         ),
-        txtItemDetail(context, "Tổng nợ", "$advance"),
+        txtItemDetail(context, "Tổng nợ", "${getFormatPrice("$advance")}đ"),
         SizedBox(
           height: 10,
         ),
@@ -620,6 +624,7 @@ Widget miniContainer(
     double fontSize,
     FontWeight fontWeightText,
     bool doPopNavigate,
+    Alignment alignmentText,
     Widget widget}) {
   return GestureDetector(
       onTap: () => widget == null
@@ -651,22 +656,21 @@ Widget miniContainer(
           ],
         ),
         child: Container(
+          alignment: alignmentText == null ? Alignment.center : alignmentText,
           height: height,
           width: width,
-          child: Center(
-            child: Padding(
-              padding: EdgeInsets.only(
-                  left: paddingLeftOfText == null ? 0 : paddingLeftOfText,
-                  right: paddingRightOfText == null ? 0 : paddingRightOfText,
-                  bottom: paddingBottomOfText == null ? 0 : paddingBottomOfText,
-                  top: paddingTopOfText == null ? 0 : paddingTopOfText),
-              child: AutoSizeText(
-                tittle,
-                style: GoogleFonts.roboto(
-                    color: colorText,
-                    fontWeight: fontWeightText,
-                    fontSize: fontSize == null ? null : fontSize),
-              ),
+          child: Padding(
+            padding: EdgeInsets.only(
+                left: paddingLeftOfText == null ? 0 : paddingLeftOfText,
+                right: paddingRightOfText == null ? 0 : paddingRightOfText,
+                bottom: paddingBottomOfText == null ? 0 : paddingBottomOfText,
+                top: paddingTopOfText == null ? 0 : paddingTopOfText),
+            child: AutoSizeText(
+              tittle,
+              style: GoogleFonts.roboto(
+                  color: colorText,
+                  fontWeight: fontWeightText,
+                  fontSize: fontSize == null ? null : fontSize),
             ),
           ),
         ),
@@ -837,9 +841,9 @@ Widget componentContainerDetailAdvanceRequest(BuildContext context,
         SizedBox(
           height: 10,
         ),
-        if(activeDate != null)
-        txtItemDetail(context, "Ngày nhận tiền",
-            "${getDateTime(activeDate, dateFormat: "dd/MM/yyyy")}"),
+        if (activeDate != null)
+          txtItemDetail(context, "Ngày nhận tiền",
+              "${getDateTime(activeDate, dateFormat: "dd/MM/yyyy")}"),
         SizedBox(
           height: 10,
         ),
@@ -864,7 +868,7 @@ Widget componentContainerDetailAdvanceRequest(BuildContext context,
         // không cần bắt null url.
         if (!isCustomer)
           Container(
-            child: Image.network(imageUrl),
+            child: imageUrl == null ? null : Image.network(imageUrl),
           ),
         //show btn for manager and customer
         showBtnInAdvanceRequest(context, statusId, activeStatus, isCustomer, id,
@@ -907,10 +911,7 @@ Widget showBtnInAdvanceRequest(context, status, activeStatus, bool isCustomer,
       return btnProcessAdvanceBill(context,
           isCustomer: false,
           idAdvanceBill: id,
-          widgetToNavigator: HomeAdminPage(
-            index: 2,
-            indexInsidePage: 1,
-          ));
+          widgetToNavigator: widgetToNavigator);
     } else {
       return Container();
     }
@@ -968,8 +969,8 @@ Widget widgetCreateAdvance(context, List item, String storeId,
                   child: RaisedButton(
                     color: Color(0xFF0BB791),
                     onPressed: () {
-                      createRequestAdvance(context, 'TK-111', item[0], reason,
-                          item[1], storeId);
+                      createRequestAdvance(
+                          context, 'TK-111', item[0], reason, item[1], storeId);
                     },
                     child: AutoSizeText(
                       'Xác nhận',

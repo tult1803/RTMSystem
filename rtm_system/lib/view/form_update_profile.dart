@@ -55,7 +55,6 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
   bool checkClick;
   String messageCancel = '', confirmPassword;
   int indexOfBottomBar = 0;
-
   @override
   void initState() {
     super.initState();
@@ -173,6 +172,7 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
                     ];
                   });
                 },
+                currentTime: widget.birthday,
                 maxTime: DateTime(DateTime.now().year, 12, 31),
                 minTime: DateTime(DateTime.now().year - 111),
                 locale: LocaleType.vi,

@@ -18,7 +18,6 @@ class PutProcessAdvanceBill{
         "reason": "$reason",
       }),
     );
-    print('$status');
     print('putAPI ProcessAdvanceBill: ${response.statusCode}');
     return response.statusCode;
   }

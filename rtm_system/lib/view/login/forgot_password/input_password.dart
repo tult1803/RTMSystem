@@ -4,7 +4,7 @@ import 'package:rtm_system/helpers/component.dart';
 import 'package:rtm_system/ultils/check_data.dart';
 import 'package:rtm_system/ultils/get_api_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
-import 'package:rtm_system/view/login_page.dart';
+import 'package:rtm_system/view/login/login_page.dart';
 
 class InputNewPassword extends StatefulWidget {
   final String firebaseToken;

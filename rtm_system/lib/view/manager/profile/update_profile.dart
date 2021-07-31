@@ -18,6 +18,7 @@ class updateProfile extends StatefulWidget {
 
 enum GenderCharacter { women, men }
 
+// ignore: camel_case_types
 class _updateProfileState extends State<updateProfile> {
   DateTime birthday = DateTime.now();
   String date;

@@ -7,17 +7,20 @@ import 'package:rtm_system/helpers/component.dart';
 import 'package:rtm_system/ultils/check_data.dart';
 import 'package:rtm_system/ultils/get_api_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
-
 import 'otp/otp_screen.dart';
 
-class ForgotPassword extends StatefulWidget {
+class CheckPhone extends StatefulWidget {
+  final bool isLogin;
+
+  const CheckPhone({this.isLogin});
+
   @override
-  _ForgotPasswordState createState() => _ForgotPasswordState();
+  _CheckPhoneState createState() => _CheckPhoneState();
 }
 
 String pin1, pin2, pin3, pin4, pin5, pin6;
 
-class _ForgotPasswordState extends State<ForgotPassword> {
+class _CheckPhoneState extends State<CheckPhone> {
   String phone, errorPhone;
   final FocusNode _nodePhone = FocusNode();
 
@@ -46,7 +49,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       appBar: AppBar(
         leading: leadingAppbar(context, colorIcon: Colors.white),
         centerTitle: true,
-        title: titleAppBar("Quên mật khẩu"),
+        title: titleAppBar(widget.isLogin ? "Đăng nhập" : "Quên mật khẩu"),
       ),
       body: Center(
         child: Container(
@@ -96,6 +99,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => OtpScreen(
                                       phoneNumber: phone,
+                                      isLogin: widget.isLogin,
                                     )));
                         }
                       },
