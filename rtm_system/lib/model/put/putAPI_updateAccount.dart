@@ -7,14 +7,8 @@ import 'package:http/http.dart' as http;
 class PutUpdateProfile {
   updateProfile(
       String token,
-      String phone,
-      int type,
-      String accountId,
-      String password,
       String fullName,
       int gender,
-      String cmnd,
-      String address,
       String birthday) async {
     final response = await http.put(
       Uri.http('$urlMain', '$urlUpdateAccount'),
@@ -23,20 +17,13 @@ class PutUpdateProfile {
         'Authorization': 'Bearer $token',
       },
       body: jsonEncode(<String, dynamic>{
-        "type": type,
-        "account_id": accountId,
-        "password": password,
         "fullname": fullName,
         "gender": gender,
         "birthday": birthday,
-        "phone": phone,
-        "cmnd": "$cmnd",
-        "vip": false,
-        "address": "$address",
       }),
     );
 
-    print("Status putAPI Update Profile:${response.statusCode}");
+    print("Status putAPI Update Account:${response.statusCode}");
     return response.statusCode;
   }
 }

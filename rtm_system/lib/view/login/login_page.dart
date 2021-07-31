@@ -153,7 +153,7 @@ class LoginPageState extends State<LoginPage> {
     }
     if (roleId == 3 && status == 200) {
       savedInfoLogin(roleId, accountId, gender, accessToken, fullName, phone,
-          birthday, password);
+          birthday);
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
@@ -165,7 +165,7 @@ class LoginPageState extends State<LoginPage> {
       _buttonState = ButtonState.normal;
     } else if (roleId == 2 && status == 200) {
       savedInfoLogin(roleId, accountId, gender, accessToken, fullName, phone,
-          birthday, password);
+          birthday);
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
