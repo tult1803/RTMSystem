@@ -8,6 +8,7 @@ import 'package:rtm_system/helpers/component.dart';
 import 'package:rtm_system/model/model_advance_return_detail.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/customer/advance/detail_invoice_in_advance.dart';
+import 'package:rtm_system/view/detail_advance_request.dart';
 import 'package:rtm_system/view/manager/form_detail_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -79,6 +80,15 @@ class _DetailAdvanceReturnState extends State<DetailAdvanceReturn> {
               dateTime: element.doneDate,
               isPaid: true,
               returnCash: 0,
+              widget: FormForDetailPage(
+                tittle: "Chi tiết ứng tiền",
+                bodyPage: DetailAdvancePage(
+                  isCustomer: true,
+                  id: element.id,
+                  status: element.statusId,
+                  isRequest: false,
+                ),
+              ),
             ));
           });
           return SingleChildScrollView(
@@ -145,14 +155,14 @@ class _DetailAdvanceReturnState extends State<DetailAdvanceReturn> {
   }
 
   Widget circularProgress(context) {
-  var size = MediaQuery.of(context).size;
-  return Container(
-    height: size.height,
-    child: Center(
-      child: CircularProgressIndicator(
-        color: Colors.white,
+    var size = MediaQuery.of(context).size;
+    return Container(
+      height: size.height,
+      child: Center(
+        child: CircularProgressIndicator(
+          color: Colors.white,
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 }

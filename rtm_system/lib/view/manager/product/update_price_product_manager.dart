@@ -44,7 +44,6 @@ class _updatePriceProductState extends State<updatePriceProduct> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     _nodePrice.dispose();
   }

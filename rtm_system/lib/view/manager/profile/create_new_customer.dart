@@ -11,8 +11,6 @@ class CreateCustomer extends StatefulWidget {
 }
 
 class _CreateCustomerState extends State<CreateCustomer> {
-  @override
-  void initState() {}
 
   @override
   Widget build(BuildContext context) {

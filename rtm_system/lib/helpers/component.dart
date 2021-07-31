@@ -10,7 +10,6 @@ import 'package:rtm_system/model/model_invoice_request.dart';
 import 'package:rtm_system/ultils/get_api_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/customer/Profile/show_image_cmnd.dart';
-import 'package:rtm_system/view/manager/home_manager_page.dart';
 import 'package:rtm_system/view/manager/product/update_price_product_manager.dart';
 import '../ultils/get_data.dart';
 
@@ -946,7 +945,7 @@ Widget widgetCreateAdvance(context, List item, String storeId,
             margin: EdgeInsets.fromLTRB(24, 12, 24, 12),
             child: Column(
               children: [
-                txtPersonInvoice(context, 'Người tạo', '${name}', '${phone}'),
+                txtPersonInvoice(context, 'Người tạo', '$name', '$phone'),
                 SizedBox(
                   height: 10,
                 ),

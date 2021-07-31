@@ -340,7 +340,7 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
               margin: EdgeInsets.only(top: 15, left: 5),
               width: 100,
               child: AutoSizeText(
-                "${tittle}",
+                "$tittle",
                 style: TextStyle(fontWeight: FontWeight.w500),
               )),
 
@@ -425,7 +425,7 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
               margin: EdgeInsets.only(top: 15, left: 5),
               width: 100,
               child: AutoSizeText(
-                "${tittle}",
+                "$tittle",
                 style: TextStyle(fontWeight: FontWeight.w500),
               )),
 

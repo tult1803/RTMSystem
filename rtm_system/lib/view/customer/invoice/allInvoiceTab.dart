@@ -282,7 +282,7 @@ class _InvoiceTabState extends State<InvoiceTab> with TickerProviderStateMixin {
         getFromDate =
             "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
         getToDate =
-            "${getDateTime("${toDate}", dateFormat: "yyyy-MM-dd 23:59:59")}";
+            "${getDateTime("$toDate", dateFormat: "yyyy-MM-dd 23:59:59")}";
       });
     }
   }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:rtm_system/helpers/component.dart';
 import 'package:rtm_system/presenter/Customer/show_information_store.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
+
 class ContactPage extends StatefulWidget {
   const ContactPage({Key key}) : super(key: key);
 
@@ -15,7 +15,6 @@ class _ContactPageState extends State<ContactPage> {
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
-        leading: leadingAppbar(context, colorIcon: Colors.white),
         backgroundColor: primaryColor,
         title: Text('Liên hệ', style: TextStyle(
           color: Colors.white,

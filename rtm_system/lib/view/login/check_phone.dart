@@ -26,7 +26,6 @@ class _CheckPhoneState extends State<CheckPhone> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     pin1 = null;
     pin2 = null;
@@ -38,7 +37,6 @@ class _CheckPhoneState extends State<CheckPhone> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     _nodePhone.dispose();
   }
