@@ -181,7 +181,7 @@ class _BodyState extends State<Body> {
         }
       }
     } on FirebaseAuthException catch (e) {
-      showEasyLoadingError(context, '$MSG056');
+      showEasyLoadingError(context, showMessage("Mã OTP", MSG056));
     }
   }
 
