@@ -807,21 +807,21 @@ class _AddProductPageState extends State<AddProductPage> {
           GestureDetector(
             onTap: () {
               ///Nếu muốn cho customer chọn ngày thì mở comment dòng này
-              // if (widget.dateToPay == null) {
-              //   DatePicker.showDatePicker(
-              //     context,
-              //     showTitleActions: true,
-              //     onConfirm: (date) {
-              //       setState(() {
-              //         dateSale = date;
-              //       });
-              //     },
-              //     minTime: DateTime.now(),
-              //     maxTime: DateTime.now().subtract(Duration(days: -7)),
-              //     locale: LocaleType.vi,
-              //
-              //   );
-              // }
+              if (widget.dateToPay == null) {
+                DatePicker.showDatePicker(
+                  context,
+                  showTitleActions: true,
+                  onConfirm: (date) {
+                    setState(() {
+                      dateSale = date;
+                    });
+                  },
+                  minTime: DateTime.now(),
+                  maxTime: DateTime.now().subtract(Duration(days: -6)),
+                  locale: LocaleType.vi,
+              
+                );
+              }
             },
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
