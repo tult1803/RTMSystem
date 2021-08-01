@@ -8,7 +8,9 @@ class PutUpdatePassword {
   updatePassword(
       String token,
       String accountId,
-      String password) async {
+      String password,
+      String newPassword,
+      String confirmPassword) async {
     final response = await http.put(
       Uri.http('$urlMain', '$urlUpdatePassword'),
       headers: <String, String>{
@@ -18,6 +20,8 @@ class PutUpdatePassword {
       body: jsonEncode(<String, dynamic>{
         "account_id": accountId,
         "password": password,
+        "new_password": "string",
+        "confirm_password": "string"
       }),
     );
 

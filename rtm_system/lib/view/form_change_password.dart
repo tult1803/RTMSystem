@@ -8,8 +8,7 @@ class formUpdatePasswordPage extends StatefulWidget {
   final String accountId;
   final bool isCustomer;
 
-  formUpdatePasswordPage(
-      {this.accountId, this.isCustomer});
+  formUpdatePasswordPage({this.accountId, this.isCustomer});
 
   @override
   _formUpdatePasswordPageState createState() => _formUpdatePasswordPageState();
@@ -138,7 +137,7 @@ class _formUpdatePasswordPageState extends State<formUpdatePasswordPage> {
       child: TextField(
         controller: _controller,
         obscureText: checkShow ? true : false,
-        onChanged: (value) async{
+        onChanged: (value) async {
           if (tittle == "Mật khẩu mới") {
             this.newPassword = value.trim();
           } else if (tittle == 'Xác nhận mật khẩu mới') {
@@ -150,13 +149,14 @@ class _formUpdatePasswordPageState extends State<formUpdatePasswordPage> {
             checkClick = true;
           });
         },
-        onSubmitted: (value) async{
+        onSubmitted: (value) async {
           if (tittle == "Mật khẩu mới") {
             this.newPassword = value.trim();
             errNewPassword = await checkPassword(newPassword, 1);
           } else if (tittle == 'Xác nhận mật khẩu mới') {
             this.confirmPassword = value.trim();
-            errConfirmPassword = await checkPassword(confirmPassword, 2, passwordCheck: newPassword);
+            errConfirmPassword = await checkPassword(confirmPassword, 2,
+                passwordCheck: newPassword);
           } else if (tittle == 'Mật khẩu hiện tại') {
             this.password = value.trim();
             errPassword = await checkPassword(password, 0);
@@ -219,15 +219,17 @@ class _formUpdatePasswordPageState extends State<formUpdatePasswordPage> {
           borderRadius: BorderRadius.circular(10),
         ),
         child: TextButton(
-          onPressed: () async{
-            bool check = await  _validateData();
-            setState(()  {
+          onPressed: () async {
+            bool check = await _validateData();
+            setState(() {
               if (check) {
                 //chỉ cần pw và account_id để change pw, những field khác truyền để đủ field theo function
                 doUpdatePassword(context,
                     isCustomer: widget.isCustomer,
                     accountId: "${widget.accountId}",
-                    password: newPassword);
+                    password: password,
+                    newPassword: newPassword,
+                    confirmPassword: confirmPassword);
               }
             });
           },
@@ -246,7 +248,8 @@ class _formUpdatePasswordPageState extends State<formUpdatePasswordPage> {
   Future _validateData() async {
     errPassword = await checkPassword(password, 0);
     errNewPassword = await checkPassword(newPassword, 1);
-    errConfirmPassword = await checkPassword(confirmPassword, 2, passwordCheck: newPassword);
+    errConfirmPassword =
+        await checkPassword(confirmPassword, 2, passwordCheck: newPassword);
     if (errPassword == null &&
         errConfirmPassword == null &&
         errNewPassword == null) {
