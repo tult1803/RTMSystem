@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rtm_system/helpers/component.dart';
 import 'package:rtm_system/presenter/Customer/show_information_store.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 
@@ -16,9 +17,8 @@ class _ContactPageState extends State<ContactPage> {
       backgroundColor: backgroundColor,
       appBar: AppBar(
         backgroundColor: primaryColor,
-        title: Text('Liên hệ', style: TextStyle(
-          color: Colors.white,
-        ),),
+        leading: leadingAppbar(context),
+        title: titleAppBar('Liên hệ'),
         centerTitle: true,
       ),
       body: Container(

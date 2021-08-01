@@ -12,8 +12,8 @@ import 'package:rtm_system/view/customer/pay_advance.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AdvancePage extends StatefulWidget {
-  const AdvancePage({Key key}) : super(key: key);
-
+  AdvancePage({this.index});
+  int index;
   @override
   State<AdvancePage> createState() => _AdvancePageState();
 }
@@ -25,18 +25,18 @@ class _AdvancePageState extends State<AdvancePage>
     with TickerProviderStateMixin {
   TabController _tabController;
   String getFromDate, getToDate;
-  int index, _selectedIndex;
+  int _selectedIndex, _index;
   int level = 0;
 
   @override
   void initState() {
     super.initState();
     //tab 1: yeu cau
-    index = 0;
+    widget.index == null? _index = 0: _index = widget.index;
     _tabController = TabController(length: 4, vsync: this);
     _tabController.addListener(() {
       setState(() {
-        _selectedIndex = _tabController.index;
+        _selectedIndex = _index;
       });
     });
     getAPIProfile();
@@ -181,7 +181,10 @@ class _AdvancePageState extends State<AdvancePage>
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => CreateRequestAdvance(levelCustomer: level,)),
+            MaterialPageRoute(
+                builder: (context) => CreateRequestAdvance(
+                      levelCustomer: level,
+                    )),
           );
         },
         child: Icon(

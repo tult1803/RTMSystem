@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/customer/Profile/profile.dart';
 import 'package:rtm_system/view/customer/contact/ContactPage.dart';
+import 'package:rtm_system/view/customer/home_menu.dart';
 import 'package:rtm_system/view/customer/invoice/allInvoiceTab.dart';
 import 'package:rtm_system/view/customer/notice/all_notices.dart';
 
@@ -27,7 +28,7 @@ class _HomeCustomerPageState extends State<HomeCustomerPage> {
     super.initState();
     _index = widget.index;
     if (_index == 0) {
-      _widget = InvoiceTab();
+      _widget = HomeMenu();
     } else if (_index == 1) {
       _widget = AdvancePage();
     } else if (_index == 2) {
@@ -48,11 +49,12 @@ class _HomeCustomerPageState extends State<HomeCustomerPage> {
         index: _index,
         height: 70.0,
         items: <Widget>[
+          Icon( Icons.home, size: 30, ),
           Icon( Icons.my_library_books_outlined, size: 30, ),
           Icon(Icons.monetization_on_outlined, size: 30),
           Icon(Icons.notifications_none, size: 30),
           Icon(Icons.people_rounded, size: 30),
-          Icon(Icons.contacts_outlined, size: 30),
+          // Icon(Icons.contacts_outlined, size: 30),
         ],
         color: Colors.white,
         buttonBackgroundColor: primaryColor,
@@ -62,7 +64,7 @@ class _HomeCustomerPageState extends State<HomeCustomerPage> {
         onTap: (index) {
           setState(() {
             if (index == 0) {
-              _widget = InvoiceTab();
+              _widget = HomeMenu();
             } else if (index == 1) {
               _widget = AdvancePage();
             } else if (index == 2) {
