@@ -101,10 +101,7 @@ Future post_put_ApiProfile(
     } else {
       PutUpdateProfile _putUpdate = PutUpdateProfile();
       status = await _putUpdate.updateProfile(
-          prefs.get("access_token"),
-          fullname,
-          gender,
-          birthday);
+          prefs.get("access_token"), fullname, gender, birthday);
     }
   } else {
     PostCreateCustomer _createCustomer = PostCreateCustomer();
@@ -133,12 +130,16 @@ Future<void> doUpdateInvoice(BuildContext context,
 }
 
 Future<void> doUpdatePassword(BuildContext context,
-    {String accountId, String password, bool isCustomer}) async {
+    {String accountId,
+    String password,
+    String newPassword,
+    String confirmPassword,
+    bool isCustomer}) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   PutUpdatePassword putUpdatePassword = PutUpdatePassword();
   showEasyLoading(context, MSG052);
   int status = await putUpdatePassword.updatePassword(
-      prefs.get("access_token"), accountId, password);
+      prefs.get("access_token"), accountId, password, newPassword, confirmPassword);
   if (status == 200) {
     prefs.setString("password", password);
     if (isCustomer) {
@@ -152,7 +153,12 @@ Future<void> doUpdatePassword(BuildContext context,
             index: 4,
           ));
     }
-  } else {
+  } else if(status == 403){
+    showEasyLoadingError(
+      context,
+      showMessage("Mật khẩu hiện tại", MSG020),
+    );
+  }else {
     showEasyLoadingError(
       context,
       MSG025,
@@ -186,10 +192,10 @@ Future<void> doCreateCustomer(
           ));
     } else {
       if (isCreate == false) {
-          prefs.setString("fullname", fullname);
-          prefs.setString("phone", phone);
-          prefs.setInt("gender", gender);
-          prefs.setString("birthday", birthday);
+        prefs.setString("fullname", fullname);
+        prefs.setString("phone", phone);
+        prefs.setInt("gender", gender);
+        prefs.setString("birthday", birthday);
       }
       showEasyLoadingSuccess(context, MSG003,
           widget: isCreate == false ? HomeAdminPage(index: 4) : AllCustomer());
@@ -575,59 +581,63 @@ Future doDeleteAdvanceRequest(BuildContext context, String id) async {
       : showEasyLoadingError(context, showMessage(MSG030, MSG027));
 }
 
-Future doCheckAccount(BuildContext context,String phone) async{
+Future doCheckAccount(BuildContext context, String phone) async {
   CheckAccount account = CheckAccount();
   showEasyLoading(context, "$MSG052");
   int status = await account.checkAccount(phone);
-  if(status == 200){
+  if (status == 200) {
     EasyLoading.dismiss();
     return true;
-  }else{
+  } else {
     showEasyLoadingError(context, "$MSG009");
     return false;
   }
 }
 
-Future doForgotPassword(BuildContext context,String fbToken, String password,String confirmPassword) async{
+Future doForgotPassword(BuildContext context, String fbToken, String password,
+    String confirmPassword) async {
   ChangeForgotPassword forgotPassword = ChangeForgotPassword();
   showEasyLoading(context, "$MSG052");
-  int status = await forgotPassword.getPassword(fbToken, password, confirmPassword);
-  if(status == 200){
+  int status =
+      await forgotPassword.getPassword(fbToken, password, confirmPassword);
+  if (status == 200) {
     showEasyLoadingSuccess(context, "$MSG003", widget: LoginPage());
-  }else{
+  } else {
     showEasyLoadingError(context, "$MSG025");
   }
 }
 
-Future doLoginOTP(BuildContext context,String phone, String firebaseToken) async {
+Future doLoginOTP(
+    BuildContext context, String phone, String firebaseToken) async {
   DataLogin data;
   PostLogin getAPI = PostLogin();
   try {
     data = await getAPI.createLogin(phone,
         password: "", firebaseToken: firebaseToken);
     if (data != null) {
-      savedInfoLogin(data.roleId, data.accountId, data.gender,
-          data.accessToken, data.fullName, data.phone, data.birthday);
+      savedInfoLogin(data.roleId, data.accountId, data.gender, data.accessToken,
+          data.fullName, data.phone, data.birthday);
       if (data.roleId == 3) {
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
                 builder: (context) => HomeCustomerPage(
-                  index: 0,
-                )),
-                (route) => false);
+                      index: 0,
+                    )),
+            (route) => false);
       } else if (data.roleId == 2) {
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
                 builder: (context) => HomeAdminPage(
-                  index: 0,
-                )),
-                (route) => false);
+                      index: 0,
+                    )),
+            (route) => false);
         print('Status button: Done');
       }
       EasyLoading.dismiss();
-    }else showEasyLoadingError(context, '$MSG030');
+    } else
+      showEasyLoadingError(context, '$MSG030');
   } catch (_) {
     showEasyLoadingError(context, '$MSG027');
   }

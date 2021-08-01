@@ -206,7 +206,7 @@ void checkSaveLogin(BuildContext context) async {
   }
 }
 
-void savedInfoLogin(int role_id, String accountId, int gender, String access_token, String fullname, String phone, String birthday) async {
+void savedInfoLogin(int roleId, String accountId, int gender, String accessToken, String fullname, String phone, String birthday) async {
   print('login '+ accountId);
   SharedPreferences prefs = await SharedPreferences.getInstance();
   prefs.setBool("isLogin", true);
