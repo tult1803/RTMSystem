@@ -32,11 +32,11 @@ class _OtpFormState extends State<OtpForm> {
   @override
   void dispose() {
     super.dispose();
-    pin2FocusNode.dispose();
-    pin3FocusNode.dispose();
-    pin4FocusNode.dispose();
-    pin5FocusNode.dispose();
-    pin6FocusNode.dispose();
+    if(pin2.isNotEmpty)pin2FocusNode.dispose();
+    if(pin3.isNotEmpty)pin3FocusNode.dispose();
+    if(pin4.isNotEmpty)pin4FocusNode.dispose();
+    if(pin5.isNotEmpty)pin5FocusNode.dispose();
+    if(pin6.isNotEmpty)pin6FocusNode.dispose();
   }
 
   void nextField(int index, String value, FocusNode focusNode) {
@@ -66,6 +66,7 @@ class _OtpFormState extends State<OtpForm> {
                 Flexible(
                   child: SizedBox(
                     child: TextFormField(
+
                       maxLength: 1,
                       maxLengthEnforcement: MaxLengthEnforcement.enforced,
                       style: TextStyle(fontSize: 24),
