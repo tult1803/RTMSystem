@@ -49,7 +49,7 @@ class _processCreateCustomerState extends State<processCreateCustomer> {
       ),
       child: TextButton(
           onPressed: () {
-            doCreateCustomer(context, phone, password, fullname, gender, cmnd, address, birthday == null ? null :"${getDateTime("$birthday", dateFormat: 'yyyy-MM-dd')}", this.widget.isCustomer, this.widget.typeOfUpdate,this.widget.accountId, isCreate: this.widget.isCreate, isUpdate: this.widget.isUpdate);
+            doCreateUpdateCustomer(context, phone, password, fullname, gender, cmnd, address, birthday == null ? null :"${getDateTime("$birthday", dateFormat: 'yyyy-MM-dd')}", this.widget.isCustomer, this.widget.typeOfUpdate,this.widget.accountId, isCreate: this.widget.isCreate, isUpdate: this.widget.isUpdate);
           },
           child: Text(
             "${this.widget.tittle}",

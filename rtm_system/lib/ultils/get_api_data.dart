@@ -145,7 +145,7 @@ Future<void> doUpdatePassword(BuildContext context,
     if (isCustomer) {
       showEasyLoadingSuccess(context, MSG003,
           widget: HomeCustomerPage(
-            index: 3,
+            index: 4,
           ));
     } else {
       showEasyLoadingSuccess(context, MSG003,
@@ -166,7 +166,7 @@ Future<void> doUpdatePassword(BuildContext context,
   }
 }
 
-Future<void> doCreateCustomer(
+Future<void> doCreateUpdateCustomer(
     BuildContext context,
     String phone,
     String password,
@@ -188,7 +188,7 @@ Future<void> doCreateCustomer(
     if (isCustomer) {
       showEasyLoadingSuccess(context, MSG003,
           widget: HomeCustomerPage(
-            index: 3,
+            index: 4,
           ));
     } else {
       if (isCreate == false) {
@@ -219,9 +219,11 @@ Future<void> put_API_ConfirmAdvance(BuildContext context, id) async {
   status == 200
       ? showEasyLoadingSuccess(context, showMessage("", MSG012),
           widget: HomeCustomerPage(
-            index: 1,
+            index: 2, indexAdvance: 1,
           ))
-      : showEasyLoadingError(context, showMessage(MSG025, MSG027));
+      : showEasyLoadingError(context, showMessage(MSG025, MSG027), widget: HomeCustomerPage(
+            index: 2, indexAdvance: 1,
+          ));
 }
 
 Future<void> putAPIUpdatePrice(BuildContext context, String productId,
@@ -255,30 +257,36 @@ Future<void> doConfirmOrAcceptOrRejectInvoice(BuildContext context,
   int status;
   if (isCustomer) {
     showEasyLoading(context, MSG052);
+    int _indexInvoice;
     // 1 is sign invoice, 2 is accept invoice, 3 is delete request
     if (type == 1) {
       PutSignInvoice putSignInvoiceInvoice = PutSignInvoice();
       status = await putSignInvoiceInvoice.putSignInvoice(
           prefs.get("access_token"), invoiceIdSign);
+      _indexInvoice = 2;
     } else if (type == 2) {
       PutConfirmInvoice putConfirmInvoice = PutConfirmInvoice();
       status = await putConfirmInvoice.putConfirmInvoice(
           prefs.get("access_token"), invoiceId);
+      _indexInvoice = 1;
     } else if (type == 3) {
       DeleteInvoiceRequest deleteInvoiceRequest = DeleteInvoiceRequest();
       status = await deleteInvoiceRequest.deleteInvoiceRequest(
           prefs.get('access_token'), invoiceId,
           reason: reason);
+      _indexInvoice = 0;
     }
     if (status == 200) {
       showEasyLoadingSuccess(context, showMessage("", MSG012),
           widget: HomeCustomerPage(
-            index: 0,
+            index: 1,
+            indexInvoice: _indexInvoice,
           ));
     } else {
       showEasyLoadingError(context, showMessage(MSG025, MSG027),
           widget: HomeCustomerPage(
-            index: 0,
+            index: 1,
+            indexInvoice: _indexInvoice,
           ));
     }
   } else {
@@ -335,9 +343,14 @@ Future<void> createRequestAdvance(BuildContext context, String accountId,
   status == 200
       ? showEasyLoadingSuccess(context, showMessage("", MSG002),
           widget: HomeCustomerPage(
-            index: 1,
+            index: 2,
+            indexAdvance: 0,
           ))
-      : showEasyLoadingError(context, showMessage("", MSG024));
+      : showEasyLoadingError(context, showMessage("", MSG024),
+          widget: HomeCustomerPage(
+            index: 2,
+            indexAdvance: 0,
+          ));
 }
 
 Future getDataCustomerFromPhone(String phone) async {
@@ -455,11 +468,11 @@ Future doCreateInvoice(BuildContext context,
       ? isCustomer
           ? showEasyLoadingSuccess(context, showMessage("", MSG002),
               widget: HomeCustomerPage(
-                index: 0,
+                index: 1, indexInvoice: 0,
               ))
           : showEasyLoadingSuccess(context, showMessage("", MSG002),
               widget: widgetToNavigator)
-      : showEasyLoadingError(context, showMessage("", MSG024));
+      : showEasyLoadingError(context, showMessage("", MSG024), widget: widgetToNavigator);
 }
 
 Future<void> putReturnAdvance(BuildContext context, List<String> invoiceId,
@@ -473,11 +486,11 @@ Future<void> putReturnAdvance(BuildContext context, List<String> invoiceId,
         prefs.get("access_token"), invoiceId, advanceId);
     if (status == 200) {
       showEasyLoadingSuccess(context, showMessage("", MSG019),
-          widget: HomeCustomerPage(index: 1));
+          widget: HomeCustomerPage(index: 2, indexAdvance: 3,));
     } else
-      showEasyLoadingError(context, showMessage("", MSG025));
+      showEasyLoadingError(context, showMessage("", MSG025), widget:HomeCustomerPage(index: 2, indexAdvance: 1,) );
   } else {
-    showEasyLoadingError(context, showMessage(MSG031, MSG027));
+    showEasyLoadingError(context, showMessage(MSG031, MSG027), widget:HomeCustomerPage(index: 2, indexAdvance: 1,));
   }
 }
 
@@ -504,7 +517,7 @@ Future<void> doUpgradeCustomer(BuildContext context,
         data.elementAt(1));
     if (statusImage == 200 && statusData == 200) {
       showEasyLoadingSuccess(context, "Đã gửi",
-          waitTime: 2, widget: HomeCustomerPage(index: 3));
+          waitTime: 2, widget: HomeCustomerPage(index: 4));
     } else {
       showEasyLoadingError(context,
           "Gửi ${checkStatusUpgrade(statusImage, statusData)} thất bại",
@@ -563,9 +576,9 @@ Future doReceiveReturnCash(
       prefs.get("access_token"), id);
   if (status == 200) {
     showEasyLoadingSuccess(context, showMessage("", MSG022),
-        widget: HomeCustomerPage(index: 1));
+        widget: HomeCustomerPage(index: 2, indexAdvance: 3,));
   } else {
-    showEasyLoadingError(context, showMessage(MSG030, MSG027));
+    showEasyLoadingError(context, showMessage(MSG030, MSG027),  widget: HomeCustomerPage(index: 2, indexAdvance: 3,));
   }
 }
 
@@ -577,8 +590,8 @@ Future doDeleteAdvanceRequest(BuildContext context, String id) async {
       prefs.get('access_token'), id);
   status == 200
       ? showEasyLoadingSuccess(context, showMessage("", MSG017),
-          widget: HomeCustomerPage(index: 1))
-      : showEasyLoadingError(context, showMessage(MSG030, MSG027));
+          widget: HomeCustomerPage(index: 2, indexAdvance: 0,))
+      : showEasyLoadingError(context, showMessage(MSG030, MSG027), widget: HomeCustomerPage(index: 2, indexAdvance: 0,));
 }
 
 Future doCheckAccount(BuildContext context, String phone) async {

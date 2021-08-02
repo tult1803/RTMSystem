@@ -69,7 +69,6 @@ class _HomeMenuState extends State<HomeMenu> with TickerProviderStateMixin {
           0;
       _totalAmount += amount.round();
     });
-    print(_totalAmount);
     setState(() {
       invoiceAmount = _totalAmount;
     });
@@ -136,8 +135,8 @@ class _HomeMenuState extends State<HomeMenu> with TickerProviderStateMixin {
                           Icons.my_library_books,
                           "Xác nhận ứng tiền",
                           Icons.monetization_on_outlined,
-                          HomeCustomerPage(index: 1),
-                          HomeCustomerPage(index: 2),
+                          HomeCustomerPage(index: 1, indexInvoice: 1, indexAdvance: 0,),
+                          HomeCustomerPage(index: 2, indexAdvance: 1, indexInvoice: 0),
                           false),
                       SizedBox(
                         height: 35,

@@ -157,7 +157,7 @@ class LoginPageState extends State<LoginPage> {
           context,
           MaterialPageRoute(
               builder: (context) => HomeCustomerPage(
-                    index: 0,
+                    index: 0, indexAdvance: 0, indexInvoice: 0,
                   )),
           (route) => false);
       print('Status button: Done');

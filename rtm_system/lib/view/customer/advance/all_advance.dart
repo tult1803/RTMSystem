@@ -32,11 +32,14 @@ class _AdvancePageState extends State<AdvancePage>
   void initState() {
     super.initState();
     //tab 1: yeu cau
-    widget.index == null? _index = 0: _index = widget.index;
-    _tabController = TabController(length: 4, vsync: this);
+    _tabController = TabController(
+        length: 4,
+        vsync: this,
+        initialIndex:
+            widget.index == null ? _index = 0 : _index = widget.index);
     _tabController.addListener(() {
       setState(() {
-        _selectedIndex = _index;
+        _selectedIndex = _tabController.index;
       });
     });
     getAPIProfile();
@@ -49,7 +52,6 @@ class _AdvancePageState extends State<AdvancePage>
           "${getDateTime("$toDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
     });
   }
-
   Future getAPIProfile() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     String token = sharedPreferences.getString('access_token');
@@ -64,7 +66,7 @@ class _AdvancePageState extends State<AdvancePage>
     });
     return infomationCustomer;
   }
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -156,7 +158,7 @@ class _AdvancePageState extends State<AdvancePage>
   }
 
   Widget showFloatBtn(index) {
-    if (index == 1) {
+    if (index == 1 || index == 3) {
       return FloatingActionButton.extended(
         onPressed: () {
           Navigator.push(

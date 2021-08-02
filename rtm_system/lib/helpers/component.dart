@@ -419,6 +419,9 @@ Widget componentContainerDetailInvoice(BuildContext context,
         btnProcessInvoice(context, statusId, id, isCustomer,
             widgetToNavigator: widgetToNavigator,
             isDegree: degree == 0 ? false : true),
+        SizedBox(
+          height: 25,
+        ),
       ],
     ),
   );
