@@ -56,17 +56,13 @@ class _formUpdatePasswordPageState extends State<formUpdatePasswordPage> {
               ],
             ),
           ),
-          Column(
-            children: [
-              _txtField(
-                  getDataTextField(this.password),
-                  "Nhập mật khẩu hiện tại",
-                  "Mật khẩu hiện tại",
-                  errPassword,
-                  1,
-                  TextInputType.text),
-            ],
-          ),
+          _txtField(
+              getDataTextField(this.password),
+              "Nhập mật khẩu hiện tại",
+              "Mật khẩu hiện tại",
+              errPassword,
+              1,
+              TextInputType.text),
           SizedBox(
             height: 20,
           ),

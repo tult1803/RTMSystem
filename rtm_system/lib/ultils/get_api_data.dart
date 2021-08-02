@@ -649,8 +649,7 @@ Future doLoginOTP(
         print('Status button: Done');
       }
       EasyLoading.dismiss();
-    } else
-      showEasyLoadingError(context, '$MSG030');
+    } else showEasyLoadingError(context, '$MSG030');
   } catch (_) {
     showEasyLoadingError(context, '$MSG027');
   }

@@ -29,6 +29,7 @@ class _BodyState extends State<Body> {
   FirebaseAuth _auth = FirebaseAuth.instance;
 
   doSendSMS() async {
+    print('Phone: ${convertPhone(widget.phoneNumber)}');
     showEasyLoading(context, "$MSG052");
     await _auth.verifyPhoneNumber(
         phoneNumber: convertPhone(widget.phoneNumber),

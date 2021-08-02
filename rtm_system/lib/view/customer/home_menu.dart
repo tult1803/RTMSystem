@@ -118,72 +118,69 @@ class _HomeMenuState extends State<HomeMenu> with TickerProviderStateMixin {
                       topRight: Radius.circular(35.0),
                     ),
                   ),
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 45,
-                      ),
-                      twoBtnBody(
-                        "Nhận tiền",
-                        Icons.border_color,
-                        "Trả nợ",
-                        Icons.money_off,
-                        GetMoneyDeposit(),
-                        PayDebt(),
-                        true,
-                      ),
-                      SizedBox(
-                        height: 45,
-                      ),
-                      twoBtnBody(
-                          "Xác nhận hoá đơn",
-                          Icons.my_library_books,
-                          "Xác nhận ứng tiền",
-                          Icons.monetization_on_outlined,
-                          HomeCustomerPage(
-                            index: 1,
-                            indexInvoice: 1,
-                            indexAdvance: 0,
-                          ),
-                          HomeCustomerPage(
-                              index: 2, indexAdvance: 1, indexInvoice: 0),
-                          false),
-                      SizedBox(
-                        height: 35,
-                      ),
-                      Container(
-                        child: TextButton(
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                  builder: (context) => ContactPage()),
-                            );
-                          },
-                          child: Center(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.my_library_books,
-                                  color: primaryColor,
-                                ),
-                                SizedBox(
-                                  width: 15,
-                                ),
-                                AutoSizeText(
-                                  "Liên hệ",
-                                  style: TextStyle(
-                                      color: primaryColor,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                              ],
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 45,
+                        ),
+                        twoBtnBody(
+                          "Nhận tiền",
+                          Icons.border_color,
+                          "Trả nợ",
+                          Icons.money_off,
+                          GetMoneyDeposit(),
+                          PayDebt(),
+                          true,
+                        ),
+                        twoBtnBody(
+                            "Xác nhận hoá đơn",
+                            Icons.my_library_books,
+                            "Xác nhận ứng tiền",
+                            Icons.monetization_on_outlined,
+                            HomeCustomerPage(
+                              index: 1,
+                              indexInvoice: 1,
+                              indexAdvance: 0,
+                            ),
+                            HomeCustomerPage(
+                                index: 2, indexAdvance: 1, indexInvoice: 0),
+                            false),
+
+                        Container(
+                          child: TextButton(
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                    builder: (context) => ContactPage()),
+                              );
+                            },
+                            child: Center(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.my_library_books,
+                                    color: primaryColor,
+                                  ),
+                                  SizedBox(
+                                    width: 15,
+                                  ),
+                                  AutoSizeText(
+                                    "Liên hệ",
+                                    style: TextStyle(
+                                        color: primaryColor,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      // twoBtnBody("Liên hệ", Icons.contact_page, "", null,
-                      //     ContactPage(), null, true),
-                    ],
+                        // twoBtnBody("Liên hệ", Icons.contact_page, "", null,
+                        //     ContactPage(), null, true),
+                      ],
+                    ),
                   )),
             ),
           ],
@@ -282,7 +279,7 @@ class _HomeMenuState extends State<HomeMenu> with TickerProviderStateMixin {
           boxShadow: [
             BoxShadow(
               color: Colors.black54,
-              blurRadius: 3,
+              blurRadius: 2,
               offset: Offset(1, 1), // Shadow position
             ),
           ],
@@ -323,14 +320,13 @@ class _HomeMenuState extends State<HomeMenu> with TickerProviderStateMixin {
   }
 
   Widget twoBtnBody(name1, icon1, name2, icon2, widget1, widget2, isCheck) {
-    var size = MediaQuery.of(context).size;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         miniIconTextContainer(
           context,
-          height: size.height * 0.15,
-          width: size.width * 0.35,
+          height: 120,
+          width: 150,
           borderRadius: 20,
           colorContainer: Colors.white,
           tittle: name1,
@@ -342,12 +338,14 @@ class _HomeMenuState extends State<HomeMenu> with TickerProviderStateMixin {
           iconSize: 65,
           widget: widget1,
           isCheck: isCheck,
+          // marginRight: 10,
+          marginBottom: 30,
         ),
         if (name2 != "" && icon2 != null && widget2 != null)
           miniIconTextContainer(
             context,
-            height: size.height * 0.15,
-            width: size.width * 0.35,
+            height: 120,
+            width: 150,
             borderRadius: 20,
             colorContainer: Colors.white,
             tittle: name2,
@@ -357,6 +355,8 @@ class _HomeMenuState extends State<HomeMenu> with TickerProviderStateMixin {
             iconSize: 65,
             widget: widget2,
             isCheck: isCheck,
+            // marginLeft: 10,
+            marginBottom: 30,
           ),
       ],
     );
