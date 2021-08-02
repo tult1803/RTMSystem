@@ -73,7 +73,7 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
     } else
       messageCancel = 'Bạn muốn huỷ tạo khách hàng?';
     if (widget.check) {
-      indexOfBottomBar = 0;
+      indexOfBottomBar = 4;
     } else {
       indexOfBottomBar = 4;
     }

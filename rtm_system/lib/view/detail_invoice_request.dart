@@ -12,7 +12,10 @@ class DetailInvoiceRequest extends StatefulWidget {
   final Widget widgetToNavigator;
 
   DetailInvoiceRequest(
-      {this.invoiceRequestElement, this.isCustomer, this.isRequest, this.widgetToNavigator});
+      {this.invoiceRequestElement,
+      this.isCustomer,
+      this.isRequest,
+      this.widgetToNavigator});
 
   @override
   _DetailInvoiceRequestState createState() => _DetailInvoiceRequestState();
@@ -51,13 +54,17 @@ class _DetailInvoiceRequestState extends State<DetailInvoiceRequest> {
               widgetToNavigator: this.widget.widgetToNavigator,
             ),
           ),
-            //dùng dialog có setState cho xoá yêu cầu của customer nên thêm ở đây
+          SizedBox(
+            height: 15,
+          ),
+          //dùng dialog có setState cho xoá yêu cầu của customer nên thêm ở đây
           if (widget.isCustomer)
             // ignore: deprecated_member_use
             RaisedButton(
               color: Colors.redAccent,
               onPressed: () {
-                _displayTextInputDialog(context, "${widget.invoiceRequestElement.id}");
+                _displayTextInputDialog(
+                    context, "${widget.invoiceRequestElement.id}");
               },
               child: Text(
                 'Xoá yêu cầu',
@@ -109,7 +116,7 @@ class _DetailInvoiceRequestState extends State<DetailInvoiceRequest> {
               ),
               TextButton(
                 onPressed: () {
-                  doConfirmOrAcceptOrRejectInvoice(context, id, [],3, true,
+                  doConfirmOrAcceptOrRejectInvoice(context, id, [], 3, true,
                       reason: reasonInput);
                 },
                 child: Text(
