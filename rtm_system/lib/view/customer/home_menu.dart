@@ -147,38 +147,38 @@ class _HomeMenuState extends State<HomeMenu> with TickerProviderStateMixin {
                                 index: 2, indexAdvance: 1, indexInvoice: 0),
                             false),
 
-                        Container(
-                          child: TextButton(
-                            onPressed: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                    builder: (context) => ContactPage()),
-                              );
-                            },
-                            child: Center(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.my_library_books,
-                                    color: primaryColor,
-                                  ),
-                                  SizedBox(
-                                    width: 15,
-                                  ),
-                                  AutoSizeText(
-                                    "Liên hệ",
-                                    style: TextStyle(
-                                        color: primaryColor,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        // twoBtnBody("Liên hệ", Icons.contact_page, "", null,
-                        //     ContactPage(), null, true),
+                        // Container(
+                        //   child: TextButton(
+                        //     onPressed: () {
+                        //       Navigator.of(context).push(
+                        //         MaterialPageRoute(
+                        //             builder: (context) => ContactPage()),
+                        //       );
+                        //     },
+                        //     child: Center(
+                        //       child: Row(
+                        //         mainAxisAlignment: MainAxisAlignment.center,
+                        //         children: [
+                        //           Icon(
+                        //             Icons.my_library_books,
+                        //             color: primaryColor,
+                        //           ),
+                        //           SizedBox(
+                        //             width: 15,
+                        //           ),
+                        //           AutoSizeText(
+                        //             "Liên hệ",
+                        //             style: TextStyle(
+                        //                 color: primaryColor,
+                        //                 fontWeight: FontWeight.w500),
+                        //           ),
+                        //         ],
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
+                        twoBtnBody("Liên hệ", Icons.contact_page, "", null,
+                            ContactPage(), null, true),
                       ],
                     ),
                   )),
