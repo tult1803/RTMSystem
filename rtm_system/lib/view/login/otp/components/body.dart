@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -24,18 +26,20 @@ class Body extends StatefulWidget {
 
 class _BodyState extends State<Body> {
   final translator = GoogleTranslator();
-  int timeSMS = 0;
   String verificationId, otp;
   FirebaseAuth _auth = FirebaseAuth.instance;
+  Timer _timer;
+  int _start = 90;
 
   doSendSMS() async {
     print('Phone: ${convertPhone(widget.phoneNumber)}');
     showEasyLoading(context, "$MSG052");
     await _auth.verifyPhoneNumber(
         phoneNumber: convertPhone(widget.phoneNumber),
-        timeout: Duration(seconds: 120),
+        timeout: Duration(seconds: 90),
         verificationCompleted: (phoneAuthCredential) async {},
         verificationFailed: (error) async {
+          print("$error === ${error.code}");
           /// Dung google translate error message
           var err =
               await translator.translate("${error.code}", from: "en", to: 'vi');
@@ -55,9 +59,16 @@ class _BodyState extends State<Body> {
   @override
   void initState() {
     super.initState();
+    startTimer();
     if (widget.phoneNumber != null) doSendSMS();
   }
 
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _timer.cancel();
+  }
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -121,7 +132,11 @@ class _BodyState extends State<Body> {
   Widget btnReSendOTP() {
     return GestureDetector(
       onTap: () {
-        if (widget.phoneNumber != null && timeSMS == 0) {
+        if (widget.phoneNumber != null && _start == 0) {
+          setState(() {
+            _start = 90;
+            startTimer();
+          });
           doSendSMS();
         } else
           showEasyLoadingError(context, "Xin đợi");
@@ -139,24 +154,35 @@ class _BodyState extends State<Body> {
     });
   }
 
+  void startTimer() {
+    const oneSec = const Duration(seconds: 1);
+    _timer = new Timer.periodic(
+      oneSec,
+          (Timer timer) {
+        if (_start == 0) {
+          setState(() {
+            timer.cancel();
+          });
+        } else {
+          setState(() {
+            _start--;
+          });
+        }
+      },
+    );
+  }
+
   Row buildTimer() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          "Mã sẽ được gửi trong ",
+          "Mã sẽ được gửi trong",
           style: GoogleFonts.roboto(color: Colors.black87),
         ),
-        TweenAnimationBuilder(
-          tween: Tween(begin: 120, end: 0.0),
-          duration: Duration(seconds: 120),
-          builder: (context, value, child) {
-            timeSMS = value.toInt();
-            return Text(
-              "${value.toInt()}s",
-              style: GoogleFonts.roboto(color: Colors.blueAccent),
-            );
-          },
+        Text(
+          " ${_start}s",
+          style: GoogleFonts.roboto(color: Colors.blueAccent),
         ),
       ],
     );

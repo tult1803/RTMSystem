@@ -31,7 +31,11 @@ checkUpdatePriceProduct(BuildContext context, {bool isClick, double price}) {
   if (isClick) {
     if (price != null) {
       if (price > 0) {
-        return true;
+        String lenghtPrice = "$price";
+        if(lenghtPrice.length > 10){
+          showEasyLoadingError(context,  showMessage("", MSG057));
+          return false;
+        }else return true;
       } else {
         showEasyLoadingError(context,  showMessage("", MSG035));
         return false;
@@ -88,8 +92,14 @@ checkQuantity(double quantity) {
   return null;
 }
 
+checkLengthQuantityDegree(String length){
+  if (length.length < 6) {
+    return showMessage("", MSG057);
+  }
+  return null;
+}
+
 checkDegree(bool checkProduct, double degree) {
-  print(degree);
   if (!checkProduct) {
     if (degree == 0) {
       return showMessage("Số độ", MSG001);

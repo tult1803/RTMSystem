@@ -651,6 +651,6 @@ Future doLoginOTP(
       EasyLoading.dismiss();
     } else showEasyLoadingError(context, '$MSG030');
   } catch (_) {
-    showEasyLoadingError(context, '$MSG027');
+    showEasyLoadingError(context, '$MSG004');
   }
 }

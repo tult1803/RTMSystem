@@ -6,7 +6,7 @@ import 'dart:core';
 String MSG001 = "không được để trống.";
 String MSG002 = "Tạo mới thành công.";
 String MSG003 = "Cập nhật thông tin thành công";
-String MSG004 = "Tên đăng nhập sai.";
+String MSG004 = "Đăng nhập thất bại.";
 String MSG005 = "Tài khoản đã bị khóa.";
 String MSG006 = "Số tiền phải lớn hơn hoặc bằng 100,000 VND";
 String MSG007 = "Độ dài của tên khách hàng nhỏ hơn 50 ký tự.";
@@ -61,6 +61,8 @@ String MSG053 = "Hủy kích hoạt thành công";
 String MSG054 = "Ẩn thông báo thành công";
 String MSG055 = "Xin hãy nhập giá mới";
 String MSG056 = "không hợp lệ";
+
+String MSG057 = "Vượt quá độ dài cho phép";
 //use to show message
 String showMessage(String name, String msg){
   return name.isEmpty || name == null? msg : name + " " + msg;

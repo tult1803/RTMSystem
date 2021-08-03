@@ -177,6 +177,7 @@ class _AddProductPageState extends State<AddProductPage> {
       this.widget.savePrice == null ? price = "0" : price = widget.savePrice;
       this.widget.dateToPay == null
           ? dateSale = DateTime.now()
+
           /// Nếu muốn Tạo hóa đơn lấy theo ngày trên yêu cầu thì mở comment dòng này ///
           // : dateSale = DateTime.parse(widget.dateToPay);
           : dateSale = DateTime.now();
@@ -223,6 +224,7 @@ class _AddProductPageState extends State<AddProductPage> {
                 Column(
                   children: [
                     txtAutoFillByPhone(
+                      maxLength: 15,
                       enabled: widget.isChangeData == null ? true : false,
                       controller: getDataTextField(phoneNewCustomer),
                       isCustomer: this.widget.isCustomer,
@@ -337,6 +339,7 @@ class _AddProductPageState extends State<AddProductPage> {
     TextInputType txtInputType,
     bool isCustomer,
     bool enabled,
+    int maxLength
   }) {
     return isCustomer
         ? Container()
@@ -346,13 +349,15 @@ class _AddProductPageState extends State<AddProductPage> {
             child: TextField(
               controller: controller,
               // initialValue: this.widget.txt,
+              maxLength: maxLength,
               autocorrect: false,
               obscureText: false,
               enabled: enabled,
               onSubmitted: (value) async {
-                doOnSubmittedTextField(type, value);
                 if (tittle.contains("Điện thoại")) {
                   errorPhone = await checkPhoneNumber(value);
+                 if(errorPhone == null) doOnSubmittedTextField(type, value);
+                  if(errorPhone != null) phoneNewCustomer = "";
                 }
               },
               maxLines: 1,
@@ -672,8 +677,11 @@ class _AddProductPageState extends State<AddProductPage> {
       color: Colors.white,
       child: TextField(
         controller: isQuantity ? txtController : null,
+        maxLength: 6,
         onSubmitted: (value) async {
+          double check;
           try {
+            check = double.parse(value.trim());
             if (isQuantity) {
               if (value.isNotEmpty) {
                 insertQuantity(value);
@@ -685,11 +693,18 @@ class _AddProductPageState extends State<AddProductPage> {
                 errorQuantity = await checkQuantity(quantity);
               }
             } else {
-              this.degree = double.tryParse(value.isEmpty ? "0" : value);
+              this.degree = double.parse(value.isEmpty ? "0" : value);
               errorDegree = await checkDegree(checkProduct, degree);
             }
           } catch (_) {
-            print('Lỗi add_product_invoice => _txtItemProduct ');
+            print('Lỗi add_product_invoice => _txtItemProduct $check');
+            setState(() {
+              isQuantity
+                  ? errorQuantity = showMessage("Số ký", MSG056)
+                  // ignore: unnecessary_statements
+                  : {errorDegree = showMessage("Số độ", MSG056), this.degree = 0};
+
+            });
           }
         },
         maxLines: maxLines,
@@ -815,7 +830,6 @@ class _AddProductPageState extends State<AddProductPage> {
                   minTime: DateTime.now(),
                   maxTime: DateTime.now().subtract(Duration(days: -6)),
                   locale: LocaleType.vi,
-              
                 );
               }
             },
