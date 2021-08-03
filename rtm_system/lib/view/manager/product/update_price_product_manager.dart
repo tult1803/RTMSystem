@@ -47,6 +47,7 @@ class _updatePriceProductState extends State<updatePriceProduct> {
     super.dispose();
     _nodePrice.dispose();
   }
+
   void isNotEmptyChoose() {
     try {
       if (this.widget.chosenValue != null) {
@@ -60,8 +61,9 @@ class _updatePriceProductState extends State<updatePriceProduct> {
           getDataTextField("${getFormatPrice("$price")}");
         });
       }
-    }catch(_){
-      EasyLoading.showError(showMessage("", MSG045), duration: Duration(seconds: 2));
+    } catch (_) {
+      EasyLoading.showError(showMessage("", MSG045),
+          duration: Duration(seconds: 2));
     }
   }
 
@@ -70,25 +72,25 @@ class _updatePriceProductState extends State<updatePriceProduct> {
     return Scaffold(
       appBar: AppBar(
         leading: leadingAppbar(context, widget: this.widget.widgetToNavigate),
-        // leading: leadingAppbar(context),
         centerTitle: true,
         backgroundColor: welcome_color,
-        title: Text(
-          "Cập nhật giá",
-          style: TextStyle(
-              color: Colors.white, fontWeight: FontWeight.w500, fontSize: 22),
-        ),
+        title: titleAppBar("Cập nhật giá")
       ),
       body: SingleChildScrollView(
         physics: NeverScrollableScrollPhysics(),
         child: new Container(
-          margin: EdgeInsets.only(top: 10),
+          margin: EdgeInsets.only(top: 24),
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              _dropDownList(),
+              Container(
+                width: 200,
+                child: Row(
+                  children: [Expanded(child: _dropDownList())],
+                ),
+              ),
               _txt(this.widget.chosenValue),
               Padding(
                 padding: const EdgeInsets.only(top: 20.0),
@@ -129,54 +131,50 @@ class _updatePriceProductState extends State<updatePriceProduct> {
 
   Widget _dropDownList() {
     return Container(
-      height: 50,
+      padding: EdgeInsets.only(left: 5),
       decoration: BoxDecoration(
         border: Border.all(color: Colors.black54, width: 1),
         borderRadius: BorderRadius.circular(5),
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: DropdownButton<String>(
-          focusColor: Colors.white,
-          value: _value,
-          //elevation: 5,
-          style: TextStyle(color: Colors.white),
-          iconEnabledColor: Colors.black,
-          items:
-              itemNameUpdatePrice.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-              value: value,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Text("$value", style: TextStyle(color: Colors.black)),
-                  checkDate(value)
-                      ? Icon(
-                          Icons.check,
-                          color: Colors.green,
-                        )
-                      : SizedBox(),
-                ],
-              ),
-            );
-          }).toList(),
-          hint: Text(
-            "Chọn sản phẩm",
-            style: TextStyle(
-                color: Colors.black, fontSize: 14, fontWeight: FontWeight.w500),
-          ),
-          onChanged: (String value) {
-            setState(() {
-              isClick = true;
-              _value = value;
-              indexValue = itemNameUpdatePrice.indexOf(value);
-              price = double.parse(itemPriceUpdatePrice[indexValue]);
-              currentPrice = double.parse(itemPriceUpdatePrice[indexValue]);
-              productId = itemIdUpdatePrice[indexValue];
-              getDataTextField("${getFormatPrice("$price")}");
-            });
-          },
+      child: DropdownButton<String>(
+        focusColor: Colors.white,
+        value: _value,
+        style: TextStyle(color: Colors.white),
+        iconEnabledColor: Colors.black,
+        isExpanded: true,
+        underline: Container(
+          color: backgroundColor,
         ),
+        items:
+            itemNameUpdatePrice.map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text("$value", style: TextStyle(color: Colors.black)),
+                checkDate(value)
+                    ? Icon(
+                        Icons.check,
+                        color: Colors.green,
+                      )
+                    : SizedBox(),
+              ],
+            ),
+          );
+        }).toList(),
+        hint: Text("Chọn sản phẩm"),
+        onChanged: (String value) {
+          setState(() {
+            isClick = true;
+            _value = value;
+            indexValue = itemNameUpdatePrice.indexOf(value);
+            price = double.parse(itemPriceUpdatePrice[indexValue]);
+            currentPrice = double.parse(itemPriceUpdatePrice[indexValue]);
+            productId = itemIdUpdatePrice[indexValue];
+            getDataTextField("${getFormatPrice("$price")}");
+          });
+        },
       ),
     );
   }
@@ -198,7 +196,7 @@ class _updatePriceProductState extends State<updatePriceProduct> {
 
   Widget _txt(String value) {
     return Container(
-      height: 50,
+      height: 45,
       width: 200,
       margin: EdgeInsets.only(top: 20),
       child: KeyboardActions(
@@ -227,7 +225,7 @@ class _updatePriceProductState extends State<updatePriceProduct> {
                 child: Center(
                   child: AutoSizeText(
                     "Giá",
-                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+                    style: TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
                   ),
                 )),
 
@@ -237,7 +235,7 @@ class _updatePriceProductState extends State<updatePriceProduct> {
               child: Center(
                 child: AutoSizeText(
                   "VNĐ",
-                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+                  style: TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
                 ),
               ),
             ),
@@ -275,7 +273,7 @@ class _updatePriceProductState extends State<updatePriceProduct> {
         width: width,
         decoration: BoxDecoration(
           color: color,
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(15),
         ),
         child: TextButton(
           onPressed: () async {
@@ -297,7 +295,7 @@ class _updatePriceProductState extends State<updatePriceProduct> {
               style: TextStyle(
                   color: Colors.white,
                   fontSize: 20,
-                  fontWeight: FontWeight.w500),
+                  fontWeight: FontWeight.w400),
             ),
           ),
         ));

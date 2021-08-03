@@ -1217,3 +1217,41 @@ Widget containerTextInProcess() {
     ),
   );
 }
+// /Dùng cho container icon trong quản lý  khách hàng
+Widget containerIconCustomer({
+  IconData icon,
+  FontWeight fontWeight,
+  Alignment alignment,
+  double marginLeft,
+  double marginRight,
+  double marginTop,
+  double marginBottom,
+  double borderRadius,
+  double paddingLeftOfText,
+  double paddingRightOfText,
+  double paddingTopOfText,
+  double paddingBottomOfText,
+  double height,
+  double width,
+  Color color,
+}) {
+  return Container(
+    height: height,
+    width: width,
+    margin: EdgeInsets.only(
+      right: marginRight == null ? 0 : marginRight,
+      top: marginTop == null ? 0 : marginTop,
+      bottom: marginBottom == null ? 0 : marginBottom,
+      left: marginLeft == null ? 0 : marginLeft,
+    ),
+    alignment: alignment,
+    child: Padding(
+      padding: EdgeInsets.only(
+          left: paddingLeftOfText == null ? 0 : paddingLeftOfText,
+          right: paddingRightOfText == null ? 0 : paddingRightOfText,
+          bottom: paddingBottomOfText == null ? 0 : paddingBottomOfText,
+          top: paddingTopOfText == null ? 0 : paddingTopOfText),
+      child: Icon(icon, color: color,)
+    ),
+  );
+}

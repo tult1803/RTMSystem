@@ -20,11 +20,7 @@ class _createNoticeState extends State<createNotice> {
         leading: leadingAppbar(context),
         centerTitle: true,
         backgroundColor: welcome_color,
-        title:  Text(
-            "Tạo thông báo",
-            style: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.w500, fontSize: 22),
-        ),
+        title: titleAppBar("Tạo thông báo"),
       ),
       body: SingleChildScrollView(child: new showCreateNotice()),
     );

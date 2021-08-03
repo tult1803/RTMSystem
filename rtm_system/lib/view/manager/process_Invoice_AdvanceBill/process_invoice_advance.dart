@@ -49,10 +49,7 @@ class _requestInvoiceAdvanceState extends State<requestInvoiceAdvance>
               widget: HomeAdminPage(
                 index: 0,
               )),
-          title: Text(
-            "Yêu cầu chờ xử lý",
-            style: GoogleFonts.roboto(color: Colors.white, fontSize: 20),
-          ),
+          title: titleAppBar("Yêu cầu chờ xử lý"),
           centerTitle: true,
           backgroundColor: welcome_color,
           bottom: bottomAppBar(),
@@ -65,9 +62,7 @@ class _requestInvoiceAdvanceState extends State<requestInvoiceAdvance>
 
   Widget bottomAppBar() {
     return TabBar(
-      // labelPadding: EdgeInsets.symmetric(horizontal: 7.0),
       indicatorColor: primaryColor,
-      isScrollable: true,
       labelColor: Colors.white,
       unselectedLabelColor: Colors.white.withOpacity(0.5),
       controller: _tabController,

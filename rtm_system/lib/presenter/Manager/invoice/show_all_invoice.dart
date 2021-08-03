@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rtm_system/helpers/component.dart';
 import 'package:rtm_system/model/model_invoice.dart';
 import 'package:rtm_system/presenter/Manager/invoice/show_invoice.dart';
 import 'package:rtm_system/presenter/Manager/invoice/show_request_invoice.dart';
@@ -49,7 +50,7 @@ class _showAllInvoiceState extends State<showAllInvoice>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: titleAppBar(),
+        title: titleAppBar("Hóa đơn"),
         bottom: bottomAppBar(),
       ),
       body: Stack(
@@ -84,16 +85,6 @@ class _showAllInvoiceState extends State<showAllInvoice>
     );
   }
 
-  Widget titleAppBar() {
-    return Center(
-      child: Text(
-        "Hóa đơn",
-        style: TextStyle(
-            color: Colors.white, fontWeight: FontWeight.w500, fontSize: 22),
-      ),
-    );
-  }
-
   Widget bottomAppBar() {
     return TabBar(
       // labelPadding: EdgeInsets.symmetric(horizontal: 7.0),
@@ -104,7 +95,7 @@ class _showAllInvoiceState extends State<showAllInvoice>
       controller: _tabController,
       tabs: <Widget>[
         Tab(text: "Yêu cầu"),
-        Tab(text: "Xử lý"),
+        Tab(text: "Đang xử lý"),
         Tab(text: "Ký gửi"),
         Tab(text: "Hoàn thành"),
         Tab(text: "Từ chối"),
