@@ -543,6 +543,7 @@ Widget boxForAdvance({
   String imageUrl,
   int status,
   Widget widget,
+  bool isCheck
 }) {
   String dateAfterFormat, dateReceiveAfterFormat, totalAfterFormat;
   try {
@@ -590,11 +591,11 @@ Widget boxForAdvance({
                     alignment: Alignment.centerRight,
                     paddingLeftOfText: 10,
                     paddingRightOfText: 10,
-                    tittle: status == 8
+                    tittle: isCheck
                         ? "Đã duyệt "
-                        : "${getStatus(status: status)}",
+                        : "Đã mượn",
                     fontWeight: FontWeight.w600,
-                    color: getColorStatus(status: status)),
+                    color: isCheck? Colors.orangeAccent: getColorStatus(status: status)),
               ),
             ],
           ),
@@ -1064,9 +1065,9 @@ Widget boxForAdvanceHistory({
   Color statusAdvance;
   if (isAdvance && isPaid) {
     titleStatus = "Đã trả nợ";
-    statusAdvance = getColorStatus(status: 9);
+    statusAdvance = getColorStatus(status: 1);
   } else if (!isAdvance && !isPaid) {
-    titleStatus = "Đã trả xong";
+    titleStatus = "Đơn trả";
     statusAdvance = getColorStatus(status: 9);
   } else {
     titleStatus = "Đã mượn";

@@ -875,6 +875,9 @@ Widget componentContainerDetailAdvanceRequest(BuildContext context,
         //show btn for manager and customer
         showBtnInAdvanceRequest(context, statusId, activeStatus, isCustomer, id,
             statusId, id, widgetToNavigator),
+        SizedBox(
+          height: 25,
+        ),
       ],
     ),
   );

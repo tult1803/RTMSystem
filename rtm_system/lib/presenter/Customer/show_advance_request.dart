@@ -165,6 +165,7 @@ int totalAdvance = 0;
                                     storeId: item.storeId,
                                     name: item.customerName,
                                     receiveDate: item.receiveDate,
+                                    isCheck: item.doneDate == null? false: true,
                                     widget: FormForDetailPage(
                                       tittle: "Chi tiết ứng tiền",
                                       bodyPage: DetailAdvancePage(

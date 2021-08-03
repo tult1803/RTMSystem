@@ -142,6 +142,9 @@ class _DetailAdvanceReturnState extends State<DetailAdvanceReturn> {
                   ),
                   if (widget.isDone == false)
                     btnConfirmAdvanceReturn(context, id: widget.id),
+                  SizedBox(
+                    height: 25,
+                  ),
                 ],
               ),
             ),
