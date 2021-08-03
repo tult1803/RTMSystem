@@ -61,6 +61,8 @@ String MSG053 = "Hủy kích hoạt thành công";
 String MSG054 = "Ẩn thông báo thành công";
 String MSG055 = "Xin hãy nhập giá mới";
 String MSG056 = "không hợp lệ";
+
+String MSG057 = "Vượt quá độ dài cho phép";
 //use to show message
 String showMessage(String name, String msg){
   return name.isEmpty || name == null? msg : name + " " + msg;

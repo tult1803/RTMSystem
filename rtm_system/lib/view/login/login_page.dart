@@ -222,11 +222,7 @@ class LoginPageState extends State<LoginPage> {
     setState(() {
       error = "";
       errorUsername = checkPhoneNumber(username);
-      if (password == null || password == "") {
-        errorPassword = showMessage("Mật khẩu", MSG001);
-      } else {
-        errorPassword = null;
-      }
+      errorPassword = checkPassword(password, 0);
 
       if (errorUsername == null && errorPassword == null) {
         _buttonState = ButtonState.inProgress;
@@ -309,6 +305,11 @@ class LoginPageState extends State<LoginPage> {
           onChanged: (value1) {
             setState(() {
               password = value1.trim();
+            });
+          },
+          onSubmitted: (value) {
+            setState(() {
+              errorPassword = checkPassword(password, 0);
             });
           },
           obscureText: obscureTextPassword,
