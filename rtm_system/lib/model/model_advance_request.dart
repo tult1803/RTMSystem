@@ -1,9 +1,3 @@
-import 'dart:convert';
-
-AdvanceRequest advanceRequestFromJson(String str) => AdvanceRequest.fromJson(json.decode(str));
-
-String advanceRequestToJson(AdvanceRequest data) => json.encode(data.toJson());
-
 class AdvanceRequest {
   AdvanceRequest({
     this.advances,
@@ -17,11 +11,6 @@ class AdvanceRequest {
     advances: List<Advance>.from(json["advances"].map((x) => Advance.fromJson(x))),
     total: json["total"],
   );
-
-  Map<String, dynamic> toJson() => {
-    "advances": List<dynamic>.from(advances.map((x) => x.toJson())),
-    "total": total,
-  };
 }
 
 class Advance {
@@ -87,31 +76,9 @@ class Advance {
     processDate: json["process_date"],
     acceptId: json["accept_id"],
     acceptStatusId: json["accept_status_id"],
-    doneDate: json["done_date"],
+    doneDate: json["done_date"] == null ? null : json["done_date"],
     cancelId: json["cancel_id"],
     reason: json["reason"],
   );
 
-  Map<String, dynamic> toJson() => {
-    "id": id,
-    "customer_id": customerId,
-    "customer_name": customerName,
-    "customer_phone": customerPhone,
-    "store_id": storeId,
-    "store_name": storeName,
-    "amount": amount,
-    "create_date": createDate,
-    "receive_date": receiveDate,
-    "description": description,
-    "image_url": imageUrl,
-    "status_id": statusId,
-    "manager_id": managerId,
-    "manager_name": managerName,
-    "process_date": processDate,
-    "accept_id": acceptId,
-    "accept_status_id": acceptStatusId,
-    "done_date": doneDate,
-    "cancel_id": cancelId,
-    "reason": reason,
-  };
 }

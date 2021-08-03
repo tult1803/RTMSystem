@@ -24,16 +24,24 @@ class _AllCustomerState extends State<AllCustomer> {
         leading: leadingAppbar(context, widget: this.widget.widgetToNavigator == null ? HomeAdminPage(index: 4,): this.widget.widgetToNavigator),
         centerTitle: true,
         backgroundColor: welcome_color,
-        title: Text(
-              "Quản lý khách hàng",
-              style: TextStyle(
-                  color: Colors.white, fontWeight: FontWeight.w500, fontSize: 22),
-            ),
-        bottom: PreferredSize(
-            child: btnMain(context,150, "Tạo khách hàng", Icon(Icons.person_add), CreateCustomer()),
-            preferredSize: Size.fromHeight(60.0)),
+        title: titleAppBar("Quản lý khách hàng"),
       ),
-      body: new showAllCustomer(),
+      body: showAllCustomer(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => CreateCustomer()),
+          );
+        },
+        child: Icon(
+          Icons.add,
+          color: Colors.white,
+          size: 25,
+        ),
+        backgroundColor: primaryColor,
+      )
     );
   }
 }

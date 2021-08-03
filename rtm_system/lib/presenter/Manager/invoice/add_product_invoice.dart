@@ -210,11 +210,7 @@ class _AddProductPageState extends State<AddProductPage> {
         backgroundColor: Color(0xFF0BB791),
         centerTitle: true,
         leading: leadingAppbar(context, widget: this.widget.widgetToNavigator),
-        title: Text(
-          this.widget.tittle,
-          style: TextStyle(
-              color: Colors.white, fontWeight: FontWeight.w500, fontSize: 22),
-        ),
+        title: titleAppBar(widget.tittle),
       ),
       body: SingleChildScrollView(
         child: Container(

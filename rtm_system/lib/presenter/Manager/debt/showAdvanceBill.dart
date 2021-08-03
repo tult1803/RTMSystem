@@ -126,6 +126,7 @@ class showAdvancceBillManagerState extends State<showAdvancceBillManager> {
                          name: item.customerName,
                          receiveDate: item.receiveDate,
                          imageUrl: item.imageUrl,
+                         isCheck: item.doneDate == null? false: true,
                          widget: FormForDetailPage(
                            tittle: "Chi tiết ứng tiền",
                            bodyPage: DetailAdvancePage(

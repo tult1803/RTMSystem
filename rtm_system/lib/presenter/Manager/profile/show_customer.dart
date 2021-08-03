@@ -84,7 +84,7 @@ class _showAllCustomerState extends State<showAllCustomer> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Container(
-      margin: EdgeInsets.only(top: 0, left: 5, right: 5),
+      margin: EdgeInsets.only(top: 0, left: 5, right: 5, bottom: 25),
       height: size.height,
       width: size.width,
       child: new CustomScrollView(

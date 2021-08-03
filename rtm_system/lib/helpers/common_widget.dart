@@ -200,10 +200,10 @@ Widget boxForCustomer(
     onTap: () => Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => widget)),
     child: Container(
-      margin: EdgeInsets.only(top: 15, left: 10, right: 10),
+      margin: EdgeInsets.only(top: 15, left: 10, right: 10, bottom: 10),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(5),
+        borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
             color: Colors.black54,
@@ -214,88 +214,93 @@ Widget boxForCustomer(
       ),
       child: Column(
         children: [
+          SizedBox(height: 5,),
           Row(
             children: [
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: CircleAvatar(
-                      backgroundColor: colorHexa("AEDFD4"),
-                      child: Icon(
-                        Icons.person_outline_sharp,
-                        color: Colors.black54,
+              Expanded(
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: CircleAvatar(
+                        backgroundColor: colorHexa("AEDFD4"),
+                        child: Icon(
+                          Icons.person_outline_sharp,
+                          color: Colors.black54,
+                        ),
                       ),
                     ),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        child: Text(
-                          name,
-                          style:
-                              GoogleFonts.roboto(fontWeight: FontWeight.w700),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          child: Text(
+                            name,
+                            style:
+                                GoogleFonts.roboto(fontWeight: FontWeight.w700),
+                          ),
                         ),
-                      ),
-                      Container(
-                        child: Text(
-                          phone,
-                          style: GoogleFonts.roboto(
-                              fontWeight: FontWeight.w400,
-                              color: Colors.black54),
+                        SizedBox(height: 5,),
+                        Container(
+                          child: Text(
+                            phone,
+                            style: GoogleFonts.roboto(
+                                fontWeight: FontWeight.w400,),
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                  ],
+                ),
               ),
-              Expanded(child: SizedBox()),
-              miniContainer(
-                context: context,
-                borderRadius: 5,
-                height: 30,
-                width: 100,
-                colorContainer: Colors.white,
-                colorText: Colors.black,
-                fontWeightText: FontWeight.w500,
-                marginRight: 10,
-                tittle: "${getLevel(level: level)}",
-              ),
+              containerTextInvoice(
+                    alignment: Alignment.centerRight,
+                    paddingLeftOfText: 10,
+                    paddingRightOfText: 10,
+                    tittle: "${getStatus(status: status)}",
+                    fontWeight: FontWeight.w600,
+                    color: getColorStatus(status: status)),
             ],
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              miniContainer(
-                context: context,
-                borderRadius: 5,
-                height: 30,
-                width: 130,
-                colorContainer: colorHexa("#FF8F84"),
-                colorText: Colors.white,
-                fontWeightText: FontWeight.w500,
-                marginLeft: 10,
-                paddingLeftOfText: 10,
-                alignmentText: Alignment.centerLeft,
-                tittle: "Nợ: ${getFormatPrice("$advance")} đ",
+              Expanded(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    containerTextInvoice(
+                      marginTop: 2,
+                      alignment: Alignment.topLeft,
+                      paddingLeftOfText: 15,
+                      paddingRightOfText: 10,
+                      tittle: "Số nợ:",
+                      fontWeight: FontWeight.w400,
+                    ),
+                    containerTextInvoice(
+                      marginTop: 2,
+                      alignment: Alignment.topLeft,
+                      paddingLeftOfText: 0,
+                      paddingRightOfText: 10,
+                      tittle: "${getFormatPrice(advance.toString())} đ",
+                      fontWeight: FontWeight.w500,
+                      color: primaryColor
+                    )
+                  ],
+                ),
               ),
-              Expanded(child: SizedBox()),
-              miniContainer(
-                context: context,
-                borderRadius: 5,
-                height: 30,
-                width: 100,
-                colorContainer: getColorStatus(status: status),
-                colorText: Colors.white,
-                fontWeightText: FontWeight.w500,
-                marginRight: 10,
-                tittle: "${getStatus(status: status)}",
-              ),
+              containerIconCustomer(
+                  marginTop: 2,
+                  alignment: Alignment.topLeft,
+                  paddingLeftOfText: 10,
+                  paddingRightOfText: 10,
+                  icon: level == 0? Icons.star_border_outlined : level == 1? Icons.star_border_purple500: Icons.star,
+                  fontWeight: FontWeight.w400,
+                  color: level == 0? Colors.grey: level ==1? Colors.blueGrey: Colors.orangeAccent)
             ],
           ),
           SizedBox(
-            height: 10,
+            height: 15,
           ),
         ],
       ),
@@ -543,6 +548,7 @@ Widget boxForAdvance({
   String imageUrl,
   int status,
   Widget widget,
+  bool isCheck
 }) {
   String dateAfterFormat, dateReceiveAfterFormat, totalAfterFormat;
   try {
@@ -590,11 +596,11 @@ Widget boxForAdvance({
                     alignment: Alignment.centerRight,
                     paddingLeftOfText: 10,
                     paddingRightOfText: 10,
-                    tittle: status == 8
+                    tittle: isCheck
                         ? "Đã duyệt "
-                        : "${getStatus(status: status)}",
+                        : "Đã mượn",
                     fontWeight: FontWeight.w600,
-                    color: getColorStatus(status: status)),
+                    color: isCheck? Colors.orangeAccent: getColorStatus(status: status)),
               ),
             ],
           ),
@@ -1064,9 +1070,9 @@ Widget boxForAdvanceHistory({
   Color statusAdvance;
   if (isAdvance && isPaid) {
     titleStatus = "Đã trả nợ";
-    statusAdvance = getColorStatus(status: 9);
+    statusAdvance = getColorStatus(status: 1);
   } else if (!isAdvance && !isPaid) {
-    titleStatus = "Đã trả xong";
+    titleStatus = "Đơn trả";
     statusAdvance = getColorStatus(status: 9);
   } else {
     titleStatus = "Đã mượn";
