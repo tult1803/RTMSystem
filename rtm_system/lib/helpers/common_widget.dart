@@ -597,8 +597,8 @@ Widget boxForAdvance({
                     paddingLeftOfText: 10,
                     paddingRightOfText: 10,
                     tittle: isCheck
-                        ? "Đã duyệt "
-                        : "Đã mượn",
+                        ? "Đã mượn"
+                        : "Đã duyệt ",
                     fontWeight: FontWeight.w600,
                     color: isCheck? Colors.orangeAccent: getColorStatus(status: status)),
               ),
