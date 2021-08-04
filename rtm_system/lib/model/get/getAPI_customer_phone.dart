@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:js';
 import 'package:flutter/cupertino.dart';
 import 'package:rtm_system/helpers/dialog.dart';
 import 'package:rtm_system/model/model_profile_customer.dart';

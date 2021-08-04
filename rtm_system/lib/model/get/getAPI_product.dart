@@ -28,11 +28,11 @@ class GetProduct {
       return listProduct;
     } else {
       // throw an exception.
-      if (response.statusCode == 403) {
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        prefs.clear();
-        showCupertinoAlertDialog(context, showMessage("", MSG059), widget: LoginPage(), isPush: true);
-      }
+      // if (response.statusCode == 403) {
+      //   SharedPreferences prefs = await SharedPreferences.getInstance();
+      //   prefs.clear();
+      //   showCupertinoAlertDialog(context, showMessage("", MSG059), widget: LoginPage(), isPush: true);
+      // }
       throw Exception('Failed to load data');
     }
   }
