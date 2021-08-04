@@ -561,6 +561,26 @@ Widget boxForAdvance({
     dateAfterFormat = "$createDate";
     dateReceiveAfterFormat = "$receiveDate";
   }
+  String titleStatus;
+  Color statusAdvance;
+  if (isCheck) {
+    titleStatus = "Đã mượn";
+    statusAdvance = Colors.orangeAccent;
+  } else {
+    if (status == 6) {
+      titleStatus = getStatus(status: status);
+      statusAdvance = getColorStatus(status: status);
+      getColorStatus(status: status);
+    } else if (status == 4) {
+      titleStatus = getStatus(status: status);
+      statusAdvance = getColorStatus(status: status);
+      getColorStatus(status: status);
+    } else {
+      titleStatus = "Đã duyệt";
+      statusAdvance = getColorStatus(status: 8);
+      getColorStatus(status: status);
+    }
+  } 
   return GestureDetector(
     onTap: () => Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => widget)),
@@ -596,11 +616,9 @@ Widget boxForAdvance({
                     alignment: Alignment.centerRight,
                     paddingLeftOfText: 10,
                     paddingRightOfText: 10,
-                    tittle: isCheck
-                        ? "Đã mượn"
-                        : "Đã duyệt ",
+                    tittle: titleStatus,
                     fontWeight: FontWeight.w600,
-                    color: isCheck? Colors.orangeAccent: getColorStatus(status: status)),
+                    color: statusAdvance),
               ),
             ],
           ),
@@ -1070,7 +1088,7 @@ Widget boxForAdvanceHistory({
   Color statusAdvance;
   if (isAdvance && isPaid) {
     titleStatus = "Đã trả nợ";
-    statusAdvance = getColorStatus(status: 1);
+    statusAdvance = getColorStatus(status: 7);
   } else if (!isAdvance && !isPaid) {
     titleStatus = "Đơn trả";
     statusAdvance = getColorStatus(status: 9);

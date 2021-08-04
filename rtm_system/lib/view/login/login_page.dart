@@ -223,7 +223,6 @@ class LoginPageState extends State<LoginPage> {
       error = "";
       errorUsername = checkPhoneNumber(username);
       errorPassword = checkPassword(password, 0);
-
       if (errorUsername == null && errorPassword == null) {
         _buttonState = ButtonState.inProgress;
         print('Status button: Process');

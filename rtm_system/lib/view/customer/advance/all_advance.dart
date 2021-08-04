@@ -135,7 +135,7 @@ class _AdvancePageState extends State<AdvancePage>
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               rowButtonDatetime(),
-              new showAdvanceRequestPage(status,
+              showAdvanceRequestPage(status,
                   fromDate: getFromDate, toDate: getToDate),
             ],
           ),
@@ -150,9 +150,7 @@ class _AdvancePageState extends State<AdvancePage>
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              new showHistoryAdvancePage(),
-            ],
+            children: [ showHistoryAdvancePage(),],
           ),
         ));
   }

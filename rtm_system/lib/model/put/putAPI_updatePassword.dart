@@ -2,8 +2,6 @@ import 'dart:convert';
 import 'package:rtm_system/ultils/src/url_api.dart';
 import 'package:http/http.dart' as http;
 
-//Type = 0 là update Password, != 0 là updata dữ liệu khác
-//CMND mà trống là update manager, ngược lại là update Customer
 class PutUpdatePassword {
   updatePassword(
       String token,
@@ -20,8 +18,8 @@ class PutUpdatePassword {
       body: jsonEncode(<String, dynamic>{
         "account_id": accountId,
         "password": password,
-        "new_password": "string",
-        "confirm_password": "string"
+        "new_password": newPassword,
+        "confirm_password": confirmPassword
       }),
     );
 
