@@ -38,7 +38,7 @@ class _AllNoticeState extends State<AllNotice> {
         onPressed: () => Navigator.of(context)
             .push(MaterialPageRoute(builder: (context) => createNotice())),
         child: new Icon(
-          Icons.add_alert_outlined,
+          Icons.notification_add_outlined,
           color: Colors.white,
           size: 30,
         ),

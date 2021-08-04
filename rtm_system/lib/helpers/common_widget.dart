@@ -939,10 +939,10 @@ Widget btnDeactivateCustomer(
   if (status != "Không hoạt động") {
     return Container(
       width: 160,
-      height: 50,
+      height: 45,
       decoration: BoxDecoration(
         color: Colors.redAccent,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(15),
       ),
       child: TextButton(
         onPressed: () {
@@ -963,7 +963,7 @@ Widget btnDeactivateCustomer(
         },
         child: AutoSizeText(
           isDeactivateNotice == null ? "Hủy kích hoạt" : "Ẩn thông báo",
-          style: TextStyle(color: Colors.white, fontSize: 17),
+          style: TextStyle(color: Colors.white, fontSize: 16),
         ),
       ),
     );
