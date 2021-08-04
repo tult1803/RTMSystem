@@ -294,9 +294,9 @@ Widget boxForCustomer(
                   alignment: Alignment.topLeft,
                   paddingLeftOfText: 10,
                   paddingRightOfText: 10,
-                  icon: level == 0? Icons.star_border_outlined : level == 1? Icons.star_border_purple500: Icons.star,
+                  icon: level == 0? null : level == 1? Icons.star_border: Icons.star,
                   fontWeight: FontWeight.w400,
-                  color: level == 0? Colors.grey: level ==1? Colors.blueGrey: Colors.orangeAccent)
+                  color: level == 0? Colors.grey: level ==1? Colors.grey: Colors.orangeAccent)
             ],
           ),
           SizedBox(

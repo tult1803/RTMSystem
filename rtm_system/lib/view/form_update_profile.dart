@@ -104,9 +104,10 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
                   errPhone,
                   1,
                   TextInputType.phone,
-                  enable: widget.isCreate),
+                  enable: widget.isCreate,
+                  maxLength: 11),
               _txtFormField(this.widget.fullname, false, "Nhập họ tên",
-                  "Họ và tên", errFullName, 1, TextInputType.text),
+                  "Họ và tên", errFullName, 1, TextInputType.text, maxLength: 50),
               _checkPassword(),
               _checkConfirmPassword(),
               radioButton(context),
@@ -189,8 +190,8 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
                   });
                 },
                 currentTime: widget.birthday,
-                maxTime: DateTime(DateTime.now().year, 12, 31),
-                minTime: DateTime(DateTime.now().year - 111),
+                maxTime: DateTime(DateTime.now().year - 18, DateTime.now().month, DateTime.now().day),
+                minTime: DateTime(DateTime.now().year - 100),
                 locale: LocaleType.vi,
               );
             },
@@ -256,7 +257,7 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
       String error,
       int maxLines,
       TextInputType txtType,
-      {bool enable}) {
+      {bool enable, int maxLength}) {
     return Container(
       margin: widget.isUpgrade
           ? EdgeInsets.only(top: 4)
@@ -264,6 +265,7 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
       child: TextField(
         controller: _controller,
         obscureText: obscureText,
+        maxLength: maxLength,
         inputFormatters: [
           if (tittle == "Số điện thoại" || tittle == "CMND/CCCD")
             FilteringTextInputFormatter.allow(RegExp(r'[[0-9]')),
@@ -348,7 +350,7 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
           suffixIcon: widget.isUpgrade
               ? null
               : Icon(
-                  Icons.create,
+                 widget.isUpdate ? Icons.check : Icons.create,
                   color: Colors.black54,
                 ),
 
@@ -366,13 +368,14 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
   }
 
   Widget _txtFormField(String value, bool obscureText, String hintText,
-      String tittle, String error, int maxLines, TextInputType txtType) {
+      String tittle, String error, int maxLines, TextInputType txtType, {int maxLength}) {
     return Container(
       margin: widget.isUpgrade
           ? null
           : EdgeInsets.only(top: 10, left: 10, right: 10),
       child: TextFormField(
         initialValue: value,
+        maxLength: maxLength,
         obscureText: obscureText,
         onChanged: (value) {
           if (tittle == "Họ và tên") {
@@ -635,14 +638,14 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
   Widget _checkCMND() {
     return this.widget.check
         ? _txtfield(getDataTextField(this.widget.cmnd), false, widget.isUpgrade ? "Nhập CMND/CCCD":"Không bắt buộc",
-            "CMND/CCCD", errCMND, 1, TextInputType.phone)
+            "CMND/CCCD", errCMND, 1, TextInputType.phone, maxLength: 12)
         : Container();
   }
 
   Widget _checkAddress() {
     return this.widget.check
         ? _txtFormField(this.widget.address, false,  widget.isUpgrade ? "Nhập địa chỉ":"Không bắt buộc", "Địa chỉ",
-            errAddress, 1, TextInputType.streetAddress)
+            errAddress, 1, TextInputType.streetAddress, maxLength: 100)
         : Container();
   }
 

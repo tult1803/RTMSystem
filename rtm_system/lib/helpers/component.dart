@@ -7,6 +7,7 @@ import 'package:rtm_system/helpers/button.dart';
 import 'package:rtm_system/helpers/common_widget.dart';
 import 'package:rtm_system/model/model_advance_return_detail.dart';
 import 'package:rtm_system/model/model_invoice_request.dart';
+import 'package:rtm_system/ultils/check_data.dart';
 import 'package:rtm_system/ultils/get_api_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/customer/Profile/show_image_cmnd.dart';
@@ -445,7 +446,7 @@ Widget componentContainerDetailProduct(BuildContext context, Map item) {
         SizedBox(
           height: 10,
         ),
-        txtItemDetail(context, "Loại", "${item["type"]}"),
+        txtItemDetail(context, "Loại", "${checkTypeProduct(item["type"])}"),
         SizedBox(
           height: 10,
         ),

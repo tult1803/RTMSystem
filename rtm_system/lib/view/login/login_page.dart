@@ -257,6 +257,7 @@ class LoginPageState extends State<LoginPage> {
         config: keyBoardConfig(context),
         child: TextField(
           focusNode: _nodeUsername,
+          maxLength: 11,
           onChanged: (value) {
             username = value.trim();
           },
@@ -272,6 +273,7 @@ class LoginPageState extends State<LoginPage> {
           ],
           decoration: InputDecoration(
             border: UnderlineInputBorder(),
+            counterText: "",
             labelText: "Số điện thoại",
             labelStyle: TextStyle(color: Colors.black54),
             contentPadding: EdgeInsets.only(top: 14, left: 10),

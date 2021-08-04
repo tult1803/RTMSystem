@@ -204,6 +204,7 @@ class _updatePriceProductState extends State<updatePriceProduct> {
         config: keyBoardConfig(context),
         child: TextField(
           focusNode: _nodePrice,
+          maxLength: 9,
           textAlign: TextAlign.right,
           controller: _controller,
           keyboardType: TextInputType.number,
@@ -212,6 +213,7 @@ class _updatePriceProductState extends State<updatePriceProduct> {
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
           decoration: InputDecoration(
             border: OutlineInputBorder(),
+            counterText: "",
             hintText: "000.000",
             //Sau khi click vào "Nhập tiêu đề" thì màu viền sẽ đổi
             focusedBorder: OutlineInputBorder(
