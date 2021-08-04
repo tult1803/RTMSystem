@@ -6,8 +6,10 @@ import 'package:rtm_system/model/get/getAPI_customer_phone.dart';
 import 'package:rtm_system/model/get/getAPI_invoice.dart';
 import 'package:rtm_system/model/model_invoice.dart';
 import 'package:rtm_system/model/model_profile_customer.dart';
+import 'package:rtm_system/presenter/Manager/invoice/add_product_invoice.dart';
 import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
+import 'package:rtm_system/view/customer/advance/create_request_advance.dart';
 import 'package:rtm_system/view/customer/contact/ContactPage.dart';
 import 'package:rtm_system/view/customer/get_money_deposit.dart';
 import 'package:rtm_system/view/customer/home_customer_page.dart';
@@ -24,6 +26,11 @@ class HomeMenu extends StatefulWidget {
 class _HomeMenuState extends State<HomeMenu> with TickerProviderStateMixin {
   TabController _tabController;
   int advanceAmount = 0, invoiceAmount = 0;
+
+  GetAPIProfileCustomer getAPIProfileCustomer = GetAPIProfileCustomer();
+  InfomationCustomer infomationCustomer = InfomationCustomer();
+  int level = 0;
+
   Invoice invoice;
   @override
   void initState() {
@@ -75,6 +82,21 @@ class _HomeMenuState extends State<HomeMenu> with TickerProviderStateMixin {
     return invoice.invoices;
   }
 
+  Future getAPIProfile() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    String token = sharedPreferences.getString('access_token');
+    String phone = sharedPreferences.getString('phone');
+    // Đỗ dữ liệu lấy từ api
+    infomationCustomer =
+        await getAPIProfileCustomer.getProfileCustomer(token, phone);
+    if (infomationCustomer != null) {
+      setState(() {
+        level = infomationCustomer.level;
+      });
+    }
+    return infomationCustomer;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -112,7 +134,7 @@ class _HomeMenuState extends State<HomeMenu> with TickerProviderStateMixin {
             Expanded(
               child: Container(
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: backgroundColor,
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(35.0),
                       topRight: Radius.circular(35.0),
@@ -121,32 +143,10 @@ class _HomeMenuState extends State<HomeMenu> with TickerProviderStateMixin {
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
-                        SizedBox(
-                          height: 45,
-                        ),
-                        twoBtnBody(
-                          "Nhận tiền",
-                          Icons.border_color,
-                          "Trả nợ",
-                          Icons.money_off,
-                          GetMoneyDeposit(),
-                          PayDebt(),
-                          true,
-                        ),
-                        twoBtnBody(
-                            "Xác nhận hoá đơn",
-                            Icons.my_library_books,
-                            "Xác nhận ứng tiền",
-                            Icons.monetization_on_outlined,
-                            HomeCustomerPage(
-                              index: 1,
-                              indexInvoice: 1,
-                              indexAdvance: 0,
-                            ),
-                            HomeCustomerPage(
-                                index: 2, indexAdvance: 1, indexInvoice: 0),
-                            false),
                         Container(
+                          margin: EdgeInsets.only(
+                            right: 24,
+                          ),
                           child: TextButton(
                             onPressed: () {
                               Navigator.of(context).push(
@@ -156,10 +156,10 @@ class _HomeMenuState extends State<HomeMenu> with TickerProviderStateMixin {
                             },
                             child: Center(
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   Icon(
-                                    Icons.my_library_books,
+                                    Icons.add_ic_call_outlined,
                                     color: primaryColor,
                                   ),
                                   SizedBox(
@@ -176,6 +176,44 @@ class _HomeMenuState extends State<HomeMenu> with TickerProviderStateMixin {
                             ),
                           ),
                         ),
+                        twoBtnBody(
+                          "Tạo bán hàng",
+                          Icons.playlist_add_check,
+                          "Tạo ứng tiền",
+                          Icons.post_add_outlined,
+                          AddProductPage(
+                            isCustomer: true,
+                            tittle: "Tạo yêu cầu bán hàng",
+                            level: level,
+                            widgetToNavigator: HomeCustomerPage(index: 0),
+                          ),
+                          CreateRequestAdvance(
+                            levelCustomer: level,
+                          ),
+                          true,
+                        ),
+                        twoBtnBody(
+                          "Nhận tiền",
+                          Icons.drive_file_rename_outline,
+                          "Trả nợ",
+                          Icons.money_off_csred_rounded,
+                          GetMoneyDeposit(),
+                          PayDebt(),
+                          true,
+                        ),
+                        twoBtnBody(
+                            "Xác nhận hoá đơn",
+                            Icons.file_copy_outlined ,
+                            "Xác nhận ứng tiền",
+                            Icons.attach_money ,
+                            HomeCustomerPage(
+                              index: 1,
+                              indexInvoice: 1,
+                              indexAdvance: 0,
+                            ),
+                            HomeCustomerPage(
+                                index: 2, indexAdvance: 1, indexInvoice: 0),
+                            false),
                       ],
                     ),
                   )),
@@ -293,6 +331,9 @@ class _HomeMenuState extends State<HomeMenu> with TickerProviderStateMixin {
                       (route) => false),
           child: Column(
             children: [
+              SizedBox(
+                height: 10,
+              ),
               Container(
                   child: icon == null
                       ? Icon(Icons.error)
@@ -309,7 +350,7 @@ class _HomeMenuState extends State<HomeMenu> with TickerProviderStateMixin {
                 style: GoogleFonts.roboto(
                     fontSize: fontSize,
                     fontWeight: fontWeightText,
-                    color: colorText),
+                    color: colorText,),
               ),
             ],
           ),
@@ -327,16 +368,16 @@ class _HomeMenuState extends State<HomeMenu> with TickerProviderStateMixin {
           borderRadius: 20,
           colorContainer: Colors.white,
           tittle: name1,
-          colorText: colorHexa("2B2D20"),
+          colorText: Colors.black,
           icon: Icon(
             icon1,
           ),
-          iconColor: welcome_color,
-          iconSize: 65,
+          iconColor: primaryColor,
+          iconSize: 50,
           widget: widget1,
           isCheck: isCheck,
-          // marginRight: 10,
           marginBottom: 30,
+          fontSize: 15
         ),
         if (name2 != "" && icon2 != null && widget2 != null)
           miniIconTextContainer(
@@ -346,14 +387,14 @@ class _HomeMenuState extends State<HomeMenu> with TickerProviderStateMixin {
             borderRadius: 20,
             colorContainer: Colors.white,
             tittle: name2,
-            colorText: colorHexa("2B2D20"),
+            colorText: Colors.black,
             icon: Icon(icon2),
-            iconColor: welcome_color,
-            iconSize: 65,
+            iconColor: primaryColor,
+            iconSize: 50,
             widget: widget2,
             isCheck: isCheck,
-            // marginLeft: 10,
             marginBottom: 30,
+            fontSize: 15,
           ),
       ],
     );
