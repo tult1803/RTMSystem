@@ -30,7 +30,7 @@ class _ContactPageState extends State<ContactPage> {
             topRight: Radius.circular(15.0),
           ),
         ),
-        child: new showStore(),
+        child: showStore(),
       ),
     );
   }
