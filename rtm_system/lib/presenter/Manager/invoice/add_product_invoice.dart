@@ -205,6 +205,7 @@ class _AddProductPageState extends State<AddProductPage> {
 
   @override
   Widget build(BuildContext context) {
+    print(nameNewCustomer);
     return Scaffold(
       backgroundColor: Color(0xffEEEEEE),
       appBar: AppBar(
@@ -233,6 +234,7 @@ class _AddProductPageState extends State<AddProductPage> {
                       txtInputType: TextInputType.numberWithOptions(
                           signed: true, decimal: true),
                       error: errorPhone,
+                        icon: Icons.create
                     ),
                     txtAutoFillByPhone(
                       enabled: false,
@@ -241,6 +243,7 @@ class _AddProductPageState extends State<AddProductPage> {
                       type: "name",
                       tittle: "Tên khách hàng",
                       txtInputType: TextInputType.name,
+                      icon: nameNewCustomer.isNotEmpty ? Icons.check : Icons.clear,
                     ),
                     SizedBox(
                       height: 10,
@@ -339,7 +342,8 @@ class _AddProductPageState extends State<AddProductPage> {
     TextInputType txtInputType,
     bool isCustomer,
     bool enabled,
-    int maxLength
+    int maxLength,
+    IconData icon
   }) {
     return isCustomer
         ? Container()
@@ -357,7 +361,13 @@ class _AddProductPageState extends State<AddProductPage> {
                 if (tittle.contains("Điện thoại")) {
                   errorPhone = await checkPhoneNumber(value);
                  if(errorPhone == null) doOnSubmittedTextField(type, value);
-                  if(errorPhone != null) phoneNewCustomer = "";
+                  if(errorPhone != null) {
+                    phoneNewCustomer = "";
+                    // ignore: unnecessary_statements
+                    nameNewCustomer == oldCusName ? nameNewCustomer = "" : null;
+                    // ignore: unnecessary_statements
+                    customerId == oldCusId ? customerId = "" : null;
+                  }
                 }
               },
               maxLines: 1,
@@ -388,7 +398,7 @@ class _AddProductPageState extends State<AddProductPage> {
                 ),
                 //Hiển thị Icon góc phải
                 suffixIcon: Icon(
-                  Icons.create,
+                  icon,
                   color: Colors.black54,
                 ),
 

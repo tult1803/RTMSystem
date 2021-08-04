@@ -63,6 +63,7 @@ String MSG055 = "Xin hãy nhập giá mới";
 String MSG056 = "không hợp lệ";
 
 String MSG057 = "Vượt quá độ dài cho phép";
+String MSG058 = "CMND/CCCD là 9 đến 12 số.";
 //use to show message
 String showMessage(String name, String msg){
   return name.isEmpty || name == null? msg : name + " " + msg;

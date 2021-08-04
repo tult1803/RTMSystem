@@ -153,7 +153,7 @@ checkCMND(String cmnd) {
   } else {
     try {
       if (cmnd.length < 9 || cmnd.length > 12) {
-        return showMessage("CMND/CCCD", MSG020);
+        return showMessage("", MSG058);
       } else {
         return null;
       }
@@ -209,4 +209,10 @@ convertPhone(String phone) {
   } catch (e) {
     return phone;
   }
+}
+
+checkTypeProduct(type){
+  if(type == 0){
+     return "Mủ lỏng";
+  }else return "Mủ đặc";
 }
