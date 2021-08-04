@@ -224,7 +224,7 @@ class _AddProductPageState extends State<AddProductPage> {
                 Column(
                   children: [
                     txtAutoFillByPhone(
-                      maxLength: 15,
+                      maxLength: 11,
                       enabled: widget.isChangeData == null ? true : false,
                       controller: getDataTextField(phoneNewCustomer),
                       isCustomer: this.widget.isCustomer,
