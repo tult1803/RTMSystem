@@ -21,13 +21,14 @@ class _showStoreState extends State<showStore> {
       PagingController(firstPageKey: 10);
   Store store;
   List<StoreElement> storeList;
-Future<void> _makePhoneCall(String url) async {
+  Future<void> _makePhoneCall(String url) async {
     if (await canLaunch(url)) {
       await launch(url);
     } else {
       throw 'Could not launch $url';
     }
   }
+
   @override
   void initState() {
     _pagingController.addPageRequestListener((pageKey) {
@@ -133,93 +134,93 @@ Future<void> _makePhoneCall(String url) async {
     );
   }
 
-Widget containerStores(BuildContext context, String name, String address,
-    String phone, String email) {
-  var size = MediaQuery.of(context).size;
-  return Container(
-    margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
-    decoration: BoxDecoration(
-      color: Colors.white,
-      borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(15.0),
-        topRight: Radius.circular(15.0),
-      ),
-    ),
-    child: TextButton(
-      style: TextButton.styleFrom(
-        primary: Colors.black, // foreground
-        textStyle: TextStyle(
-          fontSize: 16,
+  Widget containerStores(BuildContext context, String name, String address,
+      String phone, String email) {
+    var size = MediaQuery.of(context).size;
+    return Container(
+      margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(15.0),
+          topRight: Radius.circular(15.0),
         ),
       ),
-      onPressed: () {
-        setState(() {
-          _makePhoneCall('tel:$phone');
-       });
-      },
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                width: size.width * 0.93,
-                child: AutoSizeText(
-                  "$name",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
+      child: TextButton(
+        style: TextButton.styleFrom(
+          primary: Colors.black, // foreground
+          textStyle: TextStyle(
+            fontSize: 16,
+          ),
+        ),
+        onPressed: () {
+          setState(() {
+            _makePhoneCall('tel:$phone');
+          });
+        },
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Container(
+                  width: size.width * 0.93,
+                  child: AutoSizeText(
+                    "$name",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.left,
                   ),
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.left,
                 ),
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            AutoSizeText(
+              "$address",
+              style: TextStyle(
+                fontSize: 14,
               ),
-            ],
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          AutoSizeText(
-            "$address",
-            style: TextStyle(
-              fontSize: 14,
+              textAlign: TextAlign.left,
+              overflow: TextOverflow.ellipsis,
             ),
-            textAlign: TextAlign.left,
-            overflow: TextOverflow.ellipsis,
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          AutoSizeText(
-            "$phone",
-            style: TextStyle(
-              fontSize: 14,
+            SizedBox(
+              height: 10,
             ),
-            textAlign: TextAlign.left,
-            overflow: TextOverflow.ellipsis,
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          AutoSizeText(
-            "$email",
-            style: TextStyle(
-              fontSize: 12,
-              color: welcome_color,
+            AutoSizeText(
+              "$phone",
+              style: TextStyle(
+                fontSize: 14,
+              ),
+              textAlign: TextAlign.left,
+              overflow: TextOverflow.ellipsis,
             ),
-            textAlign: TextAlign.left,
-          ),
-          SizedBox(
-            height: 9,
-          ),
-          SizedBox(
-            height: 0.5,
-            child: Container(
-              color: Colors.black54,
+            SizedBox(
+              height: 10,
             ),
-          ),
-        ],
+            AutoSizeText(
+              "$email",
+              style: TextStyle(
+                fontSize: 12,
+                color: welcome_color,
+              ),
+              textAlign: TextAlign.left,
+            ),
+            SizedBox(
+              height: 9,
+            ),
+            SizedBox(
+              height: 0.5,
+              child: Container(
+                color: Colors.black54,
+              ),
+            ),
+          ],
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 }
