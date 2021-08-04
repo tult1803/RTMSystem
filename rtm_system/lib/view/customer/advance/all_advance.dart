@@ -60,7 +60,7 @@ class _AdvancePageState extends State<AdvancePage>
     InfomationCustomer infomationCustomer = InfomationCustomer();
     // Đỗ dữ liệu lấy từ api
     infomationCustomer =
-        await getAPIProfileCustomer.getProfileCustomer(token, phone);
+        await getAPIProfileCustomer.getProfileCustomer(context,token, phone);
     setState(() {
       level = infomationCustomer.level;
     });

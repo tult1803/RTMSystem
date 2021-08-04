@@ -61,7 +61,7 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
 
     // Đỗ dữ liệu lấy từ api
     informationCustomer =
-        await getAPIProfileCustomer.getProfileCustomer(token, phone);
+        await getAPIProfileCustomer.getProfileCustomer(context,token, phone);
     if (informationCustomer != null) {
       setState(() {
         totalAdvance = informationCustomer.advance;

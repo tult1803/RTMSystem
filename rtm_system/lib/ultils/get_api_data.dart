@@ -353,7 +353,7 @@ Future<void> createRequestAdvance(BuildContext context, String accountId,
           ));
 }
 
-Future getDataCustomerFromPhone(String phone) async {
+Future getDataCustomerFromPhone(BuildContext context,String phone) async {
   try {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     GetAPIProfileCustomer getAPIProfileCustomer = GetAPIProfileCustomer();
@@ -363,7 +363,7 @@ Future getDataCustomerFromPhone(String phone) async {
       maskType: EasyLoadingMaskType.black,
     );
     infomationCustomer = await getAPIProfileCustomer.getProfileCustomer(
-        prefs.get('access_token'), phone);
+        context, prefs.get('access_token'), phone);
     EasyLoading.showSuccess("Thành công");
     await Future.delayed(Duration(milliseconds: 1000));
     EasyLoading.dismiss();

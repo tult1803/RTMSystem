@@ -40,7 +40,7 @@ class _showProfileState extends State<showProfile> {
     String phone = sharedPreferences.getString('phone');
     password = sharedPreferences.getString('password');
     infomationCustomer =
-        await getAPIProfileCustomer.getProfileCustomer(token, phone);
+        await getAPIProfileCustomer.getProfileCustomer(context,token, phone);
 
     return infomationCustomer;
   }

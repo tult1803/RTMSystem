@@ -417,7 +417,7 @@ class _AddProductPageState extends State<AddProductPage> {
     switch (type) {
       case "phone":
         phoneNewCustomer = value.trim();
-        infomationCustomer = await getDataCustomerFromPhone(value);
+        infomationCustomer = await getDataCustomerFromPhone(context,value);
         setState(() {
           if (infomationCustomer == null) {
             // ignore: unnecessary_statements

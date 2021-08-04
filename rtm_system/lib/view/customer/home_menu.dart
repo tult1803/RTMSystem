@@ -49,7 +49,7 @@ class _HomeMenuState extends State<HomeMenu> with TickerProviderStateMixin {
     InfomationCustomer infomationCustomer = InfomationCustomer();
     // Đỗ dữ liệu lấy từ api
     infomationCustomer =
-        await getAPIProfileCustomer.getProfileCustomer(token, phone);
+        await getAPIProfileCustomer.getProfileCustomer(context,token, phone);
     setState(() {
       advanceAmount = infomationCustomer.advance;
     });
@@ -96,7 +96,7 @@ class _HomeMenuState extends State<HomeMenu> with TickerProviderStateMixin {
     String phone = sharedPreferences.getString('phone');
     // Đỗ dữ liệu lấy từ api
     infomationCustomer =
-        await getAPIProfileCustomer.getProfileCustomer(token, phone);
+        await getAPIProfileCustomer.getProfileCustomer(context,token, phone);
     if (infomationCustomer != null) {
       setState(() {
         level = infomationCustomer.level;
