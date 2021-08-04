@@ -57,6 +57,7 @@ dependencies:
   firebase_auth: ^3.0.1
   keyboard_actions: ^3.4.3
   translator: ^0.1.7
+  url_launcher: ^6.0.9
   #  path: ^1.8.0
   #  path_provider: ^2.0.2
 
