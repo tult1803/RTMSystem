@@ -1066,7 +1066,7 @@ Widget boxForAdvanceHistory({
                       alignment: Alignment.topLeft,
                       paddingLeftOfText: 10,
                       paddingRightOfText: 10,
-                      tittle: "Số tiền vay",
+                      tittle: isAdvance? "Số tiền vay": "Tổng tiền",
                     ),
                     SizedBox(
                       height: 10,
@@ -1087,7 +1087,7 @@ Widget boxForAdvanceHistory({
                           alignment: Alignment.topLeft,
                           paddingLeftOfText: 10,
                           paddingRightOfText: 10,
-                          tittle: "Số tiền trả lại",
+                          tittle: "Tiền hoàn trả",
                         ),
                         SizedBox(
                           height: 10,

@@ -398,16 +398,20 @@ Widget componentContainerDetailInvoice(BuildContext context,
         SizedBox(
           height: 10,
         ),
-        txtItemDetail(context, "Ngày khách hàng xác nhận",
-            "${getDateTime(customerConfirmDate)}"),
-        SizedBox(
-          height: 10,
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        txtItemDetail(
-            context, "Ngày hoá đơn có hiệu lực", "${getDateTime(activeDate)}"),
+        if (customerConfirmDate != null)
+          txtItemDetail(context, "Ngày khách hàng xác nhận",
+              "${getDateTime(customerConfirmDate)}"),
+        if (customerConfirmDate != null)
+          SizedBox(
+            height: 10,
+          ),
+        if (activeDate != null)
+          txtItemDetail(context, "Ngày hoá đơn có hiệu lực",
+              "${getDateTime(activeDate)}"),
+        if (activeDate != null)
+          SizedBox(
+            height: 10,
+          ),
         txtItemDetail(context, "Trạng thái", "${getStatus(status: statusId)}",
             colorContent: getColorStatus(status: statusId)),
         SizedBox(
@@ -482,7 +486,6 @@ Widget componentContainerDetailProduct(BuildContext context, Map item) {
     ),
   );
 }
-
 
 //Dùng cho các container nhỏ vd như trong trang quản lý khách hàng
 //Và đang dùng cho component "Mã" và "Trạng thái hóa đơn" trong quản lý hóa đơn
@@ -1103,6 +1106,7 @@ Widget containerTextInProcess() {
     ),
   );
 }
+
 // /Dùng cho container icon trong quản lý  khách hàng
 Widget containerIconCustomer({
   IconData icon,
@@ -1132,12 +1136,14 @@ Widget containerIconCustomer({
     ),
     alignment: alignment,
     child: Padding(
-      padding: EdgeInsets.only(
-          left: paddingLeftOfText == null ? 0 : paddingLeftOfText,
-          right: paddingRightOfText == null ? 0 : paddingRightOfText,
-          bottom: paddingBottomOfText == null ? 0 : paddingBottomOfText,
-          top: paddingTopOfText == null ? 0 : paddingTopOfText),
-      child: Icon(icon, color: color,)
-    ),
+        padding: EdgeInsets.only(
+            left: paddingLeftOfText == null ? 0 : paddingLeftOfText,
+            right: paddingRightOfText == null ? 0 : paddingRightOfText,
+            bottom: paddingBottomOfText == null ? 0 : paddingBottomOfText,
+            top: paddingTopOfText == null ? 0 : paddingTopOfText),
+        child: Icon(
+          icon,
+          color: color,
+        )),
   );
 }

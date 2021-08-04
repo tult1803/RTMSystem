@@ -306,12 +306,9 @@ class _AddProductPageState extends State<AddProductPage> {
                     ),
                   ],
                 ),
-                SizedBox(
-                  height: 10,
-                ),
                 btnSave(context, 200, 40, Color(0xFF0BB791), "Tạo", 1),
                 SizedBox(
-                  height: 10,
+                  height: 25,
                 ),
                 showPriceTable(),
               ],
