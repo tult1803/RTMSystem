@@ -56,13 +56,8 @@ class _formUpdatePasswordPageState extends State<formUpdatePasswordPage> {
               ],
             ),
           ),
-          _txtField(
-              getDataTextField(this.password),
-              "Nhập mật khẩu hiện tại",
-              "Mật khẩu hiện tại",
-              errPassword,
-              1,
-              TextInputType.text),
+          _txtField(getDataTextField(this.password), "Nhập mật khẩu hiện tại",
+              "Mật khẩu hiện tại", errPassword, 1, TextInputType.text),
           SizedBox(
             height: 20,
           ),
@@ -175,8 +170,20 @@ class _formUpdatePasswordPageState extends State<formUpdatePasswordPage> {
             ),
           ),
           //Hiển thị Icon góc phải
-          suffixIcon: Icon(
-            Icons.create,
+          suffixIcon: IconButton(
+            onPressed: () {
+              setState(() {
+                if (tittle == "Mật khẩu mới") {
+                this.newPassword = "";
+              } else if (tittle == 'Xác nhận mật khẩu mới') {
+                this.confirmPassword = "";
+              } else if (tittle == 'Mật khẩu hiện tại') {
+                this.password = "";
+              }
+              });
+              _controller.clear;
+            },
+            icon: Icon(Icons.clear),
             color: Colors.black54,
           ),
 
