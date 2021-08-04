@@ -6,7 +6,8 @@ import 'package:rtm_system/ultils/src/color_ultils.dart';
 class FormForDetailPage extends StatefulWidget {
   final Widget bodyPage;
   final String tittle;
-  FormForDetailPage({this.tittle, this.bodyPage});
+  final Widget navigatorWidget;
+  FormForDetailPage({this.tittle, this.bodyPage, this.navigatorWidget});
 
   @override
   _FormForDetailPageState createState() => _FormForDetailPageState();
@@ -18,7 +19,7 @@ class _FormForDetailPageState extends State<FormForDetailPage> {
     return Scaffold(
       backgroundColor: welcome_color,
       appBar: AppBar(
-        leading: leadingAppbar(context),
+        leading: leadingAppbar(context, widget: widget.navigatorWidget == null ? null : widget.navigatorWidget),
         backgroundColor: welcome_color,
         elevation: 0,
         centerTitle: true,

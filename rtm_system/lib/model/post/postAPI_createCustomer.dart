@@ -14,19 +14,25 @@ class PostCreateCustomer{
         'Authorization': 'Bearer $token',
       },
       body: jsonEncode(<String, dynamic>{
-        "username":phone,
-        "password": password,
+        "password": "$password",
         "role_id": 3,
-        "fullname": fullname,
+        "fullname": "$fullname",
         "gender": gender,
         "birthday": birthday,
-        "phone": phone,
+        "phone": "$phone",
         "cmnd": cmnd,
         "address": address
       }),
     );
+    print(Uri.http('$urlMain', '$urlCreateCustomer'));
+    print("Pass: $password");
+    print("Name: $fullname");
+    print("Sex: $gender");
+    print("Birthday: $birthday");
+    print("Phone: $phone");
+    print("CMND: $cmnd");
+    print("Address: $address");
     print("Status postApi CreateCustomer:${response.statusCode}");
     return response.statusCode;
   }
-
 }

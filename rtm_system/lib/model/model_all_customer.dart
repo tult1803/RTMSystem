@@ -37,6 +37,9 @@ class CustomerList {
     this.phone,
     this.birthday,
     this.address,
+    this.cmndFront,
+    this.cmndBack,
+    this.needConfirm,
   });
 
   int id;
@@ -50,6 +53,10 @@ class CustomerList {
   String phone;
   String birthday;
   String address;
+  String cmndFront;
+  String cmndBack;
+  bool needConfirm;
+
 
   factory CustomerList.fromJson(Map<String, dynamic> json) => CustomerList(
     id: json["id"],
@@ -63,6 +70,9 @@ class CustomerList {
     phone: json["phone"],
     birthday: json["birthday"],
     address: json["address"],
+    cmndFront: json["cmndFront"],
+    cmndBack: json["cmndBack"],
+    needConfirm: json["need_confirm"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -77,5 +87,8 @@ class CustomerList {
     "phone": phone,
     "birthday": birthday,
     "address": address,
+    "cmndFront": cmndFront,
+    "cmndBack": cmndBack,
+    "need_confirm": needConfirm,
   };
 }

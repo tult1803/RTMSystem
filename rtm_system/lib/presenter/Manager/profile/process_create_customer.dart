@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:rtm_system/ultils/get_api_data.dart';
 import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
@@ -21,8 +20,7 @@ class _processCreateCustomerState extends State<processCreateCustomer> {
   String fullname, phone, cmnd, address, password;
   DateTime birthday;
   int gender;
-  final fBirthday = new DateFormat('yyyy-MM-dd');
-  Future<void> _getData() {
+  Future<void> _getData() async {
     setState(() {
       fullname = this.widget.listCustomer[0];
       gender = this.widget.listCustomer[1];
@@ -51,7 +49,7 @@ class _processCreateCustomerState extends State<processCreateCustomer> {
       ),
       child: TextButton(
           onPressed: () {
-            doCreateCustomer(context, phone, password, fullname, gender, cmnd, address, "${getDateTime("$birthday", dateFormat: 'yyyy-MM-dd')}", this.widget.isCustomer, this.widget.typeOfUpdate,this.widget.accountId, isCreate: this.widget.isCreate, isUpdate: this.widget.isUpdate);
+            doCreateUpdateCustomer(context, phone, password, fullname, gender, cmnd, address, birthday == null ? null :"${getDateTime("$birthday", dateFormat: 'yyyy-MM-dd')}", this.widget.isCustomer, this.widget.typeOfUpdate,this.widget.accountId, isCreate: this.widget.isCreate, isUpdate: this.widget.isUpdate);
           },
           child: Text(
             "${this.widget.tittle}",

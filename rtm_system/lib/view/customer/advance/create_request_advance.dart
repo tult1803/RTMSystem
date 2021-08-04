@@ -2,9 +2,13 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:rtm_system/helpers/dialog.dart';
 import 'package:rtm_system/model/get/getAPI_allStore.dart';
+import 'package:rtm_system/model/get/getAPI_customer_phone.dart';
+import 'package:rtm_system/model/model_profile_customer.dart';
 import 'package:rtm_system/model/model_store.dart';
 import 'package:rtm_system/helpers/component.dart';
+import 'package:rtm_system/ultils/check_data.dart';
 import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/ultils/src/message_list.dart';
@@ -13,6 +17,8 @@ import 'package:rtm_system/view/customer/advance/confirm_create_request_advance.
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CreateRequestAdvance extends StatefulWidget {
+  final int levelCustomer;
+  CreateRequestAdvance({this.levelCustomer});
   @override
   _CreateRequestAdvanceState createState() => _CreateRequestAdvanceState();
 }
@@ -26,6 +32,7 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
   Store store;
   List<StoreElement> dataListStore;
   String _myStore, reason = '';
+  int totalAdvance = 0;
 
   Future _getStore() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -44,11 +51,31 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
     return dataListStore;
   }
 
+  //get total advance
+  Future getAPIProfile() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    String token = sharedPreferences.getString('access_token');
+    String phone = sharedPreferences.getString('phone');
+    GetAPIProfileCustomer getAPIProfileCustomer = GetAPIProfileCustomer();
+    InfomationCustomer informationCustomer = InfomationCustomer();
+
+    // Đỗ dữ liệu lấy từ api
+    informationCustomer =
+        await getAPIProfileCustomer.getProfileCustomer(token, phone);
+    if (informationCustomer != null) {
+      setState(() {
+        totalAdvance = informationCustomer.advance;
+      });
+    }
+    return informationCustomer;
+  }
+
   @override
   void initState() {
     setState(() {
       createDate = DateTime.now();
     });
+    getAPIProfile();
     _getStore();
   }
 
@@ -98,7 +125,31 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          if (_formKey.currentState.validate()) {
+          validData();
+        },
+        label: titleAppBar('Tạo mới'),
+        backgroundColor: primaryColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(50.0),
+        ),
+        elevation: 10,
+      ),
+    );
+  }
+
+  void validData() {
+    if (_myStore == null) {
+      checkChooseStore(context, _myStore);
+    } else {
+      if (_formKey.currentState.validate()) {
+        var numberSplit = money.split(",");
+        String moneyJoin = numberSplit.join();
+        int valueMoney = int.parse(moneyJoin);
+        int checkMoney = valueMoney + totalAdvance;
+        if (widget.levelCustomer == 1) {
+          if (checkMoney > 50000000) {
+            showEasyLoadingError(context,  showMessage("", MSG048));
+          } else {
             Navigator.push(
               context,
               MaterialPageRoute(
@@ -109,15 +160,23 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
                       )),
             );
           }
-        },
-        label: titleAppBar('Tạo mới'),
-        backgroundColor: primaryColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(50.0),
-        ),
-        elevation: 10,
-      ),
-    );
+        } else if (widget.levelCustomer == 2) {
+          if (checkMoney > 100000000) {
+            showEasyLoadingError(context,  showMessage("", MSG049));
+          } else {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ConfirmCreateRequestAdvance(
+                        listInfor: listInfor,
+                        storeId: _myStore,
+                        isCustomer: true,
+                      )),
+            );
+          }
+        }
+      }
+    }
   }
 
   Widget _dropdownListStore() {
@@ -178,14 +237,29 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
         child: TextFormField(
           // The validator receives the text that the user has entered.
           validator: (value) {
+            int valueMoney = 0;
             if (value == null || value.isEmpty) {
               return showMessage(tittle, MSG001);
-            } else if (!checkFormatMoney.hasMatch(value)) {
-              return showMessage('', MSG026);
-            } else if (value.length <= 6) {
-              // số tiền phải là từ 100 trở lên
-              return showMessage('', MSG006);
+            } else {
+              var numberSplit = money.split(",");
+              String moneyJoin = numberSplit.join();
+              valueMoney = int.parse(moneyJoin);
+              if (!checkFormatMoney.hasMatch(value)) {
+                return showMessage('', MSG026);
+              } else if (value.length <= 6) {
+                // số tiền phải là từ 100 trở lên
+                return showMessage('', MSG006);
+              } else if (widget.levelCustomer == 1) {
+                if (valueMoney > 50000000) {
+                  return showMessage('', MSG046);
+                }
+              } else if (widget.levelCustomer == 2) {
+                if (valueMoney > 100000000) {
+                  return showMessage('', MSG047);
+                }
+              }
             }
+
             return null;
           },
           maxLines: 1,
@@ -217,7 +291,7 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
                 margin: EdgeInsets.only(top: 15, left: 5),
                 width: size.width * 0.2,
                 child: AutoSizeText(
-                  "${tittle}",
+                  "$tittle",
                   style: TextStyle(fontWeight: FontWeight.w500),
                 )),
             //Hiển thị Icon góc phải
@@ -347,7 +421,7 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
               margin: EdgeInsets.only(top: 15, left: 5),
               width: size.width * 0.2,
               child: AutoSizeText(
-                "${tittle}",
+                "$tittle",
                 style: TextStyle(fontWeight: FontWeight.w500),
               )),
 

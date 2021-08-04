@@ -12,7 +12,7 @@ import 'package:rtm_system/helpers/component.dart';
 import 'package:rtm_system/ultils/check_data.dart';
 import 'package:rtm_system/ultils/get_api_data.dart';
 import 'package:rtm_system/ultils/get_data.dart';
-import 'package:rtm_system/ultils/src/regExp.dart';
+import 'package:rtm_system/ultils/src/message_list.dart';
 import 'package:rtm_system/view/confirm_detail_invoice.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
 import 'package:rtm_system/view/table_price.dart';
@@ -35,6 +35,7 @@ class AddProductPage extends StatefulWidget {
       savePrice,
       productName,
       storeName;
+  final int level;
 
   //true is Customer role
   final bool isCustomer;
@@ -53,7 +54,8 @@ class AddProductPage extends StatefulWidget {
       this.widgetToNavigator,
       this.productName,
       this.storeName,
-      this.isChangeData});
+      this.isChangeData,
+      this.level});
 
   @override
   _AddProductPageState createState() => _AddProductPageState();
@@ -63,8 +65,8 @@ InfomationCustomer infomationCustomer = InfomationCustomer();
 String phoneNewCustomer, nameNewCustomer, customerId;
 
 class _AddProductPageState extends State<AddProductPage> {
-  String errorPhone, errorFullName, errorQuantity, errorDegree;
-  String price, productName;
+  String errorPhone, errorQuantity, errorDegree;
+  String price, productName, currentPrice = "0", priceSell = "0";
   String token, storeName;
   String personSale = '', phoneSale = '', oldCusName, oldCusId;
   List listQuantity = [];
@@ -73,7 +75,7 @@ class _AddProductPageState extends State<AddProductPage> {
   List<StoreElement> dataListStore;
   bool checkClick = false;
   var txtController = TextEditingController();
-  bool autoFocus = false, enabledFillName = true;
+  bool autoFocus = false;
 
   //field to sales
   double quantity = 0, degree = 0;
@@ -81,6 +83,7 @@ class _AddProductPageState extends State<AddProductPage> {
   String _myProduct, _myStore;
   bool checkProduct = true;
   DateTime dateSale;
+  int type;
 
   Future _getProduct() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -93,10 +96,22 @@ class _AddProductPageState extends State<AddProductPage> {
     GetProduct getProduct = GetProduct();
     dataListProduct.clear();
     if (token.isNotEmpty) {
-      dataList = await getProduct.getProduct(token, "");
-      dataList.forEach((element) {
+      dataList = await getProduct.getProduct(token, "",
+          limit: null, type: widget.level == 2 ? 1 : 2);
+      dataList.forEach((element) async {
         Map<dynamic, dynamic> data = element;
         dataListProduct.add(DataProduct.fromJson(data));
+        if (widget.dateToPay != null) {
+          if (element["id"] == widget.productId) {
+            currentPrice = "${element["update_price"]}";
+            priceSell = "${comparePrice(price, currentPrice)}";
+          }
+        }
+        if (widget.productId == element["id"]) {
+          setState(() {
+            type = element["type"];
+          });
+        }
       });
       setState(() {
         // ignore: unnecessary_statements
@@ -153,16 +168,19 @@ class _AddProductPageState extends State<AddProductPage> {
           ? nameNewCustomer = ""
           : nameNewCustomer = widget.fullName;
       this.widget.storeId == null ? _myStore = null : _myStore = widget.storeId;
-      this.widget.productId == null
-          ? _myProduct = null
-          : widget.productId == "SP-1000003"
-              // ignore: unnecessary_statements
-              ? {_myProduct = widget.productId, checkProduct = false}
-              : _myProduct = widget.productId;
+      if (widget.productId == null) {
+        _myProduct = null;
+      } else {
+        type == 0 ? checkProduct = true : checkProduct = false;
+        _myProduct = widget.productId;
+      }
       this.widget.savePrice == null ? price = "0" : price = widget.savePrice;
       this.widget.dateToPay == null
           ? dateSale = DateTime.now()
-          : dateSale = DateTime.parse(widget.dateToPay);
+
+          /// Nếu muốn Tạo hóa đơn lấy theo ngày trên yêu cầu thì mở comment dòng này ///
+          // : dateSale = DateTime.parse(widget.dateToPay);
+          : dateSale = DateTime.now();
       this.widget.productName == null
           ? productName = ""
           : productName = widget.productName;
@@ -187,17 +205,14 @@ class _AddProductPageState extends State<AddProductPage> {
 
   @override
   Widget build(BuildContext context) {
+    print(nameNewCustomer);
     return Scaffold(
       backgroundColor: Color(0xffEEEEEE),
       appBar: AppBar(
         backgroundColor: Color(0xFF0BB791),
         centerTitle: true,
         leading: leadingAppbar(context, widget: this.widget.widgetToNavigator),
-        title: Text(
-          this.widget.tittle,
-          style: TextStyle(
-              color: Colors.white, fontWeight: FontWeight.w500, fontSize: 22),
-        ),
+        title: titleAppBar(widget.tittle),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -210,6 +225,7 @@ class _AddProductPageState extends State<AddProductPage> {
                 Column(
                   children: [
                     txtAutoFillByPhone(
+                      maxLength: 11,
                       enabled: widget.isChangeData == null ? true : false,
                       controller: getDataTextField(phoneNewCustomer),
                       isCustomer: this.widget.isCustomer,
@@ -218,16 +234,16 @@ class _AddProductPageState extends State<AddProductPage> {
                       txtInputType: TextInputType.numberWithOptions(
                           signed: true, decimal: true),
                       error: errorPhone,
+                        icon: Icons.create
                     ),
                     txtAutoFillByPhone(
-                      enabled:
-                          widget.isChangeData == null ? enabledFillName : false,
+                      enabled: false,
                       isCustomer: this.widget.isCustomer,
                       controller: getDataTextField(nameNewCustomer),
                       type: "name",
                       tittle: "Tên khách hàng",
                       txtInputType: TextInputType.name,
-                      error: errorFullName,
+                      icon: nameNewCustomer.isNotEmpty ? Icons.check : Icons.clear,
                     ),
                     SizedBox(
                       height: 10,
@@ -262,6 +278,18 @@ class _AddProductPageState extends State<AddProductPage> {
                         ),
                         btnCurrentPrice(context, price),
                         SizedBox(
+                          height: 5,
+                        ),
+                        if (widget.dateToPay != null)
+                          btnCurrentPrice(context, "$currentPrice",
+                              tittle: "Giá hiện tại"),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        if (widget.dateToPay != null)
+                          _showMoneyOrQuantity(
+                              "Giá bán", "${getFormatPrice(priceSell)} VNĐ"),
+                        SizedBox(
                           height: 10,
                         ),
                         if (!widget.isCustomer)
@@ -273,7 +301,7 @@ class _AddProductPageState extends State<AddProductPage> {
                         //Khi manager tạo hoá đơn thì mới có giá lúc bán để show
                         if (!widget.isCustomer)
                           _showMoneyOrQuantity("Thành tiền",
-                              "${getFormatPrice('${getPriceTotal(double.tryParse(price), degree, quantity)}')}đ"),
+                              "${getFormatPrice('${getPriceTotal(double.tryParse(widget.dateToPay != null ? priceSell : price), degree, quantity)}')}đ"),
                       ]),
                     ),
                   ],
@@ -314,6 +342,8 @@ class _AddProductPageState extends State<AddProductPage> {
     TextInputType txtInputType,
     bool isCustomer,
     bool enabled,
+    int maxLength,
+    IconData icon
   }) {
     return isCustomer
         ? Container()
@@ -323,15 +353,22 @@ class _AddProductPageState extends State<AddProductPage> {
             child: TextField(
               controller: controller,
               // initialValue: this.widget.txt,
+              maxLength: maxLength,
               autocorrect: false,
               obscureText: false,
               enabled: enabled,
               onSubmitted: (value) async {
-                doOnSubmittedTextField(type, value);
                 if (tittle.contains("Điện thoại")) {
                   errorPhone = await checkPhoneNumber(value);
-                } else
-                  errorFullName = await checkFullName(context, nameNewCustomer);
+                 if(errorPhone == null) doOnSubmittedTextField(type, value);
+                  if(errorPhone != null) {
+                    phoneNewCustomer = "";
+                    // ignore: unnecessary_statements
+                    nameNewCustomer == oldCusName ? nameNewCustomer = "" : null;
+                    // ignore: unnecessary_statements
+                    customerId == oldCusId ? customerId = "" : null;
+                  }
+                }
               },
               maxLines: 1,
               keyboardType: txtInputType,
@@ -361,7 +398,7 @@ class _AddProductPageState extends State<AddProductPage> {
                 ),
                 //Hiển thị Icon góc phải
                 suffixIcon: Icon(
-                  Icons.create,
+                  icon,
                   color: Colors.black54,
                 ),
 
@@ -383,17 +420,15 @@ class _AddProductPageState extends State<AddProductPage> {
         infomationCustomer = await getDataCustomerFromPhone(value);
         setState(() {
           if (infomationCustomer == null) {
-            enabledFillName = true;
             // ignore: unnecessary_statements
             nameNewCustomer == oldCusName ? nameNewCustomer = "" : null;
             // ignore: unnecessary_statements
             customerId == oldCusId ? customerId = "" : null;
           } else {
-            oldCusName = infomationCustomer.fullName;
-            nameNewCustomer = infomationCustomer.fullName;
+            oldCusName = infomationCustomer.fullname;
+            nameNewCustomer = infomationCustomer.fullname;
             oldCusId = infomationCustomer.accountId;
             customerId = infomationCustomer.accountId;
-            enabledFillName = false;
           }
           autoFocus = false;
         });
@@ -473,13 +508,17 @@ class _AddProductPageState extends State<AddProductPage> {
           onPressed: () {
             setState(() {
               if (widget.isCustomer) {
-                _myProduct == null
-                    ? showCustomDialog(
-                        context,
-                        content: "Chưa chọn sản phẩm",
-                        isSuccess: false,
-                      )
-                    : _navigator("Xác nhận giữ giá");
+                if (_myStore == null) {
+                  checkChooseStore(context, _myStore);
+                } else {
+                  if (_myProduct == null) {
+                    checkChooseProduct(context, _myProduct);
+                  } else {
+                    widget.level == 1
+                        ? _navigator("Xác nhận bán hàng")
+                        : _navigator("Xác nhận giữ giá");
+                  }
+                }
               } else {
                 _validate();
               }
@@ -499,23 +538,21 @@ class _AddProductPageState extends State<AddProductPage> {
 
   void _validate() async {
     errorPhone = await checkPhoneNumber(phoneNewCustomer);
-    errorFullName = await checkFullName(context, nameNewCustomer);
     checkChooseProduct(context, _myProduct);
     errorQuantity = await checkQuantity(quantity);
     errorDegree = await checkDegree(checkProduct, degree);
-
+    checkChooseStore(context, _myStore);
     if (errorPhone == null &&
         errorQuantity == null &&
-        errorFullName == null &&
-        _myProduct != null) {
+        _myProduct != null &&
+        _myStore != null) {
       if (checkProduct || (!checkProduct && errorDegree == null)) {
-        _navigator("Xác nhận hóa đơn");
+        if (nameNewCustomer.isNotEmpty) {
+          _navigator("Xác nhận hóa đơn");
+        } else {
+          showEasyLoadingError(context, showMessage("", MSG009));
+        }
       }
-      // if (checkProduct ) {
-      //   _navigator("Xác nhận hóa đơn");
-      // } else if (!checkProduct && errorDegree == null) {
-      //   _navigator("Xác nhận hóa đơn");
-      // }
     }
   }
 
@@ -549,12 +586,6 @@ class _AddProductPageState extends State<AddProductPage> {
                       setState(() {
                         _myProduct = newValue;
                         _getCurrentPrice(newValue);
-                        if (_myProduct == "SP-1000003") {
-                          checkProduct = false;
-                        } else {
-                          degree = 0;
-                          checkProduct = true;
-                        }
                         checkClick = true;
                       });
                     }
@@ -568,6 +599,16 @@ class _AddProductPageState extends State<AddProductPage> {
                             if (widget.productName == null) {
                               setState(() {
                                 productName = item.name;
+                              });
+                            }
+                            if (item.type == 0) {
+                              setState(() {
+                                checkProduct = false;
+                              });
+                            } else {
+                              setState(() {
+                                degree = 0;
+                                checkProduct = true;
                               });
                             }
                           },
@@ -646,8 +687,11 @@ class _AddProductPageState extends State<AddProductPage> {
       color: Colors.white,
       child: TextField(
         controller: isQuantity ? txtController : null,
+        maxLength: 6,
         onSubmitted: (value) async {
+          double check;
           try {
+            check = double.parse(value.trim());
             if (isQuantity) {
               if (value.isNotEmpty) {
                 insertQuantity(value);
@@ -659,11 +703,18 @@ class _AddProductPageState extends State<AddProductPage> {
                 errorQuantity = await checkQuantity(quantity);
               }
             } else {
-              this.degree = double.tryParse(value.isEmpty ? "0" : value);
+              this.degree = double.parse(value.isEmpty ? "0" : value);
               errorDegree = await checkDegree(checkProduct, degree);
             }
           } catch (_) {
-            print('Lỗi add_product_invoice => _txtItemProduct ');
+            print('Lỗi add_product_invoice => _txtItemProduct $check');
+            setState(() {
+              isQuantity
+                  ? errorQuantity = showMessage("Số ký", MSG056)
+                  // ignore: unnecessary_statements
+                  : {errorDegree = showMessage("Số độ", MSG056), this.degree = 0};
+
+            });
           }
         },
         maxLines: maxLines,
@@ -745,7 +796,7 @@ class _AddProductPageState extends State<AddProductPage> {
     setState(() {
       dataListProduct.forEach((element) {
         if (element.id == value) {
-          price = element.price;
+          price = element.price.toString();
         }
       });
     });
@@ -776,6 +827,7 @@ class _AddProductPageState extends State<AddProductPage> {
           ),
           GestureDetector(
             onTap: () {
+              ///Nếu muốn cho customer chọn ngày thì mở comment dòng này
               if (widget.dateToPay == null) {
                 DatePicker.showDatePicker(
                   context,
@@ -785,9 +837,8 @@ class _AddProductPageState extends State<AddProductPage> {
                       dateSale = date;
                     });
                   },
-                  maxTime: DateTime(DateTime.now().year + 100, 12, 31),
-                  minTime: DateTime(DateTime.now().year, DateTime.now().month,
-                      DateTime.now().day),
+                  minTime: DateTime.now(),
+                  maxTime: DateTime.now().subtract(Duration(days: -6)),
                   locale: LocaleType.vi,
                 );
               }
@@ -830,7 +881,7 @@ class _AddProductPageState extends State<AddProductPage> {
     );
   }
 
-  Widget btnCurrentPrice(context, String price) {
+  Widget btnCurrentPrice(context, String price, {String tittle}) {
     return Container(
       height: 45,
       decoration: BoxDecoration(
@@ -844,7 +895,7 @@ class _AddProductPageState extends State<AddProductPage> {
             width: 130,
             margin: EdgeInsets.only(left: 15),
             child: Text(
-              "${widget.dateToPay != null ? "Giá đã giữ" : "Giá hiện tại"}",
+              "${tittle == null ? widget.dateToPay != null ? "Giá đã giữ" : "Giá hiện tại" : tittle}",
               style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
             ),
           ),
@@ -868,13 +919,13 @@ class _AddProductPageState extends State<AddProductPage> {
   }
 
   Future<void> _navigator(String tittle) async {
-    print(customerId);
     Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => FormForDetailPage(
                   tittle: tittle,
                   bodyPage: confirmDetailInvoice(
+                    level: widget.level,
                     storeId: "$_myStore",
                     productId: "$_myProduct",
                     customerId: "$customerId",
@@ -884,7 +935,7 @@ class _AddProductPageState extends State<AddProductPage> {
                     dateToPay: "$dateSale",
                     degree: "$degree",
                     quantity: "$quantity",
-                    price: "$price",
+                    price: "${widget.dateToPay != null ? priceSell : price}",
                     productName: "$productName",
                     storeName: "$storeName",
                     widgetToNavigator: widget.widgetToNavigator == null

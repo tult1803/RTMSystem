@@ -73,7 +73,7 @@ class _ConfirmCreateRequestAdvanceState extends State<ConfirmCreateRequestAdvanc
         centerTitle: true,
         leading: leadingAppbar(context),
         title: Text(
-          "Tạo yêu cầu ứng tiền",
+          "Xác nhận thông tin",
           style: TextStyle(
               color: Colors.white, fontWeight: FontWeight.w500, fontSize: 22),
         ),

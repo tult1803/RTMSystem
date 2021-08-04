@@ -1,11 +1,14 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:rtm_system/helpers/dialog.dart';
 import 'package:rtm_system/helpers/button.dart';
 import 'package:rtm_system/ultils/check_data.dart';
 import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
+import 'customer/Profile/upgrade_account.dart';
 import 'manager/profile/confirm_create_customer.dart';
 
 //check: true là cho customer còn false là cho manager
@@ -15,7 +18,7 @@ class formUpdateProfile extends StatefulWidget {
   String fullname, phone, cmnd, address, password, accountId;
   int gender;
   DateTime birthday;
-  final bool check, isCreate;
+  final bool check, isCreate, isUpgrade;
   final int typeOfUpdate;
 
   // True là sẽ gọi api update, false là gọi api createCustomer
@@ -36,6 +39,7 @@ class formUpdateProfile extends StatefulWidget {
       this.typeOfUpdate,
       this.accountId,
       this.isCustomer,
+      this.isUpgrade,
       this.list});
 
   @override
@@ -46,31 +50,44 @@ enum GenderCharacter { women, men }
 
 // ignore: camel_case_types
 class _formUpdateProfileState extends State<formUpdateProfile> {
-  String errFullName, errPhone, errCMND, errAddress, errUser, errPass, errBirth;
+  String errFullName,
+      errPhone,
+      errCMND,
+      errAddress,
+      errUser,
+      errPass,
+      errBirth,
+      errConfirmPassword;
   GenderCharacter character;
-  bool checkClick = false;
-  String messageCancel = '';
+  bool checkClick;
+  String messageCancel = '', confirmPassword;
   int indexOfBottomBar = 0;
 
   @override
   void initState() {
     super.initState();
-
-    if (this.widget.gender == 0) {
-      character = GenderCharacter.women;
-    } else
-      character = GenderCharacter.men;
+    checkClick = widget.isCreate ? true : false;
+    setGender();
     if (this.widget.isUpdate) {
       messageCancel = 'Bạn muốn huỷ cập nhật thông tin?';
     } else
       messageCancel = 'Bạn muốn huỷ tạo khách hàng?';
     if (widget.check) {
-      indexOfBottomBar = 3;
+      indexOfBottomBar = 4;
     } else {
       indexOfBottomBar = 4;
     }
   }
 
+  void setGender(){
+    setState(() {
+      if (widget.gender == 0) {
+        character = GenderCharacter.women;
+      }
+      else
+        character = GenderCharacter.men;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -78,17 +95,21 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
         children: [
           Column(
             children: [
-              _txtFormField(this.widget.fullname, false, "Nhập họ tên",
-                  "Họ và tên", errFullName, 1, TextInputType.text),
-              _txtfield(
+              if (!widget.isCustomer)
+                _txtfield(
                   getDataTextField(this.widget.phone),
                   false,
                   "Nhập số điện thoại",
                   "Số điện thoại",
                   errPhone,
                   1,
-                  TextInputType.phone),
+                  TextInputType.phone,
+                  enable: widget.isCreate,
+                  maxLength: 11),
+              _txtFormField(this.widget.fullname, false, "Nhập họ tên",
+                  "Họ và tên", errFullName, 1, TextInputType.text, maxLength: 50),
               _checkPassword(),
+              _checkConfirmPassword(),
               radioButton(context),
               btnBirthday(context),
               _checkCMND(),
@@ -98,28 +119,29 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
           SizedBox(
             height: 20,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              btnSubmitOrCancel(
-                  context,
-                  120,
-                  40,
-                  Colors.redAccent,
-                  "Hủy",
-                  "",
-                  "",
-                  null,
-                  false,
-                  indexOfBottomBar,
-                  this.widget.isCustomer,
-                  messageCancel),
-              SizedBox(width: 20),
-              btnSubmitValidate(context, 120, 40, welcome_color, "Kiểm tra",
-                  this.widget.list, this.widget.check,
-                  isCreate: this.widget.isCreate),
-            ],
-          ),
+          if (!widget.isUpgrade)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                btnSubmitOrCancel(
+                    context,
+                    120,
+                    40,
+                    Colors.redAccent,
+                    "Hủy",
+                    "",
+                    "",
+                    null,
+                    false,
+                    indexOfBottomBar,
+                    this.widget.isCustomer,
+                    messageCancel),
+                SizedBox(width: 20),
+                btnSubmitValidate(context, 120, 40, welcome_color, "Kiểm tra",
+                    this.widget.list, this.widget.check,
+                    isCreate: this.widget.isCreate),
+              ],
+            ),
         ],
       ),
     );
@@ -153,6 +175,8 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
                 onConfirm: (date) {
                   setState(() {
                     checkClick = true;
+                    getDataCustomer(
+                        2, getDateTime("$date", dateFormat: "yyyy-MM-dd"));
                     this.widget.birthday = date;
                     this.widget.list = [
                       this.widget.fullname,
@@ -165,9 +189,9 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
                     ];
                   });
                 },
-                currentTime: this.widget.birthday,
-                maxTime: DateTime(DateTime.now().year, 12, 31),
-                minTime: DateTime(DateTime.now().year - 111),
+                currentTime: widget.birthday,
+                maxTime: DateTime(DateTime.now().year - 18, DateTime.now().month, DateTime.now().day),
+                minTime: DateTime(DateTime.now().year - 100),
                 locale: LocaleType.vi,
               );
             },
@@ -175,7 +199,9 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
               children: [
                 Container(
                   width: 100,
-                  margin: EdgeInsets.only(left: 15),
+                  margin: widget.isUpgrade
+                      ? EdgeInsets.only(left: 5)
+                      : EdgeInsets.only(left: 15),
                   child: AutoSizeText(
                     "Ngày sinh",
                     style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
@@ -183,16 +209,24 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
                 ),
                 Expanded(
                   child: Text(
-                    '${getDateTime("${this.widget.birthday}", dateFormat: "dd/MM/yyyy")}',
-                    style: TextStyle(fontSize: 16),
+                    '${widget.birthday == null ? widget.isUpgrade ? "dd/MM/yyyy" : "Không bắt buộc" : getDateTime("${this.widget.birthday}", dateFormat: "dd/MM/yyyy")}',
+                    style: TextStyle(
+                        fontSize: 16,
+                        color: widget.birthday == null
+                            ? Colors.black45
+                            : Colors.black87),
                   ),
                 ),
                 Container(
-                  width: 70,
-                  child: Icon(
-                    Icons.calendar_today,
-                    color: Colors.black45,
-                  ),
+                  child: widget.isUpgrade
+                      ? null
+                      : Container(
+                          width: 70,
+                          child: Icon(
+                            Icons.calendar_today,
+                            color: Colors.black45,
+                          ),
+                        ),
                 ),
               ],
             ),
@@ -203,7 +237,9 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
           SizedBox(
             height: 1,
             child: Container(
-              margin: EdgeInsets.only(left: 10, right: 10),
+              margin: widget.isUpgrade
+                  ? EdgeInsets.only(left: 0)
+                  : EdgeInsets.only(left: 10, right: 10),
               width: size.width,
               color: Colors.black45,
             ),
@@ -220,23 +256,31 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
       String tittle,
       String error,
       int maxLines,
-      TextInputType txtType) {
+      TextInputType txtType,
+      {bool enable, int maxLength}) {
     return Container(
-      margin: EdgeInsets.only(top: 10, left: 10, right: 10),
+      margin: widget.isUpgrade
+          ? EdgeInsets.only(top: 4)
+          : EdgeInsets.only(top: 10, left: 10, right: 10),
       child: TextField(
         controller: _controller,
         obscureText: obscureText,
+        maxLength: maxLength,
+        inputFormatters: [
+          if (tittle == "Số điện thoại" || tittle == "CMND/CCCD")
+            FilteringTextInputFormatter.allow(RegExp(r'[[0-9]')),
+        ],
         onChanged: (value) {
-          if (tittle == "Họ và tên") {
-            this.widget.fullname = value.trim();
-          } else if (tittle == "Số điện thoại") {
+          if (tittle == "Số điện thoại") {
             this.widget.phone = value.trim();
           } else if (tittle == "CMND/CCCD") {
             this.widget.cmnd = value.trim();
-          } else if (tittle == "Địa chỉ") {
-            this.widget.address = value.trim();
+            getDataCustomer(3, value.trim());
           } else if (tittle == "Mật khẩu") {
             this.widget.password = value.trim();
+          } else if (tittle == "Xác nhận") {
+            confirmPassword = value.trim();
+            // "Xác nhận"
           }
           setState(() {
             checkClick = true;
@@ -252,25 +296,34 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
           });
         },
         onSubmitted: (value) {
-          print('no');
           setState(() {
-            if (tittle == "Họ và tên") {
-              errFullName = checkFullName(context, widget.fullname);
-            } else if (tittle == "Số điện thoại") {
+            if (tittle == "Số điện thoại") {
               errPhone = checkPhoneNumber(widget.phone);
-            } else if (tittle == "CMND/CCCD") {
+            } else if (tittle == "CMND/CCCD" && !widget.isCreate ||
+                tittle == "CMND/CCCD" && value.isNotEmpty) {
               errCMND = checkCMND(widget.cmnd);
-            } else if (tittle == "Địa chỉ") {
-              errAddress = checkAddress(widget.address);
+              getErrorDataCustomer(3, errCMND);
             } else if (tittle == "Mật khẩu") {
               if (widget.isUpdate) {
                 errPass = null;
               } else {
                 errPass = checkPassword(widget.password, 1);
               }
+            } else if (tittle == "Xác nhận") {
+              if (widget.isUpdate) {
+                errConfirmPassword = null;
+              } else {
+                errConfirmPassword = checkPassword(widget.password, 2,
+                    passwordCheck: confirmPassword);
+              }
+            }
+            if (tittle == "CMND/CCCD" && value.isEmpty && widget.isCreate) {
+              errCMND = null;
+              getErrorDataCustomer(3, errCMND);
             }
           });
         },
+        enabled: enable == null ? true : enable,
         maxLines: maxLines,
         keyboardType: txtType,
         style: TextStyle(fontSize: 15),
@@ -289,15 +342,17 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
               margin: EdgeInsets.only(top: 15, left: 5),
               width: 100,
               child: AutoSizeText(
-                "${tittle}",
+                "$tittle",
                 style: TextStyle(fontWeight: FontWeight.w500),
               )),
 
           //Hiển thị Icon góc phải
-          suffixIcon: Icon(
-            Icons.create,
-            color: Colors.black54,
-          ),
+          suffixIcon: widget.isUpgrade
+              ? null
+              : Icon(
+                 widget.isUpdate ? Icons.check : Icons.create,
+                  color: Colors.black54,
+                ),
 
           //Hiển thị lỗi
           focusedErrorBorder: OutlineInputBorder(
@@ -313,23 +368,22 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
   }
 
   Widget _txtFormField(String value, bool obscureText, String hintText,
-      String tittle, String error, int maxLines, TextInputType txtType) {
+      String tittle, String error, int maxLines, TextInputType txtType, {int maxLength}) {
     return Container(
-      margin: EdgeInsets.only(top: 10, left: 10, right: 10),
+      margin: widget.isUpgrade
+          ? null
+          : EdgeInsets.only(top: 10, left: 10, right: 10),
       child: TextFormField(
         initialValue: value,
+        maxLength: maxLength,
         obscureText: obscureText,
         onChanged: (value) {
           if (tittle == "Họ và tên") {
             this.widget.fullname = value.trim();
-          } else if (tittle == "Số điện thoại") {
-            this.widget.phone = value.trim();
-          } else if (tittle == "CMND/CCCD") {
-            this.widget.cmnd = value.trim();
+            getDataCustomer(0, value.trim());
           } else if (tittle == "Địa chỉ") {
             this.widget.address = value.trim();
-          } else if (tittle == "Mật khẩu") {
-            this.widget.password = value.trim();
+            getDataCustomer(4, value.trim());
           }
           setState(() {
             checkClick = true;
@@ -345,22 +399,14 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
           });
         },
         onFieldSubmitted: (value) {
-          print('no');
           setState(() {
             if (tittle == "Họ và tên") {
               errFullName = checkFullName(context, widget.fullname);
-            } else if (tittle == "Số điện thoại") {
-              errPhone = checkPhoneNumber(widget.phone);
-            } else if (tittle == "CMND/CCCD") {
-              errCMND = checkCMND(widget.cmnd);
-            } else if (tittle == "Địa chỉ") {
+              getErrorDataCustomer(0, errFullName);
+            } else if (tittle == "Địa chỉ" && !widget.isCreate ||
+                tittle == "Địa chỉ" && value.isNotEmpty) {
               errAddress = checkAddress(widget.address);
-            } else if (tittle == "Mật khẩu") {
-              if (widget.isUpdate) {
-                errPass = null;
-              } else {
-                errPass = checkPassword(widget.password, 1);
-              }
+              getErrorDataCustomer(4, errAddress);
             }
           });
         },
@@ -382,15 +428,17 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
               margin: EdgeInsets.only(top: 15, left: 5),
               width: 100,
               child: AutoSizeText(
-                "${tittle}",
+                "$tittle",
                 style: TextStyle(fontWeight: FontWeight.w500),
               )),
 
           //Hiển thị Icon góc phải
-          suffixIcon: Icon(
-            Icons.create,
-            color: Colors.black54,
-          ),
+          suffixIcon: widget.isUpgrade
+              ? null
+              : Icon(
+                  Icons.create,
+                  color: Colors.black54,
+                ),
 
           //Hiển thị lỗi
           focusedErrorBorder: OutlineInputBorder(
@@ -409,18 +457,27 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
   Widget radioButton(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Padding(
-      padding: const EdgeInsets.only(top: 0, right: 10),
+      padding: widget.isUpgrade
+          ? EdgeInsets.only(top: 0)
+          : EdgeInsets.only(top: 0, right: 10),
       child: Column(
         children: [
           Row(
             children: <Widget>[
               Container(
-                margin: EdgeInsets.only(top: 10, left: 0),
-                width: 85,
-                height: 50,
-                child: Center(
-                    child: Text("Giới tính",
-                        style: TextStyle(fontWeight: FontWeight.w500))),
+                child: widget.isUpgrade
+                    ? null
+                    : Container(
+                        alignment: Alignment.centerLeft,
+                        padding: EdgeInsets.only(left: 15),
+                        margin: EdgeInsets.only(top: 10, right: 0),
+                        width: 85,
+                        height: 50,
+                        child: AutoSizeText("Giới tính",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                            )),
+                      ),
               ),
               Container(
                 height: 50,
@@ -435,6 +492,7 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
                   groupValue: character,
                   onChanged: (GenderCharacter value) {
                     setState(() {
+                      getDataCustomer(1, value == GenderCharacter.men ? 1 : 0);
                       checkClick = true;
                       character = value;
                       this.widget.list = [
@@ -450,16 +508,18 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
                   },
                 ),
               ),
-              Expanded(
+              Flexible(
                 child: Container(
                   height: 50,
                   child: RadioListTile<GenderCharacter>(
                     activeColor: welcome_color,
-                    title: const AutoSizeText('Nữ'),
+                    title: AutoSizeText('Nữ'),
                     value: GenderCharacter.women,
                     groupValue: character,
                     onChanged: (GenderCharacter value) {
                       setState(() {
+                        getDataCustomer(
+                            1, value == GenderCharacter.men ? 1 : 0);
                         this.checkClick = true;
                         character = value;
                         this.widget.list = [
@@ -481,7 +541,9 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
           SizedBox(
             height: 1,
             child: Container(
-              margin: EdgeInsets.only(left: 10, right: 0),
+              margin: widget.isUpgrade
+                  ? EdgeInsets.only(top: 0)
+                  : EdgeInsets.only(left: 10),
               width: size.width,
               color: Colors.black45,
             ),
@@ -545,18 +607,25 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
   Future _validateData() async {
     errFullName = await checkFullName(context, widget.fullname);
     errPhone = await checkPhoneNumber(widget.phone);
-    if (this.widget.check == true) {
-      errCMND = await checkCMND(widget.cmnd);
-      errAddress = await checkAddress(widget.address);
+    if (!widget.isCreate) {
+      if (this.widget.check == true) {
+        errCMND = await checkCMND(widget.cmnd);
+        errAddress = await checkAddress(widget.address);
+      }
     }
     if (widget.isUpdate) {
       errPass = null;
+      errConfirmPassword = null;
     } else {
       errPass = checkPassword(widget.password, 1);
+      errConfirmPassword =
+          checkPassword(widget.password, 2, passwordCheck: confirmPassword);
     }
+
     if (errFullName == null &&
         errPhone == null &&
         errPass == null &&
+        errConfirmPassword == null &&
         errBirth == null &&
         errCMND == null &&
         errAddress == null &&
@@ -568,15 +637,15 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
 
   Widget _checkCMND() {
     return this.widget.check
-        ? _txtfield(getDataTextField(this.widget.cmnd), false, "Nhập CMND/CCCD",
-            "CMND/CCCD", errCMND, 1, TextInputType.phone)
+        ? _txtfield(getDataTextField(this.widget.cmnd), false, widget.isUpgrade ? "Nhập CMND/CCCD":"Không bắt buộc",
+            "CMND/CCCD", errCMND, 1, TextInputType.phone, maxLength: 12)
         : Container();
   }
 
   Widget _checkAddress() {
     return this.widget.check
-        ? _txtFormField(this.widget.address, false, "Nhập địa chỉ", "Địa chỉ",
-            errAddress, 1, TextInputType.streetAddress)
+        ? _txtFormField(this.widget.address, false,  widget.isUpgrade ? "Nhập địa chỉ":"Không bắt buộc", "Địa chỉ",
+            errAddress, 1, TextInputType.streetAddress, maxLength: 100)
         : Container();
   }
 
@@ -585,5 +654,32 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
         ? Container()
         : _txtfield(getDataTextField(this.widget.password), true,
             "Nhập mật khẩu", "Mật khẩu", errPass, 1, TextInputType.text);
+  }
+
+  Widget _checkConfirmPassword() {
+    return this.widget.isUpdate
+        ? Container()
+        : _txtfield(
+            getDataTextField(confirmPassword),
+            true,
+            "Nhập lại mật khẩu",
+            "Xác nhận",
+            errConfirmPassword,
+            1,
+            TextInputType.text);
+  }
+
+  void getDataCustomer(int index, value) {
+    if (widget.isUpgrade) {
+      dataCustomer.removeAt(index);
+      dataCustomer.insert(index, value);
+    }
+  }
+
+  void getErrorDataCustomer(int index, value) {
+    if (widget.isUpgrade) {
+      errorData.removeAt(index);
+      errorData.insert(index, "$value");
+    }
   }
 }

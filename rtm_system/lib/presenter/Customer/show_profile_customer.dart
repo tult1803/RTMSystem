@@ -6,7 +6,7 @@ import 'package:rtm_system/model/model_profile_customer.dart';
 import 'package:rtm_system/helpers/button.dart';
 import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
-import 'package:rtm_system/view/customer/Profile/account_verification.dart';
+import 'package:rtm_system/view/customer/Profile/upgrade_account.dart';
 import 'package:rtm_system/view/update_password.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -41,6 +41,7 @@ class _showProfileState extends State<showProfile> {
     password = sharedPreferences.getString('password');
     infomationCustomer =
         await getAPIProfileCustomer.getProfileCustomer(token, phone);
+
     return infomationCustomer;
   }
 
@@ -65,7 +66,8 @@ class _showProfileState extends State<showProfile> {
                   SizedBox(
                     height: 12,
                   ),
-                  showInforCustomer(snapshot.hasData, snapshot.hasError),
+                  showInforCustomer(
+                      context, snapshot.hasData, snapshot.hasError),
                   btnLogout(context),
                 ],
               ),
@@ -89,7 +91,7 @@ class _showProfileState extends State<showProfile> {
     );
   }
 
-  Widget showInforCustomer(hasData, isError) {
+  Widget showInforCustomer(BuildContext context, hasData, isError) {
     if (hasData) {
       return Container(
         margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
@@ -97,18 +99,17 @@ class _showProfileState extends State<showProfile> {
         child: Center(
           child: Column(
             children: [
-              _item(context, 'Họ và tên', infomationCustomer.fullName),
-              _item(
-                  context,
-                  'Ngày sinh',
-                  getDateTime(infomationCustomer.birthday.toString(),
-                      dateFormat: 'dd-MM-yyyy')),
+              _item(context, 'Họ và tên', infomationCustomer.fullname),
+              _item(context, 'Ngày sinh',
+                  "${infomationCustomer.birthday == null ? "-----" : getDateTime(infomationCustomer.birthday, dateFormat: 'dd-MM-yyyy')}"),
               _item(context, 'Số điện thoại', infomationCustomer.phone),
               _item(context, 'Giới tính', getGender(infomationCustomer.gender)),
-              _item(context, 'CMND', infomationCustomer.cmnd),
-              _item(context, 'Địa chỉ', infomationCustomer.address.toString()),
+              _item(context, 'CMND',
+                  "${infomationCustomer.cmnd == null ? "-----" : infomationCustomer.cmnd}"),
+              _item(context, 'Địa chỉ',
+                  "${infomationCustomer.address == null ? "-----" : infomationCustomer.address}"),
               _item(context, 'Loại tài khoản',
-                  getLevel(level: infomationCustomer.level)),
+                  "${getLevel(level: infomationCustomer.level)} ${infomationCustomer.needConfirm ? "- Chờ xác nhận" : ""}"),
               SizedBox(
                 height: 12,
               ),
@@ -119,8 +120,19 @@ class _showProfileState extends State<showProfile> {
     } else if (isError) {
       return showErrorLoadData();
     } else {
-      return CircularProgressIndicator(
-        color: primaryColor,
+      return Container(
+        width: MediaQuery.of(context).size.width,
+        height: 300,
+        color: Colors.white54,
+        child: Center(
+          child: SizedBox(
+            child: CircularProgressIndicator(
+              color: welcome_color,
+            ),
+            height: 35,
+            width: 35,
+          ),
+        ),
       );
     }
   }
@@ -136,8 +148,7 @@ class _showProfileState extends State<showProfile> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => UpdatePasswordPage(
-                    password: password,
-                    account_id: infomationCustomer.accountId,
+                    accountId: infomationCustomer.accountId,
                     isCustomer: true,
                   ),
                 ),
@@ -159,32 +170,36 @@ class _showProfileState extends State<showProfile> {
               ),
             ),
           ),
-          level == 0
-              ? TextButton(
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => AccountVerification()));
-                  },
-                  child: Center(
-                    child: AutoSizeText(
-                      "Xác thực ảnh CMND",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    primary: primaryColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                    ),
-                  ),
-                )
-              : Container(),
+          if (level == 0 && !infomationCustomer.needConfirm)
+            btnUpgradeAccount(),
         ],
       ),
     );
+  }
+
+  Widget btnUpgradeAccount() {
+    return TextButton(
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => UpgradeAccount(
+                    informationCustomer: infomationCustomer,
+                  )));
+        },
+        child: Center(
+          child: AutoSizeText(
+            "Cập nhật tài khoản",
+            style: TextStyle(
+              fontWeight: FontWeight.w500,
+              color: Colors.white,
+            ),
+          ),
+        ),
+        style: ElevatedButton.styleFrom(
+          primary: primaryColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+        ));
   }
 
   //Show thông tin của người dùng

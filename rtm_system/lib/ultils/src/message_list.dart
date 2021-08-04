@@ -6,19 +6,19 @@ import 'dart:core';
 String MSG001 = "không được để trống.";
 String MSG002 = "Tạo mới thành công.";
 String MSG003 = "Cập nhật thông tin thành công";
-String MSG004 = "Tên đăng nhập sai.";
+String MSG004 = "Đăng nhập thất bại.";
 String MSG005 = "Tài khoản đã bị khóa.";
 String MSG006 = "Số tiền phải lớn hơn hoặc bằng 100,000 VND";
 String MSG007 = "Độ dài của tên khách hàng nhỏ hơn 50 ký tự.";
 String MSG008 = "Không có dữ liệu.";
-String MSG009 = "Tên khách hàng không tồn tại.";
+String MSG009 = "Khách hàng không tồn tại.";
 String MSG010 = "Vui lòng chọn loại hóa đơn.";
 String MSG011 = "Hóa đơn đã được xác nhận không thể thay đổi.";
 String MSG012 = "Đã xác nhận thành công.";
-String MSG013 = "Vui lòng chọn sản phẩm.";
+String MSG013 = "Vui lòng chọn loại sản phẩm.";
 String MSG014 = "Số điện thoại là 10 hoặc 11 số.";
 String MSG015 = "Vui lòng chọn ngày sinh.";
-String MSG016 = "Độ dài mật khẩu lớn hơn 6 ký tự, bao gồm chữ và số.";
+String MSG016 = "Độ dài lớn hơn 6, bao gồm chữ và số.";
 String MSG017 = "Đã hủy bỏ thành công.";
 String MSG018 = "Từ chối xác nhận thông tin?";
 String MSG019 = "Đã trả tiền thành công.";
@@ -38,15 +38,32 @@ String MSG031 = "Quý khách không có nợ.";
 String MSG032 = "Xác nhận quý khách đã nhận số tiền hoàn trả?";
 String MSG033 = "Vui lòng chọn tiền nợ nhỏ hơn hoặc bằng tiền ký gửi";
 String MSG034 = "Vui lòng chọn đơn nợ!";
-String MSG035 = "Giá phải lớn hơn 1.000đ";
+String MSG035 = "Giá phải lớn hơn 0";
 String MSG036 = "Mất kết nối internet.";
 String MSG037 = "Trả tiền thất bại";
 String MSG038 = "Nhận tiền thất bại";
 String MSG039 = "Giá sản phẩm đã cập nhật";
 String MSG040 = "Đã xoá thành công";
 String MSG041 = "Xoá thất bại";
+String MSG042 = "Vui lòng chọn cửa hàng";
+String MSG043 = "Vui lòng chọn đơn ký gửi!";
+String MSG044 = "Không có hoá đơn ký gửi để trả nợ.";
+String MSG045 = "Tải thông tin thất bại";
+String MSG046 = "Số tiền không vượt quá 50.000.000 VND";
+String MSG047 = "Số tiền không vượt quá 100.000.000 VND";
+String MSG048 = "Hạn mức tối đa 50.000.000 VND";
+String MSG049 = "Hạn mức tối đa 100.000.000 VND";
+/// =====================
+String MSG050 = "Kiểm tra lại thông tin";
+String MSG051 = "Kiểm tra lại";
+String MSG052 = "Đang xử lý...";
+String MSG053 = "Hủy kích hoạt thành công";
+String MSG054 = "Ẩn thông báo thành công";
+String MSG055 = "Xin hãy nhập giá mới";
+String MSG056 = "không hợp lệ";
 
-
+String MSG057 = "Vượt quá độ dài cho phép";
+String MSG058 = "CMND/CCCD là 9 đến 12 số.";
 //use to show message
 String showMessage(String name, String msg){
   return name.isEmpty || name == null? msg : name + " " + msg;

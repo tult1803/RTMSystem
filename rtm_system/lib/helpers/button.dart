@@ -7,7 +7,7 @@ import 'package:rtm_system/ultils/src/message_list.dart';
 import 'package:rtm_system/view/customer/home_customer_page.dart';
 import 'package:rtm_system/view/detail_notice.dart';
 import 'package:rtm_system/view/form_reason.dart';
-import 'package:rtm_system/view/login_page.dart';
+import 'package:rtm_system/view/login/login_page.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -327,18 +327,12 @@ Widget btnSubmitOrCancel(
             if (mainTittle == "") {
               showStatusAlertDialog(context, txtError, null, false);
             } else {
+              showEasyLoading(context, MSG052);
               int status = await postAPINotice(mainTittle, content);
               if (status == 200) {
-                showCustomDialog(context,
-                    isSuccess: true,
-                    content: "Tạo thành công",
-                    doPopNavigate: true,
-                    widgetToNavigator: widgetToNavigator);
+                showEasyLoadingSuccess(context, MSG002, widget: widgetToNavigator);
               } else
-                showCustomDialog(context,
-                    isSuccess: false,
-                    content: "Tạo thất bại. Xin thử lại",
-                    doPopNavigate: true);
+                showEasyLoadingError(context, showMessage(MSG024, MSG027));
             }
           } else {
             if (isCustomer) {
@@ -417,67 +411,6 @@ Widget btnDeleteRequestPage(BuildContext context, double width, double height,
   );
 }
 
-// chấp nhận hoặc từ chối hóa đơn
-Widget btnAcceptOrReject(BuildContext context, double width, Color color,
-    String tittleButtonAlertDialog, bool action, int indexOfBottomBar) {
-  return Container(
-      child: SizedBox(
-    width: width,
-    // ignore: deprecated_member_use
-    child: RaisedButton(
-      color: color,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-      onPressed: () async {
-        if (action) {
-          int status = 200;
-          // await postAPINotice(mainTittle, content);
-          // gọi api trả lại gì đó khi chấp nhận hoặc từ chối
-          if (status == 200) {
-            //chở lại trang all invoice
-            if (tittleButtonAlertDialog == 'Từ chối') {
-              showStatusAlertDialog(
-                  context,
-                  "Đã từ chối thông tin.",
-                  HomeCustomerPage(
-                    index: indexOfBottomBar,
-                  ),
-                  true);
-            } else {
-              showStatusAlertDialog(
-                  context,
-                  "Đã xác nhận thông tin.",
-                  HomeCustomerPage(
-                    index: indexOfBottomBar,
-                  ),
-                  true);
-            }
-          } else
-            showStatusAlertDialog(context, "Xác nhận thất bại", null, false);
-        } else {
-          //chở lại trang all invoice
-          showAlertDialog(
-              context,
-              "Từ chối xác nhận thông tin?",
-              HomeCustomerPage(
-                index: indexOfBottomBar,
-              ));
-        }
-      },
-      child: Center(
-        child: Text(
-          tittleButtonAlertDialog,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-          ),
-        ),
-      ),
-    ),
-  ));
-}
-
 Widget btnProcessAdvanceBill(BuildContext context,
     {String idAdvanceBill, bool isCustomer, Widget widgetToNavigator}) {
   return Row(
@@ -512,9 +445,7 @@ Widget btnProcessAdvanceBill(BuildContext context,
           color: Color(0xFF0BB791),
           onPressed: () {
             doProcessAdvanceBill(context, idAdvanceBill, 8,
-                widgetToNavigator: HomeAdminPage(
-                  index: 2,
-                ));
+                widgetToNavigator: widgetToNavigator);
           },
           child: Text(
             "Xác nhận",
@@ -584,9 +515,11 @@ Widget btnProcessInvoice(context, int statusId, String id, bool isCustomer,
       );
     } else {
       return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: isRequest == null
+            ? MainAxisAlignment.spaceAround
+        : MainAxisAlignment.center,
         children: [
-          Flexible(
+          isRequest == null ? Flexible(
             // ignore: deprecated_member_use
             child: RaisedButton(
               color: Colors.redAccent,
@@ -608,27 +541,30 @@ Widget btnProcessInvoice(context, int statusId, String id, bool isCustomer,
               ),
               elevation: 10,
             ),
-          ),
+          ): Container(),
           Flexible(
-                  // ignore: deprecated_member_use
-                  child: RaisedButton(
-                    color: Color(0xFF0BB791),
-                    onPressed: () {
-                      isRequest != null ? doConfirmOrAcceptOrRejectInvoice(
-                          context, id,  [],2, isCustomer,
-                          isRequest: isRequest,
-                          element: element,
-                          widgetToNavigator: widgetToNavigator)
-                      : showTextFieldDialog(context, isDegree:isDegree, id: id);
-                    },
-                    child: Text(
-                      '${isRequest != null ? "Tạo" : "Cập nhật"}',
-                      style: TextStyle(color: Colors.white, fontSize: 16),
+                  child: Container(
+                    width: isRequest != null ? 150 : 120,
+                    // ignore: deprecated_member_use
+                    child: RaisedButton(
+                      color: Color(0xFF0BB791),
+                      onPressed: () {
+                        isRequest != null ? doConfirmOrAcceptOrRejectInvoice(
+                            context, id,  [],2, isCustomer,
+                            isRequest: isRequest,
+                            element: element,
+                            widgetToNavigator: widgetToNavigator)
+                        : showTextFieldDialog(context, isDegree:isDegree, id: id);
+                      },
+                      child: Text(
+                        '${isRequest != null ? "Tạo" : "Cập nhật"}',
+                        style: TextStyle(color: Colors.white, fontSize: 16),
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      elevation: 10,
                     ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    elevation: 10,
                   ),
                 )
         ],
@@ -695,7 +631,7 @@ Widget btnConfirmAdvanceReturn(
           );
         },
         child: AutoSizeText(
-          "Nhận tiền hoàn trả",
+          "Nhận tiền",
           style: TextStyle(
               color: Colors.white, fontWeight: FontWeight.w500, fontSize: 16),
         )),

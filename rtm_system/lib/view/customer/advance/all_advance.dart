@@ -12,8 +12,8 @@ import 'package:rtm_system/view/customer/pay_advance.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AdvancePage extends StatefulWidget {
-  const AdvancePage({Key key}) : super(key: key);
-
+  AdvancePage({this.index});
+  int index;
   @override
   State<AdvancePage> createState() => _AdvancePageState();
 }
@@ -21,20 +21,22 @@ class AdvancePage extends StatefulWidget {
 DateTime fromDate;
 DateTime toDate;
 
-class _AdvancePageState extends State<AdvancePage> with TickerProviderStateMixin {
+class _AdvancePageState extends State<AdvancePage>
+    with TickerProviderStateMixin {
   TabController _tabController;
   String getFromDate, getToDate;
-  int index, _selectedIndex;
-  GetAPIProfileCustomer getAPIProfileCustomer = GetAPIProfileCustomer();
-  InfomationCustomer infomationCustomer = InfomationCustomer();
+  int _selectedIndex, _index;
   int level = 0;
 
   @override
   void initState() {
     super.initState();
-     //tab 1: yeu cau
-    index = 0;
-    _tabController = TabController(length: 4, vsync: this);
+    //tab 1: yeu cau
+    _tabController = TabController(
+        length: 4,
+        vsync: this,
+        initialIndex:
+            widget.index == null ? _index = 0 : _index = widget.index);
     _tabController.addListener(() {
       setState(() {
         _selectedIndex = _tabController.index;
@@ -50,11 +52,12 @@ class _AdvancePageState extends State<AdvancePage> with TickerProviderStateMixin
           "${getDateTime("$toDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
     });
   }
-
   Future getAPIProfile() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     String token = sharedPreferences.getString('access_token');
     String phone = sharedPreferences.getString('phone');
+    GetAPIProfileCustomer getAPIProfileCustomer = GetAPIProfileCustomer();
+    InfomationCustomer infomationCustomer = InfomationCustomer();
     // Đỗ dữ liệu lấy từ api
     infomationCustomer =
         await getAPIProfileCustomer.getProfileCustomer(token, phone);
@@ -63,7 +66,7 @@ class _AdvancePageState extends State<AdvancePage> with TickerProviderStateMixin
     });
     return infomationCustomer;
   }
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,9 +78,8 @@ class _AdvancePageState extends State<AdvancePage> with TickerProviderStateMixin
         bottom: bottomTabBar(),
       ),
       body: tabView(),
-      floatingActionButton: level != 0
-          ? showFloatBtn(_selectedIndex)
-          : showHiddenFloatBtn(),
+      floatingActionButton:
+          level != 0 ? showFloatBtn(_selectedIndex) : showHiddenFloatBtn(),
     );
   }
 
@@ -105,22 +107,24 @@ class _AdvancePageState extends State<AdvancePage> with TickerProviderStateMixin
       ],
     );
   }
-  Widget tabView(){
+
+  Widget tabView() {
     var size = MediaQuery.of(context).size;
     return TabBarView(
-        controller: _tabController,
-        children: <Widget>[
-          //show advance chờ xử lý
-          containerAdvance(size.height, 4),
-          //Show advance được chấp nhận, đã mượn
-          containerAdvance(size.height, 8),
-          //Show advance bị từ chối
-          containerAdvance(size.height, 6),
-          //show advance đã trả
-          containerAdvanceHistory(size.height, 8),
-        ],
-      );
+      controller: _tabController,
+      children: <Widget>[
+        //show advance chờ xử lý
+        containerAdvance(size.height, 4),
+        //Show advance được chấp nhận, đã mượn
+        containerAdvance(size.height, 8),
+        //Show advance bị từ chối
+        containerAdvance(size.height, 6),
+        //show advance đã trả
+        containerAdvanceHistory(size.height, 8),
+      ],
+    );
   }
+
   //show invoice advance request
   Widget containerAdvance(height, status) {
     return Container(
@@ -131,7 +135,7 @@ class _AdvancePageState extends State<AdvancePage> with TickerProviderStateMixin
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               rowButtonDatetime(),
-              new showAdvanceRequestPage(status,
+              showAdvanceRequestPage(status,
                   fromDate: getFromDate, toDate: getToDate),
             ],
           ),
@@ -146,15 +150,13 @@ class _AdvancePageState extends State<AdvancePage> with TickerProviderStateMixin
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              new showHistoryAdvancePage(),
-            ],
+            children: [ showHistoryAdvancePage(),],
           ),
         ));
   }
-  
+
   Widget showFloatBtn(index) {
-    if (index == 1) {
+    if (index == 1 || index == 3) {
       return FloatingActionButton.extended(
         onPressed: () {
           Navigator.push(
@@ -179,7 +181,10 @@ class _AdvancePageState extends State<AdvancePage> with TickerProviderStateMixin
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => CreateRequestAdvance()),
+            MaterialPageRoute(
+                builder: (context) => CreateRequestAdvance(
+                      levelCustomer: level,
+                    )),
           );
         },
         child: Icon(
@@ -262,7 +267,7 @@ class _AdvancePageState extends State<AdvancePage> with TickerProviderStateMixin
         getFromDate =
             "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
         getToDate =
-            "${getDateTime("${toDate}", dateFormat: "yyyy-MM-dd 23:59:59")}";
+            "${getDateTime("$toDate", dateFormat: "yyyy-MM-dd 23:59:59")}";
       });
     }
   }

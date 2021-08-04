@@ -9,11 +9,12 @@ import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/presenter/Manager/invoice/add_product_invoice.dart';
 import 'package:rtm_system/view/customer/get_money_deposit.dart';
+import 'package:rtm_system/view/customer/home_customer_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class InvoiceTab extends StatefulWidget {
-  const InvoiceTab({Key key}) : super(key: key);
-
+  InvoiceTab({this.index});
+  int index;
   @override
   State<InvoiceTab> createState() => _InvoiceTabState();
 }
@@ -24,7 +25,7 @@ DateTime toDate;
 class _InvoiceTabState extends State<InvoiceTab> with TickerProviderStateMixin {
   TabController _tabController;
   String getFromDate, getToDate;
-  int index, _selectedIndex;
+  int _index, _selectedIndex;
   GetAPIProfileCustomer getAPIProfileCustomer = GetAPIProfileCustomer();
   InfomationCustomer infomationCustomer = InfomationCustomer();
   int level = 0;
@@ -47,8 +48,12 @@ class _InvoiceTabState extends State<InvoiceTab> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    index = 0;
-    _tabController = TabController(length: 5, vsync: this);
+    print(widget.index);
+    _tabController = TabController(
+        length: 5,
+        vsync: this,
+        initialIndex:
+            widget.index == null ? _index = 0 : _index = widget.index);
     _tabController.addListener(() {
       setState(() {
         _selectedIndex = _tabController.index;
@@ -61,7 +66,7 @@ class _InvoiceTabState extends State<InvoiceTab> with TickerProviderStateMixin {
         "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
     getToDate = "${getDateTime("$toDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
   }
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,8 +78,7 @@ class _InvoiceTabState extends State<InvoiceTab> with TickerProviderStateMixin {
         bottom: bottomTabBar(),
       ),
       body: tabView(),
-      floatingActionButton:
-          level != 0 ? _showFloatBtn(_selectedIndex) : showHiddenFloatBtn(),
+      floatingActionButton: showFloatBtn(_selectedIndex, level),
     );
   }
 
@@ -159,47 +163,57 @@ class _InvoiceTabState extends State<InvoiceTab> with TickerProviderStateMixin {
     );
   }
 
-  Widget _showFloatBtn(index) {
+  Widget showFloatBtn(index, levelCustomer) {
     //index = 2 là tab thứ 2 "Ký gửi"
     if (index == 2) {
-      return FloatingActionButton.extended(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => GetMoneyDeposit()),
-          );
-        },
-        label: Text(
-          'Nhận tiền',
-          style: TextStyle(
-            color: Colors.white,
+      if (levelCustomer != 0) {
+        return FloatingActionButton.extended(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => GetMoneyDeposit()),
+            );
+          },
+          label: Text(
+            'Nhận tiền',
+            style: TextStyle(
+              color: Colors.white,
+            ),
           ),
-        ),
-        backgroundColor: primaryColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(50.0),
-        ),
-        elevation: 10,
-      );
+          backgroundColor: primaryColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(50.0),
+          ),
+          elevation: 10,
+        );
+      } else {
+        return showHiddenFloatBtn();
+      }
     } else {
-      return FloatingActionButton(
-        backgroundColor: primaryColor,
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => AddProductPage(
-                      isCustomer: true,
-                      tittle: "Tạo yêu cầu bán hàng",
-                    )),
-          );
-        },
-        child: Icon(
-          Icons.post_add_outlined,
-          color: Colors.white,
-          size: 25,
-        ),
-      );
+      if (levelCustomer == 2) {
+        return FloatingActionButton(
+          backgroundColor: primaryColor,
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => AddProductPage(
+                        isCustomer: true,
+                        tittle: "Tạo yêu cầu bán hàng",
+                        level: level,
+                        widgetToNavigator: HomeCustomerPage(index: 1, indexInvoice: 0,),
+                      )),
+            );
+          },
+          child: Icon(
+            Icons.post_add_outlined,
+            color: Colors.white,
+            size: 25,
+          ),
+        );
+      } else {
+        return showHiddenFloatBtn();
+      }
     }
   }
 
@@ -274,7 +288,7 @@ class _InvoiceTabState extends State<InvoiceTab> with TickerProviderStateMixin {
         getFromDate =
             "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
         getToDate =
-            "${getDateTime("${toDate}", dateFormat: "yyyy-MM-dd 23:59:59")}";
+            "${getDateTime("$toDate", dateFormat: "yyyy-MM-dd 23:59:59")}";
       });
     }
   }

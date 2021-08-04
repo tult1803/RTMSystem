@@ -29,6 +29,7 @@ void configLoading() {
 }
 
 class MyApp extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -57,6 +58,7 @@ class MyApp extends StatelessWidget {
         builder: EasyLoading.init(),
         debugShowCheckedModeBanner: false,
         home: WelcomePage(),
+        // home: InputNewPassword(),
       ),
     );
   }

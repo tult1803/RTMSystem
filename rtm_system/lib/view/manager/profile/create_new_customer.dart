@@ -11,9 +11,6 @@ class CreateCustomer extends StatefulWidget {
 }
 
 class _CreateCustomerState extends State<CreateCustomer> {
-  @override
-  void initState() {
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,11 +27,12 @@ class _CreateCustomerState extends State<CreateCustomer> {
         ),
         body: SingleChildScrollView(
             child: new formUpdateProfile(
-              check: true,
+              isUpgrade: false,
+          check: true,
           isCustomer: false,
           isUpdate: false,
           isCreate: true,
-          birthday: DateTime.now(),
+          // birthday: DateTime.now(),
         )));
   }
 }

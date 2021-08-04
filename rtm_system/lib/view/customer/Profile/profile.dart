@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:rtm_system/helpers/component.dart';
 import 'package:rtm_system/presenter/Customer/show_profile_customer.dart';
-import 'package:rtm_system/presenter/Customer/verification/front_identity_card.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -16,9 +15,6 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
-    if (imageBack != null) imageBack = null;
-    if (imageFront != null) imageFront = null;
-    if (imageFace != null) imageFace = null;
   }
 
   @override

@@ -1,13 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:rtm_system/model/model_validate_account.dart';
 import 'package:rtm_system/ultils/src/url_api.dart';
 import 'package:http/http.dart' as http;
 
 class PostValidateCustomer {
   createValidateCustomer(String token,
-      {File face, File cmndFront, File cmndBack}) async {
-    final byteFace = face.readAsBytesSync();
+      {File cmndFront, File cmndBack}) async {
     final bytecmndFront = cmndFront.readAsBytesSync();
     final bytecmndBack = cmndBack.readAsBytesSync();
     final response = await http.post(
@@ -19,11 +17,10 @@ class PostValidateCustomer {
       body: jsonEncode(<String, dynamic>{
         "cmnd1": bytecmndFront,
         "cmnd2": bytecmndBack,
-        "avt": byteFace,
       }),
     );
 
     print("Status postApi ValidateCustomer:${response.statusCode}");
-    return DataValidateAccount.fromJson(json.decode(response.body));
+    return response.statusCode;
   }
 }

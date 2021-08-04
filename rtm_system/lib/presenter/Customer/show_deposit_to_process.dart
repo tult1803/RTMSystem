@@ -1,4 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rtm_system/blocs/count_total_invoices.dart';
@@ -12,7 +11,6 @@ import 'package:rtm_system/model/model_invoice.dart';
 import 'package:rtm_system/helpers/common_widget.dart';
 import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
-import 'package:rtm_system/ultils/src/message_list.dart';
 import 'package:rtm_system/view/detail_invoice.dart';
 import 'package:rtm_system/view/manager/form_detail_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -111,6 +109,9 @@ class showAllInvoicePageState extends State<showDepositToProcess> {
                           isRequest: false,
                           isCustomer: true),
                     );
+                  } else {
+                    BlocProvider.of<TotalDepositBloc>(context)
+                        .emit(_totalDeposit);
                   }
                   BlocProvider.of<ListInvoiceIdBloc>(context)
                       .emit(invoiceIdList);
