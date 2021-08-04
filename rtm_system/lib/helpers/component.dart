@@ -1,16 +1,13 @@
 import 'dart:ui';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rtm_system/helpers/button.dart';
-import 'package:rtm_system/helpers/common_widget.dart';
 import 'package:rtm_system/model/model_advance_return_detail.dart';
 import 'package:rtm_system/model/model_invoice_request.dart';
 import 'package:rtm_system/ultils/check_data.dart';
 import 'package:rtm_system/ultils/get_api_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
-import 'package:rtm_system/view/customer/Profile/show_image_cmnd.dart';
 import 'package:rtm_system/view/manager/product/update_price_product_manager.dart';
 import '../ultils/get_data.dart';
 
