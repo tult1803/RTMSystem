@@ -9,6 +9,7 @@ import 'package:rtm_system/model/model_profile_customer.dart';
 import 'package:rtm_system/presenter/Manager/invoice/add_product_invoice.dart';
 import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
+import 'package:rtm_system/view/customer/Profile/upgrade_account.dart';
 import 'package:rtm_system/view/customer/advance/create_request_advance.dart';
 import 'package:rtm_system/view/customer/contact/ContactPage.dart';
 import 'package:rtm_system/view/customer/get_money_deposit.dart';
@@ -29,7 +30,7 @@ class _HomeMenuState extends State<HomeMenu> with TickerProviderStateMixin {
 
   GetAPIProfileCustomer getAPIProfileCustomer = GetAPIProfileCustomer();
   InfomationCustomer infomationCustomer = InfomationCustomer();
-  int level = 0;
+  int level;
 
   Invoice invoice;
   @override
@@ -37,6 +38,7 @@ class _HomeMenuState extends State<HomeMenu> with TickerProviderStateMixin {
     super.initState();
     getAmountAdvance();
     getAmountDeposit();
+    getAPIProfile();
   }
 
   Future getAmountAdvance() async {
@@ -55,6 +57,7 @@ class _HomeMenuState extends State<HomeMenu> with TickerProviderStateMixin {
   }
 
   Future<List> getAmountDeposit() async {
+    List result;
     int _totalAmount = 0;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     GetInvoice getAPIAllInvoice = GetInvoice();
@@ -68,18 +71,23 @@ class _HomeMenuState extends State<HomeMenu> with TickerProviderStateMixin {
       "",
       "",
     );
-    invoice.invoices.forEach((element) {
-      double amount = getPriceTotal(
-              double.parse(element.price.toString()),
-              double.parse(element.degree.toString()),
-              double.parse(element.quantity.toString())) ??
-          0;
-      _totalAmount += amount.round();
-    });
-    setState(() {
-      invoiceAmount = _totalAmount;
-    });
-    return invoice.invoices;
+    if (invoice != null) {
+      invoice.invoices.forEach((element) {
+        double amount = getPriceTotal(
+                double.parse(element.price.toString()),
+                double.parse(element.degree.toString()),
+                double.parse(element.quantity.toString())) ??
+            0;
+        _totalAmount += amount.round();
+      });
+      setState(() {
+        invoiceAmount = _totalAmount;
+      });
+      result = invoice.invoices;
+    } else {
+      result = [];
+    }
+    return result;
   }
 
   Future getAPIProfile() async {
@@ -94,6 +102,8 @@ class _HomeMenuState extends State<HomeMenu> with TickerProviderStateMixin {
         level = infomationCustomer.level;
       });
     }
+    print("aaaaaa");
+    print(level);
     return infomationCustomer;
   }
 
@@ -109,145 +119,47 @@ class _HomeMenuState extends State<HomeMenu> with TickerProviderStateMixin {
         ),
         body: Column(
           children: [
-            Container(
-              margin: EdgeInsets.fromLTRB(12, 20, 12, 46),
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(15.0),
-                  )),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  centerTextMoney(context, "Số tiền hiện có",
-                      Icons.my_library_books, invoiceAmount),
-                  Container(
-                      child: Text(
-                    "|",
-                    style: TextStyle(fontSize: 27, color: primaryColor),
-                  )),
-                  centerTextMoney(context, "Tổng tiền nợ",
-                      Icons.monetization_on_outlined, advanceAmount),
-                ],
-              ),
-            ),
+            containerHeader(),
             Expanded(
               child: Container(
-                  decoration: BoxDecoration(
-                    color: backgroundColor,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(35.0),
-                      topRight: Radius.circular(35.0),
-                    ),
+                decoration: BoxDecoration(
+                  color: backgroundColor,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(35.0),
+                    topRight: Radius.circular(35.0),
                   ),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        Container(
-                          margin: EdgeInsets.only(
-                            right: 24,
-                          ),
-                          child: TextButton(
-                            onPressed: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                    builder: (context) => ContactPage()),
-                              );
-                            },
-                            child: Center(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Icon(
-                                    Icons.add_ic_call_outlined,
-                                    color: primaryColor,
-                                  ),
-                                  SizedBox(
-                                    width: 15,
-                                  ),
-                                  AutoSizeText(
-                                    "Liên hệ",
-                                    style: TextStyle(
-                                        color: primaryColor,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        twoBtnBody(
-                          "Tạo bán hàng",
-                          Icons.playlist_add_check,
-                          "Tạo ứng tiền",
-                          Icons.post_add_outlined,
-                          AddProductPage(
-                            isCustomer: true,
-                            tittle: "Tạo yêu cầu bán hàng",
-                            level: level,
-                            widgetToNavigator: HomeCustomerPage(index: 0),
-                          ),
-                          CreateRequestAdvance(
-                            levelCustomer: level,
-                          ),
-                          true,
-                        ),
-                        twoBtnBody(
-                          "Nhận tiền",
-                          Icons.drive_file_rename_outline,
-                          "Trả nợ",
-                          Icons.money_off_csred_rounded,
-                          GetMoneyDeposit(),
-                          PayDebt(),
-                          true,
-                        ),
-                        twoBtnBody(
-                            "Xác nhận hoá đơn",
-                            Icons.file_copy_outlined ,
-                            "Xác nhận ứng tiền",
-                            Icons.attach_money ,
-                            HomeCustomerPage(
-                              index: 1,
-                              indexInvoice: 1,
-                              indexAdvance: 0,
-                            ),
-                            HomeCustomerPage(
-                                index: 2, indexAdvance: 1, indexInvoice: 0),
-                            false),
-                      ],
-                    ),
-                  )),
+                ),
+                child: SingleChildScrollView(
+                  child: level == null? Container(): btnMenu(level),
+                ),
+              ),
             ),
           ],
         ));
   }
 
-  Widget bottomTabBar() {
-    return TabBar(
-      labelPadding: EdgeInsets.symmetric(horizontal: 7.0),
-      indicatorColor: primaryColor,
-      labelColor: Colors.white,
-      unselectedLabelColor: Colors.white.withOpacity(0.5),
-      controller: _tabController,
-      tabs: <Widget>[
-        Tab(
-          child: Text('a'),
-        ),
-        Tab(
-          child: Text('a'),
-        ),
-      ],
-    );
-  }
-
-  Widget tabView() {
-    var size = MediaQuery.of(context).size;
-    return TabBarView(
-      controller: _tabController,
-      children: <Widget>[
-        Container(),
-        Container(),
-      ],
+  Widget containerHeader() {
+    return Container(
+      margin: EdgeInsets.fromLTRB(12, 20, 12, 46),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.all(
+            Radius.circular(15.0),
+          )),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          centerTextMoney(context, "Số tiền hiện có", Icons.my_library_books,
+              invoiceAmount),
+          Container(
+              child: Text(
+            "|",
+            style: TextStyle(fontSize: 27, color: primaryColor),
+          )),
+          centerTextMoney(context, "Tổng tiền nợ",
+              Icons.monetization_on_outlined, advanceAmount),
+        ],
+      ),
     );
   }
 
@@ -276,6 +188,96 @@ class _HomeMenuState extends State<HomeMenu> with TickerProviderStateMixin {
         ),
       ),
     );
+  }
+
+  Widget btnMenu(int levelCus) {
+    if (levelCus == 0) {
+      return Column(
+        children: [
+          btnContact(),
+          twoBtnBody(
+            "Xem hoá đơn",
+            Icons.post_add_outlined,
+           null,
+            null,
+            HomeCustomerPage(
+              index: 1,
+              indexInvoice: 3,
+              indexAdvance: 0,
+            ),
+            null,
+            false,
+          ),
+          twoBtnBody(
+            "Cập nhật tài khoản",
+            Icons.person_add_alt_1_outlined,
+            null,
+            null,
+            UpgradeAccount(
+              informationCustomer: infomationCustomer,
+            ),
+            null,
+            true,
+          ),
+        ],
+      );
+    } else {
+      return Column(
+        children: [
+          btnContact(),
+          if (level == 2)
+            twoBtnBody(
+              "Tạo bán hàng",
+              Icons.playlist_add_check,
+              "Tạo ứng tiền",
+              Icons.post_add_outlined,
+              AddProductPage(
+                isCustomer: true,
+                tittle: "Tạo yêu cầu bán hàng",
+                level: level,
+                widgetToNavigator: HomeCustomerPage(index: 0),
+              ),
+              CreateRequestAdvance(
+                levelCustomer: level,
+              ),
+              true,
+            ),
+          twoBtnBody(
+            "Nhận tiền",
+            Icons.drive_file_rename_outline,
+            "Trả nợ",
+            Icons.money_off_csred_rounded,
+            GetMoneyDeposit(),
+            PayDebt(),
+            true,
+          ),
+          twoBtnBody(
+              "Xác nhận hoá đơn",
+              Icons.file_copy_outlined,
+              "Xác nhận ứng tiền",
+              Icons.attach_money,
+              HomeCustomerPage(
+                index: 1,
+                indexInvoice: 1,
+                indexAdvance: 0,
+              ),
+              HomeCustomerPage(index: 2, indexAdvance: 1, indexInvoice: 0),
+              false),
+          if (level == 1)
+            twoBtnBody(
+              "Tạo ứng tiền",
+              Icons.post_add_outlined,
+              "",
+              null,
+              CreateRequestAdvance(
+                levelCustomer: level,
+              ),
+              null,
+              true,
+            ),
+        ],
+      );
+    }
   }
 
   Widget miniIconTextContainer(
@@ -348,9 +350,10 @@ class _HomeMenuState extends State<HomeMenu> with TickerProviderStateMixin {
               AutoSizeText(
                 tittle == null ? "" : tittle,
                 style: GoogleFonts.roboto(
-                    fontSize: fontSize,
-                    fontWeight: fontWeightText,
-                    color: colorText,),
+                  fontSize: fontSize,
+                  fontWeight: fontWeightText,
+                  color: colorText,
+                ),
               ),
             ],
           ),
@@ -361,24 +364,22 @@ class _HomeMenuState extends State<HomeMenu> with TickerProviderStateMixin {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        miniIconTextContainer(
-          context,
-          height: 120,
-          width: 150,
-          borderRadius: 20,
-          colorContainer: Colors.white,
-          tittle: name1,
-          colorText: Colors.black,
-          icon: Icon(
-            icon1,
-          ),
-          iconColor: primaryColor,
-          iconSize: 50,
-          widget: widget1,
-          isCheck: isCheck,
-          marginBottom: 30,
-          fontSize: 15
-        ),
+        miniIconTextContainer(context,
+            height: 120,
+            width: 150,
+            borderRadius: 20,
+            colorContainer: Colors.white,
+            tittle: name1,
+            colorText: Colors.black,
+            icon: Icon(
+              icon1,
+            ),
+            iconColor: primaryColor,
+            iconSize: 50,
+            widget: widget1,
+            isCheck: isCheck,
+            marginBottom: 30,
+            fontSize: 15),
         if (name2 != "" && icon2 != null && widget2 != null)
           miniIconTextContainer(
             context,
@@ -397,6 +398,40 @@ class _HomeMenuState extends State<HomeMenu> with TickerProviderStateMixin {
             fontSize: 15,
           ),
       ],
+    );
+  }
+
+  Widget btnContact() {
+    return Container(
+      margin: EdgeInsets.only(
+        right: 24,
+      ),
+      child: TextButton(
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => ContactPage()),
+          );
+        },
+        child: Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Icon(
+                Icons.add_ic_call_outlined,
+                color: primaryColor,
+              ),
+              SizedBox(
+                width: 15,
+              ),
+              AutoSizeText(
+                "Liên hệ",
+                style:
+                    TextStyle(color: primaryColor, fontWeight: FontWeight.w500),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

@@ -19,7 +19,9 @@ class GetInvoice{
     print('Status GetAPI Invoice: ${response.statusCode}');
     if (response.statusCode == 200) {
       return  Invoice.fromJson(jsonDecode(response.body));
-    } else {
+    } else if(response.statusCode == 404) {
+      return null;
+    }else {
       // throw an exception.
       throw Exception('Failed to load data');
     }

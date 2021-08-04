@@ -65,7 +65,6 @@ class _BodyState extends State<Body> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     _timer.cancel();
   }

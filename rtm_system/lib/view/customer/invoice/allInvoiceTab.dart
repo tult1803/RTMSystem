@@ -66,7 +66,6 @@ class _InvoiceTabState extends State<InvoiceTab> with TickerProviderStateMixin {
         "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
     getToDate = "${getDateTime("$toDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
   }
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
