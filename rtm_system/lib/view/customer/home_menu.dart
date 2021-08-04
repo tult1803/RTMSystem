@@ -36,26 +36,9 @@ class _HomeMenuState extends State<HomeMenu> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    getAmountAdvance();
     getAmountDeposit();
     getAPIProfile();
   }
-
-  Future getAmountAdvance() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    String token = sharedPreferences.getString('access_token');
-    String phone = sharedPreferences.getString('phone');
-    GetAPIProfileCustomer getAPIProfileCustomer = GetAPIProfileCustomer();
-    InfomationCustomer infomationCustomer = InfomationCustomer();
-    // Đỗ dữ liệu lấy từ api
-    infomationCustomer =
-        await getAPIProfileCustomer.getProfileCustomer(token, phone);
-    setState(() {
-      advanceAmount = infomationCustomer.advance;
-    });
-    return infomationCustomer;
-  }
-
   Future<List> getAmountDeposit() async {
     List result;
     int _totalAmount = 0;
@@ -100,10 +83,9 @@ class _HomeMenuState extends State<HomeMenu> with TickerProviderStateMixin {
     if (infomationCustomer != null) {
       setState(() {
         level = infomationCustomer.level;
+        advanceAmount = infomationCustomer.advance;
       });
     }
-    print("aaaaaa");
-    print(level);
     return infomationCustomer;
   }
 
