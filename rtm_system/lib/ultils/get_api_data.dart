@@ -18,7 +18,7 @@ import 'package:rtm_system/model/post/postAPI_createNotice.dart';
 import 'package:rtm_system/model/get/getAPI_customer_phone.dart';
 import 'package:rtm_system/model/post/postAPI_login.dart';
 import 'package:rtm_system/model/post/postAPI_validateCustomer.dart';
-import 'package:rtm_system/model/put/putAPI_UpdateProfile.dart';
+import 'package:rtm_system/model/put/putAPI_updateProfile.dart';
 import 'package:rtm_system/model/put/putAPI_confirmAdvanceRequest.dart';
 import 'package:rtm_system/model/put/putAPI_confirmAdvanceReturn.dart';
 import 'package:rtm_system/model/put/putAPI_returnAdvance.dart';
