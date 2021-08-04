@@ -107,9 +107,9 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
                 ),
                 Column(
                   children: [
-                    _formMoney(false, "Nhập số tiền VND", "Số tiền",
+                    _formMoney(getDataTextField(money),false, "Nhập số tiền VND", "Số tiền",
                         TextInputType.number),
-                    _txtFormField('', false, "Nhập lý do ứng tiền ", "Lý do", 1,
+                    _txtFormField(getDataTextField(reason), false, "Nhập lý do ứng tiền ", "Lý do", 1,
                         TextInputType.text),
                     SizedBox(
                       height: 10,
@@ -226,7 +226,7 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
   }
 
   // form để nhập số tiền
-  Widget _formMoney(
+  Widget _formMoney(TextEditingController _controller,
       bool obscureText, String hintText, String tittle, TextInputType txtType) {
     var size = MediaQuery.of(context).size;
     return Form(
@@ -235,7 +235,7 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
         color: Colors.white,
         margin: EdgeInsets.only(top: 10, left: 10, right: 10),
         child: TextFormField(
-          // The validator receives the text that the user has entered.
+          controller: _controller,
           validator: (value) {
             int valueMoney = 0;
             if (value == null || value.isEmpty) {
@@ -295,10 +295,16 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
                   style: TextStyle(fontWeight: FontWeight.w500),
                 )),
             //Hiển thị Icon góc phải
-            suffixIcon: Icon(
-              Icons.create,
-              color: Colors.black54,
-            ),
+             suffixIcon: IconButton(
+            onPressed: () {
+              setState(() {
+                this.money = "";
+              });
+              _controller.clear;
+            },
+            icon: Icon(Icons.clear),
+            color: Colors.black54,
+          ),
             contentPadding: EdgeInsets.all(15),
           ),
         ),
@@ -383,15 +389,26 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
       ),
     );
   }
-
+  TextEditingController getDataTextField(String txt) {
+    if (txt == null) {
+      txt = "";
+    }
+    final TextEditingController _controller = TextEditingController();
+    _controller.value = _controller.value.copyWith(
+      text: txt,
+      selection: TextSelection.collapsed(offset: txt.length),
+    );
+    return _controller;
+  }
   //form reason is can NULL
-  Widget _txtFormField(String value, bool obscureText, String hintText,
+  Widget _txtFormField(TextEditingController _controller, bool obscureText, String hintText,
       String tittle, int maxLines, TextInputType txtType) {
     var size = MediaQuery.of(context).size;
     return Container(
       margin: EdgeInsets.only(top: 10, left: 10, right: 10),
       child: TextFormField(
-        initialValue: value,
+        controller: _controller,
+        // initialValue: value,
         obscureText: obscureText,
         onChanged: (value) {
           setState(() {
@@ -410,13 +427,9 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
         decoration: InputDecoration(
           border: UnderlineInputBorder(),
           hintText: '$hintText',
-
-          //Sau khi click vào "Nhập tiêu đề" thì màu viền sẽ đổi
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(color: welcome_color),
           ),
-
-          //Hiển thị text góc phải
           prefixIcon: Container(
               margin: EdgeInsets.only(top: 15, left: 5),
               width: size.width * 0.2,
@@ -424,10 +437,14 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
                 "$tittle",
                 style: TextStyle(fontWeight: FontWeight.w500),
               )),
-
-          //Hiển thị Icon góc phải
-          suffixIcon: Icon(
-            Icons.create,
+           suffixIcon: IconButton(
+            onPressed: () {
+              setState(() {
+                this.reason = "";
+              });
+              _controller.clear;
+            },
+            icon: Icon(Icons.clear),
             color: Colors.black54,
           ),
           contentPadding: EdgeInsets.all(15),

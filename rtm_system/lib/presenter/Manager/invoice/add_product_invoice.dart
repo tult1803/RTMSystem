@@ -225,17 +225,16 @@ class _AddProductPageState extends State<AddProductPage> {
                 Column(
                   children: [
                     txtAutoFillByPhone(
-                      maxLength: 11,
-                      enabled: widget.isChangeData == null ? true : false,
-                      controller: getDataTextField(phoneNewCustomer),
-                      isCustomer: this.widget.isCustomer,
-                      type: "phone",
-                      tittle: "Điện thoại",
-                      txtInputType: TextInputType.numberWithOptions(
-                          signed: true, decimal: true),
-                      error: errorPhone,
-                        icon: Icons.create
-                    ),
+                        maxLength: 11,
+                        enabled: widget.isChangeData == null ? true : false,
+                        controller: getDataTextField(phoneNewCustomer),
+                        isCustomer: this.widget.isCustomer,
+                        type: "phone",
+                        tittle: "Điện thoại",
+                        txtInputType: TextInputType.numberWithOptions(
+                            signed: true, decimal: true),
+                        error: errorPhone,
+                        icon: Icons.clear),
                     txtAutoFillByPhone(
                       enabled: false,
                       isCustomer: this.widget.isCustomer,
@@ -243,7 +242,9 @@ class _AddProductPageState extends State<AddProductPage> {
                       type: "name",
                       tittle: "Tên khách hàng",
                       txtInputType: TextInputType.name,
-                      icon: nameNewCustomer.isNotEmpty ? Icons.check : Icons.clear,
+                      icon: nameNewCustomer.isNotEmpty
+                          ? Icons.check
+                          : Icons.clear,
                     ),
                     SizedBox(
                       height: 10,
@@ -306,12 +307,9 @@ class _AddProductPageState extends State<AddProductPage> {
                     ),
                   ],
                 ),
-                SizedBox(
-                  height: 10,
-                ),
                 btnSave(context, 200, 40, Color(0xFF0BB791), "Tạo", 1),
                 SizedBox(
-                  height: 10,
+                  height: 25,
                 ),
                 showPriceTable(),
               ],
@@ -334,17 +332,16 @@ class _AddProductPageState extends State<AddProductPage> {
     }
   }
 
-  Widget txtAutoFillByPhone({
-    TextEditingController controller,
-    String error,
-    String tittle,
-    String type,
-    TextInputType txtInputType,
-    bool isCustomer,
-    bool enabled,
-    int maxLength,
-    IconData icon
-  }) {
+  Widget txtAutoFillByPhone(
+      {TextEditingController controller,
+      String error,
+      String tittle,
+      String type,
+      TextInputType txtInputType,
+      bool isCustomer,
+      bool enabled,
+      int maxLength,
+      IconData icon}) {
     return isCustomer
         ? Container()
         : Container(
@@ -360,8 +357,8 @@ class _AddProductPageState extends State<AddProductPage> {
               onSubmitted: (value) async {
                 if (tittle.contains("Điện thoại")) {
                   errorPhone = await checkPhoneNumber(value);
-                 if(errorPhone == null) doOnSubmittedTextField(type, value);
-                  if(errorPhone != null) {
+                  if (errorPhone == null) doOnSubmittedTextField(type, value);
+                  if (errorPhone != null) {
                     phoneNewCustomer = "";
                     // ignore: unnecessary_statements
                     nameNewCustomer == oldCusName ? nameNewCustomer = "" : null;
@@ -397,8 +394,16 @@ class _AddProductPageState extends State<AddProductPage> {
                   ),
                 ),
                 //Hiển thị Icon góc phải
-                suffixIcon: Icon(
-                  icon,
+                suffixIcon: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      if (tittle == "Điện thoại") {
+                        phoneNewCustomer = "";
+                      }
+                    });
+                    controller.clear;
+                  },
+                  icon: Icon(icon),
                   color: Colors.black54,
                 ),
 
@@ -712,8 +717,10 @@ class _AddProductPageState extends State<AddProductPage> {
               isQuantity
                   ? errorQuantity = showMessage("Số ký", MSG056)
                   // ignore: unnecessary_statements
-                  : {errorDegree = showMessage("Số độ", MSG056), this.degree = 0};
-
+                  : {
+                      errorDegree = showMessage("Số độ", MSG056),
+                      this.degree = 0
+                    };
             });
           }
         },
