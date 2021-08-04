@@ -147,6 +147,11 @@ class _DetailCustomerState extends State<DetailCustomer> {
             ],
           ),
           SizedBox(
+              height: 1,
+              child: Container(
+                color: Color(0xFFBDBDBD),
+              )),
+          SizedBox(
             height: 10,
           ),
           Row(
