@@ -53,6 +53,7 @@ class _showAllInvoiceState extends State<showAllInvoice>
       backgroundColor: backgroundColor,
       appBar: AppBar(
         title: titleAppBar("Hóa đơn"),
+        centerTitle: true,
         bottom: bottomAppBar(),
       ),
       body: Stack(

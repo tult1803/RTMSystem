@@ -125,6 +125,7 @@ class _AddProductPageState extends State<AddProductPage> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     GetAPIAllStore getAPIAllStore = GetAPIAllStore();
     store = await getAPIAllStore.getStores(
+      context,
       prefs.get("access_token"),
       1000,
       1,

@@ -55,6 +55,7 @@ class _showAllBillState extends State<showAllBill>
     return Scaffold(
       appBar: AppBar(
         title: titleAppBar("Ứng tiền"),
+        centerTitle: true,
         bottom: bottomAppBar(),
       ),
       body: Stack(

@@ -57,6 +57,7 @@ class _showStoreState extends State<showStore> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       GetAPIAllStore getAPIAllStore = GetAPIAllStore();
       store = await getAPIAllStore.getStores(
+        context,
         prefs.get("access_token"),
         pageKey,
         _pageSize,

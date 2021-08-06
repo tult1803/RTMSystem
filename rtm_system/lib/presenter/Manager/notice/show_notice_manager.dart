@@ -51,6 +51,7 @@ class _showAllNoticeState extends State<showAllNotice> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       GetAPIAllNotice getAPIAllNotice = GetAPIAllNotice();
       notice = await getAPIAllNotice.getNotices(
+        context,
         prefs.get("access_token"),
         pageKey,
         _pageSize,
