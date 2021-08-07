@@ -45,6 +45,7 @@ class _HomeMenuState extends State<HomeMenu> with TickerProviderStateMixin {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     GetInvoice getAPIAllInvoice = GetInvoice();
     invoice = await getAPIAllInvoice.getInvoice(
+      context,
       prefs.get("access_token"),
       prefs.get("accountId"),
       "",
@@ -79,7 +80,7 @@ class _HomeMenuState extends State<HomeMenu> with TickerProviderStateMixin {
     String phone = sharedPreferences.getString('phone');
     // Đỗ dữ liệu lấy từ api
     infomationCustomer =
-        await getAPIProfileCustomer.getProfileCustomer(token, phone);
+        await getAPIProfileCustomer.getProfileCustomer(context,token, phone);
     if (infomationCustomer != null) {
       setState(() {
         level = infomationCustomer.level;

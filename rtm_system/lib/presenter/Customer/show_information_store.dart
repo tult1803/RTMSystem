@@ -57,6 +57,7 @@ class _showStoreState extends State<showStore> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       GetAPIAllStore getAPIAllStore = GetAPIAllStore();
       store = await getAPIAllStore.getStores(
+        context,
         prefs.get("access_token"),
         pageKey,
         _pageSize,
@@ -83,25 +84,10 @@ class _showStoreState extends State<showStore> {
           PagedSliverList<int, StoreElement>(
             pagingController: _pagingController,
             builderDelegate: PagedChildBuilderDelegate<StoreElement>(
-                firstPageErrorIndicatorBuilder: (context) {
-                  return Column(
-                    children: [
-                      firstPageErrorIndicatorBuilder(context,
-                          tittle: showMessage(null, MSG008)),
-                      GestureDetector(
-                        onTap: () => _pagingController.refresh(),
-                        child: Text(
-                          showMessage(null, MSG027),
-                          style: TextStyle(color: welcome_color, fontSize: 18),
-                        ),
-                      ),
-                    ],
-                  );
-                },
+                firstPageErrorIndicatorBuilder: (context) => noItemFound(),
+                noItemsFoundIndicatorBuilder: (context) => noItemFound(),
                 firstPageProgressIndicatorBuilder: (context) =>
                     firstPageProgressIndicatorBuilder(),
-                noItemsFoundIndicatorBuilder: (context) =>
-                    noItemsFoundIndicatorBuilder(),
                 newPageProgressIndicatorBuilder: (context) =>
                     newPageProgressIndicatorBuilder(),
                 itemBuilder: (context, item, index) {
@@ -118,15 +104,15 @@ class _showStoreState extends State<showStore> {
     super.dispose();
   }
 
-  Widget noItemsFoundIndicatorBuilder() {
+  Widget noItemFound(){
     return Column(
       children: [
         firstPageErrorIndicatorBuilder(context,
-            tittle: showMessage("", MSG008)),
+            tittle: "$MSG008"),
         GestureDetector(
           onTap: () => _pagingController.refresh(),
           child: Text(
-            showMessage('', MSG027),
+            "Nhấn để tải lại",
             style: TextStyle(color: welcome_color, fontSize: 18),
           ),
         ),

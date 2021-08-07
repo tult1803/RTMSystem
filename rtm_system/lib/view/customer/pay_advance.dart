@@ -48,7 +48,7 @@ class _PayDebtState extends State<PayDebt> {
     String phone = sharedPreferences.getString('phone');
     // Đỗ dữ liệu lấy từ api
     informationCustomer =
-        await getAPIProfileCustomer.getProfileCustomer(token, phone);
+        await getAPIProfileCustomer.getProfileCustomer(context,token, phone);
     if (informationCustomer != null) {
       setState(() {
         totalAdvance = informationCustomer.advance;

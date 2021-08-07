@@ -38,6 +38,7 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     GetAPIAllStore getAPIAllStore = GetAPIAllStore();
     store = await getAPIAllStore.getStores(
+      context,
       prefs.get("access_token"),
       1000,
       1,
@@ -61,7 +62,7 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
 
     // Đỗ dữ liệu lấy từ api
     informationCustomer =
-        await getAPIProfileCustomer.getProfileCustomer(token, phone);
+        await getAPIProfileCustomer.getProfileCustomer(context,token, phone);
     if (informationCustomer != null) {
       setState(() {
         totalAdvance = informationCustomer.advance;

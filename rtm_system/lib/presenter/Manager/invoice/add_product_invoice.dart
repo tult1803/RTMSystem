@@ -96,7 +96,7 @@ class _AddProductPageState extends State<AddProductPage> {
     GetProduct getProduct = GetProduct();
     dataListProduct.clear();
     if (token.isNotEmpty) {
-      dataList = await getProduct.getProduct(token, "",
+      dataList = await getProduct.getProduct(context,token, "",
           limit: null, type: widget.level == 2 ? 1 : 2);
       dataList.forEach((element) async {
         Map<dynamic, dynamic> data = element;
@@ -125,6 +125,7 @@ class _AddProductPageState extends State<AddProductPage> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     GetAPIAllStore getAPIAllStore = GetAPIAllStore();
     store = await getAPIAllStore.getStores(
+      context,
       prefs.get("access_token"),
       1000,
       1,
@@ -422,7 +423,7 @@ class _AddProductPageState extends State<AddProductPage> {
     switch (type) {
       case "phone":
         phoneNewCustomer = value.trim();
-        infomationCustomer = await getDataCustomerFromPhone(value);
+        infomationCustomer = await getDataCustomerFromPhone(context,value);
         setState(() {
           if (infomationCustomer == null) {
             // ignore: unnecessary_statements

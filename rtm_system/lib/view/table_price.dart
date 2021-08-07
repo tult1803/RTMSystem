@@ -28,6 +28,7 @@ class _showTablePriceState extends State<showTablePrice> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       GetProduct getProduct = GetProduct();
       dataListProduct = await getProduct.getProduct(
+        context,
         prefs.get("access_token"),
         widget.idProduct,
         type: 3,
