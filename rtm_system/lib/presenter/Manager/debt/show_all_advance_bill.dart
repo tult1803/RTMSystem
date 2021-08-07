@@ -1,5 +1,5 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:rtm_system/helpers/component.dart';
 import 'package:rtm_system/presenter/Manager/debt/showAdvanceBill.dart';
 import 'package:rtm_system/presenter/infinite_scroll_pagination/common/character_search_input_sliver.dart';
 import 'package:rtm_system/helpers/common_widget.dart';
@@ -54,7 +54,8 @@ class _showAllBillState extends State<showAllBill>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: titleAppBar(),
+        title: titleAppBar("Ứng tiền"),
+        centerTitle: true,
         bottom: bottomAppBar(),
       ),
       body: Stack(
@@ -86,16 +87,6 @@ class _showAllBillState extends State<showAllBill>
             ),
           ],
         )
-    );
-  }
-
-  Widget titleAppBar() {
-    return Center(
-      child: Text(
-        "Ứng tiền",
-        style: TextStyle(
-            color: Colors.white, fontWeight: FontWeight.w500, fontSize: 22),
-      ),
     );
   }
 

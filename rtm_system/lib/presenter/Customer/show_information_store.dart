@@ -1,13 +1,14 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:rtm_system/model/get/getAPI_allStore.dart';
 import 'package:rtm_system/model/model_store.dart';
-import 'package:rtm_system/helpers/common_widget.dart';
 import 'package:rtm_system/helpers/component.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/ultils/src/message_list.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class showStore extends StatefulWidget {
   @override
@@ -20,6 +21,13 @@ class _showStoreState extends State<showStore> {
       PagingController(firstPageKey: 10);
   Store store;
   List<StoreElement> storeList;
+  Future<void> _makePhoneCall(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 
   @override
   void initState() {
@@ -49,6 +57,7 @@ class _showStoreState extends State<showStore> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       GetAPIAllStore getAPIAllStore = GetAPIAllStore();
       store = await getAPIAllStore.getStores(
+        context,
         prefs.get("access_token"),
         pageKey,
         _pageSize,
@@ -75,25 +84,10 @@ class _showStoreState extends State<showStore> {
           PagedSliverList<int, StoreElement>(
             pagingController: _pagingController,
             builderDelegate: PagedChildBuilderDelegate<StoreElement>(
-                firstPageErrorIndicatorBuilder: (context) {
-                  return Column(
-                    children: [
-                      firstPageErrorIndicatorBuilder(context,
-                          tittle: showMessage(null, MSG008)),
-                      GestureDetector(
-                        onTap: () => _pagingController.refresh(),
-                        child: Text(
-                          showMessage(null, MSG027),
-                          style: TextStyle(color: welcome_color, fontSize: 18),
-                        ),
-                      ),
-                    ],
-                  );
-                },
+                firstPageErrorIndicatorBuilder: (context) => noItemFound(),
+                noItemsFoundIndicatorBuilder: (context) => noItemFound(),
                 firstPageProgressIndicatorBuilder: (context) =>
                     firstPageProgressIndicatorBuilder(),
-                noItemsFoundIndicatorBuilder: (context) =>
-                    noItemsFoundIndicatorBuilder(),
                 newPageProgressIndicatorBuilder: (context) =>
                     newPageProgressIndicatorBuilder(),
                 itemBuilder: (context, item, index) {
@@ -110,19 +104,109 @@ class _showStoreState extends State<showStore> {
     super.dispose();
   }
 
-  Widget noItemsFoundIndicatorBuilder() {
+  Widget noItemFound(){
     return Column(
       children: [
         firstPageErrorIndicatorBuilder(context,
-            tittle: showMessage("", MSG008)),
+            tittle: "$MSG008"),
         GestureDetector(
           onTap: () => _pagingController.refresh(),
           child: Text(
-            showMessage('', MSG027),
+            "Nhấn để tải lại",
             style: TextStyle(color: welcome_color, fontSize: 18),
           ),
         ),
       ],
+    );
+  }
+
+  Widget containerStores(BuildContext context, String name, String address,
+      String phone, String email) {
+    var size = MediaQuery.of(context).size;
+    return Container(
+      margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(15.0),
+          topRight: Radius.circular(15.0),
+        ),
+      ),
+      child: TextButton(
+        style: TextButton.styleFrom(
+          primary: Colors.black, // foreground
+          textStyle: TextStyle(
+            fontSize: 16,
+          ),
+        ),
+        onPressed: () {
+          setState(() {
+            _makePhoneCall('tel:$phone');
+          });
+        },
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Container(
+                  width: size.width * 0.93,
+                  child: AutoSizeText(
+                    "$name",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.left,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            AutoSizeText(
+              "$address",
+              style: TextStyle(
+                fontSize: 14,
+              ),
+              textAlign: TextAlign.left,
+              overflow: TextOverflow.ellipsis,
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            AutoSizeText(
+              "$phone",
+              style: TextStyle(
+                fontSize: 14,
+              ),
+              textAlign: TextAlign.left,
+              overflow: TextOverflow.ellipsis,
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            AutoSizeText(
+              "$email",
+              style: TextStyle(
+                fontSize: 12,
+                color: welcome_color,
+              ),
+              textAlign: TextAlign.left,
+            ),
+            SizedBox(
+              height: 9,
+            ),
+            SizedBox(
+              height: 0.5,
+              child: Container(
+                color: Colors.black54,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

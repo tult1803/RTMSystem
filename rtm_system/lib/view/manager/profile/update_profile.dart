@@ -8,9 +8,9 @@ import '../../form_update_profile.dart';
 
 // ignore: camel_case_types
 class updateProfile extends StatefulWidget {
-  final String fullname, password, accountId;
-
-  updateProfile({this.fullname, this.password, this.accountId});
+  final String fullname, accountId;
+  final int gender;
+  updateProfile({this.fullname, this.gender, this.accountId});
 
   @override
   _updateProfileState createState() => _updateProfileState();
@@ -18,12 +18,11 @@ class updateProfile extends StatefulWidget {
 
 enum GenderCharacter { women, men }
 
+// ignore: camel_case_types
 class _updateProfileState extends State<updateProfile> {
   DateTime birthday = DateTime.now();
   String date;
   String phone;
-  int gender;
-  GenderCharacter character;
 
   @override
   void initState() {
@@ -56,16 +55,13 @@ class _updateProfileState extends State<updateProfile> {
           fullname: this.widget.fullname,
           birthday: birthday,
           phone: phone,
-          gender: gender,
-          // Tai password mau dang la 1 nen bi bat validate
-          password: this.widget.password,
+          gender: widget.gender,
           list: [
             this.widget.fullname,
-            gender,
+            widget.gender,
             phone,
             "",
             "",
-            this.widget.password,
             birthday
           ],
         )));
@@ -75,9 +71,7 @@ class _updateProfileState extends State<updateProfile> {
 //Dùng cho updateProfile hiện tại là chỉ manager
   Future getDataProfile() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-
     setState(() {
-      gender = prefs.get("gender");
       birthday = DateFormat("yyyy-MM-dd").parse(prefs.get("birthday"));
       phone = prefs.get("phone");
     });

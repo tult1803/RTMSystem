@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:rtm_system/helpers/dialog.dart';
 import 'package:rtm_system/ultils/src/message_list.dart';
+import 'package:rtm_system/view/login/login_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'src/regExp.dart';
 
@@ -31,7 +33,11 @@ checkUpdatePriceProduct(BuildContext context, {bool isClick, double price}) {
   if (isClick) {
     if (price != null) {
       if (price > 0) {
-        return true;
+        String lenghtPrice = "$price";
+        if(lenghtPrice.length > 10){
+          showEasyLoadingError(context,  showMessage("", MSG057));
+          return false;
+        }else return true;
       } else {
         showEasyLoadingError(context,  showMessage("", MSG035));
         return false;
@@ -88,8 +94,14 @@ checkQuantity(double quantity) {
   return null;
 }
 
+checkLengthQuantityDegree(String length){
+  if (length.length < 6) {
+    return showMessage("", MSG057);
+  }
+  return null;
+}
+
 checkDegree(bool checkProduct, double degree) {
-  print(degree);
   if (!checkProduct) {
     if (degree == 0) {
       return showMessage("Số độ", MSG001);
@@ -100,7 +112,7 @@ checkDegree(bool checkProduct, double degree) {
 
 checkPassword(String password, int type, {String passwordCheck}) {
   ///type 0 : password
-  ///type 1 : currentPassword
+  ///type 1 : newPassword
   ///type 2 : confirmPassword
   if (password == null || password == "") {
     switch (type) {
@@ -117,8 +129,8 @@ checkPassword(String password, int type, {String passwordCheck}) {
   } else
     switch (type) {
       case 0:
-        if (passwordCheck != password) {
-          return showMessage("Mật khẩu", MSG020);
+        if (!checkFormatPassword.hasMatch(password)) {
+          return showMessage("", MSG016);
         } else
           return null;
         break;
@@ -143,7 +155,7 @@ checkCMND(String cmnd) {
   } else {
     try {
       if (cmnd.length < 9 || cmnd.length > 12) {
-        return showMessage("CMND/CCCD", MSG020);
+        return showMessage("", MSG058);
       } else {
         return null;
       }
@@ -179,4 +191,38 @@ checkStatusUpgrade(int statusImage, int statusData){
   }else if(statusImage != 200 && statusData != 200){
     return "ảnh và dữ liệu";
   }else return "";
+}
+
+//Convert from String to country phone (+84)
+convertPhone(String phone) {
+  String error = checkPhoneNumber(phone);
+  try {
+    if (error == null) {
+      if (phone.substring(0, 3) == "+84") {
+        return phone;
+      } else {
+        if (phone.substring(0, 1) == "0") {
+          return "+84${phone.substring(1)}";
+        }
+      }
+      return null;
+    }
+    return null;
+  } catch (e) {
+    return phone;
+  }
+}
+
+checkTypeProduct(type){
+  if(type == 0){
+     return "Mủ lỏng";
+  }else return "Mủ đặc";
+}
+
+checkTimeToken(BuildContext context,int statusCode) async{
+  if (statusCode == 403) {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.clear();
+    showCupertinoAlertDialog(context, showMessage("", MSG059), widget: LoginPage(), isPush: true);
+  }
 }

@@ -31,7 +31,7 @@ class _ConfirmCreateRequestAdvanceState extends State<ConfirmCreateRequestAdvanc
     GetProduct getProduct = GetProduct();
     dataListProduct.clear();
     if (token.isNotEmpty) {
-      dataList = await getProduct.getProduct(token, "");
+      dataList = await getProduct.getProduct(context,token, "");
       dataList.forEach((element) {
         Map<dynamic, dynamic> data = element;
         dataListProduct.add(DataProduct.fromJson(data));
@@ -73,7 +73,7 @@ class _ConfirmCreateRequestAdvanceState extends State<ConfirmCreateRequestAdvanc
         centerTitle: true,
         leading: leadingAppbar(context),
         title: Text(
-          "Tạo yêu cầu ứng tiền",
+          "Xác nhận thông tin",
           style: TextStyle(
               color: Colors.white, fontWeight: FontWeight.w500, fontSize: 22),
         ),

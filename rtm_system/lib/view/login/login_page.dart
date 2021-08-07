@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -11,6 +10,10 @@ import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/ultils/src/message_list.dart';
 import 'package:rtm_system/view/customer/home_customer_page.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
+import 'package:keyboard_actions/keyboard_actions.dart';
+import 'package:keyboard_actions/keyboard_actions_config.dart';
+
+import 'check_phone.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -24,6 +27,7 @@ PostLogin getAPI = PostLogin();
 DataLogin data;
 
 class LoginPageState extends State<LoginPage> {
+  final FocusNode _nodeUsername = FocusNode();
   bool obscureTextPassword = true;
   Icon iconPassword = Icon(
     Icons.visibility_outlined,
@@ -45,6 +49,12 @@ class LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
     checkSaveLogin(context);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _nodeUsername.dispose();
   }
 
   @override
@@ -78,6 +88,10 @@ class LoginPageState extends State<LoginPage> {
                 SizedBox(
                   height: 15,
                 ),
+                loginOTP(context),
+                SizedBox(
+                  height: 15,
+                ),
                 _checkLogin(),
                 SizedBox(
                   height: 15,
@@ -89,19 +103,34 @@ class LoginPageState extends State<LoginPage> {
         ));
   }
 
-  Widget forgotPassword(){
+  Widget loginOTP(BuildContext context){
+   return GestureDetector(
+     onTap: () {
+       Navigator.of(context).push(MaterialPageRoute(builder: (context) => CheckPhone(isLogin: true,)));
+     },
+     child: Container(
+         width: MediaQuery.of(context).size.width,
+         margin: EdgeInsets.only(left: 50, right: 40),
+         child: Text("Đăng nhập bằng sms", style: GoogleFonts.roboto(color: Colors.blueAccent, fontWeight: FontWeight.w400,),)),
+   ) ;
+  }
+
+  Widget forgotPassword() {
     return GestureDetector(
       onTap: () {
-        /// Chờ code ===== ///
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => CheckPhone(isLogin: false,)));
       },
-      child: Text("Quên mật khẩu", style: GoogleFonts.roboto(color: welcome_color, fontSize: 16),),
+      child: Text(
+        "Quên mật khẩu",
+        style: GoogleFonts.roboto(color: welcome_color, fontSize: 16),
+      ),
     );
   }
 
   Future loginApi() async {
     // Đỗ dữ liệu lấy từ api
-    data = await getAPI.createLogin(username, password);
-
+    data = await getAPI.createLogin(username, password: password, firebaseToken: "");
     status = PostLogin.status;
     setState(() {
       roleId = data.roleId;
@@ -123,19 +152,19 @@ class LoginPageState extends State<LoginPage> {
     }
     if (roleId == 3 && status == 200) {
       savedInfoLogin(roleId, accountId, gender, accessToken, fullName, phone,
-          birthday, password);
+          birthday);
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
               builder: (context) => HomeCustomerPage(
-                    index: 0,
+                    index: 0, indexAdvance: 0, indexInvoice: 0,
                   )),
           (route) => false);
       print('Status button: Done');
       _buttonState = ButtonState.normal;
     } else if (roleId == 2 && status == 200) {
       savedInfoLogin(roleId, accountId, gender, accessToken, fullName, phone,
-          birthday, password);
+          birthday);
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
@@ -149,7 +178,6 @@ class LoginPageState extends State<LoginPage> {
       startTimer(false);
     }
   }
-
 
   Widget _checkLogin() {
     return Container(
@@ -193,13 +221,8 @@ class LoginPageState extends State<LoginPage> {
   void _checkTextLogin() {
     setState(() {
       error = "";
-        errorUsername =  checkPhoneNumber(username);
-      if (password == null || password == "") {
-        errorPassword = "Mật khẩu trống";
-      } else {
-        errorPassword = null;
-      }
-
+      errorUsername = checkPhoneNumber(username);
+      errorPassword = checkPassword(password, 0);
       if (errorUsername == null && errorPassword == null) {
         _buttonState = ButtonState.inProgress;
         print('Status button: Process');
@@ -208,17 +231,39 @@ class LoginPageState extends State<LoginPage> {
     });
   }
 
+  KeyboardActionsConfig keyBoardConfig(BuildContext context) {
+    return KeyboardActionsConfig(
+      keyboardActionsPlatform: KeyboardActionsPlatform.ALL,
+      nextFocus: true,
+      actions: [
+        KeyboardActionsItem(
+          focusNode: _nodeUsername,
+          displayDoneButton: true,
+          onTapAction: () {
+            setState(() {
+              errorUsername = checkPhoneNumber(username);
+            });
+          },
+        ),
+      ],
+    );
+  }
+
   Widget _txtUsername() {
     return Container(
       margin: EdgeInsets.only(left: 40, right: 40),
-      child: Material(
+      child: KeyboardActions(
+        disableScroll: true,
+        config: keyBoardConfig(context),
         child: TextField(
+          focusNode: _nodeUsername,
+          maxLength: 11,
           onChanged: (value) {
             username = value.trim();
           },
           onSubmitted: (value) {
             setState(() {
-              errorUsername =  checkPhoneNumber(username);
+              errorUsername = checkPhoneNumber(username);
             });
           },
           cursorColor: welcome_color,
@@ -228,6 +273,7 @@ class LoginPageState extends State<LoginPage> {
           ],
           decoration: InputDecoration(
             border: UnderlineInputBorder(),
+            counterText: "",
             labelText: "Số điện thoại",
             labelStyle: TextStyle(color: Colors.black54),
             contentPadding: EdgeInsets.only(top: 14, left: 10),
@@ -260,6 +306,11 @@ class LoginPageState extends State<LoginPage> {
           onChanged: (value1) {
             setState(() {
               password = value1.trim();
+            });
+          },
+          onSubmitted: (value) {
+            setState(() {
+              errorPassword = checkPassword(password, 0);
             });
           },
           obscureText: obscureTextPassword,

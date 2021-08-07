@@ -1,16 +1,13 @@
 import 'dart:ui';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rtm_system/helpers/button.dart';
-import 'package:rtm_system/helpers/common_widget.dart';
 import 'package:rtm_system/model/model_advance_return_detail.dart';
 import 'package:rtm_system/model/model_invoice_request.dart';
+import 'package:rtm_system/ultils/check_data.dart';
 import 'package:rtm_system/ultils/get_api_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
-import 'package:rtm_system/view/customer/Profile/show_image_cmnd.dart';
-import 'package:rtm_system/view/manager/home_manager_page.dart';
 import 'package:rtm_system/view/manager/product/update_price_product_manager.dart';
 import '../ultils/get_data.dart';
 
@@ -349,7 +346,6 @@ Widget componentContainerDetailInvoice(BuildContext context,
     String createTime,
     String storeName,
     String customerConfirmDate,
-    // String managerConfirmDate,
     String activeDate,
     bool isCustomer,
     Widget widgetToNavigator}) {
@@ -375,7 +371,7 @@ Widget componentContainerDetailInvoice(BuildContext context,
         SizedBox(
           height: 10,
         ),
-        txtItemDetail(context, "Tên khách hàng", "$customerName",
+        txtItemDetail(context, "Khách hàng", "$customerName",
             subContent: customerPhone),
         SizedBox(
           height: 10,
@@ -388,12 +384,12 @@ Widget componentContainerDetailInvoice(BuildContext context,
         Container(
           child: degree == 0
               ? SizedBox(height: 1)
-              : txtItemDetail(context, "Độ", "$degree"),
+              : txtItemDetail(context, "Số độ", "$degree"),
         ),
         SizedBox(
           height: 10,
         ),
-        txtItemDetail(context, "Khối lượng", "$quantity kg"),
+        txtItemDetail(context, "Khối lượng sản phẩm", "$quantity kg"),
         SizedBox(
           height: 10,
         ),
@@ -402,21 +398,20 @@ Widget componentContainerDetailInvoice(BuildContext context,
         SizedBox(
           height: 10,
         ),
-        txtItemDetail(context, "Ngày xác nhận của khách hàng",
-            "${getDateTime(customerConfirmDate)}"),
-        SizedBox(
-          height: 10,
-        ),
-        // txtItemDetail(context, "Ngày xác nhận của quản lý",
-        //     "${getDateTime(managerConfirmDate)}"),
-        // SizedBox(
-        //   height: 10,
-        // ),
-        SizedBox(
-          height: 10,
-        ),
-        txtItemDetail(
-            context, "Ngày hoá đơn có hiệu lực", "${getDateTime(activeDate)}"),
+        if (customerConfirmDate != null)
+          txtItemDetail(context, "Ngày khách hàng xác nhận",
+              "${getDateTime(customerConfirmDate)}"),
+        if (customerConfirmDate != null)
+          SizedBox(
+            height: 10,
+          ),
+        if (activeDate != null)
+          txtItemDetail(context, "Ngày hoá đơn có hiệu lực",
+              "${getDateTime(activeDate)}"),
+        if (activeDate != null)
+          SizedBox(
+            height: 10,
+          ),
         txtItemDetail(context, "Trạng thái", "${getStatus(status: statusId)}",
             colorContent: getColorStatus(status: statusId)),
         SizedBox(
@@ -426,6 +421,9 @@ Widget componentContainerDetailInvoice(BuildContext context,
         btnProcessInvoice(context, statusId, id, isCustomer,
             widgetToNavigator: widgetToNavigator,
             isDegree: degree == 0 ? false : true),
+        SizedBox(
+          height: 25,
+        ),
       ],
     ),
   );
@@ -449,7 +447,7 @@ Widget componentContainerDetailProduct(BuildContext context, Map item) {
         SizedBox(
           height: 10,
         ),
-        txtItemDetail(context, "Loại", "${item["type"]}"),
+        txtItemDetail(context, "Loại", "${checkTypeProduct(item["type"])}"),
         SizedBox(
           height: 10,
         ),
@@ -489,115 +487,6 @@ Widget componentContainerDetailProduct(BuildContext context, Map item) {
   );
 }
 
-//Dùng cho trang chi tiết khách hàng
-// Là các dòng trong trang chi tiết khách hàng
-Widget componentContainerDetailCustomer(BuildContext context,
-    {String status,
-    String token,
-    String accountId,
-    int statusId,
-    int advance,
-    String fullName,
-    String cmnd,
-    String phone,
-    String address,
-    String birthday,
-    String gender,
-    String imageCMNDF,
-    String imageCMNDB,
-    bool needConfirm,
-    String level}) {
-  return Padding(
-    padding: const EdgeInsets.all(8.0),
-    child: Column(
-      children: [
-        txtItemDetail(context, "ID khách hàng", accountId),
-        SizedBox(
-          height: 10,
-        ),
-        txtItemDetail(context, "Họ và tên", fullName),
-        SizedBox(
-          height: 10,
-        ),
-        txtItemDetail(context, "Giới tính", gender),
-        SizedBox(
-          height: 10,
-        ),
-        txtItemDetail(context, "Điện thoại", phone),
-        SizedBox(
-          height: 10,
-        ),
-        Row(
-          children: [
-            txtItemDetail(context, "CMND/CCCD", cmnd),
-            Expanded(
-              child: GestureDetector(
-                  onTap: () {
-                    if (imageCMNDF != null)
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => ImageCMND(
-                                imageFCMND: imageCMNDF,
-                                imageBCMND: imageCMNDB,
-                              )));
-                  },
-                  child: Container(
-                      alignment: Alignment.centerRight,
-                      margin: EdgeInsets.only(top: 5, right: 10),
-                      child: Text(
-                        imageCMNDF == null
-                            ? "Chờ cập nhật"
-                            : needConfirm ? "Chờ xác nhận" : "Xem ảnh",
-                        style: TextStyle(
-                            color: imageCMNDF == null
-                                ? Colors.redAccent
-                                : needConfirm ? Colors.orange :Colors.blueAccent),
-                      ))),
-            ),
-          ],
-        ),
-        SizedBox(
-            height: 1,
-            child: Container(
-              color: Color(0xFFBDBDBD),
-            )),
-        SizedBox(
-          height: 10,
-        ),
-        txtItemDetail(context, "Ngày sinh",
-            "${getDateTime(birthday, dateFormat: 'dd/MM/yyyy')}"),
-        SizedBox(
-          height: 10,
-        ),
-        txtItemDetail(context, "Địa chỉ", address),
-        SizedBox(
-          height: 10,
-        ),
-        txtItemDetail(context, "Tổng nợ", "$advance"),
-        SizedBox(
-          height: 10,
-        ),
-        txtItemDetail(context, "Loại tài khoản", level),
-        SizedBox(
-          height: 10,
-        ),
-        txtItemDetail(context, "Trạng thái", "$status",
-            colorContent: getColorStatus(status: statusId)),
-        SizedBox(
-          height: 10,
-        ),
-        btnDeactivateCustomer(
-            token: token,
-            context: context,
-            status: status,
-            deactivateId: accountId),
-        SizedBox(
-          height: 5,
-        ),
-      ],
-    ),
-  );
-}
-
 //Dùng cho các container nhỏ vd như trong trang quản lý khách hàng
 //Và đang dùng cho component "Mã" và "Trạng thái hóa đơn" trong quản lý hóa đơn
 // là những component container nhỏ trong từng khách hàng
@@ -626,6 +515,7 @@ Widget miniContainer(
     double fontSize,
     FontWeight fontWeightText,
     bool doPopNavigate,
+    Alignment alignmentText,
     Widget widget}) {
   return GestureDetector(
       onTap: () => widget == null
@@ -657,22 +547,21 @@ Widget miniContainer(
           ],
         ),
         child: Container(
+          alignment: alignmentText == null ? Alignment.center : alignmentText,
           height: height,
           width: width,
-          child: Center(
-            child: Padding(
-              padding: EdgeInsets.only(
-                  left: paddingLeftOfText == null ? 0 : paddingLeftOfText,
-                  right: paddingRightOfText == null ? 0 : paddingRightOfText,
-                  bottom: paddingBottomOfText == null ? 0 : paddingBottomOfText,
-                  top: paddingTopOfText == null ? 0 : paddingTopOfText),
-              child: AutoSizeText(
-                tittle,
-                style: GoogleFonts.roboto(
-                    color: colorText,
-                    fontWeight: fontWeightText,
-                    fontSize: fontSize == null ? null : fontSize),
-              ),
+          child: Padding(
+            padding: EdgeInsets.only(
+                left: paddingLeftOfText == null ? 0 : paddingLeftOfText,
+                right: paddingRightOfText == null ? 0 : paddingRightOfText,
+                bottom: paddingBottomOfText == null ? 0 : paddingBottomOfText,
+                top: paddingTopOfText == null ? 0 : paddingTopOfText),
+            child: AutoSizeText(
+              tittle,
+              style: GoogleFonts.roboto(
+                  color: colorText,
+                  fontWeight: fontWeightText,
+                  fontSize: fontSize == null ? null : fontSize),
             ),
           ),
         ),
@@ -843,9 +732,9 @@ Widget componentContainerDetailAdvanceRequest(BuildContext context,
         SizedBox(
           height: 10,
         ),
-        if(activeDate != null)
-        txtItemDetail(context, "Ngày nhận tiền",
-            "${getDateTime(activeDate, dateFormat: "dd/MM/yyyy")}"),
+        if (activeDate != null)
+          txtItemDetail(context, "Ngày nhận tiền",
+              "${getDateTime(activeDate, dateFormat: "dd/MM/yyyy")}"),
         SizedBox(
           height: 10,
         ),
@@ -870,11 +759,14 @@ Widget componentContainerDetailAdvanceRequest(BuildContext context,
         // không cần bắt null url.
         if (!isCustomer)
           Container(
-            child: Image.network(imageUrl),
+            child: imageUrl == null ? null : Image.network(imageUrl),
           ),
         //show btn for manager and customer
         showBtnInAdvanceRequest(context, statusId, activeStatus, isCustomer, id,
             statusId, id, widgetToNavigator),
+        SizedBox(
+          height: 25,
+        ),
       ],
     ),
   );
@@ -913,10 +805,7 @@ Widget showBtnInAdvanceRequest(context, status, activeStatus, bool isCustomer,
       return btnProcessAdvanceBill(context,
           isCustomer: false,
           idAdvanceBill: id,
-          widgetToNavigator: HomeAdminPage(
-            index: 2,
-            indexInsidePage: 1,
-          ));
+          widgetToNavigator: widgetToNavigator);
     } else {
       return Container();
     }
@@ -951,7 +840,7 @@ Widget widgetCreateAdvance(context, List item, String storeId,
             margin: EdgeInsets.fromLTRB(24, 12, 24, 12),
             child: Column(
               children: [
-                txtPersonInvoice(context, 'Người tạo', '${name}', '${phone}'),
+                txtPersonInvoice(context, 'Người tạo', '$name', '$phone'),
                 SizedBox(
                   height: 10,
                 ),
@@ -974,8 +863,8 @@ Widget widgetCreateAdvance(context, List item, String storeId,
                   child: RaisedButton(
                     color: Color(0xFF0BB791),
                     onPressed: () {
-                      createRequestAdvance(context, 'TK-111', item[0], reason,
-                          item[1], storeId);
+                      createRequestAdvance(
+                          context, 'TK-111', item[0], reason, item[1], storeId);
                     },
                     child: AutoSizeText(
                       'Xác nhận',
@@ -1037,7 +926,7 @@ Widget componentDetailCreateInvoice(
           height: 10,
         ),
         if (level == 2)
-          txtItemDetail(context, "Giá bán", "${getFormatPrice(price)} đ"),
+          txtItemDetail(context, "Giá sản phẩm", "${getFormatPrice(price)} đ"),
         if (level == 2)
           SizedBox(
             height: 10,
@@ -1215,5 +1104,46 @@ Widget containerTextInProcess() {
         ),
       ),
     ),
+  );
+}
+
+// /Dùng cho container icon trong quản lý  khách hàng
+Widget containerIconCustomer({
+  IconData icon,
+  FontWeight fontWeight,
+  Alignment alignment,
+  double marginLeft,
+  double marginRight,
+  double marginTop,
+  double marginBottom,
+  double borderRadius,
+  double paddingLeftOfText,
+  double paddingRightOfText,
+  double paddingTopOfText,
+  double paddingBottomOfText,
+  double height,
+  double width,
+  Color color,
+}) {
+  return Container(
+    height: height,
+    width: width,
+    margin: EdgeInsets.only(
+      right: marginRight == null ? 0 : marginRight,
+      top: marginTop == null ? 0 : marginTop,
+      bottom: marginBottom == null ? 0 : marginBottom,
+      left: marginLeft == null ? 0 : marginLeft,
+    ),
+    alignment: alignment,
+    child: Padding(
+        padding: EdgeInsets.only(
+            left: paddingLeftOfText == null ? 0 : paddingLeftOfText,
+            right: paddingRightOfText == null ? 0 : paddingRightOfText,
+            bottom: paddingBottomOfText == null ? 0 : paddingBottomOfText,
+            top: paddingTopOfText == null ? 0 : paddingTopOfText),
+        child: Icon(
+          icon,
+          color: color,
+        )),
   );
 }

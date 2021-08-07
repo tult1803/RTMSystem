@@ -15,7 +15,7 @@ class showCreateNotice extends StatefulWidget {
 
 // ignore: camel_case_types
 class _showCreateNoticeState extends State<showCreateNotice> {
-  String tittle="", description="";
+  String tittle = "", description = "";
   var fDate = new DateFormat('dd-MM-yyyy');
 
   @override
@@ -39,36 +39,61 @@ class _showCreateNoticeState extends State<showCreateNotice> {
                   ),
                 ],
               ),
-                width: size.width,
-                // height: 300,
-                child: Container(
-                  margin: EdgeInsets.all(20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _txt("Tiêu đề"),
-                      _txtfield('Nhập tiêu đề', 3, 1, 0),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      _txt("Nội dung"),
-                      _txtfield('Nhập nội dung', 10, 1, 1),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      _txt("Ngày tạo: ${fDate.format(DateTime.now())}")
-                    ],
-                  ),
+              width: size.width,
+              // height: 300,
+              child: Container(
+                margin: EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _txt("Tiêu đề"),
+                    _txtfield('Nhập tiêu đề', 3, 1, 0, maxLength: 50),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    _txt("Nội dung"),
+                    _txtfield('Nhập nội dung', 10, 1, 1),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    _txt("Ngày tạo: ${fDate.format(DateTime.now())}")
+                  ],
                 ),
               ),
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                btnSubmitOrCancel(context, 140, 40, Colors.redAccent, "Hủy",
-                    tittle, description, null,false, 3, false, "Bạn muốn huỷ tạo thông báo?"),
+                btnSubmitOrCancel(
+                    context,
+                    140,
+                    40,
+                    Colors.redAccent,
+                    "Hủy",
+                    tittle,
+                    description,
+                    null,
+                    false,
+                    3,
+                    false,
+                    "Bạn muốn huỷ tạo thông báo?"),
                 SizedBox(width: 20),
-                btnSubmitOrCancel(context, 140, 40, welcome_color, "Tạo",
-                    tittle, description, "Tiêu để đang bị để trống.",true, 3, false,'', widgetToNavigator: HomeAdminPage(index: 3,)),
+                btnSubmitOrCancel(
+                    context,
+                    140,
+                    40,
+                    welcome_color,
+                    "Tạo",
+                    tittle,
+                    description,
+                    "Tiêu để đang bị để trống.",
+                    true,
+                    3,
+                    false,
+                    '',
+                    widgetToNavigator: HomeAdminPage(
+                      index: 3,
+                    )),
               ],
             ),
           ],
@@ -86,23 +111,21 @@ class _showCreateNoticeState extends State<showCreateNotice> {
     );
   }
 
-  Widget _txtfield(String hintText, int maxLines, int minLines, int check) {
+  Widget _txtfield(String hintText, int maxLines, int minLines, int check,
+      {int maxLength}) {
     return Container(
       child: TextField(
         onChanged: (value) {
-          if (check == 0) {
-            setState(() {
+          setState(() {
+            if (check == 0) {
               tittle = value;
-            });
-            print('_txtfield Tittle: $tittle');
-          } else {
-            setState(() {
+            } else {
               description = value;
-            });
-            print('_txtfield Content: $description');
-          }
+            }
+          });
         },
         maxLines: maxLines,
+        maxLength: maxLength,
         keyboardType: TextInputType.text,
         style: TextStyle(fontSize: 15),
         cursorColor: welcome_color,
@@ -118,4 +141,3 @@ class _showCreateNoticeState extends State<showCreateNotice> {
     );
   }
 }
-

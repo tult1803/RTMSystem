@@ -40,7 +40,7 @@ class _showProfileState extends State<showProfile> {
     String phone = sharedPreferences.getString('phone');
     password = sharedPreferences.getString('password');
     infomationCustomer =
-        await getAPIProfileCustomer.getProfileCustomer(token, phone);
+        await getAPIProfileCustomer.getProfileCustomer(context,token, phone);
 
     return infomationCustomer;
   }
@@ -148,8 +148,7 @@ class _showProfileState extends State<showProfile> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => UpdatePasswordPage(
-                    password: password,
-                    account_id: infomationCustomer.accountId,
+                    accountId: infomationCustomer.accountId,
                     isCustomer: true,
                   ),
                 ),
@@ -188,7 +187,7 @@ class _showProfileState extends State<showProfile> {
         },
         child: Center(
           child: AutoSizeText(
-            "Xác thực tài khoản",
+            "Cập nhật tài khoản",
             style: TextStyle(
               fontWeight: FontWeight.w500,
               color: Colors.white,

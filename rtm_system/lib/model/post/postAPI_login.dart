@@ -5,11 +5,9 @@ import 'package:http/http.dart' as http;
 
 import '../model_login.dart';
 
-
-
 class PostLogin{
   static int status;
-  createLogin(String username, String password) async {
+  createLogin(String username, {String password, String firebaseToken}) async {
   final response = await http.post(
     Uri.http('$urlMain', '$urlLogin'),
     headers: <String, String>{
@@ -17,14 +15,15 @@ class PostLogin{
     },
     body: jsonEncode(<String, dynamic>{
       "username": username,
-      "password": password
+      "password": password,
+      "firebase_token" : firebaseToken,
     }),
   );
   print("Status postApi Login:${response.statusCode}");
   if (response.statusCode == 200) {
     // If the server did return a 201 CREATED response,
     // then parse the JSON.
-    status = 200;
+      status = 200;
     return DataLogin.fromJson(json.decode(response.body));
   } else if (response.statusCode == 400) {
     status = 400;

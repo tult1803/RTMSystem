@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:rtm_system/helpers/dialog.dart';
 import 'package:rtm_system/helpers/button.dart';
@@ -49,31 +50,44 @@ enum GenderCharacter { women, men }
 
 // ignore: camel_case_types
 class _formUpdateProfileState extends State<formUpdateProfile> {
-  String errFullName, errPhone, errCMND, errAddress, errUser, errPass, errBirth;
+  String errFullName,
+      errPhone,
+      errCMND,
+      errAddress,
+      errUser,
+      errPass,
+      errBirth,
+      errConfirmPassword;
   GenderCharacter character;
   bool checkClick;
-  String messageCancel = '';
+  String messageCancel = '', confirmPassword;
   int indexOfBottomBar = 0;
 
   @override
   void initState() {
     super.initState();
     checkClick = widget.isCreate ? true : false;
-    if (this.widget.gender == 0) {
-      character = GenderCharacter.women;
-    } else
-      character = GenderCharacter.men;
+    setGender();
     if (this.widget.isUpdate) {
       messageCancel = 'Bạn muốn huỷ cập nhật thông tin?';
     } else
       messageCancel = 'Bạn muốn huỷ tạo khách hàng?';
     if (widget.check) {
-      indexOfBottomBar = 0;
+      indexOfBottomBar = 4;
     } else {
       indexOfBottomBar = 4;
     }
   }
 
+  void setGender(){
+    setState(() {
+      if (widget.gender == 0) {
+        character = GenderCharacter.women;
+      }
+      else
+        character = GenderCharacter.men;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -81,18 +95,21 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
         children: [
           Column(
             children: [
-              _txtFormField(this.widget.fullname, false, "Nhập họ tên",
-                  "Họ và tên", errFullName, 1, TextInputType.text),
               if (!widget.isCustomer)
                 _txtfield(
-                    getDataTextField(this.widget.phone),
-                    false,
-                    "Nhập số điện thoại",
-                    "Số điện thoại",
-                    errPhone,
-                    1,
-                    TextInputType.phone),
+                  getDataTextField(this.widget.phone),
+                  false,
+                  "Nhập số điện thoại",
+                  "Số điện thoại",
+                  errPhone,
+                  1,
+                  TextInputType.phone,
+                  enable: widget.isCreate,
+                  maxLength: 11),
+              _txtFormField(this.widget.fullname, false, "Nhập họ tên",
+                  "Họ và tên", errFullName, 1, TextInputType.text, maxLength: 50),
               _checkPassword(),
+              _checkConfirmPassword(),
               radioButton(context),
               btnBirthday(context),
               _checkCMND(),
@@ -158,7 +175,8 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
                 onConfirm: (date) {
                   setState(() {
                     checkClick = true;
-                    getDataCustomer(2, getDateTime("$date", dateFormat: "yyyy-MM-dd"));
+                    getDataCustomer(
+                        2, getDateTime("$date", dateFormat: "yyyy-MM-dd"));
                     this.widget.birthday = date;
                     this.widget.list = [
                       this.widget.fullname,
@@ -171,8 +189,9 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
                     ];
                   });
                 },
-                maxTime: DateTime(DateTime.now().year, 12, 31),
-                minTime: DateTime(DateTime.now().year - 111),
+                currentTime: widget.birthday,
+                maxTime: DateTime(DateTime.now().year - 18, DateTime.now().month, DateTime.now().day),
+                minTime: DateTime(DateTime.now().year - 100),
                 locale: LocaleType.vi,
               );
             },
@@ -190,7 +209,7 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
                 ),
                 Expanded(
                   child: Text(
-                    '${widget.birthday == null ? "Không bắt buộc" : getDateTime("${this.widget.birthday}", dateFormat: "dd/MM/yyyy")}',
+                    '${widget.birthday == null ? widget.isUpgrade ? "dd/MM/yyyy" : "Không bắt buộc" : getDateTime("${this.widget.birthday}", dateFormat: "dd/MM/yyyy")}',
                     style: TextStyle(
                         fontSize: 16,
                         color: widget.birthday == null
@@ -199,13 +218,15 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
                   ),
                 ),
                 Container(
-                  child: widget.isUpgrade ? null : Container(
-                    width: 70,
-                    child: Icon(
-                      Icons.calendar_today,
-                      color: Colors.black45,
-                    ),
-                  ),
+                  child: widget.isUpgrade
+                      ? null
+                      : Container(
+                          width: 70,
+                          child: Icon(
+                            Icons.calendar_today,
+                            color: Colors.black45,
+                          ),
+                        ),
                 ),
               ],
             ),
@@ -235,7 +256,8 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
       String tittle,
       String error,
       int maxLines,
-      TextInputType txtType) {
+      TextInputType txtType,
+      {bool enable, int maxLength}) {
     return Container(
       margin: widget.isUpgrade
           ? EdgeInsets.only(top: 4)
@@ -243,6 +265,11 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
       child: TextField(
         controller: _controller,
         obscureText: obscureText,
+        maxLength: maxLength,
+        inputFormatters: [
+          if (tittle == "Số điện thoại" || tittle == "CMND/CCCD")
+            FilteringTextInputFormatter.allow(RegExp(r'[[0-9]')),
+        ],
         onChanged: (value) {
           if (tittle == "Số điện thoại") {
             this.widget.phone = value.trim();
@@ -251,6 +278,9 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
             getDataCustomer(3, value.trim());
           } else if (tittle == "Mật khẩu") {
             this.widget.password = value.trim();
+          } else if (tittle == "Xác nhận") {
+            confirmPassword = value.trim();
+            // "Xác nhận"
           }
           setState(() {
             checkClick = true;
@@ -279,6 +309,13 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
               } else {
                 errPass = checkPassword(widget.password, 1);
               }
+            } else if (tittle == "Xác nhận") {
+              if (widget.isUpdate) {
+                errConfirmPassword = null;
+              } else {
+                errConfirmPassword = checkPassword(widget.password, 2,
+                    passwordCheck: confirmPassword);
+              }
             }
             if (tittle == "CMND/CCCD" && value.isEmpty && widget.isCreate) {
               errCMND = null;
@@ -286,6 +323,7 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
             }
           });
         },
+        enabled: enable == null ? true : enable,
         maxLines: maxLines,
         keyboardType: txtType,
         style: TextStyle(fontSize: 15),
@@ -304,15 +342,17 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
               margin: EdgeInsets.only(top: 15, left: 5),
               width: 100,
               child: AutoSizeText(
-                "${tittle}",
+                "$tittle",
                 style: TextStyle(fontWeight: FontWeight.w500),
               )),
 
           //Hiển thị Icon góc phải
-          suffixIcon: widget.isUpgrade ? null : Icon(
-            Icons.create,
-            color: Colors.black54,
-          ),
+          suffixIcon: widget.isUpgrade
+              ? null
+              : Icon(
+                 widget.isUpdate ? Icons.check : Icons.create,
+                  color: Colors.black54,
+                ),
 
           //Hiển thị lỗi
           focusedErrorBorder: OutlineInputBorder(
@@ -328,13 +368,14 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
   }
 
   Widget _txtFormField(String value, bool obscureText, String hintText,
-      String tittle, String error, int maxLines, TextInputType txtType) {
+      String tittle, String error, int maxLines, TextInputType txtType, {int maxLength}) {
     return Container(
       margin: widget.isUpgrade
           ? null
           : EdgeInsets.only(top: 10, left: 10, right: 10),
       child: TextFormField(
         initialValue: value,
+        maxLength: maxLength,
         obscureText: obscureText,
         onChanged: (value) {
           if (tittle == "Họ và tên") {
@@ -387,15 +428,17 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
               margin: EdgeInsets.only(top: 15, left: 5),
               width: 100,
               child: AutoSizeText(
-                "${tittle}",
+                "$tittle",
                 style: TextStyle(fontWeight: FontWeight.w500),
               )),
 
           //Hiển thị Icon góc phải
-          suffixIcon: widget.isUpgrade ? null : Icon(
-            Icons.create,
-            color: Colors.black54,
-          ),
+          suffixIcon: widget.isUpgrade
+              ? null
+              : Icon(
+                  Icons.create,
+                  color: Colors.black54,
+                ),
 
           //Hiển thị lỗi
           focusedErrorBorder: OutlineInputBorder(
@@ -422,15 +465,19 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
           Row(
             children: <Widget>[
               Container(
-                child: widget.isUpgrade ? null : Container(
-                  alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.only(left: 15),
-                  margin: EdgeInsets.only(top: 10, right: 0),
-                  width: 85,
-                  height: 50,
-                      child: AutoSizeText("Giới tính",
-                          style: TextStyle(fontWeight: FontWeight.w500, )),
-                ),
+                child: widget.isUpgrade
+                    ? null
+                    : Container(
+                        alignment: Alignment.centerLeft,
+                        padding: EdgeInsets.only(left: 15),
+                        margin: EdgeInsets.only(top: 10, right: 0),
+                        width: 85,
+                        height: 50,
+                        child: AutoSizeText("Giới tính",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                            )),
+                      ),
               ),
               Container(
                 height: 50,
@@ -445,7 +492,7 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
                   groupValue: character,
                   onChanged: (GenderCharacter value) {
                     setState(() {
-                      getDataCustomer(1, value == GenderCharacter.men ? 1: 0);
+                      getDataCustomer(1, value == GenderCharacter.men ? 1 : 0);
                       checkClick = true;
                       character = value;
                       this.widget.list = [
@@ -466,12 +513,13 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
                   height: 50,
                   child: RadioListTile<GenderCharacter>(
                     activeColor: welcome_color,
-                    title:  AutoSizeText('Nữ'),
+                    title: AutoSizeText('Nữ'),
                     value: GenderCharacter.women,
                     groupValue: character,
                     onChanged: (GenderCharacter value) {
                       setState(() {
-                        getDataCustomer(1, value == GenderCharacter.men ? 1: 0);
+                        getDataCustomer(
+                            1, value == GenderCharacter.men ? 1 : 0);
                         this.checkClick = true;
                         character = value;
                         this.widget.list = [
@@ -567,12 +615,17 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
     }
     if (widget.isUpdate) {
       errPass = null;
+      errConfirmPassword = null;
     } else {
       errPass = checkPassword(widget.password, 1);
+      errConfirmPassword =
+          checkPassword(widget.password, 2, passwordCheck: confirmPassword);
     }
+
     if (errFullName == null &&
         errPhone == null &&
         errPass == null &&
+        errConfirmPassword == null &&
         errBirth == null &&
         errCMND == null &&
         errAddress == null &&
@@ -584,15 +637,15 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
 
   Widget _checkCMND() {
     return this.widget.check
-        ? _txtfield(getDataTextField(this.widget.cmnd), false, "Không bắt buộc",
-            "CMND/CCCD", errCMND, 1, TextInputType.phone)
+        ? _txtfield(getDataTextField(this.widget.cmnd), false, widget.isUpgrade ? "Nhập CMND/CCCD":"Không bắt buộc",
+            "CMND/CCCD", errCMND, 1, TextInputType.phone, maxLength: 12)
         : Container();
   }
 
   Widget _checkAddress() {
     return this.widget.check
-        ? _txtFormField(this.widget.address, false, "Không bắt buộc", "Địa chỉ",
-            errAddress, 1, TextInputType.streetAddress)
+        ? _txtFormField(this.widget.address, false,  widget.isUpgrade ? "Nhập địa chỉ":"Không bắt buộc", "Địa chỉ",
+            errAddress, 1, TextInputType.streetAddress, maxLength: 100)
         : Container();
   }
 
@@ -603,15 +656,28 @@ class _formUpdateProfileState extends State<formUpdateProfile> {
             "Nhập mật khẩu", "Mật khẩu", errPass, 1, TextInputType.text);
   }
 
-  void getDataCustomer(int index, value){
-    if(widget.isUpgrade) {
+  Widget _checkConfirmPassword() {
+    return this.widget.isUpdate
+        ? Container()
+        : _txtfield(
+            getDataTextField(confirmPassword),
+            true,
+            "Nhập lại mật khẩu",
+            "Xác nhận",
+            errConfirmPassword,
+            1,
+            TextInputType.text);
+  }
+
+  void getDataCustomer(int index, value) {
+    if (widget.isUpgrade) {
       dataCustomer.removeAt(index);
       dataCustomer.insert(index, value);
     }
   }
 
-  void getErrorDataCustomer(int index, value){
-    if(widget.isUpgrade) {
+  void getErrorDataCustomer(int index, value) {
+    if (widget.isUpgrade) {
       errorData.removeAt(index);
       errorData.insert(index, "$value");
     }

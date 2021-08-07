@@ -200,10 +200,10 @@ Widget boxForCustomer(
     onTap: () => Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => widget)),
     child: Container(
-      margin: EdgeInsets.only(top: 15, left: 10, right: 10),
+      margin: EdgeInsets.only(top: 15, left: 10, right: 10, bottom: 10),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(5),
+        borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
             color: Colors.black54,
@@ -214,86 +214,93 @@ Widget boxForCustomer(
       ),
       child: Column(
         children: [
+          SizedBox(height: 5,),
           Row(
             children: [
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: CircleAvatar(
-                      backgroundColor: colorHexa("AEDFD4"),
-                      child: Icon(
-                        Icons.person_outline_sharp,
-                        color: Colors.black54,
+              Expanded(
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: CircleAvatar(
+                        backgroundColor: colorHexa("AEDFD4"),
+                        child: Icon(
+                          Icons.person_outline_sharp,
+                          color: Colors.black54,
+                        ),
                       ),
                     ),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        child: Text(
-                          name,
-                          style:
-                              GoogleFonts.roboto(fontWeight: FontWeight.w700),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          child: Text(
+                            name,
+                            style:
+                                GoogleFonts.roboto(fontWeight: FontWeight.w700),
+                          ),
                         ),
-                      ),
-                      Container(
-                        child: Text(
-                          phone,
-                          style: GoogleFonts.roboto(
-                              fontWeight: FontWeight.w400,
-                              color: Colors.black54),
+                        SizedBox(height: 5,),
+                        Container(
+                          child: Text(
+                            phone,
+                            style: GoogleFonts.roboto(
+                                fontWeight: FontWeight.w400,),
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                  ],
+                ),
               ),
-              Expanded(child: SizedBox()),
-              miniContainer(
-                context: context,
-                borderRadius: 5,
-                height: 30,
-                width: 100,
-                colorContainer: Colors.white,
-                colorText: Colors.black,
-                fontWeightText: FontWeight.w500,
-                marginRight: 10,
-                tittle: "${getLevel(level: level)}",
-              ),
+              containerTextInvoice(
+                    alignment: Alignment.centerRight,
+                    paddingLeftOfText: 10,
+                    paddingRightOfText: 10,
+                    tittle: "${getStatus(status: status)}",
+                    fontWeight: FontWeight.w600,
+                    color: getColorStatus(status: status)),
             ],
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              miniContainer(
-                context: context,
-                borderRadius: 5,
-                height: 30,
-                width: 130,
-                colorContainer: getColorStatus(status: status),
-                colorText: Colors.white,
-                fontWeightText: FontWeight.w500,
-                marginLeft: 10,
-                tittle: "${getStatus(status: status)}",
+              Expanded(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    containerTextInvoice(
+                      marginTop: 2,
+                      alignment: Alignment.topLeft,
+                      paddingLeftOfText: 15,
+                      paddingRightOfText: 10,
+                      tittle: "Số nợ:",
+                      fontWeight: FontWeight.w400,
+                    ),
+                    containerTextInvoice(
+                      marginTop: 2,
+                      alignment: Alignment.topLeft,
+                      paddingLeftOfText: 0,
+                      paddingRightOfText: 10,
+                      tittle: "${getFormatPrice(advance.toString())} đ",
+                      fontWeight: FontWeight.w500,
+                      color: primaryColor
+                    )
+                  ],
+                ),
               ),
-              Expanded(child: SizedBox()),
-              miniContainer(
-                context: context,
-                borderRadius: 5,
-                height: 30,
-                width: 100,
-                colorContainer: colorHexa("#FF8F84"),
-                colorText: Colors.white,
-                fontWeightText: FontWeight.w500,
-                marginRight: 10,
-                tittle: "Nợ: $advance",
-              ),
+              containerIconCustomer(
+                  marginTop: 2,
+                  alignment: Alignment.topLeft,
+                  paddingLeftOfText: 10,
+                  paddingRightOfText: 10,
+                  icon: level == 0? null : level == 1? Icons.star_border: Icons.star,
+                  fontWeight: FontWeight.w400,
+                  color: level == 0? Colors.grey: level ==1? Colors.grey: Colors.orangeAccent)
             ],
           ),
           SizedBox(
-            height: 10,
+            height: 15,
           ),
         ],
       ),
@@ -541,6 +548,7 @@ Widget boxForAdvance({
   String imageUrl,
   int status,
   Widget widget,
+  bool isCheck
 }) {
   String dateAfterFormat, dateReceiveAfterFormat, totalAfterFormat;
   try {
@@ -553,6 +561,26 @@ Widget boxForAdvance({
     dateAfterFormat = "$createDate";
     dateReceiveAfterFormat = "$receiveDate";
   }
+  String titleStatus;
+  Color statusAdvance;
+  if (isCheck) {
+    titleStatus = "Đã mượn";
+    statusAdvance = Colors.orangeAccent;
+  } else {
+    if (status == 6) {
+      titleStatus = getStatus(status: status);
+      statusAdvance = getColorStatus(status: status);
+      getColorStatus(status: status);
+    } else if (status == 4) {
+      titleStatus = getStatus(status: status);
+      statusAdvance = getColorStatus(status: status);
+      getColorStatus(status: status);
+    } else {
+      titleStatus = "Đã duyệt";
+      statusAdvance = getColorStatus(status: 8);
+      getColorStatus(status: status);
+    }
+  } 
   return GestureDetector(
     onTap: () => Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => widget)),
@@ -588,11 +616,9 @@ Widget boxForAdvance({
                     alignment: Alignment.centerRight,
                     paddingLeftOfText: 10,
                     paddingRightOfText: 10,
-                    tittle: status == 8
-                        ? "Đã duyệt "
-                        : "${getStatus(status: status)}",
+                    tittle: titleStatus,
                     fontWeight: FontWeight.w600,
-                    color: getColorStatus(status: status)),
+                    color: statusAdvance),
               ),
             ],
           ),
@@ -913,10 +939,10 @@ Widget btnDeactivateCustomer(
   if (status != "Không hoạt động") {
     return Container(
       width: 160,
-      height: 50,
+      height: 45,
       decoration: BoxDecoration(
         color: Colors.redAccent,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(15),
       ),
       child: TextButton(
         onPressed: () {
@@ -937,99 +963,13 @@ Widget btnDeactivateCustomer(
         },
         child: AutoSizeText(
           isDeactivateNotice == null ? "Hủy kích hoạt" : "Ẩn thông báo",
-          style: TextStyle(color: Colors.white, fontSize: 17),
+          style: TextStyle(color: Colors.white, fontSize: 16),
         ),
       ),
     );
   } else {
     return Container();
   }
-}
-
-Widget containerStores(BuildContext context, String name, String address,
-    String phone, String email) {
-  var size = MediaQuery.of(context).size;
-  return Container(
-    margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
-    decoration: BoxDecoration(
-      color: Colors.white,
-      borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(15.0),
-        topRight: Radius.circular(15.0),
-      ),
-    ),
-    child: TextButton(
-      style: TextButton.styleFrom(
-        primary: Colors.black, // foreground
-        textStyle: TextStyle(
-          fontSize: 16,
-        ),
-      ),
-      onPressed: () {},
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                width: size.width * 0.93,
-                child: AutoSizeText(
-                  "$name",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.left,
-                ),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          AutoSizeText(
-            "$address",
-            style: TextStyle(
-              fontSize: 14,
-            ),
-            textAlign: TextAlign.left,
-            overflow: TextOverflow.ellipsis,
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          AutoSizeText(
-            "$phone",
-            style: TextStyle(
-              fontSize: 14,
-            ),
-            textAlign: TextAlign.left,
-            overflow: TextOverflow.ellipsis,
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          AutoSizeText(
-            "$email",
-            style: TextStyle(
-              fontSize: 12,
-              color: welcome_color,
-            ),
-            textAlign: TextAlign.left,
-          ),
-          SizedBox(
-            height: 9,
-          ),
-          SizedBox(
-            height: 0.5,
-            child: Container(
-              color: Colors.black54,
-            ),
-          ),
-        ],
-      ),
-    ),
-  );
 }
 
 //show lịch sử giao dịch của ứng tiền, hiện tại show như này trước
@@ -1062,9 +1002,9 @@ Widget boxForAdvanceHistory({
   Color statusAdvance;
   if (isAdvance && isPaid) {
     titleStatus = "Đã trả nợ";
-    statusAdvance = getColorStatus(status: 9);
+    statusAdvance = getColorStatus(status: 7);
   } else if (!isAdvance && !isPaid) {
-    titleStatus = "Đã trả xong";
+    titleStatus = "Đơn trả";
     statusAdvance = getColorStatus(status: 9);
   } else {
     titleStatus = "Đã mượn";
@@ -1126,7 +1066,7 @@ Widget boxForAdvanceHistory({
                       alignment: Alignment.topLeft,
                       paddingLeftOfText: 10,
                       paddingRightOfText: 10,
-                      tittle: "Số tiền vay",
+                      tittle: isAdvance? "Số tiền vay": "Tổng tiền",
                     ),
                     SizedBox(
                       height: 10,
@@ -1147,7 +1087,7 @@ Widget boxForAdvanceHistory({
                           alignment: Alignment.topLeft,
                           paddingLeftOfText: 10,
                           paddingRightOfText: 10,
-                          tittle: "Số tiền trả lại",
+                          tittle: "Tiền hoàn trả",
                         ),
                         SizedBox(
                           height: 10,

@@ -4,6 +4,9 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:rtm_system/model/delete/deleteAPI_deactivateAdvanceRequest.dart';
 import 'package:rtm_system/model/delete/deleteAPI_invoice.dart';
 import 'package:rtm_system/model/delete/deleteAPI_invoiceRequest.dart';
+import 'package:rtm_system/model/get/getAPI_check_account.dart';
+import 'package:rtm_system/model/model_login.dart';
+import 'package:rtm_system/model/post/postAPI_forget_password.dart';
 import 'package:rtm_system/model/get/getAPI_maintainCheck.dart';
 import 'package:rtm_system/model/model_invoice_request.dart';
 import 'package:rtm_system/model/model_profile_customer.dart';
@@ -13,8 +16,9 @@ import 'package:rtm_system/model/post/postAPI_createCustomer.dart';
 import 'package:rtm_system/model/post/postAPI_createInvoice.dart';
 import 'package:rtm_system/model/post/postAPI_createNotice.dart';
 import 'package:rtm_system/model/get/getAPI_customer_phone.dart';
+import 'package:rtm_system/model/post/postAPI_login.dart';
 import 'package:rtm_system/model/post/postAPI_validateCustomer.dart';
-import 'package:rtm_system/model/put/putAPI_UpdateProfile.dart';
+import 'package:rtm_system/model/put/putAPI_updateProfile.dart';
 import 'package:rtm_system/model/put/putAPI_confirmAdvanceRequest.dart';
 import 'package:rtm_system/model/put/putAPI_confirmAdvanceReturn.dart';
 import 'package:rtm_system/model/put/putAPI_returnAdvance.dart';
@@ -25,10 +29,12 @@ import 'package:rtm_system/model/put/putAPI_updateInvoice.dart';
 import 'package:rtm_system/model/put/putAPI_updatePassword.dart';
 import 'package:rtm_system/model/put/putAPI_updatePrice.dart';
 import 'package:rtm_system/model/put/putAPI_updateAccount.dart';
+import 'package:rtm_system/presenter/check_login.dart';
 import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/message_list.dart';
 import 'package:rtm_system/presenter/Manager/invoice/add_product_invoice.dart';
 import 'package:rtm_system/view/customer/home_customer_page.dart';
+import 'package:rtm_system/view/login/login_page.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
 import 'package:rtm_system/view/manager/profile/allCustomer_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -66,7 +72,7 @@ Future<void> getNotice(BuildContext context, String mainTittle, String content,
     showStatusAlertDialog(context, showMessage(MSG024, MSG027), null, false);
 }
 
-/// Hàm này chờ xử lý
+// ignore: non_constant_identifier_names
 Future post_put_ApiProfile(
     String phone,
     String password,
@@ -95,16 +101,7 @@ Future post_put_ApiProfile(
     } else {
       PutUpdateProfile _putUpdate = PutUpdateProfile();
       status = await _putUpdate.updateProfile(
-          prefs.get("access_token"),
-          phone,
-          typeOfUpdate,
-          accountId,
-          password,
-          fullname,
-          gender,
-          cmnd,
-          address,
-          birthday);
+          prefs.get("access_token"), fullname, gender, birthday);
     }
   } else {
     PostCreateCustomer _createCustomer = PostCreateCustomer();
@@ -133,18 +130,22 @@ Future<void> doUpdateInvoice(BuildContext context,
 }
 
 Future<void> doUpdatePassword(BuildContext context,
-    {String accountId, String password, bool isCustomer}) async {
+    {String accountId,
+    String password,
+    String newPassword,
+    String confirmPassword,
+    bool isCustomer}) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   PutUpdatePassword putUpdatePassword = PutUpdatePassword();
   showEasyLoading(context, MSG052);
   int status = await putUpdatePassword.updatePassword(
-      prefs.get("access_token"), accountId, password);
+      prefs.get("access_token"), accountId, password, newPassword, confirmPassword);
   if (status == 200) {
     prefs.setString("password", password);
     if (isCustomer) {
       showEasyLoadingSuccess(context, MSG003,
           widget: HomeCustomerPage(
-            index: 3,
+            index: 4,
           ));
     } else {
       showEasyLoadingSuccess(context, MSG003,
@@ -152,7 +153,12 @@ Future<void> doUpdatePassword(BuildContext context,
             index: 4,
           ));
     }
-  } else {
+  } else if(status == 403){
+    showEasyLoadingError(
+      context,
+      showMessage("Mật khẩu hiện tại", MSG020),
+    );
+  }else {
     showEasyLoadingError(
       context,
       MSG025,
@@ -160,7 +166,7 @@ Future<void> doUpdatePassword(BuildContext context,
   }
 }
 
-Future<void> doCreateCustomer(
+Future<void> doCreateUpdateCustomer(
     BuildContext context,
     String phone,
     String password,
@@ -182,21 +188,17 @@ Future<void> doCreateCustomer(
     if (isCustomer) {
       showEasyLoadingSuccess(context, MSG003,
           widget: HomeCustomerPage(
-            index: 3,
+            index: 4,
           ));
     } else {
-      if (isCreate == null) {
-        if (fullname.trim().isNotEmpty) {
-          prefs.setString("fullname", fullname);
-          prefs.setString("phone", phone);
-          prefs.setInt("gender", gender);
-          prefs.setString("birthday", birthday);
-        } else {
-          prefs.setString("password", password);
-        }
+      if (isCreate == false) {
+        prefs.setString("fullname", fullname);
+        prefs.setString("phone", phone);
+        prefs.setInt("gender", gender);
+        prefs.setString("birthday", birthday);
       }
       showEasyLoadingSuccess(context, MSG003,
-          widget: isCreate == null ? HomeAdminPage(index: 4) : AllCustomer());
+          widget: isCreate == false ? HomeAdminPage(index: 4) : AllCustomer());
     }
   } else
     showEasyLoadingError(
@@ -217,9 +219,11 @@ Future<void> put_API_ConfirmAdvance(BuildContext context, id) async {
   status == 200
       ? showEasyLoadingSuccess(context, showMessage("", MSG012),
           widget: HomeCustomerPage(
-            index: 1,
+            index: 2, indexAdvance: 1,
           ))
-      : showEasyLoadingError(context, showMessage(MSG025, MSG027));
+      : showEasyLoadingError(context, showMessage(MSG025, MSG027), widget: HomeCustomerPage(
+            index: 2, indexAdvance: 1,
+          ));
 }
 
 Future<void> putAPIUpdatePrice(BuildContext context, String productId,
@@ -253,30 +257,36 @@ Future<void> doConfirmOrAcceptOrRejectInvoice(BuildContext context,
   int status;
   if (isCustomer) {
     showEasyLoading(context, MSG052);
+    int _indexInvoice;
     // 1 is sign invoice, 2 is accept invoice, 3 is delete request
     if (type == 1) {
       PutSignInvoice putSignInvoiceInvoice = PutSignInvoice();
       status = await putSignInvoiceInvoice.putSignInvoice(
           prefs.get("access_token"), invoiceIdSign);
+      _indexInvoice = 2;
     } else if (type == 2) {
       PutConfirmInvoice putConfirmInvoice = PutConfirmInvoice();
       status = await putConfirmInvoice.putConfirmInvoice(
           prefs.get("access_token"), invoiceId);
+      _indexInvoice = 1;
     } else if (type == 3) {
       DeleteInvoiceRequest deleteInvoiceRequest = DeleteInvoiceRequest();
       status = await deleteInvoiceRequest.deleteInvoiceRequest(
           prefs.get('access_token'), invoiceId,
           reason: reason);
+      _indexInvoice = 0;
     }
     if (status == 200) {
       showEasyLoadingSuccess(context, showMessage("", MSG012),
           widget: HomeCustomerPage(
-            index: 0,
+            index: 1,
+            indexInvoice: _indexInvoice,
           ));
     } else {
       showEasyLoadingError(context, showMessage(MSG025, MSG027),
           widget: HomeCustomerPage(
-            index: 0,
+            index: 1,
+            indexInvoice: _indexInvoice,
           ));
     }
   } else {
@@ -333,12 +343,17 @@ Future<void> createRequestAdvance(BuildContext context, String accountId,
   status == 200
       ? showEasyLoadingSuccess(context, showMessage("", MSG002),
           widget: HomeCustomerPage(
-            index: 1,
+            index: 2,
+            indexAdvance: 0,
           ))
-      : showEasyLoadingError(context, showMessage("", MSG024));
+      : showEasyLoadingError(context, showMessage("", MSG024),
+          widget: HomeCustomerPage(
+            index: 2,
+            indexAdvance: 0,
+          ));
 }
 
-Future getDataCustomerFromPhone(String phone) async {
+Future getDataCustomerFromPhone(BuildContext context,String phone) async {
   try {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     GetAPIProfileCustomer getAPIProfileCustomer = GetAPIProfileCustomer();
@@ -348,7 +363,7 @@ Future getDataCustomerFromPhone(String phone) async {
       maskType: EasyLoadingMaskType.black,
     );
     infomationCustomer = await getAPIProfileCustomer.getProfileCustomer(
-        prefs.get('access_token'), phone);
+        context, prefs.get('access_token'), phone);
     EasyLoading.showSuccess("Thành công");
     await Future.delayed(Duration(milliseconds: 1000));
     EasyLoading.dismiss();
@@ -407,6 +422,7 @@ Future doProcessAdvanceBill(
       id: invoiceId,
       status: statusProcess,
       reason: reason);
+
   status == 200
       ? showEasyLoadingSuccess(
           context,
@@ -452,11 +468,11 @@ Future doCreateInvoice(BuildContext context,
       ? isCustomer
           ? showEasyLoadingSuccess(context, showMessage("", MSG002),
               widget: HomeCustomerPage(
-                index: 0,
+                index: 1, indexInvoice: 0,
               ))
           : showEasyLoadingSuccess(context, showMessage("", MSG002),
               widget: widgetToNavigator)
-      : showEasyLoadingError(context, showMessage("", MSG024));
+      : showEasyLoadingError(context, showMessage("", MSG024), widget: widgetToNavigator);
 }
 
 Future<void> putReturnAdvance(BuildContext context, List<String> invoiceId,
@@ -470,11 +486,11 @@ Future<void> putReturnAdvance(BuildContext context, List<String> invoiceId,
         prefs.get("access_token"), invoiceId, advanceId);
     if (status == 200) {
       showEasyLoadingSuccess(context, showMessage("", MSG019),
-          widget: HomeCustomerPage(index: 1));
+          widget: HomeCustomerPage(index: 2, indexAdvance: 3,));
     } else
-      showEasyLoadingError(context, showMessage("", MSG025));
+      showEasyLoadingError(context, showMessage("", MSG025), widget:HomeCustomerPage(index: 2, indexAdvance: 1,) );
   } else {
-    showEasyLoadingError(context, showMessage(MSG031, MSG027));
+    showEasyLoadingError(context, showMessage(MSG031, MSG027), widget:HomeCustomerPage(index: 2, indexAdvance: 1,));
   }
 }
 
@@ -501,7 +517,7 @@ Future<void> doUpgradeCustomer(BuildContext context,
         data.elementAt(1));
     if (statusImage == 200 && statusData == 200) {
       showEasyLoadingSuccess(context, "Đã gửi",
-          waitTime: 2, widget: HomeCustomerPage(index: 3));
+          waitTime: 2, widget: HomeCustomerPage(index: 4));
     } else {
       showEasyLoadingError(context,
           "Gửi ${checkStatusUpgrade(statusImage, statusData)} thất bại",
@@ -560,9 +576,9 @@ Future doReceiveReturnCash(
       prefs.get("access_token"), id);
   if (status == 200) {
     showEasyLoadingSuccess(context, showMessage("", MSG022),
-        widget: HomeCustomerPage(index: 1));
+        widget: HomeCustomerPage(index: 2, indexAdvance: 3,));
   } else {
-    showEasyLoadingError(context, showMessage(MSG030, MSG027));
+    showEasyLoadingError(context, showMessage(MSG030, MSG027),  widget: HomeCustomerPage(index: 2, indexAdvance: 3,));
   }
 }
 
@@ -574,6 +590,67 @@ Future doDeleteAdvanceRequest(BuildContext context, String id) async {
       prefs.get('access_token'), id);
   status == 200
       ? showEasyLoadingSuccess(context, showMessage("", MSG017),
-          widget: HomeCustomerPage(index: 1))
-      : showEasyLoadingError(context, showMessage(MSG030, MSG027));
+          widget: HomeCustomerPage(index: 2, indexAdvance: 0,))
+      : showEasyLoadingError(context, showMessage(MSG030, MSG027), widget: HomeCustomerPage(index: 2, indexAdvance: 0,));
+}
+
+Future doCheckAccount(BuildContext context, String phone) async {
+  CheckAccount account = CheckAccount();
+  showEasyLoading(context, "$MSG052");
+  int status = await account.checkAccount(phone);
+  if (status == 200) {
+    EasyLoading.dismiss();
+    return true;
+  } else {
+    showEasyLoadingError(context, "$MSG009");
+    return false;
+  }
+}
+
+Future doForgotPassword(BuildContext context, String fbToken, String password,
+    String confirmPassword) async {
+  ChangeForgotPassword forgotPassword = ChangeForgotPassword();
+  showEasyLoading(context, "$MSG052");
+  int status =
+      await forgotPassword.getPassword(fbToken, password, confirmPassword);
+  if (status == 200) {
+    showEasyLoadingSuccess(context, "$MSG003", widget: LoginPage());
+  } else {
+    showEasyLoadingError(context, "$MSG025");
+  }
+}
+
+Future doLoginOTP(
+    BuildContext context, String phone, String firebaseToken) async {
+  DataLogin data;
+  PostLogin getAPI = PostLogin();
+  try {
+    data = await getAPI.createLogin(phone,
+        password: "", firebaseToken: firebaseToken);
+    if (data != null) {
+      savedInfoLogin(data.roleId, data.accountId, data.gender, data.accessToken,
+          data.fullName, data.phone, data.birthday);
+      if (data.roleId == 3) {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+                builder: (context) => HomeCustomerPage(
+                      index: 0,
+                    )),
+            (route) => false);
+      } else if (data.roleId == 2) {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+                builder: (context) => HomeAdminPage(
+                      index: 0,
+                    )),
+            (route) => false);
+        print('Status button: Done');
+      }
+      EasyLoading.dismiss();
+    } else showEasyLoadingError(context, '$MSG030');
+  } catch (_) {
+    showEasyLoadingError(context, '$MSG004');
+  }
 }

@@ -1,5 +1,5 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:rtm_system/helpers/component.dart';
 import 'package:rtm_system/presenter/Manager/notice/show_notice_manager.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/manager/notice/create_notice_manager.dart';
@@ -16,23 +16,28 @@ class _AllNoticeState extends State<AllNotice> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: backgroundColor,
       appBar: AppBar(
         backgroundColor: welcome_color,
-        title: Center(
-          child: AutoSizeText(
-            "Thông báo",
-            style: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.w500, fontSize: 25),
+        centerTitle: true,
+        title: titleAppBar("Thông báo")
+      ),
+      body:  Container(
+         margin: EdgeInsets.fromLTRB(0, 24, 0, 0),
+         decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(15.0),
+            topRight: Radius.circular(15.0),
           ),
         ),
-      ),
-      body: new showAllNotice(),
+        child: showAllNotice()),
       floatingActionButton: new FloatingActionButton(
         //
         onPressed: () => Navigator.of(context)
             .push(MaterialPageRoute(builder: (context) => createNotice())),
         child: new Icon(
-          Icons.add_alert_outlined,
+          Icons.notification_add_outlined,
           color: Colors.white,
           size: 30,
         ),

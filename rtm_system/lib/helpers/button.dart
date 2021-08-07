@@ -7,7 +7,7 @@ import 'package:rtm_system/ultils/src/message_list.dart';
 import 'package:rtm_system/view/customer/home_customer_page.dart';
 import 'package:rtm_system/view/detail_notice.dart';
 import 'package:rtm_system/view/form_reason.dart';
-import 'package:rtm_system/view/login_page.dart';
+import 'package:rtm_system/view/login/login_page.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -445,9 +445,7 @@ Widget btnProcessAdvanceBill(BuildContext context,
           color: Color(0xFF0BB791),
           onPressed: () {
             doProcessAdvanceBill(context, idAdvanceBill, 8,
-                widgetToNavigator: HomeAdminPage(
-                  index: 2,
-                ));
+                widgetToNavigator: widgetToNavigator);
           },
           child: Text(
             "Xác nhận",

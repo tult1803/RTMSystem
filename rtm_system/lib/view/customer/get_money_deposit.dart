@@ -192,7 +192,6 @@ class _GetMoneyDepositState extends State<GetMoneyDeposit> {
                                     1,
                                     true,
                                   );
-                                  ;
                                 },
                                 child: Text(
                                   'Có',

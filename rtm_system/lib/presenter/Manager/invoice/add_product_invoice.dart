@@ -15,6 +15,7 @@ import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/message_list.dart';
 import 'package:rtm_system/view/confirm_detail_invoice.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
+import 'package:rtm_system/view/table_price.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../view/manager/form_detail_page.dart';
@@ -82,6 +83,7 @@ class _AddProductPageState extends State<AddProductPage> {
   String _myProduct, _myStore;
   bool checkProduct = true;
   DateTime dateSale;
+  int type;
 
   Future _getProduct() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -94,8 +96,9 @@ class _AddProductPageState extends State<AddProductPage> {
     GetProduct getProduct = GetProduct();
     dataListProduct.clear();
     if (token.isNotEmpty) {
-      dataList = await getProduct.getProduct(token, "");
-      dataList.forEach((element) async{
+      dataList = await getProduct.getProduct(context,token, "",
+          limit: null, type: widget.level == 2 ? 1 : 2);
+      dataList.forEach((element) async {
         Map<dynamic, dynamic> data = element;
         dataListProduct.add(DataProduct.fromJson(data));
         if (widget.dateToPay != null) {
@@ -103,6 +106,11 @@ class _AddProductPageState extends State<AddProductPage> {
             currentPrice = "${element["update_price"]}";
             priceSell = "${comparePrice(price, currentPrice)}";
           }
+        }
+        if (widget.productId == element["id"]) {
+          setState(() {
+            type = element["type"];
+          });
         }
       });
       setState(() {
@@ -112,10 +120,12 @@ class _AddProductPageState extends State<AddProductPage> {
       return dataListProduct;
     }
   }
+
   Future _getStore() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     GetAPIAllStore getAPIAllStore = GetAPIAllStore();
     store = await getAPIAllStore.getStores(
+      context,
       prefs.get("access_token"),
       1000,
       1,
@@ -159,16 +169,19 @@ class _AddProductPageState extends State<AddProductPage> {
           ? nameNewCustomer = ""
           : nameNewCustomer = widget.fullName;
       this.widget.storeId == null ? _myStore = null : _myStore = widget.storeId;
-      this.widget.productId == null
-          ? _myProduct = null
-          : widget.productId == "SP-1000003"
-              // ignore: unnecessary_statements
-              ? {_myProduct = widget.productId, checkProduct = false}
-              : _myProduct = widget.productId;
+      if (widget.productId == null) {
+        _myProduct = null;
+      } else {
+        type == 0 ? checkProduct = true : checkProduct = false;
+        _myProduct = widget.productId;
+      }
       this.widget.savePrice == null ? price = "0" : price = widget.savePrice;
       this.widget.dateToPay == null
           ? dateSale = DateTime.now()
-          : dateSale = DateTime.parse(widget.dateToPay);
+
+          /// Nếu muốn Tạo hóa đơn lấy theo ngày trên yêu cầu thì mở comment dòng này ///
+          // : dateSale = DateTime.parse(widget.dateToPay);
+          : dateSale = DateTime.now();
       this.widget.productName == null
           ? productName = ""
           : productName = widget.productName;
@@ -193,17 +206,14 @@ class _AddProductPageState extends State<AddProductPage> {
 
   @override
   Widget build(BuildContext context) {
+    print(nameNewCustomer);
     return Scaffold(
       backgroundColor: Color(0xffEEEEEE),
       appBar: AppBar(
         backgroundColor: Color(0xFF0BB791),
         centerTitle: true,
         leading: leadingAppbar(context, widget: this.widget.widgetToNavigator),
-        title: Text(
-          this.widget.tittle,
-          style: TextStyle(
-              color: Colors.white, fontWeight: FontWeight.w500, fontSize: 22),
-        ),
+        title: titleAppBar(widget.tittle),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -216,15 +226,16 @@ class _AddProductPageState extends State<AddProductPage> {
                 Column(
                   children: [
                     txtAutoFillByPhone(
-                      enabled: widget.isChangeData == null ? true : false,
-                      controller: getDataTextField(phoneNewCustomer),
-                      isCustomer: this.widget.isCustomer,
-                      type: "phone",
-                      tittle: "Điện thoại",
-                      txtInputType: TextInputType.numberWithOptions(
-                          signed: true, decimal: true),
-                      error: errorPhone,
-                    ),
+                        maxLength: 11,
+                        enabled: widget.isChangeData == null ? true : false,
+                        controller: getDataTextField(phoneNewCustomer),
+                        isCustomer: this.widget.isCustomer,
+                        type: "phone",
+                        tittle: "Điện thoại",
+                        txtInputType: TextInputType.numberWithOptions(
+                            signed: true, decimal: true),
+                        error: errorPhone,
+                        icon: Icons.clear),
                     txtAutoFillByPhone(
                       enabled: false,
                       isCustomer: this.widget.isCustomer,
@@ -232,6 +243,9 @@ class _AddProductPageState extends State<AddProductPage> {
                       type: "name",
                       tittle: "Tên khách hàng",
                       txtInputType: TextInputType.name,
+                      icon: nameNewCustomer.isNotEmpty
+                          ? Icons.check
+                          : Icons.clear,
                     ),
                     SizedBox(
                       height: 10,
@@ -294,43 +308,41 @@ class _AddProductPageState extends State<AddProductPage> {
                     ),
                   ],
                 ),
-                SizedBox(
-                  height: 10,
-                ),
                 btnSave(context, 200, 40, Color(0xFF0BB791), "Tạo", 1),
                 SizedBox(
-                  height: 10,
+                  height: 25,
                 ),
-                // showPriceTable(),
+                showPriceTable(),
               ],
             )),
       ),
     );
   }
 
-  // Widget showPriceTable() {
-  //   if (widget.isCustomer) {
-  //     if (_myProduct != null) {
-  //       return showTablePrice(
-  //         idProduct: _myProduct,
-  //       );
-  //     } else {
-  //       return Container();
-  //     }
-  //   } else {
-  //     return Container();
-  //   }
-  // }
+  Widget showPriceTable() {
+    if (widget.isCustomer) {
+      if (_myProduct != null) {
+        return showTablePrice(
+          idProduct: _myProduct,
+        );
+      } else {
+        return Container();
+      }
+    } else {
+      return Container();
+    }
+  }
 
-  Widget txtAutoFillByPhone({
-    TextEditingController controller,
-    String error,
-    String tittle,
-    String type,
-    TextInputType txtInputType,
-    bool isCustomer,
-    bool enabled,
-  }) {
+  Widget txtAutoFillByPhone(
+      {TextEditingController controller,
+      String error,
+      String tittle,
+      String type,
+      TextInputType txtInputType,
+      bool isCustomer,
+      bool enabled,
+      int maxLength,
+      IconData icon}) {
     return isCustomer
         ? Container()
         : Container(
@@ -339,13 +351,21 @@ class _AddProductPageState extends State<AddProductPage> {
             child: TextField(
               controller: controller,
               // initialValue: this.widget.txt,
+              maxLength: maxLength,
               autocorrect: false,
               obscureText: false,
               enabled: enabled,
               onSubmitted: (value) async {
-                doOnSubmittedTextField(type, value);
                 if (tittle.contains("Điện thoại")) {
                   errorPhone = await checkPhoneNumber(value);
+                  if (errorPhone == null) doOnSubmittedTextField(type, value);
+                  if (errorPhone != null) {
+                    phoneNewCustomer = "";
+                    // ignore: unnecessary_statements
+                    nameNewCustomer == oldCusName ? nameNewCustomer = "" : null;
+                    // ignore: unnecessary_statements
+                    customerId == oldCusId ? customerId = "" : null;
+                  }
                 }
               },
               maxLines: 1,
@@ -375,8 +395,16 @@ class _AddProductPageState extends State<AddProductPage> {
                   ),
                 ),
                 //Hiển thị Icon góc phải
-                suffixIcon: Icon(
-                  Icons.create,
+                suffixIcon: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      if (tittle == "Điện thoại") {
+                        phoneNewCustomer = "";
+                      }
+                    });
+                    controller.clear;
+                  },
+                  icon: Icon(icon),
                   color: Colors.black54,
                 ),
 
@@ -395,7 +423,7 @@ class _AddProductPageState extends State<AddProductPage> {
     switch (type) {
       case "phone":
         phoneNewCustomer = value.trim();
-        infomationCustomer = await getDataCustomerFromPhone(value);
+        infomationCustomer = await getDataCustomerFromPhone(context,value);
         setState(() {
           if (infomationCustomer == null) {
             // ignore: unnecessary_statements
@@ -564,12 +592,6 @@ class _AddProductPageState extends State<AddProductPage> {
                       setState(() {
                         _myProduct = newValue;
                         _getCurrentPrice(newValue);
-                        if (_myProduct == "SP-1000003") {
-                          checkProduct = false;
-                        } else {
-                          degree = 0;
-                          checkProduct = true;
-                        }
                         checkClick = true;
                       });
                     }
@@ -583,6 +605,16 @@ class _AddProductPageState extends State<AddProductPage> {
                             if (widget.productName == null) {
                               setState(() {
                                 productName = item.name;
+                              });
+                            }
+                            if (item.type == 0) {
+                              setState(() {
+                                checkProduct = false;
+                              });
+                            } else {
+                              setState(() {
+                                degree = 0;
+                                checkProduct = true;
                               });
                             }
                           },
@@ -661,8 +693,11 @@ class _AddProductPageState extends State<AddProductPage> {
       color: Colors.white,
       child: TextField(
         controller: isQuantity ? txtController : null,
+        maxLength: 6,
         onSubmitted: (value) async {
+          double check;
           try {
+            check = double.parse(value.trim());
             if (isQuantity) {
               if (value.isNotEmpty) {
                 insertQuantity(value);
@@ -674,11 +709,20 @@ class _AddProductPageState extends State<AddProductPage> {
                 errorQuantity = await checkQuantity(quantity);
               }
             } else {
-              this.degree = double.tryParse(value.isEmpty ? "0" : value);
+              this.degree = double.parse(value.isEmpty ? "0" : value);
               errorDegree = await checkDegree(checkProduct, degree);
             }
           } catch (_) {
-            print('Lỗi add_product_invoice => _txtItemProduct ');
+            print('Lỗi add_product_invoice => _txtItemProduct $check');
+            setState(() {
+              isQuantity
+                  ? errorQuantity = showMessage("Số ký", MSG056)
+                  // ignore: unnecessary_statements
+                  : {
+                      errorDegree = showMessage("Số độ", MSG056),
+                      this.degree = 0
+                    };
+            });
           }
         },
         maxLines: maxLines,
@@ -760,7 +804,7 @@ class _AddProductPageState extends State<AddProductPage> {
     setState(() {
       dataListProduct.forEach((element) {
         if (element.id == value) {
-          price = element.price;
+          price = element.price.toString();
         }
       });
     });
@@ -791,6 +835,7 @@ class _AddProductPageState extends State<AddProductPage> {
           ),
           GestureDetector(
             onTap: () {
+              ///Nếu muốn cho customer chọn ngày thì mở comment dòng này
               if (widget.dateToPay == null) {
                 DatePicker.showDatePicker(
                   context,
@@ -800,9 +845,8 @@ class _AddProductPageState extends State<AddProductPage> {
                       dateSale = date;
                     });
                   },
-                  maxTime: DateTime(DateTime.now().year + 100, 12, 31),
-                  minTime: DateTime(DateTime.now().year, DateTime.now().month,
-                      DateTime.now().day),
+                  minTime: DateTime.now(),
+                  maxTime: DateTime.now().subtract(Duration(days: -6)),
                   locale: LocaleType.vi,
                 );
               }

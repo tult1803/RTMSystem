@@ -114,15 +114,15 @@ class _BackIdentifyCardState extends State<BackIdentifyCard> {
   }
 
 //get image from gallery
-  _imageFromGallery() async {
-    PickedFile image = await ImagePicker()
-        .getImage(source: ImageSource.gallery, imageQuality: 50);
-    if (image != null) {
-      setState(() {
-        imageBack = File(image.path);
-      });
-    }
-  }
+//   _imageFromGallery() async {
+//     PickedFile image = await ImagePicker()
+//         .getImage(source: ImageSource.gallery, imageQuality: 50);
+//     if (image != null) {
+//       setState(() {
+//         imageBack = File(image.path);
+//       });
+//     }
+//   }
 
 // show option choice camera or gallery
   void showPicker(context) {
@@ -132,14 +132,14 @@ class _BackIdentifyCardState extends State<BackIdentifyCard> {
           return SafeArea(
               child: Wrap(
                 children: [
-                  ListTile(
-                    leading: Icon(Icons.photo_library),
-                    title: Text('Chọn ảnh trong thư viện'),
-                    onTap: () {
-                      _imageFromGallery();
-                      Navigator.of(context).pop();
-                    },
-                  ),
+                  // ListTile(
+                  //   leading: Icon(Icons.photo_library),
+                  //   title: Text('Chọn ảnh trong thư viện'),
+                  //   onTap: () {
+                  //     _imageFromGallery();
+                  //     Navigator.of(context).pop();
+                  //   },
+                  // ),
                   ListTile(
                     leading: Icon(Icons.camera_alt),
                     title: Text('Mở camera'),

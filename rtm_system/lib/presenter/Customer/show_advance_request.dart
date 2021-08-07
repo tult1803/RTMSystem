@@ -68,7 +68,7 @@ int totalAdvance = 0;
     String phone = sharedPreferences.getString('phone');
     // Đỗ dữ liệu lấy từ api
     infomationCustomer =
-        await getAPIProfileCustomer.getProfileCustomer(token, phone);
+        await getAPIProfileCustomer.getProfileCustomer(context,token, phone);
     if (infomationCustomer != null) {
       setState(() {
         totalAdvance = infomationCustomer.advance;
@@ -165,6 +165,7 @@ int totalAdvance = 0;
                                     storeId: item.storeId,
                                     name: item.customerName,
                                     receiveDate: item.receiveDate,
+                                    isCheck: item.doneDate == null? false: true,
                                     widget: FormForDetailPage(
                                       tittle: "Chi tiết ứng tiền",
                                       bodyPage: DetailAdvancePage(

@@ -12,8 +12,8 @@ import 'package:rtm_system/view/customer/pay_advance.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AdvancePage extends StatefulWidget {
-  const AdvancePage({Key key}) : super(key: key);
-
+  AdvancePage({this.index});
+  int index;
   @override
   State<AdvancePage> createState() => _AdvancePageState();
 }
@@ -25,15 +25,18 @@ class _AdvancePageState extends State<AdvancePage>
     with TickerProviderStateMixin {
   TabController _tabController;
   String getFromDate, getToDate;
-  int index, _selectedIndex;
+  int _selectedIndex, _index;
   int level = 0;
 
   @override
   void initState() {
     super.initState();
     //tab 1: yeu cau
-    index = 0;
-    _tabController = TabController(length: 4, vsync: this);
+    _tabController = TabController(
+        length: 4,
+        vsync: this,
+        initialIndex:
+            widget.index == null ? _index = 0 : _index = widget.index);
     _tabController.addListener(() {
       setState(() {
         _selectedIndex = _tabController.index;
@@ -49,7 +52,6 @@ class _AdvancePageState extends State<AdvancePage>
           "${getDateTime("$toDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
     });
   }
-
   Future getAPIProfile() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     String token = sharedPreferences.getString('access_token');
@@ -58,13 +60,13 @@ class _AdvancePageState extends State<AdvancePage>
     InfomationCustomer infomationCustomer = InfomationCustomer();
     // Đỗ dữ liệu lấy từ api
     infomationCustomer =
-        await getAPIProfileCustomer.getProfileCustomer(token, phone);
+        await getAPIProfileCustomer.getProfileCustomer(context,token, phone);
     setState(() {
       level = infomationCustomer.level;
     });
     return infomationCustomer;
   }
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -133,7 +135,7 @@ class _AdvancePageState extends State<AdvancePage>
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               rowButtonDatetime(),
-              new showAdvanceRequestPage(status,
+              showAdvanceRequestPage(status,
                   fromDate: getFromDate, toDate: getToDate),
             ],
           ),
@@ -148,15 +150,13 @@ class _AdvancePageState extends State<AdvancePage>
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              new showHistoryAdvancePage(),
-            ],
+            children: [ showHistoryAdvancePage(),],
           ),
         ));
   }
 
   Widget showFloatBtn(index) {
-    if (index == 1) {
+    if (index == 1 || index == 3) {
       return FloatingActionButton.extended(
         onPressed: () {
           Navigator.push(
@@ -181,7 +181,10 @@ class _AdvancePageState extends State<AdvancePage>
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => CreateRequestAdvance(levelCustomer: level,)),
+            MaterialPageRoute(
+                builder: (context) => CreateRequestAdvance(
+                      levelCustomer: level,
+                    )),
           );
         },
         child: Icon(
@@ -264,7 +267,7 @@ class _AdvancePageState extends State<AdvancePage>
         getFromDate =
             "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
         getToDate =
-            "${getDateTime("${toDate}", dateFormat: "yyyy-MM-dd 23:59:59")}";
+            "${getDateTime("$toDate", dateFormat: "yyyy-MM-dd 23:59:59")}";
       });
     }
   }

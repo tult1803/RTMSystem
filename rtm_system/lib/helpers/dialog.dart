@@ -1,17 +1,12 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:path/path.dart';
 import 'package:rtm_system/model/delete/deleteAPI_deactivateNotice.dart';
 import 'package:rtm_system/model/delete/deleteAPI_deactivateCustomer.dart';
 import 'package:rtm_system/ultils/check_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/ultils/src/message_list.dart';
-
-import 'component.dart';
 import '../ultils/get_api_data.dart';
 
 //show khi nhấn các nút "Hủy" hoặc "Tạo"
@@ -137,7 +132,7 @@ showStatusAlertDialog(
   );
 }
 
-Future showCupertinoAlertDialog(BuildContext context, String content) {
+Future showCupertinoAlertDialog(BuildContext context, String content, {bool isPush, Widget widget}) {
   return showDialog(
       context: context,
       builder: (_) => new CupertinoAlertDialog(
@@ -150,7 +145,8 @@ Future showCupertinoAlertDialog(BuildContext context, String content) {
                   style: TextStyle(color: welcome_color),
                 ),
                 onPressed: () {
-                  Navigator.of(context).pop();
+                  isPush == null ? Navigator.of(context).pop()
+                  :  Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context)=>widget), (route) => false);
                 },
               )
             ],

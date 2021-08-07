@@ -43,7 +43,7 @@ class _DetailAdvancePageState extends State<DetailAdvancePage> {
     InfomationCustomer infomationCustomer = InfomationCustomer();
     // Đỗ dữ liệu lấy từ api
     infomationCustomer =
-        await getAPIProfileCustomer.getProfileCustomer(token, widget.phoneCustomer);
+        await getAPIProfileCustomer.getProfileCustomer(context,token, widget.phoneCustomer);
     setState(() {
       imageUrl = infomationCustomer.cmndFront;
     });
@@ -87,7 +87,7 @@ class _DetailAdvancePageState extends State<DetailAdvancePage> {
                 description: advanceDetail.description,
                 reason: advanceDetail.reason,
                 imageUrl: imageUrl,
-                widgetToNavigator: this.widget.widgetToNavigator,
+                widgetToNavigator: widget.widgetToNavigator,
               ),
             ),
           );

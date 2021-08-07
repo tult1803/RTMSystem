@@ -5,12 +5,10 @@ import 'package:rtm_system/ultils/get_api_data.dart';
 
 // ignore: camel_case_types
 class formUpdatePasswordPage extends StatefulWidget {
-  final String currentPassword;
-  final String account_id;
+  final String accountId;
   final bool isCustomer;
 
-  formUpdatePasswordPage(
-      {this.currentPassword, this.account_id, this.isCustomer});
+  formUpdatePasswordPage({this.accountId, this.isCustomer});
 
   @override
   _formUpdatePasswordPageState createState() => _formUpdatePasswordPageState();
@@ -28,7 +26,7 @@ class _formUpdatePasswordPageState extends State<formUpdatePasswordPage> {
   void initState() {
     super.initState();
     if (widget.isCustomer) {
-      indexOfBottomBar = 3;
+      indexOfBottomBar = 4;
     } else {
       indexOfBottomBar = 4;
     }
@@ -58,17 +56,8 @@ class _formUpdatePasswordPageState extends State<formUpdatePasswordPage> {
               ],
             ),
           ),
-          Column(
-            children: [
-              _txtField(
-                  getDataTextField(this.password),
-                  "Nhập mật khẩu hiện tại",
-                  "Mật khẩu hiện tại",
-                  errPassword,
-                  1,
-                  TextInputType.text),
-            ],
-          ),
+          _txtField(getDataTextField(this.password), "Nhập mật khẩu hiện tại",
+              "Mật khẩu hiện tại", errPassword, 1, TextInputType.text),
           SizedBox(
             height: 20,
           ),
@@ -139,7 +128,7 @@ class _formUpdatePasswordPageState extends State<formUpdatePasswordPage> {
       child: TextField(
         controller: _controller,
         obscureText: checkShow ? true : false,
-        onChanged: (value) async{
+        onChanged: (value) async {
           if (tittle == "Mật khẩu mới") {
             this.newPassword = value.trim();
           } else if (tittle == 'Xác nhận mật khẩu mới') {
@@ -151,16 +140,17 @@ class _formUpdatePasswordPageState extends State<formUpdatePasswordPage> {
             checkClick = true;
           });
         },
-        onSubmitted: (value) async{
+        onSubmitted: (value) async {
           if (tittle == "Mật khẩu mới") {
             this.newPassword = value.trim();
             errNewPassword = await checkPassword(newPassword, 1);
           } else if (tittle == 'Xác nhận mật khẩu mới') {
             this.confirmPassword = value.trim();
-            errConfirmPassword = await checkPassword(confirmPassword, 2, passwordCheck: newPassword);
+            errConfirmPassword = await checkPassword(confirmPassword, 2,
+                passwordCheck: newPassword);
           } else if (tittle == 'Mật khẩu hiện tại') {
             this.password = value.trim();
-            errPassword = await checkPassword(password, 0, passwordCheck: widget.currentPassword);
+            errPassword = await checkPassword(password, 0);
           }
           setState(() {
             checkClick = true;
@@ -180,8 +170,20 @@ class _formUpdatePasswordPageState extends State<formUpdatePasswordPage> {
             ),
           ),
           //Hiển thị Icon góc phải
-          suffixIcon: Icon(
-            Icons.create,
+          suffixIcon: IconButton(
+            onPressed: () {
+              setState(() {
+                if (tittle == "Mật khẩu mới") {
+                this.newPassword = "";
+              } else if (tittle == 'Xác nhận mật khẩu mới') {
+                this.confirmPassword = "";
+              } else if (tittle == 'Mật khẩu hiện tại') {
+                this.password = "";
+              }
+              });
+              _controller.clear;
+            },
+            icon: Icon(Icons.clear),
             color: Colors.black54,
           ),
 
@@ -220,15 +222,17 @@ class _formUpdatePasswordPageState extends State<formUpdatePasswordPage> {
           borderRadius: BorderRadius.circular(10),
         ),
         child: TextButton(
-          onPressed: () async{
-            bool check = await  _validateData();
-            setState(()  {
+          onPressed: () async {
+            bool check = await _validateData();
+            setState(() {
               if (check) {
                 //chỉ cần pw và account_id để change pw, những field khác truyền để đủ field theo function
                 doUpdatePassword(context,
                     isCustomer: widget.isCustomer,
-                    accountId: "${widget.account_id}",
-                    password: newPassword);
+                    accountId: "${widget.accountId}",
+                    password: password,
+                    newPassword: newPassword,
+                    confirmPassword: confirmPassword);
               }
             });
           },
@@ -245,9 +249,10 @@ class _formUpdatePasswordPageState extends State<formUpdatePasswordPage> {
   }
 
   Future _validateData() async {
-    errPassword = await checkPassword(password, 0, passwordCheck: widget.currentPassword);
+    errPassword = await checkPassword(password, 0);
     errNewPassword = await checkPassword(newPassword, 1);
-    errConfirmPassword = await checkPassword(confirmPassword, 2, passwordCheck: newPassword);
+    errConfirmPassword =
+        await checkPassword(confirmPassword, 2, passwordCheck: newPassword);
     if (errPassword == null &&
         errConfirmPassword == null &&
         errNewPassword == null) {

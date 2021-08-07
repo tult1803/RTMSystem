@@ -28,9 +28,10 @@ class _showTablePriceState extends State<showTablePrice> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       GetProduct getProduct = GetProduct();
       dataListProduct = await getProduct.getProduct(
+        context,
         prefs.get("access_token"),
         widget.idProduct,
-        type: 1,
+        type: 3,
         limit: 10,
       );
       final isLastPage = dataListProduct.length - 1 < pageKey;
@@ -75,7 +76,7 @@ class _showTablePriceState extends State<showTablePrice> {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.idProduct != widget.idProduct) {
       _pagingController.refresh();
-      dataListProduct.clear();
+     if(dataListProduct != null) dataListProduct.clear();
     }
   }
 

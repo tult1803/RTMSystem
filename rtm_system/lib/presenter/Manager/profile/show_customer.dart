@@ -32,6 +32,7 @@ class _showAllCustomerState extends State<showAllCustomer> {
       token = prefs.get("access_token");
       GetCustomer getAPIAllCustomer = GetCustomer();
       customer = await getAPIAllCustomer.createCustomer(
+        context,
         prefs.get("access_token"),
         0,
         // account_id sẽ truyền không để lấy hết customer vì customer đc quản lý chung
@@ -84,7 +85,7 @@ class _showAllCustomerState extends State<showAllCustomer> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Container(
-      margin: EdgeInsets.only(top: 0, left: 5, right: 5),
+      margin: EdgeInsets.only(top: 0, left: 5, right: 5, bottom: 25),
       height: size.height,
       width: size.width,
       child: new CustomScrollView(

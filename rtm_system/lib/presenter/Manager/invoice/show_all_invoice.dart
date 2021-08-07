@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rtm_system/helpers/component.dart';
 import 'package:rtm_system/model/model_invoice.dart';
 import 'package:rtm_system/presenter/Manager/invoice/show_invoice.dart';
 import 'package:rtm_system/presenter/Manager/invoice/show_request_invoice.dart';
@@ -21,6 +22,7 @@ class showAllInvoice extends StatefulWidget {
 DateTime fromDate;
 DateTime toDate;
 String itemToSearch;
+
 // ignore: camel_case_types
 class _showAllInvoiceState extends State<showAllInvoice>
     with TickerProviderStateMixin {
@@ -48,8 +50,10 @@ class _showAllInvoiceState extends State<showAllInvoice>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: backgroundColor,
       appBar: AppBar(
-        title: titleAppBar(),
+        title: titleAppBar("Hóa đơn"),
+        centerTitle: true,
         bottom: bottomAppBar(),
       ),
       body: Stack(
@@ -62,36 +66,28 @@ class _showAllInvoiceState extends State<showAllInvoice>
     );
   }
 
-  Widget searchItem(context){
+  Widget searchItem(context) {
     var size = MediaQuery.of(context).size;
     return Container(
-            key: Key('Search'),
-            padding: EdgeInsets.only(top: 40),
-              width: size.width,
-              child: new CustomScrollView(
-                physics: NeverScrollableScrollPhysics(),
-                slivers: [
-                  CharacterSearchInputSliver(
-                    hintText: "Tìm kiếm theo số điện thoại",
-                    onChanged: (searchTerm) {
-                      setState(() {
-                        itemToSearch = searchTerm;
-                      });
+        margin: EdgeInsets.only(
+          top: 10,
+        ),
+        key: Key('Search'),
+        padding: EdgeInsets.only(top: 40),
+        width: size.width,
+        child: new CustomScrollView(
+          physics: NeverScrollableScrollPhysics(),
+          slivers: [
+            CharacterSearchInputSliver(
+              hintText: "Tìm kiếm theo số điện thoại",
+              onChanged: (searchTerm) {
+                setState(() {
+                  itemToSearch = searchTerm;
+                });
               },
-                  ),
-                ],
-              )
-    );
-  }
-
-  Widget titleAppBar() {
-    return Center(
-      child: Text(
-        "Hóa đơn",
-        style: TextStyle(
-            color: Colors.white, fontWeight: FontWeight.w500, fontSize: 22),
-      ),
-    );
+            ),
+          ],
+        ));
   }
 
   Widget bottomAppBar() {
@@ -104,7 +100,7 @@ class _showAllInvoiceState extends State<showAllInvoice>
       controller: _tabController,
       tabs: <Widget>[
         Tab(text: "Yêu cầu"),
-        Tab(text: "Xử lý"),
+        Tab(text: "Đang xử lý"),
         Tab(text: "Ký gửi"),
         Tab(text: "Hoàn thành"),
         Tab(text: "Từ chối"),
@@ -113,7 +109,8 @@ class _showAllInvoiceState extends State<showAllInvoice>
   }
 
   Widget tabBarView() {
-    return Padding(
+    return Container(
+      margin: EdgeInsets.only(top: 12),
       padding: const EdgeInsets.only(top: 115.0),
       child: TabBarView(
         controller: _tabController,
@@ -136,9 +133,24 @@ class _showAllInvoiceState extends State<showAllInvoice>
             ),
             searchItem: itemToSearch,
           ),
-          new showInvoiceManager(5, fromDate: getFromDate, toDate: getToDate, searchItem: itemToSearch,),
-          new showInvoiceManager(3, fromDate: getFromDate, toDate: getToDate, searchItem: itemToSearch,),
-          new showInvoiceManager(2, fromDate: getFromDate, toDate: getToDate, searchItem: itemToSearch,),
+          new showInvoiceManager(
+            5,
+            fromDate: getFromDate,
+            toDate: getToDate,
+            searchItem: itemToSearch,
+          ),
+          new showInvoiceManager(
+            3,
+            fromDate: getFromDate,
+            toDate: getToDate,
+            searchItem: itemToSearch,
+          ),
+          new showInvoiceManager(
+            2,
+            fromDate: getFromDate,
+            toDate: getToDate,
+            searchItem: itemToSearch,
+          ),
         ],
       ),
     );
@@ -147,10 +159,9 @@ class _showAllInvoiceState extends State<showAllInvoice>
   //Dùng để show 2 cái nút để chọn ngày
   Widget rowButtonDatetime() {
     return Container(
-      height: 80,
+      height: 90,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           btnDateTime(
               context,
@@ -184,6 +195,7 @@ class _showAllInvoiceState extends State<showAllInvoice>
     itemToSearch = "";
     super.dispose();
   }
+
 //Copy nó để tái sử dụng cho các trang khác nếu cần
 // Không thể tách vì nó có hàm setState
   Widget datePick() {
