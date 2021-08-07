@@ -34,6 +34,7 @@ class _showHistoryAdvancePageState extends State<showHistoryAdvancePage> {
       GetAdvanceHistory getAdvanceHistory = GetAdvanceHistory();
       List<dynamic> listAdvance = [];
       listAdvance = await getAdvanceHistory.getAdvanceHistory(
+        context,
         prefs.get("access_token"),
         prefs.get("accountId"),
         pageKey,

@@ -18,7 +18,11 @@ class _WelcomePageState extends State<WelcomePage> {
     super.initState();
     _timer();
   }
-
+@override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -31,7 +35,7 @@ class _WelcomePageState extends State<WelcomePage> {
      new Timer.periodic(Duration(seconds: 3), (Timer timer) async{
       int status = await doCheckMaintain();
       Navigator.pushAndRemoveUntil(
-          this.context,
+          context,
           MaterialPageRoute(builder: (context) => status == 200 ? LoginPage() : MaintainPage()),
           (route) => false);
       // Dừng timer

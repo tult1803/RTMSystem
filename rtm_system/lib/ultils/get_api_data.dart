@@ -310,6 +310,7 @@ Future<void> doConfirmOrAcceptOrRejectInvoice(BuildContext context,
                       productId: element.productId,
                       savePrice: "${element.price}",
                       storeId: element.storeId,
+                      productType: element.productType,
                       isCustomer: false,
                       isChangeData: true,
                       widgetToNavigator: widgetToNavigator,
@@ -602,7 +603,9 @@ Future doCheckAccount(BuildContext context, String phone) async {
     EasyLoading.dismiss();
     return true;
   } else {
-    showEasyLoadingError(context, "$MSG009");
+    if(status == 403){
+      checkTimeToken(context, status);
+    }else showEasyLoadingError(context, "$MSG009");
     return false;
   }
 }

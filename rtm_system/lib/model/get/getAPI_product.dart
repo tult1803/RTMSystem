@@ -23,7 +23,6 @@ class GetProduct {
       List<dynamic> listProduct = json.decode(response.body);
       return listProduct;
     } else {
-
       checkTimeToken(context, response.statusCode);
       throw Exception('Failed to load data');
     }

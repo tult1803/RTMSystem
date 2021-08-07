@@ -56,7 +56,7 @@ class _DetailAdvancePageState extends State<DetailAdvancePage> {
     String token = sharedPreferences.getString('access_token');
     // Đỗ dữ liệu lấy từ api
     advanceDetail = await getAdvanceDetail.getAdvanceDetail(
-        token, widget.id, widget.status);
+        context,token, widget.id, widget.status);
     return advanceDetail;
   }
 

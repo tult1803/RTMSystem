@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:keyboard_actions/keyboard_actions.dart';
+import 'package:keyboard_actions/keyboard_actions_config.dart';
 import 'package:rtm_system/model/get/getAPI_allStore.dart';
 import 'package:rtm_system/model/get/getAPI_product.dart';
 import 'package:rtm_system/model/model_product.dart';
@@ -35,7 +37,7 @@ class AddProductPage extends StatefulWidget {
       savePrice,
       productName,
       storeName;
-  final int level;
+  final int level, productType;
 
   //true is Customer role
   final bool isCustomer;
@@ -55,7 +57,8 @@ class AddProductPage extends StatefulWidget {
       this.productName,
       this.storeName,
       this.isChangeData,
-      this.level});
+      this.level,
+      this.productType});
 
   @override
   _AddProductPageState createState() => _AddProductPageState();
@@ -77,6 +80,8 @@ class _AddProductPageState extends State<AddProductPage> {
   var txtController = TextEditingController();
   bool autoFocus = false;
 
+  FocusNode nodePhone, nodeName, nodeDegree, nodeQuantity;
+
   //field to sales
   double quantity = 0, degree = 0;
 
@@ -96,7 +101,7 @@ class _AddProductPageState extends State<AddProductPage> {
     GetProduct getProduct = GetProduct();
     dataListProduct.clear();
     if (token.isNotEmpty) {
-      dataList = await getProduct.getProduct(context,token, "",
+      dataList = await getProduct.getProduct(context, token, "",
           limit: null, type: widget.level == 2 ? 1 : 2);
       dataList.forEach((element) async {
         Map<dynamic, dynamic> data = element;
@@ -147,11 +152,19 @@ class _AddProductPageState extends State<AddProductPage> {
     phoneNewCustomer = null;
     nameNewCustomer = null;
     customerId = null;
+    nodePhone.dispose();
+    nodeName.dispose();
+    nodeDegree.dispose();
+    nodeQuantity.dispose();
   }
 
   @override
   void initState() {
     super.initState();
+    nodePhone = FocusNode();
+    nodeName = FocusNode();
+    nodeDegree = FocusNode();
+    nodeQuantity = FocusNode();
     _checkDataFromRequest();
     _getProduct();
     _getStore();
@@ -172,7 +185,8 @@ class _AddProductPageState extends State<AddProductPage> {
       if (widget.productId == null) {
         _myProduct = null;
       } else {
-        type == 0 ? checkProduct = true : checkProduct = false;
+        print('product_Type: ${widget.productType} //188 add_product_invoice');
+        widget.productType != 0 ? checkProduct = true : checkProduct = false;
         _myProduct = widget.productId;
       }
       this.widget.savePrice == null ? price = "0" : price = widget.savePrice;
@@ -204,9 +218,25 @@ class _AddProductPageState extends State<AddProductPage> {
     return _controller;
   }
 
+  KeyboardActionsConfig keyBoardConfig(BuildContext context, node,
+      {String type}) {
+    return KeyboardActionsConfig(
+      keyboardActionsPlatform: KeyboardActionsPlatform.ALL,
+      nextFocus: true,
+      actions: [
+        KeyboardActionsItem(
+          focusNode: node,
+          displayDoneButton: true,
+          onTapAction: () async {
+            checkKeyBoardConfig(node, type: type);
+          },
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    print(nameNewCustomer);
     return Scaffold(
       backgroundColor: Color(0xffEEEEEE),
       appBar: AppBar(
@@ -226,16 +256,17 @@ class _AddProductPageState extends State<AddProductPage> {
                 Column(
                   children: [
                     txtAutoFillByPhone(
-                        maxLength: 11,
-                        enabled: widget.isChangeData == null ? true : false,
-                        controller: getDataTextField(phoneNewCustomer),
-                        isCustomer: this.widget.isCustomer,
-                        type: "phone",
-                        tittle: "Điện thoại",
-                        txtInputType: TextInputType.numberWithOptions(
-                            signed: true, decimal: true),
-                        error: errorPhone,
-                        icon: Icons.clear),
+                      maxLength: 11,
+                      enabled: widget.isChangeData == null ? true : false,
+                      controller: getDataTextField(phoneNewCustomer),
+                      isCustomer: this.widget.isCustomer,
+                      type: "phone",
+                      tittle: "Điện thoại",
+                      txtInputType: TextInputType.number,
+                      error: errorPhone,
+                      icon: Icons.clear,
+                      node: nodePhone,
+                    ),
                     txtAutoFillByPhone(
                       enabled: false,
                       isCustomer: this.widget.isCustomer,
@@ -246,6 +277,7 @@ class _AddProductPageState extends State<AddProductPage> {
                       icon: nameNewCustomer.isNotEmpty
                           ? Icons.check
                           : Icons.clear,
+                      node: nodeName,
                     ),
                     SizedBox(
                       height: 10,
@@ -342,78 +374,93 @@ class _AddProductPageState extends State<AddProductPage> {
       bool isCustomer,
       bool enabled,
       int maxLength,
-      IconData icon}) {
+      IconData icon,
+      FocusNode node}) {
     return isCustomer
         ? Container()
         : Container(
             color: Colors.white,
             margin: EdgeInsets.only(top: 10, left: 10, right: 10),
-            child: TextField(
-              controller: controller,
-              // initialValue: this.widget.txt,
-              maxLength: maxLength,
-              autocorrect: false,
-              obscureText: false,
-              enabled: enabled,
-              onSubmitted: (value) async {
-                if (tittle.contains("Điện thoại")) {
-                  errorPhone = await checkPhoneNumber(value);
-                  if (errorPhone == null) doOnSubmittedTextField(type, value);
-                  if (errorPhone != null) {
-                    phoneNewCustomer = "";
-                    // ignore: unnecessary_statements
-                    nameNewCustomer == oldCusName ? nameNewCustomer = "" : null;
-                    // ignore: unnecessary_statements
-                    customerId == oldCusId ? customerId = "" : null;
+            child: KeyboardActions(
+              disableScroll: true,
+              config: keyBoardConfig(context, node, type: type),
+              child: TextField(
+                focusNode: node,
+                controller: controller,
+                // initialValue: this.widget.txt,
+                maxLength: maxLength,
+                autocorrect: false,
+                obscureText: false,
+                enabled: enabled,
+                onChanged: (value) {
+                  setState(() {
+                    if (tittle.contains("Điện thoại"))
+                      phoneNewCustomer = value.trim();
+                  });
+                },
+                onSubmitted: (value) async {
+                  if (tittle.contains("Điện thoại")) {
+                    errorPhone = await checkPhoneNumber(phoneNewCustomer);
+                    if (errorPhone == null)
+                      doOnSubmittedTextField(type, phoneNewCustomer);
+                    if (errorPhone != null) {
+                      phoneNewCustomer = "";
+                      // ignore: unnecessary_statements
+                      nameNewCustomer == oldCusName
+                          ? nameNewCustomer = ""
+                          // ignore: unnecessary_statements
+                          : null;
+                      // ignore: unnecessary_statements
+                      customerId == oldCusId ? customerId = "" : null;
+                    }
                   }
-                }
-              },
-              maxLines: 1,
-              keyboardType: txtInputType,
-              // TextInputType.numberWithOptions(signed: true, decimal: true),
-              inputFormatters: [
-                txtInputType !=
-                        TextInputType.numberWithOptions(
-                            signed: true, decimal: true)
-                    ? FilteringTextInputFormatter.allow(
-                        RegExp(r'[ [a-zA-Z0-9]'))
-                    : FilteringTextInputFormatter.allow(RegExp(r'[[0-9]')),
-              ],
-              style: TextStyle(fontSize: 15),
-              cursorColor: Colors.red,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                ),
-                labelText: tittle,
-                labelStyle: TextStyle(color: Colors.black54),
-                contentPadding: EdgeInsets.only(top: 14, left: 10),
-                //Sau khi click vào "Nhập tiêu đề" thì màu viền sẽ đổi
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Color(0xFF0BB791),
+                },
+                maxLines: 1,
+                keyboardType: txtInputType,
+                // TextInputType.numberWithOptions(signed: true, decimal: true),
+                inputFormatters: [
+                  txtInputType != TextInputType.number
+                      ? FilteringTextInputFormatter.allow(
+                          RegExp(r'[ [a-zA-Z0-9]'))
+                      : FilteringTextInputFormatter.allow(RegExp(r'[[0-9]')),
+                ],
+                style: TextStyle(fontSize: 15),
+                cursorColor: Colors.red,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
                   ),
-                ),
-                //Hiển thị Icon góc phải
-                suffixIcon: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      if (tittle == "Điện thoại") {
-                        phoneNewCustomer = "";
-                      }
-                    });
-                    controller.clear;
-                  },
-                  icon: Icon(icon),
-                  color: Colors.black54,
-                ),
+                  labelText: tittle,
+                  labelStyle: TextStyle(color: Colors.black54),
+                  contentPadding: EdgeInsets.only(top: 14, left: 10),
+                  //Sau khi click vào "Nhập tiêu đề" thì màu viền sẽ đổi
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color(0xFF0BB791),
+                    ),
+                  ),
+                  //Hiển thị Icon góc phải
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        if (tittle == "Điện thoại") {
+                          phoneNewCustomer = "";
+                        }
+                      });
+                      // ignore: unnecessary_statements
+                      controller.clear;
+                    },
+                    icon: Icon(icon),
+                    color: Colors.black54,
+                  ),
 
-                //Hiển thị lỗi
-                focusedErrorBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.redAccent),
+                  //Hiển thị lỗi
+                  focusedErrorBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.redAccent),
+                  ),
+                  //Nhận thông báo lỗi
+                  errorText: error,
                 ),
-                //Nhận thông báo lỗi
-                errorText: error,
               ),
             ),
           );
@@ -423,7 +470,7 @@ class _AddProductPageState extends State<AddProductPage> {
     switch (type) {
       case "phone":
         phoneNewCustomer = value.trim();
-        infomationCustomer = await getDataCustomerFromPhone(context,value);
+        infomationCustomer = await getDataCustomerFromPhone(context, value);
         setState(() {
           if (infomationCustomer == null) {
             // ignore: unnecessary_statements
@@ -481,6 +528,7 @@ class _AddProductPageState extends State<AddProductPage> {
             isQuantity: false,
             hintText: 'Nhập số độ',
             maxLines: 1,
+            node: nodeDegree,
           );
   }
 
@@ -492,6 +540,7 @@ class _AddProductPageState extends State<AddProductPage> {
             hintText: 'Nhập số ký',
             maxLines: 1,
             isQuantity: true,
+            node: nodeQuantity,
           );
   }
 
@@ -687,79 +736,124 @@ class _AddProductPageState extends State<AddProductPage> {
     );
   }
 
+  double checkItemProduct;
+
   Widget _txtItemProduct(
-      {BuildContext context, String hintText, int maxLines, bool isQuantity}) {
+      {BuildContext context,
+      String hintText,
+      int maxLines,
+      bool isQuantity,
+      FocusNode node}) {
     return Container(
       color: Colors.white,
-      child: TextField(
-        controller: isQuantity ? txtController : null,
-        maxLength: 6,
-        onSubmitted: (value) async {
-          double check;
-          try {
-            check = double.parse(value.trim());
-            if (isQuantity) {
-              if (value.isNotEmpty) {
-                insertQuantity(value);
-                quantity = 0;
-                listQuantity.forEach((element) {
-                  quantity += double.parse(element);
-                });
-                txtController.clear();
-                errorQuantity = await checkQuantity(quantity);
-              }
-            } else {
-              this.degree = double.parse(value.isEmpty ? "0" : value);
-              errorDegree = await checkDegree(checkProduct, degree);
-            }
-          } catch (_) {
-            print('Lỗi add_product_invoice => _txtItemProduct $check');
-            setState(() {
-              isQuantity
-                  ? errorQuantity = showMessage("Số ký", MSG056)
-                  // ignore: unnecessary_statements
-                  : {
-                      errorDegree = showMessage("Số độ", MSG056),
-                      this.degree = 0
-                    };
-            });
-          }
-        },
-        maxLines: maxLines,
-        keyboardType:
-            TextInputType.numberWithOptions(signed: true, decimal: true),
-        inputFormatters: [
-          FilteringTextInputFormatter.allow(RegExp(r'[.[0-9]')),
-        ],
-        style: TextStyle(fontSize: 15),
-        cursorColor: Colors.red,
-        decoration: InputDecoration(
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(5.0)),
-          ),
-          labelText: hintText,
-          labelStyle: TextStyle(color: Colors.black54),
-          contentPadding: EdgeInsets.only(top: 14, left: 10),
-          //Sau khi click vào "Nhập tiêu đề" thì màu viền sẽ đổi
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: Color(0xFF0BB791),
+      child: KeyboardActions(
+        disableScroll: true,
+        config: keyBoardConfig(context, node),
+        child: TextField(
+          focusNode: node,
+          controller: isQuantity ? txtController : null,
+          maxLength: 6,
+          onChanged: (value) {
+            doTextFieldOnChanged(value, isQuantity);
+          },
+          onSubmitted: (value) async {
+            doTextFieldSubmitted(value, isQuantity);
+          },
+          maxLines: maxLines,
+          keyboardType: TextInputType.number,
+          inputFormatters: [
+            FilteringTextInputFormatter.allow(RegExp(r'[.[0-9]')),
+          ],
+          style: TextStyle(fontSize: 15),
+          cursorColor: Colors.red,
+          decoration: InputDecoration(
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(5.0)),
             ),
+            labelText: hintText,
+            labelStyle: TextStyle(color: Colors.black54),
+            contentPadding: EdgeInsets.only(top: 14, left: 10),
+            //Sau khi click vào "Nhập tiêu đề" thì màu viền sẽ đổi
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Color(0xFF0BB791),
+              ),
+            ),
+            //Hiển thị Icon góc phải
+            suffixIcon: Icon(
+              Icons.create_outlined,
+              color: Colors.black54,
+            ),
+            //Hiển thị lỗi
+            focusedErrorBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.redAccent),
+            ),
+            //Nhận thông báo lỗi
+            errorText: isQuantity ? errorQuantity : errorDegree,
           ),
-          //Hiển thị Icon góc phải
-          suffixIcon: Icon(
-            Icons.create_outlined,
-            color: Colors.black54,
-          ),
-          //Hiển thị lỗi
-          focusedErrorBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.redAccent),
-          ),
-          //Nhận thông báo lỗi
-          errorText: isQuantity ? errorQuantity : errorDegree,
         ),
       ),
     );
+  }
+
+  doTextFieldOnChanged(value, isQuantity) async {
+    try {
+      setState(() {
+        if (value != null) {
+          checkItemProduct = double.parse(value.trim());
+        } else {
+          if (isQuantity) {
+            errorQuantity = checkQuantity(quantity);
+          } else
+            errorDegree = checkDegree(checkProduct, degree);
+        }
+      });
+    } catch (_) {
+      setState(() {
+        checkItemProduct = null;
+        isQuantity
+            ? errorQuantity = showMessage("Số ký", MSG056)
+            // ignore: unnecessary_statements
+            : {errorDegree = showMessage("Số độ", MSG056), this.degree = 0};
+      });
+    }
+  }
+
+  doTextFieldSubmitted(value, isQuantity) async {
+    try {
+      checkItemProduct = double.parse(value.trim());
+      if (isQuantity) {
+        if (checkItemProduct > 0) {
+          insertQuantity("$checkItemProduct");
+          quantity = 0;
+          listQuantity.forEach((element) {
+            quantity += double.parse(element);
+          });
+          txtController.clear();
+          errorQuantity = await checkQuantity(quantity);
+          checkItemProduct = null;
+        }
+      } else {
+        this.degree = double.parse(value.isEmpty ? "0" : value);
+        errorDegree = await checkDegree(checkProduct, degree);
+      }
+    } catch (_) {
+      print('Lỗi add_product_invoice => _txtItemProduct $checkItemProduct');
+      setState(() {
+        checkItemProduct = null;
+        isQuantity
+            ? value.isEmpty
+                ? errorQuantity = checkQuantity(quantity)
+                : errorQuantity = showMessage("Số ký", MSG056)
+            // ignore: unnecessary_statements
+            : {
+                value.isEmpty
+                    ? errorDegree = checkDegree(checkProduct, degree)
+                    : errorDegree = showMessage("Số độ", MSG056),
+                this.degree = 0
+              };
+      });
+    }
   }
 
   //Hiển thị ra các container nhỏ khi nhập số cân
@@ -955,5 +1049,50 @@ class _AddProductPageState extends State<AddProductPage> {
                     isCustomer: widget.isCustomer,
                   ),
                 )));
+  }
+
+  checkKeyBoardConfig(node, {String type}) async {
+    if (node == nodePhone) {
+      errorPhone = await checkPhoneNumber(phoneNewCustomer);
+      if (errorPhone == null) doOnSubmittedTextField(type, phoneNewCustomer);
+      if (errorPhone != null) {
+        phoneNewCustomer = "";
+        // ignore: unnecessary_statements
+        nameNewCustomer == oldCusName
+            ? nameNewCustomer = ""
+            // ignore: unnecessary_statements
+            : null;
+        // ignore: unnecessary_statements
+        customerId == oldCusId ? customerId = "" : null;
+      }
+    }
+    if (node == nodeQuantity) {
+      if (checkItemProduct != null) {
+        if (checkItemProduct > 0) {
+          insertQuantity("$checkItemProduct");
+          quantity = 0;
+          listQuantity.forEach((element) {
+            quantity += double.parse(element);
+          });
+          txtController.clear();
+          checkItemProduct = null;
+          errorQuantity = await checkQuantity(quantity);
+        }
+      } else
+        errorQuantity = await checkQuantity(quantity);
+    }
+    if (node == nodeDegree) {
+      if (checkItemProduct != null) {
+        print(checkItemProduct);
+        String value = "$checkItemProduct";
+        this.degree = double.parse(value.isEmpty ? "0" : value);
+        errorDegree = await checkDegree(checkProduct, degree);
+        checkItemProduct = null;
+      } else
+        // setState(() {
+        //     if(valueCheckDegree.isEmpty || valueCheckDegree == null)  degree = 0;
+        //   });
+        errorDegree = await checkDegree(checkProduct, degree);
+    }
   }
 }
