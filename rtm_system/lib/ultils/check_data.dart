@@ -223,6 +223,6 @@ checkTimeToken(BuildContext context,int statusCode) async{
   if (statusCode == 403) {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.clear();
-    showCupertinoAlertDialog(context, showMessage("", MSG059), widget: LoginPage(), isPush: true);
+    showCupertinoAlertDialog(context, showMessage("", MSG061), widget: LoginPage(), isPush: true);
   }
 }
