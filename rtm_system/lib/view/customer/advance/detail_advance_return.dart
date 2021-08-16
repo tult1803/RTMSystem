@@ -35,6 +35,7 @@ class _DetailAdvanceReturnState extends State<DetailAdvanceReturn> {
     String token = sharedPreferences.getString('access_token');
     // Đỗ dữ liệu lấy từ api
     advanceReturnDetail = await getAdvanceReturnDetail.getAdvanceReturnDetail(
+      context,
       token,
       widget.id,
     );

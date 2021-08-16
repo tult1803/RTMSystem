@@ -35,6 +35,7 @@ class showAdvancceBillManagerState extends State<showAdvancceBillManager> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       GetAdvanceRequest getAPIAllInvoice = GetAdvanceRequest();
       advanceBill = await getAPIAllInvoice.getAdvanceRequest(
+        context,
         prefs.get("access_token"),
         0,
         "",

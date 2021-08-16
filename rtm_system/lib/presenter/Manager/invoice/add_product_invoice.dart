@@ -166,6 +166,7 @@ class _AddProductPageState extends State<AddProductPage> {
   }
 
   Future<void> _checkDataFromRequest() async {
+    print('Type: ${widget.productType}');
     setState(() {
       this.widget.customerId == null
           ? customerId = ""
