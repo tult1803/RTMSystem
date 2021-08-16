@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:keyboard_actions/keyboard_actions.dart';
+import 'package:keyboard_actions/keyboard_actions_config.dart';
 import 'package:rtm_system/model/get/getAPI_allStore.dart';
 import 'package:rtm_system/model/get/getAPI_product.dart';
 import 'package:rtm_system/model/model_product.dart';
@@ -35,7 +37,7 @@ class AddProductPage extends StatefulWidget {
       savePrice,
       productName,
       storeName;
-  final int level;
+  final int level, productType;
 
   //true is Customer role
   final bool isCustomer;
@@ -55,6 +57,7 @@ class AddProductPage extends StatefulWidget {
       this.productName,
       this.storeName,
       this.isChangeData,
+      this.productType,
       this.level});
 
   @override
@@ -76,7 +79,7 @@ class _AddProductPageState extends State<AddProductPage> {
   bool checkClick = false;
   var txtController = TextEditingController();
   bool autoFocus = false;
-
+  FocusNode nodePhone, nodeName;
   //field to sales
   double quantity = 0, degree = 0;
 
@@ -96,7 +99,7 @@ class _AddProductPageState extends State<AddProductPage> {
     GetProduct getProduct = GetProduct();
     dataListProduct.clear();
     if (token.isNotEmpty) {
-      dataList = await getProduct.getProduct(context,token, "",
+      dataList = await getProduct.getProduct(context, token, "",
           limit: null, type: widget.level == 2 ? 1 : 2);
       dataList.forEach((element) async {
         Map<dynamic, dynamic> data = element;
@@ -147,14 +150,19 @@ class _AddProductPageState extends State<AddProductPage> {
     phoneNewCustomer = null;
     nameNewCustomer = null;
     customerId = null;
+    nodePhone.dispose();
+    nodeName.dispose();
   }
 
   @override
   void initState() {
     super.initState();
+    nodePhone = FocusNode();
+    nodeName = FocusNode();
     _checkDataFromRequest();
     _getProduct();
     _getStore();
+
   }
 
   Future<void> _checkDataFromRequest() async {
@@ -172,7 +180,7 @@ class _AddProductPageState extends State<AddProductPage> {
       if (widget.productId == null) {
         _myProduct = null;
       } else {
-        type == 0 ? checkProduct = true : checkProduct = false;
+        widget.productType != 0 ? checkProduct = true : checkProduct = false;
         _myProduct = widget.productId;
       }
       this.widget.savePrice == null ? price = "0" : price = widget.savePrice;
@@ -204,9 +212,38 @@ class _AddProductPageState extends State<AddProductPage> {
     return _controller;
   }
 
+  KeyboardActionsConfig keyBoardConfig(BuildContext context, node,
+      {String type}) {
+    return KeyboardActionsConfig(
+      keyboardActionsPlatform: KeyboardActionsPlatform.ALL,
+      nextFocus: true,
+      actions: [
+        KeyboardActionsItem(
+          focusNode: node,
+          displayDoneButton: true,
+          onTapAction: () async {
+            if (node == nodePhone) {
+              errorPhone = await checkPhoneNumber(phoneNewCustomer);
+              if (errorPhone == null) doOnSubmittedTextField(type, phoneNewCustomer);
+              if (errorPhone != null) {
+                phoneNewCustomer = "";
+                // ignore: unnecessary_statements
+                nameNewCustomer == oldCusName
+                    ? nameNewCustomer = ""
+                // ignore: unnecessary_statements
+                    : null;
+                // ignore: unnecessary_statements
+                customerId == oldCusId ? customerId = "" : null;
+              }
+            }
+          },
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    print(nameNewCustomer);
     return Scaffold(
       backgroundColor: Color(0xffEEEEEE),
       appBar: AppBar(
@@ -235,7 +272,8 @@ class _AddProductPageState extends State<AddProductPage> {
                         txtInputType: TextInputType.numberWithOptions(
                             signed: true, decimal: true),
                         error: errorPhone,
-                        icon: Icons.clear),
+                        icon: Icons.clear,
+                    node: nodePhone),
                     txtAutoFillByPhone(
                       enabled: false,
                       isCustomer: this.widget.isCustomer,
@@ -246,6 +284,7 @@ class _AddProductPageState extends State<AddProductPage> {
                       icon: nameNewCustomer.isNotEmpty
                           ? Icons.check
                           : Icons.clear,
+                      node: nodeName,
                     ),
                     SizedBox(
                       height: 10,
@@ -342,78 +381,90 @@ class _AddProductPageState extends State<AddProductPage> {
       bool isCustomer,
       bool enabled,
       int maxLength,
-      IconData icon}) {
+      IconData icon,
+      FocusNode node}) {
     return isCustomer
         ? Container()
         : Container(
             color: Colors.white,
             margin: EdgeInsets.only(top: 10, left: 10, right: 10),
-            child: TextField(
-              controller: controller,
-              // initialValue: this.widget.txt,
-              maxLength: maxLength,
-              autocorrect: false,
-              obscureText: false,
-              enabled: enabled,
-              onSubmitted: (value) async {
-                if (tittle.contains("Điện thoại")) {
-                  errorPhone = await checkPhoneNumber(value);
-                  if (errorPhone == null) doOnSubmittedTextField(type, value);
-                  if (errorPhone != null) {
-                    phoneNewCustomer = "";
-                    // ignore: unnecessary_statements
-                    nameNewCustomer == oldCusName ? nameNewCustomer = "" : null;
-                    // ignore: unnecessary_statements
-                    customerId == oldCusId ? customerId = "" : null;
+            child: KeyboardActions(
+              disableScroll: true,
+              config: keyBoardConfig(context, node, type: type),
+              child: TextField(
+                focusNode: node,
+                controller: controller,
+                // initialValue: this.widget.txt,
+                maxLength: maxLength,
+                autocorrect: false,
+                obscureText: false,
+                enabled: enabled,
+                onChanged: (value) {
+                  setState(() {
+                    if (tittle.contains("Điện thoại"))
+                      phoneNewCustomer = value.trim();
+                  });
+                },
+                onSubmitted: (value) async {
+                  if (tittle.contains("Điện thoại")) {
+                    errorPhone = await checkPhoneNumber(value);
+                    if (errorPhone == null) doOnSubmittedTextField(type, value);
+                    if (errorPhone != null) {
+                      phoneNewCustomer = "";
+                      // ignore: unnecessary_statements
+                      nameNewCustomer == oldCusName ? nameNewCustomer = "" : null;
+                      // ignore: unnecessary_statements
+                      customerId == oldCusId ? customerId = "" : null;
+                    }
                   }
-                }
-              },
-              maxLines: 1,
-              keyboardType: txtInputType,
-              // TextInputType.numberWithOptions(signed: true, decimal: true),
-              inputFormatters: [
-                txtInputType !=
-                        TextInputType.numberWithOptions(
-                            signed: true, decimal: true)
-                    ? FilteringTextInputFormatter.allow(
-                        RegExp(r'[ [a-zA-Z0-9]'))
-                    : FilteringTextInputFormatter.allow(RegExp(r'[[0-9]')),
-              ],
-              style: TextStyle(fontSize: 15),
-              cursorColor: Colors.red,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                ),
-                labelText: tittle,
-                labelStyle: TextStyle(color: Colors.black54),
-                contentPadding: EdgeInsets.only(top: 14, left: 10),
-                //Sau khi click vào "Nhập tiêu đề" thì màu viền sẽ đổi
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Color(0xFF0BB791),
+                },
+                maxLines: 1,
+                keyboardType: txtInputType,
+                // TextInputType.numberWithOptions(signed: true, decimal: true),
+                inputFormatters: [
+                  txtInputType !=
+                          TextInputType.numberWithOptions(
+                              signed: true, decimal: true)
+                      ? FilteringTextInputFormatter.allow(
+                          RegExp(r'[ [a-zA-Z0-9]'))
+                      : FilteringTextInputFormatter.allow(RegExp(r'[[0-9]')),
+                ],
+                style: TextStyle(fontSize: 15),
+                cursorColor: Colors.red,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
                   ),
-                ),
-                //Hiển thị Icon góc phải
-                suffixIcon: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      if (tittle == "Điện thoại") {
-                        phoneNewCustomer = "";
-                      }
-                    });
-                    controller.clear;
-                  },
-                  icon: Icon(icon),
-                  color: Colors.black54,
-                ),
+                  labelText: tittle,
+                  labelStyle: TextStyle(color: Colors.black54),
+                  contentPadding: EdgeInsets.only(top: 14, left: 10),
+                  //Sau khi click vào "Nhập tiêu đề" thì màu viền sẽ đổi
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color(0xFF0BB791),
+                    ),
+                  ),
+                  //Hiển thị Icon góc phải
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        if (tittle == "Điện thoại") {
+                          phoneNewCustomer = "";
+                        }
+                      });
+                      controller.clear;
+                    },
+                    icon: Icon(icon),
+                    color: Colors.black54,
+                  ),
 
-                //Hiển thị lỗi
-                focusedErrorBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.redAccent),
+                  //Hiển thị lỗi
+                  focusedErrorBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.redAccent),
+                  ),
+                  //Nhận thông báo lỗi
+                  errorText: error,
                 ),
-                //Nhận thông báo lỗi
-                errorText: error,
               ),
             ),
           );
@@ -423,7 +474,7 @@ class _AddProductPageState extends State<AddProductPage> {
     switch (type) {
       case "phone":
         phoneNewCustomer = value.trim();
-        infomationCustomer = await getDataCustomerFromPhone(context,value);
+        infomationCustomer = await getDataCustomerFromPhone(context, value);
         setState(() {
           if (infomationCustomer == null) {
             // ignore: unnecessary_statements

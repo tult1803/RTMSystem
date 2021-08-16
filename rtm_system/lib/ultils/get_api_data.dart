@@ -101,7 +101,7 @@ Future post_put_ApiProfile(
     } else {
       PutUpdateProfile _putUpdate = PutUpdateProfile();
       status = await _putUpdate.updateProfile(
-          prefs.get("access_token"), fullname, gender, birthday);
+          prefs.get("access_token"), accountId,fullname, gender, birthday);
     }
   } else {
     PostCreateCustomer _createCustomer = PostCreateCustomer();
@@ -310,6 +310,7 @@ Future<void> doConfirmOrAcceptOrRejectInvoice(BuildContext context,
                       productId: element.productId,
                       savePrice: "${element.price}",
                       storeId: element.storeId,
+                      productType: element.productType,
                       isCustomer: false,
                       isChangeData: true,
                       widgetToNavigator: widgetToNavigator,

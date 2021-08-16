@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 class PutUpdateProfile {
   updateProfile(
       String token,
+      String accountId,
       String fullName,
       int gender,
       String birthday) async {
@@ -17,12 +18,12 @@ class PutUpdateProfile {
         'Authorization': 'Bearer $token',
       },
       body: jsonEncode(<String, dynamic>{
+        "account_id": accountId,
         "fullname": fullName,
         "gender": gender,
         "birthday": birthday,
       }),
     );
-
     print("Status putAPI Update Account:${response.statusCode}");
     return response.statusCode;
   }
