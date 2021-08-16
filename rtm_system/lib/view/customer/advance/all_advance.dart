@@ -33,7 +33,7 @@ class _AdvancePageState extends State<AdvancePage>
     super.initState();
     //tab 1: yeu cau
     _tabController = TabController(
-        length: 4,
+        length: 5,
         vsync: this,
         initialIndex:
             widget.index == null ? _index = 0 : _index = widget.index);
@@ -60,7 +60,7 @@ class _AdvancePageState extends State<AdvancePage>
     InfomationCustomer infomationCustomer = InfomationCustomer();
     // Đỗ dữ liệu lấy từ api
     infomationCustomer =
-        await getAPIProfileCustomer.getProfileCustomer(token, phone);
+        await getAPIProfileCustomer.getProfileCustomer(context,token, phone);
     setState(() {
       level = infomationCustomer.level;
     });
@@ -85,7 +85,7 @@ class _AdvancePageState extends State<AdvancePage>
 
   Widget bottomTabBar() {
     return TabBar(
-      labelPadding: EdgeInsets.symmetric(horizontal: 7.0),
+      labelPadding: EdgeInsets.symmetric(horizontal: 12.0),
       indicatorColor: primaryColor,
       isScrollable: true,
       labelColor: Colors.white,
@@ -99,10 +99,13 @@ class _AdvancePageState extends State<AdvancePage>
           text: 'Đã duyệt',
         ),
         Tab(
-          text: 'Huỷ bỏ',
+          text: 'Lịch sử giao dịch',
         ),
         Tab(
-          text: 'Lịch sử giao dịch',
+          text: 'Hết hạn',
+        ),
+        Tab(
+          text: 'Huỷ bỏ',
         ),
       ],
     );
@@ -117,10 +120,12 @@ class _AdvancePageState extends State<AdvancePage>
         containerAdvance(size.height, 4),
         //Show advance được chấp nhận, đã mượn
         containerAdvance(size.height, 8),
-        //Show advance bị từ chối
-        containerAdvance(size.height, 6),
         //show advance đã trả
         containerAdvanceHistory(size.height, 8),
+        //show advance hết hạn
+        containerAdvance(size.height, 7),
+        //Show advance bị từ chối
+        containerAdvance(size.height, 6),
       ],
     );
   }
@@ -156,7 +161,7 @@ class _AdvancePageState extends State<AdvancePage>
   }
 
   Widget showFloatBtn(index) {
-    if (index == 1 || index == 3) {
+    if (index == 1) {
       return FloatingActionButton.extended(
         onPressed: () {
           Navigator.push(

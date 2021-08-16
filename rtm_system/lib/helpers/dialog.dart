@@ -132,7 +132,7 @@ showStatusAlertDialog(
   );
 }
 
-Future showCupertinoAlertDialog(BuildContext context, String content) {
+Future showCupertinoAlertDialog(BuildContext context, String content, {bool isPush, Widget widget}) {
   return showDialog(
       context: context,
       builder: (_) => new CupertinoAlertDialog(
@@ -145,7 +145,8 @@ Future showCupertinoAlertDialog(BuildContext context, String content) {
                   style: TextStyle(color: welcome_color),
                 ),
                 onPressed: () {
-                  Navigator.of(context).pop();
+                  isPush == null ? Navigator.of(context).pop()
+                  :  Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context)=>widget), (route) => false);
                 },
               )
             ],

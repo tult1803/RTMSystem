@@ -1,13 +1,15 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:rtm_system/model/model_all_notice.dart';
+import 'package:rtm_system/ultils/check_data.dart';
 import 'package:rtm_system/ultils/src/url_api.dart';
 
 class GetAPIAllNotice {
   static int status;
   // ?pageNum=13&pageNo=1
-  Future<Notice> getNotices(String token, int pageNum, int pageNo, {String searchTerm}) async {
+  Future<Notice> getNotices(BuildContext context, String token, int pageNum, int pageNo, {String searchTerm}) async {
     final response =  await http.get(
       //Link khi ra: 'http://3.137.137.156:5000/api/rtm/v1/notice/get-notice-list?pageNum=14&pageNo=1'
       // { "pageNum" : "14", "pageNo" : "1" } sẽ thay cho dấu ? và & khi parse
@@ -23,13 +25,8 @@ class GetAPIAllNotice {
       status = 200;
       return Notice.fromJson(jsonDecode(response.body));
     } else {
+      checkTimeToken(context, response.statusCode);
       throw Exception('Failed to load data');
     }
   }
-
-  static String _buildSearchTermQuery(String searchTerm) =>
-      searchTerm != null && searchTerm.isNotEmpty
-          ? 'name=${searchTerm.replaceAll(' ', '+').toLowerCase()}'
-          : '';
-
 }

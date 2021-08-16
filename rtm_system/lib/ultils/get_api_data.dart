@@ -101,7 +101,7 @@ Future post_put_ApiProfile(
     } else {
       PutUpdateProfile _putUpdate = PutUpdateProfile();
       status = await _putUpdate.updateProfile(
-          prefs.get("access_token"), fullname, gender, birthday);
+          prefs.get("access_token"), accountId,fullname, gender, birthday);
     }
   } else {
     PostCreateCustomer _createCustomer = PostCreateCustomer();
@@ -310,6 +310,7 @@ Future<void> doConfirmOrAcceptOrRejectInvoice(BuildContext context,
                       productId: element.productId,
                       savePrice: "${element.price}",
                       storeId: element.storeId,
+                      productType: element.productType,
                       isCustomer: false,
                       isChangeData: true,
                       widgetToNavigator: widgetToNavigator,
@@ -331,7 +332,7 @@ Future<void> createRequestAdvance(BuildContext context, String accountId,
   int status;
   showEasyLoading(context, MSG052);
   // 1 is create request advance, 2 is accept advance
-  ImageService imageService = ImageService();
+  PostCreateAdvance imageService = PostCreateAdvance();
   status = await imageService.postCreateAdvance(
     prefs.get("access_token"),
     prefs.get("accountId"),
@@ -353,7 +354,7 @@ Future<void> createRequestAdvance(BuildContext context, String accountId,
           ));
 }
 
-Future getDataCustomerFromPhone(String phone) async {
+Future getDataCustomerFromPhone(BuildContext context,String phone) async {
   try {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     GetAPIProfileCustomer getAPIProfileCustomer = GetAPIProfileCustomer();
@@ -363,7 +364,7 @@ Future getDataCustomerFromPhone(String phone) async {
       maskType: EasyLoadingMaskType.black,
     );
     infomationCustomer = await getAPIProfileCustomer.getProfileCustomer(
-        prefs.get('access_token'), phone);
+        context, prefs.get('access_token'), phone);
     EasyLoading.showSuccess("Thành công");
     await Future.delayed(Duration(milliseconds: 1000));
     EasyLoading.dismiss();

@@ -33,7 +33,7 @@ class _showAllProductState extends State<showAllProduct> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       GetProduct getProduct = GetProduct();
       dataList = await getProduct
-          .getProduct(prefs.getString("access_token"), "", type: 0, limit: 0);
+          .getProduct(context,prefs.getString("access_token"), "", type: 2, limit: 0);
       if(itemNameUpdatePrice.length < dataList.length) dataList.forEach((element) {
         itemNameUpdatePrice.add("${element["name"]}");
         itemPriceUpdatePrice.add("${element["update_price"]}");

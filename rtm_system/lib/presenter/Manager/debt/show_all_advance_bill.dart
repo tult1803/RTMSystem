@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:rtm_system/helpers/component.dart';
 import 'package:rtm_system/presenter/Manager/debt/showAdvanceBill.dart';
@@ -48,14 +47,13 @@ class _showAllBillState extends State<showAllBill>
     itemToSearch = "";
     super.dispose();
   }
-
-
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: titleAppBar("Ứng tiền"),
+        centerTitle: true,
         bottom: bottomAppBar(),
       ),
       body: Stack(

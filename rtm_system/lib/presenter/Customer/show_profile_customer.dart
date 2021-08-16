@@ -40,7 +40,7 @@ class _showProfileState extends State<showProfile> {
     String phone = sharedPreferences.getString('phone');
     password = sharedPreferences.getString('password');
     infomationCustomer =
-        await getAPIProfileCustomer.getProfileCustomer(token, phone);
+        await getAPIProfileCustomer.getProfileCustomer(context,token, phone);
 
     return infomationCustomer;
   }
@@ -127,7 +127,7 @@ class _showProfileState extends State<showProfile> {
         child: Center(
           child: SizedBox(
             child: CircularProgressIndicator(
-              color: welcome_color,
+              color: primaryColor,
             ),
             height: 35,
             width: 35,

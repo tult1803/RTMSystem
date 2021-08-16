@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:rtm_system/helpers/dialog.dart';
 import 'package:rtm_system/ultils/src/message_list.dart';
+import 'package:rtm_system/view/login/login_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'src/regExp.dart';
 
@@ -215,4 +217,12 @@ checkTypeProduct(type){
   if(type == 0){
      return "Mủ lỏng";
   }else return "Mủ đặc";
+}
+
+checkTimeToken(BuildContext context,int statusCode) async{
+  if (statusCode == 403) {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.clear();
+    showCupertinoAlertDialog(context, showMessage("", MSG061), widget: LoginPage(), isPush: true);
+  }
 }

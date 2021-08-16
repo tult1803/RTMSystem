@@ -1,16 +1,13 @@
 import 'dart:ui';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rtm_system/helpers/button.dart';
-import 'package:rtm_system/helpers/common_widget.dart';
 import 'package:rtm_system/model/model_advance_return_detail.dart';
 import 'package:rtm_system/model/model_invoice_request.dart';
 import 'package:rtm_system/ultils/check_data.dart';
 import 'package:rtm_system/ultils/get_api_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
-import 'package:rtm_system/view/customer/Profile/show_image_cmnd.dart';
 import 'package:rtm_system/view/manager/product/update_price_product_manager.dart';
 import '../ultils/get_data.dart';
 
@@ -401,16 +398,20 @@ Widget componentContainerDetailInvoice(BuildContext context,
         SizedBox(
           height: 10,
         ),
-        txtItemDetail(context, "Ngày khách hàng xác nhận",
-            "${getDateTime(customerConfirmDate)}"),
-        SizedBox(
-          height: 10,
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        txtItemDetail(
-            context, "Ngày hoá đơn có hiệu lực", "${getDateTime(activeDate)}"),
+        if (customerConfirmDate != null)
+          txtItemDetail(context, "Ngày khách hàng xác nhận",
+              "${getDateTime(customerConfirmDate)}"),
+        if (customerConfirmDate != null)
+          SizedBox(
+            height: 10,
+          ),
+        if (activeDate != null)
+          txtItemDetail(context, "Ngày hoá đơn có hiệu lực",
+              "${getDateTime(activeDate)}"),
+        if (activeDate != null)
+          SizedBox(
+            height: 10,
+          ),
         txtItemDetail(context, "Trạng thái", "${getStatus(status: statusId)}",
             colorContent: getColorStatus(status: statusId)),
         SizedBox(
@@ -485,7 +486,6 @@ Widget componentContainerDetailProduct(BuildContext context, Map item) {
     ),
   );
 }
-
 
 //Dùng cho các container nhỏ vd như trong trang quản lý khách hàng
 //Và đang dùng cho component "Mã" và "Trạng thái hóa đơn" trong quản lý hóa đơn
@@ -750,7 +750,7 @@ Widget componentContainerDetailAdvanceRequest(BuildContext context,
         ),
         if (activeStatus != null)
           txtItemDetail(context, "Tình trạng",
-              activeStatus == 5 ? "Chưa nhận tiền" : "Đã nhận tiền",
+              activeStatus == 5 ? "Chưa nhận tiền" : activeStatus==7? "${getStatus(status: activeStatus)}": "Đã nhận tiền",
               colorContent: getColorStatus(status: activeStatus)),
         SizedBox(
           height: 10,
@@ -1106,6 +1106,7 @@ Widget containerTextInProcess() {
     ),
   );
 }
+
 // /Dùng cho container icon trong quản lý  khách hàng
 Widget containerIconCustomer({
   IconData icon,
@@ -1135,12 +1136,14 @@ Widget containerIconCustomer({
     ),
     alignment: alignment,
     child: Padding(
-      padding: EdgeInsets.only(
-          left: paddingLeftOfText == null ? 0 : paddingLeftOfText,
-          right: paddingRightOfText == null ? 0 : paddingRightOfText,
-          bottom: paddingBottomOfText == null ? 0 : paddingBottomOfText,
-          top: paddingTopOfText == null ? 0 : paddingTopOfText),
-      child: Icon(icon, color: color,)
-    ),
+        padding: EdgeInsets.only(
+            left: paddingLeftOfText == null ? 0 : paddingLeftOfText,
+            right: paddingRightOfText == null ? 0 : paddingRightOfText,
+            bottom: paddingBottomOfText == null ? 0 : paddingBottomOfText,
+            top: paddingTopOfText == null ? 0 : paddingTopOfText),
+        child: Icon(
+          icon,
+          color: color,
+        )),
   );
 }

@@ -36,7 +36,7 @@ class _InvoiceTabState extends State<InvoiceTab> with TickerProviderStateMixin {
     String phone = sharedPreferences.getString('phone');
     // Đỗ dữ liệu lấy từ api
     infomationCustomer =
-        await getAPIProfileCustomer.getProfileCustomer(token, phone);
+        await getAPIProfileCustomer.getProfileCustomer(context,token, phone);
     if (infomationCustomer != null) {
       setState(() {
         level = infomationCustomer.level;
@@ -66,7 +66,6 @@ class _InvoiceTabState extends State<InvoiceTab> with TickerProviderStateMixin {
         "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
     getToDate = "${getDateTime("$toDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
   }
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -36,6 +36,7 @@ class showInvoiceManagerState extends State<showInvoiceManager> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       GetInvoice getAPIAllInvoice = GetInvoice();
       invoice = await getAPIAllInvoice.getInvoice(
+        context,
         prefs.get("access_token"),
         "",
         //Customer Id: truyền 0 là get All cho manager

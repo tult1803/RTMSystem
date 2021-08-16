@@ -1,28 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:rtm_system/helpers/common_widget.dart';
 import 'package:rtm_system/helpers/component.dart';
+import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
-
 class DetailOfNotice extends StatefulWidget {
-  final String titleNotice ,contentNotice;
+  final String titleNotice, contentNotice;
   final String noticeId;
   // true is Customer. Used to hide the button  in page of manager.
   final bool isCustomer;
 
-
-  DetailOfNotice({this.titleNotice, this.contentNotice, this.noticeId, this.isCustomer});
+  DetailOfNotice(
+      {this.titleNotice, this.contentNotice, this.noticeId, this.isCustomer});
 
   @override
   _DetailOfNoticeState createState() => _DetailOfNoticeState();
 }
 
 String token;
-class _DetailOfNoticeState extends State<DetailOfNotice> {
 
+class _DetailOfNoticeState extends State<DetailOfNotice> {
   Future _getToken() async {
-    SharedPreferences prefs =  await SharedPreferences.getInstance();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       token = prefs.get("access_token");
     });
@@ -33,9 +32,17 @@ class _DetailOfNoticeState extends State<DetailOfNotice> {
     super.initState();
     _getToken();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(0.0),
+        child: AppBar(
+          backgroundColor: primaryColor,
+          elevation: 0,
+        ),
+      ),
       body: SafeArea(
         child: Stack(
           alignment: Alignment.bottomCenter,
@@ -58,7 +65,7 @@ class _DetailOfNoticeState extends State<DetailOfNotice> {
                       StretchMode.blurBackground,
                       StretchMode.fadeTitle,
                     ],
-                    background:  Image(
+                    background: Image(
                       image: AssetImage("images/notice_detail.png"),
                       fit: BoxFit.cover,
                     ),
@@ -66,7 +73,7 @@ class _DetailOfNoticeState extends State<DetailOfNotice> {
                 ),
                 SliverList(
                   delegate: SliverChildBuilderDelegate(
-                        (BuildContext context, int index) {
+                    (BuildContext context, int index) {
                       return Container(
                         margin: EdgeInsets.all(10),
                         child: ListTile(
@@ -90,16 +97,16 @@ class _DetailOfNoticeState extends State<DetailOfNotice> {
                 ),
               ],
             ),
-            if(!widget.isCustomer)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 30.0),
-              child: btnDeactivateCustomer(
-                  token: "$token",
-                  context: context,
-                  status: "1",
-                  isDeactivateNotice: true,
-                  deactivateId:  this.widget.noticeId),
-            ),
+            if (!widget.isCustomer)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 30.0),
+                child: btnDeactivateCustomer(
+                    token: "$token",
+                    context: context,
+                    status: "1",
+                    isDeactivateNotice: true,
+                    deactivateId: this.widget.noticeId),
+              ),
           ],
         ),
       ),

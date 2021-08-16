@@ -188,6 +188,7 @@ class _ProgressButtonState extends State<ProgressButton>
 void checkSaveLogin(BuildContext context) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   print('Role: ${prefs.getInt("role_id")}');
+  print(prefs.get("access_token"));
   try {
     if (prefs.getInt("role_id") == 3 && prefs.getBool("isLogin") == true) {
       Navigator.pushAndRemoveUntil(

@@ -28,7 +28,7 @@ class _showAdvanceRequestPageState extends State<showAdvanceRequestPage> {
   int _pageSize = 1;
   final PagingController _pagingController = PagingController(firstPageKey: 10);
   AdvanceRequest advanceRequest;
-int totalAdvance = 0;
+  int totalAdvance = 0;
   GetAPIProfileCustomer getAPIProfileCustomer = GetAPIProfileCustomer();
   InfomationCustomer infomationCustomer = InfomationCustomer();
   Future<void> _fetchPage(pageKey) async {
@@ -61,6 +61,7 @@ int totalAdvance = 0;
       _pagingController.error = error;
     }
   }
+
 //get total advance
   Future getAPIProfile() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
@@ -68,7 +69,7 @@ int totalAdvance = 0;
     String phone = sharedPreferences.getString('phone');
     // Đỗ dữ liệu lấy từ api
     infomationCustomer =
-        await getAPIProfileCustomer.getProfileCustomer(token, phone);
+        await getAPIProfileCustomer.getProfileCustomer(context, token, phone);
     if (infomationCustomer != null) {
       setState(() {
         totalAdvance = infomationCustomer.advance;
@@ -159,13 +160,15 @@ int totalAdvance = 0;
                                 return boxForAdvance(
                                     context: context,
                                     id: item.id,
-                                    status: item.statusId,
+                                    status: item.acceptStatusId,
+                                    statusAdvances: item.statusId,
                                     createDate: "${item.createDate}",
                                     amount: "${item.amount}",
                                     storeId: item.storeId,
                                     name: item.customerName,
                                     receiveDate: item.receiveDate,
-                                    isCheck: item.doneDate == null? false: true,
+                                    isCheck:
+                                        item.doneDate == null ? false : true,
                                     widget: FormForDetailPage(
                                       tittle: "Chi tiết ứng tiền",
                                       bodyPage: DetailAdvancePage(
@@ -175,8 +178,7 @@ int totalAdvance = 0;
                                         isRequest: false,
                                       ),
                                     ),
-                                    isCustomer: true
-                                );
+                                    isCustomer: true);
                               }),
                         ),
                       ],
@@ -190,15 +192,16 @@ int totalAdvance = 0;
       ),
     );
   }
-   Widget noItemsFoundIndicatorBuilder() {
+
+  Widget noItemsFoundIndicatorBuilder() {
     return Column(
       children: [
         firstPageErrorIndicatorBuilder(context,
-            tittle:  showMessage("", MSG008)),
+            tittle: showMessage("", MSG008)),
         GestureDetector(
           onTap: () => _pagingController.refresh(),
           child: Text(
-             showMessage('', MSG027),
+            showMessage('', MSG027),
             style: TextStyle(color: welcome_color, fontSize: 18),
           ),
         ),

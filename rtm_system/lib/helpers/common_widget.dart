@@ -547,6 +547,7 @@ Widget boxForAdvance({
   String receiveDate,
   String imageUrl,
   int status,
+  int statusAdvances,
   Widget widget,
   bool isCheck
 }) {
@@ -562,24 +563,30 @@ Widget boxForAdvance({
     dateReceiveAfterFormat = "$receiveDate";
   }
   String titleStatus;
-  Color statusAdvance;
+  Color colorStatusAdvance;
   if (isCheck) {
     titleStatus = "Đã mượn";
-    statusAdvance = Colors.orangeAccent;
+    colorStatusAdvance = Colors.orangeAccent;
   } else {
-    if (status == 6) {
+    if(statusAdvances == 8){
+    if (status == 7) {
       titleStatus = getStatus(status: status);
-      statusAdvance = getColorStatus(status: status);
+      colorStatusAdvance = getColorStatus(status: status);
       getColorStatus(status: status);
     } else if (status == 4) {
       titleStatus = getStatus(status: status);
-      statusAdvance = getColorStatus(status: status);
+      colorStatusAdvance = getColorStatus(status: status);
       getColorStatus(status: status);
     } else {
       titleStatus = "Đã duyệt";
-      statusAdvance = getColorStatus(status: 8);
+      colorStatusAdvance = getColorStatus(status: 8);
       getColorStatus(status: status);
     }
+    } else {
+      titleStatus = getStatus(status: statusAdvances);
+      colorStatusAdvance = getColorStatus(status: statusAdvances);
+    }
+    
   } 
   return GestureDetector(
     onTap: () => Navigator.of(context)
@@ -618,7 +625,7 @@ Widget boxForAdvance({
                     paddingRightOfText: 10,
                     tittle: titleStatus,
                     fontWeight: FontWeight.w600,
-                    color: statusAdvance),
+                    color: colorStatusAdvance),
               ),
             ],
           ),
@@ -1066,7 +1073,7 @@ Widget boxForAdvanceHistory({
                       alignment: Alignment.topLeft,
                       paddingLeftOfText: 10,
                       paddingRightOfText: 10,
-                      tittle: "Số tiền vay",
+                      tittle: isAdvance? "Số tiền vay": "Tổng tiền",
                     ),
                     SizedBox(
                       height: 10,
@@ -1087,7 +1094,7 @@ Widget boxForAdvanceHistory({
                           alignment: Alignment.topLeft,
                           paddingLeftOfText: 10,
                           paddingRightOfText: 10,
-                          tittle: "Số tiền trả lại",
+                          tittle: "Tiền hoàn trả",
                         ),
                         SizedBox(
                           height: 10,
