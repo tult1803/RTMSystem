@@ -112,8 +112,8 @@ class _showStoreState extends State<showStore> {
         GestureDetector(
           onTap: () => _pagingController.refresh(),
           child: Text(
-            "Nhấn để tải lại",
-            style: TextStyle(color: welcome_color, fontSize: 18),
+            "$MSG027",
+            style: TextStyle(color: primaryColor, fontSize: 18),
           ),
         ),
       ],

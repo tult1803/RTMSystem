@@ -332,7 +332,7 @@ Future<void> createRequestAdvance(BuildContext context, String accountId,
   int status;
   showEasyLoading(context, MSG052);
   // 1 is create request advance, 2 is accept advance
-  ImageService imageService = ImageService();
+  PostCreateAdvance imageService = PostCreateAdvance();
   status = await imageService.postCreateAdvance(
     prefs.get("access_token"),
     prefs.get("accountId"),

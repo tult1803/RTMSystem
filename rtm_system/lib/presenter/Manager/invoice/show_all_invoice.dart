@@ -103,7 +103,7 @@ class _showAllInvoiceState extends State<showAllInvoice>
         Tab(text: "Đang xử lý"),
         Tab(text: "Ký gửi"),
         Tab(text: "Hoàn thành"),
-        Tab(text: "Từ chối"),
+        Tab(text: "Huỷ bỏ"),
       ],
     );
   }

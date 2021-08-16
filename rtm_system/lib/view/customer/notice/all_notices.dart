@@ -28,7 +28,7 @@ class _NoticesPageState extends State<NoticesPage> {
             topRight: Radius.circular(15.0),
           ),
         ),
-        child: new showNotice(),
+        child: showNotice(),
       ),
     );
   }
