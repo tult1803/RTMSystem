@@ -47,9 +47,7 @@ class _showAllBillState extends State<showAllBill>
     itemToSearch = "";
     super.dispose();
   }
-
-
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(

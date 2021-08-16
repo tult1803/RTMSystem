@@ -127,7 +127,7 @@ class _showProfileState extends State<showProfile> {
         child: Center(
           child: SizedBox(
             child: CircularProgressIndicator(
-              color: welcome_color,
+              color: primaryColor,
             ),
             height: 35,
             width: 35,

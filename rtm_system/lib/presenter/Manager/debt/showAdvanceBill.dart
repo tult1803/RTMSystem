@@ -119,7 +119,8 @@ class showAdvancceBillManagerState extends State<showAdvancceBillManager> {
                   return boxForAdvance(
                          context: context,
                          id: item.id,
-                         status: item.statusId,
+                         status: item.acceptStatusId,
+                         statusAdvances: item.statusId,
                          createDate: "${item.createDate}",
                          amount: "${item.amount}",
                          storeId: item.storeId,

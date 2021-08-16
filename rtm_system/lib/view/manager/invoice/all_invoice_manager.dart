@@ -14,7 +14,7 @@ class _AllInvoiceState extends State<AllInvoice> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: new showAllInvoice(index: this.widget.index,),
+      body: showAllInvoice(index: this.widget.index,),
       floatingActionButton: new FloatingActionButton(
         onPressed: () => Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => AddProductPage(

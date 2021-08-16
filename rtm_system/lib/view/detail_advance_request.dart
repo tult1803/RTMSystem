@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:rtm_system/model/get/getAPI_customer_phone.dart';
 import 'package:rtm_system/model/get/getAdvanceDetail.dart';
 import 'package:rtm_system/model/model_AdvanceDetail.dart';
 import 'package:rtm_system/helpers/common_widget.dart';
 import 'package:rtm_system/helpers/component.dart';
-import 'package:rtm_system/model/model_profile_customer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DetailAdvancePage extends StatefulWidget {
@@ -33,21 +31,6 @@ class _DetailAdvancePageState extends State<DetailAdvancePage> {
   @override
   void initState() {
     super.initState();
-    getAPIProfile();
-  }
-
-  Future getAPIProfile() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    String token = sharedPreferences.getString('access_token');
-    GetAPIProfileCustomer getAPIProfileCustomer = GetAPIProfileCustomer();
-    InfomationCustomer infomationCustomer = InfomationCustomer();
-    // Đỗ dữ liệu lấy từ api
-    infomationCustomer =
-        await getAPIProfileCustomer.getProfileCustomer(context,token, widget.phoneCustomer);
-    setState(() {
-      imageUrl = infomationCustomer.cmndFront;
-    });
-    return infomationCustomer;
   }
 
   Future getDetail() async {
@@ -91,6 +74,9 @@ class _DetailAdvancePageState extends State<DetailAdvancePage> {
               ),
             ),
           );
+        } 
+        else if(snapshot.hasError){
+          return showErrorLoadData();
         }
         return Container(
             height: size.height,

@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:rtm_system/ultils/src/url_api.dart';
 
-class ImageService{
+class PostCreateAdvance{
   postCreateAdvance(token, userId, storeId, money, reason, receiveDate) async {
     String fomatMoney = money.replaceAll(',','');
     int parseMoney = int.parse(fomatMoney);

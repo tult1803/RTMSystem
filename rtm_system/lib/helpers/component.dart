@@ -750,7 +750,7 @@ Widget componentContainerDetailAdvanceRequest(BuildContext context,
         ),
         if (activeStatus != null)
           txtItemDetail(context, "Tình trạng",
-              activeStatus == 5 ? "Chưa nhận tiền" : "Đã nhận tiền",
+              activeStatus == 5 ? "Chưa nhận tiền" : activeStatus==7? "${getStatus(status: activeStatus)}": "Đã nhận tiền",
               colorContent: getColorStatus(status: activeStatus)),
         SizedBox(
           height: 10,

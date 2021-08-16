@@ -12,7 +12,7 @@ class _AllDebtState extends State<AllDebt> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: new showAllBill(),
+      body: showAllBill(),
     );
   }
 }
