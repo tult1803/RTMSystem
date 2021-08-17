@@ -47,14 +47,11 @@ Widget bottomHomeBar(BuildContext context) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
-      Flexible(
-          child: Container(
-        height: 10,
-      )),
       miniIconTextContainer(
         context,
+        marginLeft: 10,
         height: 80,
-        width: 80,
+        width: 90,
         borderRadius: 10,
         colorContainer: Colors.white,
         tittle: "Cập nhật",
@@ -70,7 +67,7 @@ Widget bottomHomeBar(BuildContext context) {
       ),
       Flexible(
           child: Container(
-        height: 10,
+            height: 1,
       )),
       miniIconTextContainer(
         context,
@@ -87,8 +84,8 @@ Widget bottomHomeBar(BuildContext context) {
       ),
       Flexible(
           child: Container(
-        height: 10,
-      )),
+            height: 1,
+          )),
       miniIconTextContainer(context,
           height: 80,
           width: 80,
@@ -108,11 +105,12 @@ Widget bottomHomeBar(BuildContext context) {
           )),
       Flexible(
           child: Container(
-        height: 10,
+        height: 1,
       )),
       miniIconTextContainer(context,
+          marginRight: 10,
           height: 80,
-          width: 80,
+          width: 100,
           borderRadius: 10,
           colorContainer: Colors.white,
           tittle: "Khách hàng",
@@ -125,10 +123,6 @@ Widget bottomHomeBar(BuildContext context) {
               widgetToNavigator: HomeAdminPage(
             index: 0,
           ))),
-      Flexible(
-          child: Container(
-        height: 10,
-      )),
     ],
   );
 }

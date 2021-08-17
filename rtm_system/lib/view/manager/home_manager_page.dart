@@ -59,38 +59,40 @@ class _HomeAdminPageState extends State<HomeAdminPage> {
       body: _widget,
       bottomNavigationBar: SafeArea(
         bottom: true,
-        child: CurvedNavigationBar(
-          key: _bottomNavigationKey,
-          index: _index,
-          height: 40.0,
-          items: <Widget>[
-            Icon(Icons.home_outlined, size: 30),
-            Icon(Icons.my_library_books_outlined, size: 30),
-            Icon(Icons.monetization_on_outlined, size: 30),
-            Icon(Icons.notifications_none, size: 30),
-            Icon(Icons.people_rounded, size: 30),
-          ],
-          color: Colors.white,
-          buttonBackgroundColor: welcome_color,
-          backgroundColor: Colors.white,
-          animationCurve: Curves.easeInOut,
-          animationDuration: Duration(milliseconds: 600),
-          onTap: (index) {
-            setState(() {
-              if (index == 0) {
-                _widget = AllProduct();
-              } else if (index == 1) {
-                _widget = AllInvoice();
-              } else if (index == 2) {
-                _widget = AllDebt();
-              } else if (index == 3) {
-                _widget = AllNotice();
-              } else if (index == 4) {
-                _widget = ProfileManager();
-              }
-            });
-          },
-          letIndexChange: (index) => true,
+        child: SafeArea(
+          child: CurvedNavigationBar(
+            key: _bottomNavigationKey,
+            index: _index,
+            // height: 40.0,
+            items: <Widget>[
+              Icon(Icons.home_outlined, size: 30),
+              Icon(Icons.my_library_books_outlined, size: 30),
+              Icon(Icons.monetization_on_outlined, size: 30),
+              Icon(Icons.notifications_none, size: 30),
+              Icon(Icons.people_rounded, size: 30),
+            ],
+            color: Colors.white,
+            buttonBackgroundColor: welcome_color,
+            backgroundColor: Colors.white,
+            animationCurve: Curves.easeInOut,
+            animationDuration: Duration(milliseconds: 600),
+            onTap: (index) {
+              setState(() {
+                if (index == 0) {
+                  _widget = AllProduct();
+                } else if (index == 1) {
+                  _widget = AllInvoice();
+                } else if (index == 2) {
+                  _widget = AllDebt();
+                } else if (index == 3) {
+                  _widget = AllNotice();
+                } else if (index == 4) {
+                  _widget = ProfileManager();
+                }
+              });
+            },
+            letIndexChange: (index) => true,
+          ),
         ),
       ),
     );
