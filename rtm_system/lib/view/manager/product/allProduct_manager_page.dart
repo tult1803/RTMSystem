@@ -67,7 +67,7 @@ Widget bottomHomeBar(BuildContext context) {
       ),
       Flexible(
           child: Container(
-            height: 1,
+            width: 5,
       )),
       miniIconTextContainer(
         context,
@@ -84,7 +84,7 @@ Widget bottomHomeBar(BuildContext context) {
       ),
       Flexible(
           child: Container(
-            height: 1,
+            width: 5,
           )),
       miniIconTextContainer(context,
           height: 80,
@@ -105,7 +105,7 @@ Widget bottomHomeBar(BuildContext context) {
           )),
       Flexible(
           child: Container(
-        height: 1,
+            width: 5,
       )),
       miniIconTextContainer(context,
           marginRight: 10,
