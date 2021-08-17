@@ -49,7 +49,7 @@ Widget bottomHomeBar(BuildContext context) {
     children: [
       miniIconTextContainer(
         context,
-        marginLeft: 10,
+        marginLeft: 5,
         height: 80,
         width: 90,
         borderRadius: 10,
@@ -108,9 +108,9 @@ Widget bottomHomeBar(BuildContext context) {
             width: 5,
       )),
       miniIconTextContainer(context,
-          marginRight: 10,
+          marginRight: 5,
           height: 80,
-          width: 100,
+          width: 95,
           borderRadius: 10,
           colorContainer: Colors.white,
           tittle: "Khách hàng",
