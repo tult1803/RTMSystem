@@ -52,7 +52,7 @@ String MSG045 = "Tải thông tin thất bại";
 String MSG046 = "Số tiền không vượt quá 50.000.000 VND";
 String MSG047 = "Số tiền không vượt quá 100.000.000 VND";
 String MSG048 = "Hạn mức tối đa 50.000.000 VND";
-String MSG049 = "Hạn mức tối đa 100.000.000 VND";
+String MSG049 = "Hạn mức tối đa 200.000.000 VND";
 /// =====================
 String MSG050 = "Kiểm tra lại thông tin";
 String MSG051 = "Kiểm tra lại";

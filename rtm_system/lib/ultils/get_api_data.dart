@@ -487,7 +487,7 @@ Future<void> putReturnAdvance(BuildContext context, List<String> invoiceId,
         prefs.get("access_token"), invoiceId, advanceId);
     if (status == 200) {
       showEasyLoadingSuccess(context, showMessage("", MSG019),
-          widget: HomeCustomerPage(index: 2, indexAdvance: 3,));
+          widget: HomeCustomerPage(index: 2, indexAdvance: 2,));
     } else
       showEasyLoadingError(context, showMessage("", MSG025), widget:HomeCustomerPage(index: 2, indexAdvance: 1,) );
   } else {
