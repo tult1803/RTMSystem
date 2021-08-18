@@ -27,6 +27,8 @@ class _AdvancePageState extends State<AdvancePage>
   String getFromDate, getToDate;
   int _selectedIndex, _index;
   int level = 0;
+  int maxAdvance = 0;
+  int maxAdvanceRequest = 0;
 
   @override
   void initState() {
@@ -63,6 +65,8 @@ class _AdvancePageState extends State<AdvancePage>
         await getAPIProfileCustomer.getProfileCustomer(context,token, phone);
     setState(() {
       level = infomationCustomer.level;
+      maxAdvance = infomationCustomer.maxAdvance;
+      maxAdvanceRequest = infomationCustomer.maxAdvanceRequest;
     });
     return infomationCustomer;
   }
@@ -189,6 +193,8 @@ class _AdvancePageState extends State<AdvancePage>
             MaterialPageRoute(
                 builder: (context) => CreateRequestAdvance(
                       levelCustomer: level,
+                      maxAdvance: maxAdvance,
+                      maxAdvanceRequest: maxAdvanceRequest,
                     )),
           );
         },
