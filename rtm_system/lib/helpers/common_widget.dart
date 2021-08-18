@@ -566,7 +566,8 @@ Widget boxForAdvance({
   Color colorStatusAdvance;
   if (isCheck) {
     titleStatus = "Đã mượn";
-    colorStatusAdvance = Colors.orangeAccent;
+    colorStatusAdvance = getColorStatus(status: 8);
+    
   } else {
     if(statusAdvances == 8){
     if (status == 7) {
@@ -579,7 +580,7 @@ Widget boxForAdvance({
       getColorStatus(status: status);
     } else {
       titleStatus = "Đã duyệt";
-      colorStatusAdvance = getColorStatus(status: 8);
+      colorStatusAdvance = Colors.orangeAccent;
       getColorStatus(status: status);
     }
     } else {
@@ -1015,7 +1016,7 @@ Widget boxForAdvanceHistory({
     statusAdvance = getColorStatus(status: 9);
   } else {
     titleStatus = "Đã mượn";
-    statusAdvance = getColorStatus(status: 4);
+    statusAdvance = Colors.orangeAccent;
   }
   return GestureDetector(
     onTap: () => Navigator.of(context)
