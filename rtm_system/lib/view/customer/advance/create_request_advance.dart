@@ -33,6 +33,8 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
   List<StoreElement> dataListStore;
   String _myStore, reason = '';
   int totalAdvance = 0;
+  int maxAdvance = 0;
+  int maxAdvanceRequest = 0;
 
   Future _getStore() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -66,6 +68,8 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
     if (informationCustomer != null) {
       setState(() {
         totalAdvance = informationCustomer.advance;
+        maxAdvance = informationCustomer.maxAdvance;
+        maxAdvanceRequest = informationCustomer.maxAdvanceRequest;
       });
     }
     return informationCustomer;
@@ -148,7 +152,7 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
         int valueMoney = int.parse(moneyJoin);
         int checkMoney = valueMoney + totalAdvance;
         if (widget.levelCustomer == 1) {
-          if (checkMoney > 50000000) {
+          if (checkMoney > maxAdvance) {
             showEasyLoadingError(context,  showMessage("", MSG048));
           } else {
             Navigator.push(
@@ -162,7 +166,7 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
             );
           }
         } else if (widget.levelCustomer == 2) {
-          if (checkMoney > 100000000) {
+          if (checkMoney > maxAdvance) {
             showEasyLoadingError(context,  showMessage("", MSG049));
           } else {
             Navigator.push(
@@ -251,11 +255,11 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
                 // số tiền phải là từ 100 trở lên
                 return showMessage('', MSG006);
               } else if (widget.levelCustomer == 1) {
-                if (valueMoney > 50000000) {
+                if (valueMoney > maxAdvanceRequest) {
                   return showMessage('', MSG046);
                 }
               } else if (widget.levelCustomer == 2) {
-                if (valueMoney > 100000000) {
+                if (valueMoney > maxAdvanceRequest) {
                   return showMessage('', MSG047);
                 }
               }

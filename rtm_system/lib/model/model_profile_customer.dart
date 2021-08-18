@@ -14,6 +14,8 @@ class InfomationCustomer {
         this.cmndFront,
         this.cmndBack,
         this.needConfirm,
+        this.maxAdvance,
+        this.maxAdvanceRequest,
     });
 
     int id;
@@ -30,6 +32,8 @@ class InfomationCustomer {
     String cmndFront;
     String cmndBack;
     bool needConfirm;
+    int maxAdvance;
+    int maxAdvanceRequest;
 
     factory InfomationCustomer.fromJson(Map<String, dynamic> json) => InfomationCustomer(
         id: json["id"],
@@ -46,6 +50,8 @@ class InfomationCustomer {
         cmndFront: json["cmndFront"],
         cmndBack: json["cmndBack"],
         needConfirm: json["need_confirm"],
+        maxAdvance: json["max_advance"],
+        maxAdvanceRequest: json["max_advance_request"],
     );
 
 }
