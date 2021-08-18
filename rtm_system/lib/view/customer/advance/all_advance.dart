@@ -29,6 +29,7 @@ class _AdvancePageState extends State<AdvancePage>
   int level = 0;
   int maxAdvance = 0;
   int maxAdvanceRequest = 0;
+  int totalAdvance = 0;
 
   @override
   void initState() {
@@ -54,6 +55,7 @@ class _AdvancePageState extends State<AdvancePage>
           "${getDateTime("$toDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
     });
   }
+
   Future getAPIProfile() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     String token = sharedPreferences.getString('access_token');
@@ -62,15 +64,16 @@ class _AdvancePageState extends State<AdvancePage>
     InfomationCustomer infomationCustomer = InfomationCustomer();
     // Đỗ dữ liệu lấy từ api
     infomationCustomer =
-        await getAPIProfileCustomer.getProfileCustomer(context,token, phone);
+        await getAPIProfileCustomer.getProfileCustomer(context, token, phone);
     setState(() {
       level = infomationCustomer.level;
       maxAdvance = infomationCustomer.maxAdvance;
       maxAdvanceRequest = infomationCustomer.maxAdvanceRequest;
+      totalAdvance = infomationCustomer.advance;
     });
     return infomationCustomer;
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -159,7 +162,9 @@ class _AdvancePageState extends State<AdvancePage>
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [ showHistoryAdvancePage(),],
+            children: [
+              showHistoryAdvancePage(),
+            ],
           ),
         ));
   }
@@ -195,6 +200,7 @@ class _AdvancePageState extends State<AdvancePage>
                       levelCustomer: level,
                       maxAdvance: maxAdvance,
                       maxAdvanceRequest: maxAdvanceRequest,
+                      totalAdvance: totalAdvance,
                     )),
           );
         },

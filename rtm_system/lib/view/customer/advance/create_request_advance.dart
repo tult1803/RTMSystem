@@ -20,7 +20,12 @@ class CreateRequestAdvance extends StatefulWidget {
   final int levelCustomer;
   final int maxAdvance;
   final int maxAdvanceRequest;
-  CreateRequestAdvance({this.levelCustomer, this.maxAdvance, this.maxAdvanceRequest});
+  final int totalAdvance;
+  CreateRequestAdvance(
+      {this.levelCustomer,
+      this.maxAdvance,
+      this.maxAdvanceRequest,
+      this.totalAdvance});
   @override
   _CreateRequestAdvanceState createState() => _CreateRequestAdvanceState();
 }
@@ -34,8 +39,6 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
   Store store;
   List<StoreElement> dataListStore;
   String _myStore, reason = '';
-  int totalAdvance = 0;
-  
 
   Future _getStore() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -55,31 +58,11 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
     return dataListStore;
   }
 
-  //get total advance
-  Future getAPIProfile() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    String token = sharedPreferences.getString('access_token');
-    String phone = sharedPreferences.getString('phone');
-    GetAPIProfileCustomer getAPIProfileCustomer = GetAPIProfileCustomer();
-    InfomationCustomer informationCustomer = InfomationCustomer();
-
-    // Đỗ dữ liệu lấy từ api
-    informationCustomer =
-        await getAPIProfileCustomer.getProfileCustomer(context,token, phone);
-    if (informationCustomer != null) {
-      setState(() {
-        totalAdvance = informationCustomer.advance;
-      });
-    }
-    return informationCustomer;
-  }
-
   @override
   void initState() {
     setState(() {
       createDate = DateTime.now();
     });
-    getAPIProfile();
     _getStore();
   }
 
@@ -111,10 +94,10 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
                 ),
                 Column(
                   children: [
-                    _formMoney(getDataTextField(money),false, "Nhập số tiền VND", "Số tiền",
-                        TextInputType.number),
-                    _txtFormField(getDataTextField(reason), false, "Nhập lý do ứng tiền ", "Lý do", 1,
-                        TextInputType.text),
+                    _formMoney(getDataTextField(money), false,
+                        "Nhập số tiền VND", "Số tiền", TextInputType.number),
+                    _txtFormField(getDataTextField(reason), false,
+                        "Nhập lý do ứng tiền ", "Lý do", 1, TextInputType.text),
                     SizedBox(
                       height: 10,
                     ),
@@ -149,10 +132,10 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
         var numberSplit = money.split(",");
         String moneyJoin = numberSplit.join();
         int valueMoney = int.parse(moneyJoin);
-        int checkMoney = valueMoney + totalAdvance;
+        int checkMoney = valueMoney + widget.totalAdvance;
         if (widget.levelCustomer == 1) {
           if (checkMoney > widget.maxAdvance) {
-            showEasyLoadingError(context,  showMessage("", MSG048));
+            showEasyLoadingError(context, showMessage("", MSG048));
           } else {
             Navigator.push(
               context,
@@ -166,7 +149,7 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
           }
         } else if (widget.levelCustomer == 2) {
           if (checkMoney > widget.maxAdvance) {
-            showEasyLoadingError(context,  showMessage("", MSG049));
+            showEasyLoadingError(context, showMessage("", MSG049));
           } else {
             Navigator.push(
               context,
@@ -230,8 +213,8 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
   }
 
   // form để nhập số tiền
-  Widget _formMoney(TextEditingController _controller,
-      bool obscureText, String hintText, String tittle, TextInputType txtType) {
+  Widget _formMoney(TextEditingController _controller, bool obscureText,
+      String hintText, String tittle, TextInputType txtType) {
     var size = MediaQuery.of(context).size;
     return Form(
       key: _formKey,
@@ -299,16 +282,16 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
                   style: TextStyle(fontWeight: FontWeight.w500),
                 )),
             //Hiển thị Icon góc phải
-             suffixIcon: IconButton(
-            onPressed: () {
-              setState(() {
-                this.money = "";
-              });
-              _controller.clear;
-            },
-            icon: Icon(Icons.clear),
-            color: Colors.black54,
-          ),
+            suffixIcon: IconButton(
+              onPressed: () {
+                setState(() {
+                  this.money = "";
+                });
+                _controller.clear;
+              },
+              icon: Icon(Icons.clear),
+              color: Colors.black54,
+            ),
             contentPadding: EdgeInsets.all(15),
           ),
         ),
@@ -393,6 +376,7 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
       ),
     );
   }
+
   TextEditingController getDataTextField(String txt) {
     if (txt == null) {
       txt = "";
@@ -404,9 +388,10 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
     );
     return _controller;
   }
+
   //form reason is can NULL
-  Widget _txtFormField(TextEditingController _controller, bool obscureText, String hintText,
-      String tittle, int maxLines, TextInputType txtType) {
+  Widget _txtFormField(TextEditingController _controller, bool obscureText,
+      String hintText, String tittle, int maxLines, TextInputType txtType) {
     var size = MediaQuery.of(context).size;
     return Container(
       margin: EdgeInsets.only(top: 10, left: 10, right: 10),
@@ -441,7 +426,7 @@ class _CreateRequestAdvanceState extends State<CreateRequestAdvance> {
                 "$tittle",
                 style: TextStyle(fontWeight: FontWeight.w500),
               )),
-           suffixIcon: IconButton(
+          suffixIcon: IconButton(
             onPressed: () {
               setState(() {
                 this.reason = "";

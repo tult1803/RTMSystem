@@ -31,6 +31,8 @@ class _HomeMenuState extends State<HomeMenu> with TickerProviderStateMixin {
   GetAPIProfileCustomer getAPIProfileCustomer = GetAPIProfileCustomer();
   InfomationCustomer infomationCustomer = InfomationCustomer();
   int level;
+  int maxAdvance = 0;
+  int maxAdvanceRequest = 0;
 
   Invoice invoice;
   @override
@@ -39,6 +41,7 @@ class _HomeMenuState extends State<HomeMenu> with TickerProviderStateMixin {
     getAmountDeposit();
     getAPIProfile();
   }
+
   Future<List> getAmountDeposit() async {
     List result;
     int _totalAmount = 0;
@@ -80,11 +83,13 @@ class _HomeMenuState extends State<HomeMenu> with TickerProviderStateMixin {
     String phone = sharedPreferences.getString('phone');
     // Đỗ dữ liệu lấy từ api
     infomationCustomer =
-        await getAPIProfileCustomer.getProfileCustomer(context,token, phone);
+        await getAPIProfileCustomer.getProfileCustomer(context, token, phone);
     if (infomationCustomer != null) {
       setState(() {
         level = infomationCustomer.level;
         advanceAmount = infomationCustomer.advance;
+        maxAdvance = infomationCustomer.maxAdvance;
+        maxAdvanceRequest = infomationCustomer.maxAdvanceRequest;
       });
     }
     return infomationCustomer;
@@ -113,7 +118,7 @@ class _HomeMenuState extends State<HomeMenu> with TickerProviderStateMixin {
                   ),
                 ),
                 child: SingleChildScrollView(
-                  child: level == null? Container(): btnMenu(level),
+                  child: level == null ? Container() : btnMenu(level),
                 ),
               ),
             ),
@@ -181,7 +186,7 @@ class _HomeMenuState extends State<HomeMenu> with TickerProviderStateMixin {
           twoBtnBody(
             "Xem hoá đơn",
             Icons.post_add_outlined,
-           null,
+            null,
             null,
             HomeCustomerPage(
               index: 1,
@@ -222,6 +227,9 @@ class _HomeMenuState extends State<HomeMenu> with TickerProviderStateMixin {
               ),
               CreateRequestAdvance(
                 levelCustomer: level,
+                maxAdvance: maxAdvance,
+                maxAdvanceRequest: maxAdvanceRequest,
+                totalAdvance: advanceAmount,
               ),
               true,
             ),
@@ -254,6 +262,9 @@ class _HomeMenuState extends State<HomeMenu> with TickerProviderStateMixin {
               null,
               CreateRequestAdvance(
                 levelCustomer: level,
+                maxAdvance: maxAdvance,
+                maxAdvanceRequest: maxAdvanceRequest,
+                totalAdvance: advanceAmount,
               ),
               null,
               true,
