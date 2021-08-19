@@ -250,7 +250,7 @@ class _HomeMenuState extends State<HomeMenu> with TickerProviderStateMixin {
               HomeCustomerPage(
                 index: 1,
                 indexInvoice: 1,
-                indexAdvance: 0,
+                indexAdvance: 1,
               ),
               HomeCustomerPage(index: 2, indexAdvance: 1, indexInvoice: 0),
               false),
