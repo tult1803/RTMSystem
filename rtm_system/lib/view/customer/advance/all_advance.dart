@@ -13,7 +13,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AdvancePage extends StatefulWidget {
   AdvancePage({this.index});
+
   int index;
+
   @override
   State<AdvancePage> createState() => _AdvancePageState();
 }
@@ -38,7 +40,7 @@ class _AdvancePageState extends State<AdvancePage>
     _tabController = TabController(
         length: 5,
         vsync: this,
-        initialIndex: widget.index == null? 0: widget.index);
+        initialIndex: widget.index == null ? 0 : widget.index);
     _tabController.addListener(() {
       setState(() {
         _selectedIndex = _tabController.index;
@@ -83,12 +85,12 @@ class _AdvancePageState extends State<AdvancePage>
         title: titleAppBar('Ứng tiền'),
         bottom: bottomTabBar(),
       ),
-      body: Stack(
-          children: [
-            rowButtonDatetime(),
-            tabView(),]),
+      body: Stack(children: [
+        Container(child: _selectedIndex == 2 ? null : rowButtonDatetime()),
+        tabView(),
+      ]),
       floatingActionButton:
-          level != 0 ?  showFloatBtn(_selectedIndex) : showHiddenFloatBtn(),
+          level != 0 ? showFloatBtn(_selectedIndex) : showHiddenFloatBtn(),
     );
   }
 
@@ -121,9 +123,8 @@ class _AdvancePageState extends State<AdvancePage>
   }
 
   Widget tabView() {
-    var size = MediaQuery.of(context).size;
     return Padding(
-      padding: const EdgeInsets.only(top: 65.0),
+      padding: EdgeInsets.only(top: _selectedIndex == 2 ? 20 : 65.0),
       child: TabBarView(
         controller: _tabController,
         children: <Widget>[
@@ -134,7 +135,8 @@ class _AdvancePageState extends State<AdvancePage>
           new showAdvanceRequestPage(8,
               fromDate: getFromDate, toDate: getToDate),
           //show advance đã trả
-          containerAdvanceHistory(size.height, 8),
+          // containerAdvanceHistory(size.height, 8),
+          showHistoryAdvancePage(),
           //show advance hết hạn
           new showAdvanceRequestPage(7,
               fromDate: getFromDate, toDate: getToDate),
@@ -144,21 +146,6 @@ class _AdvancePageState extends State<AdvancePage>
         ],
       ),
     );
-  }
-
-  //show invoice advance history
-  Widget containerAdvanceHistory(height, status) {
-    return Container(
-        height: height,
-        margin: EdgeInsets.only(left: 5, top: 12, right: 5),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              showHistoryAdvancePage(),
-            ],
-          ),
-        ));
   }
 
   Widget showFloatBtn(int index) {
