@@ -577,9 +577,9 @@ Future doReceiveReturnCash(
       prefs.get("access_token"), id);
   if (status == 200) {
     showEasyLoadingSuccess(context, showMessage("", MSG022),
-        widget: HomeCustomerPage(index: 2, indexAdvance: 3,));
+        widget: HomeCustomerPage(index: 2, indexAdvance: 2,));
   } else {
-    showEasyLoadingError(context, showMessage(MSG030, MSG027),  widget: HomeCustomerPage(index: 2, indexAdvance: 3,));
+    showEasyLoadingError(context, showMessage(MSG030, MSG027),  widget: HomeCustomerPage(index: 2, indexAdvance: 2,));
   }
 }
 

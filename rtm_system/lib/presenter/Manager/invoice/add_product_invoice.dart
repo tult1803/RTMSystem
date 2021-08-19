@@ -888,7 +888,7 @@ class _AddProductPageState extends State<AddProductPage> {
           GestureDetector(
             onTap: () {
               ///Nếu muốn cho customer chọn ngày thì mở comment dòng này
-              if (widget.dateToPay == null) {
+              if (widget.isCustomer) {
                 DatePicker.showDatePicker(
                   context,
                   showTitleActions: true,
