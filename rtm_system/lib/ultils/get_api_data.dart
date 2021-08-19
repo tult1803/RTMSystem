@@ -268,13 +268,13 @@ Future<void> doConfirmOrAcceptOrRejectInvoice(BuildContext context,
       PutConfirmInvoice putConfirmInvoice = PutConfirmInvoice();
       status = await putConfirmInvoice.putConfirmInvoice(
           prefs.get("access_token"), invoiceId);
-      _indexInvoice = 1;
+      _indexInvoice = 2;
     } else if (type == 3) {
       DeleteInvoiceRequest deleteInvoiceRequest = DeleteInvoiceRequest();
       status = await deleteInvoiceRequest.deleteInvoiceRequest(
           prefs.get('access_token'), invoiceId,
           reason: reason);
-      _indexInvoice = 0;
+      _indexInvoice = 4;
     }
     if (status == 200) {
       showEasyLoadingSuccess(context, showMessage("", MSG012),
@@ -283,11 +283,7 @@ Future<void> doConfirmOrAcceptOrRejectInvoice(BuildContext context,
             indexInvoice: _indexInvoice,
           ));
     } else {
-      showEasyLoadingError(context, showMessage(MSG025, MSG027),
-          widget: HomeCustomerPage(
-            index: 1,
-            indexInvoice: _indexInvoice,
-          ));
+      showEasyLoadingError(context, showMessage(MSG025, MSG027),);
     }
   } else {
     //call api tao invoice cua manager
