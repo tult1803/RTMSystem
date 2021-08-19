@@ -13,7 +13,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AdvancePage extends StatefulWidget {
   AdvancePage({this.index});
+
   int index;
+
   @override
   State<AdvancePage> createState() => _AdvancePageState();
 }
@@ -38,7 +40,7 @@ class _AdvancePageState extends State<AdvancePage>
     _tabController = TabController(
         length: 5,
         vsync: this,
-        initialIndex: widget.index == null? 0: widget.index);
+        initialIndex: widget.index == null ? 0 : widget.index);
     _tabController.addListener(() {
       setState(() {
         _selectedIndex = _tabController.index;
@@ -83,9 +85,12 @@ class _AdvancePageState extends State<AdvancePage>
         title: titleAppBar('Ứng tiền'),
         bottom: bottomTabBar(),
       ),
-      body: tabView(),
+      body: Stack(children: [
+        Container(child: _selectedIndex == 2 ? null : rowButtonDatetime()),
+        tabView(),
+      ]),
       floatingActionButton:
-          level != 0 ?  showFloatBtn(_selectedIndex) : showHiddenFloatBtn(),
+          level != 0 ? showFloatBtn(_selectedIndex) : showHiddenFloatBtn(),
     );
   }
 
@@ -118,54 +123,29 @@ class _AdvancePageState extends State<AdvancePage>
   }
 
   Widget tabView() {
-    var size = MediaQuery.of(context).size;
-    return TabBarView(
-      controller: _tabController,
-      children: <Widget>[
-        //show advance chờ xử lý
-        containerAdvance(size.height, 4),
-        //Show advance được chấp nhận, đã mượn
-        containerAdvance(size.height, 8),
-        //show advance đã trả
-        containerAdvanceHistory(size.height, 8),
-        //show advance hết hạn
-        containerAdvance(size.height, 7),
-        //Show advance bị từ chối
-        containerAdvance(size.height, 6),
-      ],
+    return Padding(
+      padding: EdgeInsets.only(top: _selectedIndex == 2 ? 20 : 65.0),
+      child: TabBarView(
+        controller: _tabController,
+        children: <Widget>[
+          //show advance chờ xử lý
+          new showAdvanceRequestPage(4,
+              fromDate: getFromDate, toDate: getToDate),
+          //Show advance được chấp nhận, đã mượn
+          new showAdvanceRequestPage(8,
+              fromDate: getFromDate, toDate: getToDate),
+          //show advance đã trả
+          // containerAdvanceHistory(size.height, 8),
+          showHistoryAdvancePage(),
+          //show advance hết hạn
+          new showAdvanceRequestPage(7,
+              fromDate: getFromDate, toDate: getToDate),
+          //Show advance bị từ chối
+          new showAdvanceRequestPage(6,
+              fromDate: getFromDate, toDate: getToDate),
+        ],
+      ),
     );
-  }
-
-  //show invoice advance request
-  Widget containerAdvance(height, status) {
-    return Container(
-        height: height,
-        margin: EdgeInsets.only(left: 5, top: 12, right: 5),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              rowButtonDatetime(),
-              showAdvanceRequestPage(status,
-                  fromDate: getFromDate, toDate: getToDate),
-            ],
-          ),
-        ));
-  }
-
-  //show invoice advance history
-  Widget containerAdvanceHistory(height, status) {
-    return Container(
-        height: height,
-        margin: EdgeInsets.only(left: 5, top: 12, right: 5),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              showHistoryAdvancePage(),
-            ],
-          ),
-        ));
   }
 
   Widget showFloatBtn(int index) {
@@ -214,30 +194,33 @@ class _AdvancePageState extends State<AdvancePage>
   }
 
   Widget rowButtonDatetime() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        btnDateTimeForCustomer(
-            context,
-            "${getDateTime("$fromDate", dateFormat: "dd-MM-yyyy")}",
-            Icon(Icons.date_range),
-            datePick()),
-        SizedBox(
-          child: Center(
-              child: Container(
-                  alignment: Alignment.topCenter,
-                  height: 20,
-                  child: Text(
-                    "-",
-                    style: TextStyle(fontSize: 20),
-                  ))),
-        ),
-        btnDateTimeForCustomer(
-            context,
-            "${getDateTime("$toDate", dateFormat: "dd-MM-yyyy")}",
-            Icon(Icons.date_range),
-            datePick()),
-      ],
+    return Container(
+      height: 75,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          btnDateTimeForCustomer(
+              context,
+              "${getDateTime("$fromDate", dateFormat: "dd-MM-yyyy")}",
+              Icon(Icons.date_range),
+              datePick()),
+          SizedBox(
+            child: Center(
+                child: Container(
+                    alignment: Alignment.topCenter,
+                    height: 20,
+                    child: Text(
+                      "-",
+                      style: TextStyle(fontSize: 20),
+                    ))),
+          ),
+          btnDateTimeForCustomer(
+              context,
+              "${getDateTime("$toDate", dateFormat: "dd-MM-yyyy")}",
+              Icon(Icons.date_range),
+              datePick()),
+        ],
+      ),
     );
   }
 

@@ -14,7 +14,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class InvoiceTab extends StatefulWidget {
   InvoiceTab({this.index});
+
   int index;
+
   @override
   State<InvoiceTab> createState() => _InvoiceTabState();
 }
@@ -36,7 +38,7 @@ class _InvoiceTabState extends State<InvoiceTab> with TickerProviderStateMixin {
     String phone = sharedPreferences.getString('phone');
     // Đỗ dữ liệu lấy từ api
     infomationCustomer =
-        await getAPIProfileCustomer.getProfileCustomer(context,token, phone);
+        await getAPIProfileCustomer.getProfileCustomer(context, token, phone);
     if (infomationCustomer != null) {
       setState(() {
         level = infomationCustomer.level;
@@ -66,6 +68,7 @@ class _InvoiceTabState extends State<InvoiceTab> with TickerProviderStateMixin {
         "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
     getToDate = "${getDateTime("$toDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,7 +79,10 @@ class _InvoiceTabState extends State<InvoiceTab> with TickerProviderStateMixin {
         title: titleAppBar('Hoá đơn'),
         bottom: bottomTabBar(),
       ),
-      body: tabView(),
+      body: Stack(children: [
+        rowButtonDatetime(),
+        tabView(),
+      ]),
       floatingActionButton: showFloatBtn(_selectedIndex, level),
     );
   }
@@ -110,54 +116,24 @@ class _InvoiceTabState extends State<InvoiceTab> with TickerProviderStateMixin {
   }
 
   Widget tabView() {
-    var size = MediaQuery.of(context).size;
-    return TabBarView(
-      controller: _tabController,
-      children: <Widget>[
-        //Show invoice request
-        containerInvoiceRequest(),
-        //Show invoice processing
-        containerInvoice(size.height, 4),
-        //Show invoice deposit
-        containerInvoice(size.height, 5),
-        //Show sale's invoice: -1 ( done, undone, actice)
-        containerInvoice(size.height, 3),
-        containerInvoice(size.height, 2),
-      ],
-    );
-  }
-
-  //show invoice
-  Widget containerInvoice(height, status) {
-    return Container(
-        height: height,
-        margin: EdgeInsets.only(left: 5, top: 12, right: 5),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              rowButtonDatetime(),
-              new showAllInvoicePage(status,
-                  fromDate: getFromDate, toDate: getToDate),
-            ],
-          ),
-        ));
-  }
-
-  Widget containerInvoiceRequest() {
-    var size = MediaQuery.of(context).size;
-    return Container(
-      height: size.height,
-      margin: EdgeInsets.only(left: 5, top: 12, right: 5),
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            rowButtonDatetime(),
-            new showAllInvoiceRequestPage(
+    return Padding(
+      padding: const EdgeInsets.only(top: 60.0),
+      child: TabBarView(
+        controller: _tabController,
+        children: <Widget>[
+          new Padding(
+            padding: const EdgeInsets.only(top: 10.0),
+            child: new showAllInvoiceRequestPage(
                 fromDate: getFromDate, toDate: getToDate),
-          ],
-        ),
+          ),
+          //Show invoice processing
+          new showAllInvoicePage(4, fromDate: getFromDate, toDate: getToDate),
+          //Show invoice deposit
+          new showAllInvoicePage(5, fromDate: getFromDate, toDate: getToDate),
+          //Show sale's invoice: -1 ( done, undone, actice)
+          new showAllInvoicePage(3, fromDate: getFromDate, toDate: getToDate),
+          new showAllInvoicePage(2, fromDate: getFromDate, toDate: getToDate),
+        ],
       ),
     );
   }
@@ -200,7 +176,10 @@ class _InvoiceTabState extends State<InvoiceTab> with TickerProviderStateMixin {
                         isCustomer: true,
                         tittle: "Tạo yêu cầu bán hàng",
                         level: level,
-                        widgetToNavigator: HomeCustomerPage(index: 1, indexInvoice: 0,),
+                        widgetToNavigator: HomeCustomerPage(
+                          index: 1,
+                          indexInvoice: 0,
+                        ),
                       )),
             );
           },
@@ -218,30 +197,33 @@ class _InvoiceTabState extends State<InvoiceTab> with TickerProviderStateMixin {
 
   //show btn select date, it have setState should dont reuse
   Widget rowButtonDatetime() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        btnDateTimeForCustomer(
-            context,
-            "${getDateTime("$fromDate", dateFormat: "dd-MM-yyyy")}",
-            Icon(Icons.date_range),
-            datePick()),
-        SizedBox(
-          child: Center(
-              child: Container(
-                  alignment: Alignment.topCenter,
-                  height: 20,
-                  child: Text(
-                    "-",
-                    style: TextStyle(fontSize: 20),
-                  ))),
-        ),
-        btnDateTimeForCustomer(
-            context,
-            "${getDateTime("$toDate", dateFormat: "dd-MM-yyyy")}",
-            Icon(Icons.date_range),
-            datePick()),
-      ],
+    return Container(
+      height: 80,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          btnDateTimeForCustomer(
+              context,
+              "${getDateTime("$fromDate", dateFormat: "dd-MM-yyyy")}",
+              Icon(Icons.date_range),
+              datePick()),
+          SizedBox(
+            child: Center(
+                child: Container(
+                    alignment: Alignment.topCenter,
+                    height: 20,
+                    child: Text(
+                      "-",
+                      style: TextStyle(fontSize: 20),
+                    ))),
+          ),
+          btnDateTimeForCustomer(
+              context,
+              "${getDateTime("$toDate", dateFormat: "dd-MM-yyyy")}",
+              Icon(Icons.date_range),
+              datePick()),
+        ],
+      ),
     );
   }
 
