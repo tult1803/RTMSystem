@@ -263,7 +263,7 @@ Future<void> doConfirmOrAcceptOrRejectInvoice(BuildContext context,
       PutSignInvoice putSignInvoiceInvoice = PutSignInvoice();
       status = await putSignInvoiceInvoice.putSignInvoice(
           prefs.get("access_token"), invoiceIdSign);
-      _indexInvoice = 2;
+      _indexInvoice = 3;
     } else if (type == 2) {
       PutConfirmInvoice putConfirmInvoice = PutConfirmInvoice();
       status = await putConfirmInvoice.putConfirmInvoice(
