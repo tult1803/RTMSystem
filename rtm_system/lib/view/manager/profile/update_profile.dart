@@ -37,11 +37,7 @@ class _updateProfileState extends State<updateProfile> {
           leading: leadingAppbar(context),
           centerTitle: true,
           backgroundColor: welcome_color,
-          title: Text(
-            "Cập nhật thông tin",
-            style: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.w500, fontSize: 22),
-          ),
+          title: titleAppBar("Cập nhật thông tin"),
         ),
         body: SingleChildScrollView(
             child: new formUpdateProfile(
