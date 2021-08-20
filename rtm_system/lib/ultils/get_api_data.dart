@@ -272,7 +272,7 @@ Future<void> doConfirmOrAcceptOrRejectInvoice(BuildContext context,
       status = await deleteInvoiceRequest.deleteInvoiceRequest(
           prefs.get('access_token'), invoiceId,
           reason: reason);
-      _indexInvoice = 4;
+      _indexInvoice = 0;
     }
     if (status == 200) {
       showEasyLoadingSuccess(context, showMessage("", MSG012),
@@ -581,7 +581,7 @@ Future doDeleteAdvanceRequest(BuildContext context, String id) async {
       prefs.get('access_token'), id);
   status == 200
       ? showEasyLoadingSuccess(context, showMessage("", MSG017),
-          widget: HomeCustomerPage(index: 2, indexAdvance: 4,))
+          widget: HomeCustomerPage(index: 2, indexAdvance: 0,))
       : showEasyLoadingError(context, showMessage(MSG030, MSG027),);
 }
 
