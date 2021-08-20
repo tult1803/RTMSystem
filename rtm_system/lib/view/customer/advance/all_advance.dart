@@ -90,7 +90,7 @@ class _AdvancePageState extends State<AdvancePage>
         tabView(),
       ]),
       floatingActionButton:
-          level != 0 ? showFloatBtn(_selectedIndex) : showHiddenFloatBtn(),
+          level != 0 ? showFloatBtn(_selectedIndex == null? widget.index: _selectedIndex) : showHiddenFloatBtn(),
     );
   }
 
@@ -149,7 +149,7 @@ class _AdvancePageState extends State<AdvancePage>
   }
 
   Widget showFloatBtn(int index) {
-    if (index == 2) {
+    if (index == 1) {
       return FloatingActionButton.extended(
         onPressed: () {
           Navigator.push(
