@@ -157,7 +157,17 @@ class _showHistoryAdvancePageState extends State<showHistoryAdvancePage> {
                                   itemBuilder: (context, item, index) {
                                     var idSplit = item.id.split("-");
                                     String prefixId = idSplit[0].trim();
+                                    bool checkDone = true;
                                     if (prefixId == "TN") {
+                                      if(item.returnCash == 0){
+                                        checkDone = true;
+                                      }else{
+                                        if(item.receiveDate != null){
+                                          checkDone = true;
+                                        }else{
+                                          checkDone = false;
+                                        }
+                                      }
                                       return boxForAdvanceHistory(
                                         context: context,
                                         id: item.id,
@@ -168,13 +178,12 @@ class _showHistoryAdvancePageState extends State<showHistoryAdvancePage> {
                                         dateTime: item.datetime,
                                         receiveDate: item.receiveDate,
                                         isPaid: item.paid,
+                                        checkShow: true,
                                         widget: FormForDetailPage(
                                           tittle: "Chi tiết đơn trả nợ",
                                           bodyPage: DetailAdvanceReturn(
                                             id: item.id,
-                                            isDone: item.receiveDate != null
-                                                ? true
-                                                : false,
+                                            isDone: checkDone,
                                           ),
                                         ),
                                       );
@@ -189,6 +198,7 @@ class _showHistoryAdvancePageState extends State<showHistoryAdvancePage> {
                                         dateTime: item.datetime,
                                         receiveDate: item.receiveDate,
                                         isPaid: item.paid,
+                                        checkShow: false,
                                         widget: FormForDetailPage(
                                           tittle: "Chi tiết ứng tiền",
                                           bodyPage: DetailAdvancePage(

@@ -1027,7 +1027,8 @@ Widget componentContainerAdvanceReturnDetail(BuildContext context,
         SizedBox(
           height: 10,
         ),
-        txtItemDetail(context, "Trạng thái",
+        returnCash == 0? Container()
+            : txtItemDetail(context, "Trạng thái",
             isDone ? "Đã nhận tiền hoàn trả" : "Chưa nhận tiền hoàn trả",
             colorContent: isDone ? primaryColor : Colors.redAccent),
       ],
