@@ -136,7 +136,7 @@ class _AdvancePageState extends State<AdvancePage>
               fromDate: getFromDate, toDate: getToDate),
           //show advance đã trả
           // containerAdvanceHistory(size.height, 8),
-          showHistoryAdvancePage(),
+          new showHistoryAdvancePage(),
           //show advance hết hạn
           new showAdvanceRequestPage(7,
               fromDate: getFromDate, toDate: getToDate),

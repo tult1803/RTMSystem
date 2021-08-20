@@ -993,6 +993,7 @@ Widget boxForAdvanceHistory({
   String dateTime,
   //ngay tra no
   String receiveDate,
+  bool checkShow,
   Widget widget,
 }) {
   String amountAfterFormat,
@@ -1088,7 +1089,7 @@ Widget boxForAdvanceHistory({
                   ],
                 ),
               ),
-              returnCash != 0
+              checkShow == true
                   ? Column(
                       children: [
                         containerTextInvoice(
