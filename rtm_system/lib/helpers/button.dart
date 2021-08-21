@@ -330,7 +330,8 @@ Widget btnSubmitOrCancel(
               showEasyLoading(context, MSG052);
               int status = await postAPINotice(mainTittle, content);
               if (status == 200) {
-                showEasyLoadingSuccess(context, MSG002, widget: widgetToNavigator);
+                showEasyLoadingSuccess(context, MSG002,
+                    widget: widgetToNavigator);
               } else
                 showEasyLoadingError(context, showMessage(MSG024, MSG027));
             }
@@ -462,7 +463,10 @@ Widget btnProcessAdvanceBill(BuildContext context,
 }
 
 Widget btnProcessInvoice(context, int statusId, String id, bool isCustomer,
-    {bool isRequest, Widget widgetToNavigator, bool isDegree,InvoiceRequestElement element}) {
+    {bool isRequest,
+    Widget widgetToNavigator,
+    bool isDegree,
+    InvoiceRequestElement element}) {
   var size = MediaQuery.of(context).size;
   //show button để xử lý hoàn thành đơn
   //status = 0 là cho customer xoá hoá đơn gửi yêu cầu.
@@ -479,7 +483,8 @@ Widget btnProcessInvoice(context, int statusId, String id, bool isCustomer,
         child: RaisedButton(
           color: primaryColor,
           onPressed: () {
-            doConfirmOrAcceptOrRejectInvoice(context, "", invoiceIdToSign, 1, isCustomer);
+            doConfirmOrAcceptOrRejectInvoice(
+                context, "", invoiceIdToSign, 1, isCustomer);
           },
           child: Text(
             'Nhận tiền',
@@ -517,56 +522,72 @@ Widget btnProcessInvoice(context, int statusId, String id, bool isCustomer,
       return Row(
         mainAxisAlignment: isRequest == null
             ? MainAxisAlignment.spaceAround
-        : MainAxisAlignment.center,
+            : MainAxisAlignment.center,
         children: [
-          isRequest == null ? Flexible(
-            // ignore: deprecated_member_use
-            child: RaisedButton(
-              color: Colors.redAccent,
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => ReasonToDelete(
-                          invoiceId: id,
-                          isRequest: isRequest != null ? true : false,
-                          isCustomer: isCustomer,
-                          widgetToNavigator: widgetToNavigator,
-                        )));
-              },
-              child: Text(
-                '${isRequest != null ? "Từ chối" : "Xóa"}',
-                style: TextStyle(color: Colors.white, fontSize: 16),
-              ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              elevation: 10,
-            ),
-          ): Container(),
-          Flexible(
-                  child: Container(
-                    width: isRequest != null ? 150 : 120,
-                    // ignore: deprecated_member_use
-                    child: RaisedButton(
-                      color: Color(0xFF0BB791),
-                      onPressed: () {
-                        isRequest != null ? doConfirmOrAcceptOrRejectInvoice(
-                            context, id,  [],2, isCustomer,
-                            isRequest: isRequest,
-                            element: element,
-                            widgetToNavigator: widgetToNavigator)
-                        : showTextFieldDialog(context, isDegree:isDegree, id: id);
-                      },
-                      child: Text(
-                        '${isRequest != null ? "Tạo" : "Cập nhật"}',
-                        style: TextStyle(color: Colors.white, fontSize: 16),
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      elevation: 10,
+          isRequest == null
+              ? Flexible(
+                  // ignore: deprecated_member_use
+                  child: RaisedButton(
+                    color: Colors.redAccent,
+                    onPressed: () {
+                      isRequest != null
+                          ? Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => ReasonToDelete(
+                                    invoiceId: id,
+                                    isRequest: isRequest != null ? true : false,
+                                    isCustomer: isCustomer,
+                                    widgetToNavigator: widgetToNavigator,
+                                  )))
+                          : showAlertDialog(
+                              context,
+                              "Bạn muốn xoá hoá đơn",
+                              HomeAdminPage(
+                                index: 1,
+                                indexInsidePage: 1,
+                              ),
+                              isInvoice: false,
+                               isCustomer: isCustomer,
+                              id: id,
+                            );
+                    },
+                    child: Text(
+                      '${isRequest != null ? "Từ chối" : "Xóa"}',
+                      style: TextStyle(color: Colors.white, fontSize: 16),
                     ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    elevation: 10,
                   ),
                 )
+              : Container(),
+          Flexible(
+            child: Container(
+              width: isRequest != null ? 150 : 120,
+              // ignore: deprecated_member_use
+              child: RaisedButton(
+                color: Color(0xFF0BB791),
+                onPressed: () {
+                  isRequest != null
+                      ? doConfirmOrAcceptOrRejectInvoice(
+                          context, id, [], 2, isCustomer,
+                          isRequest: isRequest,
+                          element: element,
+                          widgetToNavigator: widgetToNavigator)
+                      : showTextFieldDialog(context,
+                          isDegree: isDegree, id: id);
+                },
+                child: Text(
+                  '${isRequest != null ? "Tạo" : "Cập nhật"}',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                elevation: 10,
+              ),
+            ),
+          )
         ],
       );
     }
@@ -616,7 +637,7 @@ Widget btnConfirmAdvanceReturn(
                   ),
                   TextButton(
                     onPressed: () {
-                      doReceiveReturnCash(context,id: id);
+                      doReceiveReturnCash(context, id: id);
                     },
                     child: Text(
                       'Có',
