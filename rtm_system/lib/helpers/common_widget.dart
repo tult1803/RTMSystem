@@ -590,8 +590,11 @@ Widget boxForAdvance({
     
   } 
   return GestureDetector(
-    onTap: () => Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => widget)),
+    onTap: () {
+      widget == null? print('ok') :
+      Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => widget));
+    },
     child: Container(
       margin: EdgeInsets.only(top: 15, left: 10, right: 10),
       decoration: BoxDecoration(
