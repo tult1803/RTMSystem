@@ -47,13 +47,13 @@ class _AdvancePageState extends State<AdvancePage>
       });
     });
     getAPIProfile();
-    toDate = DateTime.now();
     fromDate = DateTime.now().subtract(Duration(days: 30));
+    toDate = DateTime.now();
     setState(() {
       getFromDate =
           "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
       getToDate =
-          "${getDateTime("$toDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
+          "${getDateTime("$toDate", dateFormat: "yyyy-MM-dd 23:59:59")}";
     });
   }
 
