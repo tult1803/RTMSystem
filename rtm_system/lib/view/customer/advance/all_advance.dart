@@ -27,7 +27,7 @@ class _AdvancePageState extends State<AdvancePage>
     with TickerProviderStateMixin {
   TabController _tabController;
   String getFromDate, getToDate;
-  int _selectedIndex;
+  int _selectedIndex, _index;
   int level = 0;
   int maxAdvance = 0;
   int maxAdvanceRequest = 0;
@@ -36,11 +36,13 @@ class _AdvancePageState extends State<AdvancePage>
   @override
   void initState() {
     super.initState();
-    //tab 1: yeu cau
+    setState(() {
+      _index = widget.index;
+    });
     _tabController = TabController(
         length: 5,
         vsync: this,
-        initialIndex: widget.index == null ? 0 : widget.index);
+        initialIndex: widget.index == null ? 0 : _index);
     _tabController.addListener(() {
       setState(() {
         _selectedIndex = _tabController.index;
@@ -90,7 +92,7 @@ class _AdvancePageState extends State<AdvancePage>
         tabView(),
       ]),
       floatingActionButton:
-          level != 0 ? showFloatBtn(_selectedIndex == null? widget.index: _selectedIndex) : showHiddenFloatBtn(),
+          level != 0 ? showFloatBtn(_selectedIndex == null? _index: _selectedIndex) : showHiddenFloatBtn(),
     );
   }
 

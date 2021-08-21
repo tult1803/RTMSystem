@@ -50,12 +50,14 @@ class _InvoiceTabState extends State<InvoiceTab> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    print(widget.index);
+    setState(() {
+      _index = widget.index;
+    });
     _tabController = TabController(
         length: 5,
         vsync: this,
         initialIndex:
-            widget.index == null ? _index = 0 : _index = widget.index);
+            widget.index == null ?  0 : _index);
     _tabController.addListener(() {
       setState(() {
         _selectedIndex = _tabController.index;
@@ -83,7 +85,7 @@ class _InvoiceTabState extends State<InvoiceTab> with TickerProviderStateMixin {
         rowButtonDatetime(),
         tabView(),
       ]),
-      floatingActionButton: showFloatBtn(_selectedIndex, level),
+      floatingActionButton: showFloatBtn(_selectedIndex == null? _index: _selectedIndex, level),
     );
   }
 
