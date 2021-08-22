@@ -7,23 +7,43 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'src/regExp.dart';
 
 checkInputUpdateInvoice(BuildContext context,
-    {bool isDegree, double quantity, double degree}) {
+    {bool isDegree,  String quantity, String degree}) {
   if (isDegree) {
-    if (quantity == 0 && degree == 0) {
+    if (quantity.isEmpty && degree.isEmpty) {
       showCupertinoAlertDialog(
           context, showMessage("Khối lượng, số độ", MSG001));
       return false;
-    } else if (quantity == 0) {
+    } else if (quantity.isEmpty) {
       showCupertinoAlertDialog(context, showMessage("Khối lượng", MSG001));
       return false;
-    } else if (degree == 0) {
+    } else if (degree.isEmpty) {
       showCupertinoAlertDialog(context, showMessage("Số độ", MSG001));
       return false;
+    }else {
+      try{
+        double quantityDouble = double.parse(quantity);
+        try{
+          double degreeDouble = double.parse(degree);
+        }catch(e){
+          showCupertinoAlertDialog(context, showMessage("Số độ", MSG056));
+          return false;
+        }
+      }catch(e){
+        showCupertinoAlertDialog(context, showMessage("Khối lượng", MSG056));
+        return false;
+      }
     }
   } else {
-    if (quantity == 0) {
+    if (quantity.isEmpty) {
       showCupertinoAlertDialog(context, showMessage("Khối lượng", MSG001));
       return false;
+    }else{
+      try{
+        double quantityDouble = double.parse(quantity);
+      }catch(_){
+        showCupertinoAlertDialog(context, showMessage("Khối lượng", MSG056));
+        return false;
+      }
     }
   }
   return true;

@@ -36,6 +36,7 @@ class _showAdvanceRequestPageState extends State<showAdvanceRequestPage> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       GetAdvanceRequest getAdvanceRequest = GetAdvanceRequest();
       advanceRequest = await getAdvanceRequest.getAdvanceRequest(
+        context,
         prefs.get("access_token"),
         0,
         prefs.get("accountId"),
@@ -157,7 +158,7 @@ class _showAdvanceRequestPageState extends State<showAdvanceRequestPage> {
                               newPageProgressIndicatorBuilder: (context) =>
                                   newPageProgressIndicatorBuilder(),
                               itemBuilder: (context, item, index) {
-                                return boxForAdvance(
+                                  return boxForAdvance(
                                     context: context,
                                     id: item.id,
                                     status: item.acceptStatusId,
@@ -169,7 +170,7 @@ class _showAdvanceRequestPageState extends State<showAdvanceRequestPage> {
                                     receiveDate: item.receiveDate,
                                     isCheck:
                                         item.doneDate == null ? false : true,
-                                    widget: FormForDetailPage(
+                                    widget: item.statusId == 7? null : FormForDetailPage(
                                       tittle: "Chi tiết ứng tiền",
                                       bodyPage: DetailAdvancePage(
                                         isCustomer: true,

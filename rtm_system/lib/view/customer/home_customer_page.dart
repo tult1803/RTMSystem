@@ -29,9 +29,9 @@ class _HomeCustomerPageState extends State<HomeCustomerPage> {
     if (_index == 0) {
       _widget = HomeMenu();
     } else if (_index == 1) {
-      _widget = InvoiceTab(index: widget.indexInvoice);
+      _widget = InvoiceTab(index: widget.indexInvoice == null? 0: widget.indexInvoice);
     } else if (_index == 2) {
-      _widget = AdvancePage(index: widget.indexAdvance);
+      _widget = AdvancePage(index: widget.indexAdvance == null? 0: widget.indexAdvance);
     } else if (_index == 3) {
       _widget = NoticesPage();
     } else if (_index == 4) {
@@ -78,9 +78,9 @@ class _HomeCustomerPageState extends State<HomeCustomerPage> {
             if (index == 0) {
               _widget = HomeMenu();
             } else if (index == 1) {
-              _widget = InvoiceTab(index: widget.indexInvoice);
+              _widget = InvoiceTab(index: widget.indexInvoice == null? 0: widget.indexInvoice);
             } else if (index == 2) {
-              _widget = AdvancePage(index: widget.indexAdvance);
+              _widget = AdvancePage(index: widget.indexAdvance == null? 0: widget.indexAdvance);
             } else if (index == 3) {
               _widget = NoticesPage();
             } else if (index == 4) {

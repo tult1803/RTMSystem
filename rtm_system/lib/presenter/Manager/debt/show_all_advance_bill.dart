@@ -109,7 +109,7 @@ class _showAllBillState extends State<showAllBill>
     return Container(
       height: 80,
       child:Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           btnDateTime(

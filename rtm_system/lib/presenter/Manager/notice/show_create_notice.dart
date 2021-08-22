@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:rtm_system/helpers/button.dart';
+import 'package:rtm_system/ultils/get_data.dart';
 import 'package:rtm_system/ultils/src/color_ultils.dart';
 import 'package:rtm_system/view/manager/home_manager_page.dart';
 
@@ -16,7 +17,6 @@ class showCreateNotice extends StatefulWidget {
 // ignore: camel_case_types
 class _showCreateNoticeState extends State<showCreateNotice> {
   String tittle = "", description = "";
-  var fDate = new DateFormat('dd-MM-yyyy');
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +56,7 @@ class _showCreateNoticeState extends State<showCreateNotice> {
                     SizedBox(
                       height: 10,
                     ),
-                    _txt("Ngày tạo: ${fDate.format(DateTime.now())}")
+                    _txt("Ngày tạo: ${getDateTime("${DateTime.now()}", dateFormat: "dd/MM/yyyy")}")
                   ],
                 ),
               ),

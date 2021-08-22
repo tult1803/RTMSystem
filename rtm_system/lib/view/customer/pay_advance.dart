@@ -63,6 +63,7 @@ class _PayDebtState extends State<PayDebt> {
     advanceAccept.clear();
     GetAdvanceRequest getAdvanceRequest = GetAdvanceRequest();
     listAdvance = await getAdvanceRequest.getAdvanceRequest(
+      context,
       prefs.get("access_token"),
       1,
       prefs.get("accountId"),

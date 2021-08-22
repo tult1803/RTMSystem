@@ -15,7 +15,7 @@ class PutProcessAdvanceBill{
       body: jsonEncode(<String, dynamic>{
         "id": id,
         "status_id": status,
-        "reason": "$reason",
+        "reason": "${reason == null ? "" : reason}",
       }),
     );
     print('putAPI ProcessAdvanceBill: ${response.statusCode}');

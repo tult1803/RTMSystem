@@ -50,7 +50,7 @@ class _showAllInvoiceState extends State<showAllInvoice>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backgroundColor,
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: titleAppBar("Hóa đơn"),
         centerTitle: true,

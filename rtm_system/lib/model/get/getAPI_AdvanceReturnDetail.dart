@@ -1,11 +1,13 @@
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:rtm_system/model/model_advance_return_detail.dart';
+import 'package:rtm_system/ultils/check_data.dart';
 import 'package:rtm_system/ultils/src/url_api.dart';
 import 'package:http/http.dart' as http;
 
 class GetAdvanceReturnDetail{
   static int statusInvoice;
-  getAdvanceReturnDetail(String token, String id) async {
+  getAdvanceReturnDetail(BuildContext context,String token, String id) async {
     final response = await http.get(
     Uri.http('$urlMain', '$urlAdvanceReturnDetail/$id'),
       headers: <String, String>{
@@ -20,6 +22,7 @@ class GetAdvanceReturnDetail{
       return  AdvanceReturnDetail.fromJson(jsonDecode(response.body));
     } else {
       // throw an exception.
+      checkTimeToken(context, response.statusCode);
       throw Exception('Failed to load data');
     }
   }

@@ -566,7 +566,8 @@ Widget boxForAdvance({
   Color colorStatusAdvance;
   if (isCheck) {
     titleStatus = "Đã mượn";
-    colorStatusAdvance = Colors.orangeAccent;
+    colorStatusAdvance = getColorStatus(status: 8);
+    
   } else {
     if(statusAdvances == 8){
     if (status == 7) {
@@ -579,7 +580,7 @@ Widget boxForAdvance({
       getColorStatus(status: status);
     } else {
       titleStatus = "Đã duyệt";
-      colorStatusAdvance = getColorStatus(status: 8);
+      colorStatusAdvance = Colors.orangeAccent;
       getColorStatus(status: status);
     }
     } else {
@@ -589,8 +590,11 @@ Widget boxForAdvance({
     
   } 
   return GestureDetector(
-    onTap: () => Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => widget)),
+    onTap: () {
+      widget == null? print('ok') :
+      Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => widget));
+    },
     child: Container(
       margin: EdgeInsets.only(top: 15, left: 10, right: 10),
       decoration: BoxDecoration(
@@ -992,6 +996,7 @@ Widget boxForAdvanceHistory({
   String dateTime,
   //ngay tra no
   String receiveDate,
+  bool checkShow,
   Widget widget,
 }) {
   String amountAfterFormat,
@@ -1015,7 +1020,7 @@ Widget boxForAdvanceHistory({
     statusAdvance = getColorStatus(status: 9);
   } else {
     titleStatus = "Đã mượn";
-    statusAdvance = getColorStatus(status: 4);
+    statusAdvance = Colors.orangeAccent;
   }
   return GestureDetector(
     onTap: () => Navigator.of(context)
@@ -1087,7 +1092,7 @@ Widget boxForAdvanceHistory({
                   ],
                 ),
               ),
-              returnCash != 0
+              checkShow == true
                   ? Column(
                       children: [
                         containerTextInvoice(

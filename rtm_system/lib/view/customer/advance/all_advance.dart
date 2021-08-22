@@ -13,7 +13,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AdvancePage extends StatefulWidget {
   AdvancePage({this.index});
+
   int index;
+
   @override
   State<AdvancePage> createState() => _AdvancePageState();
 }
@@ -27,31 +29,36 @@ class _AdvancePageState extends State<AdvancePage>
   String getFromDate, getToDate;
   int _selectedIndex, _index;
   int level = 0;
+  int maxAdvance = 0;
+  int maxAdvanceRequest = 0;
+  int totalAdvance = 0;
 
   @override
   void initState() {
     super.initState();
-    //tab 1: yeu cau
+    setState(() {
+      _index = widget.index;
+    });
     _tabController = TabController(
         length: 5,
         vsync: this,
-        initialIndex:
-            widget.index == null ? _index = 0 : _index = widget.index);
+        initialIndex: widget.index == null ? 0 : _index);
     _tabController.addListener(() {
       setState(() {
         _selectedIndex = _tabController.index;
       });
     });
     getAPIProfile();
-    toDate = DateTime.now();
     fromDate = DateTime.now().subtract(Duration(days: 30));
+    toDate = DateTime.now();
     setState(() {
       getFromDate =
           "${getDateTime("$fromDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
       getToDate =
-          "${getDateTime("$toDate", dateFormat: "yyyy-MM-dd HH:mm:ss")}";
+          "${getDateTime("$toDate", dateFormat: "yyyy-MM-dd 23:59:59")}";
     });
   }
+
   Future getAPIProfile() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     String token = sharedPreferences.getString('access_token');
@@ -60,13 +67,16 @@ class _AdvancePageState extends State<AdvancePage>
     InfomationCustomer infomationCustomer = InfomationCustomer();
     // Đỗ dữ liệu lấy từ api
     infomationCustomer =
-        await getAPIProfileCustomer.getProfileCustomer(context,token, phone);
+        await getAPIProfileCustomer.getProfileCustomer(context, token, phone);
     setState(() {
       level = infomationCustomer.level;
+      maxAdvance = infomationCustomer.maxAdvance;
+      maxAdvanceRequest = infomationCustomer.maxAdvanceRequest;
+      totalAdvance = infomationCustomer.advance;
     });
     return infomationCustomer;
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,9 +87,12 @@ class _AdvancePageState extends State<AdvancePage>
         title: titleAppBar('Ứng tiền'),
         bottom: bottomTabBar(),
       ),
-      body: tabView(),
+      body: Stack(children: [
+        Container(child: _selectedIndex == 2 ? null : rowButtonDatetime()),
+        tabView(),
+      ]),
       floatingActionButton:
-          level != 0 ? showFloatBtn(_selectedIndex) : showHiddenFloatBtn(),
+          level != 0 ? showFloatBtn(_selectedIndex == null? _index: _selectedIndex) : showHiddenFloatBtn(),
     );
   }
 
@@ -112,55 +125,32 @@ class _AdvancePageState extends State<AdvancePage>
   }
 
   Widget tabView() {
-    var size = MediaQuery.of(context).size;
-    return TabBarView(
-      controller: _tabController,
-      children: <Widget>[
-        //show advance chờ xử lý
-        containerAdvance(size.height, 4),
-        //Show advance được chấp nhận, đã mượn
-        containerAdvance(size.height, 8),
-        //show advance đã trả
-        containerAdvanceHistory(size.height, 8),
-        //show advance hết hạn
-        containerAdvance(size.height, 7),
-        //Show advance bị từ chối
-        containerAdvance(size.height, 6),
-      ],
+    return Padding(
+      padding: EdgeInsets.only(top: _selectedIndex == 2 ? 20 : 65.0),
+      child: TabBarView(
+        controller: _tabController,
+        children: <Widget>[
+          //show advance chờ xử lý
+          new showAdvanceRequestPage(4,
+              fromDate: getFromDate, toDate: getToDate),
+          //Show advance được chấp nhận, đã mượn
+          new showAdvanceRequestPage(8,
+              fromDate: getFromDate, toDate: getToDate),
+          //show advance đã trả
+          // containerAdvanceHistory(size.height, 8),
+          new showHistoryAdvancePage(),
+          //show advance hết hạn
+          new showAdvanceRequestPage(7,
+              fromDate: getFromDate, toDate: getToDate),
+          //Show advance bị từ chối
+          new showAdvanceRequestPage(6,
+              fromDate: getFromDate, toDate: getToDate),
+        ],
+      ),
     );
   }
 
-  //show invoice advance request
-  Widget containerAdvance(height, status) {
-    return Container(
-        height: height,
-        margin: EdgeInsets.only(left: 5, top: 12, right: 5),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              rowButtonDatetime(),
-              showAdvanceRequestPage(status,
-                  fromDate: getFromDate, toDate: getToDate),
-            ],
-          ),
-        ));
-  }
-
-  //show invoice advance history
-  Widget containerAdvanceHistory(height, status) {
-    return Container(
-        height: height,
-        margin: EdgeInsets.only(left: 5, top: 12, right: 5),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [ showHistoryAdvancePage(),],
-          ),
-        ));
-  }
-
-  Widget showFloatBtn(index) {
+  Widget showFloatBtn(int index) {
     if (index == 1) {
       return FloatingActionButton.extended(
         onPressed: () {
@@ -189,6 +179,9 @@ class _AdvancePageState extends State<AdvancePage>
             MaterialPageRoute(
                 builder: (context) => CreateRequestAdvance(
                       levelCustomer: level,
+                      maxAdvance: maxAdvance,
+                      maxAdvanceRequest: maxAdvanceRequest,
+                      totalAdvance: totalAdvance,
                     )),
           );
         },
@@ -203,30 +196,33 @@ class _AdvancePageState extends State<AdvancePage>
   }
 
   Widget rowButtonDatetime() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        btnDateTimeForCustomer(
-            context,
-            "${getDateTime("$fromDate", dateFormat: "dd-MM-yyyy")}",
-            Icon(Icons.date_range),
-            datePick()),
-        SizedBox(
-          child: Center(
-              child: Container(
-                  alignment: Alignment.topCenter,
-                  height: 20,
-                  child: Text(
-                    "-",
-                    style: TextStyle(fontSize: 20),
-                  ))),
-        ),
-        btnDateTimeForCustomer(
-            context,
-            "${getDateTime("$toDate", dateFormat: "dd-MM-yyyy")}",
-            Icon(Icons.date_range),
-            datePick()),
-      ],
+    return Container(
+      height: 75,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          btnDateTimeForCustomer(
+              context,
+              "${getDateTime("$fromDate", dateFormat: "dd-MM-yyyy")}",
+              Icon(Icons.date_range),
+              datePick()),
+          SizedBox(
+            child: Center(
+                child: Container(
+                    alignment: Alignment.topCenter,
+                    height: 20,
+                    child: Text(
+                      "-",
+                      style: TextStyle(fontSize: 20),
+                    ))),
+          ),
+          btnDateTimeForCustomer(
+              context,
+              "${getDateTime("$toDate", dateFormat: "dd-MM-yyyy")}",
+              Icon(Icons.date_range),
+              datePick()),
+        ],
+      ),
     );
   }
 

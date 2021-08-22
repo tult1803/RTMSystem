@@ -219,11 +219,9 @@ Future<void> put_API_ConfirmAdvance(BuildContext context, id) async {
   status == 200
       ? showEasyLoadingSuccess(context, showMessage("", MSG012),
           widget: HomeCustomerPage(
-            index: 2, indexAdvance: 1,
+            index: 2, indexAdvance: 2,
           ))
-      : showEasyLoadingError(context, showMessage(MSG025, MSG027), widget: HomeCustomerPage(
-            index: 2, indexAdvance: 1,
-          ));
+      : showEasyLoadingError(context, showMessage(MSG025, MSG027),);
 }
 
 Future<void> putAPIUpdatePrice(BuildContext context, String productId,
@@ -263,12 +261,12 @@ Future<void> doConfirmOrAcceptOrRejectInvoice(BuildContext context,
       PutSignInvoice putSignInvoiceInvoice = PutSignInvoice();
       status = await putSignInvoiceInvoice.putSignInvoice(
           prefs.get("access_token"), invoiceIdSign);
-      _indexInvoice = 2;
+      _indexInvoice = 3;
     } else if (type == 2) {
       PutConfirmInvoice putConfirmInvoice = PutConfirmInvoice();
       status = await putConfirmInvoice.putConfirmInvoice(
           prefs.get("access_token"), invoiceId);
-      _indexInvoice = 1;
+      _indexInvoice = 2;
     } else if (type == 3) {
       DeleteInvoiceRequest deleteInvoiceRequest = DeleteInvoiceRequest();
       status = await deleteInvoiceRequest.deleteInvoiceRequest(
@@ -283,11 +281,7 @@ Future<void> doConfirmOrAcceptOrRejectInvoice(BuildContext context,
             indexInvoice: _indexInvoice,
           ));
     } else {
-      showEasyLoadingError(context, showMessage(MSG025, MSG027),
-          widget: HomeCustomerPage(
-            index: 1,
-            indexInvoice: _indexInvoice,
-          ));
+      showEasyLoadingError(context, showMessage(MSG025, MSG027),);
     }
   } else {
     //call api tao invoice cua manager
@@ -347,11 +341,7 @@ Future<void> createRequestAdvance(BuildContext context, String accountId,
             index: 2,
             indexAdvance: 0,
           ))
-      : showEasyLoadingError(context, showMessage("", MSG024),
-          widget: HomeCustomerPage(
-            index: 2,
-            indexAdvance: 0,
-          ));
+      : showEasyLoadingError(context, showMessage("", MSG024));
 }
 
 Future getDataCustomerFromPhone(BuildContext context,String phone) async {
@@ -487,11 +477,11 @@ Future<void> putReturnAdvance(BuildContext context, List<String> invoiceId,
         prefs.get("access_token"), invoiceId, advanceId);
     if (status == 200) {
       showEasyLoadingSuccess(context, showMessage("", MSG019),
-          widget: HomeCustomerPage(index: 2, indexAdvance: 3,));
+          widget: HomeCustomerPage(index: 2, indexAdvance: 2,));
     } else
-      showEasyLoadingError(context, showMessage("", MSG025), widget:HomeCustomerPage(index: 2, indexAdvance: 1,) );
+      showEasyLoadingError(context, showMessage("", MSG025),);
   } else {
-    showEasyLoadingError(context, showMessage(MSG031, MSG027), widget:HomeCustomerPage(index: 2, indexAdvance: 1,));
+    showEasyLoadingError(context, showMessage(MSG031, MSG027),);
   }
 }
 
@@ -577,9 +567,9 @@ Future doReceiveReturnCash(
       prefs.get("access_token"), id);
   if (status == 200) {
     showEasyLoadingSuccess(context, showMessage("", MSG022),
-        widget: HomeCustomerPage(index: 2, indexAdvance: 3,));
+        widget: HomeCustomerPage(index: 2, indexAdvance: 2,));
   } else {
-    showEasyLoadingError(context, showMessage(MSG030, MSG027),  widget: HomeCustomerPage(index: 2, indexAdvance: 3,));
+    showEasyLoadingError(context, showMessage(MSG030, MSG027),);
   }
 }
 
@@ -592,7 +582,7 @@ Future doDeleteAdvanceRequest(BuildContext context, String id) async {
   status == 200
       ? showEasyLoadingSuccess(context, showMessage("", MSG017),
           widget: HomeCustomerPage(index: 2, indexAdvance: 0,))
-      : showEasyLoadingError(context, showMessage(MSG030, MSG027), widget: HomeCustomerPage(index: 2, indexAdvance: 0,));
+      : showEasyLoadingError(context, showMessage(MSG030, MSG027),);
 }
 
 Future doCheckAccount(BuildContext context, String phone) async {
