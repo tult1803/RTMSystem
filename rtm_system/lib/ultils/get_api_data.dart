@@ -269,9 +269,10 @@ Future<void> doConfirmOrAcceptOrRejectInvoice(BuildContext context,
       _indexInvoice = 2;
     } else if (type == 3) {
       DeleteInvoiceRequest deleteInvoiceRequest = DeleteInvoiceRequest();
+      
       status = await deleteInvoiceRequest.deleteInvoiceRequest(
           prefs.get('access_token'), invoiceId,
-          reason: reason);
+          reason: reason == null? "Huỷ" : reason);
       _indexInvoice = 0;
     }
     if (status == 200) {
