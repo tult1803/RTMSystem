@@ -100,7 +100,9 @@ class _ReasonToDeleteState extends State<ReasonToDelete> {
       margin: EdgeInsets.all(10),
       child: TextField(
         onChanged: (value) {
-          reason = value;
+          setState(() {
+            reason = value;
+          });
         },
         maxLines: maxLines,
         keyboardType: TextInputType.text,
