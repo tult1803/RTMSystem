@@ -118,7 +118,7 @@ class _AdvancePageState extends State<AdvancePage>
           text: 'Hết hạn',
         ),
         Tab(
-          text: 'Huỷ bỏ',
+          text: 'Từ chối',
         ),
       ],
     );
