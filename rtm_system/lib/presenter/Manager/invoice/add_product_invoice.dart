@@ -663,7 +663,6 @@ class _AddProductPageState extends State<AddProductPage> {
                               setState(() {
                                 productName = item.name;
                               });
-                            }
                             if (item.type == 0) {
                               setState(() {
                                 checkProduct = false;
@@ -673,6 +672,7 @@ class _AddProductPageState extends State<AddProductPage> {
                                 degree = 0;
                                 checkProduct = true;
                               });
+                            }
                             }
                           },
                         );
