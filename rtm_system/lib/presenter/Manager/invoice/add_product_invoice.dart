@@ -102,8 +102,13 @@ class _AddProductPageState extends State<AddProductPage> {
       dataList = await getProduct.getProduct(context, token, "",
           limit: null, type: widget.level == 2 ? 1 : 2);
       dataList.forEach((element) async {
-        Map<dynamic, dynamic> data = element;
-        dataListProduct.add(DataProduct.fromJson(data));
+        if(widget.isCustomer){
+          if(element["type"] == 1){  
+            dataListProduct.add(DataProduct.fromJson(element));
+          }
+        }else{
+            dataListProduct.add(DataProduct.fromJson(element));
+        }
         if (widget.dateToPay != null) {
           if (element["id"] == widget.productId) {
             currentPrice = "${element["update_price"]}";
